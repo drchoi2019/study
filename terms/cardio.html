@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family of 'Cardio': An Interactive Etymology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, single-page journey. It starts with a hero section to introduce the core concept. The main interactive element is a radial diagram where users hover over words related to 'kardia' to dynamically display detailed information in a central floating panel, transforming passive reading into active exploration. This structure prioritizes user engagement and information discovery over simply replicating the source text's layout. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Etymological breakdown of words from the 'kardia' root. 
+        - Goal: Organize, Inform, Compare.
+        - Viz/Presentation Method: An interactive radial diagram built with HTML/CSS and a dynamic, centrally-located floating content panel.
+        - Interaction: Hovering a word on the diagram updates the central content panel.
+        - Justification: The diagram visually represents the "family tree" of words. Displaying information centrally on hover is a direct and intuitive interaction model.
+        - Library/Method: Vanilla JS for interactivity.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.1) translate(-45%, -45%) !important;
+            z-index: 20;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Cardio'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek root <span class="font-lora italic">'kardia'</span> (heart) is the ancestor of many terms. Hover over a word below to see its origin story.</p>
+            </div>
+
+            <div class="flex justify-center items-center min-h-[50vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl">
+                    <!-- Word nodes will be injected here -->
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                        <!-- Content will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordData = [
+                { word: 'Cardiology', prefix: 'Cardio-', prefixMeaning: 'heart', root: 'logy', rootMeaning: 'study of', meaning: 'The branch of medicine that deals with diseases and abnormalities of the heart.', angle: 0, icon: '👨‍⚕️' },
+                { word: 'Cardiac', prefix: 'Cardi-', prefixMeaning: 'heart', root: 'ac', rootMeaning: 'relating to', meaning: 'Relating to the heart. For example, cardiac arrest is a sudden loss of heart function.', angle: 45, icon: '❤️' },
+                { word: 'Myocardium', prefix: 'Myo-', prefixMeaning: 'muscle', root: 'cardium', rootMeaning: 'heart', meaning: 'The muscular tissue of the heart wall.', angle: 90, icon: '💪' },
+                { word: 'Pericardium', prefix: 'Peri-', prefixMeaning: 'around', root: 'cardium', rootMeaning: 'heart', meaning: 'The membrane enclosing the heart, consisting of an outer fibrous layer and an inner double layer.', angle: 135, icon: '🛡️' },
+                { word: 'Tachycardia', prefix: 'Tachy-', prefixMeaning: 'fast', root: 'cardia', rootMeaning: 'heart', meaning: 'An abnormally rapid heart rate.', angle: 180, icon: '⏩' },
+                { word: 'Bradycardia', prefix: 'Brady-', prefixMeaning: 'slow', root: 'cardia', rootMeaning: 'heart', meaning: 'An abnormally slow heart rate.', angle: 225, icon: '⏪' },
+                { word: 'Myocardial Infarction', prefix: 'Myo-', prefixMeaning: 'muscle', root: 'cardial', rootMeaning: 'heart', meaning: 'The death of heart muscle tissue due to a lack of oxygen, commonly known as a heart attack.', angle: 270, icon: '💔' },
+                { word: 'Electrocardiogram', prefix: 'Electro-', prefixMeaning: 'electric', root: 'cardiogram', rootMeaning: 'heart record', meaning: 'A record of the heart\'s electrical activity (ECG/EKG).', angle: 315, icon: '📈' }
+            ];
+
+            const diagramContainer = document.getElementById('word-diagram-container');
+            const centerDisplay = document.getElementById('center-display');
+            const nodes = [];
+
+            const defaultContent = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl text-teal-800">kardia</p>
+                    <p class="text-lg text-teal-700 opacity-80">(heart)</p>
+                </div>
+            `;
+            
+            centerDisplay.innerHTML = defaultContent;
+            centerDisplay.style.opacity = '1';
+            centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+
+            // Create and append nodes
+            wordData.forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
+                
+                node.innerHTML = `<span class="text-2xl">${item.icon}</span> <span class="font-bold text-lg pointer-events-none text-teal-800">${item.word}</span>`;
+                
+                diagramContainer.appendChild(node);
+                nodes.push(node);
+
+                node.addEventListener('mouseover', () => {
+                    const selectedWord = item;
+                    centerDisplay.style.opacity = '0';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                    setTimeout(() => {
+                        let breakdownHtml = '';
+                        if (selectedWord.word === 'Myocardial Infarction') {
+                            breakdownHtml = `
+                                <p class="mt-1 text-md text-stone-500">
+                                    <span class="font-semibold text-rose-600">Myo-</span> (<em>muscle</em>) + 
+                                    <span class="font-semibold text-teal-600">cardial</span> (<em>heart</em>) +
+                                    <span class="font-semibold text-teal-600">infarction</span> (<em>tissue death</em>)
+                                </p>
+                            `;
+                        } else {
+                            breakdownHtml = `
+                                <p class="mt-1 text-md text-stone-500">
+                                    <span class="font-semibold text-rose-600">${selectedWord.prefix}</span> (<em>${selectedWord.prefixMeaning}</em>) + 
+                                    <span class="font-semibold text-teal-600">${selectedWord.root}</span> (<em>${selectedWord.rootMeaning}</em>)
+                                </p>
+                            `;
+                        }
+
+                        centerDisplay.innerHTML = `
+                            <div>
+                                <h3 class="text-3xl font-bold text-teal-700 font-lora">${selectedWord.word}</h3>
+                                ${breakdownHtml}
+                                <p class="mt-3 text-stone-700 text-md">${selectedWord.meaning}</p>
+                            </div>
+                        `;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+
+            });
+
+            // Function to calculate and apply node positions
+            function positionNodes() {
+                const containerWidth = diagramContainer.offsetWidth;
+                if (containerWidth === 0) {
+                    requestAnimationFrame(positionNodes); // Try again on the next frame if not ready
+                    return;
+                }
+                const radius = containerWidth * 0.45;
+
+                nodes.forEach((node, index) => {
+                    const item = wordData[index];
+                    const angleRad = (item.angle - 90) * (Math.PI / 180);
+                    
+                    const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                    const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                    node.style.left = `${x}%`;
+                    node.style.top = `${y}%`;
+                    node.style.transform = 'translate(-50%, -50%)';
+                });
+            }
+
+            // Initial positioning and responsive updates
+            positionNodes();
+            window.addEventListener('resize', positionNodes);
+        });
+    </script>
+</body>
+</html>
