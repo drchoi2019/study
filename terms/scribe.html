@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family of 'Scribe': An Interactive Etymology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, single-page journey. It starts with a hero section to introduce the core concept. The main interactive element is a radial diagram where users hover over words derived from 'scribere' to dynamically display detailed information in a central floating panel, transforming passive reading into active exploration. This structure prioritizes user engagement and information discovery over simply replicating the source text's layout. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Etymological breakdown of words from 'scribere'. 
+        - Goal: Organize, Inform, Compare.
+        - Viz/Presentation Method: An interactive radial diagram built with HTML/CSS and a dynamic, centrally-located floating content panel.
+        - Interaction: Hovering a word on the diagram updates the central content panel.
+        - Justification: The diagram visually represents the "family tree" of words. Displaying information centrally on hover is a direct and intuitive interaction model.
+        - Library/Method: Vanilla JS for interactivity.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.1) translate(-45%, -45%) !important;
+            z-index: 20;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Scribe'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Latin root <span class="font-lora italic">'scribere'</span> (to write) is the ancestor of a rich family of words. Hover over a word below to see its origin story.</p>
+            </div>
+
+            <div class="flex justify-center items-center min-h-[50vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl">
+                    <!-- Word nodes will be injected here -->
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                        <!-- Content will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordData = [
+                { word: 'Prescribe', prefix: 'Pre-', prefixMeaning: 'before', meaning: 'To set down a rule or instruction in advance.', example: 'The doctor will prescribe the right medicine.', angle: 0 },
+                { word: 'Proscribe', prefix: 'Pro-', prefixMeaning: 'forward, publicly', meaning: 'To forbid or ban officially.', example: 'The new law proscribes certain activities.', angle: 30 },
+                { word: 'Postscript', prefix: 'Post-', prefixMeaning: 'after', meaning: 'A note added at the end of a letter (P.S.).', example: 'She added a quick postscript to her email.', angle: 60 },
+                { word: 'Superscript', prefix: 'Super-', prefixMeaning: 'above', meaning: 'Text written above the normal line (e.g., exponents).', example: 'In E=mc², the 2 is a superscript.', angle: 90 },
+                { word: 'Subscript', prefix: 'Sub-', prefixMeaning: 'below', meaning: 'Text written below the normal line (e.g., in H₂O).', example: 'Chemical formulas often use a subscript.', angle: 120 },
+                { word: 'Inscribe', prefix: 'In-', prefixMeaning: 'into', meaning: 'To engrave or write inside something.', example: 'They will inscribe the winner\'s name on the trophy.', angle: 150 },
+                { word: 'Subscribe', prefix: 'Sub-', prefixMeaning: 'under', meaning: 'To sign or agree in writing, especially to a service.', example: 'I subscribe to several online journals.', angle: 180 },
+                { word: 'Describe', prefix: 'De-', prefixMeaning: 'down, away', meaning: 'To explain or give details, literally "to write down."', example: 'Can you describe the person you saw?', angle: 210 },
+                { word: 'Transcribe', prefix: 'Trans-', prefixMeaning: 'across', meaning: 'To copy in writing, often from one format to another.', example: 'He was asked to transcribe the audio recording.', angle: 240 },
+                { word: 'Circumscribe', prefix: 'Circum-', prefixMeaning: 'around', meaning: 'To limit or confine within boundaries.', example: 'The king\'s power was circumscribed by law.', angle: 270 },
+                { word: 'Conscription', prefix: 'Con-', prefixMeaning: 'together', meaning: 'Compulsory enlistment, especially into the military.', example: 'The country introduced conscription during the war.', angle: 300 },
+                { word: 'Manuscript', prefix: 'Manu-', prefixMeaning: 'hand', meaning: 'Originally, a handwritten document; an author’s work.', example: 'The author sent the manuscript to the publisher.', angle: 330 }
+            ];
+
+            const diagramContainer = document.getElementById('word-diagram-container');
+            const centerDisplay = document.getElementById('center-display');
+            const nodes = [];
+
+            const defaultContent = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl text-teal-800">scribere</p>
+                    <p class="text-lg text-teal-700 opacity-80">(to write)</p>
+                </div>
+            `;
+            
+            centerDisplay.innerHTML = defaultContent;
+            centerDisplay.style.opacity = '1';
+            centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+
+            // Create and append nodes
+            wordData.forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
+                
+                const actualPrefix = item.prefix.slice(0, -1);
+                const restOfWord = item.word.slice(actualPrefix.length);
+
+                node.innerHTML = `<span class="font-bold text-lg pointer-events-none"><span class="text-rose-600">${actualPrefix}</span><span class="text-teal-800">${restOfWord}</span></span>`;
+                
+                diagramContainer.appendChild(node);
+                nodes.push(node);
+
+                node.addEventListener('mouseover', () => {
+                    const selectedWord = item;
+                    centerDisplay.style.opacity = '0';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                    setTimeout(() => {
+                        centerDisplay.innerHTML = `
+                            <div>
+                                <h3 class="text-3xl font-bold text-teal-700 font-lora">${selectedWord.word}</h3>
+                                <p class="mt-1 text-md text-stone-500">
+                                    <span class="font-semibold text-rose-600">${selectedWord.prefix}</span> (<em>${selectedWord.prefixMeaning}</em>) + 
+                                    <span class="font-semibold text-teal-600">scribe</span>
+                                </p>
+                                <p class="mt-3 text-stone-700 text-md">${selectedWord.meaning}</p>
+                                <blockquote class="mt-3 border-l-4 border-stone-200 pl-3">
+                                    <p class="text-stone-600 italic">"${selectedWord.example}"</p>
+                                </blockquote>
+                            </div>
+                        `;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+
+                node.addEventListener('mouseout', () => {
+                     centerDisplay.style.opacity = '0';
+                     centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                     setTimeout(() => {
+                        centerDisplay.innerHTML = defaultContent;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+            });
+
+            // Function to calculate and apply node positions
+            function positionNodes() {
+                const containerWidth = diagramContainer.offsetWidth;
+                if (containerWidth === 0) {
+                    requestAnimationFrame(positionNodes); // Try again on the next frame if not ready
+                    return;
+                }
+                const radius = containerWidth * 0.45;
+
+                nodes.forEach((node, index) => {
+                    const item = wordData[index];
+                    const angleRad = (item.angle - 90) * (Math.PI / 180);
+                    
+                    const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                    const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                    node.style.left = `${x}%`;
+                    node.style.top = `${y}%`;
+                    node.style.transform = 'translate(-50%, -50%)';
+                });
+            }
+
+            // Initial positioning and responsive updates
+            positionNodes();
+            window.addEventListener('resize', positionNodes);
+        });
+    </script>
+</body>
+</html>
