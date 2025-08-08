@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>빈호맥학 퀴즈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FDFBF5; /* 부드러운 베이지 배경 */
+        }
+        .quiz-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAE0D5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .btn-choice {
+            background-color: #FFF8F0;
+            border: 1px solid #EAE0D5;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-choice:hover {
+            background-color: #FCEFE1;
+            transform: translateY(-2px);
+        }
+        .btn-choice.correct {
+            background-color: #D1FAE5; /* Correct Answer: Green */
+            border-color: #6EE7B7;
+            color: #065F46;
+        }
+        .btn-choice.incorrect {
+            background-color: #FEE2E2; /* Incorrect Answer: Red */
+            border-color: #FCA5A5;
+            color: #991B1B;
+        }
+        .btn-next {
+            background-color: #A07C5B; /* 짙은 베이지 계열 */
+            color: white;
+            transition: background-color 0.2s ease;
+        }
+        .btn-next:hover {
+            background-color: #8A6A4D;
+        }
+        .progress-bar-bg {
+            background-color: #EAE0D5;
+        }
+        .progress-bar-fill {
+            background-color: #A07C5B;
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div id="quiz-container" class="w-full max-w-2xl mx-auto">
+        <div class="quiz-card rounded-xl p-6 md:p-8">
+            <div id="start-screen">
+                <h1 class="text-3xl font-bold text-center text-[#4A3F35] mb-4">빈호맥학 퀴즈</h1>
+                <p class="text-center text-gray-600 mb-8">주어진 내용을 보고 알맞은 맥(脈)을 맞춰보세요.</p>
+                <button id="start-btn" class="w-full btn-next font-bold py-3 px-4 rounded-lg text-lg">퀴즈 시작하기</button>
+            </div>
+
+            <div id="quiz-screen" class="hidden">
+                <!-- 진행 상태와 점수 -->
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-sm font-semibold text-[#A07C5B]">문제 <span id="current-question"></span> / <span id="total-questions"></span></p>
+                    <p class="text-sm font-semibold text-[#A07C5B]">점수: <span id="score">0</span></p>
+                </div>
+
+                <!-- 진행 바 -->
+                <div class="progress-bar-bg w-full h-2 rounded-full mb-6">
+                    <div id="progress-bar" class="progress-bar-fill h-2 rounded-full" style="width: 0%;"></div>
+                </div>
+
+                <!-- 문제 영역 -->
+                <div class="mb-6 min-h-[120px] bg-stone-50 p-4 rounded-lg border border-stone-200">
+                    <p id="pattern" class="text-lg font-bold text-[#4A3F35] mb-2"></p>
+                    <p id="description" class="text-base text-gray-700"></p>
+                </div>
+
+                <!-- 선택지 -->
+                <div id="choices" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- 선택지 버튼은 JS로 생성 -->
+                </div>
+
+                <!-- 다음 버튼 -->
+                <div class="mt-8 text-center">
+                    <button id="next-btn" class="w-full md:w-1/2 btn-next font-bold py-3 px-4 rounded-lg hidden">다음 문제</button>
+                </div>
+            </div>
+
+            <div id="result-screen" class="hidden text-center">
+                 <h2 class="text-3xl font-bold text-[#4A3F35] mb-4">퀴즈 결과</h2>
+                 <p class="text-xl text-gray-700 mb-2">총 <span id="final-total"></span>문제 중 <strong id="final-score" class="text-2xl text-[#A07C5B]"></span>문제를 맞혔습니다!</p>
+                 <p id="result-message" class="text-lg font-medium mt-4 mb-8"></p>
+                 <button id="restart-btn" class="w-full btn-next font-bold py-3 px-4 rounded-lg text-lg">다시 풀어보기</button>
+            </div>
+        </div>
+        <footer class="text-center mt-4">
+            <p class="text-xs text-gray-400">Gemini가 생성한 퀴즈입니다.</p>
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            { pulse: "부맥(浮脈)", pattern: "표증 (Exterior)", description: "가볍게 손을 대었을 때 그 박동에 힘이 있고, 힘있게 눌렀을 때는 무력한 모습을 나타낸다. 마치 미풍이 서서히 불어 새의 깃털을 미약하게 움직이게 하는 것 같은 느낌이다. 또한 느릅나무를 서서히 문지르는 듯한 느낌이며, 물 위에 나무조각이 떠있는 것 같은 느낌 같기도 하고 파를 비비는 듯한 감촉 같기도 하다." },
+            { pulse: "침맥(沈脈)", pattern: "이증 (Interior)", description: "손을 힘있게 근골(筋骨) 부위까지 눌렀을 때 촉지(觸知)할 수 있는 맥을 말한다. 마치 면포(棉布) 속에 모래가 들어 있어서 속은 단단하지만 겉은 유연한 것 같은 모습이다. 또, 돌을 물 속에 던졌을 때 밑바닥까지 가라앉는 형상으로 비유할 수 있다." },
+            { pulse: "지맥(遲脈)", pattern: "한증 (Cold)", description: "일호일흡지간(一呼一吸之間)의 박동이 3회로서, 그 오고 가는 모양이 완만(緩慢)하다." },
+            { pulse: "삭맥(數脈)", pattern: "열증 (Heat)", description: "한 호흡지간(呼吸之間)에 6회 박동하는 것이며, 맥기(脈氣)의 유동(流動)이 아주 급박(急迫)하다." },
+            { pulse: "허맥(虛脈)", pattern: "기허 (Qi deficiency)", description: "박동이 늦고 완만하며 부대(浮大)하면서도 연(軟)하며, 힘주어 누르면 그 감각이 무력(無力)한 느낌이 든다. 손 끝에서 은은하게 박동하면서 돌연히 공허(空虛)해지는 감각을 느낄 수 있다." },
+            { pulse: "약맥(弱脈)", pattern: "혈허 (Blood deficiency)", description: "그 맥상(脈象)이 아주 유연(柔軟)하면서 침세(沈細)한 것을 말하는데, 힘주어 눌러야 비로소 감지할 수 있으며, 가볍게 대어서는 촉지(觸知)할 수 없는 맥이다." },
+            { pulse: "실맥(實脈)", pattern: "실증 (Excess)", description: "부부(浮部)와 침부(沈部)에서 모두 촉지(觸知)할 수 있다. 맥의 형체가 크고(大) 길며(長), 약간 현(弦)한 느낌이 들면서 손끝에서 강하고 힘있는 박동감을 얻을 수 있다." },
+            { pulse: "활맥(滑脈)", pattern: "습담 (Dampness, Phlegm)", description: "그 박동의 오고 감이 모두 유리(流利)하고 원활(圓滑)한 모습인데, 연이어 나타나는 그 모습이 마치 둥근 구슬이 손가락 아래서 굴러다니는 듯한 느낌이며, 또 손에서 달아나려는 듯한 감각이다." },
+            { pulse: "삽맥(澁脈)", pattern: "혈어 (Blood stasis)", description: "세소(細小)하면서 지만(遲慢)하고, 그 박동이 매끄럽지 못하며 맥체(脈體)가 짧고 흩어지는 모습이다. 마치 가벼운 칼로 대나무를 긁는 듯하며, 빗물이 모래를 적시는 것 같기도 하고, 병든 누에가 나뭇잎을 먹는 모습 같기도 하다." },
+            { pulse: "현맥(弦脈)", pattern: "간기울결 (Liver Qi stagnation)", description: "맥체(脈體)가 단직(端直)하고 길다. 이는 마치 팽팽하게 끌어 당겨져 있는 활시위와 같다. 힘 주어 눌러도 이동감(移動感)이 없으며 그 길면서 유여(有餘)한 모습이 마치 거문고나 비파의 줄을 누르고 있는 듯 하다." },
+            { pulse: "긴맥(緊脈)", pattern: "한증 (Cold)", description: "그 박동의 오고 감에 힘이 있으며 좌우측에서 모두 이를 느낄 수 있다. 이는 마치 비틀어 끌리는 밧줄의 전동(轉動)과 같다." },
+            { pulse: "완맥(緩脈)", pattern: "정상, 습", description: "지맥(遲脈)보다 약간 빠른데, 한 호흡지간(呼吸之間)에 4회 박동하는 맥을 말한다. 이는 마치 날실 한 줄이 방직기에 걸려있지만 팽팽하게 감겨 있지 않은 모습과 같으며, 왕래가 아주 균일하다." },
+            { pulse: "유맥(濡脈)", pattern: "습담 (Dampness, Phlegm)", description: "그 형세(形勢)가 아주 유연(柔軟)하고 부세(浮細)하다. 마치 솜이 물 위에 떠있는 것 같으며, 손을 가볍게 대면 촉지(觸知)가 되지만 힘주어 누르면 감지되지 않는다." },
+            { pulse: "촉맥(促脈)", pattern: "혈어 (Blood stasis)", description: "그 오고 가는 모양이 모두 빠른 모습(數象)을 보이는데, 어떤 때는 한 번 정지하다가 다시 계속된다. 마치 절름발이가 길을 빨리 걷는 것처럼 그 속도에 일정한 규율이 없다." },
+            { pulse: "결맥(結脈)", pattern: "혈어 (Blood stasis)", description: "그 박동이 완만(緩慢)하며, 때때로 한번씩 쉬다가 다시 돌아오는 맥을 말한다." },
+            { pulse: "대맥(代脈)", pattern: "혈어 (Blood stasis)", description: "박동하면서 중간에 때대로 멈추는 맥인데, 제법 오랫동안 원래의 상태로 돌아오지 않으며, 다시 돌아온 후에는 재차 원래대로 박동하는 맥이다." },
+            { pulse: "세맥(細脈)", pattern: "혈허 (Blood deficiency) / 음허, 건조 (Yin deficiency, Dryness)", description: "미맥(微脈)보다는 약간 큰 모습이며, 시종(始終) 잘 만져지는 맥이다. 맥상(脈象)은 세직(細直)하면서도 연(軟)하다. 마치 한 가닥의 실처럼 손 아래서 박동한다." }
+        ];
+
+        // DOM 요소 가져오기
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const scoreEl = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
+
+        const patternEl = document.getElementById('pattern');
+        const descriptionEl = document.getElementById('description');
+        const choicesEl = document.getElementById('choices');
+
+        const finalScoreEl = document.getElementById('final-score');
+        const finalTotalEl = document.getElementById('final-total');
+        const resultMessageEl = document.getElementById('result-message');
+
+        // 퀴즈 상태 변수
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const QUIZ_LENGTH = 10;
+
+        // 퀴즈 시작 함수
+        function startQuiz() {
+            // 상태 초기화
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreEl.textContent = 0;
+            
+            // 문제 랜덤으로 섞고 10개 선택
+            questions = quizData.sort(() => 0.5 - Math.random()).slice(0, QUIZ_LENGTH);
+            totalQuestionsEl.textContent = QUIZ_LENGTH;
+
+            // 화면 전환
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            // 첫 문제 표시
+            showQuestion();
+        }
+
+        // 문제 표시 함수
+        function showQuestion() {
+            // 이전 선택지 제거
+            choicesEl.innerHTML = '';
+            nextBtn.classList.add('hidden');
+
+            // 현재 문제 가져오기
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            // 문제 정보 업데이트
+            patternEl.textContent = currentQuestion.pattern;
+            descriptionEl.textContent = currentQuestion.description;
+            currentQuestionEl.textContent = currentQuestionIndex + 1;
+            
+            // 진행 바 업데이트
+            const progress = ((currentQuestionIndex + 1) / QUIZ_LENGTH) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // 선택지 생성
+            const choices = getChoices(currentQuestion.pulse);
+            choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice;
+                button.classList.add('btn-choice', 'p-4', 'rounded-lg', 'text-left', 'font-medium', 'text-gray-800');
+                button.onclick = () => selectAnswer(button, choice, currentQuestion.pulse);
+                choicesEl.appendChild(button);
+            });
+        }
+
+        // 4지선다 선택지 생성 함수 (정답 1 + 오답 3)
+        function getChoices(correctAnswer) {
+            let choices = [correctAnswer];
+            let wrongAnswers = quizData
+                .map(q => q.pulse)
+                .filter(p => p !== correctAnswer);
+            
+            wrongAnswers.sort(() => 0.5 - Math.random());
+
+            for (let i = 0; i < 3; i++) {
+                choices.push(wrongAnswers[i]);
+            }
+
+            // 선택지 순서 섞기
+            return choices.sort(() => 0.5 - Math.random());
+        }
+
+        // 답안 선택 함수
+        function selectAnswer(button, selectedChoice, correctAnswer) {
+            // 모든 버튼 비활성화
+            Array.from(choicesEl.children).forEach(btn => {
+                btn.disabled = true;
+                // 정답 버튼 표시
+                if (btn.textContent === correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            if (selectedChoice === correctAnswer) {
+                // 정답일 경우
+                score++;
+                scoreEl.textContent = score;
+                button.classList.add('correct');
+            } else {
+                // 오답일 경우
+                button.classList.add('incorrect');
+            }
+            
+            // 다음 버튼 표시
+            nextBtn.classList.remove('hidden');
+        }
+
+        // 다음 문제로 넘어가는 함수
+        function showNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < QUIZ_LENGTH) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // 결과 표시 함수
+        function showResult() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            finalScoreEl.textContent = score;
+            finalTotalEl.textContent = QUIZ_LENGTH;
+
+            let message = '';
+            const percentage = (score / QUIZ_LENGTH) * 100;
+            if (percentage === 100) {
+                message = '완벽해요! 맥진의 달인이시군요!';
+            } else if (percentage >= 70) {
+                message = '훌륭해요! 조금만 더 공부하면 전문가가 될 수 있겠어요.';
+            } else if (percentage >= 40) {
+                message = '좋아요! 복습하면 더 좋은 결과가 있을 거예요.';
+            } else {
+                message = '아쉬워요. 처음부터 다시 차근차근 시작해볼까요?';
+            }
+            resultMessageEl.textContent = message;
+        }
+
+        // 이벤트 리스너 연결
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', showNextQuestion);
+        restartBtn.addEventListener('click', startQuiz);
+
+    </script>
+</body>
+</html>
