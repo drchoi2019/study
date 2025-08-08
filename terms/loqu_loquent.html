@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family of 'Loqu': An Interactive Etymology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, single-page journey. It starts with a hero section to introduce the core concept. The main interactive element is a radial diagram where users hover over words derived from 'loqui' to dynamically display detailed information in a central floating panel, transforming passive reading into active exploration. This structure prioritizes user engagement and information discovery over simply replicating the source text's layout. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Etymological breakdown of words from 'loqui'. 
+        - Goal: Organize, Inform, Compare.
+        - Viz/Presentation Method: An interactive radial diagram built with HTML/CSS and a dynamic, centrally-located floating content panel.
+        - Interaction: Hovering a word on the diagram updates the central content panel.
+        - Justification: The diagram visually represents the "family tree" of words. Displaying information centrally on hover is a direct and intuitive interaction model.
+        - Library/Method: Vanilla JS for interactivity.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.1) translate(-45%, -45%) !important;
+            z-index: 20;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Loqu'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Latin root <span class="font-lora italic">'loqui'</span> (to speak) is the ancestor of a rich family of words. Hover over a word below to see its origin story.</p>
+            </div>
+
+            <div class="flex justify-center items-center min-h-[50vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl">
+                    <!-- Word nodes will be injected here -->
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                        <!-- Content will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordData = [
+                { word: 'Loquacious', prefix: 'Loqu-', prefixMeaning: 'speak', meaning: 'Tending to talk a great deal; talkative.', example: 'He is a loquacious person who dominates every conversation.', angle: 0 },
+                { word: 'Eloquent', prefix: 'E-', prefixMeaning: 'out', meaning: 'Fluent or persuasive in speaking or writing.', example: 'The speaker delivered an eloquent and moving speech.', angle: 30 },
+                { word: 'Colloquial', prefix: 'Col-', prefixMeaning: 'together', meaning: 'Language used in ordinary or familiar conversation.', example: '"Gonna" is a colloquial form of "going to".', angle: 60 },
+                { word: 'Soliloquy', prefix: 'Solus-', prefixMeaning: 'alone', meaning: 'An act of speaking one\'s thoughts aloud when by oneself.', example: 'Hamlet\'s famous soliloquy begins with "To be, or not to be".', angle: 90 },
+                { word: 'Interlocutor', prefix: 'Inter-', prefixMeaning: 'between', meaning: 'A person who takes part in a dialogue or conversation.', example: 'He was a skilled interlocutor, able to draw out others\' thoughts.', angle: 120 },
+                { word: 'Ventriloquist', prefix: 'Ventri-', prefixMeaning: 'belly', meaning: 'An entertainer who can make their voice seem to come from a dummy.', example: 'The ventriloquist and his puppet were a hilarious duo.', angle: 150 },
+                { word: 'Grandiloquent', prefix: 'Grandi-', prefixMeaning: 'large', meaning: 'Using long or complicated words in order to impress people.', example: 'His grandiloquent style of speaking was not well-received.', angle: 180 },
+                { word: 'Magniloquent', prefix: 'Magni-', prefixMeaning: 'great', meaning: 'Using high-flown or bombastic language.', example: 'The politician\'s magniloquent speech was full of empty promises.', angle: 210 },
+                { word: 'Circumlocution', prefix: 'Circum-', prefixMeaning: 'around', meaning: 'The use of many words where fewer would do; talking in circles.', example: 'He used circumlocution to avoid answering the direct question.', angle: 240 },
+                { word: 'Elocution', prefix: 'E-', prefixMeaning: 'out', meaning: 'The skill of clear and expressive speech.', example: 'She took elocution lessons to improve her public speaking.', angle: 270 },
+                { word: 'Allocution', prefix: 'Al-', prefixMeaning: 'to', meaning: 'A formal speech giving advice or a warning.', example: 'The Pope delivered a solemn allocution to the cardinals.', angle: 300 },
+                { word: 'Obloquy', prefix: 'Ob-', prefixMeaning: 'against', meaning: 'Strong public criticism or verbal abuse.', example: 'He faced a torrent of obloquy for his controversial decision.', angle: 330 }
+            ];
+
+            const diagramContainer = document.getElementById('word-diagram-container');
+            const centerDisplay = document.getElementById('center-display');
+            const nodes = [];
+
+            const defaultContent = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl text-teal-800">loqui</p>
+                    <p class="text-lg text-teal-700 opacity-80">(to speak)</p>
+                </div>
+            `;
+            
+            centerDisplay.innerHTML = defaultContent;
+            centerDisplay.style.opacity = '1';
+            centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+
+            // Create and append nodes
+            wordData.forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
+                
+                node.innerHTML = `<span class="font-bold text-lg pointer-events-none text-teal-800">${item.word}</span>`;
+                
+                diagramContainer.appendChild(node);
+                nodes.push(node);
+
+                node.addEventListener('mouseover', () => {
+                    const selectedWord = item;
+                    centerDisplay.style.opacity = '0';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                    setTimeout(() => {
+                        centerDisplay.innerHTML = `
+                            <div>
+                                <h3 class="text-3xl font-bold text-teal-700 font-lora">${selectedWord.word}</h3>
+                                <p class="mt-1 text-md text-stone-500">
+                                    <span class="font-semibold text-rose-600">${selectedWord.prefix}</span> (<em>${selectedWord.prefixMeaning}</em>) + 
+                                    <span class="font-semibold text-teal-600">loqu</span>
+                                </p>
+                                <p class="mt-3 text-stone-700 text-md">${selectedWord.meaning}</p>
+                                <blockquote class="mt-3 border-l-4 border-stone-200 pl-3">
+                                    <p class="text-stone-600 italic">"${selectedWord.example}"</p>
+                                </blockquote>
+                            </div>
+                        `;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+
+                node.addEventListener('mouseout', () => {
+                     centerDisplay.style.opacity = '0';
+                     centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                     setTimeout(() => {
+                        centerDisplay.innerHTML = defaultContent;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+            });
+
+            // Function to calculate and apply node positions
+            function positionNodes() {
+                const containerWidth = diagramContainer.offsetWidth;
+                if (containerWidth === 0) {
+                    requestAnimationFrame(positionNodes); // Try again on the next frame if not ready
+                    return;
+                }
+                const radius = containerWidth * 0.45;
+
+                nodes.forEach((node, index) => {
+                    const item = wordData[index];
+                    const angleRad = (item.angle - 90) * (Math.PI / 180);
+                    
+                    const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                    const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                    node.style.left = `${x}%`;
+                    node.style.top = `${y}%`;
+                    node.style.transform = 'translate(-50%, -50%)';
+                });
+            }
+
+            // Initial positioning and responsive updates
+            positionNodes();
+            window.addEventListener('resize', positionNodes);
+        });
+    </script>
+</body>
+</html>
