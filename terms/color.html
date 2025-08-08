@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Terminology in Color</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Mosaic grid container */
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 7px; /* Scaled down from 10px */
+            width: 333px; /* 2/3 of 500px */
+            height: 333px; /* 2/3 of 500px */
+            max-width: 90vw;
+            max-height: 90vw;
+            aspect-ratio: 1 / 1; /* Maintain square shape */
+        }
+        /* Individual color blocks */
+        .color-block {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .color-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        /* Style for the active/clicked block */
+        .color-block.active {
+            transform: translateY(-5px);
+            box-shadow: 0 0 0 3px #3b82f6, 0 10px 20px rgba(0,0,0,0.2); /* Blue ring and enhanced shadow */
+            z-index: 10;
+        }
+        /* Style for Latin root words */
+        .latin-root {
+            color: #059669; /* A distinct green color */
+            font-style: italic;
+            font-weight: 600;
+        }
+        /* Specific grid placements for a Kandinsky-like feel */
+        #erythro-block { grid-column: 1 / 4; grid-row: 1 / 3; }
+        #xantho-block { grid-column: 4 / 7; grid-row: 1 / 2; }
+        #chloro-block { grid-column: 5 / 7; grid-row: 2 / 5; }
+        #cyano-block { grid-column: 1 / 3; grid-row: 3 / 7; }
+        #purpura-block { grid-column: 3 / 5; grid-row: 3 / 5; }
+        #melano-block { grid-column: 3 / 7; grid-row: 5 / 7; }
+        #leuko-block { grid-column: 4 / 5; grid-row: 2 / 3; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="text-center mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-yellow-400 to-blue-500">Medical Terminology in Color</h1>
+        <p class="text-gray-500 text-sm mt-2">By Hyungsuk Choi</p>
+        <p class="text-gray-600 mt-2">Click on the colored blocks to learn more.</p>
+    </div>
+
+    <div class="mosaic-grid relative">
+        <div id="erythro-block" class="color-block" data-color="erythro" style="background-color: #ef4444;"></div>
+        <div id="xantho-block" class="color-block" data-color="xantho" style="background-color: #facc15;"></div>
+        <div id="chloro-block" class="color-block" data-color="chloro" style="background-color: #22c55e;"></div>
+        <div id="cyano-block" class="color-block" data-color="cyano" style="background-color: #3b82f6;"></div>
+        <div id="purpura-block" class="color-block" data-color="purpura" style="background-color: #a855f7;"></div>
+        <div id="melano-block" class="color-block" data-color="melano" style="background-color: #171717;"></div>
+        <div id="leuko-block" class="color-block" data-color="leuko" style="background-color: #f9fafb; border: 1px solid #d1d5db;"></div>
+    </div>
+
+    <div id="info-display-area" class="w-full max-w-2xl mt-10 p-6 bg-white border border-gray-200 rounded-lg shadow-md text-left min-h-[250px] flex flex-col justify-center">
+        <p class="text-center text-gray-500">Click on a color block above to see details.</p>
+    </div>
+
+    <script>
+        // Data object containing all information in English
+        const colorData = {
+            erythro: {
+                title: "Erythro (Red)",
+                description: "Refers to the color red, often associated with red blood cells that are vital for carrying oxygen.",
+                terms: [
+                    { name: "Erythrocyte", definition: "A red blood cell, which contains hemoglobin and is responsible for transporting oxygen throughout the body." },
+                    { name: "Erythroderma", definition: "A skin condition characterized by widespread redness and scaling of the skin." },
+                    { name: "Rubella", definition: "A viral infection (from Latin <span class='latin-root'>'ruber'</span> for red), also known as 'German measles,' famous for its characteristic red rash." }
+                ]
+            },
+            cyano: {
+                title: "Cyano (Blue)",
+                description: "Indicates the color blue, typically related to a lack of oxygen in the blood, causing a bluish discoloration.",
+                terms: [
+                    { name: "Cyanosis", definition: "A condition where the skin or mucous membranes turn blue due to insufficient oxygen in the blood." },
+                    { name: "Cyanide", definition: "A toxic chemical that derives its name from its blue color in certain solid forms." }
+                ]
+            },
+            purpura: {
+                title: "Purpura (Purple)",
+                description: "Represents the color purple and refers to purple or reddish spots on the skin caused by bleeding underneath.",
+                terms: [
+                    { name: "Thrombocytopenic Purpura", definition: "A disorder where purple spots appear on the skin due to a low number of platelets." }
+                ]
+            },
+            chloro: {
+                title: "Chloro (Green)",
+                description: "Refers to green, most famously seen in plants but also related to the greenish-yellow gas, chlorine.",
+                terms: [
+                    { name: "Chlorophyll", definition: "The green pigment in plants that is essential for photosynthesis." },
+                    { name: "Chlorine", definition: "A greenish-yellow gas used as a powerful disinfectant and in chemical processes." },
+                    { name: "Chlorosis", definition: "A condition in plants where leaves produce insufficient chlorophyll, turning them pale or yellow." }
+                ]
+            },
+            xantho: {
+                title: "Xantho (Yellow)",
+                description: "Indicates yellow. This root is seen in Xanthosis, a yellowish discoloration of the skin.",
+                terms: [
+                    { name: "Xanthosis", definition: "A general term for yellowish discoloration. A specific, harmless type is Carotenemia, caused by excess beta-carotene from foods like carrots." },
+                    { name: "Xanthoma", definition: "Yellowish deposits of cholesterol that form under the skin, often near the eyes." }
+                ]
+            },
+            melano: {
+                title: "Melano (Black)",
+                description: "Refers to black and is associated with melanin, the pigment that colors our skin, hair, and eyes.",
+                terms: [
+                    { name: "Melanoma", definition: "A dangerous type of skin cancer that originates in melanin-producing cells." },
+                    { name: "Melanin", definition: "The pigment responsible for color in skin, hair, and eyes." },
+                    { name: "Substantia Nigra", definition: "A 'black substance' (from Latin <span class='latin-root'>'niger'</span> for black) in the midbrain, crucial for movement control and affected in Parkinson's disease." }
+                ]
+            },
+            leuko: {
+                title: "Leuko (White)",
+                description: "Refers to white, commonly associated with white blood cells that are the foundation of the immune system.",
+                terms: [
+                    { name: "Leukocyte", definition: "A white blood cell, responsible for fighting infection and disease." },
+                    { name: "Leukemia", definition: "A cancer characterized by the overproduction of abnormal white blood cells." },
+                    { name: "Albinism", definition: "A congenital condition (from Latin <span class='latin-root'>'albus'</span> for white) involving a lack of melanin, resulting in pale skin and white hair." }
+                ]
+            }
+        };
+
+        const infoDisplayArea = document.getElementById('info-display-area');
+        const blocks = document.querySelectorAll('.color-block');
+        const defaultInfoText = '<p class="text-center text-gray-500">Click on a color block above to see details.</p>';
+        let activeBlock = null;
+
+        // Function to update the static info area
+        const updateInfoArea = (colorId) => {
+            const data = colorData[colorId];
+            let termsHtml = '';
+            data.terms.forEach(term => {
+                termsHtml += `
+                    <div class="mt-3">
+                        <p class="font-semibold text-md text-gray-800">${term.name}</p>
+                        <p class="text-sm text-gray-600">${term.definition}</p>
+                    </div>
+                `;
+            });
+
+            infoDisplayArea.innerHTML = `
+                <h3 class="text-2xl font-bold mb-2 text-gray-900">${data.title}</h3>
+                <p class="text-base text-gray-600 mb-4">${data.description}</p>
+                <div class="border-t border-gray-200 pt-4">
+                    ${termsHtml}
+                </div>
+            `;
+        };
+        
+        // Function to reset the info area to its default state
+        const resetInfoArea = () => {
+            infoDisplayArea.innerHTML = defaultInfoText;
+            if (activeBlock) {
+                activeBlock.classList.remove('active');
+                activeBlock = null;
+            }
+        };
+
+        // Add click event listeners to each color block
+        blocks.forEach(block => {
+            block.addEventListener('click', (e) => {
+                // If there's an active block and it's not the one we just clicked, remove its active class
+                if (activeBlock && activeBlock !== block) {
+                    activeBlock.classList.remove('active');
+                }
+
+                // If we clicked the currently active block, deactivate it and reset the info
+                if (activeBlock === block) {
+                    resetInfoArea();
+                } else {
+                    // Otherwise, activate the new block and show its info
+                    block.classList.add('active');
+                    activeBlock = block;
+                    const colorId = block.dataset.color;
+                    updateInfoArea(colorId);
+                }
+            });
+        });
+
+        // Initialize the info area with default text
+        infoDisplayArea.innerHTML = defaultInfoText;
+
+    </script>
+</body>
+</html>
