@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family of 'Graphy': An Interactive Etymology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, single-page journey. It starts with a hero section to introduce the core concept. The main interactive element is a radial diagram where users hover over words derived from 'graphein' to dynamically display detailed information in a central floating panel, transforming passive reading into active exploration. This structure prioritizes user engagement and information discovery over simply replicating the source text's layout. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Etymological breakdown of words from 'graphein'. 
+        - Goal: Organize, Inform, Compare.
+        - Viz/Presentation Method: An interactive radial diagram built with HTML/CSS and a dynamic, centrally-located floating content panel.
+        - Interaction: Hovering a word on the diagram updates the central content panel.
+        - Justification: The diagram visually represents the "family tree" of words. Displaying information centrally on hover is a direct and intuitive interaction model.
+        - Library/Method: Vanilla JS for interactivity.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.1) translate(-45%, -45%) !important;
+            z-index: 20;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Graphy'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek root <span class="font-lora italic">'graphein'</span> (to write, to record) is the ancestor of a rich family of words. Hover over a word below to see its origin story.</p>
+            </div>
+
+            <div class="flex justify-center items-center min-h-[50vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-3xl">
+                    <!-- Word nodes will be injected here -->
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                        <!-- Content will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordData = [
+                { word: 'Tomography', prefix: 'Tomo-', prefixMeaning: 'slice', meaning: 'Imaging by sections or slicing.', example: 'A CT scanner performs tomography to create detailed images.', angle: 0 },
+                { word: 'Angiography', prefix: 'Angio-', prefixMeaning: 'vessel', meaning: 'X-ray imaging of blood vessels.', example: 'Angiography can detect blockages in arteries.', angle: 40 },
+                { word: 'Mammography', prefix: 'Mammo-', prefixMeaning: 'breast', meaning: 'A technique using X-rays to screen for breast cancer.', example: 'Regular mammography is recommended for early detection.', angle: 80 },
+                { word: 'Radiography', prefix: 'Radio-', prefixMeaning: 'radiation', meaning: 'Imaging using X-rays or similar radiation.', example: 'A standard chest X-ray is a form of radiography.', angle: 120 },
+                { word: 'Ultrasonography', prefix: 'Ultra-', prefixMeaning: 'beyond', meaning: 'Imaging using ultrasound waves.', example: 'Ultrasonography is often used to view a fetus during pregnancy.', angle: 160 },
+                { word: 'Echocardiography', prefix: 'Echo-', prefixMeaning: 'echo', meaning: 'An ultrasound of the heart.', example: 'Echocardiography assesses the heart\'s function and structures.', angle: 200 },
+                { word: 'Electrocardiography', prefix: 'Electro-', prefixMeaning: 'electric', meaning: 'Recording the electrical activity of the heart (ECG/EKG).', example: 'An ECG can detect irregular heart rhythms.', angle: 240 },
+                { word: 'Electroencephalography', prefix: 'Encephalo-', prefixMeaning: 'brain', meaning: 'Recording the electrical activity of the brain (EEG).', example: 'An EEG is used to diagnose epilepsy.', angle: 280 },
+                { word: 'Thermography', prefix: 'Thermo-', prefixMeaning: 'heat', meaning: 'A technique for measuring and mapping surface temperatures.', example: 'Thermography can detect inflammation by showing heat patterns.', angle: 320 }
+            ];
+
+            const diagramContainer = document.getElementById('word-diagram-container');
+            const centerDisplay = document.getElementById('center-display');
+            const nodes = [];
+
+            const defaultContent = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl text-teal-800">graphein</p>
+                    <p class="text-lg text-teal-700 opacity-80">(to write, record)</p>
+                </div>
+            `;
+            
+            centerDisplay.innerHTML = defaultContent;
+            centerDisplay.style.opacity = '1';
+            centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+
+            // Create and append nodes
+            wordData.forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
+                
+                node.innerHTML = `<span class="font-bold text-lg pointer-events-none text-teal-800">${item.word}</span>`;
+                
+                diagramContainer.appendChild(node);
+                nodes.push(node);
+
+                node.addEventListener('mouseover', () => {
+                    const selectedWord = item;
+                    centerDisplay.style.opacity = '0';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                    setTimeout(() => {
+                        centerDisplay.innerHTML = `
+                            <div>
+                                <h3 class="text-3xl font-bold text-teal-700 font-lora">${selectedWord.word}</h3>
+                                <p class="mt-1 text-md text-stone-500">
+                                    <span class="font-semibold text-rose-600">${selectedWord.prefix}</span> (<em>${selectedWord.prefixMeaning}</em>) + 
+                                    <span class="font-semibold text-teal-600">graphy</span>
+                                </p>
+                                <p class="mt-3 text-stone-700 text-md">${selectedWord.meaning}</p>
+                                <blockquote class="mt-3 border-l-4 border-stone-200 pl-3">
+                                    <p class="text-stone-600 italic">"${selectedWord.example}"</p>
+                                </blockquote>
+                            </div>
+                        `;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+
+                node.addEventListener('mouseout', () => {
+                     centerDisplay.style.opacity = '0';
+                     centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                     setTimeout(() => {
+                        centerDisplay.innerHTML = defaultContent;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+            });
+
+            // Function to calculate and apply node positions
+            function positionNodes() {
+                const containerWidth = diagramContainer.offsetWidth;
+                if (containerWidth === 0) {
+                    requestAnimationFrame(positionNodes); // Try again on the next frame if not ready
+                    return;
+                }
+                const radius = containerWidth * 0.45;
+
+                nodes.forEach((node, index) => {
+                    const item = wordData[index];
+                    const angleRad = (item.angle - 90) * (Math.PI / 180);
+                    
+                    const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                    const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                    node.style.left = `${x}%`;
+                    node.style.top = `${y}%`;
+                    node.style.transform = 'translate(-50%, -50%)';
+                });
+            }
+
+            // Initial positioning and responsive updates
+            positionNodes();
+            window.addEventListener('resize', positionNodes);
+        });
+    </script>
+</body>
+</html>
