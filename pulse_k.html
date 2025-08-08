@@ -81,7 +81,7 @@
                 </div>
 
                 <!-- 선택지 -->
-                <div id="choices" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div id="choices" class="grid grid-cols-2 md:grid-cols-3 gap-3">
                     <!-- 선택지 버튼은 JS로 생성 -->
                 </div>
 
@@ -99,7 +99,7 @@
             </div>
         </div>
         <footer class="text-center mt-4">
-            <p class="text-xs text-gray-400">By Hyungsuk Choi</p>
+            <p class="text-xs text-gray-400">by Hyungsuk Choi</p>
         </footer>
     </div>
 
@@ -201,7 +201,7 @@
             });
         }
 
-        // 4지선다 선택지 생성 함수 (정답 1 + 오답 3)
+        // 6지선다 선택지 생성 함수 (정답 1 + 오답 5)
         function getChoices(correctAnswer) {
             let choices = [correctAnswer];
             let wrongAnswers = quizData
@@ -210,8 +210,11 @@
             
             wrongAnswers.sort(() => 0.5 - Math.random());
 
-            for (let i = 0; i < 3; i++) {
-                choices.push(wrongAnswers[i]);
+            // 오답 5개 가져오기
+            for (let i = 0; i < 5; i++) {
+                if(wrongAnswers[i]) {
+                    choices.push(wrongAnswers[i]);
+                }
             }
 
             // 선택지 순서 섞기
