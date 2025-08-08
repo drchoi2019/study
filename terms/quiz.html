@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Terminology Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .correct {
+            background-color: #22c55e !important; /* green-500 */
+            color: white !important;
+            border-color: #16a34a !important; /* green-600 */
+        }
+        .incorrect {
+            background-color: #ef4444 !important; /* red-500 */
+            color: white !important;
+            border-color: #dc2626 !important; /* red-600 */
+        }
+        .disabled-options button {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl">
+        <div id="quiz-container" class="bg-white w-full rounded-xl shadow-lg p-6 md:p-8">
+            <!-- Header -->
+            <div class="mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Medical Terminology Quiz</h1>
+                <p class="text-slate-500 mt-1">Test your knowledge of prefixes and suffixes.</p>
+            </div>
+
+            <!-- Quiz Content Area -->
+            <div id="quiz-content">
+                <div class="flex justify-between items-center mb-4">
+                    <div id="question-counter" class="text-sm font-semibold text-slate-600"></div>
+                    <div id="score-counter" class="text-sm font-semibold text-slate-600"></div>
+                </div>
+                
+                <div id="question-area" class="mb-6">
+                    <p class="text-lg text-slate-600">What is the meaning of the term:</p>
+                    <h2 id="question-term" class="text-3xl md:text-4xl font-bold text-indigo-600 my-2"></h2>
+                </div>
+
+                <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <!-- Options will be injected here by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Results Screen -->
+            <div id="results-screen" class="hidden text-center">
+                <h2 class="text-2xl font-bold text-slate-800">Quiz Complete!</h2>
+                <p class="text-slate-600 mt-2">Your final score is:</p>
+                <p id="final-score" class="text-6xl font-bold text-indigo-600 my-4"></p>
+                <p id="score-message" class="text-lg text-slate-700 mb-6"></p>
+                <button id="restart-btn" class="w-full max-w-xs mx-auto bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                    Try Again
+                </button>
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-8 text-right">
+                <button id="next-btn" class="bg-slate-200 text-slate-700 font-bold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors hidden">
+                    Next
+                </button>
+            </div>
+        </div>
+        <!-- Credit line -->
+        <p class="text-center text-sm text-slate-500 mt-4">by Hyungsuk Choi</p>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const terms = [
+            // Prefixes - General
+            { term: 'A, An', definition: 'Without, lack of' }, { term: 'Ab', definition: 'Away from' },
+            { term: 'Ad', definition: 'To, toward, near to' }, { term: 'Ambi', definition: 'Both' },
+            { term: 'Anti', definition: 'Against, opposed to, reversed' }, { term: 'Circum', definition: 'Around, about' },
+            { term: 'Con/com', definition: 'With, together' }, { term: 'Contra', definition: 'Against, opposite' },
+            { term: 'De', definition: 'Away from' }, { term: 'Dia', definition: 'Through, apart, across, completely' },
+            { term: 'Dis', definition: 'Reversal, apart from, separation' }, { term: 'Dys', definition: 'Bad, difficult, disordered' },
+            // Prefixes - Numbers
+            { term: 'Hemi/Semi', definition: 'Half' }, { term: 'Bi', definition: 'Twice, double' },
+            { term: 'Tri', definition: 'Three' }, { term: 'Quadro', definition: 'Four' },
+            { term: 'Poly', definition: 'Many, much' },
+            // Prefixes - Location
+            { term: 'Ante', definition: 'Before, forward' }, { term: 'E, Ex', definition: 'Out, away from' },
+            { term: 'Endo', definition: 'Within' }, { term: 'Epi', definition: 'Upon, on' },
+            { term: 'Extra', definition: 'Outside' }, { term: 'Hyper', definition: 'Over, above, excessive' },
+            { term: 'Hypo', definition: 'Under, below, deficient' }, { term: 'Im, In', definition: 'In, Into' },
+            { term: 'Im, In (alt)', definition: 'Not' }, { term: 'Infra', definition: 'Below' },
+            { term: 'Inter', definition: 'Between' }, { term: 'Intra', definition: 'Within' },
+            { term: 'Meta', definition: 'Beyond, after, change' }, { term: 'Para', definition: 'Beside, beyond, near to' },
+            { term: 'Per', definition: 'Through, excessive' }, { term: 'Peri', definition: 'Around' },
+            { term: 'Post', definition: 'After, behind' }, { term: 'Pre', definition: 'Before, in front of' },
+            { term: 'Pro', definition: 'Before, in front of' }, { term: 'Re', definition: 'Back, again, contrary' },
+            { term: 'Retro', definition: 'Backward, located behind' }, { term: 'Sub', definition: 'Under' },
+            { term: 'Super', definition: 'Above, upper, excessive' }, { term: 'Supra', definition: 'Above, upper, excessive' },
+            { term: 'Sym, Syn', definition: 'Together, with' }, { term: 'Trans', definition: 'Across, through, beyond' },
+            { term: 'Ultra', definition: 'Beyond, in excess' },
+            // Suffixes
+            { term: '-algia', definition: 'Pain' }, { term: '-itis', definition: 'Inflammation' },
+            { term: '-pathy', definition: 'Disease or disorder' }, { term: '-megaly', definition: 'Abnormal enlargement' },
+            { term: '-ia', definition: 'Condition' }, { term: '-osis', definition: 'Condition' },
+            { term: '-rrhage', definition: 'Flow (bleeding)' }, { term: '-rrhea', definition: 'Flow' },
+            { term: '-cise', definition: 'Cut' }, { term: '-ectomy', definition: 'Surgical removal' },
+            { term: '-otomy', definition: 'Incision' }, { term: '-plasty', definition: 'Surgical correction' },
+            { term: '-emia', definition: 'Condition of blood' }, { term: '-penia', definition: 'Decrease' },
+            { term: '-stenosis', definition: 'Abnormal tightening' }, { term: '-cide', definition: 'Kill' },
+            { term: '-oma', definition: 'Tumor' }, { term: '-genic', definition: 'Origin' },
+            { term: '-tripsy', definition: 'Crushing' }, { term: '-ology', definition: 'Study of' },
+            { term: '-oscopy', definition: 'Examination' }, { term: '-lysis', definition: 'Breaking down' },
+            { term: '-graphy', definition: 'Drawing, Writing' }, { term: '-gram', definition: 'Record or picture' },
+            { term: '-oid', definition: 'Resembling' }, { term: '-metry', definition: 'Process of measuring' },
+            { term: '-phobia', definition: 'Fear' }, { term: '-genesis', definition: 'Formation or origin' },
+            { term: '-trophy', definition: 'Nourishment or growth' }, { term: '-plasia', definition: 'Formation or development' },
+            { term: '-cyte', definition: 'Cell' }, { term: '-ase', definition: 'Enzyme' }
+        ];
+
+        // --- STATE ---
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        // The quiz length is now set to 10 random questions.
+        const QUIZ_LENGTH = 10;
+
+        // --- DOM ELEMENTS ---
+        const quizContentEl = document.getElementById('quiz-content');
+        const resultsScreenEl = document.getElementById('results-screen');
+        const questionCounterEl = document.getElementById('question-counter');
+        const scoreCounterEl = document.getElementById('score-counter');
+        const questionTermEl = document.getElementById('question-term');
+        const optionsContainerEl = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const finalScoreEl = document.getElementById('final-score');
+        const scoreMessageEl = document.getElementById('score-message');
+
+        // --- FUNCTIONS ---
+
+        /**
+         * Shuffles an array in place.
+         * @param {Array} array The array to shuffle.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        /**
+         * Sets up and starts the quiz.
+         */
+        function startQuiz() {
+            // Reset state
+            currentQuestionIndex = 0;
+            score = 0;
+            quizQuestions = [];
+            
+            // Show quiz content and hide results
+            quizContentEl.classList.remove('hidden');
+            resultsScreenEl.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+
+            // Create a shuffled list of 10 questions
+            const shuffledTerms = [...terms];
+            shuffleArray(shuffledTerms);
+            const selectedTerms = shuffledTerms.slice(0, QUIZ_LENGTH);
+
+            // For each selected term, create a question object with 6 options
+            quizQuestions = selectedTerms.map(correctTerm => {
+                const otherTerms = terms.filter(t => t.definition !== correctTerm.definition);
+                shuffleArray(otherTerms);
+                // Get 5 incorrect options to make a total of 6 options
+                const incorrectOptions = otherTerms.slice(0, 5).map(t => t.definition);
+                
+                const options = [correctTerm.definition, ...incorrectOptions];
+                shuffleArray(options);
+
+                return {
+                    term: correctTerm.term,
+                    correctAnswer: correctTerm.definition,
+                    options: options
+                };
+            });
+            
+            displayQuestion();
+            updateScoreDisplay();
+        }
+
+        /**
+         * Displays the current question and its options.
+         */
+        function displayQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const question = quizQuestions[currentQuestionIndex];
+            
+            questionCounterEl.textContent = `Question ${currentQuestionIndex + 1} / ${QUIZ_LENGTH}`;
+            questionTermEl.textContent = question.term;
+            optionsContainerEl.innerHTML = '';
+            optionsContainerEl.classList.remove('disabled-options');
+            nextBtn.classList.add('hidden');
+
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = "w-full text-left p-4 border-2 border-slate-300 rounded-lg hover:bg-slate-100 hover:border-indigo-400 transition-all duration-200";
+                button.onclick = () => handleOptionSelect(button, option, question.correctAnswer);
+                optionsContainerEl.appendChild(button);
+            });
+        }
+        
+        /**
+         * Handles the user selecting an answer.
+         * @param {HTMLButtonElement} selectedButton - The button element that was clicked.
+         * @param {string} selectedOption - The text content of the selected option.
+         * @param {string} correctAnswer - The correct answer for the current question.
+         */
+        function handleOptionSelect(selectedButton, selectedOption, correctAnswer) {
+            optionsContainerEl.classList.add('disabled-options'); // Disable other buttons
+            const isCorrect = selectedOption === correctAnswer;
+
+            if (isCorrect) {
+                score++;
+                selectedButton.classList.add('correct');
+            } else {
+                selectedButton.classList.add('incorrect');
+                // Highlight the correct answer
+                Array.from(optionsContainerEl.children).forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+            
+            updateScoreDisplay();
+            nextBtn.classList.remove('hidden');
+        }
+
+        /**
+         * Updates the score display on the screen.
+         */
+        function updateScoreDisplay() {
+            scoreCounterEl.textContent = `Score: ${score}`;
+        }
+        
+        /**
+         * Shows the final results screen.
+         */
+        function showResults() {
+            quizContentEl.classList.add('hidden');
+            resultsScreenEl.classList.remove('hidden');
+
+            const percentage = Math.round((score / QUIZ_LENGTH) * 100);
+            finalScoreEl.textContent = `${percentage}%`;
+
+            let message = '';
+            if (percentage === 100) {
+                message = "Perfect score! You're a terminology master!";
+            } else if (percentage >= 80) {
+                message = "Excellent job! You know your stuff.";
+            } else if (percentage >= 50) {
+                message = "Good effort! Keep practicing.";
+            } else {
+                message = "Don't worry, review the terms and try again!";
+            }
+            scoreMessageEl.textContent = message;
+        }
+
+        // --- EVENT LISTENERS ---
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+
+        restartBtn.addEventListener('click', startQuiz);
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', startQuiz);
+
+    </script>
+</body>
+</html>
