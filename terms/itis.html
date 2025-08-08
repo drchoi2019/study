@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family of '-itis': An Interactive Etymology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, single-page journey. It starts with a hero section to introduce the core concept. The main interactive element is a radial diagram where users hover over words ending in '-itis' to dynamically display detailed information in a central floating panel, transforming passive reading into active exploration. This structure prioritizes user engagement and information discovery over simply replicating the source text's layout. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Etymological breakdown of words from the '-itis' suffix. 
+        - Goal: Organize, Inform, Compare.
+        - Viz/Presentation Method: An interactive radial diagram built with HTML/CSS and a dynamic, centrally-located floating content panel.
+        - Interaction: Hovering a word on the diagram updates the central content panel.
+        - Justification: The diagram visually represents the "family tree" of words. Displaying information centrally on hover is a direct and intuitive interaction model.
+        - Library/Method: Vanilla JS for interactivity.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.1) translate(-45%, -45%) !important;
+            z-index: 20;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of '-itis'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek suffix <span class="font-lora italic">'-itis'</span> (inflammation) is the ancestor of many medical terms. Hover over a word below to see its origin story.</p>
+            </div>
+
+            <div class="flex justify-center items-center min-h-[50vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl">
+                    <!-- Word nodes will be injected here -->
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                        <!-- Content will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordData = [
+                { word: 'Arthritis', prefix: 'Arthr-', prefixMeaning: 'joint', meaning: 'Inflammation of one or more joints.', example: 'Arthritis causes pain and stiffness in the joints.', angle: 0 },
+                { word: 'Bronchitis', prefix: 'Bronch-', prefixMeaning: 'bronchial tube', meaning: 'Inflammation of the lining of your bronchial tubes.', example: 'A persistent cough is a common symptom of bronchitis.', angle: 36 },
+                { word: 'Dermatitis', prefix: 'Dermat-', prefixMeaning: 'skin', meaning: 'A general term for inflammation of the skin.', example: 'Dermatitis can cause itchy rashes and dry skin.', angle: 72 },
+                { word: 'Gastritis', prefix: 'Gastr-', prefixMeaning: 'stomach', meaning: 'Inflammation of the lining of the stomach.', example: 'Gastritis is often caused by infection or excessive alcohol use.', angle: 108 },
+                { word: 'Hepatitis', prefix: 'Hepat-', prefixMeaning: 'liver', meaning: 'Inflammation of the liver.', example: 'Hepatitis can be caused by viral infections.', angle: 144 },
+                { word: 'Nephritis', prefix: 'Nephr-', prefixMeaning: 'kidney', meaning: 'Inflammation of the kidneys.', example: 'Nephritis can affect the kidney\'s ability to filter waste.', angle: 180 },
+                { word: 'Otitis', prefix: 'Ot-', prefixMeaning: 'ear', meaning: 'Inflammation or infection of the ear.', example: 'Otitis media is a common ear infection in children.', angle: 216 },
+                { word: 'Pharyngitis', prefix: 'Pharyng-', prefixMeaning: 'pharynx (throat)', meaning: 'Inflammation of the pharynx, causing a sore throat.', example: 'Pharyngitis is the medical term for a sore throat.', angle: 252 },
+                { word: 'Sinusitis', prefix: 'Sinus-', prefixMeaning: 'sinus', meaning: 'Inflammation of the tissue lining the sinuses.', example: 'Sinusitis can cause a stuffy nose and facial pain.', angle: 288 },
+                { word: 'Tonsillitis', prefix: 'Tonsil-', prefixMeaning: 'tonsil', meaning: 'Inflammation of the tonsils.', example: 'Tonsillitis is characterized by sore throat and swollen tonsils.', angle: 324 }
+            ];
+
+            const diagramContainer = document.getElementById('word-diagram-container');
+            const centerDisplay = document.getElementById('center-display');
+            const nodes = [];
+
+            const defaultContent = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl text-teal-800">-itis</p>
+                    <p class="text-lg text-teal-700 opacity-80">(inflammation)</p>
+                </div>
+            `;
+            
+            centerDisplay.innerHTML = defaultContent;
+            centerDisplay.style.opacity = '1';
+            centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+
+            // Create and append nodes
+            wordData.forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
+                
+                node.innerHTML = `<span class="font-bold text-lg pointer-events-none text-teal-800">${item.word}</span>`;
+                
+                diagramContainer.appendChild(node);
+                nodes.push(node);
+
+                node.addEventListener('mouseover', () => {
+                    const selectedWord = item;
+                    centerDisplay.style.opacity = '0';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                    setTimeout(() => {
+                        centerDisplay.innerHTML = `
+                            <div>
+                                <h3 class="text-3xl font-bold text-teal-700 font-lora">${selectedWord.word}</h3>
+                                <p class="mt-1 text-md text-stone-500">
+                                    <span class="font-semibold text-rose-600">${selectedWord.prefix}</span> (<em>${selectedWord.prefixMeaning}</em>) + 
+                                    <span class="font-semibold text-teal-600">itis</span>
+                                </p>
+                                <p class="mt-3 text-stone-700 text-md">${selectedWord.meaning}</p>
+                                <blockquote class="mt-3 border-l-4 border-stone-200 pl-3">
+                                    <p class="text-stone-600 italic">"${selectedWord.example}"</p>
+                                </blockquote>
+                            </div>
+                        `;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+
+                node.addEventListener('mouseout', () => {
+                     centerDisplay.style.opacity = '0';
+                     centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                     setTimeout(() => {
+                        centerDisplay.innerHTML = defaultContent;
+                        centerDisplay.style.opacity = '1';
+                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                });
+            });
+
+            // Function to calculate and apply node positions
+            function positionNodes() {
+                const containerWidth = diagramContainer.offsetWidth;
+                if (containerWidth === 0) {
+                    requestAnimationFrame(positionNodes); // Try again on the next frame if not ready
+                    return;
+                }
+                const radius = containerWidth * 0.45;
+
+                nodes.forEach((node, index) => {
+                    const item = wordData[index];
+                    const angleRad = (item.angle - 90) * (Math.PI / 180);
+                    
+                    const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                    const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                    node.style.left = `${x}%`;
+                    node.style.top = `${y}%`;
+                    node.style.transform = 'translate(-50%, -50%)';
+                });
+            }
+
+            // Initial positioning and responsive updates
+            positionNodes();
+            window.addEventListener('resize', positionNodes);
+        });
+    </script>
+</body>
+</html>
