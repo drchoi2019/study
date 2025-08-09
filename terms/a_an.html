@@ -58,7 +58,7 @@
         <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 pt-8">
                 <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'A-/An-'</h2>
-                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek prefix <span class="font-lora italic">'a-'</span> or <span class="font-lora italic">'an-'</span> (without, not) is the ancestor of many medical terms. Hover over or tap a word below to see its origin story.</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek prefix <span class="font-lora italic">'a-'</span> or <span class="font-lora italic">'an-'</span> (without, not) is the ancestor of many medical terms. Click a word to see its origin story and hear it spoken.</p>
             </div>
 
             <!-- Desktop Radial Diagram (visible on md screens and up) -->
@@ -75,14 +75,11 @@
             <div id="mobile-list-view" class="md:hidden space-y-4">
                 <!-- Mobile cards will be injected here -->
             </div>
-          <br><br>  
-
-
         </section>
     </main>
 
-      <p class="text-base text-slate-400 text-center">© 2024 Hyungsuk Choi. All rights reserved.</p>
-<br><br>
+     <p class="text-base text-slate-400 text-center">© 2024 Hyungsuk Choi. All rights reserved.</p>
+    <br><br>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -102,6 +99,18 @@
                     <p class="text-lg text-teal-700 opacity-80">(without, not)</p>
                 </div>
             `;
+            
+            // Function to speak text
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel(); // Cancel any previous speech
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
 
             // Function to update the central display content
             function updateCenterDisplay(content) {
@@ -158,7 +167,10 @@
                         e.stopPropagation();
                         const content = `
                             <div>
-                                <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
+                                <div class="flex items-center justify-center">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
+                                    <span class="speaker-icon cursor-pointer ml-2 text-2xl" data-word="${item.word}" style="pointer-events: auto;">🔊</span>
+                                </div>
                                 ${getBreakdownHtml(item)}
                             </div>
                         `;
@@ -206,9 +218,10 @@
                         <div class="flex items-center">
                             <span class="text-2xl mr-4">${item.icon}</span>
                             <h3 class="font-bold text-lg text-teal-800">${item.word}</h3>
+                            <span class="speaker-icon cursor-pointer ml-2 text-xl" data-word="${item.word}">🔊</span>
                         </div>
                         <span class="arrow-icon text-teal-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
                     `;
 
@@ -220,17 +233,30 @@
                     card.appendChild(body);
                     mobileContainer.appendChild(card);
 
-                    header.addEventListener('click', () => {
-                        document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
-                            if (activeCard !== card) {
-                                activeCard.classList.remove('active');
-                            }
-                        });
-                        card.classList.toggle('active');
+                    header.addEventListener('click', (e) => {
+                        // Only toggle accordion if the speaker icon wasn't clicked
+                        if (!e.target.classList.contains('speaker-icon')) {
+                            document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
+                                if (activeCard !== card) {
+                                    activeCard.classList.remove('active');
+                                }
+                            });
+                            card.classList.toggle('active');
+                        }
                     });
                 });
-
             }
+            
+            // --- Global Speaker Icon Event Listener ---
+            document.body.addEventListener('click', function(e) {
+                if (e.target.classList.contains('speaker-icon')) {
+                    e.stopPropagation();
+                    const wordToSpeak = e.target.dataset.word;
+                    if (wordToSpeak) {
+                        speak(wordToSpeak);
+                    }
+                }
+            });
 
             // Call setup functions
             setupDesktopView();
