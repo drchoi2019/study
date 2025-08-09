@@ -197,6 +197,18 @@
             '#FBBF24', // 9 (yellow stripe - only base color used)
         ];
         
+        // Function to speak text
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Cancel any previous speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('Text-to-speech not supported in this browser.');
+            }
+        }
+
         // Create balls and add event listeners
         for (let i = 0; i < 10; i++) {
             const ball = document.createElement('div');
@@ -237,7 +249,10 @@
             const data = numberData[number];
             let termsHtml = data.terms.map(term => `
                 <div class="mt-4">
-                    <p class="font-semibold text-lg text-gray-800">${term.name}</p>
+                    <div class="flex items-center">
+                        <p class="font-semibold text-lg text-gray-800">${term.name}</p>
+                        <svg data-word="${term.name}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-blue-500 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </div>
                     <p class="text-base text-gray-600 ml-2">${term.definition}</p>
                 </div>
             `).join('');
@@ -260,6 +275,18 @@
                 </div>
             `;
         };
+        
+        // --- Global Speaker Icon Event Listener ---
+        document.body.addEventListener('click', function(e) {
+            const speakerIcon = e.target.closest('.speaker-icon');
+            if (speakerIcon) {
+                e.stopPropagation();
+                const wordToSpeak = speakerIcon.dataset.word;
+                if (wordToSpeak) {
+                    speak(wordToSpeak);
+                }
+            }
+        });
 
         // Set initial state
         infoDisplayArea.innerHTML = defaultInfoText;
