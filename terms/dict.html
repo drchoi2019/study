@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Family of 'Voke': An Interactive Etymology</title>
+    <title>The Family of 'Dict': An Interactive Etymology</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,8 +57,9 @@
     <main class="py-12 md:py-20">
         <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 pt-8">
-                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Voke'</h2>
-                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Latin root <span class="font-lora italic">'vocare'</span> (to call) is the ancestor of a rich family of words. Hover over or tap a word below to see its origin story.</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Dict'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Latin root <span class="font-lora italic">'dicere'</span> (to say, to speak) is the ancestor of a rich family of words. Click a word to see its origin story and hear it spoken.</p>
             </div>
 
             <!-- Desktop Radial Diagram (visible on md screens and up) -->
@@ -77,29 +78,45 @@
             </div>
         </section>
     </main>
- <p class="text-base text-slate-400 text-center">© 2024 Hyungsuk Choi. All rights reserved.</p>
+     <p class="text-base text-slate-400 text-center">© 2024 Hyungsuk Choi. All rights reserved.</p>
     <br><br>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const wordData = [
-                { word: 'Vocal', prefix: 'Voc-', prefixMeaning: 'call, voice', meaning: 'Relating to the human voice.', example: 'The vocal cords are essential for speech.', angle: 0 },
-                { word: 'Vocation', prefix: 'Voc-', prefixMeaning: 'call, voice', meaning: 'A strong feeling of suitability for a particular career or occupation; a calling.', example: 'He considered teaching to be his true vocation.', angle: 36 },
-                { word: 'Evoke', prefix: 'E-', prefixMeaning: 'out', meaning: 'To bring a feeling, memory, or image into the mind.', example: 'The smell of the sea evoked memories of his childhood.', angle: 72 },
-                { word: 'Provoke', prefix: 'Pro-', prefixMeaning: 'forward', meaning: 'To stimulate or give rise to a reaction or emotion, typically a strong one.', example: 'His comments were intended to provoke a reaction.', angle: 108 },
-                { word: 'Revoke', prefix: 'Re-', prefixMeaning: 'back', meaning: 'To officially cancel a decree, decision, or promise.', example: 'The authorities have revoked their license.', angle: 144 },
-                { word: 'Advocate', prefix: 'Ad-', prefixMeaning: 'to, toward', meaning: 'A person who publicly supports or recommends a particular cause or policy.', example: 'She is a passionate advocate for animal rights.', angle: 180 },
-                { word: 'Invoke', prefix: 'In-', prefixMeaning: 'in, into', meaning: 'To call on a deity, spirit, or higher power for help or inspiration.', example: 'The shaman invoked the spirits for guidance.', angle: 216 },
-                { word: 'Equivocate', prefix: 'Equi-', prefixMeaning: 'equally', meaning: 'To use ambiguous language to conceal the truth or avoid committing oneself.', example: 'When asked directly, the politician began to equivocate.', angle: 252 },
-                { word: 'Irrevocable', prefix: 'Ir-', prefixMeaning: 'not', meaning: 'Not able to be changed, reversed, or recovered; final.', example: 'The court\'s decision is irrevocable.', angle: 288 },
-                { word: 'Vocable', prefix: 'Voc-', prefixMeaning: 'call, voice', meaning: 'A word, especially with reference to its form rather than its meaning.', example: 'Each vocable represents a distinct sound in the language.', angle: 324 }
+                { word: 'Dictate', prefix: 'Dict-', prefixMeaning: 'to say', meaning: 'To say or read something aloud for another person to write down; to command.', example: 'The teacher will dictate a sentence for the students.', angle: 0, icon: '✍️' },
+                { word: 'Predict', prefix: 'Pre-', prefixMeaning: 'before', meaning: 'To say that an event will happen in the future.', example: 'It is difficult to predict the outcome of the election.', angle: 28, icon: '🔮' },
+                { word: 'Contradict', prefix: 'Contra-', prefixMeaning: 'against', meaning: 'To say the opposite of a statement; to deny the truth.', example: 'His actions completely contradict his words.', angle: 56, icon: '🗣️' },
+                { word: 'Verdict', prefix: 'Ver-', prefixMeaning: 'truth', meaning: 'A decision on an issue of fact in a civil or criminal case.', example: 'The jury reached a guilty verdict.', angle: 84, icon: '⚖️' },
+                { word: 'Edict', prefix: 'E-', prefixMeaning: 'out', meaning: 'An official order or proclamation issued by a person in authority.', example: 'The emperor issued an edict forbidding the practice.', angle: 112, icon: '📜' },
+                { word: 'Malediction', prefix: 'Male-', prefixMeaning: 'badly', meaning: 'A magical word or phrase uttered with the intention of bringing about evil; a curse.', example: 'He muttered a malediction against his enemies.', angle: 140, icon: '😠' },
+                { word: 'Benediction', prefix: 'Bene-', prefixMeaning: 'well', meaning: 'The utterance of a blessing, especially at the end of a religious service.', example: 'The priest gave a benediction to the congregation.', angle: 168, icon: '😇' },
+                { word: 'Abdicate', prefix: 'Ab-', prefixMeaning: 'away from', meaning: 'To renounce one\'s throne, right, or power.', example: 'The king was forced to abdicate the throne.', angle: 196, icon: '👑' },
+                { word: 'Indict', prefix: 'In-', prefixMeaning: 'in, against', meaning: 'To formally accuse of or charge with a serious crime.', example: 'The grand jury is expected to indict him for fraud.', angle: 224, icon: '👨‍⚖️' },
+                { word: 'Addict', prefix: 'Ad-', prefixMeaning: 'to, toward', meaning: 'A person who is addicted to a particular substance or activity.', example: 'Originally, it meant one devoted to a saying or command.', angle: 252, icon: '🔗' },
+                { word: 'Dedicate', prefix: 'De-', prefixMeaning: 'away, from', meaning: 'To devote time or oneself to a particular task or purpose.', example: 'She dedicates her life to helping others.', angle: 280, icon: '❤️' },
+                { word: 'Jurisdiction', prefix: 'Juris-', prefixMeaning: 'law', meaning: 'The official power to make legal decisions and judgments.', example: 'The court has jurisdiction over the case.', angle: 308, icon: '🏛️' },
+                { word: 'Diction', prefix: 'Dict-', prefixMeaning: 'to say', meaning: 'The choice and use of words in speech or writing.', example: 'The actor\'s diction was clear and precise.', angle: 336, icon: '💬' }
             ];
 
             const defaultContentHTML = `
                 <div class="text-center">
-                    <p class="font-lora italic text-4xl text-teal-800">vocare</p>
-                    <p class="text-lg text-teal-700 opacity-80">(to call)</p>
+                    <p class="font-lora italic text-4xl text-teal-800">dicere</p>
+                    <p class="text-lg text-teal-700 opacity-80">(to say, speak)</p>
                 </div>
             `;
+
+            // Function to speak text
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel(); // Cancel any previous speech
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
 
             // Function to update the central display content
             function updateCenterDisplay(content) {
@@ -120,7 +137,7 @@
                 return `
                     <p class="mt-1 text-md text-stone-500">
                         <span class="font-semibold text-rose-600">${item.prefix}</span> (<em>${item.prefixMeaning}</em>) + 
-                        <span class="font-semibold text-teal-600">voke/voc</span> (<em>to call</em>)
+                        <span class="font-semibold text-teal-600">dict</span>
                     </p>
                     <p class="mt-3 text-stone-700 text-md">${item.meaning}</p>
                     <blockquote class="mt-3 border-l-4 border-stone-200 pl-3">
@@ -147,7 +164,7 @@
                 wordData.forEach(item => {
                     const node = document.createElement('div');
                     node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
-                    node.innerHTML = `<span class="font-bold text-sm md:text-lg pointer-events-none text-teal-800">${item.word}</span>`;
+                    node.innerHTML = `<span class="text-2xl pointer-events-none">${item.icon}</span> <span class="font-bold text-sm md:text-lg pointer-events-none text-teal-800">${item.word}</span>`;
                     
                     diagramContainer.appendChild(node);
                     nodes.push(node);
@@ -156,7 +173,10 @@
                         e.stopPropagation();
                         const content = `
                             <div>
-                                <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
+                                <div class="flex items-center justify-center">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
+                                    <svg data-word="${item.word}" style="pointer-events: auto;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-teal-600 w-6 h-6"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                </div>
                                 ${getBreakdownHtml(item)}
                             </div>
                         `;
@@ -202,10 +222,12 @@
                     header.className = 'p-4 flex justify-between items-center cursor-pointer border-b border-gray-200';
                     header.innerHTML = `
                         <div class="flex items-center">
+                            <span class="text-2xl mr-4">${item.icon}</span>
                             <h3 class="font-bold text-lg text-teal-800">${item.word}</h3>
+                            <svg data-word="${item.word}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-teal-600 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </div>
                         <span class="arrow-icon text-teal-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
                     `;
 
@@ -217,16 +239,31 @@
                     card.appendChild(body);
                     mobileContainer.appendChild(card);
 
-                    header.addEventListener('click', () => {
-                        document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
-                            if (activeCard !== card) {
-                                activeCard.classList.remove('active');
-                            }
-                        });
-                        card.classList.toggle('active');
+                    header.addEventListener('click', (e) => {
+                        // Only toggle accordion if the speaker icon wasn't clicked
+                        if (!e.target.closest('.speaker-icon')) {
+                            document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
+                                if (activeCard !== card) {
+                                    activeCard.classList.remove('active');
+                                }
+                            });
+                            card.classList.toggle('active');
+                        }
                     });
                 });
             }
+            
+            // --- Global Speaker Icon Event Listener ---
+            document.body.addEventListener('click', function(e) {
+                const speakerIcon = e.target.closest('.speaker-icon');
+                if (speakerIcon) {
+                    e.stopPropagation();
+                    const wordToSpeak = speakerIcon.dataset.word;
+                    if (wordToSpeak) {
+                        speak(wordToSpeak);
+                    }
+                }
+            });
 
             // Call setup functions
             setupDesktopView();
