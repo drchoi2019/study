@@ -5,28 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Family of 'Ferre': An Interactive Etymology</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA is designed as a thematic, single-page journey. It starts with a hero section to introduce the core concept. The main interactive element is a radial diagram where users hover over words derived from 'ferre' to dynamically display detailed information in a central floating panel, transforming passive reading into active exploration. This structure prioritizes user engagement and information discovery over simply replicating the source text's layout. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Etymological breakdown of words from 'ferre'. 
-        - Goal: Organize, Inform, Compare.
-        - Viz/Presentation Method: An interactive radial diagram built with HTML/CSS and a dynamic, centrally-located floating content panel.
-        - Interaction: Hovering a word on the diagram updates the central content panel.
-        - Justification: The diagram visually represents the "family tree" of words. Displaying information centrally on hover is a direct and intuitive interaction model.
-        - Library/Method: Vanilla JS for interactivity.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Merriweather&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f7f4;
-            color: #3d3d3d;
+            font-family: 'Merriweather', serif;
+            background-color: #f8f9fa;
+            color: #212529;
         }
-        h1, h2, h3 {
+        h1, h2, h3, h4, h5, h6 {
             font-family: 'Lora', serif;
         }
         .word-node {
@@ -34,12 +23,40 @@
             z-index: 10;
         }
         .word-node:hover {
-            transform: scale(1.1) translate(-45%, -45%) !important;
+            transform: scale(1.15) translate(-43%, -43%) !important;
             z-index: 20;
         }
         #center-display {
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
             pointer-events: none;
+            background-color: white;
+            border: 1px solid #dee2e6;
+        }
+        .mobile-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .mobile-card.active .mobile-card-body {
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .mobile-card.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .speaker-icon {
+            color: #6c757d;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .speaker-icon:hover {
+            color: #0275d8;
         }
     </style>
 </head>
@@ -48,125 +65,213 @@
     <main class="py-12 md:py-20">
         <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 pt-8">
-                <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Ferre'</h2>
-                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Latin root <span class="font-lora italic">'ferre'</span> (to bring, to carry) is the ancestor of a rich family of words. Hover over a word below to see its origin story.</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800">The Family of 'Ferre'</h2>
+                <p class="mt-8 text-lg text-gray-700 max-w-3xl mx-auto">
+                    The Latin root <span class="font-lora italic">'ferre'</span> (to bring, to carry) is the ancestor of a rich family of words. Click a word to see its origin story and hear it spoken.
+                </p>
             </div>
 
-            <div class="flex justify-center items-center min-h-[50vh]">
-                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl">
+            <!-- Desktop Radial Diagram (visible on md screens and up) -->
+            <div class="hidden md:flex justify-center items-center min-h-[70vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl cursor-pointer">
                     <!-- Word nodes will be injected here -->
-                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80 rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
                         <!-- Content will be injected here -->
                     </div>
                 </div>
             </div>
+
+            <!-- Mobile List View (visible below md screens) -->
+            <div id="mobile-list-view" class="md:hidden space-y-3">
+                <!-- Mobile cards will be injected here -->
+            </div>
         </section>
     </main>
-
-     <p class="text-base text-slate-400 text-center">© 2024 Hyungsuk Choi. All rights reserved.</p>
-    <br><br>
+    <footer class="text-center pb-8">
+        <p class="text-base text-slate-500">© 2024 Hyungsuk Choi. All rights reserved.</p>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const wordData = [
-                { word: 'Conference', prefix: 'Con-', prefixMeaning: 'together', meaning: 'An event where people bring their ideas together to discuss them.', example: 'In the age of video calls, a conference can happen anywhere.', angle: 0 },
-                { word: 'Difference', prefix: 'Dis-', prefixMeaning: 'apart', meaning: 'The quality of being unlike; what results from carrying things apart.', example: 'To ask "What\'s the difference?" is to ask what has been carried apart.', angle: 32 },
-                { word: 'Inference', prefix: 'In-', prefixMeaning: 'into', meaning: 'A conclusion reached by bringing evidence into one\'s reasoning.', example: 'I can infer from your expression that you\'re not happy.', angle: 64 },
-                { word: 'Reference', prefix: 'Re-', prefixMeaning: 'back, again', meaning: 'The act of bringing back a source to consult or cite it.', example: 'A paper\'s references show what the author brought back to support their logic.', angle: 96 },
-                { word: 'Preference', prefix: 'Prae-', prefixMeaning: 'before, in front', meaning: 'The act of carrying one option forward over others.', example: 'Choosing a preference is like lifting your favorite item forward.', angle: 128 },
-                { word: 'Deference', prefix: 'De-', prefixMeaning: 'down', meaning: 'Humble submission and respect, as if carrying an offering down to someone.', example: 'Showing deference to authority comes from this gesture of respect.', angle: 160 },
-                { word: 'Interference', prefix: 'Inter-', prefixMeaning: 'between', meaning: 'The act of carrying something between two points, causing an obstruction.', example: 'To interfere is to carry an obstacle into someone\'s path.', angle: 192 },
-                { word: 'Transference', prefix: 'Trans-', prefixMeaning: 'across', meaning: 'The act of carrying something from one place to another.', example: 'In psychology, it\'s when feelings are carried across to a new person.', angle: 224 },
-                { word: 'Circumference', prefix: 'Circum-', prefixMeaning: 'around', meaning: 'The distance carried around a circle.', example: 'The word evokes the journey of carrying something around a circle\'s edge.', angle: 256 },
-                { word: 'Afference', prefix: 'Ad-', prefixMeaning: 'to, toward', meaning: 'Nerve signals carried toward the central nervous system.', example: 'Afference is the body\'s system for bringing sensory data in.', angle: 288 },
-                { word: 'Efference', prefix: 'Ex-', prefixMeaning: 'out of', meaning: 'Nerve signals carried out from the central nervous system.', example: 'Efference carries motor commands out from the brain to the muscles.', angle: 320 }
+                { word: 'Conference', prefix: 'Con-', prefixMeaning: 'together', meaning: 'An event where people bring their ideas together to discuss them.', example: 'In the age of video calls, a conference can happen anywhere.', angle: 0, icon: '🤝' },
+                { word: 'Difference', prefix: 'Dis-', prefixMeaning: 'apart', meaning: 'The quality of being unlike; what results from carrying things apart.', example: 'To ask "What\'s the difference?" is to ask what has been carried apart.', angle: 32, icon: '↔️' },
+                { word: 'Inference', prefix: 'In-', prefixMeaning: 'into', meaning: 'A conclusion reached by bringing evidence into one\'s reasoning.', example: 'I can infer from your expression that you\'re not happy.', angle: 64, icon: '🤔' },
+                { word: 'Reference', prefix: 'Re-', prefixMeaning: 'back, again', meaning: 'The act of bringing back a source to consult or cite it.', example: 'A paper\'s references show what the author brought back to support their logic.', angle: 96, icon: '📚' },
+                { word: 'Preference', prefix: 'Prae-', prefixMeaning: 'before, in front', meaning: 'The act of carrying one option forward over others.', example: 'Choosing a preference is like lifting your favorite item forward.', angle: 128, icon: '👍' },
+                { word: 'Deference', prefix: 'De-', prefixMeaning: 'down', meaning: 'Humble submission and respect, as if carrying an offering down to someone.', example: 'Showing deference to authority comes from this gesture of respect.', angle: 160, icon: '🙇' },
+                { word: 'Interference', prefix: 'Inter-', prefixMeaning: 'between', meaning: 'The act of carrying something between two points, causing an obstruction.', example: 'To interfere is to carry an obstacle into someone\'s path.', angle: 192, icon: '🚧' },
+                { word: 'Transference', prefix: 'Trans-', prefixMeaning: 'across', meaning: 'The act of carrying something from one place to another.', example: 'In psychology, it\'s when feelings are carried across to a new person.', angle: 224, icon: '🔄' },
+                { word: 'Circumference', prefix: 'Circum-', prefixMeaning: 'around', meaning: 'The distance carried around a circle.', example: 'The word evokes the journey of carrying something around a circle\'s edge.', angle: 256, icon: '⭕' },
+                { word: 'Afference', prefix: 'Ad-', prefixMeaning: 'to, toward', meaning: 'Nerve signals carried toward the central nervous system.', example: 'Afference is the body\'s system for bringing sensory data in.', angle: 288, icon: '🧠➡️' },
+                { word: 'Efference', prefix: 'Ex-', prefixMeaning: 'out of', meaning: 'Nerve signals carried out from the central nervous system.', example: 'Efference carries motor commands out from the brain to the muscles.', angle: 320, icon: '🧠⬅️' }
             ];
 
-            const diagramContainer = document.getElementById('word-diagram-container');
-            const centerDisplay = document.getElementById('center-display');
-            const nodes = [];
-
-            const defaultContent = `
+            const defaultContentHTML = `
                 <div class="text-center">
-                    <p class="font-lora italic text-4xl text-teal-800">ferre</p>
-                    <p class="text-lg text-teal-700 opacity-80">(to bring, carry)</p>
+                    <p class="font-lora italic text-4xl text-gray-800">ferre</p>
+                    <p class="text-lg text-gray-600 opacity-90">(to bring, carry)</p>
                 </div>
             `;
+
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
+
+            function updateCenterDisplay(content) {
+                const centerDisplay = document.getElementById('center-display');
+                if (!centerDisplay) return;
+                centerDisplay.style.opacity = '0';
+                centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                setTimeout(() => {
+                    centerDisplay.innerHTML = content;
+                    centerDisplay.style.opacity = '1';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 300);
+            }
+
+            function getBreakdownHtml(item) {
+                return `
+                    <p class="mt-2 text-md text-gray-600">
+                        <span class="font-semibold" style="color: #d9534f;">${item.prefix}</span> (<em>${item.prefixMeaning}</em>) + 
+                        <span class="font-semibold" style="color: #0275d8;">fer</span> (<em>bring, carry</em>)
+                    </p>
+                    <p class="mt-3 text-gray-800 text-md">${item.meaning}</p>
+                     <blockquote class="mt-3 border-l-4 border-gray-200 pl-3">
+                        <p class="text-gray-600 italic">"${item.example}"</p>
+                    </blockquote>
+                `;
+            }
             
-            centerDisplay.innerHTML = defaultContent;
-            centerDisplay.style.opacity = '1';
-            centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+            function setupDesktopView() {
+                const diagramContainer = document.getElementById('word-diagram-container');
+                if (!diagramContainer) return;
 
-            // Create and append nodes
-            wordData.forEach(item => {
-                const node = document.createElement('div');
-                node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
+                const nodes = [];
                 
-                node.innerHTML = `<span class="font-bold text-lg pointer-events-none text-teal-800">${item.word}</span>`;
-                
-                diagramContainer.appendChild(node);
-                nodes.push(node);
+                updateCenterDisplay(defaultContentHTML);
 
-                node.addEventListener('mouseover', () => {
-                    const selectedWord = item;
-                    centerDisplay.style.opacity = '0';
-                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                diagramContainer.addEventListener('click', (e) => {
+                    if (e.target === diagramContainer) {
+                        updateCenterDisplay(defaultContentHTML);
+                    }
+                });
 
-                    setTimeout(() => {
-                        centerDisplay.innerHTML = `
+                wordData.forEach(item => {
+                    const node = document.createElement('div');
+                    node.className = 'word-node absolute py-2 px-4 bg-white rounded-lg shadow-sm cursor-pointer border border-gray-300 flex items-center';
+                    node.innerHTML = `<span class="text-2xl mr-3 pointer-events-none">${item.icon}</span><span class="font-bold text-lg pointer-events-none text-gray-800">${item.word}</span>`;
+                    
+                    diagramContainer.appendChild(node);
+                    nodes.push(node);
+
+                    node.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const content = `
                             <div>
-                                <h3 class="text-3xl font-bold text-teal-700 font-lora">${selectedWord.word}</h3>
-                                <p class="mt-1 text-md text-stone-500">
-                                    <span class="font-semibold text-rose-600">${selectedWord.prefix}</span> (<em>${selectedWord.prefixMeaning}</em>) + 
-                                    <span class="font-semibold text-teal-600">fer</span>
-                                </p>
-                                <p class="mt-3 text-stone-700 text-md">${selectedWord.meaning}</p>
-                                <blockquote class="mt-3 border-l-4 border-stone-200 pl-3">
-                                    <p class="text-stone-600 italic">"${selectedWord.example}"</p>
-                                </blockquote>
+                                <div class="flex items-center justify-center">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 font-lora">${item.word}</h3>
+                                    <span class="speaker-icon ml-3 text-2xl" data-word="${item.word}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                    </span>
+                                </div>
+                                ${getBreakdownHtml(item)}
                             </div>
                         `;
-                        centerDisplay.style.opacity = '1';
-                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
-                    }, 300);
+                        updateCenterDisplay(content);
+                    });
                 });
 
-                node.addEventListener('mouseout', () => {
-                     centerDisplay.style.opacity = '0';
-                     centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
-                     setTimeout(() => {
-                        centerDisplay.innerHTML = defaultContent;
-                        centerDisplay.style.opacity = '1';
-                        centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
-                    }, 300);
-                });
-            });
+                function positionNodes() {
+                    const containerWidth = diagramContainer.offsetWidth;
+                    if (containerWidth === 0) {
+                        requestAnimationFrame(positionNodes);
+                        return;
+                    }
+                    const radius = containerWidth * 0.42;
 
-            // Function to calculate and apply node positions
-            function positionNodes() {
-                const containerWidth = diagramContainer.offsetWidth;
-                if (containerWidth === 0) {
-                    requestAnimationFrame(positionNodes); // Try again on the next frame if not ready
-                    return;
+                    nodes.forEach((node, index) => {
+                        const item = wordData[index];
+                        const angleRad = (item.angle - 90) * (Math.PI / 180);
+                        
+                        const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                        const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                        node.style.left = `${x}%`;
+                        node.style.top = `${y}%`;
+                        node.style.transform = 'translate(-50%, -50%)';
+                    });
                 }
-                const radius = containerWidth * 0.45;
 
-                nodes.forEach((node, index) => {
-                    const item = wordData[index];
-                    const angleRad = (item.angle - 90) * (Math.PI / 180);
+                positionNodes();
+                window.addEventListener('resize', positionNodes);
+            }
+
+            function setupMobileView() {
+                const mobileContainer = document.getElementById('mobile-list-view');
+                if (!mobileContainer) return;
+
+                wordData.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'mobile-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200';
                     
-                    const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
-                    const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+                    const header = document.createElement('div');
+                    header.className = 'p-4 flex justify-between items-center cursor-pointer';
+                    header.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-4">${item.icon}</span>
+                            <h3 class="font-bold text-lg text-gray-800">${item.word}</h3>
+                             <span class="speaker-icon ml-3 text-xl" data-word="${item.word}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            </span>
+                        </div>
+                        <span class="arrow-icon text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    `;
 
-                    node.style.left = `${x}%`;
-                    node.style.top = `${y}%`;
-                    node.style.transform = 'translate(-50%, -50%)';
+                    const body = document.createElement('div');
+                    body.className = 'mobile-card-body px-4 text-gray-700 border-t border-gray-200';
+                    body.innerHTML = getBreakdownHtml(item);
+
+                    card.appendChild(header);
+                    card.appendChild(body);
+                    mobileContainer.appendChild(card);
+
+                    header.addEventListener('click', (e) => {
+                        if (!e.target.closest('.speaker-icon')) {
+                            document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
+                                if (activeCard !== card) {
+                                    activeCard.classList.remove('active');
+                                }
+                            });
+                            card.classList.toggle('active');
+                        }
+                    });
                 });
             }
 
-            // Initial positioning and responsive updates
-            positionNodes();
-            window.addEventListener('resize', positionNodes);
+            document.body.addEventListener('click', function(e) {
+                const speakerIcon = e.target.closest('.speaker-icon');
+                if (speakerIcon) {
+                    e.stopPropagation();
+                    const wordToSpeak = speakerIcon.dataset.word;
+                    if (wordToSpeak) {
+                        speak(wordToSpeak);
+                    }
+                }
+            });
+
+            setupDesktopView();
+            setupMobileView();
         });
     </script>
 </body>
