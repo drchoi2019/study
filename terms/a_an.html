@@ -58,6 +58,7 @@
         <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 pt-8">
                 <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'A-/An-'</h2>
+                <p class="mt-2 text-lg text-stone-700">by Hyungsuk Choi</p>
                 <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek prefix <span class="font-lora italic">'a-'</span> or <span class="font-lora italic">'an-'</span> (without, not) is the ancestor of many medical terms. Click a word to see its origin story and hear it spoken.</p>
             </div>
 
@@ -169,7 +170,7 @@
                             <div>
                                 <div class="flex items-center justify-center">
                                     <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
-                                    <span class="speaker-icon cursor-pointer ml-2 text-2xl" data-word="${item.word}" style="pointer-events: auto;">🔊</span>
+                                    <svg data-word="${item.word}" style="pointer-events: auto;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-teal-600 w-6 h-6"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                                 </div>
                                 ${getBreakdownHtml(item)}
                             </div>
@@ -218,10 +219,10 @@
                         <div class="flex items-center">
                             <span class="text-2xl mr-4">${item.icon}</span>
                             <h3 class="font-bold text-lg text-teal-800">${item.word}</h3>
-                            <span class="speaker-icon cursor-pointer ml-2 text-xl" data-word="${item.word}">🔊</span>
+                            <svg data-word="${item.word}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-teal-600 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </div>
                         <span class="arrow-icon text-teal-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
                     `;
 
@@ -235,7 +236,7 @@
 
                     header.addEventListener('click', (e) => {
                         // Only toggle accordion if the speaker icon wasn't clicked
-                        if (!e.target.classList.contains('speaker-icon')) {
+                        if (!e.target.closest('.speaker-icon')) {
                             document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
                                 if (activeCard !== card) {
                                     activeCard.classList.remove('active');
@@ -249,9 +250,10 @@
             
             // --- Global Speaker Icon Event Listener ---
             document.body.addEventListener('click', function(e) {
-                if (e.target.classList.contains('speaker-icon')) {
+                const speakerIcon = e.target.closest('.speaker-icon');
+                if (speakerIcon) {
                     e.stopPropagation();
-                    const wordToSpeak = e.target.dataset.word;
+                    const wordToSpeak = speakerIcon.dataset.word;
                     if (wordToSpeak) {
                         speak(wordToSpeak);
                     }
@@ -263,6 +265,5 @@
             setupMobileView();
         });
     </script>
-
 </body>
 </html>
