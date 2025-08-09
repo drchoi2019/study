@@ -137,6 +137,18 @@
         const defaultInfoText = '<p class="text-center text-gray-500 text-lg">Select a sense to learn more.</p>';
         let activeIcon = null;
 
+        // Function to speak text
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Cancel any previous speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('Text-to-speech not supported in this browser.');
+            }
+        }
+
         Object.keys(senseData).forEach(key => {
             const concept = senseData[key];
             const iconWrapper = document.createElement('div');
@@ -164,7 +176,10 @@
             const rootsHtml = data.roots.map(root => `<span class="root-tag">${root}</span>`).join('');
             const examplesHtml = data.examples.map(ex => `
                 <div class="mt-4">
-                    <p class="font-semibold text-lg text-gray-800">${ex.term}</p>
+                    <div class="flex items-center">
+                        <p class="font-semibold text-lg text-gray-800">${ex.term}</p>
+                        <svg data-word="${ex.term}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-blue-500 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </div>
                     <p class="text-base text-gray-600 ml-2 italic">"${ex.definition}"</p>
                     <p class="text-sm text-gray-500 ml-2 mt-1">e.g., ${ex.exampleSentence}</p>
                 </div>
@@ -180,9 +195,22 @@
             `;
         };
 
+        // --- Global Speaker Icon Event Listener ---
+        document.body.addEventListener('click', function(e) {
+            const speakerIcon = e.target.closest('.speaker-icon');
+            if (speakerIcon) {
+                e.stopPropagation();
+                const wordToSpeak = speakerIcon.dataset.word;
+                if (wordToSpeak) {
+                    speak(wordToSpeak);
+                }
+            }
+        });
+
         infoDisplayArea.innerHTML = defaultInfoText;
     </script>
-        <footer class="mt-10 mb-6 text-center text-sm text-gray-500">
+    
+    <footer class="mt-10 mb-6 text-center text-sm text-gray-500">
         <p>© 2024 Hyungsuk Choi. All rights reserved.</p>
     </footer>
 </body>
