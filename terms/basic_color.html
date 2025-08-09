@@ -147,6 +147,18 @@
         const defaultInfoText = '<p class="text-center text-gray-500">Click on a color block above to see details.</p>';
         let activeBlock = null;
 
+        // Function to speak text
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Cancel any previous speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('Text-to-speech not supported in this browser.');
+            }
+        }
+
         // Function to update the static info area
         const updateInfoArea = (colorId) => {
             const data = colorData[colorId];
@@ -154,7 +166,10 @@
             data.terms.forEach(term => {
                 termsHtml += `
                     <div class="mt-3">
-                        <p class="font-semibold text-md text-gray-800">${term.name}</p>
+                        <div class="flex items-center">
+                            <p class="font-semibold text-md text-gray-800">${term.name}</p>
+                            <svg data-word="${term.name}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-blue-500 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </div>
                         <p class="text-sm text-gray-600">${term.definition}</p>
                     </div>
                 `;
@@ -181,22 +196,31 @@
         // Add click event listeners to each color block
         blocks.forEach(block => {
             block.addEventListener('click', (e) => {
-                // If there's an active block and it's not the one we just clicked, remove its active class
                 if (activeBlock && activeBlock !== block) {
                     activeBlock.classList.remove('active');
                 }
 
-                // If we clicked the currently active block, deactivate it and reset the info
                 if (activeBlock === block) {
                     resetInfoArea();
                 } else {
-                    // Otherwise, activate the new block and show its info
                     block.classList.add('active');
                     activeBlock = block;
                     const colorId = block.dataset.color;
                     updateInfoArea(colorId);
                 }
             });
+        });
+
+        // --- Global Speaker Icon Event Listener ---
+        document.body.addEventListener('click', function(e) {
+            const speakerIcon = e.target.closest('.speaker-icon');
+            if (speakerIcon) {
+                e.stopPropagation();
+                const wordToSpeak = speakerIcon.dataset.word;
+                if (wordToSpeak) {
+                    speak(wordToSpeak);
+                }
+            }
         });
 
         // Initialize the info area with default text
