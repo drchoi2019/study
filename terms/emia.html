@@ -58,7 +58,7 @@
         <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 pt-8">
                 <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of '-emia'</h2>
-                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek root <span class="font-lora italic">'haima'</span> (blood) gives us the suffix '-emia' for blood conditions. Hover over or tap a word below to see its origin story.</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek root <span class="font-lora italic">'haima'</span> (blood) gives us the suffix '-emia' for blood conditions. Click a word to hear it spoken, and see its origin story.</p>
             </div>
 
             <!-- Desktop Radial Diagram (visible on md screens and up) -->
@@ -77,22 +77,21 @@
             </div>
         </section>
     </main>
-
      <p class="text-base text-slate-400 text-center">© 2024 Hyungsuk Choi. All rights reserved.</p>
     <br><br>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const wordData = [
-                { word: 'Anemia', prefix: 'An-', prefixMeaning: 'without', meaning: 'A condition where the blood lacks healthy red blood cells.', example: 'Iron deficiency is a common cause of anemia.', angle: 0 },
-                { word: 'Hyperglycemia', prefix: 'Hyper-', prefixMeaning: 'high', meaning: 'An excess of glucose in the bloodstream.', example: 'Hyperglycemia is a key characteristic of diabetes.', angle: 40 },
-                { word: 'Hypoglycemia', prefix: 'Hypo-', prefixMeaning: 'low', meaning: 'A deficiency of glucose in the bloodstream.', example: 'Hypoglycemia can cause dizziness and confusion.', angle: 80 },
-                { word: 'Leukemia', prefix: 'Leuk-', prefixMeaning: 'white', meaning: 'Cancer of the blood-forming tissues.', example: 'Leukemia leads to an overproduction of abnormal white blood cells.', angle: 120 },
-                { word: 'Septicemia', prefix: 'Septic-', prefixMeaning: 'putrid', meaning: 'Blood poisoning by bacteria or their toxins.', example: 'Septicemia is a life-threatening medical emergency.', angle: 160 },
-                { word: 'Uremia', prefix: 'Ur-', prefixMeaning: 'urine', meaning: 'High levels of urea and other waste products in the blood.', example: 'Uremia occurs when the kidneys fail to filter waste properly.', angle: 200 },
-                { word: 'Hyperlipidemia', prefix: 'Hyper-', prefixMeaning: 'high', meaning: 'Abnormally high concentration of fats (lipids) in the blood.', example: 'Hyperlipidemia is a major risk factor for heart disease.', angle: 240 },
-                { word: 'Toxemia', prefix: 'Tox-', prefixMeaning: 'poison', meaning: 'The presence of toxins in the blood.', example: 'Toxemia of pregnancy is also known as pre-eclampsia.', angle: 280 },
-                { word: 'Ischemia', prefix: 'Isch-', prefixMeaning: 'restriction', meaning: 'An inadequate blood supply to an organ or part of the body.', example: 'Cardiac ischemia can lead to a heart attack.', angle: 320 }
+                { word: 'Anemia', prefix: 'An-', prefixMeaning: 'without', meaning: 'A condition where the blood lacks healthy red blood cells.', example: 'Iron deficiency is a common cause of anemia.', angle: 0, icon: '🩸' },
+                { word: 'Hyperglycemia', prefix: 'Hyper-', prefixMeaning: 'high', meaning: 'An excess of glucose in the bloodstream.', example: 'Hyperglycemia is a key characteristic of diabetes.', angle: 40, icon: '🍬' },
+                { word: 'Hypoglycemia', prefix: 'Hypo-', prefixMeaning: 'low', meaning: 'A deficiency of glucose in the bloodstream.', example: 'Hypoglycemia can cause dizziness and confusion.', angle: 80, icon: '📉' },
+                { word: 'Leukemia', prefix: 'Leuk-', prefixMeaning: 'white', meaning: 'Cancer of the blood-forming tissues.', example: 'Leukemia leads to an overproduction of abnormal white blood cells.', angle: 120, icon: '⚪' },
+                { word: 'Septicemia', prefix: 'Septic-', prefixMeaning: 'putrid', meaning: 'Blood poisoning by bacteria or their toxins.', example: 'Septicemia is a life-threatening medical emergency.', angle: 160, icon: '🦠' },
+                { word: 'Uremia', prefix: 'Ur-', prefixMeaning: 'urine', meaning: 'High levels of urea and other waste products in the blood.', example: 'Uremia occurs when the kidneys fail to filter waste properly.', angle: 200, icon: '💧' },
+                { word: 'Hyperlipidemia', prefix: 'Hyper-', prefixMeaning: 'high', meaning: 'Abnormally high concentration of fats (lipids) in the blood.', example: 'Hyperlipidemia is a major risk factor for heart disease.', angle: 240, icon: '🧈' },
+                { word: 'Toxemia', prefix: 'Tox-', prefixMeaning: 'poison', meaning: 'The presence of toxins in the blood.', example: 'Toxemia of pregnancy is also known as pre-eclampsia.', angle: 280, icon: '☠️' },
+                { word: 'Ischemia', prefix: 'Isch-', prefixMeaning: 'restriction', meaning: 'An inadequate blood supply to an organ or part of the body.', example: 'Cardiac ischemia can lead to a heart attack.', angle: 320, icon: '🚫' }
             ];
 
             const defaultContentHTML = `
@@ -101,6 +100,17 @@
                     <p class="text-lg text-teal-700 opacity-80">(blood)</p>
                 </div>
             `;
+
+            // Function to speak text
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
 
             // Function to update the central display content
             function updateCenterDisplay(content) {
@@ -148,13 +158,14 @@
                 wordData.forEach(item => {
                     const node = document.createElement('div');
                     node.className = 'word-node absolute p-3 bg-white rounded-lg shadow-md cursor-pointer text-center';
-                    node.innerHTML = `<span class="font-bold text-sm md:text-lg pointer-events-none text-teal-800">${item.word}</span>`;
+                    node.innerHTML = `<span class="text-2xl pointer-events-none">${item.icon}</span> <span class="font-bold text-sm md:text-lg pointer-events-none text-teal-800">${item.word}</span>`;
                     
                     diagramContainer.appendChild(node);
                     nodes.push(node);
 
                     node.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        speak(item.word); // Speak the word on click
                         const content = `
                             <div>
                                 <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
@@ -203,6 +214,7 @@
                     header.className = 'p-4 flex justify-between items-center cursor-pointer border-b border-gray-200';
                     header.innerHTML = `
                         <div class="flex items-center">
+                            <span class="text-2xl mr-4">${item.icon}</span>
                             <h3 class="font-bold text-lg text-teal-800">${item.word}</h3>
                         </div>
                         <span class="arrow-icon text-teal-600">
@@ -219,6 +231,7 @@
                     mobileContainer.appendChild(card);
 
                     header.addEventListener('click', () => {
+                        speak(item.word); // Speak the word on click
                         document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
                             if (activeCard !== card) {
                                 activeCard.classList.remove('active');
