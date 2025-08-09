@@ -12,7 +12,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f7f4; /* Calm background color */
+            background-color: #f8f7f4;
             color: #3d3d3d;
         }
         h1, h2, h3 {
@@ -24,13 +24,12 @@
             z-index: 10;
         }
         .word-node:hover {
-            /* Keep hover effect on desktop even though interaction is click */
             transform: scale(1.1) translate(-45%, -45%) !important;
             z-index: 20;
         }
         #center-display {
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            pointer-events: none; /* Prevent center display from capturing click events */
+            pointer-events: none;
         }
         /* Mobile accordion styles */
         .mobile-card-body {
@@ -41,7 +40,7 @@
             padding-bottom: 0;
         }
         .mobile-card.active .mobile-card-body {
-            max-height: 500px; /* Ample height for content */
+            max-height: 500px;
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
@@ -59,7 +58,7 @@
         <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 pt-8">
                 <h2 class="text-4xl md:text-5xl font-bold text-teal-800">The Family of 'Cardio'</h2>
-                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek root <span class="font-lora italic">'kardia'</span> (heart) is the ancestor of many terms. Hover over or tap a word below to see its origin story.</p>
+                <p class="mt-8 text-lg text-stone-600 max-w-3xl mx-auto">The Greek root <span class="font-lora italic">'kardia'</span> (heart) is the ancestor of many terms. Click a word to see its origin story and hear it spoken.</p>
             </div>
 
             <!-- Desktop Radial Diagram (visible on md screens and up) -->
@@ -85,13 +84,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const wordData = [
-                { word: 'Cardiology', prefix: 'Cardio-', prefixMeaning: 'heart', root: 'logy', rootMeaning: 'study of', meaning: 'The branch of medicine that deals with diseases and abnormalities of the heart.', angle: 0, icon: '👨‍⚕️' },
-                { word: 'Cardiac', prefix: 'Cardi-', prefixMeaning: 'heart', root: 'ac', rootMeaning: 'relating to', meaning: 'Relating to the heart. For example, cardiac arrest is a sudden loss of heart function.', angle: 45, icon: '❤️' },
-                { word: 'Myocardium', prefix: 'Myo-', prefixMeaning: 'muscle', root: 'cardium', rootMeaning: 'heart', meaning: 'The muscular tissue of the heart wall.', angle: 90, icon: '💪' },
-                { word: 'Pericardium', prefix: 'Peri-', prefixMeaning: 'around', root: 'cardium', rootMeaning: 'heart', meaning: 'The membrane enclosing the heart, consisting of an outer fibrous layer and an inner double layer.', angle: 135, icon: '🛡️' },
-                { word: 'Tachycardia', prefix: 'Tachy-', prefixMeaning: 'fast', root: 'cardia', rootMeaning: 'heart', meaning: 'An abnormally rapid heart rate.', angle: 180, icon: '⏩' },
-                { word: 'Bradycardia', prefix: 'Brady-', prefixMeaning: 'slow', root: 'cardia', rootMeaning: 'heart', meaning: 'An abnormally slow heart rate.', angle: 225, icon: '⏪' },
-                { word: 'Myocardial Infarction', prefix: 'Myo-', prefixMeaning: 'muscle', root: 'cardial', rootMeaning: 'heart', meaning: 'The death of heart muscle tissue due to a lack of oxygen, commonly known as a heart attack.', angle: 270, icon: '💔' },
+                { word: 'Myocardial Infarction', prefix: 'Myo-', prefixMeaning: 'muscle', root: 'cardial', rootMeaning: 'heart', meaning: 'The death of heart muscle tissue due to a lack of oxygen, commonly known as a heart attack.', angle: 0, icon: '💔' },
+                { word: 'Cardiology', prefix: 'Cardio-', prefixMeaning: 'heart', root: 'logy', rootMeaning: 'study of', meaning: 'The branch of medicine that deals with diseases and abnormalities of the heart.', angle: 45, icon: '👨‍⚕️' },
+                { word: 'Cardiac', prefix: 'Cardi-', prefixMeaning: 'heart', root: 'ac', rootMeaning: 'relating to', meaning: 'Relating to the heart. For example, cardiac arrest is a sudden loss of heart function.', angle: 90, icon: '❤️' },
+                { word: 'Myocardium', prefix: 'Myo-', prefixMeaning: 'muscle', root: 'cardium', rootMeaning: 'heart', meaning: 'The muscular tissue of the heart wall.', angle: 135, icon: '💪' },
+                { word: 'Pericardium', prefix: 'Peri-', prefixMeaning: 'around', root: 'cardium', rootMeaning: 'heart', meaning: 'The membrane enclosing the heart, consisting of an outer fibrous layer and an inner double layer.', angle: 180, icon: '🛡️' },
+                { word: 'Tachycardia', prefix: 'Tachy-', prefixMeaning: 'fast', root: 'cardia', rootMeaning: 'heart', meaning: 'An abnormally rapid heart rate.', angle: 225, icon: '⏩' },
+                { word: 'Bradycardia', prefix: 'Brady-', prefixMeaning: 'slow', root: 'cardia', rootMeaning: 'heart', meaning: 'An abnormally slow heart rate.', angle: 270, icon: '⏪' },
                 { word: 'Electrocardiogram', prefix: 'Electro-', prefixMeaning: 'electric', root: 'cardiogram', rootMeaning: 'heart record', meaning: 'A record of the heart\'s electrical activity (ECG/EKG).', angle: 315, icon: '📈' }
             ];
 
@@ -102,9 +101,22 @@
                 </div>
             `;
 
+            // Function to speak text
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel(); // Cancel any previous speech
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
+
             // Function to update the central display content
             function updateCenterDisplay(content) {
                 const centerDisplay = document.getElementById('center-display');
+                if (!centerDisplay) return;
                 centerDisplay.style.opacity = '0';
                 centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
 
@@ -124,6 +136,7 @@
                             <span class="font-semibold text-teal-600">cardial</span> (<em>heart</em>) +
                             <span class="font-semibold text-blue-600">infarction</span> (<em>tissue death</em>)
                         </p>
+                        <p class="mt-3 text-stone-700 text-md">${item.meaning}</p>
                     `;
                 }
                 return `
@@ -131,21 +144,19 @@
                         <span class="font-semibold text-rose-600">${item.prefix}</span> (<em>${item.prefixMeaning}</em>) + 
                         <span class="font-semibold text-teal-600">${item.root}</span> (<em>${item.rootMeaning}</em>)
                     </p>
+                    <p class="mt-3 text-stone-700 text-md">${item.meaning}</p>
                 `;
             }
-
+            
             // --- Desktop View Setup ---
             function setupDesktopView() {
                 const diagramContainer = document.getElementById('word-diagram-container');
-                const centerDisplay = document.getElementById('center-display');
-                if (!diagramContainer || !centerDisplay) return;
+                if (!diagramContainer) return;
 
                 const nodes = [];
                 
-                // Set initial central display
                 updateCenterDisplay(defaultContentHTML);
 
-                // Reset to default when clicking the background
                 diagramContainer.addEventListener('click', (e) => {
                     if (e.target === diagramContainer) {
                         updateCenterDisplay(defaultContentHTML);
@@ -160,14 +171,15 @@
                     diagramContainer.appendChild(node);
                     nodes.push(node);
 
-                    // Changed from mouseover to click for touch compatibility
                     node.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent background click event
+                        e.stopPropagation();
                         const content = `
                             <div>
-                                <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
+                                <div class="flex items-center justify-center">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-teal-700 font-lora">${item.word}</h3>
+                                    <svg data-word="${item.word}" style="pointer-events: auto;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-teal-600 w-6 h-6"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                </div>
                                 ${getBreakdownHtml(item)}
-                                <p class="mt-3 text-stone-700 text-sm md:text-md">${item.meaning}</p>
                             </div>
                         `;
                         updateCenterDisplay(content);
@@ -180,7 +192,7 @@
                         requestAnimationFrame(positionNodes);
                         return;
                     }
-                    const radius = containerWidth * 0.42; // Slightly smaller radius for padding
+                    const radius = containerWidth * 0.42;
 
                     nodes.forEach((node, index) => {
                         const item = wordData[index];
@@ -214,35 +226,46 @@
                         <div class="flex items-center">
                             <span class="text-2xl mr-4">${item.icon}</span>
                             <h3 class="font-bold text-lg text-teal-800">${item.word}</h3>
+                            <svg data-word="${item.word}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="speaker-icon cursor-pointer ml-2 text-teal-600 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         </div>
                         <span class="arrow-icon text-teal-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
                     `;
 
                     const body = document.createElement('div');
                     body.className = 'mobile-card-body px-4 text-stone-700';
-                    body.innerHTML = `
-                        ${getBreakdownHtml(item)}
-                        <p class="mt-3">${item.meaning}</p>
-                    `;
+                    body.innerHTML = getBreakdownHtml(item);
 
                     card.appendChild(header);
                     card.appendChild(body);
                     mobileContainer.appendChild(card);
 
-                    header.addEventListener('click', () => {
-                        // Close any other open cards
-                        document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
-                            if (activeCard !== card) {
-                                activeCard.classList.remove('active');
-                            }
-                        });
-                        // Toggle the current card
-                        card.classList.toggle('active');
+                    header.addEventListener('click', (e) => {
+                        // Only toggle accordion if the speaker icon wasn't clicked
+                        if (!e.target.closest('.speaker-icon')) {
+                            document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
+                                if (activeCard !== card) {
+                                    activeCard.classList.remove('active');
+                                }
+                            });
+                            card.classList.toggle('active');
+                        }
                     });
                 });
             }
+            
+            // --- Global Speaker Icon Event Listener ---
+            document.body.addEventListener('click', function(e) {
+                const speakerIcon = e.target.closest('.speaker-icon');
+                if (speakerIcon) {
+                    e.stopPropagation();
+                    const wordToSpeak = speakerIcon.dataset.word;
+                    if (wordToSpeak) {
+                        speak(wordToSpeak);
+                    }
+                }
+            });
 
             // Call setup functions
             setupDesktopView();
