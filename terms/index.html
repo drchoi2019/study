@@ -54,7 +54,7 @@
             margin-bottom: 0.5rem; /* 8px */
         }
         
-        /* Color Variants - Modern & Sophisticated Palette */
+        /* Color Variants */
         .card-sky .card-title-container { background-color: #f0f9ff; }
         .card-sky .card-title { color: #0c4a6e; }
         .card-sky .card-link:hover { background-color: #e0f2fe; color: #0369a1; }
@@ -78,198 +78,269 @@
         .card-fuchsia .card-title-container { background-color: #fdf4ff; }
         .card-fuchsia .card-title { color: #86198f; }
         .card-fuchsia .card-link:hover { background-color: #fae8ff; color: #a21caf; }
+
+        /* Styles for the iframe view */
+        #iframe-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+        }
+        #thin-header {
+            height: 50px;
+        }
+        #content-frame {
+            height: calc(100% - 50px);
+            border: none;
+        }
     </style>
 </head>
 <body class="text-slate-700">
 
-    <!-- Header -->
-    <header>
-        <svg width="100%" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-            <!-- Background -->
-            <defs>
-                <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#0f172a;" />
-                    <stop offset="100%" style="stop-color:#1e293b;" />
-                </linearGradient>
-                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-                    <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#bg-gradient)" />
+    <!-- Main Menu View -->
+    <div id="main-view">
+        <!-- Header -->
+        <header>
+            <svg width="100%" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                <!-- Background -->
+                <defs>
+                    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#0f172a;" />
+                        <stop offset="100%" style="stop-color:#1e293b;" />
+                    </linearGradient>
+                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#bg-gradient)" />
 
-            <!-- Abstract decorative shapes -->
-            <path d="M 50 80 Q 150 200, 250 80 T 450 80" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-            <path d="M 80 270 Q 180 150, 280 270 T 480 270" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <!-- Abstract decorative shapes -->
+                <path d="M 50 80 Q 150 200, 250 80 T 450 80" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 80 270 Q 180 150, 280 270 T 480 270" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                
+                <path d="M 1150 270 Q 1050 150, 950 270 T 750 270" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 1120 80 Q 1020 200, 920 80 T 720 80" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+
+                <!-- EKG line -->
+                <path d="M 350 175 L 480 175 L 500 145 L 530 205 L 550 165 L 570 185 L 600 175 L 850 175" stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.6"/>
+
+                <!-- Main Text -->
+                <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="72" font-weight="800" fill="#ffffff">
+                    Medical Terminology
+                </text>
+                <text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="50" font-weight="500" fill="#cbd5e1">
+                    The Ultimate Hack
+                </text>
+            </svg>
+            <div class="text-center -mt-4 sm:-mt-6 md:-mt-8 pb-8 bg-slate-800 pt-2">
+                 <p class="text-sm text-slate-400">by Hyungsuk Choi</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-6 py-12 md:px-8 md:py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Basics Section -->
+                <div class="card card-sky">
+                    <div class="card-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-5.197-5.975M15 21v-1a6 6 0 015.197-5.975M15 21v-1a6 6 0 00-9-5.197" /></svg>
+                        <h2 class="card-title">Basics: The Foundation</h2>
+                    </div>
+                    <div class="card-content">
+                        <nav>
+                            <a href="basic_numbers.html" class="card-link">Numbers</a>
+                            <a href="basic_color.html" class="card-link">Colors</a>
+                            <a href="basic_size.html" class="card-link">Sizes & Amounts</a>
+                            <a href="basic_direction.html" class="card-link">Directions</a>
+                            <a href="basic_body_part.html" class="card-link">Body Parts</a>
+                            <a href="basic_sense.html" class="card-link">Senses</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Organs Section -->
+                <div class="card card-emerald">
+                    <div class="card-title-container">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        <h2 class="card-title">Organs & Systems</h2>
+                    </div>
+                    <div class="card-content">
+                        <nav>
+                            <a href="cardio.html" class="card-link">Cardio (Heart)</a>
+                            <a href="pneumo_pulmu.html" class="card-link">Pneumo/Pulmo (Lungs)</a>
+                            <a href="gastro.html" class="card-link">Gastro (Stomach)</a>
+                            <a href="entero.html" class="card-link">Entero (Intestines)</a>
+                            <a href="hepato.html" class="card-link">Hepato (Liver)</a>
+                            <a href="nephro_reno.html" class="card-link">Nephro/Reno (Kidney)</a>
+                            <a href="oculo_opthalmo.html" class="card-link">Oculo/Opthalmo (Eye)</a>
+                            <a href="testis.html" class="card-link">Testis (Testicle)</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Prefixes Section -->
+                <div class="card card-indigo">
+                    <div class="card-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                        <h2 class="card-title">Prefixes</h2>
+                    </div>
+                    <div class="card-content">
+                        <nav>
+                            <a href="a_an.html" class="card-link">a-, an- (without, not)</a>
+                            <a href="dys.html" class="card-link">dys- (wrong)</a>
+                            <a href="epi.html" class="card-link">epi- (upon, over)</a>
+                            <a href="in_im.html" class="card-link">in-, im- (not, in)</a>
+                            <a href="meta.html" class="card-link">meta- (beyond, change)</a>
+                            <a href="peri.html" class="card-link">peri- (around)</a>
+                            <a href="hydro.html" class="card-link">hydro- (water)</a>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Suffixes Condition Section -->
+                <div class="card card-fuchsia">
+                    <div class="card-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                        <h2 class="card-title">Suffixes: Condition</h2>
+                    </div>
+                    <div class="card-content">
+                        <nav>
+                            <a href="algia.html" class="card-link">-algia (pain)</a>
+                            <a href="emia.html" class="card-link">-emia (blood condition)</a>
+                            <a href="itis.html" class="card-link">-itis (inflammation)</a>
+                            <a href="oma.html" class="card-link">-oma (tumor, mass)</a>
+                            <a href="plasia.html" class="card-link">-plasia (development)</a>
+                            <a href="trophy.html" class="card-link">-trophy (growth in size)</a>
+                            <a href="rrhea.html" class="card-link">-rrhea (flow, discharge)</a>
+                            <a href="uria.html" class="card-link">-uria (urine condition)</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Suffixes Misc Section -->
+                <div class="card card-amber">
+                    <div class="card-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                        <h2 class="card-title">Suffixes: Miscellaneous</h2>
+                    </div>
+                    <div class="card-content">
+                        <nav>
+                            <a href="cision.html" class="card-link">-cision (cutting)</a>
+                            <a href="graphy.html" class="card-link">-graphy (recording)</a>
+                            <a href="scope.html" class="card-link">-scope (viewing instrument)</a>
+                            <a href="opsis.html" class="card-link">-opsis (view)</a>
+                            <a href="oid.html" class="card-link">-oid (resemble)</a>
+                            <a href="lysis.html" class="card-link">-lysis (destruction)</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Actions & Processes Section -->
+                <div class="card card-rose">
+                    <div class="card-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        <h2 class="card-title">Actions & Processes</h2>
+                    </div>
+                    <div class="card-content">
+                        <nav>
+                            <a href="dict.html" class="card-link">dict (to say)</a>
+                            <a href="ferre.html" class="card-link">ferre (to bear)</a>
+                            <a href="gress.html" class="card-link">gress (to go)</a>
+                            <a href="loqu_loquent.html" class="card-link">loqu (to speak)</a>
+                            <a href="scribe.html" class="card-link">scribe (to write)</a>
+                            <a href="spire.html" class="card-link">spire (to breathe)</a>
+                            <a href="voc_voke.html" class="card-link">voc, voke (to call)</a>
+                            <a href="sight.html" class="card-link">sight (to see)</a>
+                            <a href="spect.html" class="card-link">spect (to look, to see)</a>
+                            <a href="vid_vis.html" class="card-link">vid, vis (to see)</a>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Quiz Section -->
+                <div class="card col-span-1 md:col-span-2 lg:col-span-3 bg-gradient-to-r from-sky-400 to-emerald-400 text-white flex flex-col items-center justify-center p-10 text-center">
+                    <h2 class="text-2xl font-bold mb-4 text-white">Test Your Knowledge!</h2>
+                    <p class="max-w-xl mb-6 text-sky-100">Ready to see what you've learned? Consolidate your knowledge with a quiz.</p>
+                    <a href="quiz.html" class="card-link inline-block bg-white text-emerald-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start Quiz</a>
+                </div>
+            </div>
             
-            <path d="M 1150 270 Q 1050 150, 950 270 T 750 270" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-            <path d="M 1120 80 Q 1020 200, 920 80 T 720 80" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+            <!-- Book Banner -->
+            <div class="mt-20 p-8 bg-white rounded-lg border border-slate-200 flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-8">
+                <img src="https://image.yes24.com/goods/122284179/XL" alt="Book Cover for Medical Terminology: A Practical Guide" class="rounded-md shadow-lg w-32 md:w-36 h-auto flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/150x210/FFFFFF/000000?text=Book+Cover';">
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold text-slate-900">Meet the Author's Guide to Medical Terminology</h3>
+                    <p class="text-slate-600 mt-2 mb-4">Dive deeper with this practical guide. It offers the ultimate strategy to easily understand and retain complex medical terms for lifelong use in clinical practice. Explore the book to master the language of medicine.</p>
+                    <a href="https://www.yes24.com/product/goods/122284179" target="_blank" rel="noopener noreferrer" class="inline-block bg-slate-900 text-white font-bold py-3 px-6 rounded-lg hover:bg-slate-700 transition-colors">
+                        Find it on YES24
+                    </a>
+                </div>
+            </div>
+        </main>
 
-            <!-- EKG line -->
-            <path d="M 350 175 L 480 175 L 500 145 L 530 205 L 550 165 L 570 185 L 600 175 L 850 175" stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.6"/>
+        <!-- Footer -->
+        <footer class="text-center py-10 mt-10 border-t border-slate-200">
+            <p class="text-slate-500">&copy; 2024 Hyungsuk Choi. All rights reserved.</p>
+        </footer>
+    </div>
 
-            <!-- Main Text -->
-            <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="72" font-weight="800" fill="#ffffff">
-                Medical Terminology
-            </text>
-            <text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="50" font-weight="500" fill="#cbd5e1">
-                The Ultimate Hack
-            </text>
-        </svg>
-        <div class="text-center -mt-4 sm:-mt-6 md:-mt-8 pb-8 bg-slate-800 pt-2">
-             <p class="text-sm text-slate-400">by Hyungsuk Choi</p>
+    <!-- Iframe View (Initially Hidden) -->
+    <div id="iframe-view" class="hidden">
+        <div id="thin-header" class="fixed top-0 left-0 w-full bg-slate-800 text-white flex items-center justify-center shadow-md cursor-pointer z-50">
+            <p class="font-semibold">Medical Terminology: Click to return main menu</p>
         </div>
-    </header>
+        <iframe id="content-frame" class="w-full mt-[50px]"></iframe>
+    </div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-12 md:px-8 md:py-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainView = document.getElementById('main-view');
+            const iframeView = document.getElementById('iframe-view');
+            const thinHeader = document.getElementById('thin-header');
+            const contentFrame = document.getElementById('content-frame');
+            const links = document.querySelectorAll('.card-link');
 
-            <!-- Basics Section -->
-            <div class="card card-sky">
-                <div class="card-title-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-5.197-5.975M15 21v-1a6 6 0 015.197-5.975M15 21v-1a6 6 0 00-9-5.197" /></svg>
-                    <h2 class="card-title">Basics: The Foundation</h2>
-                </div>
-                <div class="card-content">
-                    <nav>
-                        <a href="basic_numbers.html" class="card-link">Numbers</a>
-                        <a href="basic_color.html" class="card-link">Colors</a>
-                        <a href="basic_size.html" class="card-link">Sizes & Amounts</a>
-                        <a href="basic_direction.html" class="card-link">Directions</a>
-                        <a href="basic_body_part.html" class="card-link">Body Parts</a>
-                        <a href="basic_sense.html" class="card-link">Senses</a>
-                    </nav>
-                </div>
-            </div>
+            // Handle link clicks
+            links.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    // Prevent default link behavior
+                    event.preventDefault();
+                    
+                    const url = link.getAttribute('href');
 
-            <!-- Organs Section -->
-            <div class="card card-emerald">
-                <div class="card-title-container">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                    <h2 class="card-title">Organs & Systems</h2>
-                </div>
-                <div class="card-content">
-                    <nav>
-                        <a href="cardio.html" class="card-link">Cardio (Heart)</a>
-                        <a href="pneumo_pulmu.html" class="card-link">Pneumo/Pulmo (Lungs)</a>
-                        <a href="gastro.html" class="card-link">Gastro (Stomach)</a>
-                        <a href="entero.html" class="card-link">Entero (Intestines)</a>
-                        <a href="hepato.html" class="card-link">Hepato (Liver)</a>
-                        <a href="nephro_reno.html" class="card-link">Nephro/Reno (Kidney)</a>
-                        <a href="oculo_opthalmo.html" class="card-link">Oculo/Opthalmo (Eye)</a>
-                        <a href="testis.html" class="card-link">Testis (Testicle)</a>
-                    </nav>
-                </div>
-            </div>
+                    // Handle external links (like yes24) differently
+                    if (link.getAttribute('target') === '_blank') {
+                        window.open(url, '_blank');
+                        return;
+                    }
+                    
+                    // Set iframe source
+                    contentFrame.src = url;
 
-            <!-- Prefixes Section -->
-            <div class="card card-indigo">
-                <div class="card-title-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
-                    <h2 class="card-title">Prefixes</h2>
-                </div>
-                <div class="card-content">
-                    <nav>
-                        <a href="a_an.html" class="card-link">a-, an- (without, not)</a>
-                        <a href="dys.html" class="card-link">dys- (wrong)</a>
-                        <a href="epi.html" class="card-link">epi- (upon, over)</a>
-                        <a href="in_im.html" class="card-link">in-, im- (not, in)</a>
-                        <a href="meta.html" class="card-link">meta- (beyond, change)</a>
-                        <a href="peri.html" class="card-link">peri- (around)</a>
-                        <a href="hydro.html" class="card-link">hydro- (water)</a>
-                    </nav>
-                </div>
-            </div>
-            
-            <!-- Suffixes Condition Section -->
-            <div class="card card-fuchsia">
-                <div class="card-title-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
-                    <h2 class="card-title">Suffixes: Condition</h2>
-                </div>
-                <div class="card-content">
-                    <nav>
-                        <a href="algia.html" class="card-link">-algia (pain)</a>
-                        <a href="emia.html" class="card-link">-emia (blood condition)</a>
-                        <a href="itis.html" class="card-link">-itis (inflammation)</a>
-                        <a href="oma.html" class="card-link">-oma (tumor, mass)</a>
-                        <a href="plasia.html" class="card-link">-plasia (development)</a>
-                        <a href="trophy.html" class="card-link">-trophy (growth in size)</a>
-                        <a href="rrhea.html" class="card-link">-rrhea (flow, discharge)</a>
-                        <a href="uria.html" class="card-link">-uria (urine condition)</a>
-                    </nav>
-                </div>
-            </div>
+                    // Switch views
+                    mainView.classList.add('hidden');
+                    iframeView.classList.remove('hidden');
+                });
+            });
 
-            <!-- Suffixes Misc Section -->
-            <div class="card card-amber">
-                <div class="card-title-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                    <h2 class="card-title">Suffixes: Miscellaneous</h2>
-                </div>
-                <div class="card-content">
-                    <nav>
-                        <a href="cision.html" class="card-link">-cision (cutting)</a>
-                        <a href="graphy.html" class="card-link">-graphy (recording)</a>
-                        <a href="scope.html" class="card-link">-scope (viewing instrument)</a>
-                        <a href="opsis.html" class="card-link">-opsis (view)</a>
-                        <a href="oid.html" class="card-link">-oid (resemble)</a>
-                        <a href="lysis.html" class="card-link">-lysis (destruction)</a>
-                    </nav>
-                </div>
-            </div>
+            // Handle click on the thin header to go back
+            thinHeader.addEventListener('click', () => {
+                // Switch views back
+                iframeView.classList.add('hidden');
+                mainView.classList.remove('hidden');
 
-            <!-- Actions & Processes Section -->
-            <div class="card card-rose">
-                <div class="card-title-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    <h2 class="card-title">Actions & Processes</h2>
-                </div>
-                <div class="card-content">
-                    <nav>
-                        <a href="dict.html" class="card-link">dict (to say)</a>
-                        <a href="ferre.html" class="card-link">ferre (to bear)</a>
-                        <a href="gress.html" class="card-link">gress (to go)</a>
-                        <a href="loqu_loquent.html" class="card-link">loqu (to speak)</a>
-                        <a href="scribe.html" class="card-link">scribe (to write)</a>
-                        <a href="spire.html" class="card-link">spire (to breathe)</a>
-                        <a href="voc_voke.html" class="card-link">voc, voke (to call)</a>
-                        <a href="sight.html" class="card-link">sight (to see)</a>
-                        <a href="spect.html" class="card-link">spect (to look, to see)</a>
-                        <a href="vid_vis.html" class="card-link">vid, vis (to see)</a>
-                    </nav>
-                </div>
-            </div>
-            
-            <!-- Quiz Section -->
-            <div class="card col-span-1 md:col-span-2 lg:col-span-3 bg-gradient-to-r from-sky-400 to-emerald-400 text-white flex flex-col items-center justify-center p-10 text-center">
-                <h2 class="text-2xl font-bold mb-4 text-white">Test Your Knowledge!</h2>
-                <p class="max-w-xl mb-6 text-sky-100">Ready to see what you've learned? Consolidate your knowledge with a quiz.</p>
-                <a href="quiz.html" class="inline-block bg-white text-emerald-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start Quiz</a>
-            </div>
-        </div>
-        
-        <!-- Book Banner -->
-        <div class="mt-20 p-8 bg-white rounded-lg border border-slate-200 flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-8">
-            <img src="https://image.yes24.com/goods/122284179/XL" alt="Book Cover for Medical Terminology: A Practical Guide" class="rounded-md shadow-lg w-32 md:w-36 h-auto flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/150x210/FFFFFF/000000?text=Book+Cover';">
-            <div class="flex-grow">
-                <h3 class="text-xl font-bold text-slate-900">Meet the Author's Guide to Medical Terminology</h3>
-                <p class="text-slate-600 mt-2 mb-4">Dive deeper with this practical guide. It offers the ultimate strategy to easily understand and retain complex medical terms for lifelong use in clinical practice. Explore the book to master the language of medicine.</p>
-                <a href="https://www.yes24.com/product/goods/122284179" target="_blank" rel="noopener noreferrer" class="inline-block bg-slate-900 text-white font-bold py-3 px-6 rounded-lg hover:bg-slate-700 transition-colors">
-                    Find it on YES24
-                </a>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="text-center py-10 mt-10 border-t border-slate-200">
-        <p class="text-slate-500">&copy; 2024 Hyungsuk Choi. All rights reserved.</p>
-    </footer>
+                // Clear the iframe to stop any loading/playing media
+                contentFrame.src = 'about:blank';
+            });
+        });
+    </script>
 
 </body>
 </html>
