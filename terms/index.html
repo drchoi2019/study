@@ -79,6 +79,10 @@
         .card-fuchsia .card-title { color: #86198f; }
         .card-fuchsia .card-link:hover { background-color: #fae8ff; color: #a21caf; }
 
+        .card-teal .card-title-container { background-color: #f0fdfa; }
+        .card-teal .card-title { color: #134e4a; }
+        .card-teal .card-link:hover { background-color: #ccfbf1; color: #0f766e; }
+
         /* Styles for the iframe view */
         #iframe-view {
             position: fixed;
@@ -103,7 +107,7 @@
     <div id="main-view">
         <!-- Header -->
         <header>
-            <svg width="100%" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+            <svg width="100%" viewBox="0 0 1200 222" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
                 <!-- Background -->
                 <defs>
                     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -121,25 +125,25 @@
                 <rect width="100%" height="100%" fill="url(#bg-gradient)" />
 
                 <!-- Abstract decorative shapes -->
-                <path d="M 50 56 Q 150 140, 250 56 T 450 56" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-                <path d="M 80 189 Q 180 105, 280 189 T 480 189" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 50 50 Q 150 126, 250 50 T 450 50" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 80 170 Q 180 95, 280 170 T 480 170" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
                 
-                <path d="M 1150 189 Q 1050 105, 950 189 T 750 189" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-                <path d="M 1120 56 Q 1020 140, 920 56 T 720 56" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 1150 170 Q 1050 95, 950 170 T 750 170" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 1120 50 Q 1020 126, 920 50 T 720 50" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
 
                 <!-- EKG line -->
-                <path d="M 350 122.5 L 480 122.5 L 500 101.5 L 530 143.5 L 550 115.5 L 570 129.5 L 600 122.5 L 850 122.5" stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.6"/>
+                <path d="M 350 110 L 480 110 L 500 91 L 530 129 L 550 104 L 570 117 L 600 110 L 850 110" stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.6"/>
 
                 <!-- Main Text -->
-                <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="50" font-weight="800" fill="#ffffff">
+                <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="48" font-weight="800" fill="#ffffff">
                     Medical Terminology
                 </text>
-                <text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="34" font-weight="500" fill="#cbd5e1">
+                <text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="32" font-weight="500" fill="#cbd5e1">
                     The Ultimate Hack
                 </text>
             </svg>
-            <div class="text-center -mt-4 sm:-mt-6 md:-mt-8 pb-8 bg-slate-800 pt-2">
-                 <p class="text-sm text-slate-400">by Hyungsuk Choi</p>
+            <div class="text-center -mt-4 sm:-mt-5 md:-mt-6 pb-6 bg-slate-800 pt-2">
+                 <p class="text-xs sm:text-sm text-slate-400">by Hyungsuk Choi</p>
             </div>
         </header>
 
@@ -294,7 +298,7 @@
     <!-- Iframe View (Initially Hidden) -->
     <div id="iframe-view" class="hidden">
         <div id="thin-header" class="fixed top-0 left-0 w-full bg-slate-800 text-white flex items-center justify-center shadow-md cursor-pointer z-50">
-            <p class="font-semibold">Medical Terminology: Click to return main menu</p>
+            <p class="font-semibold text-sm sm:text-base whitespace-nowrap px-2">Click to return to home</p>
         </div>
         <iframe id="content-frame" class="w-full mt-[50px]"></iframe>
     </div>
