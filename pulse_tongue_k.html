@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기본 변증의 맥진과 설진</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF; /* Color from user's reference site */
+            color: #383431;
+        }
+        /* Style for the active button */
+        .pattern-btn.active {
+            background-color: #8B725A;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        /* Transition for smooth content updates */
+        .content-card {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .content-card.loading {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl sm:text-4xl font-bold text-[#5a4a3e] mb-2">기본 변증의 맥진과 설진</h1>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+
+            <!-- Left Column: Pattern Selection -->
+            <aside class="md:col-span-1">
+                <div id="pattern-list" class="space-y-3">
+                    <!-- Pattern buttons will be dynamically inserted here -->
+                </div>
+            </aside>
+
+            <!-- Right Column: Information Display -->
+            <section id="info-display" class="md:col-span-2 bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/80">
+                <div id="display-content" class="content-card">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 한의학 패턴 데이터
+        // 요청에 따라 영어 설명을 다시 추가
+        const tcmPatterns = [
+            { 
+                name_kr: "정상",
+                pulse_kr: "완맥 (緩脈)",
+                pulse: "Moderate, soft but strong, rhythmic",
+                tongueCoating_kr: "얇고 흰색",
+                tongueCoating: "Thin, white",
+                tongueBody_kr: "분홍색, 적당한 크기",
+                tongueBody: "Pink, proper size"
+            },
+            { 
+                name_kr: "열 (熱)",
+                pulse_kr: "삭맥 (數脈)",
+                pulse: "Rapid",
+                tongueCoating_kr: "노란색",
+                tongueCoating: "Yellow",
+                tongueBody_kr: "붉음",
+                tongueBody: "Redder"
+            },
+            { 
+                name_kr: "한 (寒)",
+                pulse_kr: "지맥 (遲脈), 긴맥 (緊脈)",
+                pulse: "Slow, tight",
+                tongueCoating_kr: "흰색",
+                tongueCoating: "White",
+                tongueBody_kr: "창백하거나 푸른색",
+                tongueBody: "Pale, blue"
+            },
+            { 
+                name_kr: "표 (表)",
+                pulse_kr: "부맥 (浮脈)",
+                pulse: "Floating",
+                tongueCoating_kr: "일반적으로 얇은 흰색",
+                tongueCoating: "Typically thin white",
+                tongueBody_kr: "정상",
+                tongueBody: "Normal"
+            },
+            { 
+                name_kr: "리 (裏)",
+                pulse_kr: "침맥 (沈脈)",
+                pulse: "Deep",
+                tongueCoating_kr: "다양함",
+                tongueCoating: "Varies",
+                tongueBody_kr: "다양함",
+                tongueBody: "Varies"
+            },
+            { 
+                name_kr: "실 (實)",
+                pulse_kr: "실맥 (實脈)",
+                pulse: "Full",
+                tongueCoating_kr: "두꺼움",
+                tongueCoating: "Thick",
+                tongueBody_kr: "단단하고 큼",
+                tongueBody: "Sturdy, large"
+            },
+            { 
+                name_kr: "기허/양허 (氣虛/陽虛)",
+                pulse_kr: "허맥 (虛脈), 침맥 (沈脈), 지맥 (遲脈)",
+                pulse: "Weak, empty, often deep and slow",
+                tongueCoating_kr: "얇고, 희고, 축축함",
+                tongueCoating: "Thin, white, wet",
+                tongueBody_kr: "창백하고 부어 있으며 치흔이 있음",
+                tongueBody: "Pale, swollen, teeth marks"
+            },
+            { 
+                name_kr: "혈허 (血虛)",
+                pulse_kr: "세맥 (細脈), 약맥 (弱脈)",
+                pulse: "Fine, weak",
+                tongueCoating_kr: "설태가 적음",
+                tongueCoating: "Less coating",
+                tongueBody_kr: "창백하고 얇고 작음",
+                tongueBody: "Pale, thin, small"
+            },
+            { 
+                name_kr: "음허/건조 (陰虛/乾燥)",
+                pulse_kr: "세삭맥 (細數脈)",
+                pulse: "Fine and rapid",
+                tongueCoating_kr: "설태가 적거나 없음, 벗겨짐",
+                tongueCoating: "Less or no coating, peeled",
+                tongueBody_kr: "붉고 얇으며 갈라짐",
+                tongueBody: "Red, thin, cracked"
+            },
+            { 
+                name_kr: "간기울결 (肝氣鬱結)",
+                pulse_kr: "현맥 (弦脈)",
+                pulse: "Wiry",
+                tongueCoating_kr: "얇은 흰색",
+                tongueCoating: "Thin, white",
+                tongueBody_kr: "정상이거나 혀 가장자리가 약간 어두움",
+                tongueBody: "Normal or slightly dusky sides"
+            },
+            { 
+                name_kr: "혈어 (血瘀)",
+                pulse_kr: "삽맥 (澀脈), 결맥 (結脈), 대맥 (代脈), 촉맥 (促脈)",
+                pulse: "Choppy, knotted, intermittent, hasty",
+                tongueCoating_kr: "자색",
+                tongueCoating: "Purple",
+                tongueBody_kr: "자색, 어두운 반점",
+                tongueBody: "Purple, dark spots"
+            },
+            { 
+                name_kr: "습담 (濕痰)",
+                pulse_kr: "유맥 (濡脈), 활맥 (滑脈)",
+                pulse: "Soggy, slippery",
+                tongueCoating_kr: "기름지고 두꺼움",
+                tongueCoating: "Greasy, thick",
+                tongueBody_kr: "부어 있고 치흔이 있음",
+                tongueBody: "Swollen, teeth marks"
+            },
+            {
+                name_kr: "풍 (風)",
+                pulse_kr: "부맥 (浮脈), 삭맥 (數脈)",
+                pulse: "Floating, often rapid",
+                tongueCoating_kr: "얇고 흰색",
+                tongueCoating: "Thin, white",
+                tongueBody_kr: "뻣뻣하거나, 한쪽으로 치우치거나, 떨릴 수 있음",
+                tongueBody: "May be stiff, deviated, or tremor"
+            }
+        ];
+
+        // DOM Elements
+        const patternListContainer = document.getElementById('pattern-list');
+        const displayContentContainer = document.getElementById('display-content');
+
+        // Function to update the display with pattern info
+        function updateDisplay(pattern) {
+            // Add a loading effect for smooth transition
+            displayContentContainer.parentElement.classList.add('loading');
+            
+            setTimeout(() => {
+                displayContentContainer.innerHTML = `
+                    <h2 class="text-2xl font-bold text-[#5a4a3e] mb-6">${pattern.name_kr}</h2>
+
+                    <div class="space-y-6">
+                        <!-- Pulse Information -->
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-[#8B725A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M5.75 8.25a7.5 7.5 0 100 7.5" /> <path stroke-linecap="round" stroke-linejoin="round" d="M8 7a5 5 0 015.636 4.364L17 15h-1.25l-2.5-2.5-1.25.625L11 15.25 8.75 13 8 7z" />
+                                </svg>
+                                <h3 class="text-xl font-semibold text-[#6f655d]">맥</h3>
+                            </div>
+                            <div class="pl-9">
+                                <p class="text-lg">${pattern.pulse_kr}</p>
+                                <p class="text-sm text-gray-500">${pattern.pulse}</p>
+                            </div>
+                        </div>
+
+                        <!-- Tongue Information -->
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-[#8B725A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 2.252a16.423 16.423 0 00-1.33 3.976 1 1 0 00.99 1.225 1 1 0 00.99-.813 14.422 14.422 0 011.23-3.612c.3-.72.63-1.39.99-2 .36.61.69 1.28.99 2a14.422 14.422 0 011.23 3.612 1 1 0 00.99.813 1 1 0 00.99-1.225 16.424 16.424 0 00-1.33-3.976C12.446 1.474 12.226 1 12 1s-.226.474-.414 1.252zM12 15a6 6 0 100-12 6 6 0 000 12z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M12 15c-3.31 0-6 1.34-6 3v2h12v-2c0-1.66-2.69-3-6-3z" />
+                                </svg>
+                                <h3 class="text-xl font-semibold text-[#6f655d]">혀</h3>
+                            </div>
+                            <div class="pl-9 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-medium text-gray-700">설태</h4>
+                                    <p class="text-lg">${pattern.tongueCoating_kr}</p>
+                                    <p class="text-sm text-gray-500">${pattern.tongueCoating}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-700">설질</h4>
+                                    <p class="text-lg">${pattern.tongueBody_kr}</p>
+                                    <p class="text-sm text-gray-500">${pattern.tongueBody}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Remove loading effect
+                displayContentContainer.parentElement.classList.remove('loading');
+            }, 250); // Delay matches CSS transition
+        }
+
+        // Function to create and append buttons
+        function initializePatternList() {
+            tcmPatterns.forEach((pattern, index) => {
+                const button = document.createElement('button');
+                button.className = 'pattern-btn w-full text-left p-4 rounded-lg shadow-md bg-white hover:bg-amber-100/50 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B725A]';
+                button.innerHTML = `<span class="font-semibold">${pattern.name_kr}</span>`;
+                button.dataset.index = index;
+
+                // Set the first button as active by default
+                if (index === 0) {
+                    button.classList.add('active');
+                }
+
+                patternListContainer.appendChild(button);
+            });
+        }
+
+        // Event Listener for the pattern list container (using event delegation)
+        patternListContainer.addEventListener('click', (e) => {
+            const button = e.target.closest('.pattern-btn');
+            if (!button) return; // Exit if the click was not on a button
+
+            // Remove 'active' class from all buttons
+            document.querySelectorAll('.pattern-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked button
+            button.classList.add('active');
+
+            // Get the pattern data and update the display
+            const patternIndex = button.dataset.index;
+            const selectedPattern = tcmPatterns[patternIndex];
+            updateDisplay(selectedPattern);
+        });
+
+        // Initial Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializePatternList();
+            // Display the first pattern's info on initial load
+            if (tcmPatterns.length > 0) {
+                updateDisplay(tcmPatterns[0]);
+            }
+        });
+    </script>
+
+</body>
+</html>
