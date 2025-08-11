@@ -21,10 +21,24 @@
             font-family: 'Cormorant Garamond', serif;
         }
         /* Header transition */
+        #main-header {
+            /* Added for flexbox alignment */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* For positioning the language toggle */
+        }
         #main-header.shrunk {
             padding-top: 1rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #e5e7eb;
+            justify-content: space-between; /* Align title left, icon right */
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        #main-header.shrunk #title-container {
+             /* Remove centering when shrunk */
+            text-align: left;
         }
         #main-header.shrunk h1 {
             font-size: 1.5rem; /* 24px */
@@ -65,16 +79,39 @@
             border-radius: 8px;
             background-color: white;
         }
+        
+        /* Language Toggle Button Style */
+        #lang-toggle {
+            display: none; /* Hidden by default */
+            padding: 0.25rem 0.75rem;
+            background-color: #e5e7eb;
+            color: #374151;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        #lang-toggle:hover {
+            background-color: #d1d5db;
+        }
+        #main-header.shrunk #lang-toggle {
+            display: block; /* Visible only when header is shrunk */
+        }
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- Header Section -->
-    <header id="main-header" class="text-center transition-all duration-500 ease-in-out py-16 md:py-20">
-        <h1 id="main-title" class="text-5xl md:text-7xl font-serif cursor-pointer text-gray-700 hover:text-black transition-colors" onclick="resetView()">
-            Interactive TCM
-        </h1>
-        <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
+    <header id="main-header" class="transition-all duration-500 ease-in-out py-16 md:py-20">
+        <!-- Title container for better alignment -->
+        <div id="title-container" class="text-center">
+            <h1 id="main-title" class="text-5xl md:text-7xl font-serif cursor-pointer text-gray-700 hover:text-black transition-colors" onclick="resetView()">
+                Interactive TCM
+            </h1>
+            <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
+        </div>
+        <!-- Language toggle button, moved to header -->
+        <a href="#" id="lang-toggle" onclick="switchToKorean(event)">Kor</a>
     </header>
 
     <!-- Navigation Menu (Portal Style) -->
@@ -84,25 +121,25 @@
             <div class="bg-white/50 p-6 rounded-lg shadow-sm">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Theory</h2>
                 <ul class="space-y-2">
-                    <li><a href="five_organs.html" class="nav-link" target="content-frame" onclick="loadPage('five_organs.html')">Five Organs Pattern</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" target="content-frame" onclick="loadPage('pattern_basic.html')">Pattern Diagnosis Basic</a></li>
-                    <li><a href="yinyang.html" class="nav-link" target="content-frame" onclick="loadPage('yinyang.html')">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse.html" class="nav-link" target="content-frame" onclick="loadPage('pulse.html')">Pulse Quiz</a></li>
+                    <li><a href="five_organs.html" class="nav-link" onclick="loadPage('five_organs.html')">Five Organs Pattern</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" onclick="loadPage('pattern_basic.html')">Pattern Diagnosis Basic</a></li>
+                    <li><a href="yinyang.html" class="nav-link" onclick="loadPage('yinyang.html')">Yin and Yang Quiz</a></li>
+                    <li><a href="pulse.html" class="nav-link" onclick="loadPage('pulse.html')">Pulse Quiz</a></li>
                 </ul>
             </div>
             <!-- Formula Column -->
             <div class="bg-white/50 p-6 rounded-lg shadow-sm">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Formula</h2>
                 <ul class="space-y-2">
-                    <li><a href="what_formula.html" class="nav-link" target="content-frame" onclick="loadPage('what_formula.html')">What is Formula</a></li>
+                    <li><a href="what_formula.html" class="nav-link" onclick="loadPage('what_formula.html')">What is Formula</a></li>
                 </ul>
             </div>
             <!-- History Column -->
             <div class="bg-white/50 p-6 rounded-lg shadow-sm">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">History</h2>
                 <ul class="space-y-2">
-                    <li><a href="history.html" class="nav-link" target="content-frame" onclick="loadPage('history.html')">Brief History of TCM</a></li>
-                    <li><a href="four_masters.html" class="nav-link" target="content-frame" onclick="loadPage('four_masters.html')">Jin_Yuan Four Grand Masters</a></li>
+                    <li><a href="history.html" class="nav-link" onclick="loadPage('history.html')">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" onclick="loadPage('four_masters.html')">Jin_Yuan Four Grand Masters</a></li>
                 </ul>
             </div>
         </div>
@@ -110,7 +147,7 @@
 
     <!-- Main Content Area with Iframe -->
     <main id="content-wrapper">
-        <iframe id="content-frame" name="content-frame" class="hidden"></iframe>
+        <iframe id="content-frame" name="content-frame" class="hidden" frameborder="0"></iframe>
     </main>
 
     <!-- Footer Section -->
@@ -123,9 +160,23 @@
         const nav = document.getElementById('main-nav');
         const contentWrapper = document.getElementById('content-wrapper');
         const iframe = document.getElementById('content-frame');
+        
+        // Variable to store the URL of the currently loaded page
+        let currentLoadedUrl = '';
+
+        // List of pages that have a Korean version available.
+        const existingKoreanPages = [
+            'five_organs_k.html',
+            'pattern_basic_k.html',
+            'pulse_k.html',
+            'history_kor.html', // Note the different naming convention
+            'what_formula_k.html'
+        ];
 
         // This function is called when a menu item is clicked.
         function loadPage(url) {
+            event.preventDefault(); // Prevent default link behavior
+            currentLoadedUrl = url; // Store the URL
             iframe.src = url;
             header.classList.add('shrunk');
             nav.style.display = 'none'; // Hide the portal navigation
@@ -140,47 +191,33 @@
             iframe.classList.add('hidden');
             contentWrapper.classList.remove('visible');
             iframe.src = 'about:blank';
+            currentLoadedUrl = ''; // Reset the current URL
         }
 
-        // --- NOTE FOR CONTENT PAGES ---
-        // The following logic should be placed inside EACH of the content HTML files
-        // (e.g., five_organs.html, history.html, etc.) to handle the language toggle.
-        /*
-        <!-- Add this to the top right of your content pages (e.g., five_organs.html) -->
-        <div style="position: fixed; top: 1rem; right: 1rem; z-index: 10;">
-            <a href="#" onclick="switchToKorean(event)" 
-               class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300 transition-colors">
-               Kor
-            </a>
-        </div>
+        // This function is called when the 'Kor' icon in the header is clicked.
+        function switchToKorean(event) {
+            event.preventDefault();
+            if (!currentLoadedUrl) return; // Do nothing if no page is loaded
 
-        <script>
-            const existingKoreanPages = [
-                'five_organs_k.html',
-                'pattern_basic_k.html',
-                'pulse_k.html',
-                'history_kor.html',
-                'what_formula_k.html'
-            ];
-
-            function switchToKorean(event) {
-                event.preventDefault();
-                const currentPage = window.location.pathname.split('/').pop();
-                let koreanPage;
-                if (currentPage === 'history.html') {
-                    koreanPage = 'history_kor.html';
-                } else {
-                    koreanPage = currentPage.replace('.html', '_k.html');
-                }
-
-                if (existingKoreanPages.includes(koreanPage)) {
-                    window.location.href = koreanPage;
-                } else {
-                    alert('한글 페이지가 아직 준비되지 않았습니다.');
-                }
+            // Determine the corresponding Korean filename
+            let koreanPage;
+            // Handle special case for history page name
+            if (currentLoadedUrl.endsWith('history.html')) {
+                koreanPage = 'history_kor.html';
+            } else {
+                koreanPage = currentLoadedUrl.replace('.html', '_k.html');
             }
-        </script>
-        */
+
+            // Check if the Korean version exists in our list
+            if (existingKoreanPages.includes(koreanPage)) {
+                // If it exists, load it into the iframe and update the current URL
+                iframe.src = koreanPage;
+                currentLoadedUrl = koreanPage;
+            } else {
+                // If not, show an alert message
+                alert('한글 페이지가 아직 준비되지 않았습니다.');
+            }
+        }
     </script>
 
 </body>
