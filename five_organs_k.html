@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중의학 오장육부 기능 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
+        .hwa-element { background-color: #FF6B6B; color: white; } /* 화(火) */
+        .mok-element { background-color: #06D6A0; color: white; } /* 목(木) */
+        .to-element { background-color: #FFD166; color: #073B4C; } /* 토(土) */
+        .geum-element { background-color: #FFFFFC4; color: black; } /* 금(金) */
+        .su-element { background-color: #073B4C; color: white; } /* 수(水) */
+        .exam-point { background-color: #FFD166; color: #073B4C; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px; }
+        .flow-arrow { display: flex; align-items: center; justify-content: center; margin: 10px 0; font-size: 2rem; color: #118AB2; }
+        .comparison-table th, .comparison-table td { border: 1px solid #073B4C; padding: 8px; text-align: left; }
+        .sticky-nav { position: sticky; top: 0; background-color: rgba(7, 59, 76, 0.9); z-index: 50; padding: 0.5rem 0; backdrop-filter: blur(5px); }
+        .sticky-nav a { color: white; margin: 0 0.75rem; font-size: 0.875rem; transition: color 0.3s; }
+        .sticky-nav a:hover { color: #FFD166; }
+        h2, h3 { color: #073B4C; }
+        h2 { border-bottom: 2px solid #118AB2; padding-bottom: 0.5rem; margin-top: 2rem; }
+        h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #118AB2; }
+        .card { background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .jangbu-title { font-size: 1.5rem; font-weight: bold; }
+        .bu-title { font-size: 1.25rem; font-weight: bold; margin-top:1rem; color: #073B4C; }
+        .palette-comment { display: none; }
+        .exam-group-title { font-size: 1.25rem; font-weight:bold; margin-top:1.5rem; margin-bottom:0.5rem;}
+        .emphasized-paragraph { background-color: #f0f9ff; /* Tailwind sky-50 */ padding: 0.75rem; border-radius: 0.375rem; font-weight: 500; border-left: 4px solid #0ea5e9 /* Tailwind sky-500 */; }
+    </style>
+    
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="palette-comment">선택된 팔레트: Energetic & Playful (#FF6B6B, #FFD166, #06D6A0, #118AB2, #073B4C)</div>
+    
+
+    <header class="bg-[#073B4C] text-white p-6 text-center">
+        <h1 class="text-4xl font-bold">중의학: 오장육부 기능</h1>
+        <p class="mt-2 text-lg">중의학에서 오장(간, 심, 비, 폐, 신)과 그에 배속된 육부의 주요 기능 및 상호관계를 시각적으로 요약합니다.</p>
+    </header>
+
+    <nav class="sticky-nav text-center">
+        <a href="#section-comparison-summary">오장 기능 비교</a>
+        <a href="#section-gan">간 (肝)</a>
+        <a href="#section-sim">심 (心)</a>
+        <a href="#section-bi">비 (脾)</a>
+        <a href="#section-pye">폐 (肺)</a>
+        <a href="#section-sin">신 (腎)</a>
+        <a href="#section-ohaeng">오행 관계</a>
+        <a href="#section-gi-hyeol">기혈 관계</a>
+        <a href="#section-exam-points-list">시험 핵심 종합</a>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="section-comparison-summary" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">오장 기능 비교 요약표</h2>
+                <p class="text-center mb-6">오장의 주요 기능, 주관 조직, 개규, 정서, 오행 관계를 한눈에 비교하여 전체적인 이해를 돕습니다.</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full comparison-table">
+                        <thead>
+                            <tr class="bg-[#073B4C] text-white">
+                                <th>오장 (臟腑)</th>
+                                <th>주요 기능 1</th>
+                                <th>주요 기능 2</th>
+                                <th>주관 조직/기관</th>
+                                <th>개규 (開竅)</th>
+                                <th>정서 (情志)</th>
+                                <th>오행 (五行)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>간 (肝)</strong></td>
+                                <td>소설 (疏泄) - 기 순환 조절</td>
+                                <td>장혈 (藏血) - 혈액 저장</td>
+                                <td>근육과 힘줄 (筋), 손톱</td>
+                                <td>눈 (目)</td>
+                                <td>노 (怒)</td>
+                                <td>목 (木)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>심 (心)</strong></td>
+                                <td>혈액 주관 (主血) - 혈액 순환</td>
+                                <td>정신 저장 (藏神) - 정신 활동</td>
+                                <td>혈관 (脈), 안색</td>
+                                <td>혀 (舌)</td>
+                                <td>희 (喜)</td>
+                                <td>화 (火)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>비 (脾)</strong></td>
+                                <td>운화 (運化) - 소화, 흡수, 운반</td>
+                                <td>통혈 (統血) - 혈액 통제</td>
+                                <td>근육과 살 (肉), 입술</td>
+                                <td>입 (口)</td>
+                                <td>사 (思)</td>
+                                <td>토 (土)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>폐 (肺)</strong></td>
+                                <td>선발과 숙강, 호흡</td>
+                                <td>위기 조절, 면역계</td>
+                                <td>피부와 체모 (皮毛)</td>
+                                <td>코 (鼻)</td>
+                                <td>비/우 (悲/憂)</td>
+                                <td>금 (金)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>신 (腎)</strong></td>
+                                <td>정 저장 (藏精) - 생장, 발육, 생식</td>
+                                <td>수 주관 (主水) - 수액 대사</td>
+                                <td>뼈 (骨), 머리카락</td>
+                                <td>귀 (耳), 이음</td>
+                                <td>공 (恐)</td>
+                                <td>수 (水)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-gan" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title mok-element p-2 rounded-t-md">간 (肝) <span class="text-sm font-normal">- 목 (木)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">간의 가장 중요한 기능은 기를 퍼뜨리는 소설(疏泄) 기능과 혈을 저장하는 장혈(藏血) 기능입니다. 소설은 양적인 기능이며, 장혈은 음적인 기능입니다. 정신적 스트레스, 월경 장애, 감정 문제 등과 관련됩니다.</p>
+                    <h3 class="text-xl font-semibold">주요 기능:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>소설 기능 (疏泄機能):</strong> 전신의 기(氣) 흐름을 원활하게 하여 정신적 안정, 정서 조절, 소화 등을 돕습니다.</li>
+                        <li><strong>장혈 기능 (藏血機能):</strong> 혈액을 저장하고 필요에 따라 혈액량을 조절하며, 특히 월경과 중요하게 관련됩니다.</li>
+                        <li><strong>근육과 힘줄 주관 (主筋):</strong> 근육과 힘줄의 정상적인 운동 기능을 유지합니다.</li>
+                        <li><strong>손톱에 상태 반영 (其華在爪):</strong> 손톱의 건강함과 윤기는 간의 혈액 저장 상태를 반영합니다.</li>
+                        <li><strong>눈으로 개규 (開竅于目):</strong> 간 기능은 시력 및 눈의 건강과 밀접하게 관련됩니다.</li>
+                    </ul>
+                    <p><strong class="mok-element p-1 rounded">정서:</strong> 노 (怒 - 분노)</p>
+                    <p><strong class="mok-element p-1 rounded">맛:</strong> 산 (酸 - 신맛)</p>
+                    <p><strong class="mok-element p-1 rounded">기후:</strong> 풍 (風 - 바람)</p>
+
+                    <h4 class="bu-title">담 (膽) - 간에 배속된 부(腑)</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>담즙을 저장하고 배설하여 소화를 돕습니다.</li>
+                        <li>결단력을 주관합니다.</li>
+                        <li>근육과 힘줄을 주관합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-sim" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title hwa-element p-2 rounded-t-md">심 (心) <span class="text-sm font-normal">- 화 (火)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">심장의 가장 중요한 기능은 혈액 순환을 주관하고 정신(神)을 저장하여 모든 정신 활동과 사유 활동을 총괄합니다.</p>
+                    <h3 class="text-xl font-semibold">주요 기능:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>혈액 및 혈관 주관 (主血脈):</strong> 혈액을 전신으로 박출하여 각 조직과 기관에 영양을 공급하며, 모든 혈관의 기능을 총괄합니다.</li>
+                        <li><strong>정신/영혼 저장 (藏神):</strong> 의식, 사고, 기억, 수면 등 인간의 모든 정신 활동과 정서 활동을 주관합니다.</li>
+                        <li><strong>혀로 개규 (開竅于舌):</strong> 심장의 기능은 혀와 연결되어 미각과 언어 표현에 영향을 미칩니다. 혀는 심장의 '싹'으로 비유됩니다.</li>
+                    </ul>
+                    <p><strong class="hwa-element p-1 rounded">정서:</strong> 희 (喜 - 기쁨)</p>
+                    <p><strong class="hwa-element p-1 rounded">맛:</strong> 고 (苦 - 쓴맛)</p>
+                    <p><strong class="hwa-element p-1 rounded">기후:</strong> 서/화 (暑/火 - 여름 더위/불)</p>
+
+                    <h4 class="bu-title">소장 (小腸) - 심에 배속된 부(腑)</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>수납과 변화 주관: 위에서 내려온 음식물을 받아들여 소화를 지속합니다.</li>
+                        <li>청탁분별: 맑은 영양 물질과 탁한 찌꺼기를 분별합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-bi" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title to-element p-2 rounded-t-md">비 (脾) <span class="text-sm font-normal">- 토 (土)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">비는 음식물을 소화(運化)하여 기혈(氣血)과 진액(津液)을 생성하고 전신으로 운반하며, 혈액이 혈관 밖으로 새지 않도록 통제(統血)합니다. '후천의 근본'으로 불립니다. 비는 에너지를 만드는 난로, 위는 음식을 소화시키는 블렌더에 비유됩니다.</p>
+                    <h3 class="text-xl font-semibold">주요 기능:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>운화 기능 주관 (主運化):</strong> 음식물에서 영양 물질과 수액을 흡수하여 전신으로 운반하고 배포합니다 (기혈 생성의 기초).</li>
+                        <li><strong>승청 기능 주관 (主升淸):</strong> 운화된 영양 물질 중 맑고 가벼운 것을 위로 올려보내 폐, 심, 머리, 눈 등으로 공급합니다.</li>
+                        <li><strong>통혈 기능 (統血):</strong> 혈액이 혈관 내에서 정상적으로 운행하도록 통제하여 출혈을 방지합니다.</li>
+                        <li><strong>기육과 사지 주관 (主肌肉四肢):</strong> 근육(살)을 풍만하게 하고, 근육의 정적인 측면을 담당합니다.</li>
+                        <li><strong>입으로 개규, 입술에 상태 반영 (開竅于口, 其華在脣):</strong> 비장의 운화 기능은 식욕 및 미각과 관련되며, 그 상태는 입술의 색과 윤택함으로 나타납니다.</li>
+                    </ul>
+                    <p><strong class="to-element p-1 rounded">정서:</strong> 사 (思 - 생각/근심)</p>
+                    <p><strong class="to-element p-1 rounded">맛:</strong> 감 (甘 - 단맛)</p>
+                    <p><strong class="to-element p-1 rounded">기후:</strong> 습 (濕 - 습기) (비는 습을 싫어함: 喜燥惡濕)</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mt-4 border p-4 rounded-md">
+                        <div>
+                            <h4 class="font-bold text-lg text-[#073B4C]">비 (脾) - 난로 🔥</h4>
+                            <p>에너지를 만드는 비는 방을 따뜻하게 하고 밝게 하는 난로와 같다.</p>
+                            <ul class="list-disc list-inside text-sm">
+                                <li>운화 (運化): 음식물을 순수 에너지로 변화시켜 사지로 배달.</li>
+                                <li>승청 (升淸): 에너지는 위와 사지로 퍼져나감 (비기는 올라감).</li>
+                                <li>불승청 (不升淸): 기운 없고 처지며, 장기 하수.</li>
+                                <li>오습 (惡濕): 물기 없이 순수한 양기가 에너지로 변해야 잘 기능. 비습 시 몸 무겁고 부종, 설사.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-[#073B4C]">위 (胃) - 블렌더 믹서기 🍇</h4>
+                            <p>음식을 갈아서 죽같이 만들어주는 블렌더와 같다.</p>
+                            <ul class="list-disc list-inside text-sm">
+                                <li>부숙 (腐熟): 음식을 썩혀(decomposition) 흡수 형태로 만듦.</li>
+                                <li>강탁 (降濁): 죽 같은 음식은 에너지화 후 나머지는 아래로 배출 (위기는 내려감).</li>
+                                <li>불강탁 (不降濁): 구토, 오심, 입덧, 신물, 딸꾹질.</li>
+                                <li>오조 (惡燥): 물이 필요. 위조 시 속쓰림, 갈증, 잇몸병. 위열증으로 발전.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4 class="bu-title">위 (胃) - 비에 배속된 부(腑)</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>'수납' 주관 (受納): 음식물 받아들임.</li>
+                        <li>음식물의 '부숙' 주관 (腐熟水穀): 초기 소화.</li>
+                        <li>기의 '강탁' 주관 (降濁): 소화된 찌꺼기를 아래로 내려보냄.</li>
+                        <li>진액의 근원.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-pye" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title geum-element p-2 rounded-t-md">폐 (肺) <span class="text-sm font-normal">- 금 (金)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">폐는 호흡을 주관하여 자연의 맑은 기(天氣)를 받아들이고 체내의 탁한 기(濁氣)를 배출하며, 전신의 기(氣)를 다스리고 수액대사를 보조합니다. 면역 기능과도 밀접합니다.</p>
+                    <h3 class="text-xl font-semibold">주요 기능:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>기 주관, 호흡 주관 (主氣, 司呼吸):</strong> 기체 교환, 종기(宗氣) 생성 도움.</li>
+                        <li><strong>선발과 숙강 조절 (主宣發肅降):</strong> 기와 진액을 전신으로 퍼뜨리고(선발), 맑은 기와 진액을 아래로 내려보내며(숙강), 호흡을 깊게 합니다. 선발은 양적, 숙강은 음적 기능입니다.</li>
+                        <li><strong>수도 통조 (通調水道):</strong> 수액의 운행 통로를 조절하여 땀과 소변을 통해 불필요한 수분을 배출함으로써 체내 수액 균형을 유지합니다.</li>
+                        <li><strong>피모 주관 (主皮毛):</strong> 피부와 체모에 영양을 공급하고 그 기능을 유지하며, 외부 사기(邪氣)로부터 인체를 방어하는 위기(衛氣)를 피부 표면으로 보냅니다.</li>
+                        <li><strong>코로 개규 (開竅于鼻):</strong> 폐는 호흡과 후각을 담당하는 코와 직접 연결됩니다.</li>
+                        <li><strong>위기 조절 (衛氣):</strong> 체표를 보호하고 체온을 조절하는 위기의 순행을 담당합니다.</li>
+                    </ul>
+                    <p><strong class="geum-element p-1 rounded">정서:</strong> 비/우 (悲/憂 - 슬픔/걱정)</p>
+                    <p><strong class="geum-element p-1 rounded">맛:</strong> 신 (辛 - 매운맛) (일반적)</p>
+                    <p><strong class="geum-element p-1 rounded">기후:</strong> 조 (燥 - 건조함) (일반적; 폐는 윤택함을 좋아함)</p>
+
+                    <h4 class="bu-title">대장 (大腸) - 폐에 배속된 부(腑)</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>통로와 전도 주관: 소장에서 내려온 음식물 찌꺼기를 받아들여 전도.</li>
+                        <li>대변을 형성하고 체액을 재흡수하여 배출.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-sin" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title su-element p-2 rounded-t-md">신 (腎) <span class="text-sm font-normal">- 수 (水)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">신장은 생명의 근원인 정(精)을 저장하여 생장, 발육, 생식 기능을 주관하며, 전신의 수액 대사를 조절하고 폐의 납기(納氣)를 돕습니다. '선천의 근본'으로 불립니다. 정의 소모는 노화와 직결됩니다.</p>
+                    <h3 class="text-xl font-semibold">주요 기능:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>정 저장 (藏精):</strong> 부모로부터 받은 선천의 정과 음식물로부터 얻은 후천의 정을 저장하며, 인체의 생장, 발육, 노화, 생식 능력을 주관합니다.</li>
+                        <li><strong>수 주관 (主水):</strong> 전신의 수액 대사를 총괄하여 소변 생성을 통해 체내 수분 균형을 조절합니다.</li>
+                        <li><strong>납기 주관 (主納氣):</strong> 폐가 들이마신 맑은 기를 신장이 받아들여 호흡을 깊고 안정되게 합니다.</li>
+                        <li><strong>골수 생성, 뇌 충만, 뼈 주관 (生髓, 充腦, 主骨):</strong> 신정(腎精)은 골수(骨髓)를 생성하고, 골수는 뼈를 채우며 뇌수(腦髓)를 보충하여 뼈의 성장과 뇌 기능에 영향을 줍니다.</li>
+                        <li><strong>귀로 개규, 머리카락에 상태 반영 (開竅于耳, 其華在髮):</strong> 신장의 정기(精氣)는 귀의 청각 기능과 밀접하며, 머리카락의 성장과 윤택함에 신장의 상태가 반영됩니다.</li>
+                        <li><strong>이음 조절 (主二陰):</strong> 앞의 음(전음, 요도)과 뒤의 음(후음, 항문)의 개폐 기능을 조절하여 대소변 배설을 관리합니다.</li>
+                    </ul>
+                    <p><strong class="su-element p-1 rounded">정서:</strong> 공 (恐 - 두려움)</p>
+                    <p><strong class="su-element p-1 rounded">맛:</strong> 함 (鹹 - 짠맛) (일반적)</p>
+                    <p><strong class="su-element p-1 rounded">기후:</strong> 한 (寒 - 추위) (일반적)</p>
+
+                    <h4 class="bu-title">방광 (膀胱) - 신에 배속된 부(腑)</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>기화를 통해 수분을 저장하고 배출합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-ohaeng" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">오장 & 오행 관계</h2>
+                <p class="text-center mb-6">오장은 각각 오행(목, 화, 토, 금, 수)에 배속되며, 이는 각 장부의 성질, 기능 및 상호관계를 이해하는 데 중요한 틀을 제공합니다. 각 오행은 특정 감정, 맛, 계절, 인체 부위 등과 연결됩니다.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 text-center">
+                    <div class="mok-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">목 (木) - 간 (肝)</h3>
+                        <p>정서: 노 (怒)</p>
+                        <p>맛: 산 (酸)</p>
+                        <p>계절: 봄</p>
+                        <p>기관: 눈 (目)</p>
+                        <p>조직: 근육과 힘줄 (筋)</p>
+                    </div>
+                    <div class="hwa-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">화 (火) - 심 (心)</h3>
+                        <p>정서: 희 (喜)</p>
+                        <p>맛: 고 (苦)</p>
+                        <p>계절: 여름</p>
+                        <p>기관: 혀 (舌)</p>
+                        <p>조직: 혈관 (脈)</p>
+                    </div>
+                    <div class="to-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">토 (土) - 비 (脾)</h3>
+                        <p>정서: 사 (思)</p>
+                        <p>맛: 감 (甘)</p>
+                        <p>계절: 늦여름 (장하)</p>
+                        <p>기관: 입 (口)</p>
+                        <p>조직: 근육과 살 (肉)</p>
+                    </div>
+                    <div class="geum-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">금 (金) - 폐 (肺)</h3>
+                        <p>정서: 비/우 (悲/憂)</p>
+                        <p>맛: 신 (辛)</p>
+                        <p>계절: 가을</p>
+                        <p>기관: 코 (鼻)</p>
+                        <p>조직: 피부와 체모 (皮毛)</p>
+                    </div>
+                    <div class="su-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">수 (水) - 신 (腎)</h3>
+                        <p>정서: 공 (恐)</p>
+                        <p>맛: 함 (鹹)</p>
+                        <p>계절: 겨울</p>
+                        <p>기관: 귀 (耳)</p>
+                        <p>조직: 뼈 (骨)</p>
+                    </div>
+                </div>
+                <p class="mt-6 text-sm text-gray-600 text-center">이 정보는 제공된 PDF 및 일반적인 중의학 이론을 바탕으로 구성되었습니다.</p>
+            </div>
+        </section>
+        
+        <section id="section-gi-hyeol" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">기(氣)와 혈(血)의 생성 및 주요 장부</h2>
+                <p class="text-center mb-4">기는 인체의 생명 활동을 유지하는 근본 물질이며, 혈은 전신에 영양을 공급합니다. 여러 장부가 이들의 생성과 운행에 관여합니다.</p>
+                <div class="text-center">
+                    <div class="inline-block bg-yellow-100 p-3 rounded-lg shadow">비 (脾): 곡기(穀氣) 생성 (소화)</div>
+                    <div class="flow-arrow text-yellow-500">+</div>
+                    <div class="inline-block bg-blue-100 p-3 rounded-lg shadow">폐 (肺): 천기(天氣) 흡수 (호흡)</div>
+                    <div class="flow-arrow text-green-500">⬇</div>
+                    <div class="inline-block bg-green-100 p-3 rounded-lg shadow">가슴에서 만나 종기(宗氣) 형성</div>
+                    <div class="flow-arrow text-red-500">⬇</div>
+                    <div class="inline-block bg-red-100 p-3 rounded-lg shadow">심 (心): 종기를 혈(血)과 함께 전신 순환</div>
+                </div>
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold">혈(血) 관련 주요 장부 기능:</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>심 (心):</strong> 혈액과 혈관을 주관 (主血脈).</li>
+                        <li><strong>비 (脾):</strong> 혈액 생성의 근원 (곡기 운화), 혈액 순환 통제 (統血).</li>
+                        <li><strong>간 (肝):</strong> 혈액을 저장하고 유통량 조절 (藏血).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-exam-points-list" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">시험 핵심 포인트 종합 목록</h2>
+                <p class="text-center mb-6">이 섹션은 학습을 위한 모든 시험 핵심 포인트의 종합 목록을 제공합니다.</p>
+                                    
+                    <div class="exam-group-title mok-element p-2 rounded-md">간 (肝) & 담 (膽)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">간은 혈을 저장 (Liver stores Blood.)</span></li>
+                        <li><span class="exam-point">간은 기의 순조로운 흐름을 조절 (Liver ensures the smooth flow of Qi.)</span></li>
+                        <li><span class="exam-point">간은 근육과 힘줄을 조절 (Liver controls the muscles and sinews.)</span></li>
+                        <li><span class="exam-point">간은 손톱에 나타남 (Liver manifests in the nails.)</span></li>
+                        <li><span class="exam-point">간은 눈으로 개규 (Liver opens into the eye.)</span></li>
+                        <li><span class="exam-point">간은 분노의 영향을 받음 (Liver is affected by anger.)</span></li>
+                        <li><span class="exam-point">간의 맛은 신맛 (Liver's taste is sour.)</span></li>
+                        <li><span class="exam-point">간의 기후는 바람 (Liver's climate is wind.)</span></li>
+                        <li><span class="exam-point">담은 담즙을 저장하고 배출 (The Gall Bladder stores and excretes bile.)</span></li>
+                        <li><span class="exam-point">담은 결단력을 주관 (The Gall Bladder controls decisiveness.)</span></li>
+                        <li><span class="exam-point">담은 근육과 힘줄을 주관 (The Gall Bladder controls the muscles and sinews.)</span></li>
+                    </ul>
+
+                    <div class="exam-group-title hwa-element p-2 rounded-md">심 (心) & 소장 (小腸)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">심은 혈을 주관 (It governs Blood. (Heart))</span></li>
+                        <li><span class="exam-point">심은 혈관을 조절 (It controls the blood vessels. (Heart))</span></li>
+                        <li><span class="exam-point">심은 안색에 나타남 (It manifests in the complexion. (Heart))</span></li>
+                        <li><span class="exam-point">심은 정신을 저장 (It houses the Mind. (Heart))</span></li>
+                        <li><span class="exam-point">심은 기쁨과 관련 (It is related to joy. (Heart))</span></li>
+                        <li><span class="exam-point">심은 혀로 개규 (It opens into the tongue. (Heart))</span></li>
+                        <li><span class="exam-point">심은 땀을 조절 (It controls sweat. (Heart))</span></li>
+                        <li><span class="exam-point">심의 맛은 쓴맛 (The taste of the Heart is bitter.)</span></li>
+                        <li><span class="exam-point">화(火)는 심과 관련 (Fire is related to the Heart.)</span></li>
+                        <li><span class="exam-point">소장은 수납과 변화를 주관 (The Small Intestine controls receiving and transforming.)</span></li>
+                        <li><span class="exam-point">소장은 진액을 분리 (The Small Intestine separates fluids.)</span></li>
+                    </ul>
+
+                    <div class="exam-group-title to-element p-2 rounded-md">비 (脾) & 위 (胃)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">비는 운화를 주관 (The Spleen governs transformation and transportation.)</span></li>
+                        <li><span class="exam-point">비는 기의 상승을 조절 (The Spleen controls the ascending of Qi.)</span></li>
+                        <li><span class="exam-point">비는 혈액을 통제 (The Spleen controls Blood.)</span></li>
+                        <li><span class="exam-point">비는 근육과 살(살) 및 사지를 조절 (The Spleen controls the muscles and flesh (flesh) and the four limbs.)</span></li>
+                        <li><span class="exam-point">비는 입, 입술, 침으로 개규 (The Spleen opens into the mouth, lips, and saliva.)</span></li>
+                        <li><span class="exam-point">비는 생각의 영향을 받음 (The Spleen is affected by pensiveness.)</span></li>
+                        <li><span class="exam-point">비의 맛은 단맛 (The Spleen's taste is sweet.)</span></li>
+                        <li><span class="exam-point">비는 습을 싫어함(The Spleen loathes Dampness.)</span></li>
+                        <li><span class="exam-point">위는 '수납'을 주관 (The Stomach controls 'receiving'.)</span></li>
+                        <li><span class="exam-point">위는 음식물의 '부숙'을 주관 (The Stomach controls the 'rotting and ripening' of food.)</span></li>
+                        <li><span class="exam-point">위는 조한것을 싫어함 (The Stomach hates dryness.)</span></li>
+                        <li><span class="exam-point">위는 탁한 것의 하강을 주관 (The Stomach controls the descending of turbid.)</span></li>
+                        <li><span class="exam-point">위는 진액의 근원 (The Stomach is the origin of fluids.)</span></li>
+                    </ul>
+
+                    <div class="exam-group-title geum-element p-2 rounded-md">폐 (肺) & 대장 (大腸)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">폐는 기와 호흡을 주관 (The Lungs govern Qi and respiration.)</span></li>
+                        <li><span class="exam-point">폐는 경맥을 조절 (The Lungs control channels.)</span></li>
+                        <li><span class="exam-point">폐는 기의 선발과 숙강을 조절 (The Lungs control diffusing and descending of Qi.)</span></li>
+                        <li><span class="exam-point">폐는 모든 생리 활동을 조절 (The Lungs regulate all physiological activities.)</span></li>
+                        <li><span class="exam-point">폐는 수도(水路)를 조절 (The Lungs regulate Water passages.)</span></li>
+                        <li><span class="exam-point">폐는 피부를 조절 (The Lungs control the skin.)</span></li>
+                        <li><span class="exam-point">폐는 위기(피부와 근육 사이 공간)를 조절 (The Lungs control Protective qi (the space between skin and muscles).)</span></li>
+                        <li><span class="exam-point">폐는 코로 개규 (The Lungs open into the nose.)</span></li>
+                        <li><span class="exam-point">폐는 걱정, 슬픔의 영향을 받음 (The Lungs are affected by worry, grief and sadness.)</span></li>
+                        <li><span class="exam-point">대장은 통로와 전도를 주관 (The Large Intestine controls passage and conduction.)</span></li>
+                        <li><span class="exam-point">대장은 대변을 형성하고 체액을 재흡수 (The Large Intestine transforms stools and reabsorbs fluids.)</span></li>
+                    </ul>
+
+                    <div class="exam-group-title su-element p-2 rounded-md">신 (腎) & 방광 (膀胱)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">정(精)을 저장하고 출생, 성장, 생식, 발달을 주관 (Store Essence and govern birth, growth, reproduction and development. (Kidneys))</span></li>
+                        <li><span class="exam-point">골수를 생산하고 뇌를 채우며 뼈를 조절 (Produce Marrow, fill up the brain and control bones. (Kidneys))</span></li>
+                        <li><span class="exam-point">수를 주관 (Govern Water. (Kidneys))</span></li>
+                        <li><span class="exam-point">기의 수납을 조절 (Control the reception of Qi. (Kidneys))</span></li>
+                        <li><span class="exam-point">귀로 개규 (Open into the ears. (Kidneys))</span></li>
+                        <li><span class="exam-point">머리카락에 나타남 (Manifest in the hair. (Kidneys))</span></li>
+                        <li><span class="exam-point">타액(침)을 조절 (Control spittle. (Kidneys))</span></li>
+                        <li><span class="exam-point">이음(두 개의 하부 구멍)을 조절 (Control the two lower orifices. (Kidneys))</span></li>
+                        <li><span class="exam-point">방광은 기화를 통해 수분을 제거 (The Bladder removes water by Qi transformation.)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white p-6 text-center mt-12">
+        <p>&copy; 2024 중의학 오장육부 기능 인포그래픽. 제공된 자료를 바탕으로 제작되었습니다.</p>
+        <p class="text-xs mt-2">본 정보는 학습 참고용이며, 전문적인 의학적 진단이나 치료를 대체할 수 없습니다.</p>
+    </footer>
+
+    <script>
+        // Chart.js 관련 스크립트는 사용자의 요청에 따라 제거되었습니다.
+        // wrapLabels 함수는 나중에 다른 차트가 추가될 경우를 대비해 남겨둡니다.
+        function wrapLabels(label) {
+            const maxLen = 16; 
+            if (typeof label === 'string' && label.length > maxLen) {
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + word).length > maxLen && currentLine.length > 0) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                }
+                lines.push(currentLine.trim());
+                return lines;
+            }
+            return label;
+        }
+        
+    </script>
+    </body>
+</html>
