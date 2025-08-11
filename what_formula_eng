@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula Studies (Bang Ji Xue)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f7f5;
+            --box-bg-color: #ffffff;
+            --border-color: #e0ddd7;
+            --text-color: #3d3d3d;
+            --subtle-text-color: #7a7a7a;
+            --connector-color: #c0b8ae;
+            --herb-color: #5a7d5a;
+            --removed-herb-color: #ed8936; /* Soft Orange */
+            --formula-color: #4a7c9b;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4a7c9b, #5a7d5a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            padding-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        .header h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--connector-color);
+            border-radius: 2px;
+        }
+        .text-section {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 25px;
+            background-color: var(--box-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        .qa-box {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 25px;
+            background-color: #e9e7e3;
+            border-left: 5px solid var(--connector-color);
+            border-radius: 8px;
+            line-height: 1.8;
+        }
+        .diagram-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            min-height: 50vh;
+        }
+        .flow-box {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background-color: var(--box-bg-color);
+            text-align: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 0.3s ease-in-out;
+        }
+        .flow-box.compact {
+            width: 140px; /* Adjusted for English text */
+        }
+        .flow-box.wide {
+            width: 240px; /* Adjusted for English text */
+        }
+        .flow-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        .box-header { padding: 16px; }
+        .box-header h3 { font-size: 1.1rem; font-weight: 700; margin: 0; } /* Adjusted font size */
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            border-top: 1px solid var(--border-color);
+            background-color: #fafaf9;
+            border-radius: 0 0 11px 11px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .flow-box.open .expandable-content { max-height: 200px; padding: 16px; }
+        .connector {
+            font-size: 2.5rem;
+            color: var(--connector-color);
+            margin: 0 16px;
+            flex-shrink: 0;
+        }
+        .vertical-stack { display: flex; flex-direction: column; gap: 24px; align-items: center; }
+        .herb { color: var(--herb-color); font-weight: 700; font-size: 0.9rem; }
+        .removed-herb { color: var(--removed-herb-color); font-weight: 700; font-size: 0.9rem; }
+        .formula {
+            color: var(--formula-color);
+            font-weight: 900;
+            text-decoration: underline;
+            text-decoration-color: rgba(74, 124, 155, 0.4);
+            text-underline-offset: 3px;
+            text-decoration-thickness: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header"><h1>What is Learning Formulae</h1></div>
+
+    <div class="text-section">
+        <p>In traditional medicine, illness is seen as a process, not a single event. Diagnosis isn't just a snapshot of today; it's about understanding how a condition changes over time. Herbal formulas are designed to guide this process back to health. For instance, Qi Deficiency can lead to Spleen Qi Deficiency, and vice versa. From there, it might cause Spleen Deficiency generating Dampness, Yang Deficiency, or even organ prolapse from Spleen Qi Sinking. It can also lead to bleeding issues (Spleen Failing to Control Blood) or emotional problems when combined with Heart Blood Deficiency. Long-term Qi Deficiency can turn into a Deficiency of both Qi and Blood, which might cause recurring miscarriages. This is a fundamental concept. You can't learn about formulas without first understanding the body's processes and the individual herbs.</p>
+    </div>
+
+    <div class="diagram-container">
+        <div class="flow-box compact" data-target="Qi Deficiency"><div class="box-header"><h3>Qi Deficiency</h3></div><div class="expandable-content"></div></div>
+        <div class="flow-box compact" data-target="Spleen Qi Deficiency" style="margin-left: 1rem;"><div class="box-header"><h3>Spleen Qi Deficiency</h3></div><div class="expandable-content"></div></div>
+        <div class="connector">→</div>
+        <div class="vertical-stack">
+            <div class="flow-box wide" data-target="Spleen Deficiency generating Dampness"><div class="box-header"><h3>Spleen Deficiency generating Dampness</h3></div><div class="expandable-content"></div></div>
+            <div class="flow-box wide" data-target="Spleen Yang Deficiency"><div class="box-header"><h3>Spleen Yang Deficiency</h3></div><div class="expandable-content"></div></div>
+            <div class="flow-box wide" data-target="Spleen Qi Sinking"><div class="box-header"><h3>Spleen Qi Sinking</h3></div><div class="expandable-content"></div></div>
+            <div class="flow-box wide" data-target="Spleen Failing to Control Blood"><div class="box-header"><h3>Spleen Failing to Control Blood</h3></div><div class="expandable-content"></div></div>
+            <div class="flow-box wide" data-target="Qi and Blood Deficiency"><div class="box-header"><h3>Qi & Blood Deficiency</h3></div><div class="expandable-content"></div></div>
+        </div>
+    </div>
+    
+    <div class="text-section">
+        <p>Herbal formulas are built step-by-step to match the flow of an illness. For a simple Qi deficiency, you might use 'Ren Shen' and 'Gan Cao'. If the Spleen Qi is the issue, you add 'Bai Zhu'. That trio—'Ren Shen', 'Bai Zhu', and 'Gan Cao'—is the core treatment for Spleen Qi Deficiency. If the deficient Spleen creates dampness, you add 'Fu Ling' to that core trio, creating the formula 'Si Jun Zi Tang'. If it leads to Yang deficiency instead, you'd add 'Gan Jiang' to warm the body, creating 'Li Zhong Wan'. For sinking Qi, you'd add herbs that lift, like 'Sheng Ma' and 'Chai Hu', to make 'Bu Zhong Yi Qi Tang'. If the Spleen can't control blood, you might add blood-builders like 'Dang Gui' and Calming herbs to 'Si Jun Zi Tang' to create 'Gui Pi Tang'. If the deficiency affects both Qi and Blood, you combine 'Si Jun Zi Tang' with another formula, 'Si Wu Tang', to make 'Ba Wu Tang'. For miscarriage risk, you modify 'Ba Wu Tang' by removing 'Fu Ling' and adding fetus-calming herbs ('An Tai Yao') to make 'Tai Shan Pan Shi Tang'. If Yang is also deficient, you add warming herbs like 'Rou Gui' and 'Huang Qi' to create 'Shi Quan Da Bu Tang'. Each formula is a team designed for a specific stage of an illness. Just memorizing 'use this for gastritis' misses the whole point of this elegant system.</p>
+    </div>
+
+    <div class="qa-box">
+        <p><strong>Q. Why does the formula 'Bu Zhong Yi Qi Tang' not only add the lifting herbs 'Sheng Ma' and 'Chai Hu' to 'Si Jun Zi Tang', but also remove 'Fu Ling'?</strong></p>
+        <p style="margin-top: 10px;">A. Think about it before reading the answer. It's because 'Fu Ling' has a downward-draining action. Since the goal is to lift the Qi up, a downward-moving herb would be counterproductive. For the same reason, 'Fu Ling' is removed to create 'Tai Shan Pan Shi Tang'. Understanding these details is what formula studies is all about.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const contentData = {
+                'Qi Deficiency': `<p><span class="herb">Ren Shen<br>Gan Cao</span></p>`,
+                'Spleen Qi Deficiency': `<p><span class="herb">Bai Zhu</span></p>`,
+                'Spleen Deficiency generating Dampness': `<p><span class="herb">+ Fu Ling</span></p><p><span class="formula">Si Jun Zi Tang</span></p>`,
+                'Spleen Yang Deficiency': `<p><span class="herb">+ Gan Jiang</span></p><p><span class="formula">Li Zhong Wan</span></p>`,
+                'Spleen Qi Sinking': `<p><span class="herb">+ Sheng Ma, Chai Hu</span><br><span class="removed-herb">(-Fu Ling)</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
+                'Spleen Failing to Control Blood': `<p><span class="formula">Si Jun Zi Tang</span> + <span class="herb">Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
+                'Qi and Blood Deficiency': `<p><span class="formula">Ba Wu Tang</span></p>
+                             <p style="margin-top: 12px;">→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
+                             <p>→ <span class="formula">Tai Shan Pan Shi Tang</span> <span class="herb">(+Calming fetus herbs)</span><br><span class="removed-herb">(-Fu Ling)</span></p>`
+            };
+
+            const boxes = document.querySelectorAll('.flow-box');
+            
+            boxes.forEach(box => {
+                const targetId = box.dataset.target;
+                const contentDiv = box.querySelector('.expandable-content');
+                
+                if (contentDiv) {
+                    contentDiv.innerHTML = contentData[targetId];
+                    box.addEventListener('click', () => {
+                        const isPersistent = targetId === 'Qi Deficiency' || targetId === 'Spleen Qi Deficiency';
+
+                        if (!isPersistent) {
+                            if (!box.classList.contains('open')) {
+                                boxes.forEach(otherBox => {
+                                    const otherTargetId = otherBox.dataset.target;
+                                    if (otherTargetId !== 'Qi Deficiency' && otherTargetId !== 'Spleen Qi Deficiency') {
+                                        otherBox.classList.remove('open');
+                                    }
+                                });
+                            }
+                        }
+                        box.classList.toggle('open');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
