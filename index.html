@@ -73,7 +73,8 @@
             width: 100%;
             border: none; /* Removed border */
             background-color: transparent; /* Made background transparent */
-            /* Height is now set dynamically by JavaScript */
+            min-height: 600px; /* 최소 높이 설정 */
+            height: auto;
         }
         
         /* Language Toggle Button Style */
@@ -162,18 +163,44 @@
         let currentEnglishUrl = '';
         let currentLang = 'en';
 
-        // Dynamically adjust iframe height based on its content
-        iframe.onload = function() {
+        // 향상된 iframe 높이 조정 함수
+        function adjustIframeHeight() {
             try {
-                // Reset height to auto before calculating new height to prevent issues
-                iframe.style.height = 'auto';
-                const newHeight = iframe.contentWindow.document.body.scrollHeight;
-                iframe.style.height = newHeight + 'px';
+                // iframe의 콘텐츠가 로드될 때까지 잠시 대기
+                setTimeout(() => {
+                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                    const body = iframeDocument.body;
+                    const html = iframeDocument.documentElement;
+                    
+                    // 실제 콘텐츠 높이 계산 (여러 방법으로 시도)
+                    const height = Math.max(
+                        body.scrollHeight,
+                        body.offsetHeight,
+                        html.clientHeight,
+                        html.scrollHeight,
+                        html.offsetHeight
+                    );
+                    
+                    // 최소 높이와 비교하여 더 큰 값 사용
+                    const finalHeight = Math.max(height + 50, 600); // 50px 여유공간 추가
+                    iframe.style.height = finalHeight + 'px';
+                    
+                    console.log('Iframe height adjusted to:', finalHeight + 'px');
+                }, 100);
             } catch (e) {
                 console.error("Could not adjust iframe height:", e);
-                // Fallback to a default height in case of errors
-                iframe.style.height = '80vh';
+                // 크로스 도메인 이슈 등으로 접근이 안될 경우 기본 높이 설정
+                iframe.style.height = '800px';
             }
+        }
+
+        // iframe 로드 이벤트 핸들러
+        iframe.onload = function() {
+            adjustIframeHeight();
+            
+            // 콘텐츠가 동적으로 변경될 수 있으므로 추가 확인
+            setTimeout(adjustIframeHeight, 500);
+            setTimeout(adjustIframeHeight, 1000);
         }
 
         const existingKoreanPages = [
@@ -182,13 +209,16 @@
             'pulse_k.html',
             'history_kor.html',
             'what_formula_k.html',
-            'pulse_tongue_k.html' // Added support for this page
+            'pulse_tongue_k.html'
         ];
 
         function loadPage(url) {
             event.preventDefault();
             currentEnglishUrl = url;
-            iframe.src = url; // The iframe's onload event will fire after this
+            
+            // 먼저 기본 높이로 설정
+            iframe.style.height = '600px';
+            iframe.src = url;
             currentLang = 'en';
             langToggle.textContent = 'Kor';
             
@@ -204,6 +234,7 @@
             iframe.classList.add('hidden');
             contentWrapper.classList.remove('visible');
             iframe.src = 'about:blank';
+            iframe.style.height = 'auto';
             currentEnglishUrl = '';
             currentLang = 'en';
             langToggle.textContent = 'Kor';
@@ -223,7 +254,8 @@
                 }
 
                 if (existingKoreanPages.includes(koreanPage)) {
-                    iframe.src = koreanPage; // The iframe's onload event will fire after this
+                    iframe.style.height = '600px'; // 기본 높이로 재설정
+                    iframe.src = koreanPage;
                     currentLang = 'ko';
                     langToggle.textContent = 'Eng';
                 } else {
@@ -231,11 +263,19 @@
                 }
             } else {
                 // Switch back to English
-                iframe.src = currentEnglishUrl; // The iframe's onload event will fire after this
+                iframe.style.height = '600px'; // 기본 높이로 재설정
+                iframe.src = currentEnglishUrl;
                 currentLang = 'en';
                 langToggle.textContent = 'Kor';
             }
         }
+
+        // 윈도우 리사이즈 시에도 iframe 높이 재조정
+        window.addEventListener('resize', function() {
+            if (!iframe.classList.contains('hidden')) {
+                setTimeout(adjustIframeHeight, 100);
+            }
+        });
     </script>
 
 </body>
