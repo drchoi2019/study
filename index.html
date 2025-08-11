@@ -22,22 +22,19 @@
         }
         /* Header transition */
         #main-header {
-            /* Added for flexbox alignment */
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative; /* For positioning the language toggle */
+            position: relative;
         }
         #main-header.shrunk {
             padding-top: 1rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            justify-content: space-between; /* Align title left, icon right */
+            justify-content: space-between;
             padding-left: 2rem;
             padding-right: 2rem;
         }
         #main-header.shrunk #title-container {
-             /* Remove centering when shrunk */
             text-align: left;
         }
         #main-header.shrunk h1 {
@@ -61,7 +58,7 @@
             color: #000;
         }
 
-        /* Iframe styling */
+        /* Iframe styling for seamless integration */
         #content-wrapper {
             max-width: 1000px;
             margin: 0 auto;
@@ -74,10 +71,9 @@
         }
         #content-frame {
             width: 100%;
-            height: 80vh; /* Adjust height as needed */
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
+            height: 80vh;
+            border: none; /* Removed border */
+            background-color: transparent; /* Made background transparent */
         }
         
         /* Language Toggle Button Style */
@@ -90,12 +86,14 @@
             font-size: 0.875rem;
             font-weight: 600;
             transition: background-color 0.3s;
+            min-width: 45px; /* Ensure button width is consistent */
+            text-align: center;
         }
         #lang-toggle:hover {
             background-color: #d1d5db;
         }
         #main-header.shrunk #lang-toggle {
-            display: block; /* Visible only when header is shrunk */
+            display: block;
         }
     </style>
 </head>
@@ -103,22 +101,20 @@
 
     <!-- Header Section -->
     <header id="main-header" class="transition-all duration-500 ease-in-out py-16 md:py-20">
-        <!-- Title container for better alignment -->
         <div id="title-container" class="text-center">
             <h1 id="main-title" class="text-5xl md:text-7xl font-serif cursor-pointer text-gray-700 hover:text-black transition-colors" onclick="resetView()">
                 Interactive TCM
             </h1>
             <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
         </div>
-        <!-- Language toggle button, moved to header -->
-        <a href="#" id="lang-toggle" onclick="switchToKorean(event)">Kor</a>
+        <a href="#" id="lang-toggle" onclick="toggleLanguage(event)">Kor</a>
     </header>
 
     <!-- Navigation Menu (Portal Style) -->
     <nav id="main-nav" class="max-w-5xl mx-auto px-4 pb-16 transition-opacity duration-500">
         <div class="grid md:grid-cols-3 gap-10">
             <!-- Theory Column -->
-            <div class="bg-white/50 p-6 rounded-lg shadow-sm">
+            <div class="p-6 rounded-lg">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Theory</h2>
                 <ul class="space-y-2">
                     <li><a href="five_organs.html" class="nav-link" onclick="loadPage('five_organs.html')">Five Organs Pattern</a></li>
@@ -128,14 +124,14 @@
                 </ul>
             </div>
             <!-- Formula Column -->
-            <div class="bg-white/50 p-6 rounded-lg shadow-sm">
+            <div class="p-6 rounded-lg">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Formula</h2>
                 <ul class="space-y-2">
                     <li><a href="what_formula.html" class="nav-link" onclick="loadPage('what_formula.html')">What is Formula</a></li>
                 </ul>
             </div>
             <!-- History Column -->
-            <div class="bg-white/50 p-6 rounded-lg shadow-sm">
+            <div class="p-6 rounded-lg">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">History</h2>
                 <ul class="space-y-2">
                     <li><a href="history.html" class="nav-link" onclick="loadPage('history.html')">Brief History of TCM</a></li>
@@ -151,7 +147,7 @@
     </main>
 
     <!-- Footer Section -->
-    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+    <footer class="text-center py-4 mt-6 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
@@ -160,62 +156,68 @@
         const nav = document.getElementById('main-nav');
         const contentWrapper = document.getElementById('content-wrapper');
         const iframe = document.getElementById('content-frame');
+        const langToggle = document.getElementById('lang-toggle');
         
-        // Variable to store the URL of the currently loaded page
-        let currentLoadedUrl = '';
+        let currentEnglishUrl = '';
+        let currentLang = 'en';
 
-        // List of pages that have a Korean version available.
         const existingKoreanPages = [
             'five_organs_k.html',
             'pattern_basic_k.html',
             'pulse_k.html',
-            'history_kor.html', // Note the different naming convention
+            'history_kor.html',
             'what_formula_k.html'
         ];
 
-        // This function is called when a menu item is clicked.
         function loadPage(url) {
-            event.preventDefault(); // Prevent default link behavior
-            currentLoadedUrl = url; // Store the URL
+            event.preventDefault();
+            currentEnglishUrl = url;
             iframe.src = url;
+            currentLang = 'en';
+            langToggle.textContent = 'Kor';
+            
             header.classList.add('shrunk');
-            nav.style.display = 'none'; // Hide the portal navigation
+            nav.style.display = 'none';
             iframe.classList.remove('hidden');
             contentWrapper.classList.add('visible');
         }
 
-        // This function is called when the main title is clicked.
         function resetView() {
             header.classList.remove('shrunk');
-            nav.style.display = 'block'; // Show the portal navigation
+            nav.style.display = 'block';
             iframe.classList.add('hidden');
             contentWrapper.classList.remove('visible');
             iframe.src = 'about:blank';
-            currentLoadedUrl = ''; // Reset the current URL
+            currentEnglishUrl = '';
+            currentLang = 'en';
+            langToggle.textContent = 'Kor';
         }
 
-        // This function is called when the 'Kor' icon in the header is clicked.
-        function switchToKorean(event) {
+        function toggleLanguage(event) {
             event.preventDefault();
-            if (!currentLoadedUrl) return; // Do nothing if no page is loaded
+            if (!currentEnglishUrl) return;
 
-            // Determine the corresponding Korean filename
-            let koreanPage;
-            // Handle special case for history page name
-            if (currentLoadedUrl.endsWith('history.html')) {
-                koreanPage = 'history_kor.html';
-            } else {
-                koreanPage = currentLoadedUrl.replace('.html', '_k.html');
-            }
+            if (currentLang === 'en') {
+                // Switch to Korean
+                let koreanPage;
+                if (currentEnglishUrl.endsWith('history.html')) {
+                    koreanPage = 'history_kor.html';
+                } else {
+                    koreanPage = currentEnglishUrl.replace('.html', '_k.html');
+                }
 
-            // Check if the Korean version exists in our list
-            if (existingKoreanPages.includes(koreanPage)) {
-                // If it exists, load it into the iframe and update the current URL
-                iframe.src = koreanPage;
-                currentLoadedUrl = koreanPage;
+                if (existingKoreanPages.includes(koreanPage)) {
+                    iframe.src = koreanPage;
+                    currentLang = 'ko';
+                    langToggle.textContent = 'Eng';
+                } else {
+                    alert('한글 페이지가 아직 준비되지 않았습니다.');
+                }
             } else {
-                // If not, show an alert message
-                alert('한글 페이지가 아직 준비되지 않았습니다.');
+                // Switch back to English
+                iframe.src = currentEnglishUrl;
+                currentLang = 'en';
+                langToggle.textContent = 'Kor';
             }
         }
     </script>
