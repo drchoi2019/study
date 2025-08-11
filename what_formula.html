@@ -95,15 +95,9 @@
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: all 0.3s ease-in-out;
         }
-        .flow-box.compact {
-            width: 130px;
-        }
-        .flow-box.medium {
-             width: 152px;
-        }
-        .flow-box.wide {
-            width: 240px; /* 209px * 1.15 */
-        }
+        .flow-box.compact { width: 130px; }
+        .flow-box.medium { width: 152px; }
+        .flow-box.wide { width: 240px; }
         .flow-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
@@ -138,6 +132,82 @@
             text-underline-offset: 3px;
             text-decoration-thickness: 2px;
         }
+
+        /* --- New styles for interactive formula diagram --- */
+        .interactive-diagram-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 25px;
+            background-color: var(--box-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .interactive-diagram-container h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+        .herb-grid-container {
+            background-color: #fafaf9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+        .herb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
+        }
+        .herb-item {
+            text-align: center;
+            padding: 12px 8px;
+            background-color: var(--box-bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: default;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+        .herb-item.highlight {
+            background-color: var(--formula-color);
+            color: white;
+            transform: scale(1.05);
+            border-color: var(--formula-color);
+            box-shadow: 0 4px 12px rgba(74, 124, 155, 0.3);
+        }
+        .herb-item.special-border {
+            border-color: var(--herb-color);
+            border-width: 2px;
+        }
+        .formula-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        .formula-button {
+            text-align: center;
+            padding: 12px;
+            background-color: var(--herb-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+        .formula-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .formula-button.active {
+            background-color: var(--formula-color);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(74, 124, 155, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -147,31 +217,11 @@
         <p class="author-name">By Hyungsuk Choi</p>
     </div>
 
-       <div class="text-section">
-        <p>방제학 학습은 단순히 “어떤 방제가 어떤 증상을 치료하는지”를 배우는 것이 아닙니다.
-방제학은 고전 처방의 내적 논리와 구성 원리를 다루는, 임상 훈련과는 구별되는 독립적인 이론 학문입니다. 따라서 임상 훈련처럼 접근해서는 안 됩니다.
-
-하지만 많은 학생들이 방제학 수업에 들어오면서 임상적 답을 기대합니다.
-그들은 “편두통에는 어떤 방제를 써야 하나요?” 같은 질문을 합니다.
-안타깝게도 많은 강사들과 교재들이 이 혼란을 부추기고 있습니다.
-서양 의약품처럼 이름, 구성 약재, 용량, 적응증, 부작용을 나열하는 형식으로 방제를 소개하기 때문입니다.
-그러나 바로 이런 방식이 오늘날 잘못 가르쳐지고 있는 내용입니다.
-
-진정한 방제학 학습이란,
-
-왜 특정 약재가 방제에 포함되거나 제외되는지,
-
-약재들이 어떻게 상승 작용 또는 길항 작용을 하는지,
-
-어떤 비율의 조합이 치료의 조화를 이루는지,
-
-그리고 방제가 전체적으로 효과를 발휘하게 만드는 구조적 논리가 무엇인지
-를 배우는 것입니다.
-
-이러한 구성 원리를 배우면, 우리의 질문도 바뀝니다.
-“이 병에는 어떤 방제를 쓰는가?”가 아니라
-“이 방제에 왜 이 약재가 있고 다른 약재는 없는가?”,
-“각 약재는 방제의 전체 구조 속에서 어떤 역할을 하는가?”라고 묻게 됩니다.</p>
+    <div class="text-section">
+        <p>방제학 학습은 단순히 “어떤 방제가 어떤 증상을 치료하는지”를 배우는 것이 아닙니다. 방제학은 고전 처방의 내적 논리와 구성 원리를 다루는, 임상 훈련과는 구별되는 독립적인 이론 학문입니다. 따라서 임상 훈련처럼 접근해서는 안 됩니다.</p>
+        <p>하지만 많은 학생들이 방제학 수업에 들어오면서 임상적 답을 기대합니다. 그들은 “편두통에는 어떤 방제를 써야 하나요?” 같은 질문을 합니다. 안타깝게도 많은 강사들과 교재들이 이 혼란을 부추기고 있습니다. 서양 의약품처럼 이름, 구성 약재, 용량, 적응증, 부작용을 나열하는 형식으로 방제를 소개하기 때문입니다. 그러나 바로 이런 방식이 오늘날 잘못 가르쳐지고 있는 내용입니다.</p>
+        <p>진정한 방제학 학습이란, 왜 특정 약재가 방제에 포함되거나 제외되는지, 약재들이 어떻게 상승 작용 또는 길항 작용을 하는지, 어떤 비율의 조합이 치료의 조화를 이루는지, 그리고 방제가 전체적으로 효과를 발휘하게 만드는 구조적 논리가 무엇인지를 배우는 것입니다.</p>
+        <p>이러한 구성 원리를 배우면, 우리의 질문도 바뀝니다. “이 병에는 어떤 방제를 쓰는가?”가 아니라 “이 방제에 왜 이 약재가 있고 다른 약재는 없는가?”, “각 약재는 방제의 전체 구조 속에서 어떤 역할을 하는가?”라고 묻게 됩니다.</p>
     </div>
     
     <div class="text-section">
@@ -204,6 +254,19 @@
         <p>한약 처방은 정확하게 이 병리적 진행과 그에 해당하는 개별 한약의 조합을 통해 이루어집니다. 기(氣)가 허하면 원기를 보하는 인삼, 감초를 사용합니다. 그런데, 특별하게 비기(脾氣)가 문제죠? 백출을 사용합니다. 그럼 인삼, 백출, 감초가 되지요. 비기허(脾氣虛)를 치료하는 최소의 유닛입니다. 습을 싫어하는 비(脾)가 허하면 곧 습이 쌓여서 비허습증(脾虛濕證)이 됩니다. 그럼, 앞서 인삼, 백출, 감초에 복령을 더합니다. 이를 사군자탕이라 합니다. 비허습증(脾虛濕證)이 아니라 양허(陽虛)로 진행하는 경우, 인삼, 백출, 감초에 비양(脾陽)을 보하는 건강을 더합니다. 이를 이중환이라고 합니다. 비기허(脾氣虛)로 인해 비기하함증으로 진행하는 경우, 인삼, 백출, 감초에 양기를 위로 올리는 승마와 시호를 더합니다. 이를 보중익기탕이라고 합니다. (몇 개의 약이 더 들어갑니다.) 비기허(脾氣虛)로 인한 비불통혈(脾不統血)로 출혈증상과 함께 심혈허(心血虛)가 생기면, 인삼, 백출, 감초에 복령을 더한 사군자탕에 보혈제인 당귀와 안신제를 더합니다. 이를 귀비탕이라고 합니다. 기허(氣虛)에서 혈허까지 진행하면 사군자탕에 사물탕(당귀, 백작, 천궁, 숙지)을 더합니다. 이를 팔물탕이라고 합니다. 기혈양허(氣血兩虛)의 습관성 유산을 치료하는 경우, 이 팔물탕에서 복령을 빼고 안태약을 더합니다. 이를 태산반석탕이라고 합니다. 기혈양허(氣血兩虛)에 양허(陽虛)로 진행하면, 육계와 황기를 더하여 양을 보합니다. 이를 십전대보탕이라고 합니다. 이렇게 한약 처방은 정교하게 병리 과정을 치료하는 팀으로 구성됩니다. 이 과정을 무시하고, '위염에는 무슨 처방', '두통에는 무슨 처방'을 공부하면 진정으로 방제를 이해할 수 없습니다.</p>
     </div>
 
+    <!-- New Interactive Diagram -->
+    <div class="interactive-diagram-container">
+        <h2>사군자탕 변방들의 구성</h2>
+        <div class="herb-grid-container">
+            <div id="herb-grid" class="herb-grid">
+                <!-- Herb items will be injected here by JS -->
+            </div>
+        </div>
+        <div id="formula-list" class="formula-list">
+            <!-- Formula buttons will be injected here by JS -->
+        </div>
+    </div>
+
     <div class="qa-box">
         <p><strong>Q. 보중익기탕은 왜 사군자탕에 승양익기하는 승마, 시호만 추가하지 않고, 굳이 복령을 뺐을까요?</strong></p>
         <p style="margin-top: 10px;">답을 먼저 보기 전에 생각해 보시기 바랍니다. 복령은 습을 아래로 내리는 하기(下氣)하는 작용이 있기 때문입니다. 마찬가지 이유로 태산반석탕에서도 역시 사군자탕에서 복령을 빼고 사물탕과 합하여 사용한 것입니다. 이러한 과정을 이해하는 것이 바로 방제학입니다.</p>
@@ -211,16 +274,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Script for the first diagram ---
             const contentData = {
                 '기허': `<p><span class="herb">인삼, 감초</span></p>`,
                 '비기허': `<p><span class="herb">+ 백출</span></p>`,
                 '비허생습': `<p><span class="herb">+ 복령</span></p><p><span class="formula">사군자탕</span></p>`,
                 '비양허': `<p><span class="herb">+ 건강</span></p><p><span class="formula">이중환</span></p>`,
-                '비기하함': `<p><span class="herb">+ 승마, 시호</span></p><p><span class="formula">보중익기탕</span></p>`,
+                '비기하함': `<p><span class="herb">+ 황기, 당귀, 진피</span></p><p><span class="herb">+ 승마, 시호</span></p><p><span class="formula">보중익기탕</span></p>`,
                 '비불통혈': `<p><span class="formula">사군자탕</span> + <span class="herb">당귀</span> + <span class="herb">안신제</span></p><p><span class="formula">귀비탕</span></p>`,
                 '기혈양허': `<p><span class="formula">팔물탕</span></p>
-                             <p style="margin-top: 12px;"><span class="formula">십전대보탕</span> <span class="herb">(+황기,육계)</span></p>
-                             <p><span class="formula">태산반석탕</span> <span class="herb">(-복령+안태약)</span></p>`
+                                 <p style="margin-top: 12px;"><span class="formula">십전대보탕</span> <span class="herb">(+황기,육계)</span></p>
+                                 <p><span class="formula">태산반석탕</span> <span class="herb">(-복령+안태약)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
@@ -248,6 +312,100 @@
                     });
                 }
             });
+
+            // --- Script for the new interactive formula diagram ---
+            const formulas = {
+                '사군자탕': ['인삼', '백출', '복령', '감초'],
+                '이공산': ['인삼', '백출', '복령', '감초', '진피'],
+                '육군자탕': ['인삼', '백출', '복령', '감초', '이진탕'],
+                '삼령백출산': ['산약', '거습약', '백출', '복령', '인삼', '감초'],
+                '이중환': ['인삼', '백출', '건강', '감초'],
+                '보중익기탕': ['인삼', '백출', '황기', '감초', '당귀', '진피', '승마', '시호'],
+                '귀비탕': ['인삼', '백출', '복령', '감초', '당귀', '안신약'],
+                '팔물탕': ['인삼', '백출', '복령', '감초', '사물탕'],
+                '십전대보탕': ['인삼', '백출', '복령', '감초', '사물탕', '황기', '육계'],
+                '태산반석탕': ['인삼', '백출', '감초', '사물탕', '안태약'],
+            };
+
+            const allHerbs = ['인삼', '백출', '감초', '복령', '건강', '진피', '황기', '당귀', '육계', '산약', '승마', '시호', '사물탕', '안신약', '안태약', '거습약', '이진탕'];
+
+            const diagramContainer = document.querySelector('.interactive-diagram-container');
+            const herbGrid = document.getElementById('herb-grid');
+            const formulaList = document.getElementById('formula-list');
+
+            if (diagramContainer && herbGrid && formulaList) {
+                // 1. Create herb grid
+                allHerbs.forEach(herb => {
+                    const herbDiv = document.createElement('div');
+                    herbDiv.textContent = herb;
+                    herbDiv.dataset.herb = herb;
+                    herbDiv.className = 'herb-item';
+                    herbGrid.appendChild(herbDiv);
+                });
+
+                // 1.5. Add special border to Sagunja-tang base herbs
+                const borderHerbs = ['인삼', '백출', '복령', '감초'];
+                borderHerbs.forEach(herbName => {
+                    const herbElement = herbGrid.querySelector(`.herb-item[data-herb='${herbName}']`);
+                    if (herbElement) {
+                        herbElement.classList.add('special-border');
+                    }
+                });
+
+                // 2. Create formula buttons
+                Object.keys(formulas).forEach(formulaName => {
+                    const button = document.createElement('button');
+                    button.textContent = formulaName;
+                    button.dataset.formula = formulaName;
+                    button.className = 'formula-button';
+                    formulaList.appendChild(button);
+                });
+                
+                let activeFormulaButton = null;
+
+                function resetSelection() {
+                    herbGrid.querySelectorAll('.herb-item').forEach(item => {
+                        item.classList.remove('highlight');
+                    });
+                    if (activeFormulaButton) {
+                        activeFormulaButton.classList.remove('active');
+                        activeFormulaButton = null;
+                    }
+                }
+
+                // 3. Add event listener to formula list
+                formulaList.addEventListener('click', (e) => {
+                    if (e.target && e.target.matches('button.formula-button')) {
+                        const clickedButton = e.target;
+                        const formulaName = clickedButton.dataset.formula;
+                        const ingredients = formulas[formulaName];
+
+                        if (activeFormulaButton === clickedButton) {
+                            resetSelection();
+                            return;
+                        }
+                        
+                        resetSelection(); // Reset previous selection before applying new one
+                        
+                        clickedButton.classList.add('active');
+                        activeFormulaButton = clickedButton;
+
+                        ingredients.forEach(ingredient => {
+                            const herbElement = herbGrid.querySelector(`.herb-item[data-herb='${ingredient}']`);
+                            if (herbElement) {
+                                herbElement.classList.add('highlight');
+                            }
+                        });
+                    }
+                });
+                
+                // 4. Deselect when clicking outside the diagram
+                document.addEventListener('click', (e) => {
+                    if (!diagramContainer.contains(e.target)) {
+                         resetSelection();
+                    }
+                });
+            }
         });
     </script>
 </body>
