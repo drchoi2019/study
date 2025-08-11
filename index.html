@@ -71,9 +71,9 @@
         }
         #content-frame {
             width: 100%;
-            height: 80vh; /* Reverted to viewport height for consistency */
             border: none; /* Removed border */
             background-color: transparent; /* Made background transparent */
+            /* Height is now set dynamically by JavaScript */
         }
         
         /* Language Toggle Button Style */
@@ -162,6 +162,20 @@
         let currentEnglishUrl = '';
         let currentLang = 'en';
 
+        // Dynamically adjust iframe height based on its content
+        iframe.onload = function() {
+            try {
+                // Reset height to auto before calculating new height to prevent issues
+                iframe.style.height = 'auto';
+                const newHeight = iframe.contentWindow.document.body.scrollHeight;
+                iframe.style.height = newHeight + 'px';
+            } catch (e) {
+                console.error("Could not adjust iframe height:", e);
+                // Fallback to a default height in case of errors
+                iframe.style.height = '80vh';
+            }
+        }
+
         const existingKoreanPages = [
             'five_organs_k.html',
             'pattern_basic_k.html',
@@ -174,7 +188,7 @@
         function loadPage(url) {
             event.preventDefault();
             currentEnglishUrl = url;
-            iframe.src = url;
+            iframe.src = url; // The iframe's onload event will fire after this
             currentLang = 'en';
             langToggle.textContent = 'Kor';
             
@@ -209,7 +223,7 @@
                 }
 
                 if (existingKoreanPages.includes(koreanPage)) {
-                    iframe.src = koreanPage;
+                    iframe.src = koreanPage; // The iframe's onload event will fire after this
                     currentLang = 'ko';
                     langToggle.textContent = 'Eng';
                 } else {
@@ -217,7 +231,7 @@
                 }
             } else {
                 // Switch back to English
-                iframe.src = currentEnglishUrl;
+                iframe.src = currentEnglishUrl; // The iframe's onload event will fire after this
                 currentLang = 'en';
                 langToggle.textContent = 'Kor';
             }
