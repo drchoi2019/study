@@ -112,6 +112,10 @@
             font-size: 1rem;
             line-height: 1.6;
         }
+        /* New CSS rule to adjust paragraph spacing */
+        .expandable-content p {
+            margin: 6px 0;
+        }
         .flow-box.open .expandable-content { max-height: 200px; padding: 16px; }
         .connector {
             font-size: 2.5rem;
@@ -268,10 +272,11 @@ When we study these compositional principles, our questions must evolve. Instead
                 'Spleen Deficiency Dampness': `<p><span class="herb">+ Fu Ling</span></p><p><span class="formula">Si Jun Zi Tang</span></p>`,
                 'Spleen Yang Deficiency': `<p><span class="herb">+ Gan Jiang</span></p><p><span class="formula">Li Zhong Wan</span></p>`,
                 'Spleen Qi Sinking': `<p><span class="herb">+ Huang Qi, Sheng Ma, Chai Hu, Dang Gui, Chen Pi</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
-                'Spleen Failing to Control Blood': `<p><span class="formula">Si Jun Zi Tang</span> + <span class="herb">Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
-                'Qi and Blood Deficiency': `<p><span class="formula">Ba Zhen Tang</span></p>
-                                     <p style="margin-top: 12px;">→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
-                                     <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span><br><span class="removed-herb">(-Fu Ling)</span></p>`
+                'Spleen Failing to Control Blood': `<p><span class="herb">+ Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
+                'Qi and Blood Deficiency': `<p><span class="herb">+ Si Wu Tang</span></p>
+                                     <p><span class="formula">Ba Zhen Tang</span></p>
+                                     <p>→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
+                                     <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span> <span class="removed-herb">(-Fu Ling)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
