@@ -170,7 +170,7 @@
                 'Spleen Qi Deficiency': `<p><span class="herb">Bai Zhu</span></p>`,
                 'Spleen Deficiency generating Dampness': `<p><span class="herb">+ Fu Ling</span></p><p><span class="formula">Si Jun Zi Tang</span></p>`,
                 'Spleen Yang Deficiency': `<p><span class="herb">+ Gan Jiang</span></p><p><span class="formula">Li Zhong Wan</span></p>`,
-                'Spleen Qi Sinking': `<p><span class="herb">+ Sheng Ma, Chai Hu</span><br><span class="removed-herb">(-Fu Ling)</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
+                'Spleen Qi Sinking': `<p><span class="herb">+ Sheng Ma, Chai Hu</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
                 'Spleen Failing to Control Blood': `<p><span class="formula">Si Jun Zi Tang</span> + <span class="herb">Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
                 'Qi and Blood Deficiency': `<p><span class="formula">Ba Wu Tang</span></p>
                              <p style="margin-top: 12px;">→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
