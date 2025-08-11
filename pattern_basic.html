@@ -1,0 +1,270 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basics of Pattern Differentiation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .section-card {
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .section-card:hover {
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            transform: translateY(-5px);
+        }
+        .item-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .item-list li:last-child {
+            border-bottom: none;
+        }
+        .term {
+            font-weight: 700;
+            color: #1e3a8a; /* Deep Blue */
+        }
+        .term-red { color: #991b1b; } /* Deep Red */
+        .term-green { color: #14532d; } /* Deep Green */
+        .term-purple { color: #581c87; } /* Deep Purple */
+        .term-amber { color: #92400e; } /* Deep Amber */
+        .term-rose { color: #9f1239; } /* Deep Rose */
+        .term-indigo { color: #312e81; } /* Deep Indigo */
+        .term-orange { color: #9a3412; } /* Deep Orange */
+        .note {
+            background-color: #eef2ff;
+            border-left: 4px solid #4f46e5;
+            padding: 0.75rem 1rem;
+            margin-top: 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: #4338ca;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+        .section-title span {
+            font-size: 1.75rem;
+            margin-right: 0.75rem;
+        }
+        .interactive-term {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #6366f1;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            z-index: 50;
+            max-width: 320px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-bold text-slate-800">Basics of Pattern Differentiation</h1>
+            <p class="mt-4 max-w-3xl mx-auto text-slate-600">This summary covers only the essential basic concepts required in the clinical field. The pattern differentiations introduced here are things you must fully understand when you see patients, beyond diagnostics and board exams.</p>
+            <p class="mt-2 text-sm italic text-slate-500">Hyungsuk Choi, PHD Basic Theory</p>
+        </header>
+
+        <!-- Eight Principles -->
+        <div class="section-card bg-white">
+            <h2 class="section-title"><span>🧭</span>Eight Principles (八綱)</h2>
+            <ul class="item-list space-y-2">
+                <li><span class="term term-blue">Cold (寒)</span> - Chills, slowness (→Qi Stagnation, Blood Stasis), slow pulse, clear fluids (runny nose, urine, phlegm), diarrhea, relieved by warmth.</li>
+                <li><span class="term term-red">Heat (熱)</span> - Fever, vexation, rapid pulse, yellow fluids, constipation, relieved by cold.</li>
+                <li><span class="term term-green">Exterior (表)</span> - Mainly acute diseases, skin <span class="text-sm text-slate-500">(* Later on, only acute diseases are called exterior syndromes)</span>.</li>
+                <li><span class="term term-purple">Interior (裏)</span> - Mainly chronic diseases, internal organs.</li>
+                <li><span class="term term-amber">Deficiency (虛)</span> - Lack of good things (Zheng Qi, Blood, Essence).</li>
+                <li>
+                    <span class="term term-rose">Excess (實)</span> - Excess of bad things (Cold, Damp, Qi Stagnation, Blood Stasis, Phlegm, etc).
+                    <div class="note">* Does Liver Qi become a disease because it's too excess? - No, Liver excess patterns are Liver Qi Stagnation, Liver Blood Stasis, etc. (Five Element Acupuncture is separate).</div>
+                </li>
+                <li>
+                    <span class="term term-indigo interactive-term" data-target="yin-deficiency">Yin Deficiency (陰虛)</span> - Blood def.+heat. Tidal fever, heat in the five centers, worse at night (all Yin deficiencies), night sweats, thready pulse.
+                </li>
+                <li>
+                    <span class="term term-orange">Yang Deficiency (陽虛)(Qi Deficiency)</span>  - Qi def.+ coldness, dampness. Chills, edema, worse during the day, spontaneous sweating, deficient pulse.
+                    <div class="note">
+                        <p>* Yin-related issues are worse at night/afternoon; Yang-related are worse in the morning/day (sweat, fever, pain).</p>
+                        <p>* Yang Qi Deficiency → Yin Excess (Cold, Damp) - Chills, edema / Yin Deficiency → Yang Excess (Dryness, Heat) - Dryness, heat symptoms.</p>
+                        <p>* Yang Excess (High fever) → Yin Deficiency (Dryness) / Yin Excess (Cold, Damp) → Yang Qi Deficiency.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Qi, Blood, Essence -->
+        <div class="section-card bg-slate-50">
+            <h2 class="section-title"><span>💧</span>Qi, Blood, Essence (氣血精)</h2>
+            <div class="space-y-4">
+                <div class="p-4 rounded-lg bg-emerald-50 border-l-4 border-emerald-500">
+                    <h3 class="font-bold text-emerald-800 mb-2">Regarding Qi (氣)</h3>
+                    <ul class="item-list">
+                        <li><span class="term interactive-term" data-target="qi-deficiency">Qi Deficiency (氣虛)</span> - Weakness / Lung - shortness of breath / Spleen - appetite.</li>
+                        <li><span class="term">Qi Uprising/Sinking (기역/기함)</span> - Vomiting, cough / Organ prolapse.</li>
+                        <li><span class="term interactive-term" data-target="qi-stagnation">Qi Stagnation (氣滯)</span> - Moving pain, no substance, distention, cf. Blood Stasis.</li>
+                    </ul>
+                </div>
+                <div class="p-4 rounded-lg bg-rose-50 border-l-4 border-rose-500">
+                    <h3 class="font-bold text-rose-800 mb-2">Regarding Blood (血)</h3>
+                    <ul class="item-list">
+                        <li><span class="term">Blood Stasis (血瘀)</span> - Stabbing pain, has substance, fixed, worse at night,anything purple, choppy pulse.</li>
+                        <li><span class="term interactive-term" data-target="blood-deficiency">Blood Deficiency (血虛)</span> - Pale (sallow) complexion, cold limbs, thready pulse.</li>
+                    </ul>
+                </div>
+                <div class="p-4 rounded-lg bg-sky-50 border-l-4 border-sky-500">
+                    <h3 class="font-bold text-sky-800 mb-2">Regarding Essence (精)</h3>
+                    <ul class="item-list">
+                        <li><span class="term">Essence Deficiency (精虛)</span> - Developmental delay, sexual dysfunction, premature aging.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="note mt-6">* Shen is not very often referred to in pattern identification. Fluid deficiency generally corresponds to Yin deficiency.</div>
+        </div>
+
+        <!-- Six Qi -->
+        <div class="section-card bg-white">
+            <h2 class="section-title"><span>💨</span>Six Qi (六氣)</h2>
+            <ul class="item-list space-y-2">
+                <li><span class="term">Wind (風)</span> - Fast (acute diseases are usually Wind, common cold), tremors, muscle cramps, convulsions (paralysis).</li>
+                <li><span class="term">Dampness (濕)</span> - Heaviness, related to Yang deficiency.</li>
+            </ul>
+            <div class="note">* Cold/Heat are in the Eight Principles, Dryness corresponds to Yin deficiency, Summer-Heat is not often dealt with in clinic.</div>
+        </div>
+        
+        <!-- Five Zang Physiology -->
+        <div class="section-card bg-slate-50">
+            <h2 class="section-title"><span>🫀</span>Five Zang Physiology (五臟 生理)</h2>
+            <ul class="item-list space-y-2">
+                <li><span class="term term-green">Liver (肝)</span> - Stores Blood, Spread Qi, emotions, muscles (movement, tendons), side of body, nails, eyes.</li>
+                <li><span class="term term-red">Heart (心)</span> - Governs blood circulation, commands all mental activities, related to the tongue.</li>
+                <li><span class="term term-amber">Spleen (脾)</span> - Governs digestive functions, controls muscles (flesh, muscles), supplies post-heaven energy.</li>
+                <li><span class="term">Lung (肺)</span> - Governs respiratory functions, immune functions.</li>
+                <li><span class="term">Kidney (腎)</span> - Governs urinary/reproductive systems, the Gate of Vitality (Ming Men), stores Essence, related to the ears.</li>
+            </ul>
+        </div>
+
+        <!-- Pattern Differentiation -->
+        <div class="section-card bg-white">
+            <h2 class="section-title"><span>🩺</span>Five Zang Pattern Differentiation (五臟 辨證)</h2>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-green-700 mb-2"><span class="text-2xl mr-2">🌿</span>Liver Patterns</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">Liver Qi Stagnation</span> - Emotional issues, flank pain, menstrual problems, wiry pulse + Qi Stagnation.<div class="note">* Qi Stagnation (pain, distention) + Liver (menstruation, muscles, flanks) = Flank pain, menstrual pain, muscle pain.</div></li>
+                        <li><span class="term">Liver Fire Blazing Upwards</span> - Anger, red eyes, temporal headache + Heat symptoms.</li>
+                        <li><span class="term">Liver Wind</span> - Muscle spasms, hemiplegia, stroke.</li>
+                        <li><span class="term">Liver Blood Deficiency</span> - Dizziness (tinnitus), blurry vision, weak nails, muscle weakness and spasms + Blood Deficiency.</li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 class="flex items-center text-xl font-bold text-red-700 mb-2"><span class="text-2xl mr-2">❤️</span>Heart Patterns</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">Heart Fire Blazing</span> - Palpitations, anxiety, tongue ulcers, dark urine, insomnia (agitation) + Heat symptoms.</li>
+                        <li><span class="term">Heart Blood Deficiency</span> - Palpitations, anxiety + Blood Deficiency (pale complexion, cold limbs).</li>
+                        <li><span class="term">Heart Blood Stasis</span> - Palpitations, anxiety, constricting pain in the heart area + Blood Stasis (stabbing pain, has substance, fixed, worse at night).</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-amber-700 mb-2"><span class="text-2xl mr-2">🌾</span>Spleen/Stomach Patterns</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">Spleen Qi Deficiency</span> - Sallow complexion, poor appetite + Qi Deficiency.</li>
+                        <li><span class="term">Spleen Yang Deficiency</span> - Spleen Qi Deficiency + chills, diarrhea, heaviness, edema.</li>
+                        <li><span class="term">Spleen Qi Sinking</span> - Spleen Qi Deficiency + organ prolapse.</li>
+                        <li><span class="term">Spleen Not Containing Blood</span> - Spleen Qi Deficiency + bleeding.</li>
+                        <li><span class="term">Stomach Yin Deficiency</span> - Epigastric pain on an empty stomach, heartburn, dry mouth, stomatitis, thirst + Yin Deficiency (afternoon fever).</li>
+                        <li><span class="term">Food Stagnation in Stomach</span> - Vomiting, bad breath, belching, epigastric pain.</li>
+                    </ul>
+                    <div class="note mt-4">* It's easier to think of the Stomach as part of the Spleen; other Fu organs are not as important.</div>
+                </div>
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-gray-700 mb-2"><span class="text-2xl mr-2">🌬️</span>Lung Patterns</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">Lung Qi Deficiency</span> - Shortness of breath, cough, daytime sweating, weak immunity + Qi Deficiency.</li>
+                        <li><span class="term">Lung Yin Deficiency</span> - Dry cough (no phlegm), dry throat + Yin Deficiency.</li>
+                        <li><span class="term">Lung Excess Patterns</span> - Wind-Cold invading the Lung, Wind-Heat invading the Lung - Common cold (Wind, Heat, Cold).</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-gray-800 mb-2"><span class="text-2xl mr-2">🌊</span>Kidney Patterns</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">Kidney Yang Deficiency</span> - Lower back pain, knee pain, tinnitus, sexual dysfunction + Yang Deficiency (edema, chills), clear urine.</li>
+                        <li><span class="term">Kidney Yin Deficiency</span> - Lower back pain, knee pain, tinnitus, sexual dysfunction + Yin Deficiency.</li>
+                        <li><span class="term">Kidney Essence Deficiency</span> - Lower back pain, knee pain, tinnitus, sexual dysfunction + Children: developmental delay, Adults: aging.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup element -->
+    <div id="popup"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popup = document.getElementById('popup');
+            const interactiveTerms = document.querySelectorAll('.interactive-term');
+
+            const popupData = {
+                'yin-deficiency': '<strong>Yin Deficiency (陰虛):</strong> Tidal fever, heat in the five centers, worse at night (all Yin deficiencies), night sweats, thready pulse.',
+                'qi-deficiency': '<strong>Qi Deficiency (氣虛):</strong> Weakness, shortness of breath, poor appetite.',
+                'blood-deficiency': '<strong>Blood Deficiency (血虛):</strong> Pale (sallow) complexion, cold limbs, thready pulse.',
+                'qi-stagnation': '<strong>Qi Stagnation (氣滯):</strong> Moving pain, no substance, distention, cf. Blood Stasis.'
+            };
+
+            interactiveTerms.forEach(term => {
+                term.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const targetKey = term.dataset.target;
+                    
+                    if (popupData[targetKey]) {
+                        popup.innerHTML = popupData[targetKey];
+                        
+                        const rect = term.getBoundingClientRect();
+                        popup.style.left = `${window.scrollX + rect.left}px`;
+                        popup.style.top = `${window.scrollY + rect.bottom + 5}px`;
+                        
+                        popup.style.display = 'block';
+                    }
+                });
+            });
+
+            document.addEventListener('click', () => {
+                popup.style.display = 'none';
+            });
+
+            popup.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html>
