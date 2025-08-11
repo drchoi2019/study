@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCM Zang-Fu Organs Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; /* Retaining for broader character support, English will render with system fonts */ }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
+        .hwa-element { background-color: #FF6B6B; color: white; } /* Fire (火) */
+        .mok-element { background-color: #06D6A0; color: white; } /* Wood (木) */
+        .to-element { background-color: #FFD166; color: #073B4C; } /* Earth (土) */
+        .geum-element { background-color: #118AB2; color: white; } /* Metal (金) */
+        .su-element { background-color: #073B4C; color: white; } /* Water (水) */
+        .exam-point { background-color: #FFD166; color: #073B4C; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px; }
+        .flow-arrow { display: flex; align-items: center; justify-content: center; margin: 10px 0; font-size: 2rem; color: #118AB2; }
+        .comparison-table th, .comparison-table td { border: 1px solid #073B4C; padding: 8px; text-align: left; }
+        .sticky-nav { position: sticky; top: 0; background-color: rgba(7, 59, 76, 0.9); z-index: 50; padding: 0.5rem 0; backdrop-filter: blur(5px); }
+        .sticky-nav a { color: white; margin: 0 0.75rem; font-size: 0.875rem; transition: color 0.3s; }
+        .sticky-nav a:hover { color: #FFD166; }
+        h2, h3 { color: #073B4C; }
+        h2 { border-bottom: 2px solid #118AB2; padding-bottom: 0.5rem; margin-top: 2rem; }
+        h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #118AB2; }
+        .card { background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .jangbu-title { font-size: 1.5rem; font-weight: bold; }
+        .bu-title { font-size: 1.25rem; font-weight: bold; margin-top:1rem; color: #073B4C; }
+        .palette-comment { display: none; }
+        .exam-group-title { font-size: 1.25rem; font-weight:bold; margin-top:1.5rem; margin-bottom:0.5rem;}
+        .emphasized-paragraph { background-color: #f0f9ff; /* Tailwind sky-50 */ padding: 0.75rem; border-radius: 0.375rem; font-weight: 500; border-left: 4px solid #0ea5e9 /* Tailwind sky-500 */; }
+    </style>
+    
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="palette-comment">Selected Palette: Energetic & Playful (#FF6B6B, #FFD166, #06D6A0, #118AB2, #073B4C)</div>
+    
+
+    <header class="bg-[#073B4C] text-white p-6 text-center">
+        <h1 class="text-4xl font-bold">Traditional Chinese Medicine: Zang-Fu Organ Functions</h1>
+        <p class="mt-2 text-lg">A visual summary of the primary functions and interrelationships of the Five Zang (Liver, Heart, Spleen, Lungs, Kidneys) and their paired Six Fu organs in TCM.</p>
+    </header>
+
+    <nav class="sticky-nav text-center">
+        <a href="#section-comparison-summary">Zang Organ Comparison</a>
+        <a href="#section-liver">Liver (肝)</a>
+        <a href="#section-heart">Heart (心)</a>
+        <a href="#section-spleen">Spleen (脾)</a>
+        <a href="#section-lungs">Lungs (肺)</a>
+        <a href="#section-kidneys">Kidneys (腎)</a>
+        <a href="#section-five-elements">Five Elements</a>
+        <a href="#section-qi-blood">Qi & Blood</a>
+        <a href="#section-exam-points-list">Comprehensive Exam Points</a>
+    </nav>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="section-comparison-summary" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">Zang Organ Function Comparison Summary Table</h2>
+                <p class="text-center mb-6">This table provides an at-a-glance comparison of the main functions, governed tissues, openings, emotions, and Five Element correspondences of the Zang organs for a holistic understanding.</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full comparison-table">
+                        <thead>
+                            <tr class="bg-[#073B4C] text-white">
+                                <th>Zang Organ (臟腑)</th>
+                                <th>Main Function 1</th>
+                                <th>Main Function 2</th>
+                                <th>Governs Tissue/Organ</th>
+                                <th>Opens into (開竅)</th>
+                                <th>Emotion (情志)</th>
+                                <th>Five Elements (五行)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Liver (肝)</strong></td>
+                                <td>Spreading (疏泄) - Regulates Qi flow</td>
+                                <td>Storing Blood (藏血)</td>
+                                <td>Muscles and Sinews (筋), Nails</td>
+                                <td>Eyes (目)</td>
+                                <td>Anger (怒)</td>
+                                <td>Wood (木)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Heart (心)</strong></td>
+                                <td>Governs Blood (主血) - Blood circulation</td>
+                                <td>Houses Mind (藏神) - Mental activity</td>
+                                <td>Vessels (脈), Complexion</td>
+                                <td>Tongue (舌)</td>
+                                <td>Joy (喜)</td>
+                                <td>Fire (火)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Spleen (脾)</strong></td>
+                                <td>Transformation & Transportation (運化) - Digestion, absorption, transport</td>
+                                <td>Controls Blood (統血)</td>
+                                <td>Muscles and Flesh (肉), Lips</td>
+                                <td>Mouth (口)</td>
+                                <td>Pensiveness (思)</td>
+                                <td>Earth (土)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lungs (肺)</strong></td>
+                                <td>Dispersing & Descending, Respiration</td>
+                                <td>Control Protective Qi, immune system</td>
+                                <td>Skin & Body Hair (皮毛)</td>
+                                <td>Nose (鼻)</td>
+                                <td>Grief/Worry (悲/憂)</td>
+                                <td>Metal (金)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kidneys (腎)</strong></td>
+                                <td>Store Essence (藏精) - Growth, development, reproduction</td>
+                                <td>Govern Water (主水) - Fluid metabolism</td>
+                                <td>Bones (骨), Hair</td>
+                                <td>Ears (耳), Two Lower Orifices</td>
+                                <td>Fear (恐)</td>
+                                <td>Water (水)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-liver" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title mok-element p-2 rounded-t-md">Liver (肝) <span class="text-sm font-normal">- Wood (木)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">The Liver's most important functions are spreading Qi (疏泄) and storing Blood (藏血). Spreading is its Yang function, while storing Blood is its Yin function. It's related to emotional stress, menstrual disorders, and emotional issues.</p>
+                    <h3 class="text-xl font-semibold">Main Functions:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>Spreading Function (疏泄機能):</strong> Ensures the smooth flow of Qi (氣) throughout the body, influencing mental stability, emotional regulation, and digestion.</li>
+                        <li><strong>Storing Blood (藏血機能):</strong> Stores Blood and regulates its volume according to the body's needs, especially important for menstruation.</li>
+                        <li><strong>Governs Muscles and Sinews (主筋):</strong> Maintains the normal motor function of muscles and sinews.</li>
+                        <li><strong>Manifests in the Nails (其華在爪):</strong> The health and luster of the nails reflect the Liver's Blood storage.</li>
+                        <li><strong>Opens into the Eyes (開竅于目):</strong> Liver function is closely related to vision and eye health.</li>
+                    </ul>
+                    <p><strong class="mok-element p-1 rounded">Emotion:</strong> Anger (怒)</p>
+                    <p><strong class="mok-element p-1 rounded">Taste:</strong> Sour (酸)</p>
+                    <p><strong class="mok-element p-1 rounded">Climate:</strong> Wind (風)</p>
+
+                    <h4 class="bu-title">Gallbladder (膽) - Fu organ paired with Liver</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Stores and excretes bile to aid digestion.</li>
+                        <li>Controls decisiveness.</li>
+                        <li>Controls the muscles and sinews.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-heart" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title hwa-element p-2 rounded-t-md">Heart (心) <span class="text-sm font-normal">- Fire (火)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">The Heart's most crucial functions are governing Blood circulation and housing the Mind (神), which encompasses all mental and cognitive activities.</p>
+                    <h3 class="text-xl font-semibold">Main Functions:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>Governs Blood & Blood Vessels (主血脈):</strong> Propels Blood to nourish the entire body and oversees vessel function.</li>
+                        <li><strong>Houses the Mind/Spirit (藏神):</strong> Governs consciousness, thought, memory, sleep, and all mental/emotional activities.</li>
+                        <li><strong>Manifests in the Complexion (其華在面):</strong> Facial color and luster reflect Heart function and Qi-Blood state.</li>
+                        <li><strong>Opens into the Tongue (開竅于舌):</strong> Influences taste and speech; the tongue is considered the "sprout" of the Heart.</li>
+                        <li><strong>Controls Sweat (在液爲汗):</strong> Sweat is considered the fluid of the Heart; it's involved in regulating sweat excretion.</li>
+                    </ul>
+                    <p><strong class="hwa-element p-1 rounded">Emotion:</strong> Joy (喜)</p>
+                    <p><strong class="hwa-element p-1 rounded">Taste:</strong> Bitter (苦)</p>
+                    <p><strong class="hwa-element p-1 rounded">Climate:</strong> Heat/Summer (暑/火)</p>
+
+                    <h4 class="bu-title">Small Intestine (小腸) - Fu organ paired with Heart</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Controls receiving and transforming: Receives food from the Stomach and continues digestion.</li>
+                        <li>Separates the clear from the turbid: Extracts nutrients and passes waste downwards.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-spleen" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title to-element p-2 rounded-t-md">Spleen (脾) <span class="text-sm font-normal">- Earth (土)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">The Spleen transforms and transports (運化) nutrients from food to produce Qi (氣), Blood (血), and Body Fluids (津液). It also contains Blood (統血) within the vessels. It's known as the "foundation of postnatal existence." The Spleen is like a stove creating energy, while the Stomach is like a blender processing food.</p>
+                    <h3 class="text-xl font-semibold">Main Functions:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>Governs Transformation & Transportation (主運化):</strong> Absorbs and distributes nutrients and fluids from food (basis of Qi & Blood production).</li>
+                        <li><strong>Controls Ascending of Qi (主升淸):</strong> Sends clear, refined nutrients upwards to nourish the Lungs, Heart, head, and eyes.</li>
+                        <li><strong>Controls Blood (統血):</strong> Keeps Blood circulating within vessels, preventing hemorrhage.</li>
+                        <li><strong>Governs Muscles & Four Limbs (主肌肉四肢):</strong> Nourishes muscles (flesh), static aspect of muscle.</li>
+                        <li><strong>Opens into the Mouth, Manifests in the Lips (開竅于口, 其華在脣):</strong> Related to appetite and taste; its condition reflects on the lips.</li>
+                    </ul>
+                    <p><strong class="to-element p-1 rounded">Emotion:</strong> Pensiveness/Worry (思)</p>
+                    <p><strong class="to-element p-1 rounded">Taste:</strong> Sweet (甘)</p>
+                    <p><strong class="to-element p-1 rounded">Climate:</strong> Dampness (濕) (The Spleen loathes Dampness: 喜燥惡濕)</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mt-4 border p-4 rounded-md">
+                        <div>
+                            <h4 class="font-bold text-lg text-[#073B4C]">Spleen (脾) - The Stove 🔥</h4>
+                            <p>The Spleen, creating energy, is like a stove that warms and brightens a room.</p>
+                            <ul class="list-disc list-inside text-sm">
+                                <li>Transformation (運化): Converts food into pure energy for the limbs.</li>
+                                <li>Ascending Clear (升淸): Energy spreads upwards and to the limbs (Spleen Qi ascends).</li>
+                                <li>Failure to Ascend: Lack of energy, body and mind feel heavy, organ prolapse.</li>
+                                <li>Loathes Dampness (惡濕): Functions best when pure Yang Qi converts to energy without moisture. Spleen Dampness leads to heaviness, edema, diarrhea.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-[#073B4C]">Stomach (胃) - The Blender 🍇</h4>
+                            <p>The Stomach is like a blender that grinds food into a pulp.</p>
+                            <ul class="list-disc list-inside text-sm">
+                                <li>Rotting & Ripening (腐熟): Decomposes food into an absorbable form.</li>
+                                <li>Descending Turbid (降濁): Digested food becomes energy; the rest descends for excretion (Stomach Qi descends).</li>
+                                <li>Failure to Descend: Nausea, vomiting, morning sickness, acid reflux, hiccups.</li>
+                                <li>Loathes Dryness (惡燥): Needs fluids. Stomach Dryness causes heartburn, thirst, gum problems; can develop into Stomach Heat.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4 class="bu-title">Stomach (胃) - Fu organ paired with Spleen</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Controls 'receiving' (受納): Accepts food.</li>
+                        <li>Controls 'rotting and ripening' of food (腐熟水穀): Initial digestion.</li>
+                        <li>Controls descending of Qi (降濁): Sends digested waste downwards.</li>
+                        <li>Is the origin of fluids.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-lungs" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title geum-element p-2 rounded-t-md">Lungs (肺) <span class="text-sm font-normal">- Metal (金)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">The Lungs govern Qi (氣) and respiration, taking in clear environmental Qi (天氣) and expelling turbid Qi (濁氣). They also regulate water passages and are closely related to the immune system.</p>
+                    <h3 class="text-xl font-semibold">Main Functions:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>Govern Qi & Respiration (主氣, 司呼吸):</strong> Manages gas exchange and assists in forming Pectoral Qi (宗氣).</li>
+                        <li><strong>Control Diffusing & Descending (主宣發肅降):</strong> Spreads Qi and fluids (Diffusing); directs clear Qi and fluids downwards and makes breathing deep (Descending). Diffusing is Yang, Descending is Yin.</li>
+                        <li><strong>Regulate Water Passages (通調水道):</strong> Regulates fluid pathways, maintaining balance via sweat and urine.</li>
+                        <li><strong>Govern Skin & Body Hair (主皮毛):</strong> Nourishes skin and hair; sends Defensive Qi (衛氣) to the body surface.</li>
+                        <li><strong>Open into the Nose (開竅于鼻):</strong> Directly connected to the nose for respiration and olfaction.</li>
+                        <li><strong>Control Protective Qi (衛氣):</strong> Governs the circulation of Defensive Qi, which protects the exterior and regulates body temperature.</li>
+                    </ul>
+                    <p><strong class="geum-element p-1 rounded">Emotion:</strong> Grief/Sadness, Worry (悲/憂)</p>
+                    <p><strong class="geum-element p-1 rounded">Taste:</strong> Pungent (辛) (Typical)</p>
+                    <p><strong class="geum-element p-1 rounded">Climate:</strong> Dryness (燥) (Typical; Lungs prefer moisture)</p>
+
+                    <h4 class="bu-title">Large Intestine (大腸) - Fu organ paired with Lungs</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Controls passage and conduction: Receives waste from the Small Intestine.</li>
+                        <li>Transforms stools and reabsorbs fluids for excretion.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-kidneys" class="mb-12">
+            <div class="card">
+                <h2 class="jangbu-title su-element p-2 rounded-t-md">Kidneys (腎) <span class="text-sm font-normal">- Water (水)</span></h2>
+                <div class="p-4">
+                    <p class="mb-4 emphasized-paragraph">The Kidneys store Essence (精), the source of life, governing growth, development, and reproduction. They also regulate water metabolism and assist the Lungs in grasping Qi (納氣). They are the "foundation of prenatal existence." Depletion of Essence is directly linked to aging.</p>
+                    <h3 class="text-xl font-semibold">Main Functions:</h3>
+                    <ul class="list-disc list-inside mb-4 space-y-1">
+                        <li><strong>Store Essence (藏精):</strong> Stores congenital (prenatal) and acquired (postnatal) Essence, governing growth, development, aging, and reproduction.</li>
+                        <li><strong>Govern Water (主水):</strong> Regulates overall body fluid metabolism and urine formation for water balance.</li>
+                        <li><strong>Control Reception of Qi (主納氣):</strong> Grasps the clear Qi inhaled by the Lungs, making breathing deep and stable.</li>
+                        <li><strong>Produce Marrow, Fill Brain, Control Bones (生髓, 充腦, 主骨):</strong> Kidney Essence produces Marrow (骨髓), which fills the bones and nourishes the Brain (腦髓).</li>
+                        <li><strong>Open into the Ears, Manifest in Hair (開竅于耳, 其華在髮):</strong> Kidney Essence (精氣) is crucial for hearing; hair condition reflects Kidney health.</li>
+                        <li><strong>Control the Two Lower Orifices (主二陰):</strong> Manages the opening and closing of the urethra (anterior yin) and anus (posterior yin) for excretion.</li>
+                    </ul>
+                    <p><strong class="su-element p-1 rounded">Emotion:</strong> Fear (恐)</p>
+                    <p><strong class="su-element p-1 rounded">Taste:</strong> Salty (鹹) (Typical)</p>
+                    <p><strong class="su-element p-1 rounded">Climate:</strong> Cold (寒) (Typical)</p>
+
+                    <h4 class="bu-title">Bladder (膀胱) - Fu organ paired with Kidneys</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Stores and excretes urine through Qi transformation.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-five-elements" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">Five Zang & Five Elements Relationship</h2>
+                <p class="text-center mb-6">The Five Zang organs are each associated with one of the Five Elements (Wood, Fire, Earth, Metal, Water). This framework helps understand their properties, functions, and interrelationships. Each element connects to specific emotions, tastes, seasons, sensory organs, and tissues.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 text-center">
+                    <div class="mok-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">Wood (木) - Liver (肝)</h3>
+                        <p>Emotion: Anger (怒)</p>
+                        <p>Taste: Sour (酸)</p>
+                        <p>Season: Spring</p>
+                        <p>Organ: Eyes (目)</p>
+                        <p>Tissue: Muscles and Sinews (筋)</p>
+                    </div>
+                    <div class="hwa-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">Fire (火) - Heart (心)</h3>
+                        <p>Emotion: Joy (喜)</p>
+                        <p>Taste: Bitter (苦)</p>
+                        <p>Season: Summer</p>
+                        <p>Organ: Tongue (舌)</p>
+                        <p>Tissue: Vessels (脈)</p>
+                    </div>
+                    <div class="to-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">Earth (土) - Spleen (脾)</h3>
+                        <p>Emotion: Pensiveness (思)</p>
+                        <p>Taste: Sweet (甘)</p>
+                        <p>Season: Late Summer</p>
+                        <p>Organ: Mouth (口)</p>
+                        <p>Tissue: Muscles and Flesh (肉)</p>
+                    </div>
+                    <div class="geum-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">Metal (金) - Lungs (肺)</h3>
+                        <p>Emotion: Grief/Worry (悲/憂)</p>
+                        <p>Taste: Pungent (辛)</p>
+                        <p>Season: Autumn</p>
+                        <p>Organ: Nose (鼻)</p>
+                        <p>Tissue: Skin & Body Hair (皮毛)</p>
+                    </div>
+                    <div class="su-element p-4 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">Water (水) - Kidneys (腎)</h3>
+                        <p>Emotion: Fear (恐)</p>
+                        <p>Taste: Salty (鹹)</p>
+                        <p>Season: Winter</p>
+                        <p>Organ: Ears (耳)</p>
+                        <p>Tissue: Bones (骨)</p>
+                    </div>
+                </div>
+                <p class="mt-6 text-sm text-gray-600 text-center">This information is based on the provided PDF and general TCM theory.</p>
+            </div>
+        </section>
+        
+        <section id="section-qi-blood" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">Production of Qi (氣) & Blood (血) and Key Organs</h2>
+                <p class="text-center mb-4">Qi is the fundamental substance maintaining life activities, and Blood nourishes the entire body. Several organs are involved in their production and circulation.</p>
+                <div class="text-center">
+                    <div class="inline-block bg-yellow-100 p-3 rounded-lg shadow">Spleen (脾): Produces Food Qi (穀氣) (Digestion)</div>
+                    <div class="flow-arrow text-yellow-500">+</div>
+                    <div class="inline-block bg-blue-100 p-3 rounded-lg shadow">Lungs (肺): Absorb Natural Air Qi (天氣) (Respiration)</div>
+                    <div class="flow-arrow text-green-500">⬇</div>
+                    <div class="inline-block bg-green-100 p-3 rounded-lg shadow">Combine in Chest to form Pectoral Qi (宗氣)</div>
+                    <div class="flow-arrow text-red-500">⬇</div>
+                    <div class="inline-block bg-red-100 p-3 rounded-lg shadow">Heart (心): Circulates Pectoral Qi with Blood (血) throughout body</div>
+                </div>
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold">Key Organ Functions Related to Blood (血):</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Heart (心):</strong> Governs Blood and vessels (主血脈).</li>
+                        <li><strong>Spleen (脾):</strong> Source of Blood production (transforms Food Qi), controls Blood circulation (統血).</li>
+                        <li><strong>Liver (肝):</strong> Stores Blood and regulates its volume (藏血).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-exam-points-list" class="mb-12">
+            <div class="card">
+                <h2 class="text-2xl font-bold mb-6 text-center">Comprehensive List of Key Examination Points</h2>
+                <p class="text-center mb-6">This section provides a comprehensive list of all key examination points for study.</p>
+                                    
+                    <div class="exam-group-title mok-element p-2 rounded-md">Liver (肝) & Gallbladder (膽)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">Liver stores Blood.</span></li>
+                        <li><span class="exam-point">Liver ensures the smooth flow of Qi.</span></li>
+                        <li><span class="exam-point">Liver controls the muscles and sinews.</span></li>
+                        <li><span class="exam-point">Liver manifests in the nails.</span></li>
+                        <li><span class="exam-point">Liver opens into the eye.</span></li>
+                        <li><span class="exam-point">Liver is affected by anger.</span></li>
+                        <li><span class="exam-point">Liver's taste is sour.</span></li>
+                        <li><span class="exam-point">Liver's climate is wind.</span></li>
+                        <li><span class="exam-point">The Gall Bladder stores and excretes bile.</span></li>
+                        <li><span class="exam-point">The Gall Bladder controls decisiveness.</span></li>
+                        <li><span class="exam-point">The Gall Bladder controls the muscles and sinews.</span></li>
+                    </ul>
+
+                    <div class="exam-group-title hwa-element p-2 rounded-md">Heart (心) & Small Intestine (小腸)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">It governs Blood. (Heart)</span></li>
+                        <li><span class="exam-point">It controls the blood vessels. (Heart)</span></li>
+                        <li><span class="exam-point">It manifests in the complexion. (Heart)</span></li>
+                        <li><span class="exam-point">It houses the Mind. (Heart)</span></li>
+                        <li><span class="exam-point">It is related to joy. (Heart)</span></li>
+                        <li><span class="exam-point">It opens into the tongue. (Heart)</span></li>
+                        <li><span class="exam-point">It controls sweat. (Heart)</span></li>
+                        <li><span class="exam-point">The taste of the Heart is bitter.</span></li>
+                        <li><span class="exam-point">Fire is related to the Heart.</span></li>
+                        <li><span class="exam-point">The Small Intestine controls receiving and transforming.</span></li>
+                        <li><span class="exam-point">The Small Intestine separates fluids.</span></li>
+                    </ul>
+
+                    <div class="exam-group-title to-element p-2 rounded-md">Spleen (脾) & Stomach (胃)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">The Spleen governs transformation and transportation.</span></li>
+                        <li><span class="exam-point">The Spleen controls the ascending of Qi.</span></li>
+                        <li><span class="exam-point">The Spleen controls Blood.</span></li>
+                        <li><span class="exam-point">The Spleen controls the muscles and flesh (flesh) and the four limbs.</span></li>
+                        <li><span class="exam-point">The Spleen opens into the mouth, lips, and saliva.</span></li>
+                        <li><span class="exam-point">The Spleen is affected by pensiveness.</span></li>
+                        <li><span class="exam-point">The Spleen's taste is sweet.</span></li>
+                        <li><span class="exam-point">The Spleen's climate is dampness. (The Spleen loathes Dampness.)</span></li>
+                        <li><span class="exam-point">The Stomach controls 'receiving'.</span></li>
+                        <li><span class="exam-point">The Stomach controls the 'rotting and ripening' of food.</span></li>
+                        <li><span class="exam-point">The Stomach controls the transportation of food essences.</span></li>
+                        <li><span class="exam-point">The Stomach controls the descending of Qi.</span></li>
+                        <li><span class="exam-point">The Stomach is the origin of fluids.</span></li>
+                    </ul>
+
+                    <div class="exam-group-title geum-element p-2 rounded-md">Lungs (肺) & Large Intestine (大腸)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">The Lungs govern Qi and respiration.</span></li>
+                        <li><span class="exam-point">The Lungs control channels.</span></li>
+                        <li><span class="exam-point">The Lungs control diffusing and descending of Qi.</span></li>
+                        <li><span class="exam-point">The Lungs regulate all physiological activities.</span></li>
+                        <li><span class="exam-point">The Lungs regulate Water passages.</span></li>
+                        <li><span class="exam-point">The Lungs control the skin.</span></li>
+                        <li><span class="exam-point">The Lungs control Protective qi (the space between skin and muscles).</span></li>
+                        <li><span class="exam-point">The Lungs open into the nose.</span></li>
+                        <li><span class="exam-point">The Lungs are affected by worry, grief and sadness.</span></li>
+                        <li><span class="exam-point">The Large Intestine controls passage and conduction.</span></li>
+                        <li><span class="exam-point">The Large Intestine transforms stools and reabsorbs fluids.</span></li>
+                    </ul>
+
+                    <div class="exam-group-title su-element p-2 rounded-md">Kidneys (腎) & Bladder (膀胱)</div>
+                    <ul class="list-none space-y-1 p-4">
+                        <li><span class="exam-point">Store Essence and govern birth, growth, reproduction and development. (Kidneys)</span></li>
+                        <li><span class="exam-point">Produce Marrow, fill up the brain and control bones. (Kidneys)</span></li>
+                        <li><span class="exam-point">Govern Water. (Kidneys)</span></li>
+                        <li><span class="exam-point">Control the reception of Qi. (Kidneys)</span></li>
+                        <li><span class="exam-point">Open into the ears. (Kidneys)</span></li>
+                        <li><span class="exam-point">Manifest in the hair. (Kidneys)</span></li>
+                        <li><span class="exam-point">Control spittle. (Kidneys)</span></li>
+                        <li><span class="exam-point">Control the two lower orifices. (Kidneys)</span></li>
+                        <li><span class="exam-point">The Bladder removes water by Qi transformation.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white p-6 text-center mt-12">
+        <p>&copy; 2024 TCM Zang-Fu Organs Infographic. Created based on provided materials.</p>
+        <p class="text-xs mt-2">This information is for educational reference only and cannot replace professional medical diagnosis or treatment.</p>
+    </footer>
+
+    <script>
+        // Chart.js related script has been removed as per user request.
+        // The wrapLabels function is kept in case other charts are added later that might need it.
+        function wrapLabels(label) {
+            const maxLen = 16; 
+            if (typeof label === 'string' && label.length > maxLen) {
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + word).length > maxLen && currentLine.length > 0) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                }
+                lines.push(currentLine.trim());
+                return lines;
+            }
+            return label;
+        }
+        
+    </script>
+    </body>
+</html>
