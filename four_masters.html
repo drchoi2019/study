@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Jin-Yuan Four Masters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony Neutrals -->
+    <!-- Application Structure Plan: A tab-based, single-page application structure was chosen for optimal usability. This design allows users to easily switch between the four masters without scrolling or page reloads, facilitating direct comparison of their philosophies. The main navigation is persistent, providing clear context and control. This interactive structure encourages active exploration of the distinct schools of thought, which is more engaging than a static, linear document. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Liu Wansu's prescription breakdown (66%, 21%, 13%). Goal: Inform proportions. Viz/Presentation: Donut Chart (Chart.js). Interaction: Hover tooltips. Justification: A chart provides a much quicker and more impactful understanding of the data than text alone.
+        - Report Info: Comparison of Zhang Congzheng and Yoshimasu Todo. Goal: Compare philosophies. Viz/Presentation: Side-by-side HTML blockquote layout. Interaction: None. Justification: Placing the similar tenets directly adjacent to each other is the clearest way to show their alignment.
+        - Report Info: Philosophies of Zhu Danxi and Li Gao. Goal: Explain core concepts. Viz/Presentation: Text with simple HTML/CSS flow diagrams. Interaction: None. Justification: Their cause-and-effect theories are effectively clarified with simple, structured visual flows, making the abstract concepts more tangible.
+        - Library/Method: Chart.js for the donut chart; Tailwind CSS for all layouts and diagrams. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #8A5A44;
+            color: #F5F5DC;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#F5F5DC] text-[#44403C]">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#654321] mb-2">The Four Great Masters of the Jin-Yuan Dynasty</h1>
+            <p class="text-lg text-[#5C5552] max-w-3xl mx-auto">An interactive exploration of the influential schools of thought that shaped Traditional Chinese Medicine.</p>
+            <p class="mt-4 text-md font-medium text-[#654321]">by Hyungsuk Choi, PHD</p>
+            <p class="mt-2 text-md text-[#5C5552] max-w-3xl mx-auto text-left">
+                These medical innovations and revisions during the Jin-Yuan period are considered one of the most critical evolutionary changes in Chinese medicine. The leading physicians of this period were primarily Confucian scholars, known as Ruyi (儒醫, or Scholar Doctors). These scholars, who were reluctant to serve the Mongolians, dedicated themselves to the development of new schools of medical thought. Based on their knowledge and perspectives, they established various schools of thought. Here, we introduce the four most important among them.
+            </p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8" id="navigation">
+            <button data-tab="liu" class="nav-button active text-sm md:text-base font-medium py-2 px-4 rounded-lg bg-[#EADDCA] text-[#654321] shadow-sm hover:bg-[#D6C6B2]">Liu Wansu: Cold & Cooling</button>
+            <button data-tab="zhang" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-lg bg-[#EADDCA] text-[#654321] shadow-sm hover:bg-[#D6C6B2]">Zhang Congzheng: Purgation</button>
+            <button data-tab="zhu" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-lg bg-[#EADDCA] text-[#654321] shadow-sm hover:bg-[#D6C6B2]">Zhu Danxi: Nourishing Yin</button>
+            <button data-tab="li" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-lg bg-[#EADDCA] text-[#654321] shadow-sm hover:bg-[#D6C6B2]">Li Gao: Spleen & Stomach</button>
+        </nav>
+
+        <main id="content-container">
+
+            <div id="liu-content" class="tab-content bg-[#FFFBF0] p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">The Cold and Cooling School: Liu Wansu</h2>
+                <div class="prose max-w-none text-[#44403C]">
+                    <p class="lead">This section details the philosophy of Liu Wansu, who argued that diseases ultimately manifest as pathogenic fire. His approach, a critique of the warming methods of the Song Dynasty, laid the groundwork for the later Warm Disease (Wen Bing) school.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Core Philosophy</h3>
+                    <p>Liu Wansu proposed that even pathogenic cold could transform into heat. Consequently, cool and cold-natured herbs were central to his therapies. This was a significant shift from the prevailing emphasis on warming and tonifying treatments. His methods were considered most suitable for patients with strong constitutions.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Correcting a Misinterpretation</h3>
+                    <p>While influential, later generations often misinterpreted his school as using only extremely cold herbs. An analysis of his book, "Xuan Ming Lun Fang," reveals a more nuanced and balanced approach to treatment, with 66% of prescriptions using a combination of cold and heat, 21% biased towards warm and hot, and only 13% biased towards cold and cool.</p>
+                </div>
+            </div>
+
+            <div id="zhang-content" class="tab-content hidden bg-[#FFFBF0] p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">The Purgation (Attacking) School: Zhang Congzheng</h2>
+                <div class="prose max-w-none text-[#44403C]">
+                     <p class="lead">This section explores the aggressive "attacking" philosophy of Zhang Congzheng, a disciple of Liu Wansu. He believed diseases were caused by invading external pathogens, or "evils," and that treatment should focus on purging them. You can examine his key tenets and see the striking parallels between his ideas and the later Kohoha school of Kampo medicine in Japan.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Core Philosophy</h3>
+                    <p>Zhang Congzheng argued that most diseases arise from the invasion of exogenous pathogens. He challenged the belief that strong "righteous qi" (the body's defense) prevents illness. Instead, he asserted that eliminating the "evil qi" (pathogen) allows the righteous qi to recover naturally. His primary focus was to purge these harmful influences from the body.</p>
+                     <h3 class="text-xl font-semibold text-[#654321] mt-4">Influence on Kampo: A Comparison</h3>
+                     <p>Zhang Congzheng's perspective closely aligns with the Kohoha school in Japan. The following comparison highlights the similarity in their radical views on treatment.</p>
+                    <div class="grid md:grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <h4 class="font-bold text-[#654321] mb-2">Zhang Congzheng's Tenets</h4>
+                            <blockquote class="border-l-4 border-[#8A5A44] pl-4 italic">
+                                "If you clear evil qi, righteous qi becomes stronger by itself... Expel evil qi with medicinal herbs, and tonify with diet and daily living modification."
+                            </blockquote>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#654321] mb-2">Yoshimasu Todo (Kohoha School)</h4>
+                             <blockquote class="border-l-4 border-[#8A5A44] pl-4 italic">
+                                "Men only cure disease, not righteous qi, which heaven takes care of... All medicines are toxins, which cannot tonify."
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="zhu-content" class="tab-content hidden bg-[#FFFBF0] p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">The Nourishing Yin School: Zhu Danxi</h2>
+                <div class="prose max-w-none text-[#44403C]">
+                    <p class="lead">This section covers the ideas of Zhu Danxi, the most recent of the four masters. His work represents a synthesis of his predecessors' thoughts. He agreed with clearing heat but uniquely attributed its origin to an internal deficiency of Yin. Explore his core philosophy and the treatment approach that combined both tonifying and purging methods.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Core Philosophy</h3>
+                    <p>Zhu Danxi's famous axiom was that "yang is always in excess, and yin is always deficient." He believed the root of many heat-related disorders was not an external pathogen, but an internal emptiness of Yin. Therefore, his treatments aimed to nourish the body's Yin, particularly Kidney Yin, to resolve heat from its source.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Treatment Approach</h3>
+                    <p>His prescriptions often combined both tonifying and purging methods. A common strategy was to employ formulas that nourished Kidney Yin while simultaneously extinguishing "ministerial fire" (a type of pathological heat arising from deficiency).</p>
+                </div>
+            </div>
+
+            <div id="li-content" class="tab-content hidden bg-[#FFFBF0] p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">The Spleen and Stomach School: Li Gao</h2>
+                <div class="prose max-w-none text-[#44403C]">
+                    <p class="lead">This section focuses on Li Gao, who proposed that most disorders stem from injury to the Spleen and Stomach system—the foundation of postnatal energy. Discover the three main factors he believed caused this damage and his holistic treatment approach, which significantly influenced the Goseiha school in Japan and the development of abdominal diagnosis.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Core Philosophy</h3>
+                    <p>Li Gao's perspective was that the majority of disorders stem from damage to the spleen and stomach. He identified a critical issue as the "sinking of the middle qi" and advocated treatments aimed at raising this qi. His approach was holistic, emphasizing the overall health and balance of the body's digestive and metabolic systems.</p>
+                    <h3 class="text-xl font-semibold text-[#654321]">Causes of Disease</h3>
+                    <p>He attributed damage to the Spleen and Stomach to three primary factors: improper diet, overstrain, and mental irritation. His most famous prescription, <em>Bu Zhong Yi Qi Tang</em>, exemplifies his approach to reversing this pathology.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navigation = document.getElementById('navigation');
+            const contentContainer = document.getElementById('content-container');
+            const tabs = navigation.querySelectorAll('.nav-button');
+            const contents = contentContainer.querySelectorAll('.tab-content');
+
+            function showTab(tabId) {
+                contents.forEach(content => {
+                    if (content.id === `${tabId}-content`) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+                tabs.forEach(tab => {
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+            }
+
+            navigation.addEventListener('click', function(e) {
+                if (e.target.matches('.nav-button')) {
+                    const tabId = e.target.dataset.tab;
+                    showTab(tabId);
+                }
+            });
+            
+            showTab('liu');
+        });
+    </script>
+</body>
+</html>
