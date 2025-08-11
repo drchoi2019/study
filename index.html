@@ -73,7 +73,7 @@
             width: 100%;
             border: none; /* Removed border */
             background-color: transparent; /* Made background transparent */
-            min-height: 600px; /* 최소 높이 설정 */
+            min-height: 400px; /* 최소 높이 줄임 */
             height: auto;
         }
         
@@ -181,8 +181,8 @@
                         html.offsetHeight
                     );
                     
-                    // 최소 높이와 비교하여 더 큰 값 사용
-                    const finalHeight = Math.max(height + 50, 600); // 50px 여유공간 추가
+                    // 최소 높이와 비교하여 더 큰 값 사용 (여유공간 줄임)
+                    const finalHeight = Math.max(height + 20, 400); // 20px 여유공간으로 줄임
                     iframe.style.height = finalHeight + 'px';
                     
                     console.log('Iframe height adjusted to:', finalHeight + 'px');
@@ -190,7 +190,7 @@
             } catch (e) {
                 console.error("Could not adjust iframe height:", e);
                 // 크로스 도메인 이슈 등으로 접근이 안될 경우 기본 높이 설정
-                iframe.style.height = '800px';
+                iframe.style.height = '500px'; // 기본 높이도 줄임
             }
         }
 
@@ -217,7 +217,7 @@
             currentEnglishUrl = url;
             
             // 먼저 기본 높이로 설정
-            iframe.style.height = '600px';
+            iframe.style.height = '400px';
             iframe.src = url;
             currentLang = 'en';
             langToggle.textContent = 'Kor';
@@ -254,7 +254,7 @@
                 }
 
                 if (existingKoreanPages.includes(koreanPage)) {
-                    iframe.style.height = '600px'; // 기본 높이로 재설정
+                    iframe.style.height = '400px'; // 기본 높이로 재설정
                     iframe.src = koreanPage;
                     currentLang = 'ko';
                     langToggle.textContent = 'Eng';
@@ -263,7 +263,7 @@
                 }
             } else {
                 // Switch back to English
-                iframe.style.height = '600px'; // 기본 높이로 재설정
+                iframe.style.height = '400px'; // 기본 높이로 재설정
                 iframe.src = currentEnglishUrl;
                 currentLang = 'en';
                 langToggle.textContent = 'Kor';
