@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한의학 변증 기초</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .section-card {
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .section-card:hover {
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            transform: translateY(-5px);
+        }
+        .item-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .item-list li:last-child {
+            border-bottom: none;
+        }
+        .term {
+            font-weight: 700;
+            color: #1e3a8a; /* Deep Blue */
+        }
+        .term-red { color: #991b1b; } /* Deep Red */
+        .term-green { color: #14532d; } /* Deep Green */
+        .term-purple { color: #581c87; } /* Deep Purple */
+        .term-amber { color: #92400e; } /* Deep Amber */
+        .term-rose { color: #9f1239; } /* Deep Rose */
+        .term-indigo { color: #312e81; } /* Deep Indigo */
+        .term-orange { color: #9a3412; } /* Deep Orange */
+        .note {
+            background-color: #eef2ff;
+            border-left: 4px solid #4f46e5;
+            padding: 0.75rem 1rem;
+            margin-top: 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: #4338ca;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+        .section-title span {
+            font-size: 1.75rem;
+            margin-right: 0.75rem;
+        }
+        .interactive-term {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #6366f1;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            z-index: 50;
+            max-width: 320px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-bold text-slate-800">변증 기초</h1>
+        </header>
+
+        <!-- 팔강 -->
+        <div class="section-card bg-white">
+            <h2 class="section-title"><span>🧭</span>팔강 (八綱)</h2>
+            <ul class="item-list space-y-2">
+                <li><span class="term term-blue">한(寒)</span> - 추위, 느림(→기체,혈어), 지맥, 맑은 물(콧물, 소변, 가래), 설사, 득온즉감</li>
+                <li><span class="term term-red">열(熱)</span> - 더위, 번조, 삭맥, 누런 물, 변비, 득한즉감</li>
+                <li><span class="term term-green">표(表)</span> - 주로 급성병, 피부 <span class="text-sm text-slate-500">(* 나중에 가면 급성병만 표병이라고 함)</span></li>
+                <li><span class="term term-purple">리(裏)</span> - 주로 만성병, 내장</li>
+                <li><span class="term term-amber">허(虛)</span> - 좋은 것이 부족한 것(정기, 혈, 정)</li>
+                <li>
+                    <span class="term term-rose">실(實)</span> - 나쁜 것이 많은 것 (한, 습, 기체, 어혈, 담, etc)
+                    <div class="note">* 간기가 너무 실해서 병이되는가? - No, 간의 실증은 간기체, 간혈허 등등 (오행침은 별개)</div>
+                </li>
+                <li>
+                    <span class="term term-indigo interactive-term" data-target="eumheo">음허(陰虛)</span> - 조열, 오장심열, 야간심(모든 음부족), 식은 땀, 세맥
+                </li>
+                <li>
+                    <span class="term term-orange">양허(陽虛)</span> - (기허) - 추위, 부종, 주간심, 자한, 허맥
+                    <div class="note">
+                        <p>* 음에 관한 것은 밤, 오후 심, 양은 아침, 낮 (땀, 열, 통증)</p>
+                        <p>* 양기 허 → 음기 실 (한, 습) - 추위, 부종 / 음기 허 → 양기 실 (조, 열) - 건조, 열증</p>
+                        <p>* 양실(고열) → 음기 허(건조) / 음실(추위,습) → 양기 허</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 기, 혈, 정 -->
+        <div class="section-card bg-slate-50">
+            <h2 class="section-title"><span>💧</span>기, 혈, 정 (氣血精)</h2>
+            <div class="space-y-4">
+                <div class="p-4 rounded-lg bg-emerald-50 border-l-4 border-emerald-500">
+                    <h3 class="font-bold text-emerald-800 mb-2">기(氣)에 관한 것</h3>
+                    <ul class="item-list">
+                        <li><span class="term interactive-term" data-target="giheo">기허(氣虛)</span> - 무력 / 폐-기단 / 비 - 식욕</li>
+                        <li><span class="term">기역/기함</span> - 구토, 기침 / 장기하수</li>
+                        <li><span class="term interactive-term" data-target="giche">기체(氣滯)</span> - 통증 - 움직임, 실체없음, 팽만 cf.혈어</li>
+                    </ul>
+                </div>
+                <div class="p-4 rounded-lg bg-rose-50 border-l-4 border-rose-500">
+                    <h3 class="font-bold text-rose-800 mb-2">혈(血)에 관한 것</h3>
+                    <ul class="item-list">
+                        <li><span class="term">혈어(血瘀)</span> - 자통, 실체있음, 고정, 야간심, 삽맥</li>
+                        <li><span class="term interactive-term" data-target="hyeolheo">혈허(血虛)</span> - 창백(pale, sallow), 손발참, 세맥</li>
+                    </ul>
+                </div>
+                <div class="p-4 rounded-lg bg-sky-50 border-l-4 border-sky-500">
+                    <h3 class="font-bold text-sky-800 mb-2">정(精)에 관한 것</h3>
+                    <ul class="item-list">
+                        <li><span class="term">정허(精虛)</span> - 발육부진, 성기능, 조기 노화</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="note mt-6">* 신 따로 변증이 별로 없다. 진액부족은 대체로 음허에 해당</div>
+        </div>
+
+        <!-- 육기 -->
+        <div class="section-card bg-white">
+            <h2 class="section-title"><span>💨</span>육기 (六氣)</h2>
+            <ul class="item-list space-y-2">
+                <li><span class="term">풍(風)</span> - 빠름(급성병은 보통 풍, 감기), 떨림, 근육 쥐나는 것, 경련(마비)</li>
+                <li><span class="term">습(濕)</span> - 무거움, 양허와 관련</li>
+            </ul>
+            <div class="note">* 한열은 팔강, 조는 음허와 일치, 서는 임상에서 다루지 않음</div>
+        </div>
+        
+        <!-- 오장 생리 -->
+        <div class="section-card bg-slate-50">
+            <h2 class="section-title"><span>🫀</span>오장 생리 (五臟 生理)</h2>
+            <ul class="item-list space-y-2">
+                <li><span class="term term-green">간(肝)</span> - 혈을 저장, 감정중 용맹, 결단, 근육(운동, 건)을 주관, 옆구리, 눈</li>
+                <li><span class="term term-red">심(心)</span> - 혈액순환기능, 정신활동의 전체를 통솔, 혀</li>
+                <li><span class="term term-amber">비(脾)</span> - 소화기능, 기육(살,근육)을 주관함, 후천적인 에너지 공급</li>
+                <li><span class="term">폐(肺)</span> - 호흡기능, 면역기능</li>
+                <li><span class="term">신(腎)</span> - 비뇨/생식기, 우리 몸의 가장 근원 명문, 정을 주관, 귀</li>
+            </ul>
+        </div>
+
+        <!-- 변증 -->
+        <div class="section-card bg-white">
+            <h2 class="section-title"><span>🩺</span>오장 변증 (五臟 辨證)</h2>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-green-700 mb-2"><span class="text-2xl mr-2">🌿</span>간변증</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">간기울결</span> - 정서문제. 협륵, 월경문제, 현맥 + 기체<div class="note">* 기체(통증,팽만)+ 간(월경, 근육, 옆구리) = 협륵통, 월경통, 근육통</div></li>
+                        <li><span class="term">간화상염</span> - 분노, 충혈, 측두통 + 열증</li>
+                        <li><span class="term">간풍</span> - 근육경련, 반신마비, 뇌졸중</li>
+                        <li><span class="term">간혈허</span> - 현기증(이명), 시야 흐림, 약한 손톱, 근육 약화와 경련 + 혈허</li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 class="flex items-center text-xl font-bold text-red-700 mb-2"><span class="text-2xl mr-2">❤️</span>심변증</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">심화상염</span> - 심계, 불안, 혀의 궤양, 진한 소변, 불면(흥분) + 열증</li>
+                        <li><span class="term">심혈허</span> - 심계, 불안 + 혈허(창백, 손발참)</li>
+                        <li><span class="term">심혈어</span> - 심계, 불안, 심장부위 조이는 통증 + 어혈(자통, 실체있음, 고정, 야간심)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-amber-700 mb-2"><span class="text-2xl mr-2">🌾</span>비위변증</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">비기허</span> - 창백한(sallow) 안색, 식욕 부진+ 기허</li>
+                        <li><span class="term">비양허</span> - 비기허 + 추위, 설사, 무거움, 부종</li>
+                        <li><span class="term">비기하함</span> - 비기허 + 장기하수</li>
+                        <li><span class="term">비불통혈</span> - 비기허 + 출혈</li>
+                        <li><span class="term">위음허</span> - 상복부 공복통, 속쓰림, 구강건조, 구내염, 갈증 + 음허(오후열)</li>
+                        <li><span class="term">식체위완</span> - 구토, 입 냄새, 트림, 위완통</li>
+                    </ul>
+                    <div class="note mt-4">* 위는 비의 일부로 생각하면 편함, 다른 육부는 중요하지 않음</div>
+                </div>
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-gray-700 mb-2"><span class="text-2xl mr-2">🌬️</span>폐변증</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">폐기허</span> - 숨가쁨, 기침. 주간 발한, 면역약화 + 기허</li>
+                        <li><span class="term">폐음허</span> - 마른 기침(가래가 없음), 목의 건조 + 음허</li>
+                        <li><span class="term">폐실증</span> - 풍한범폐, 풍열조폐 - 감기 (풍,열,한)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="flex items-center text-xl font-bold text-gray-800 mb-2"><span class="text-2xl mr-2">🌊</span>신변증</h3>
+                    <ul class="item-list space-y-2 ml-4">
+                        <li><span class="term">신양허</span> - 요통, 무릎, 이명, 성기능 문제 + 양허(부종, 추위), 맑은 소변</li>
+                        <li><span class="term">신음허</span> - 요통, 무릎, 이명, 성기능 문제 + 음허</li>
+                        <li><span class="term">신정허</span> - 요통, 무릎, 이명, 성기능 문제 + 어린이: 발달장애, 성인: 노화</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup element -->
+    <div id="popup"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popup = document.getElementById('popup');
+            const interactiveTerms = document.querySelectorAll('.interactive-term');
+
+            const popupData = {
+                'eumheo': '<strong>음허(陰虛):</strong> 조열, 오장심열, 야간심(모든 음부족), 식은 땀, 세맥',
+                'giheo': '<strong>기허(氣虛):</strong> 무력감, 기단, 식욕저하',
+                'hyeolheo': '<strong>혈허(血虛):</strong> 창백(pale, sallow), 손발참, 세맥',
+                'giche': '<strong>기체(氣滯):</strong> 통증 - 움직임, 실체없음, 팽만 cf.혈어'
+            };
+
+            interactiveTerms.forEach(term => {
+                term.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const targetKey = term.dataset.target;
+                    
+                    if (popupData[targetKey]) {
+                        popup.innerHTML = popupData[targetKey];
+                        
+                        const rect = term.getBoundingClientRect();
+                        popup.style.left = `${window.scrollX + rect.left}px`;
+                        popup.style.top = `${window.scrollY + rect.bottom + 5}px`;
+                        
+                        popup.style.display = 'block';
+                    }
+                });
+            });
+
+            document.addEventListener('click', () => {
+                popup.style.display = 'none';
+            });
+
+            popup.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html>
