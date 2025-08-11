@@ -14,12 +14,14 @@
             --subtle-text-color: #7a7a7a;
             --connector-color: #c0b8ae;
             --herb-color: #5a7d5a;
-            --removed-herb-color: #ed8936; /* Soft Orange */
+            --removed-herb-color: #ed8936;
             --formula-color: #4a7c9b;
             --shadow-color: rgba(0, 0, 0, 0.05);
+            --highlight-bg-color: #4a7c9b; /* Using formula color for highlight */
+            --highlight-text-color: #ffffff;
         }
         body {
-            font-family: 'Noto Sans', sans-serif;
+            font-family: 'Noto Sans KR', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -91,15 +93,9 @@
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: all 0.3s ease-in-out;
         }
-        .flow-box.compact {
-            width: 140px; 
-        }
-        .flow-box.medium {
-             width: 152px;
-        }
-        .flow-box.wide {
-            width: 240px; /* Increased by 15% from 209px */
-        }
+        .flow-box.compact { width: 140px; }
+        .flow-box.medium { width: 152px; }
+        .flow-box.wide { width: 240px; }
         .flow-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
@@ -135,6 +131,77 @@
             text-underline-offset: 3px;
             text-decoration-thickness: 2px;
         }
+
+        /* Styles for the new interactive diagram */
+        .interactive-diagram-section {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 25px;
+            background-color: var(--box-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .herb-grid-container {
+            background-color: #fafaf9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+        .herb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+        .herb-item {
+            text-align: center;
+            padding: 12px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: default;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            font-size: 0.9rem;
+        }
+        .herb-item.highlight {
+            background-color: var(--highlight-bg-color);
+            color: var(--highlight-text-color);
+            transform: scale(1.05);
+            box-shadow: 0 4px 14px 0 rgba(74, 124, 155, 0.3);
+            border-color: var(--highlight-bg-color);
+        }
+        .herb-item.special-border {
+            border-color: var(--herb-color);
+            border-width: 2px;
+        }
+        .formula-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        .formula-button {
+            text-align: center;
+            padding: 12px;
+            background-color: var(--box-bg-color);
+            border: 1px solid var(--formula-color);
+            color: var(--formula-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease-in-out;
+        }
+        .formula-button:hover {
+            background-color: var(--formula-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .formula-button.active {
+            background-color: var(--formula-color);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(74, 124, 155, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -147,7 +214,7 @@ The true 'Learning Formulas' means learning why certain herbs are included or ex
 When we study these compositional principles, our questions must evolve. Instead of asking, “What formula is for what disease?”, we begin to ask, “Why does this formula include this herb and not another?” and “What role does each herb play in the overall structure of the formula?” </p>
     </div>
 
-        <div class="text-section">
+    <div class="text-section">
         <p>In traditional medicine, illness is seen as a process, not a single event. Diagnosis isn't just a snapshot of today; it's about understanding how a condition changes over time. Herbal formulas are designed to guide this process back to health. For instance, Qi Deficiency can lead to Spleen Qi Deficiency, and vice versa. From there, it might cause Spleen Deficiency Dampness, Yang Deficiency, or even organ prolapse from Spleen Qi Sinking. It can also lead to bleeding issues (Spleen Failing to Control Blood) or emotional problems when combined with Heart Blood Deficiency. Long-term Qi Deficiency can turn into a Deficiency of both Qi and Blood, which might cause recurring miscarriages. This is a fundamental concept. You can't learn about formulas without first understanding the body's processes and the individual herbs.</p>
     </div>
 
@@ -163,57 +230,63 @@ When we study these compositional principles, our questions must evolve. Instead
                 <div class="flow-box medium" data-target="Spleen Deficiency Dampness"><div class="box-header"><h3>Spleen Deficiency Dampness</h3></div><div class="expandable-content"></div></div>
                 <div class="flow-box medium" data-target="Spleen Qi Sinking"><div class="box-header"><h3>Spleen Qi Sinking</h3></div><div class="expandable-content"></div></div>
             </div>
-            <div class="vertical-stack" style="justify-content: center;">
-                <div class="connector">→</div>
-            </div>
+            <div class="vertical-stack" style="justify-content: center;"><div class="connector">→</div></div>
             <div class="vertical-stack" style="justify-content: center;">
                 <div class="flow-box wide" data-target="Spleen Failing to Control Blood"><div class="box-header"><h3>Spleen Failing to Control Blood</h3></div><div class="expandable-content"></div></div>
                 <div class="flow-box wide" data-target="Qi and Blood Deficiency"><div class="box-header"><h3>Qi & Blood Deficiency</h3></div><div class="expandable-content"></div></div>
             </div>
         </div>
     </div>
-     
+      
     <p style="text-align: center; margin-top: -10px; margin-bottom: 30px; font-size: 1.1rem; color: var(--subtle-text-color);">Try to click each pattern</p>
 
     <div class="text-section">
-        <p>Herbal formulas are built step-by-step to match the flow of an illness. For a simple Qi deficiency, you might use 'Ren Shen' and 'Gan Cao'. If the Spleen Qi is the issue, you add 'Bai Zhu'. That trio—'Ren Shen', 'Bai Zhu', and 'Gan Cao'—is the core treatment for Spleen Qi Deficiency. If the deficient Spleen creates dampness, you add 'Fu Ling' to that core trio, creating the formula 'Si Jun Zi Tang'. If it leads to Yang deficiency instead, you'd add 'Gan Jiang' to warm the body, creating 'Li Zhong Wan'. For sinking Qi, you'd add herbs that lift, like 'Sheng Ma' and 'Chai Hu', to make 'Bu Zhong Yi Qi Tang'. If the Spleen can't control blood, you might add blood-builders like 'Dang Gui' and Calming herbs to 'Si Jun Zi Tang' to create 'Gui Pi Tang'. If the deficiency affects both Qi and Blood, you combine 'Si Jun Zi Tang' with another formula, 'Si Wu Tang', to make 'Ba Wu Tang'. For miscarriage risk, you modify 'Ba Wu Tang' by removing 'Fu Ling' and adding fetus-calming herbs ('An Tai Yao') to make 'Tai Shan Pan Shi Tang'. If Yang is also deficient, you add warming herbs like 'Rou Gui' and 'Huang Qi' to create 'Shi Quan Da Bu Tang'. Each formula is a team designed for a specific stage of an illness. Just memorizing 'use this for gastritis' misses the whole point of this elegant system.</p>
+        <p>Herbal formulas are built step-by-step to match the flow of an illness. For a simple Qi deficiency, you might use 'Ren Shen' and 'Gan Cao'. If the Spleen Qi is the issue, you add 'Bai Zhu'. That trio—'Ren Shen', 'Bai Zhu', and 'Gan Cao'—is the core treatment for Spleen Qi Deficiency. If the deficient Spleen creates dampness, you add 'Fu Ling' to that core trio, creating the formula 'Si Jun Zi Tang'. If it leads to Yang deficiency instead, you'd add 'Gan Jiang' to warm the body, creating 'Li Zhong Wan'. For sinking Qi, you'd add herbs that lift, like 'Sheng Ma' and 'Chai Hu', to make 'Bu Zhong Yi Qi Tang'. If the Spleen can't control blood, you might add blood-builders like 'Dang Gui' and Calming herbs to 'Si Jun Zi Tang' to create 'Gui Pi Tang'. If the deficiency affects both Qi and Blood, you combine 'Si Jun Zi Tang' with another formula, 'Si Wu Tang', to make 'Ba Zhen Tang'. For miscarriage risk, you modify 'Ba Zhen Tang' by removing 'Fu Ling' and adding fetus-calming herbs ('An Tai Yao') to make 'Tai Shan Pan Shi San'. If Yang is also deficient, you add warming herbs like 'Rou Gui' and 'Huang Qi' to create 'Shi Quan Da Bu Tang'. Each formula is a team designed for a specific stage of an illness. Just memorizing 'use this for gastritis' misses the whole point of this elegant system.</p>
+    </div>
+
+    <!-- New Interactive Diagram Section -->
+    <div id="interactive-diagram-container" class="interactive-diagram-section">
+        <div class="herb-grid-container">
+            <div id="herb-grid" class="herb-grid"></div>
+        </div>
+        <div id="formula-list-container">
+            <div id="formula-list" class="formula-list"></div>
+        </div>
     </div>
 
     <div class="qa-box">
         <p><strong>Q. Why does the formula 'Bu Zhong Yi Qi Tang' not only add the lifting herbs 'Sheng Ma' and 'Chai Hu' to 'Si Jun Zi Tang', but also remove 'Fu Ling'?</strong></p>
-        <p style="margin-top: 10px;">A. Think about it before reading the answer. It's because 'Fu Ling' has a downward-draining action. Since the goal is to lift the Qi up, a downward-moving herb would be counterproductive. For the same reason, 'Fu Ling' is removed to create 'Tai Shan Pan Shi Tang'. Understanding these details is what formula studies is all about.</p>
+        <p style="margin-top: 10px;">A. Think about it before reading the answer. It's because 'Fu Ling' has a downward-draining action. Since the goal is to lift the Qi up, a downward-moving herb would be counterproductive. For the same reason, 'Fu Ling' is removed to create 'Tai Shan Pan Shi San'. Understanding these details is what formula studies is all about.</p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Logic for the first diagram (Flowchart) ---
             const contentData = {
                 'Qi Deficiency': `<p><span class="herb">Ren Shen<br>Gan Cao</span></p>`,
-                'Spleen Qi Deficiency': `<p><span class="herb">Bai Zhu</span></p>`,
+                'Spleen Qi Deficiency': `<p><span class="herb">+ Bai Zhu</span></p>`,
                 'Spleen Deficiency Dampness': `<p><span class="herb">+ Fu Ling</span></p><p><span class="formula">Si Jun Zi Tang</span></p>`,
                 'Spleen Yang Deficiency': `<p><span class="herb">+ Gan Jiang</span></p><p><span class="formula">Li Zhong Wan</span></p>`,
-                'Spleen Qi Sinking': `<p><span class="herb">+ Sheng Ma, Chai Hu</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
+                'Spleen Qi Sinking': `<p><span class="herb">+ Huang Qi, Sheng Ma, Chai Hu, Dang Gui, Chen Pi</span></p><p><span class="removed-herb">(- Fu Ling)</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
                 'Spleen Failing to Control Blood': `<p><span class="formula">Si Jun Zi Tang</span> + <span class="herb">Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
-                'Qi and Blood Deficiency': `<p><span class="formula">Ba Wu Tang</span></p>
-                             <p style="margin-top: 12px;">→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
-                             <p>→ <span class="formula">Tai Shan Pan Shi Tang</span> <span class="herb">(+Calming fetus herbs)</span><br><span class="removed-herb">(-Fu Ling)</span></p>`
+                'Qi and Blood Deficiency': `<p><span class="formula">Ba Zhen Tang</span></p>
+                                     <p style="margin-top: 12px;">→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
+                                     <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span><br><span class="removed-herb">(-Fu Ling)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
-            
             boxes.forEach(box => {
                 const targetId = box.dataset.target;
                 const contentDiv = box.querySelector('.expandable-content');
-                
                 if (contentDiv) {
                     contentDiv.innerHTML = contentData[targetId];
                     box.addEventListener('click', () => {
-                        const isPersistent = targetId === 'Qi Deficiency' || targetId === 'Spleen Qi Deficiency' || targetId === 'Spleen Deficiency Dampness';
-
+                        const isPersistent = ['Qi Deficiency', 'Spleen Qi Deficiency', 'Spleen Deficiency Dampness'].includes(targetId);
                         if (!isPersistent) {
                             if (!box.classList.contains('open')) {
                                 boxes.forEach(otherBox => {
                                     const otherTargetId = otherBox.dataset.target;
-                                    if (otherTargetId !== 'Qi Deficiency' && otherTargetId !== 'Spleen Qi Deficiency' && otherTargetId !== 'Spleen Deficiency Dampness') {
+                                    if (!['Qi Deficiency', 'Spleen Qi Deficiency', 'Spleen Deficiency Dampness'].includes(otherTargetId)) {
                                         otherBox.classList.remove('open');
                                     }
                                 });
@@ -221,6 +294,99 @@ When we study these compositional principles, our questions must evolve. Instead
                         }
                         box.classList.toggle('open');
                     });
+                }
+            });
+
+            // --- Logic for the second diagram (Interactive Grid) ---
+            const formulasPinyin = {
+                'Si Jun Zi Tang': ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao'],
+                'Li Zhong Wan': ['Ren Shen', 'Bai Zhu', 'Gan Jiang', 'Gan Cao'],
+                'Bu Zhong Yi Qi Tang': ['Ren Shen', 'Bai Zhu', 'Huang Qi', 'Gan Cao', 'Dang Gui', 'Chen Pi', 'Sheng Ma', 'Chai Hu'],
+                'Gui Pi Tang': ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao', 'Dang Gui', 'An Shen Yao'],
+                'Ba Zhen Tang': ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao', 'Si Wu Tang'],
+                'Shi Quan Da Bu Tang': ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao', 'Si Wu Tang', 'Huang Qi', 'Rou Gui'],
+                'Tai Shan Pan Shi San': ['Ren Shen', 'Bai Zhu', 'Gan Cao', 'Si Wu Tang', 'An Tai Yao'],
+                'Liu Jun Zi Tang': ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao', 'Er Chen Tang'],
+                'Yi Gong San': ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao', 'Chen Pi'],
+                'Shen Ling Bai Zhu San': ['Shan Yao', 'Qu Shi Yao', 'Bai Zhu', 'Fu Ling', 'Ren Shen', 'Gan Cao']
+            };
+
+            const allHerbsPinyin = ['Ren Shen', 'Bai Zhu', 'Gan Cao', 'Fu Ling', 'Gan Jiang', 'Chen Pi', 'Huang Qi', 'Dang Gui', 'Rou Gui', 'Shan Yao', 'Sheng Ma', 'Chai Hu', 'Si Wu Tang', 'An Shen Yao', 'An Tai Yao', 'Qu Shi Yao', 'Er Chen Tang'];
+
+            const mainContainer = document.getElementById('interactive-diagram-container');
+            const herbGrid = document.getElementById('herb-grid');
+            const formulaList = document.getElementById('formula-list');
+
+            allHerbsPinyin.forEach(herb => {
+                const herbDiv = document.createElement('div');
+                herbDiv.textContent = herb;
+                herbDiv.dataset.herb = herb;
+                herbDiv.className = 'herb-item';
+                herbGrid.appendChild(herbDiv);
+            });
+
+            const borderHerbs = ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao'];
+            borderHerbs.forEach(herbName => {
+                const herbElement = document.querySelector(`.herb-item[data-herb='${herbName}']`);
+                if (herbElement) {
+                    herbElement.classList.add('special-border');
+                }
+            });
+
+            Object.keys(formulasPinyin).forEach(formulaName => {
+                const button = document.createElement('button');
+                button.textContent = formulaName;
+                button.dataset.formula = formulaName;
+                button.className = 'formula-button';
+                formulaList.appendChild(button);
+            });
+            
+            let activeFormulaButton = null;
+
+            function resetSelection() {
+                document.querySelectorAll('.herb-item').forEach(item => {
+                    item.classList.remove('highlight');
+                });
+                if (activeFormulaButton) {
+                    activeFormulaButton.classList.remove('active');
+                    activeFormulaButton = null;
+                }
+            }
+
+            formulaList.addEventListener('click', (e) => {
+                if (e.target && e.target.matches('button.formula-button')) {
+                    const clickedButton = e.target;
+                    const formulaName = clickedButton.dataset.formula;
+                    const ingredients = formulasPinyin[formulaName];
+
+                    if (activeFormulaButton === clickedButton) {
+                        resetSelection();
+                        return;
+                    }
+                    
+                    if (activeFormulaButton) {
+                        activeFormulaButton.classList.remove('active');
+                    }
+                    
+                    clickedButton.classList.add('active');
+                    activeFormulaButton = clickedButton;
+
+                    document.querySelectorAll('.herb-item').forEach(item => {
+                        item.classList.remove('highlight');
+                    });
+
+                    ingredients.forEach(ingredient => {
+                        const herbElement = document.querySelector(`.herb-item[data-herb='${ingredient}']`);
+                        if (herbElement) {
+                            herbElement.classList.add('highlight');
+                        }
+                    });
+                }
+            });
+            
+            mainContainer.addEventListener('click', (e) => {
+                if (!e.target.closest('.formula-button') && !e.target.closest('.herb-item')) {
+                     resetSelection();
                 }
             });
         });
