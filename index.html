@@ -147,10 +147,7 @@
         <iframe id="content-frame" name="content-frame" class="hidden" frameborder="0"></iframe>
     </main>
 
-    <!-- Footer Section -->
-    <footer class="text-center py-4 mt-8 text-sm text-gray-500">
-        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-    </footer>
+
 
     <script>
         const header = document.getElementById('main-header');
@@ -162,26 +159,7 @@
         let currentEnglishUrl = '';
         let currentLang = 'en';
 
-        // Enhanced iframe height adjustment with footer removal
-        iframe.onload = function() {
-            try {
-                // Reset height to auto before calculating new height
-                iframe.style.height = 'auto';
-                
-                // Access iframe content
-                const iframeDoc = iframe.contentWindow.document;
-                
-                // Remove footer from iframe content if it exists
-                const footer = iframeDoc.querySelector('footer');
-                if (footer) {
-                    footer.remove();
-                }
-                
-                // Calculate height after footer removal
-                const newHeight = Math.max(
-                    iframeDoc.body.scrollHeight,
-                    iframeDoc.documentElement.scrollHeight,
-                    iframeDoc.body.offsetHeight
+
                 );
                 
                 // Set iframe height with small padding
