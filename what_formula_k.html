@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>방제학</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS and Google Fonts for consistent styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #F7F3EF;
@@ -23,6 +29,9 @@
             color: var(--text-color);
             margin: 0;
             padding: 0;
+        }
+        h1, h2, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
         }
         .header {
             text-align: center;
@@ -212,6 +221,39 @@
 </head>
 <body>
 
+    <!-- Top Menu for Individual Pages -->
+    <header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+            &larr; Home
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            Kor / Eng
+        </a>
+    </header>
+    <script>
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            let targetFile;
+
+            if (currentFile.includes('_k.html')) {
+                // 현재 한글 페이지 -> 영어 페이지로
+                targetFile = currentFile.replace('_k.html', '.html');
+            } else if (currentFile.includes('history.html')) {
+                // history.html 예외 처리
+                 targetFile = 'history_kor.html';
+            }
+            else {
+                // 현재 영어 페이지 -> 한글 페이지로
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
+            
+            // 페이지 이동
+            window.location.href = targetFile;
+        }
+    </script>
+
     <div class="header">
         <h1>방제학이란?</h1>
         <p class="author-name">By Hyungsuk Choi</p>
@@ -279,8 +321,8 @@
                 '비기하함': `<p><span class="herb">+ 황기, 당귀, 진피</span></p><p><span class="herb">+ 승마, 시호</span></p><p><span class="formula">보중익기탕</span></p>`,
                 '비불통혈': `<p><span class="herb">+ 당귀</span> + <span class="herb">안신제</span></p><p><span class="formula">귀비탕</span></p>`,
                 '기혈양허': `<p><span class="herb">+ 사물탕</span></p><p><span class="formula">팔물탕</span></p>
-                                 <p style="margin-top: 12px;"><span class="formula">십전대보탕</span> <span class="herb">(+황기,육계)</span></p>
-                                 <p><span class="formula">태산반석탕</span> <span class="herb">(-복령+안태약)</span></p>`
+                                         <p style="margin-top: 12px;"><span class="formula">십전대보탕</span> <span class="herb">(+황기,육계)</span></p>
+                                         <p><span class="formula">태산반석탕</span> <span class="herb">(-복령+안태약)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
@@ -404,5 +446,10 @@
             }
         });
     </script>
+    
+    <!-- Footer for Individual Pages -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>
