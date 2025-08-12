@@ -1,733 +1,284 @@
- <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Basic Tongue and Pulse Diagnosis</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-
-        /* Custom styles */
-
-        body {
-
-            font-family: 'Inter', sans-serif;
-
-            background-color: #F7F3EF; /* Exactly matching the reference site */
-
-            color: #383431;
-
-        }
-
-        /* Style for the active button */
-
-        .pattern-btn.active {
-
-            background-color: #8B725A;
-
-            color: #FFFFFF;
-
-            transform: translateY(-2px);
-
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-
-        }
-
-        /* Transition for smooth content updates */
-
-        .content-card {
-
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-
-        }
-
-        .content-card.loading {
-
-            opacity: 0;
-
-            transform: translateY(10px);
-
-        }
-
-    </style>
-
-
-
-<!-- Tailwind CSS and Google Fonts for consistent styling (Final) -->
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!-- 'Cormorant Garamond' 폰트를 완전히 제거했습니다. -->
-
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
-
-
-
-<style>
-
-    body {
-
-        /* 모든 텍스트의 기본 폰트를 'Noto Sans KR'로 설정합니다. */
-
-        font-family: 'Noto Sans KR', sans-serif;
-
-        background-color: #F7F3EF;
-
-        color: #333;
-
-    }
-
-    /* - 문제가 되었던 명조체(Cormorant Garamond) 관련 스타일 규칙을 완전히 삭제했습니다.
-
-      - 이제 h1, h2, Home 링크 등 모든 요소가 위의 body 폰트를 따라갑니다.
-
-    */
-
-</style>
-
-
-
-    
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Tongue and Pulse Diagnosis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f5; /* Consistent background color */
+            color: #383431;
+        }
+        /* Style for the active button */
+        .pattern-btn.active {
+            background-color: #8B725A;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        /* Transition for smooth content updates */
+        .content-card {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .content-card.loading {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    </style>
 </head>
-
 <body class="min-h-screen antialiased">
 
-
-
-
-
-<!-- Top Menu for Individual Pages (Updated) -->
-
-<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-
-        &larr; Home
-
-    </a>
-
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-
-        Kor / Eng
-
-    </a>
-
-</header>
-
-<script>
-
-    async function toggleLanguage(event) {
-
-        event.preventDefault();
-
-        const currentPath = window.location.pathname;
-
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-
-        let targetFile;
-
-
-
-        // 대상 파일 결정
-
-        if (currentFile.includes('_k.html')) {
-
-            // 현재 한글 페이지 -> 영어 페이지로 이동
-
-            // 영어 페이지는 항상 존재한다고 가정하고 바로 이동합니다.
-
-            targetFile = currentFile.replace('_k.html', '.html');
-
-            window.location.href = targetFile;
-
-            return;
-
-        } else {
-
-            // 현재 영어 페이지 -> 한글 페이지로 이동
-
-            if (currentFile.includes('history.html')) {
-
-                targetFile = 'history_kor.html';
-
-            } else {
-
-                targetFile = currentFile.replace('.html', '_k.html');
-
-            }
-
-        }
-
-        
-
-        // 이동할 한글 페이지가 실제로 존재하는지 확인
-
-        try {
-
-            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
-
-            if (response.ok) {
-
-                // 페이지가 존재하면 (상태 코드 200-299) 해당 페이지로 이동
-
-                window.location.href = targetFile;
-
-            } else {
-
-                // 페이지가 존재하지 않으면 (예: 404 오류) 알림을 표시
-
-                alert('준비중입니다.');
-
-            }
-
-        } catch (error) {
-
-            // 네트워크 오류 등이 발생한 경우
-
-            console.error('페이지 확인 중 오류 발생:', error);
-
-            alert('준비중입니다.');
-
-        }
-
-    }
-
-</script>
-
-    
-
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
-
-
-
-        <!-- Header -->
-
-        <header class="text-center mb-8 md:mb-12">
-
-            <h1 class="text-3xl sm:text-4xl font-bold text-[#5a4a3e] mb-2">Basic Tongue and Pulse Diagnosis</h1>
-
-        </header>
-
-
-
-        <!-- Main Content Area -->
-
-        <main class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-
-
-
-            <!-- Left Column: Pattern Selection -->
-
-            <aside class="md:col-span-1">
-
-                <div id="pattern-list" class="space-y-3">
-
-                    <!-- Pattern buttons will be dynamically inserted here -->
-
-                </div>
-
-            </aside>
-
-
-
-            <!-- Right Column: Information Display -->
-
-            <section id="info-display" class="md:col-span-2 bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/80">
-
-                <div id="display-content" class="content-card">
-
-                    <!-- Dynamic content will be loaded here -->
-
-                </div>
-
-            </section>
-
-
-
-        </main>
-
-
-
-    </div>
-
-
-
-    <script>
-
-        // Traditional Chinese Medicine (TCM) Pattern Data
-
-        const tcmPatterns = [
-
-            { 
-
-                name_en: "Normal",
-
-                pulse_en: "Moderate Pulse",
-
-                pulse_desc: "Moderate, soft but strong, rhythmic",
-
-                tongueCoating_en: "Thin, white",
-
-                tongueCoating_desc: "Thin, white coating",
-
-                tongueBody_en: "Pink, proper size",
-
-                tongueBody_desc: "Pink body, adequate size and moisture"
-
-            },
-
-            { 
-
-                name_en: "Heat",
-
-                pulse_en: "Rapid Pulse",
-
-                pulse_desc: "Faster than normal",
-
-                tongueCoating_en: "Yellow",
-
-                tongueCoating_desc: "Yellow coating",
-
-                tongueBody_en: "Red",
-
-                tongueBody_desc: "Red body"
-
-            },
-
-            { 
-
-                name_en: "Cold",
-
-                pulse_en: "Slow Pulse(Yang def.), Tight Pulse(Full cold)",
-
-                pulse_desc: "Slower than normal, or tense like a stretched rope",
-
-                tongueCoating_en: "White",
-
-                tongueCoating_desc: "Thick white coating",
-
-                tongueBody_en: "Pale or bluish",
-
-                tongueBody_desc: "Pale or bluish body"
-
-            },
-
-            { 
-
-                name_en: "Exterior",
-
-                pulse_en: "Floating Pulse",
-
-                pulse_desc: "Felt with a light touch, on the surface",
-
-                tongueCoating_en: "Typically thin white",
-
-                tongueCoating_desc: "Usually a thin white coating",
-
-                tongueBody_en: "Normal",
-
-                tongueBody_desc: "Body color is often unchanged"
-
-            },
-
-            { 
-
-                name_en: "Interior",
-
-                pulse_en: "Deep Pulse",
-
-                pulse_desc: "Felt only with a heavy pressure, near the bone",
-
-                tongueCoating_en: "Varies",
-
-                tongueCoating_desc: "Coating can vary widely based on the condition",
-
-                tongueBody_en: "Varies",
-
-                tongueBody_desc: "Body can vary widely based on the condition"
-
-            },
-
-            { 
-
-                name_en: "Excess",
-
-                pulse_en: "Full Pulse",
-
-                pulse_desc: "Forceful and strong at all three depths",
-
-                tongueCoating_en: "various",
-
-                tongueCoating_desc: "",
-
-                tongueBody_en: "Varous",
-
-                tongueBody_desc: ""
-
-            },
-
-            { 
-
-                name_en: "Qi/Yang Deficiency",
-
-                pulse_en: "Deficient, Slow",
-
-                pulse_desc: "Forceless, and slow",
-
-                tongueCoating_en: "Thin, white, wet",
-
-                tongueCoating_desc: "Thin, white, and moist coating",
-
-                tongueBody_en: "Pale, swollen, teeth marks",
-
-                tongueBody_desc: "Pale and swollen body, often with teeth marks on the sides"
-
-            },
-
-            { 
-
-                name_en: "Blood Deficiency",
-
-                pulse_en: "Fine, Choppy, Weak",
-
-                pulse_desc: "Thin like a thread, or choppy, or forceless",
-
-                tongueCoating_en: "Less coating",
-
-                tongueCoating_desc: "Scanty or no coating",
-
-                tongueBody_en: "Pale, thin, small",
-
-                tongueBody_desc: "Pale, thin, and smaller than normal body"
-
-            },
-
-            { 
-
-                name_en: "Yin Deficiency",
-
-                pulse_en: "Fine and Rapid Pulse",
-
-                pulse_desc: "Thin like a thread and fast; can also be Floating and Empty.",
-
-                tongueCoating_en: "Less or no coating, peeled",
-
-                tongueCoating_desc: "Scanty, absent, or 'peeled' looking coating",
-
-                tongueBody_en: "Red, thin, cracked",
-
-                tongueBody_desc: "Red body, often with cracks and little moisture"
-
-            },
-
-            { 
-
-                name_en: "Liver Qi Stagnation",
-
-                pulse_en: "Wiry Pulse",
-
-                pulse_desc: "Taut like a guitar string",
-
-                tongueCoating_en: "Thin, white",
-
-                tongueCoating_desc: "Thin white coating",
-
-                tongueBody_en: "Normal or slightly dusky sides",
-
-                tongueBody_desc: "Body may be normal or have slightly purple/dark edges"
-
-            },
-
-            { 
-
-                name_en: "Blood Stasis",
-
-                pulse_en: "Choppy, Knotted, etc.",
-
-                pulse_desc: "Uneven, irregular, or stops at irregular intervals",
-
-                tongueCoating_en: "Purple",
-
-                tongueCoating_desc: "Can be purplish",
-
-                tongueBody_en: "Purple, dark spots",
-
-                tongueBody_desc: "Purple or dark body, may have spots (petechiae)"
-
-            },
-
-            { 
-
-                name_en: "Dampness/Phlegm",
-
-                pulse_en: "Soggy, Slippery",
-
-                pulse_desc: "Soft and floating, or smooth like pearls on a dish",
-
-                tongueCoating_en: "Greasy, thick",
-
-                tongueCoating_desc: "Thick, greasy, or sticky coating",
-
-                tongueBody_en: "Swollen, teeth marks",
-
-                tongueBody_desc: "Swollen/puffy body, often with teeth marks"
-
-            },
-
-            {
-
-                name_en: "Wind",
-
-                pulse_en: "Floating",
-
-                pulse_desc: "superficial level",
-
-                tongueCoating_en: "Thin, white",
-
-                tongueCoating_desc: "Thin white coating",
-
-                tongueBody_en: "Stiff, deviated, or trembling",
-
-                tongueBody_desc: "Body might be stiff, deviated to one side, or quivering"
-
-            }
-
-        ];
-
-
-
-        // DOM Elements
-
-        const patternListContainer = document.getElementById('pattern-list');
-
-        const displayContentContainer = document.getElementById('display-content');
-
-
-
-        // Function to update the display with pattern info
-
-        function updateDisplay(pattern) {
-
-            // Add a loading effect for smooth transition
-
-            displayContentContainer.parentElement.classList.add('loading');
-
-            
-
-            setTimeout(() => {
-
-                displayContentContainer.innerHTML = `
-
-                    <h2 class="text-2xl font-bold text-[#5a4a3e] mb-6">${pattern.name_en}</h2>
-
-
-
-                    <div class="space-y-6">
-
-                        <!-- Pulse Information -->
-
-                        <div>
-
-                            <div class="flex items-center mb-2">
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-[#8B725A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.332 16.142a7.5 7.5 0 1110.606-10.606" /> <path stroke-linecap="round" stroke-linejoin="round" d="M17.5 8.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
-
-                                </svg>
-
-                                <h3 class="text-xl font-semibold text-[#6f655d]">Pulse</h3>
-
-                            </div>
-
-                            <div class="pl-9">
-
-                                <p class="text-lg">${pattern.pulse_en}</p>
-
-                                <p class="text-sm text-gray-500">${pattern.pulse_desc}</p>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- Tongue Information -->
-
-                        <div>
-
-                            <div class="flex items-center mb-2">
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-[#8B725A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 2.252a16.423 16.423 0 00-1.33 3.976 1 1 0 00.99 1.225 1 1 0 00.99-.813 14.422 14.422 0 011.23-3.612c.3-.72.63-1.39.99-2 .36.61.69 1.28.99 2a14.422 14.422 0 011.23 3.612 1 1 0 00.99.813 1 1 0 00.99-1.225 16.424 16.424 0 00-1.33-3.976C12.446 1.474 12.226 1 12 1s-.226.474-.414 1.252zM12 15a6 6 0 100-12 6 6 0 000 12z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M12 15c-3.31 0-6 1.34-6 3v2h12v-2c0-1.66-2.69-3-6-3z" />
-
-                                </svg>
-
-                                <h3 class="text-xl font-semibold text-[#6f655d]">Tongue</h3>
-
-                            </div>
-
-                            <div class="pl-9 grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                                <div>
-
-                                    <h4 class="font-semibold text-gray-800 mb-1">Tongue Coating</h4>
-
-                                    <p class="text-lg">${pattern.tongueCoating_en}</p>
-
-                                    <p class="text-sm text-gray-500">${pattern.tongueCoating_desc}</p>
-
-                                </div>
-
-                                <div>
-
-                                    <h4 class="font-semibold text-gray-800 mb-1">Tongue Body</h4>
-
-                                    <p class="text-lg">${pattern.tongueBody_en}</p>
-
-                                    <p class="text-sm text-gray-500">${pattern.tongueBody_desc}</p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-                // Remove loading effect
-
-                displayContentContainer.parentElement.classList.remove('loading');
-
-            }, 250); // Delay matches CSS transition
-
-        }
-
-
-
-        // Function to create and append buttons
-
-        function initializePatternList() {
-
-            tcmPatterns.forEach((pattern, index) => {
-
-                const button = document.createElement('button');
-
-                button.className = 'pattern-btn w-full text-left p-4 rounded-lg shadow-md bg-white hover:bg-amber-100/50 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B725A]';
-
-                button.innerHTML = `<span class="font-semibold">${pattern.name_en}</span>`;
-
-                button.dataset.index = index;
-
-
-
-                // Set the first button as active by default
-
-                if (index === 0) {
-
-                    button.classList.add('active');
-
-                }
-
-
-
-                patternListContainer.appendChild(button);
-
-            });
-
-        }
-
-
-
-        // Event Listener for the pattern list container (using event delegation)
-
-        patternListContainer.addEventListener('click', (e) => {
-
-            const button = e.target.closest('.pattern-btn');
-
-            if (!button) return; // Exit if the click was not on a button
-
-
-
-            // Remove 'active' class from all buttons
-
-            document.querySelectorAll('.pattern-btn').forEach(btn => {
-
-                btn.classList.remove('active');
-
-            });
-
-
-
-            // Add 'active' class to the clicked button
-
-            button.classList.add('active');
-
-
-
-            // Get the pattern data and update the display
-
-            const patternIndex = button.dataset.index;
-
-            const selectedPattern = tcmPatterns[patternIndex];
-
-            updateDisplay(selectedPattern);
-
-        });
-
-
-
-        // Initial Load
-
-        window.addEventListener('DOMContentLoaded', () => {
-
-            initializePatternList();
-
-            // Display the first pattern's info on initial load
-
-            if (tcmPatterns.length > 0) {
-
-                updateDisplay(tcmPatterns[0]);
-
-            }
-
-        });
-
-    </script>
-
-
-
-    <!-- Footer for Individual Pages -->
-
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-
-</footer>
-
-
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl sm:text-4xl font-bold text-[#5a4a3e] mb-2">Basic Tongue and Pulse Diagnosis</h1>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+
+            <!-- Left Column: Pattern Selection -->
+            <aside class="md:col-span-1">
+                <div id="pattern-list" class="space-y-3">
+                    <!-- Pattern buttons will be dynamically inserted here -->
+                </div>
+            </aside>
+
+            <!-- Right Column: Information Display -->
+            <section id="info-display" class="md:col-span-2 bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/80">
+                <div id="display-content" class="content-card">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <script>
+        // Traditional Chinese Medicine (TCM) Pattern Data (Corrected as per user request)
+        const tcmPatterns = [
+            { 
+                name_en: "Normal",
+                pulse_en: "Moderate Pulse",
+                pulse_desc: "Moderate, soft but strong, rhythmic",
+                tongueCoating_en: "Thin, white",
+                tongueCoating_desc: "Thin, white coating",
+                tongueBody_en: "Pink, proper size",
+                tongueBody_desc: "Pink body, adequate size and moisture"
+            },
+            { 
+                name_en: "Heat",
+                pulse_en: "Rapid Pulse",
+                pulse_desc: "Faster than normal",
+                tongueCoating_en: "Yellow",
+                tongueCoating_desc: "Yellow coating",
+                tongueBody_en: "Red",
+                tongueBody_desc: "Red body"
+            },
+            { 
+                name_en: "Cold",
+                pulse_en: "Slow Pulse(Yang def.), Tight Pulse(Full cold)",
+                pulse_desc: "Slower than normal, or tense like a stretched rope",
+                tongueCoating_en: "White",
+                tongueCoating_desc: "Thick white coating",
+                tongueBody_en: "Pale or bluish",
+                tongueBody_desc: "Pale or bluish body"
+            },
+            { 
+                name_en: "Exterior",
+                pulse_en: "Floating Pulse",
+                pulse_desc: "Felt with a light touch, on the surface",
+                tongueCoating_en: "Typically thin white",
+                tongueCoating_desc: "Usually a thin white coating",
+                tongueBody_en: "Normal",
+                tongueBody_desc: "Body color is often unchanged"
+            },
+            { 
+                name_en: "Interior",
+                pulse_en: "Deep Pulse",
+                pulse_desc: "Felt only with a heavy pressure, near the bone",
+                tongueCoating_en: "Varies",
+                tongueCoating_desc: "Coating can vary widely based on the condition",
+                tongueBody_en: "Varies",
+                tongueBody_desc: "Body can vary widely based on the condition"
+            },
+            { 
+                name_en: "Excess",
+                pulse_en: "Full Pulse",
+                pulse_desc: "Forceful and strong at all three depths",
+                tongueCoating_en: "various",
+                tongueCoating_desc: "",
+                tongueBody_en: "Varous",
+                tongueBody_desc: ""
+            },
+            { 
+                name_en: "Qi/Yang Deficiency",
+                pulse_en: "Deficient, Slow",
+                pulse_desc: "Forceless, and slow",
+                tongueCoating_en: "Thin, white, wet",
+                tongueCoating_desc: "Thin, white, and moist coating",
+                tongueBody_en: "Pale, swollen, teeth marks",
+                tongueBody_desc: "Pale and swollen body, often with teeth marks on the sides"
+            },
+            { 
+                name_en: "Blood Deficiency",
+                pulse_en: "Fine, Choppy, Weak",
+                pulse_desc: "Thin like a thread, or choppy, or forceless",
+                tongueCoating_en: "Less coating",
+                tongueCoating_desc: "Scanty or no coating",
+                tongueBody_en: "Pale, thin, small",
+                tongueBody_desc: "Pale, thin, and smaller than normal body"
+            },
+            { 
+                name_en: "Yin Deficiency",
+                pulse_en: "Fine and Rapid Pulse",
+                pulse_desc: "Thin like a thread and fast; can also be Floating and Empty.",
+                tongueCoating_en: "Less or no coating, peeled",
+                tongueCoating_desc: "Scanty, absent, or 'peeled' looking coating",
+                tongueBody_en: "Red, thin, cracked",
+                tongueBody_desc: "Red body, often with cracks and little moisture"
+            },
+            { 
+                name_en: "Liver Qi Stagnation",
+                pulse_en: "Wiry Pulse",
+                pulse_desc: "Taut like a guitar string",
+                tongueCoating_en: "Thin, white",
+                tongueCoating_desc: "Thin white coating",
+                tongueBody_en: "Normal or slightly dusky sides",
+                tongueBody_desc: "Body may be normal or have slightly purple/dark edges"
+            },
+            { 
+                name_en: "Blood Stasis",
+                pulse_en: "Choppy, Knotted, etc.",
+                pulse_desc: "Uneven, irregular, or stops at irregular intervals",
+                tongueCoating_en: "Purple",
+                tongueCoating_desc: "Can be purplish",
+                tongueBody_en: "Purple, dark spots",
+                tongueBody_desc: "Purple or dark body, may have spots (petechiae)"
+            },
+            { 
+                name_en: "Dampness/Phlegm",
+                pulse_en: "Soggy, Slippery",
+                pulse_desc: "Soft and floating, or smooth like pearls on a dish",
+                tongueCoating_en: "Greasy, thick",
+                tongueCoating_desc: "Thick, greasy, or sticky coating",
+                tongueBody_en: "Swollen, teeth marks",
+                tongueBody_desc: "Swollen/puffy body, often with teeth marks"
+            },
+            {
+                name_en: "Wind",
+                pulse_en: "Floating",
+                pulse_desc: "superficial level",
+                tongueCoating_en: "Thin, white",
+                tongueCoating_desc: "Thin white coating",
+                tongueBody_en: "Stiff, deviated, or trembling",
+                tongueBody_desc: "Body might be stiff, deviated to one side, or quivering"
+            }
+        ];
+
+        // DOM Elements
+        const patternListContainer = document.getElementById('pattern-list');
+        const displayContentContainer = document.getElementById('display-content');
+
+        // Function to update the display with pattern info
+        function updateDisplay(pattern) {
+            displayContentContainer.parentElement.classList.add('loading');
+            
+            setTimeout(() => {
+                displayContentContainer.innerHTML = `
+                    <h2 class="text-2xl font-bold text-[#5a4a3e] mb-6">${pattern.name_en}</h2>
+
+                    <div class="space-y-6">
+                        <!-- Pulse Information -->
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-[#8B725A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.332 16.142a7.5 7.5 0 1110.606-10.606" /> <path stroke-linecap="round" stroke-linejoin="round" d="M17.5 8.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                                </svg>
+                                <h3 class="text-xl font-semibold text-[#6f655d]">Pulse</h3>
+                            </div>
+                            <div class="pl-9">
+                                <p class="text-lg">${pattern.pulse_en}</p>
+                                <p class="text-sm text-gray-500">${pattern.pulse_desc}</p>
+                            </div>
+                        </div>
+
+                        <!-- Tongue Information -->
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-[#8B725A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 2.252a16.423 16.423 0 00-1.33 3.976 1 1 0 00.99 1.225 1 1 0 00.99-.813 14.422 14.422 0 011.23-3.612c.3-.72.63-1.39.99-2 .36.61.69 1.28.99 2a14.422 14.422 0 011.23 3.612 1 1 0 00.99.813 1 1 0 00.99-1.225 16.424 16.424 0 00-1.33-3.976C12.446 1.474 12.226 1 12 1s-.226.474-.414 1.252zM12 15a6 6 0 100-12 6 6 0 000 12z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M12 15c-3.31 0-6 1.34-6 3v2h12v-2c0-1.66-2.69-3-6-3z" />
+                                </svg>
+                                <h3 class="text-xl font-semibold text-[#6f655d]">Tongue</h3>
+                            </div>
+                            <div class="pl-9 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 mb-1">Tongue Coating</h4>
+                                    <p class="text-lg">${pattern.tongueCoating_en}</p>
+                                    <p class="text-sm text-gray-500">${pattern.tongueCoating_desc}</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 mb-1">Tongue Body</h4>
+                                    <p class="text-lg">${pattern.tongueBody_en}</p>
+                                    <p class="text-sm text-gray-500">${pattern.tongueBody_desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                displayContentContainer.parentElement.classList.remove('loading');
+            }, 250);
+        }
+
+        // Function to create and append buttons
+        function initializePatternList() {
+            tcmPatterns.forEach((pattern, index) => {
+                const button = document.createElement('button');
+                button.className = 'pattern-btn w-full text-left p-4 rounded-lg shadow-md bg-white hover:bg-amber-100/50 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B725A]';
+                button.innerHTML = `<span class="font-semibold">${pattern.name_en}</span>`;
+                button.dataset.index = index;
+
+                if (index === 0) {
+                    button.classList.add('active');
+                }
+
+                patternListContainer.appendChild(button);
+            });
+        }
+
+        // Event Listener for the pattern list container
+        patternListContainer.addEventListener('click', (e) => {
+            const button = e.target.closest('.pattern-btn');
+            if (!button) return;
+
+            document.querySelectorAll('.pattern-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            button.classList.add('active');
+
+            const patternIndex = button.dataset.index;
+            const selectedPattern = tcmPatterns[patternIndex];
+            updateDisplay(selectedPattern);
+        });
+
+        // Initial Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializePatternList();
+            if (tcmPatterns.length > 0) {
+                updateDisplay(tcmPatterns[0]);
+            }
+        });
+    </script>
 
 </body>
-
 </html>
