@@ -4,152 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive TCM</title>
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for an elegant feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles for the oriental and soft theme */
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #F7F3EF; /* Updated background color */
+            background-color: #F7F3EF;
             color: #333;
         }
         h1, h2, .font-serif {
             font-family: 'Cormorant Garamond', serif;
         }
-        /* Header transition */
-        #main-header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
         #main-header.shrunk {
             padding-top: 1rem;
             padding-bottom: 1rem;
-            justify-content: space-between;
-            padding-left: 2rem;
-            padding-right: 2rem;
-        }
-        #main-header.shrunk #title-container {
-            text-align: left;
         }
         #main-header.shrunk h1 {
-            font-size: 1.5rem; /* 24px */
+            font-size: 1.5rem;
         }
         #main-header.shrunk p {
             display: none;
         }
-        
-        /* Navigation link style */
         .nav-link {
             display: block;
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
             transition: background-color 0.3s, color 0.3s;
             color: #5a5a5a;
-            font-size: 0.95rem;
         }
         .nav-link:hover {
             background-color: #EAE8E1;
             color: #000;
         }
-
-        /* Iframe styling for seamless integration */
         #content-wrapper {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 1rem;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
         #content-wrapper.visible {
             opacity: 1;
         }
-        #content-frame {
-            width: 100%;
-            border: none; /* Removed border */
-            background-color: transparent; /* Made background transparent */
-            min-height: 600px; /* 최소 높이 설정 */
-            height: auto;
-        }
-        
-        /* Language Toggle Button Style */
-        #lang-toggle {
-            display: none; /* Hidden by default */
-            padding: 0.25rem 0.75rem;
-            background-color: #e5e7eb;
-            color: #374151;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: background-color 0.3s;
-            min-width: 45px; /* Ensure button width is consistent */
-            text-align: center;
-        }
-        #lang-toggle:hover {
-            background-color: #d1d5db;
-        }
-        #main-header.shrunk #lang-toggle {
-            display: block;
-        }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Header Section -->
-    <header id="main-header" class="transition-all duration-500 ease-in-out py-16 md:py-20">
-        <div id="title-container" class="text-center">
-            <h1 id="main-title" class="text-5xl md:text-7xl font-serif cursor-pointer text-gray-700 hover:text-black transition-colors" onclick="resetView()">
-                Interactive TCM
-            </h1>
-            <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
-        </div>
-        <a href="#" id="lang-toggle" onclick="toggleLanguage(event)">Kor</a>
+    <!-- Main Header -->
+    <header id="main-header" class="text-center transition-all duration-500 ease-in-out py-16 md:py-20">
+        <h1 id="main-title" class="text-5xl md:text-7xl font-serif cursor-pointer text-gray-700 hover:text-black transition-colors" onclick="resetView()">
+            Interactive TCM
+        </h1>
+        <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
     </header>
 
-    <!-- Navigation Menu (Portal Style) -->
-    <nav id="main-nav" class="max-w-5xl mx-auto px-4 pb-16 transition-opacity duration-500">
+    <!-- Main Navigation Menu -->
+    <nav id="main-nav" class="max-w-5xl mx-auto px-4 pb-16">
         <div class="grid md:grid-cols-3 gap-10">
-            <!-- Theory Column -->
-            <div class="p-6 rounded-lg">
+            <!-- Theory -->
+            <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Theory</h2>
                 <ul class="space-y-2">
-                    <li><a href="five_organs.html" class="nav-link" onclick="loadPage('five_organs.html')">Five Organs</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" onclick="loadPage('pattern_basic.html')">Pattern Diagnosis Basic</a></li>
-                    <li><a href="pulse_tongue.html" class="nav-link" onclick="loadPage('pulse_tongue.html')">Basic Tongue/Pulse Pattern</a></li>
-                    <li><a href="yinyang.html" class="nav-link" onclick="loadPage('yinyang.html')">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse.html" class="nav-link" onclick="loadPage('pulse.html')">Pulse Quiz</a></li>
+                    <li><a href="five_organs.html" class="nav-link" onclick="loadPage(event)">Five Organs</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" onclick="loadPage(event)">Pattern Diagnosis Basic</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link" onclick="loadPage(event)">Basic Tongue/Pulse Pattern</a></li>
+                    <li><a href="yinyang.html" class="nav-link" onclick="loadPage(event)">Yin and Yang Quiz</a></li>
+                    <li><a href="pulse.html" class="nav-link" onclick="loadPage(event)">Pulse Quiz</a></li>
                 </ul>
             </div>
-            <!-- Formula Column -->
-            <div class="p-6 rounded-lg">
+            <!-- Formula -->
+            <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Formula</h2>
                 <ul class="space-y-2">
-                    <li><a href="what_formula.html" class="nav-link" onclick="loadPage('what_formula.html')">What is Formula</a></li>
+                    <li><a href="what_formula.html" class="nav-link" onclick="loadPage(event)">What is Formula</a></li>
                 </ul>
             </div>
-            <!-- History Column -->
-            <div class="p-6 rounded-lg">
+            <!-- History -->
+            <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">History</h2>
                 <ul class="space-y-2">
-                    <li><a href="history.html" class="nav-link" onclick="loadPage('history.html')">Brief History of TCM</a></li>
-                    <li><a href="four_masters.html" class="nav-link" onclick="loadPage('four_masters.html')">Four Grand Masters</a></li>
+                    <li><a href="history.html" class="nav-link" onclick="loadPage(event)">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" onclick="loadPage(event)">Four Grand Masters</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Area with Iframe -->
-    <main id="content-wrapper">
-        <iframe id="content-frame" name="content-frame" class="hidden" frameborder="0"></iframe>
-    </main>
+    <!-- Content Area -->
+    <main id="content-wrapper" class="hidden"></main>
 
-    <!-- Footer Section -->
-    <footer class="text-center py-4 mt-8 text-sm text-gray-500">
+    <!-- Main Footer -->
+    <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
@@ -157,126 +104,55 @@
         const header = document.getElementById('main-header');
         const nav = document.getElementById('main-nav');
         const contentWrapper = document.getElementById('content-wrapper');
-        const iframe = document.getElementById('content-frame');
-        const langToggle = document.getElementById('lang-toggle');
-        
-        let currentEnglishUrl = '';
-        let currentLang = 'en';
+        const footer = document.getElementById('main-footer');
 
-        // 향상된 iframe 높이 조정 함수
-        function adjustIframeHeight() {
+        // Function to fetch and display content, including executing scripts
+        async function fetchAndDisplay(url) {
             try {
-                // iframe의 콘텐츠가 로드될 때까지 잠시 대기
-                setTimeout(() => {
-                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                    const body = iframeDocument.body;
-                    const html = iframeDocument.documentElement;
-                    
-                    // 실제 콘텐츠 높이 계산 (여러 방법으로 시도)
-                    const height = Math.max(
-                        body.scrollHeight,
-                        body.offsetHeight,
-                        html.clientHeight,
-                        html.scrollHeight,
-                        html.offsetHeight
-                    );
-                    
-                    // 최소 높이와 비교하여 더 큰 값 사용
-                    const finalHeight = Math.max(height + 50, 600); // 50px 여유공간 추가
-                    iframe.style.height = finalHeight + 'px';
-                    
-                    console.log('Iframe height adjusted to:', finalHeight + 'px');
-                }, 100);
-            } catch (e) {
-                console.error("Could not adjust iframe height:", e);
-                // 크로스 도메인 이슈 등으로 접근이 안될 경우 기본 높이 설정
-                iframe.style.height = '800px';
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const htmlText = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                
+                contentWrapper.innerHTML = doc.body.innerHTML;
+                
+                // Execute scripts from the loaded content
+                const scripts = contentWrapper.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.textContent = oldScript.textContent;
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            } catch (error) {
+                console.error("Error fetching page:", error);
+                contentWrapper.innerHTML = `<p class="text-center text-red-500">Error: Could not load content from ${url}.</p>`;
             }
         }
 
-        // iframe 로드 이벤트 핸들러
-        iframe.onload = function() {
-            adjustIframeHeight();
-            
-            // 콘텐츠가 동적으로 변경될 수 있으므로 추가 확인
-            setTimeout(adjustIframeHeight, 500);
-            setTimeout(adjustIframeHeight, 1000);
-        }
-
-        const existingKoreanPages = [
-            'five_organs_k.html',
-            'pattern_basic_k.html',
-            'pulse_k.html',
-            'history_kor.html',
-            'what_formula_k.html',
-            'pulse_tongue_k.html'
-        ];
-
-        function loadPage(url) {
+        async function loadPage(event) {
             event.preventDefault();
-            currentEnglishUrl = url;
+            const url = event.target.getAttribute('href');
             
-            // 먼저 기본 높이로 설정
-            iframe.style.height = '600px';
-            iframe.src = url;
-            currentLang = 'en';
-            langToggle.textContent = 'Kor';
+            await fetchAndDisplay(url);
             
-            header.classList.add('shrunk');
-            nav.style.display = 'none';
-            iframe.classList.remove('hidden');
+            header.classList.add('hidden');
+            nav.classList.add('hidden');
+            footer.classList.add('hidden');
+            contentWrapper.classList.remove('hidden');
             contentWrapper.classList.add('visible');
         }
 
         function resetView() {
-            header.classList.remove('shrunk');
-            nav.style.display = 'block';
-            iframe.classList.add('hidden');
+            header.classList.remove('hidden');
+            nav.classList.remove('hidden');
+            footer.classList.remove('hidden');
+            contentWrapper.classList.add('hidden');
             contentWrapper.classList.remove('visible');
-            iframe.src = 'about:blank';
-            iframe.style.height = 'auto';
-            currentEnglishUrl = '';
-            currentLang = 'en';
-            langToggle.textContent = 'Kor';
+            contentWrapper.innerHTML = '';
         }
-
-        function toggleLanguage(event) {
-            event.preventDefault();
-            if (!currentEnglishUrl) return;
-
-            if (currentLang === 'en') {
-                // Switch to Korean
-                let koreanPage;
-                if (currentEnglishUrl.endsWith('history.html')) {
-                    koreanPage = 'history_kor.html';
-                } else {
-                    koreanPage = currentEnglishUrl.replace('.html', '_k.html');
-                }
-
-                if (existingKoreanPages.includes(koreanPage)) {
-                    iframe.style.height = '600px'; // 기본 높이로 재설정
-                    iframe.src = koreanPage;
-                    currentLang = 'ko';
-                    langToggle.textContent = 'Eng';
-                } else {
-                    alert('한글 페이지가 아직 준비되지 않았습니다.');
-                }
-            } else {
-                // Switch back to English
-                iframe.style.height = '600px'; // 기본 높이로 재설정
-                iframe.src = currentEnglishUrl;
-                currentLang = 'en';
-                langToggle.textContent = 'Kor';
-            }
-        }
-
-        // 윈도우 리사이즈 시에도 iframe 높이 재조정
-        window.addEventListener('resize', function() {
-            if (!iframe.classList.contains('hidden')) {
-                setTimeout(adjustIframeHeight, 100);
-            }
-        });
     </script>
-
 </body>
 </html>
