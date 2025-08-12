@@ -73,8 +73,8 @@
             width: 100%;
             border: none; /* Removed border */
             background-color: transparent; /* Made background transparent */
-            /* Height is now set dynamically by JavaScript */
-            transition: height 0.2s ease-in-out;
+            min-height: 600px; /* 최소 높이 설정 */
+            height: auto;
         }
         
         /* Language Toggle Button Style */
@@ -163,17 +163,45 @@
         let currentEnglishUrl = '';
         let currentLang = 'en';
 
-        // Listen for messages from the iframe to resize it
-        window.addEventListener('message', function(event) {
-            // A basic security check. In a real app, you might want to check event.origin
-            if (event.data && event.data.type === 'iframeResize') {
-                const newHeight = event.data.height;
-                if (newHeight) {
-                    iframe.style.height = newHeight + 'px';
-                }
+        // 향상된 iframe 높이 조정 함수
+        function adjustIframeHeight() {
+            try {
+                // iframe의 콘텐츠가 로드될 때까지 잠시 대기
+                setTimeout(() => {
+                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                    const body = iframeDocument.body;
+                    const html = iframeDocument.documentElement;
+                    
+                    // 실제 콘텐츠 높이 계산 (여러 방법으로 시도)
+                    const height = Math.max(
+                        body.scrollHeight,
+                        body.offsetHeight,
+                        html.clientHeight,
+                        html.scrollHeight,
+                        html.offsetHeight
+                    );
+                    
+                    // 최소 높이와 비교하여 더 큰 값 사용
+                    const finalHeight = Math.max(height + 50, 600); // 50px 여유공간 추가
+                    iframe.style.height = finalHeight + 'px';
+                    
+                    console.log('Iframe height adjusted to:', finalHeight + 'px');
+                }, 100);
+            } catch (e) {
+                console.error("Could not adjust iframe height:", e);
+                // 크로스 도메인 이슈 등으로 접근이 안될 경우 기본 높이 설정
+                iframe.style.height = '800px';
             }
-        }, false);
+        }
 
+        // iframe 로드 이벤트 핸들러
+        iframe.onload = function() {
+            adjustIframeHeight();
+            
+            // 콘텐츠가 동적으로 변경될 수 있으므로 추가 확인
+            setTimeout(adjustIframeHeight, 500);
+            setTimeout(adjustIframeHeight, 1000);
+        }
 
         const existingKoreanPages = [
             'five_organs_k.html',
@@ -181,13 +209,16 @@
             'pulse_k.html',
             'history_kor.html',
             'what_formula_k.html',
-            'pulse_tongue_k.html' // Added support for this page
+            'pulse_tongue_k.html'
         ];
 
         function loadPage(url) {
             event.preventDefault();
             currentEnglishUrl = url;
-            iframe.src = url; 
+            
+            // 먼저 기본 높이로 설정
+            iframe.style.height = '600px';
+            iframe.src = url;
             currentLang = 'en';
             langToggle.textContent = 'Kor';
             
@@ -203,7 +234,7 @@
             iframe.classList.add('hidden');
             contentWrapper.classList.remove('visible');
             iframe.src = 'about:blank';
-            iframe.style.height = '0px'; // Reset height
+            iframe.style.height = 'auto';
             currentEnglishUrl = '';
             currentLang = 'en';
             langToggle.textContent = 'Kor';
@@ -223,6 +254,7 @@
                 }
 
                 if (existingKoreanPages.includes(koreanPage)) {
+                    iframe.style.height = '600px'; // 기본 높이로 재설정
                     iframe.src = koreanPage;
                     currentLang = 'ko';
                     langToggle.textContent = 'Eng';
@@ -231,42 +263,20 @@
                 }
             } else {
                 // Switch back to English
+                iframe.style.height = '600px'; // 기본 높이로 재설정
                 iframe.src = currentEnglishUrl;
                 currentLang = 'en';
                 langToggle.textContent = 'Kor';
             }
         }
-    </script>
 
-    <!-- 
-    ******************************************************************
-    ** 중요: 아래 스크립트를 각 콘텐츠 페이지(five_organs.html 등)의  **
-    ** </body> 태그 바로 앞에 추가해야 합니다.                   **
-    ******************************************************************
-
-    <script>
-        function sendHeight() {
-            // 부모 창이 있는지 확인
-            if (window.parent) {
-                const height = document.body.scrollHeight;
-                // 부모 창으로 콘텐츠의 높이 정보를 메시지로 전송
-                window.parent.postMessage({ type: 'iframeResize', height: height }, '*');
+        // 윈도우 리사이즈 시에도 iframe 높이 재조정
+        window.addEventListener('resize', function() {
+            if (!iframe.classList.contains('hidden')) {
+                setTimeout(adjustIframeHeight, 100);
             }
-        }
-
-        // 페이지가 처음 로드될 때 높이 전송
-        window.onload = sendHeight;
-
-        // ResizeObserver를 사용하여 콘텐츠 크기가 변경될 때마다 높이를 전송.
-        // setInterval보다 훨씬 효율적입니다.
-        const resizeObserver = new ResizeObserver(entries => {
-            sendHeight();
         });
-
-        // body 요소의 크기 변경을 감지
-        resizeObserver.observe(document.body);
     </script>
-    -->
 
 </body>
 </html>
