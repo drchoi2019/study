@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음양 퀴즈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS 스타일을 하나로 통합하고 배경색을 적용합니다. */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF; /* 요청하신 배경색 */
+            color: #333;
+        }
+    </style>
+</head>
+<!-- body 클래스를 수정하여 flex-col 레이아웃을 만들고, 헤더/메인/푸터를 분리합니다. -->
+<body class="flex flex-col min-h-screen">
+
+    <!-- 1. Header: 페이지 상단에 위치 -->
+    <header class="w-full max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-semibold hover:text-gray-500">
+            &larr; 홈
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            한 / 영
+        </a>
+    </header>
+    
+    <!-- 언어 전환 스크립트 -->
+    <script>
+        async function toggleLanguage(event) {
+            event.preventDefault();
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            let targetFile;
+
+            if (currentFile.includes('_k.html')) {
+                targetFile = currentFile.replace('_k.html', '.html');
+                window.location.href = targetFile;
+                return;
+            } else {
+                if (currentFile.includes('history.html')) {
+                    targetFile = 'history_kor.html';
+                } else {
+                    targetFile = currentFile.replace('.html', '_k.html');
+                }
+            }
+            
+            try {
+                const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
+                if (response.ok) {
+                    window.location.href = targetFile;
+                } else {
+                    alert('준비중입니다.');
+                }
+            } catch (error) {
+                console.error('페이지 확인 중 오류 발생:', error);
+                alert('준비중입니다.');
+            }
+        }
+    </script>
+
+    <!-- 2. Main Content: 중앙 정렬되고, 남은 공간을 채움 -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="w-full max-w-lg">
+            <!-- 대비를 개선한 카드 스타일 -->
+            <div class="bg-gray-100 rounded-2xl shadow-lg p-6 sm:p-8 text-center text-gray-800 border border-gray-200">
+                <h1 class="text-3xl sm:text-4xl font-bold mb-2 text-black">음양<span class="text-gray-500">(陰陽)</span> 퀴즈</h1>
+                <p id="score" class="text-lg mb-6 text-gray-600">점수: 0 / 10</p>
+
+                <div id="quiz-area" class="min-h-[120px] flex items-center justify-center">
+                    <div id="question-container" class="p-4 bg-white rounded-lg w-full">
+                        <p id="question" class="text-xl sm:text-2xl font-semibold"></p>
+                    </div>
+                </div>
+
+                <div id="result" class="mt-4 min-h-[3rem] flex items-center justify-center text-2xl font-bold"></div>
+
+                <div id="button-area" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button id="yin-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-slate-400 disabled:opacity-50 disabled:transform-none">음 (陰)</button>
+                    <button id="yang-btn" class="bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-400 disabled:opacity-50 disabled:transform-none">양 (陽)</button>
+                </div>
+                
+                <button id="next-btn" class="mt-6 w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-400 hidden">다음 문제</button>
+                
+                <div id="final-result" class="hidden text-center mt-6">
+                    <h2 class="text-3xl font-bold mb-4">퀴즈 완료!</h2>
+                    <p id="final-score" class="text-2xl mb-6"></p>
+                    <button id="restart-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300">퀴즈 다시 시작</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 퀴즈 로직 스크립트 -->
+    <script>
+        // --- 데이터 정의 ---
+        // 음양 개념 목록을 한국어로 번역. 배열은 [음, 양] 순서입니다.
+        const pairs = [
+            // 기본 개념
+            ['어둠', '빛'], ['달', '해'], ['밤', '낮'], ['땅', '하늘'], ['물', '불'], ['여성', '남성'],
+            
+            // 특성 및 상태
+            ['휴식', '활동'], ['정지', '움직임'], ['추위', '더위'], ['습함', '건조함'], ['느림', '빠름'], ['수축', '팽창'],
+            ['실체', '비실체'], ['물질', '에너지'], ['저장', '생성'], ['구조', '기능'], ['만성', '급성'], ['허(虛)', '실(實)'],
+
+            // 방향 및 위치
+            ['하강', '상승'], ['아래', '위'], ['안', '밖'], ['서쪽', '동쪽'], ['북쪽', '남쪽'], ['오른쪽', '왼쪽'],
+            ['계곡', '산'], ['낮음', '높음'], ['내부', '외부'], ['몸의 앞', '몸의 뒤'],
+
+            // 순환 및 시간
+            ['가을', '봄'], ['겨울', '여름'], ['공간', '시간'], ['죽음', '탄생'],
+            
+            // 추상 및 인간
+            ['받음', '줌'], ['내향', '외향'], ['감정', '이성'], ['짝수', '홀수'], ['혈(血)', '기(氣)']
+        ];
+
+        // --- 상태 변수 ---
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // --- DOM 요소 ---
+        const questionEl = document.getElementById('question');
+        const scoreEl = document.getElementById('score');
+        const resultEl = document.getElementById('result');
+        const yinBtn = document.getElementById('yin-btn');
+        const yangBtn = document.getElementById('yang-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const quizArea = document.getElementById('quiz-area');
+        const buttonArea = document.getElementById('button-area');
+        const finalResultArea = document.getElementById('final-result');
+        const finalScoreEl = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // --- 함수 ---
+        function generateQuestions() {
+            questions = [];
+            const usedPairs = new Set();
+            while (questions.length < 10) {
+                const pairIndex = Math.floor(Math.random() * pairs.length);
+                if (usedPairs.has(pairIndex)) continue;
+                usedPairs.add(pairIndex);
+
+                const [yinItem, yangItem] = pairs[pairIndex];
+                const flip = Math.random() < 0.5;
+                const itemA = flip ? yangItem : yinItem;
+                const itemB = flip ? yinItem : yangItem;
+                
+                const questionText = `${itemA}에 비해 ${itemB}은(는) 음(陰)인가요, 양(陽)인가요?`;
+                const answer = (itemA === yangItem && itemB === yinItem) ? 'Yin' : 'Yang';
+                questions.push({ text: questionText, answer: answer });
+            }
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                questionEl.textContent = questions[currentQuestionIndex].text;
+                resetUI();
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function resetUI() {
+            resultEl.textContent = '';
+            resultEl.className = 'mt-4 min-h-[3rem] flex items-center justify-center text-2xl font-bold';
+            yinBtn.disabled = false;
+            yangBtn.disabled = false;
+            nextBtn.classList.add('hidden');
+        }
+
+        function checkAnswer(userAnswer) {
+            const correctAnswer = questions[currentQuestionIndex].answer;
+            yinBtn.disabled = true;
+            yangBtn.disabled = true;
+            nextBtn.classList.remove('hidden');
+
+            if (userAnswer === correctAnswer) {
+                resultEl.textContent = '정답!';
+                resultEl.classList.add('text-green-500');
+                score++;
+            } else {
+                // 'Yin' 또는 'Yang'을 '음' 또는 '양'으로 표시
+                const translatedAnswer = correctAnswer === 'Yin' ? '음(陰)' : '양(陽)';
+                resultEl.textContent = `오답! (정답: ${translatedAnswer})`;
+                resultEl.classList.add('text-red-500');
+            }
+            scoreEl.textContent = `점수: ${score} / 10`;
+        }
+
+        function showFinalScore() {
+            quizArea.classList.add('hidden');
+            buttonArea.classList.add('hidden');
+            resultEl.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            finalResultArea.classList.remove('hidden');
+            finalScoreEl.textContent = `최종 점수: ${score} / 10`;
+        }
+        
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreEl.textContent = `점수: 0 / 10`;
+            
+            quizArea.classList.remove('hidden');
+            buttonArea.classList.remove('hidden');
+            resultEl.classList.remove('hidden');
+            finalResultArea.classList.add('hidden');
+            
+            generateQuestions();
+            displayQuestion();
+        }
+
+        // --- 이벤트 리스너 ---
+        yinBtn.addEventListener('click', () => checkAnswer('Yin'));
+        yangBtn.addEventListener('click', () => checkAnswer('Yang'));
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+        restartBtn.addEventListener('click', restartQuiz);
+
+        // --- 초기화 ---
+        restartQuiz();
+    </script>
+
+    <!-- 3. Footer: 페이지 하단에 위치하며 크레딧 정보를 포함 -->
+    <footer class="text-center py-4 text-sm text-gray-500">
+        <p>by Hyungsuk Choi</p>
+        <p>&copy; 2024 Hyungsuk Choi. 모든 권리 보유.</p>
+    </footer>
+    
+</body>
+</html>
