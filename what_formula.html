@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formula Studies (Bang Ji Xue)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS and Google Fonts for consistent styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-color: #F7F3EF;
@@ -26,6 +32,9 @@
             color: var(--text-color);
             margin: 0;
             padding: 0;
+        }
+        h1, h2, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
         }
         .header {
             text-align: center;
@@ -54,6 +63,11 @@
             background-color: var(--connector-color);
             border-radius: 2px;
         }
+        .author-name {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: var(--subtle-text-color);
+        }
         .text-section {
             max-width: 800px;
             margin: 0 auto 30px;
@@ -77,11 +91,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 4rem 20px; /* Vertical padding adjusted, min-height removed */
             width: 100%;
             box-sizing: border-box;
             overflow-x: auto;
-            min-height: 50vh;
         }
         .flow-box {
             border: 1px solid var(--border-color);
@@ -112,7 +125,6 @@
             font-size: 1rem;
             line-height: 1.6;
         }
-        /* New CSS rule to adjust paragraph spacing */
         .expandable-content p {
             margin: 6px 0;
         }
@@ -207,61 +219,44 @@
             box-shadow: 0 4px 14px 0 rgba(74, 124, 155, 0.3);
         }
     </style>
-
-    <!-- Tailwind CSS and Google Fonts for consistent styling -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-        background-color: #F7F3EF;
-        color: #333;
-    }
-    h1, h2, .font-serif {
-        font-family: 'Cormorant Garamond', serif;
-    }
-</style>
-    
 </head>
 <body>
 
     <!-- Top Menu for Individual Pages -->
-<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-        &larr; Home
-    </a>
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-        Kor / Eng
-    </a>
-</header>
-<script>
-    function toggleLanguage(event) {
-        event.preventDefault();
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-        let targetFile;
+    <header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+            &larr; Home
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            Kor / Eng
+        </a>
+    </header>
+    <script>
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            let targetFile;
 
-        if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로
-            targetFile = currentFile.replace('_k.html', '.html');
-        } else if (currentFile.includes('history.html')) {
-            // history.html 예외 처리
-             targetFile = 'history_kor.html';
+            if (currentFile.includes('_k.html')) {
+                // From Korean to English page
+                targetFile = currentFile.replace('_k.html', '.html');
+            } else if (currentFile.includes('history.html')) {
+                // Exception for history.html
+                 targetFile = 'history_kor.html';
+            }
+            else {
+                // From English to Korean page
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
+            
+            // Navigate to the target page
+            window.location.href = targetFile;
         }
-        else {
-            // 현재 영어 페이지 -> 한글 페이지로
-            targetFile = currentFile.replace('.html', '_k.html');
-        }
-        
-        // 페이지 이동
-        window.location.href = targetFile;
-    }
-</script>
+    </script>
 
     <div class="header"><h1>What is Learning Formulae</h1> <p class="author-name">By Hyungsuk Choi</p></div>
-      
+    
     <div class="text-section">
         <p>Learning Formula is not about learning which formula treats which condition. Formula study is a distinct theoretical discipline concerned with the internal logic and compositional principles of classical prescriptions. It is not clinical training, and it should not be approached as such.  However, many students enter formula class expecting clinical answers. They ask questions like, “Which formula should I use for a migraine?” And unfortunately, many instructors and textbooks encourage this confusion by presenting formulas in a Western format—listing names, ingredients, dosage, indications, and side effects —just like over-the-counter drugs. And yet, this is exactly the kind of content that is mistakenly taught these days.
 The true 'Learning Formulas' means learning why certain herbs are included or excluded in a given formula, how herbs interact synergistically or antagonistically, what proportional balances create therapeutic harmony, and the structural logic that makes a formula effective as a whole.
@@ -291,7 +286,7 @@ When we study these compositional principles, our questions must evolve. Instead
             </div>
         </div>
     </div>
-      
+    
     <p style="text-align: center; margin-top: -10px; margin-bottom: 30px; font-size: 1.1rem; color: var(--subtle-text-color);">Try to click each pattern</p>
 
     <div class="text-section">
@@ -324,9 +319,9 @@ When we study these compositional principles, our questions must evolve. Instead
                 'Spleen Qi Sinking': `<p><span class="herb">+ Huang Qi, Sheng Ma, Chai Hu, Dang Gui, Chen Pi</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
                 'Spleen Failing to Control Blood': `<p><span class="herb">+ Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
                 'Qi and Blood Deficiency': `<p><span class="herb">+ Si Wu Tang</span></p>
-                                     <p><span class="formula">Ba Zhen Tang</span></p>
-                                     <p>→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
-                                     <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span> <span class="removed-herb">(-Fu Ling)</span></p>`
+                                         <p><span class="formula">Ba Zhen Tang</span></p>
+                                         <p>→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
+                                         <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span> <span class="removed-herb">(-Fu Ling)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
@@ -448,10 +443,8 @@ When we study these compositional principles, our questions must evolve. Instead
     </script>
 
     <!-- Footer for Individual Pages -->
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-</footer>
-
-   
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>
