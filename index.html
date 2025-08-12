@@ -17,16 +17,6 @@
         h1, h2, .font-serif {
             font-family: 'Cormorant Garamond', serif;
         }
-        #main-header.shrunk {
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
-        #main-header.shrunk h1 {
-            font-size: 1.5rem;
-        }
-        #main-header.shrunk p {
-            display: none;
-        }
         .nav-link {
             display: block;
             padding: 0.5rem 0.75rem;
@@ -38,23 +28,13 @@
             background-color: #EAE8E1;
             color: #000;
         }
-        #content-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #content-wrapper.visible {
-            opacity: 1;
-        }
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- Main Header -->
-    <header id="main-header" class="text-center transition-all duration-500 ease-in-out py-16 md:py-20">
-        <h1 id="main-title" class="text-5xl md:text-7xl font-serif cursor-pointer text-gray-700 hover:text-black transition-colors" onclick="resetView()">
+    <header id="main-header" class="text-center py-16 md:py-20">
+        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700">
             Interactive TCM
         </h1>
         <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
@@ -67,92 +47,35 @@
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Theory</h2>
                 <ul class="space-y-2">
-                    <li><a href="five_organs.html" class="nav-link" onclick="loadPage(event)">Five Organs</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" onclick="loadPage(event)">Pattern Diagnosis Basic</a></li>
-                    <li><a href="pulse_tongue.html" class="nav-link" onclick="loadPage(event)">Basic Tongue/Pulse Pattern</a></li>
-                    <li><a href="yinyang.html" class="nav-link" onclick="loadPage(event)">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse.html" class="nav-link" onclick="loadPage(event)">Pulse Quiz</a></li>
+                    <li><a href="five_organs.html" class="nav-link">Five Organs</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link">Pattern Diagnosis Basic</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link">Basic Tongue/Pulse Pattern</a></li>
+                    <li><a href="yinyang.html" class="nav-link">Yin and Yang Quiz</a></li>
+                    <li><a href="pulse.html" class="nav-link">Pulse Quiz</a></li>
                 </ul>
             </div>
             <!-- Formula -->
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Formula</h2>
                 <ul class="space-y-2">
-                    <li><a href="what_formula.html" class="nav-link" onclick="loadPage(event)">What is Formula</a></li>
+                    <li><a href="what_formula.html" class="nav-link">What is Formula</a></li>
                 </ul>
             </div>
             <!-- History -->
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">History</h2>
                 <ul class="space-y-2">
-                    <li><a href="history.html" class="nav-link" onclick="loadPage(event)">Brief History of TCM</a></li>
-                    <li><a href="four_masters.html" class="nav-link" onclick="loadPage(event)">Four Grand Masters</a></li>
+                    <li><a href="history.html" class="nav-link">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link">Four Grand Masters</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <!-- Content Area -->
-    <main id="content-wrapper" class="hidden"></main>
 
     <!-- Main Footer -->
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
-    <script>
-        const header = document.getElementById('main-header');
-        const nav = document.getElementById('main-nav');
-        const contentWrapper = document.getElementById('content-wrapper');
-        const footer = document.getElementById('main-footer');
-
-        // Function to fetch and display content, including executing scripts
-        async function fetchAndDisplay(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
-                const htmlText = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
-                
-                contentWrapper.innerHTML = doc.body.innerHTML;
-                
-                // Execute scripts from the loaded content
-                const scripts = contentWrapper.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                    newScript.textContent = oldScript.textContent;
-                    oldScript.parentNode.replaceChild(newScript, oldScript);
-                });
-            } catch (error) {
-                console.error("Error fetching page:", error);
-                contentWrapper.innerHTML = `<p class="text-center text-red-500">Error: Could not load content from ${url}.</p>`;
-            }
-        }
-
-        async function loadPage(event) {
-            event.preventDefault();
-            const url = event.target.getAttribute('href');
-            
-            await fetchAndDisplay(url);
-            
-            header.classList.add('hidden');
-            nav.classList.add('hidden');
-            footer.classList.add('hidden');
-            contentWrapper.classList.remove('hidden');
-            contentWrapper.classList.add('visible');
-        }
-
-        function resetView() {
-            header.classList.remove('hidden');
-            nav.classList.remove('hidden');
-            footer.classList.remove('hidden');
-            contentWrapper.classList.add('hidden');
-            contentWrapper.classList.remove('visible');
-            contentWrapper.innerHTML = '';
-        }
-    </script>
 </body>
 </html>
