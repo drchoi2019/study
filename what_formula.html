@@ -396,27 +396,6 @@ When we study these compositional principles, our questions must evolve. Instead
             });
         });
     </script>
-    <script>
-        function sendHeight() {
-            // 부모 창이 있는지 확인
-            if (window.parent) {
-                const height = document.body.scrollHeight;
-                // 부모 창으로 콘텐츠의 높이 정보를 메시지로 전송
-                window.parent.postMessage({ type: 'iframeResize', height: height }, '*');
-            }
-        }
-
-        // 페이지가 처음 로드될 때 높이 전송
-        window.onload = sendHeight;
-
-        // ResizeObserver를 사용하여 콘텐츠 크기가 변경될 때마다 높이를 전송.
-        // setInterval보다 훨씬 효율적입니다.
-        const resizeObserver = new ResizeObserver(entries => {
-            sendHeight();
-        });
-
-        // body 요소의 크기 변경을 감지
-        resizeObserver.observe(document.body);
-    </script>
+   
 </body>
 </html>
