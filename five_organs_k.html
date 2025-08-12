@@ -1,95 +1,176 @@
-
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>중의학 오장육부 기능 인포그래픽</title>
+    
+    <!-- Tailwind CSS, Chart.js, and Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; }
-        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
-        .hwa-element { background-color: #FF6B6B; color: white; } /* 화(火) */
-        .mok-element { background-color: #06D6A0; color: white; } /* 목(木) */
-        .to-element { background-color: #FFD166; color: #073B4C; } /* 토(土) */
-        .geum-element { background-color: #FFFFFC4; color: black; } /* 금(金) */
-        .su-element { background-color: #073B4C; color: white; } /* 수(水) */
-        .exam-point { background-color: #FFD166; color: #073B4C; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px; }
-        .flow-arrow { display: flex; align-items: center; justify-content: center; margin: 10px 0; font-size: 2rem; color: #118AB2; }
-        .comparison-table th, .comparison-table td { border: 1px solid #073B4C; padding: 8px; text-align: left; }
-        .sticky-nav { position: sticky; top: 0; background-color: rgba(7, 59, 76, 0.9); z-index: 50; padding: 0.5rem 0; backdrop-filter: blur(5px); }
-        .sticky-nav a { color: white; margin: 0 0.75rem; font-size: 0.875rem; transition: color 0.3s; }
-        .sticky-nav a:hover { color: #FFD166; }
-        h2, h3 { color: #073B4C; }
-        h2 { border-bottom: 2px solid #118AB2; padding-bottom: 0.5rem; margin-top: 2rem; }
-        h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #118AB2; }
-        .card { background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); padding: 1.5rem; margin-bottom: 1.5rem; }
-        .jangbu-title { font-size: 1.5rem; font-weight: bold; }
-        .bu-title { font-size: 1.25rem; font-weight: bold; margin-top:1rem; color: #073B4C; }
-        .palette-comment { display: none; }
-        .exam-group-title { font-size: 1.25rem; font-weight:bold; margin-top:1.5rem; margin-bottom:0.5rem;}
-        .emphasized-paragraph { background-color: #f0f9ff; /* Tailwind sky-50 */ padding: 0.75rem; border-radius: 0.375rem; font-weight: 500; border-left: 4px solid #0ea5e9 /* Tailwind sky-500 */; }
-    </style>
-    <!-- Tailwind CSS and Google Fonts for consistent styling -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-        background-color: #F7F3EF;
-        color: #333;
-    }
-    h1, h2, .font-serif {
-        font-family: 'Cormorant Garamond', serif;
-    }
-</style>
-</head>
-<body class="bg-gray-100 text-gray-800">
+        /* --- 차분하고 학술적인 팔레트 --- */
+        /* 메인 배경: #F7F3EF */
+        /* 텍스트/기본: #5D534A */
+        /* 강조색: #8E6F58 */
 
-    <!-- Top Menu for Individual Pages -->
-<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-        &larr; Home
-    </a>
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-        Kor / Eng
-    </a>
-</header>
-<script>
-    function toggleLanguage(event) {
-        event.preventDefault();
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-        let targetFile;
-
-        if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로
-            targetFile = currentFile.replace('_k.html', '.html');
-        } else if (currentFile.includes('history.html')) {
-            // history.html 예외 처리
-             targetFile = 'history_kor.html';
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #5D534A;
         }
-        else {
-            // 현재 영어 페이지 -> 한글 페이지로
-            targetFile = currentFile.replace('.html', '_k.html');
+
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* 새로운 오행 팔레트 */
+        .hwa-element { background-color: #D87C7C; color: white; } /* 화(火) */
+        .mok-element { background-color: #8BAA76; color: white; } /* 목(木) */
+        .to-element { background-color: #C7A67C; color: white; } /* 토(土) */
+        .geum-element { background-color: #A7B0B4; color: #333; } /* 금(金) */
+        .su-element { background-color: #6C7A89; color: white; } /* 수(水) */
+        
+        .exam-point {
+            background-color: #EAE3DC; /* 연한 베이지 */
+            color: #5D534A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 4px;
         }
         
-        // 페이지 이동
-        window.location.href = targetFile;
-    }
-</script>
-    
-    <div class="palette-comment">선택된 팔레트: Energetic & Playful (#FF6B6B, #FFD166, #06D6A0, #118AB2, #073B4C)</div>
-    
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            font-size: 2rem;
+            color: #8E6F58;
+        }
 
-    <header class="bg-[#073B4C] text-white p-6 text-center">
-        <h1 class="text-4xl font-bold">중의학: 오장육부 기능</h1>
-        <p class="mt-2 text-lg">중의학에서 오장(간, 심, 비, 폐, 신)과 그에 배속된 육부의 주요 기능 및 상호관계를 시각적으로 요약합니다.</p>
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #D1C7BD; /* 연한 테두리 */
+            padding: 8px;
+            text-align: left;
+        }
+        .table-header-bg { 
+            background-color: #8E6F58; 
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(247, 243, 239, 0.85); /* 배경색 + 블러 */
+            z-index: 50;
+            padding: 0.75rem 0;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #EAE3DC;
+        }
+
+        .sticky-nav a {
+            color: #5D534A; /* 기본 텍스트 색상 */
+            margin: 0 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .sticky-nav a:hover {
+            color: #000; /* 강조를 위한 어두운 호버 색상 */
+        }
+
+        h2 {
+            border-bottom: 2px solid #8E6F58; /* 강조색 */
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #8E6F58; /* 강조색 */
+        }
+        
+        .card {
+            background-color: #FCFBF9; /* 미색 카드 */
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px -2px rgba(93, 83, 74, 0.08); /* 부드러운 그림자 */
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #EAE3DC;
+        }
+
+        .jangbu-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .bu-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: #5D534A;
+        }
+
+        .exam-group-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .emphasized-paragraph {
+            background-color: #EFEAE6; /* 강조 배경색 */
+            padding: 1rem;
+            border-radius: 0.375rem;
+            border-left: 4px solid #8E6F58; /* 강조색 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 개별 페이지 상단 메뉴 -->
+    <header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+            &larr; Home
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            Kor / Eng
+        </a>
     </header>
+
+    <script>
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            let targetFile;
+
+            if (currentFile.includes('_k.html')) {
+                targetFile = currentFile.replace('_k.html', '.html');
+            } else if (currentFile.includes('history.html')) {
+                targetFile = 'history_kor.html';
+            } else {
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
+            window.location.href = targetFile;
+        }
+    </script>
+    
+    <!-- 메인 타이틀 섹션 -->
+    <div class="text-center pt-8 pb-12 px-4">
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-[#5D534A]">
+            오장육부 기능
+        </h1>
+        <p class="mt-4 text-lg max-w-2xl mx-auto text-[#8E6F58]">
+            중의학에서 오장육부의 주요 기능 및 상호관계를 시각적으로 요약합니다.
+        </p>
+    </div>
 
     <nav class="sticky-nav text-center">
         <a href="#section-comparison-summary">오장 기능 비교</a>
@@ -112,7 +193,7 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full comparison-table">
                         <thead>
-                            <tr class="bg-[#073B4C] text-white">
+                            <tr class="table-header-bg text-white">
                                 <th>오장 (臟腑)</th>
                                 <th>주요 기능 1</th>
                                 <th>주요 기능 2</th>
@@ -242,9 +323,9 @@
                     <p><strong class="to-element p-1 rounded">맛:</strong> 감 (甘 - 단맛)</p>
                     <p><strong class="to-element p-1 rounded">기후:</strong> 습 (濕 - 습기) (비는 습을 싫어함: 喜燥惡濕)</p>
                     
-                    <div class="grid md:grid-cols-2 gap-4 mt-4 border p-4 rounded-md">
+                    <div class="grid md:grid-cols-2 gap-4 mt-4 border border-[#D1C7BD] p-4 rounded-md">
                         <div>
-                            <h4 class="font-bold text-lg text-[#073B4C]">비 (脾) - 난로 🔥</h4>
+                            <h4 class="font-bold text-lg text-[#5D534A]">비 (脾) - 난로 🔥</h4>
                             <p>에너지를 만드는 비는 방을 따뜻하게 하고 밝게 하는 난로와 같다.</p>
                             <ul class="list-disc list-inside text-sm">
                                 <li>운화 (運化): 음식물을 순수 에너지로 변화시켜 사지로 배달.</li>
@@ -254,7 +335,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 class="font-bold text-lg text-[#073B4C]">위 (胃) - 블렌더 믹서기 🍇</h4>
+                            <h4 class="font-bold text-lg text-[#5D534A]">위 (胃) - 블렌더 믹서기 🍇</h4>
                             <p>음식을 갈아서 죽같이 만들어주는 블렌더와 같다.</p>
                             <ul class="list-disc list-inside text-sm">
                                 <li>부숙 (腐熟): 음식을 썩혀(decomposition) 흡수 형태로 만듦.</li>
@@ -375,7 +456,6 @@
                         <p>조직: 뼈 (骨)</p>
                     </div>
                 </div>
-                <p class="mt-6 text-sm text-gray-600 text-center">이 정보는 제공된 PDF 및 일반적인 중의학 이론을 바탕으로 구성되었습니다.</p>
             </div>
         </section>
         
@@ -384,13 +464,13 @@
                 <h2 class="text-2xl font-bold mb-6 text-center">기(氣)와 혈(血)의 생성 및 주요 장부</h2>
                 <p class="text-center mb-4">기는 인체의 생명 활동을 유지하는 근본 물질이며, 혈은 전신에 영양을 공급합니다. 여러 장부가 이들의 생성과 운행에 관여합니다.</p>
                 <div class="text-center">
-                    <div class="inline-block bg-yellow-100 p-3 rounded-lg shadow">비 (脾): 곡기(穀氣) 생성 (소화)</div>
-                    <div class="flow-arrow text-yellow-500">+</div>
-                    <div class="inline-block bg-blue-100 p-3 rounded-lg shadow">폐 (肺): 천기(天氣) 흡수 (호흡)</div>
-                    <div class="flow-arrow text-green-500">⬇</div>
-                    <div class="inline-block bg-green-100 p-3 rounded-lg shadow">가슴에서 만나 종기(宗氣) 형성</div>
-                    <div class="flow-arrow text-red-500">⬇</div>
-                    <div class="inline-block bg-red-100 p-3 rounded-lg shadow">심 (心): 종기를 혈(血)과 함께 전신 순환</div>
+                    <div class="inline-block bg-[#FDF8F0] border border-[#C7A67C] p-3 rounded-lg shadow-sm">비 (脾): 곡기(穀氣) 생성 (소화)</div>
+                    <div class="flow-arrow">+</div>
+                    <div class="inline-block bg-[#F7F8F8] border border-[#A7B0B4] p-3 rounded-lg shadow-sm">폐 (肺): 천기(天氣) 흡수 (호흡)</div>
+                    <div class="flow-arrow">⬇</div>
+                    <div class="inline-block bg-[#FBF6F6] border border-[#D87C7C] p-3 rounded-lg shadow-sm">가슴에서 만나 종기(宗氣) 형성</div>
+                    <div class="flow-arrow">⬇</div>
+                    <div class="inline-block bg-[#FBF6F6] border border-[#D87C7C] p-3 rounded-lg shadow-sm">심 (心): 종기를 혈(血)과 함께 전신 순환</div>
                 </div>
                 <div class="mt-6">
                     <h3 class="text-xl font-semibold">혈(血) 관련 주요 장부 기능:</h3>
@@ -407,82 +487,81 @@
             <div class="card">
                 <h2 class="text-2xl font-bold mb-6 text-center">시험 핵심 포인트 종합 목록</h2>
                 <p class="text-center mb-6">이 섹션은 학습을 위한 모든 시험 핵심 포인트의 종합 목록을 제공합니다.</p>
-                                    
-                    <div class="exam-group-title mok-element p-2 rounded-md">간 (肝) & 담 (膽)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">간은 혈을 저장 (Liver stores Blood.)</span></li>
-                        <li><span class="exam-point">간은 기의 순조로운 흐름을 조절 (Liver ensures the smooth flow of Qi.)</span></li>
-                        <li><span class="exam-point">간은 근육과 힘줄을 조절 (Liver controls the muscles and sinews.)</span></li>
-                        <li><span class="exam-point">간은 손톱에 나타남 (Liver manifests in the nails.)</span></li>
-                        <li><span class="exam-point">간은 눈으로 개규 (Liver opens into the eye.)</span></li>
-                        <li><span class="exam-point">간은 분노의 영향을 받음 (Liver is affected by anger.)</span></li>
-                        <li><span class="exam-point">간의 맛은 신맛 (Liver's taste is sour.)</span></li>
-                        <li><span class="exam-point">간의 기후는 바람 (Liver's climate is wind.)</span></li>
-                        <li><span class="exam-point">담은 담즙을 저장하고 배출 (The Gall Bladder stores and excretes bile.)</span></li>
-                        <li><span class="exam-point">담은 결단력을 주관 (The Gall Bladder controls decisiveness.)</span></li>
-                        <li><span class="exam-point">담은 근육과 힘줄을 주관 (The Gall Bladder controls the muscles and sinews.)</span></li>
-                    </ul>
+                
+                <div class="exam-group-title mok-element p-2 rounded-md">간 (肝) & 담 (膽)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">간은 혈을 저장 (Liver stores Blood.)</span></li>
+                    <li><span class="exam-point">간은 기의 순조로운 흐름을 조절 (Liver ensures the smooth flow of Qi.)</span></li>
+                    <li><span class="exam-point">간은 근육과 힘줄을 조절 (Liver controls the muscles and sinews.)</span></li>
+                    <li><span class="exam-point">간은 손톱에 나타남 (Liver manifests in the nails.)</span></li>
+                    <li><span class="exam-point">간은 눈으로 개규 (Liver opens into the eye.)</span></li>
+                    <li><span class="exam-point">간은 분노의 영향을 받음 (Liver is affected by anger.)</span></li>
+                    <li><span class="exam-point">간의 맛은 신맛 (Liver's taste is sour.)</span></li>
+                    <li><span class="exam-point">간의 기후는 바람 (Liver's climate is wind.)</span></li>
+                    <li><span class="exam-point">담은 담즙을 저장하고 배출 (The Gall Bladder stores and excretes bile.)</span></li>
+                    <li><span class="exam-point">담은 결단력을 주관 (The Gall Bladder controls decisiveness.)</span></li>
+                    <li><span class="exam-point">담은 근육과 힘줄을 주관 (The Gall Bladder controls the muscles and sinews.)</span></li>
+                </ul>
 
-                    <div class="exam-group-title hwa-element p-2 rounded-md">심 (心) & 소장 (小腸)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">심은 혈을 주관 (It governs Blood. (Heart))</span></li>
-                        <li><span class="exam-point">심은 혈관을 조절 (It controls the blood vessels. (Heart))</span></li>
-                        <li><span class="exam-point">심은 안색에 나타남 (It manifests in the complexion. (Heart))</span></li>
-                        <li><span class="exam-point">심은 정신을 저장 (It houses the Mind. (Heart))</span></li>
-                        <li><span class="exam-point">심은 기쁨과 관련 (It is related to joy. (Heart))</span></li>
-                        <li><span class="exam-point">심은 혀로 개규 (It opens into the tongue. (Heart))</span></li>
-                        <li><span class="exam-point">심은 땀을 조절 (It controls sweat. (Heart))</span></li>
-                        <li><span class="exam-point">심의 맛은 쓴맛 (The taste of the Heart is bitter.)</span></li>
-                        <li><span class="exam-point">화(火)는 심과 관련 (Fire is related to the Heart.)</span></li>
-                        <li><span class="exam-point">소장은 수납과 변화를 주관 (The Small Intestine controls receiving and transforming.)</span></li>
-                        <li><span class="exam-point">소장은 진액을 분리 (The Small Intestine separates fluids.)</span></li>
-                    </ul>
+                <div class="exam-group-title hwa-element p-2 rounded-md">심 (心) & 소장 (小腸)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">심은 혈을 주관 (It governs Blood. (Heart))</span></li>
+                    <li><span class="exam-point">심은 혈관을 조절 (It controls the blood vessels. (Heart))</span></li>
+                    <li><span class="exam-point">심은 안색에 나타남 (It manifests in the complexion. (Heart))</span></li>
+                    <li><span class="exam-point">심은 정신을 저장 (It houses the Mind. (Heart))</span></li>
+                    <li><span class="exam-point">심은 기쁨과 관련 (It is related to joy. (Heart))</span></li>
+                    <li><span class="exam-point">심은 혀로 개규 (It opens into the tongue. (Heart))</span></li>
+                    <li><span class="exam-point">심은 땀을 조절 (It controls sweat. (Heart))</span></li>
+                    <li><span class="exam-point">심의 맛은 쓴맛 (The taste of the Heart is bitter.)</span></li>
+                    <li><span class="exam-point">화(火)는 심과 관련 (Fire is related to the Heart.)</span></li>
+                    <li><span class="exam-point">소장은 수납과 변화를 주관 (The Small Intestine controls receiving and transforming.)</span></li>
+                    <li><span class="exam-point">소장은 진액을 분리 (The Small Intestine separates fluids.)</span></li>
+                </ul>
 
-                    <div class="exam-group-title to-element p-2 rounded-md">비 (脾) & 위 (胃)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">비는 운화를 주관 (The Spleen governs transformation and transportation.)</span></li>
-                        <li><span class="exam-point">비는 기의 상승을 조절 (The Spleen controls the ascending of Qi.)</span></li>
-                        <li><span class="exam-point">비는 혈액을 통제 (The Spleen controls Blood.)</span></li>
-                        <li><span class="exam-point">비는 근육과 살(살) 및 사지를 조절 (The Spleen controls the muscles and flesh (flesh) and the four limbs.)</span></li>
-                        <li><span class="exam-point">비는 입, 입술, 침으로 개규 (The Spleen opens into the mouth, lips, and saliva.)</span></li>
-                        <li><span class="exam-point">비는 생각의 영향을 받음 (The Spleen is affected by pensiveness.)</span></li>
-                        <li><span class="exam-point">비의 맛은 단맛 (The Spleen's taste is sweet.)</span></li>
-                        <li><span class="exam-point">비는 습을 싫어함(The Spleen loathes Dampness.)</span></li>
-                        <li><span class="exam-point">위는 '수납'을 주관 (The Stomach controls 'receiving'.)</span></li>
-                        <li><span class="exam-point">위는 음식물의 '부숙'을 주관 (The Stomach controls the 'rotting and ripening' of food.)</span></li>
-                        <li><span class="exam-point">위는 조한것을 싫어함 (The Stomach hates dryness.)</span></li>
-                        <li><span class="exam-point">위는 탁한 것의 하강을 주관 (The Stomach controls the descending of turbid.)</span></li>
-                        <li><span class="exam-point">위는 진액의 근원 (The Stomach is the origin of fluids.)</span></li>
-                    </ul>
+                <div class="exam-group-title to-element p-2 rounded-md">비 (脾) & 위 (胃)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">비는 운화를 주관 (The Spleen governs transformation and transportation.)</span></li>
+                    <li><span class="exam-point">비는 기의 상승을 조절 (The Spleen controls the ascending of Qi.)</span></li>
+                    <li><span class="exam-point">비는 혈액을 통제 (The Spleen controls Blood.)</span></li>
+                    <li><span class="exam-point">비는 근육과 살(살) 및 사지를 조절 (The Spleen controls the muscles and flesh (flesh) and the four limbs.)</span></li>
+                    <li><span class="exam-point">비는 입, 입술, 침으로 개규 (The Spleen opens into the mouth, lips, and saliva.)</span></li>
+                    <li><span class="exam-point">비는 생각의 영향을 받음 (The Spleen is affected by pensiveness.)</span></li>
+                    <li><span class="exam-point">비의 맛은 단맛 (The Spleen's taste is sweet.)</span></li>
+                    <li><span class="exam-point">비는 습을 싫어함(The Spleen loathes Dampness.)</span></li>
+                    <li><span class="exam-point">위는 '수납'을 주관 (The Stomach controls 'receiving'.)</span></li>
+                    <li><span class="exam-point">위는 음식물의 '부숙'을 주관 (The Stomach controls the 'rotting and ripening' of food.)</span></li>
+                    <li><span class="exam-point">위는 조한것을 싫어함 (The Stomach hates dryness.)</span></li>
+                    <li><span class="exam-point">위는 탁한 것의 하강을 주관 (The Stomach controls the descending of turbid.)</span></li>
+                    <li><span class="exam-point">위는 진액의 근원 (The Stomach is the origin of fluids.)</span></li>
+                </ul>
 
-                    <div class="exam-group-title geum-element p-2 rounded-md">폐 (肺) & 대장 (大腸)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">폐는 기와 호흡을 주관 (The Lungs govern Qi and respiration.)</span></li>
-                        <li><span class="exam-point">폐는 경맥을 조절 (The Lungs control channels.)</span></li>
-                        <li><span class="exam-point">폐는 기의 선발과 숙강을 조절 (The Lungs control diffusing and descending of Qi.)</span></li>
-                        <li><span class="exam-point">폐는 모든 생리 활동을 조절 (The Lungs regulate all physiological activities.)</span></li>
-                        <li><span class="exam-point">폐는 수도(水路)를 조절 (The Lungs regulate Water passages.)</span></li>
-                        <li><span class="exam-point">폐는 피부를 조절 (The Lungs control the skin.)</span></li>
-                        <li><span class="exam-point">폐는 위기(피부와 근육 사이 공간)를 조절 (The Lungs control Protective qi (the space between skin and muscles).)</span></li>
-                        <li><span class="exam-point">폐는 코로 개규 (The Lungs open into the nose.)</span></li>
-                        <li><span class="exam-point">폐는 걱정, 슬픔의 영향을 받음 (The Lungs are affected by worry, grief and sadness.)</span></li>
-                        <li><span class="exam-point">대장은 통로와 전도를 주관 (The Large Intestine controls passage and conduction.)</span></li>
-                        <li><span class="exam-point">대장은 대변을 형성하고 체액을 재흡수 (The Large Intestine transforms stools and reabsorbs fluids.)</span></li>
-                    </ul>
+                <div class="exam-group-title geum-element p-2 rounded-md">폐 (肺) & 대장 (大腸)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">폐는 기와 호흡을 주관 (The Lungs govern Qi and respiration.)</span></li>
+                    <li><span class="exam-point">폐는 경맥을 조절 (The Lungs control channels.)</span></li>
+                    <li><span class="exam-point">폐는 기의 선발과 숙강을 조절 (The Lungs control diffusing and descending of Qi.)</span></li>
+                    <li><span class="exam-point">폐는 모든 생리 활동을 조절 (The Lungs regulate all physiological activities.)</span></li>
+                    <li><span class="exam-point">폐는 수도(水路)를 조절 (The Lungs regulate Water passages.)</span></li>
+                    <li><span class="exam-point">폐는 피부를 조절 (The Lungs control the skin.)</span></li>
+                    <li><span class="exam-point">폐는 위기(피부와 근육 사이 공간)를 조절 (The Lungs control Protective qi (the space between skin and muscles).)</span></li>
+                    <li><span class="exam-point">폐는 코로 개규 (The Lungs open into the nose.)</span></li>
+                    <li><span class="exam-point">폐는 걱정, 슬픔의 영향을 받음 (The Lungs are affected by worry, grief and sadness.)</span></li>
+                    <li><span class="exam-point">대장은 통로와 전도를 주관 (The Large Intestine controls passage and conduction.)</span></li>
+                    <li><span class="exam-point">대장은 대변을 형성하고 체액을 재흡수 (The Large Intestine transforms stools and reabsorbs fluids.)</span></li>
+                </ul>
 
-                    <div class="exam-group-title su-element p-2 rounded-md">신 (腎) & 방광 (膀胱)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">정(精)을 저장하고 출생, 성장, 생식, 발달을 주관 (Store Essence and govern birth, growth, reproduction and development. (Kidneys))</span></li>
-                        <li><span class="exam-point">골수를 생산하고 뇌를 채우며 뼈를 조절 (Produce Marrow, fill up the brain and control bones. (Kidneys))</span></li>
-                        <li><span class="exam-point">수를 주관 (Govern Water. (Kidneys))</span></li>
-                        <li><span class="exam-point">기의 수납을 조절 (Control the reception of Qi. (Kidneys))</span></li>
-                        <li><span class="exam-point">귀로 개규 (Open into the ears. (Kidneys))</span></li>
-                        <li><span class="exam-point">머리카락에 나타남 (Manifest in the hair. (Kidneys))</span></li>
-                        <li><span class="exam-point">타액(침)을 조절 (Control spittle. (Kidneys))</span></li>
-                        <li><span class="exam-point">이음(두 개의 하부 구멍)을 조절 (Control the two lower orifices. (Kidneys))</span></li>
-                        <li><span class="exam-point">방광은 기화를 통해 수분을 제거 (The Bladder removes water by Qi transformation.)</span></li>
-                    </ul>
-                </div>
+                <div class="exam-group-title su-element p-2 rounded-md">신 (腎) & 방광 (膀胱)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">정(精)을 저장하고 출생, 성장, 생식, 발달을 주관 (Store Essence and govern birth, growth, reproduction and development. (Kidneys))</span></li>
+                    <li><span class="exam-point">골수를 생산하고 뇌를 채우며 뼈를 조절 (Produce Marrow, fill up the brain and control bones. (Kidneys))</span></li>
+                    <li><span class="exam-point">수를 주관 (Govern Water. (Kidneys))</span></li>
+                    <li><span class="exam-point">기의 수납을 조절 (Control the reception of Qi. (Kidneys))</span></li>
+                    <li><span class="exam-point">귀로 개규 (Open into the ears. (Kidneys))</span></li>
+                    <li><span class="exam-point">머리카락에 나타남 (Manifest in the hair. (Kidneys))</span></li>
+                    <li><span class="exam-point">타액(침)을 조절 (Control spittle. (Kidneys))</span></li>
+                    <li><span class="exam-point">이음(두 개의 하부 구멍)을 조절 (Control the two lower orifices. (Kidneys))</span></li>
+                    <li><span class="exam-point">방광은 기화를 통해 수분을 제거 (The Bladder removes water by Qi transformation.)</span></li>
+                </ul>
             </div>
         </section>
     </main>
@@ -510,9 +589,9 @@
         }
         
     </script>
-    <!-- Footer for Individual Pages -->
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-</footer>
+    <!-- 개별 페이지 푸터 -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
     </body>
 </html>
