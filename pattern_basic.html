@@ -86,22 +86,23 @@
         }
     </style>
 
-<!-- Tailwind CSS and Google Fonts for consistent styling (Corrected) -->
+<!-- Tailwind CSS and Google Fonts for consistent styling (Final) -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
+<!-- 'Cormorant Garamond' 폰트를 완전히 제거했습니다. -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
 
 <style>
     body {
+        /* 모든 텍스트의 기본 폰트를 'Noto Sans KR'로 설정합니다. */
         font-family: 'Noto Sans KR', sans-serif;
         background-color: #F7F3EF;
         color: #333;
     }
-    /* 제목(h1)은 body의 폰트를 따르도록 h1 선택자를 제거했습니다. */
-    h2, .font-serif {
-        font-family: 'Cormorant Garamond', serif;
-    }
+    /* - 문제가 되었던 명조체(Cormorant Garamond) 관련 스타일 규칙을 완전히 삭제했습니다.
+      - 이제 h1, h2, Home 링크 등 모든 요소가 위의 body 폰트를 따라갑니다.
+    */
 </style>
     
 </head>
