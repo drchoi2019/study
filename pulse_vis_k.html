@@ -72,51 +72,7 @@
 </header>
 </head>
 <body class="bg-gray-50">
-    <!-- Top Menu for Individual Pages (Updated) -->
-<header class="w-full max-w-3xl mx-auto px-4 flex justify-between items-center mb-4">
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-        &larr; Interactive TCM
-    </a>
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-        Kor / Eng
-    </a>
-</header>
-<script>
-    async function toggleLanguage(event) {
-        event.preventDefault();
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-        let targetFile;
 
-        // 대상 파일 결정
-        if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로 이동
-            targetFile = currentFile.replace('_k.html', '.html');
-            window.location.href = targetFile;
-            return;
-        } else {
-            // 현재 영어 페이지 -> 한글 페이지로 이동
-            if (currentFile.includes('history.html')) {
-                targetFile = 'history_kor.html';
-            } else {
-                targetFile = currentFile.replace('.html', '_k.html');
-            }
-        }
-        
-        // 이동할 한글 페이지가 실제로 존재하는지 확인
-        try {
-            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
-            if (response.ok) {
-                window.location.href = targetFile;
-            } else {
-                alert('준비중입니다.');
-            }
-        } catch (error) {
-            console.error('페이지 확인 중 오류 발생:', error);
-            alert('준비중입니다.');
-        }
-    }
-</script>
 
     <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">복합맥상의 시각화</h1>
 
