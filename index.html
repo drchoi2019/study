@@ -58,7 +58,7 @@
             color: #000;
         }
 
-        /* Iframe styling for seamless integration */
+        /* Content area styling */
         #content-wrapper {
             max-width: 1000px;
             margin: 0 auto;
@@ -68,12 +68,6 @@
         }
         #content-wrapper.visible {
             opacity: 1;
-        }
-        #content-frame {
-            width: 100%;
-            border: none; /* Removed border */
-            background-color: transparent; /* Made background transparent */
-            /* Height is now set dynamically by JavaScript */
         }
         
         /* Language Toggle Button Style */
@@ -142,35 +136,23 @@
         </div>
     </nav>
 
-    <!-- Main Content Area with Iframe -->
-    <main id="content-wrapper">
-        <iframe id="content-frame" name="content-frame" class="hidden" frameborder="0"></iframe>
-    </main>
+    <!-- Main Content Area - Content will be loaded here dynamically -->
+    <main id="content-wrapper" class="hidden"></main>
 
-
+    <!-- Footer Section -->
+    <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
 
     <script>
         const header = document.getElementById('main-header');
         const nav = document.getElementById('main-nav');
         const contentWrapper = document.getElementById('content-wrapper');
-        const iframe = document.getElementById('content-frame');
+        const footer = document.getElementById('main-footer');
         const langToggle = document.getElementById('lang-toggle');
         
         let currentEnglishUrl = '';
         let currentLang = 'en';
-
-
-                );
-                
-                // Set iframe height with small padding
-                iframe.style.height = (newHeight + 20) + 'px';
-                
-            } catch (e) {
-                console.error("Could not adjust iframe height:", e);
-                // Fallback to a default height in case of cross-origin errors
-                iframe.style.height = '70vh';
-            }
-        }
 
         const existingKoreanPages = [
             'five_organs_k.html',
@@ -181,33 +163,56 @@
             'pulse_tongue_k.html'
         ];
 
-        function loadPage(url) {
+        // Function to fetch and display content
+        async function fetchAndDisplay(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const htmlText = await response.text();
+                // Use DOMParser to avoid issues with full HTML files
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                contentWrapper.innerHTML = doc.body.innerHTML;
+            } catch (error) {
+                console.error("Error fetching page:", error);
+                contentWrapper.innerHTML = `<p class="text-center text-red-500">Error: Could not load content from ${url}.</p>`;
+            }
+        }
+
+        async function loadPage(url) {
             event.preventDefault();
             currentEnglishUrl = url;
-            iframe.src = url; // The iframe's onload event will fire after this
             currentLang = 'en';
             langToggle.textContent = 'Kor';
             
+            await fetchAndDisplay(url);
+            
             header.classList.add('shrunk');
-            nav.style.display = 'none';
-            iframe.classList.remove('hidden');
+            nav.classList.add('hidden');
+            footer.classList.add('hidden');
+            contentWrapper.classList.remove('hidden');
             contentWrapper.classList.add('visible');
         }
 
         function resetView() {
             header.classList.remove('shrunk');
-            nav.style.display = 'block';
-            iframe.classList.add('hidden');
+            nav.classList.remove('hidden');
+            footer.classList.remove('hidden');
+            contentWrapper.classList.add('hidden');
             contentWrapper.classList.remove('visible');
-            iframe.src = 'about:blank';
+            contentWrapper.innerHTML = ''; // Clear content
             currentEnglishUrl = '';
             currentLang = 'en';
             langToggle.textContent = 'Kor';
         }
 
-        function toggleLanguage(event) {
+        async function toggleLanguage(event) {
             event.preventDefault();
             if (!currentEnglishUrl) return;
+
+            let targetUrl;
 
             if (currentLang === 'en') {
                 // Switch to Korean
@@ -219,18 +224,21 @@
                 }
 
                 if (existingKoreanPages.includes(koreanPage)) {
-                    iframe.src = koreanPage; // The iframe's onload event will fire after this
+                    targetUrl = koreanPage;
                     currentLang = 'ko';
                     langToggle.textContent = 'Eng';
                 } else {
                     alert('한글 페이지가 아직 준비되지 않았습니다.');
+                    return;
                 }
             } else {
                 // Switch back to English
-                iframe.src = currentEnglishUrl; // The iframe's onload event will fire after this
+                targetUrl = currentEnglishUrl;
                 currentLang = 'en';
                 langToggle.textContent = 'Kor';
             }
+            
+            await fetchAndDisplay(targetUrl);
         }
     </script>
 
