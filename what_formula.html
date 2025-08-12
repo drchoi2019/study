@@ -207,8 +207,58 @@
             box-shadow: 0 4px 14px 0 rgba(74, 124, 155, 0.3);
         }
     </style>
+
+    <!-- Tailwind CSS and Google Fonts for consistent styling -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Noto Sans KR', sans-serif;
+        background-color: #F7F3EF;
+        color: #333;
+    }
+    h1, h2, .font-serif {
+        font-family: 'Cormorant Garamond', serif;
+    }
+</style>
+    
 </head>
 <body>
+
+    <!-- Top Menu for Individual Pages -->
+<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
+    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+        &larr; Home
+    </a>
+    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+        Kor / Eng
+    </a>
+</header>
+<script>
+    function toggleLanguage(event) {
+        event.preventDefault();
+        const currentPath = window.location.pathname;
+        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+        let targetFile;
+
+        if (currentFile.includes('_k.html')) {
+            // 현재 한글 페이지 -> 영어 페이지로
+            targetFile = currentFile.replace('_k.html', '.html');
+        } else if (currentFile.includes('history.html')) {
+            // history.html 예외 처리
+             targetFile = 'history_kor.html';
+        }
+        else {
+            // 현재 영어 페이지 -> 한글 페이지로
+            targetFile = currentFile.replace('.html', '_k.html');
+        }
+        
+        // 페이지 이동
+        window.location.href = targetFile;
+    }
+</script>
 
     <div class="header"><h1>What is Learning Formulae</h1> <p class="author-name">By Hyungsuk Choi</p></div>
       
@@ -396,6 +446,12 @@ When we study these compositional principles, our questions must evolve. Instead
             });
         });
     </script>
+
+    <!-- Footer for Individual Pages -->
+<footer class="text-center py-8 mt-12 text-sm text-gray-500">
+    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+</footer>
+
    
 </body>
 </html>
