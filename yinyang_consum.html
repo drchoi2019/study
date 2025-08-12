@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음양상호소모 (Yin & Yang Mutual Consumption)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif KR', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #F7F3EF; /* 요청하신 배경색 */
+            color: #5C3D2E; /* 부드러운 갈색 텍스트 */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: #FAF6F0;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #DCD1C1;
+            width: 100%;
+            max-width: 700px;
+        }
+        
+        .title {
+            text-align: center;
+            color: #4A2E20;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #C0A062;
+            padding-bottom: 15px;
+        }
+        
+        .chart-container {
+            display: flex;
+            justify-content: center; /* 간격을 줄이기 위해 center로 변경 */
+            gap: 60px; /* 막대 사이의 간격 설정 */
+            align-items: flex-end;
+            height: 350px;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        /* 기준선 추가 */
+        .chart-container::after {
+            content: '';
+            position: absolute;
+            /* 라벨 높이(font-size + margin-top)만큼 위로 이동 */
+            bottom: 38px; 
+            left: 10%; /* 양쪽 여백 */
+            right: 10%;
+            height: 2px;
+            background-color: #DCD1C1;
+        }
+        
+        .bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .bar {
+            width: 100px;
+            /* Yin (음) - 차갑고 어두운 색 */
+            background: linear-gradient(180deg, #4A5568, #2C3E50);
+            border-radius: 5px 5px 0 0;
+            cursor: grab;
+            transition: all 0.1s ease;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .bar:active {
+            cursor: grabbing;
+        }
+        
+        .bar.bar2 {
+            /* Yang (양) - 따뜻하고 밝은 색 */
+            background: linear-gradient(180deg, #D35400, #E67E22);
+        }
+
+        .bar-internal-text {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            font-size: 18px;
+            font-weight: 400;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            pointer-events: none;
+            line-height: 1.5;
+        }
+        
+        .bar-label {
+            margin-top: 15px;
+            color: #5C3D2E;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .value-display {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #5C3D2E;
+            color: #F7F3EF;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            pointer-events: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .diagnosis-display {
+            text-align: center;
+            color: #4A2E20;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-top: 30px;
+            padding: 25px;
+            background: #FDFBF7;
+            border: 1px solid #DCD1C1;
+            border-radius: 5px;
+            min-height: 110px;
+            transition: background-color 0.3s;
+        }
+        .diagnosis-display strong {
+            font-size: 20px;
+            font-weight: 600;
+            color: #B85C38; /* 강조 색상 */
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Yin & Yang Mutual Consumption</div>
+        
+        <div class="chart-container">
+            <div class="bar-wrapper">
+                <div class="bar bar1" id="bar1">
+                    <div class="value-display" id="value1">50</div>
+                    <div class="bar-internal-text">Cold<br>Damp</div>
+                </div>
+                <div class="bar-label">Yin (陰)</div>
+            </div>
+            
+            <div class="bar-wrapper">
+                <div class="bar bar2" id="bar2">
+                    <div class="value-display" id="value2">50</div>
+                    <div class="bar-internal-text">Heat<br>Dry</div>
+                </div>
+                <div class="bar-label">Yang (陽)</div>
+            </div>
+        </div>
+        
+        <div class="diagnosis-display" id="diagnosis">
+            <!-- JavaScript will update this area -->
+        </div>
+        
+    </div>
+
+    <script>
+        let value1 = 50; // Yin
+        let value2 = 50; // Yang
+        const maxHeight = 300;
+        const minValue = 0;
+        const maxValue = 100;
+        
+        let isDragging = false;
+        let currentBar = null;
+        let startY = 0;
+        let startValue = 0;
+        
+        const bar1 = document.getElementById('bar1');
+        const bar2 = document.getElementById('bar2');
+        const value1Display = document.getElementById('value1');
+        const value2Display = document.getElementById('value2');
+        const diagnosisDisplay = document.getElementById('diagnosis');
+        
+        function updateBars() {
+            const height1 = (value1 / maxValue) * maxHeight;
+            const height2 = (value2 / maxValue) * maxHeight;
+            
+            bar1.style.height = height1 + 'px';
+            bar2.style.height = height2 + 'px';
+            
+            value1Display.textContent = Math.round(value1);
+            value2Display.textContent = Math.round(value2);
+            
+            const v1 = Math.round(value1);
+            const v2 = Math.round(value2);
+            
+            if (v2 > v1) { // Yang > Yin => Yin Deficiency
+                diagnosisDisplay.innerHTML = `<strong>Yin Deficiency (음허 / 陰虛)</strong>Empty heat, tidal fever, night sweat, 5 palm heat, fine and rapid pulse, dry tongue`;
+            } else if (v1 > v2) { // Yin > Yang => Yang Deficiency
+                diagnosisDisplay.innerHTML = `<strong>Yang Deficiency (양허 / 陽虛)</strong>Cold and dampness, chills, edema, tongue teeth mark, white greasy coating, soggy slow pulse`;
+            } else {
+                diagnosisDisplay.innerHTML = `<strong>Balanced State (음양조화 / 陰陽調和)</strong>Yin and Yang are in harmony.`;
+            }
+        }
+        
+        function startDrag(e, barElement, isBar1) {
+            isDragging = true;
+            currentBar = isBar1 ? 1 : 2;
+            startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+            startValue = isBar1 ? value1 : value2;
+            
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchmove', onDrag, { passive: false });
+            document.addEventListener('touchend', stopDrag);
+            
+            e.preventDefault();
+        }
+        
+        function onDrag(e) {
+            if (!isDragging) return;
+            
+            const currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+            const deltaY = startY - currentY;
+            const sensitivity = 0.5;
+            const valueChange = deltaY * sensitivity;
+            
+            let newValue = startValue + valueChange;
+            newValue = Math.max(minValue, Math.min(maxValue, newValue));
+            
+            if (currentBar === 1) {
+                value1 = newValue;
+                value2 = maxValue - value1;
+            } else {
+                value2 = newValue;
+                value1 = maxValue - value2;
+            }
+            
+            updateBars();
+        }
+        
+        function stopDrag() {
+            isDragging = false;
+            currentBar = null;
+            
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('touchend', stopDrag);
+        }
+        
+        bar1.addEventListener('mousedown', (e) => startDrag(e, bar1, true));
+        bar1.addEventListener('touchstart', (e) => startDrag(e, bar1, true));
+        
+        bar2.addEventListener('mousedown', (e) => startDrag(e, bar2, false));
+        bar2.addEventListener('touchstart', (e) => startDrag(e, bar2, false));
+        
+        updateBars();
+    </script>
+</body>
+</html>
