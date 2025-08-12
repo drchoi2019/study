@@ -4,26 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yin Yang Diagram</title>
+    <!-- Tailwind CSS CDN 추가 -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* 기본 페이지 스타일 */
         body {
             font-family: 'Malgun Gothic', sans-serif;
-            background: #F7F3EF;
+            /* 배경색을 참조 페이지와 유사한 밝은 회색으로 변경 */
+            background: #F7F3EF; 
             margin: 0;
             padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* justify-content: center를 제거하여 콘텐츠가 상단부터 표시되도록 함 */
         }
         
+        /* 메인 컨텐츠 컨테이너 */
         .container {
-            background: white;
+            background: #F7F3EF;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 800px;
         }
         
         h1 {
@@ -43,17 +47,19 @@
             text-align: center;
         }
         
+        /* SVG (음양 다이어그램) 스타일 */
         svg {
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
             transition: transform 0.3s ease;
             cursor: pointer;
-            animation: rotate 20s linear infinite;
+            animation: rotate-reverse 20s linear infinite;
         }
         
         svg:hover {
             transform: scale(1.05);
         }
         
+        /* 설명 섹션 스타일 */
         .description {
             background: #f8f9fa;
             border-radius: 15px;
@@ -71,98 +77,106 @@
             font-size: 1.1em;
         }
         
-        .rotating {
-            animation: rotate 20s linear infinite;
-        }
-        
-        .rotating-reverse {
-            animation: rotate-reverse 20s linear infinite;
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
+        /* 시계 반대 방향 회전 애니메이션 */
         @keyframes rotate-reverse {
             from { transform: rotate(360deg); }
             to { transform: rotate(0deg); }
         }
+
+        /* 푸터 스타일 */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Yin Yang Diagram</h1>
-        
-        <div class="yin-yang-container">
-            <div class="diagram">
-                <svg id="yinYang1" width="200" height="200" viewBox="0 0 200 200" onclick="toggleDirection(this)">
-                    <!-- 배경 원 전체를 흰색으로 -->
-                    <circle cx="100" cy="100" r="90" fill="#fff" stroke="#333" stroke-width="2"/>
-                    
-                    <!-- 음(黑) 부분 - S자 모양의 반쪽 -->
-                    <path d="M 100 10 
-                             A 45 45 0 0 0 100 100 
-                             A 45 45 0 0 1 100 190 
-                             A 90 90 0 0 0 100 10 Z" 
-                          fill="#000"/>
-                    
-                    <!-- 위쪽 작은 양 원 (음 부분 안) -->
-                    <circle cx="100" cy="55" r="15" fill="#fff"/>
-                    
-                    <!-- 아래쪽 작은 음 원 (양 부분 안) -->
-                    <circle cx="100" cy="145" r="15" fill="#000"/>
-                </svg>
-            </div>
-        </div>
-        
-        <div class="description">
-            <p>When we look at the yin-yang diagram, it is not simply divided into black and white halves. It resembles fish chasing each other's tails. It is very dynamic. This depicts the continuous movement between yin and yang. Moreover, there is a white dot in the black area and a black dot in the white area. Additionally, one side is thick while the other is thin like a tail, so there are places where yin and yang are completely equal (horizontal center), and parts where one side dominates while the other is barely present (vertical center). Although yin and yang are divided, their proportions differ. Why was this simple yin-yang diagram drawn in such a way? This diagram addresses all the important properties of yin and yang.</p>
-            
-            <h4>1. Why does it move?</h4>
-            <p>Yin and yang are not fixed. The shaded part of a hill in the morning receives sunlight in the afternoon. Yin becomes yang. The same applies to our bodies and diseases. Just as everything in nature changes through the four seasons, yin and yang transform. This is called the mutual transformation of yin and yang.</p>
-            
-            <h4>2. What do the white dot in the black area and the black dot in the white area represent?</h4>
-            <p>Yin and yang are not a dichotomy. There is no purely yin or purely yang. There is always yang within yin, and yin within yang. The same applies to constitution and disease. There are no purely heat diseases or purely cold diseases. This is called the infinite divisibility of yin and yang.</p>
-            
-            <h4>3. What is the meaning of the different area proportions?</h4>
-            <p>While yin and yang are divided, some areas have more yin and others have more yang. However, even when the proportions differ, the total sum remains the same. This expresses how yin and yang consume each other. When one increases, the other naturally decreases. And when this tendency becomes extreme, it returns to the original state. It moves like a seesaw. When one rises, the other falls, but neither rises nor falls eternally—they trace a circle. In our bodies too, when yin is deficient, yang rises, and when yang rises, yin falls. When fever occurs, body fluids are damaged, and when blood is deficient, deficiency heat arises. This is called the mutual consumption of yin and yang.</p>
-            
-            <p><strong>*Modern Traditional Chinese Medicine tends to ignore this movement, proportional changes, and non-binary nature, and instead tries to categorize diseases and people in a simplistic binary way as either yin or yang, cold or hot—this represents a fundamental misunderstanding of yin and yang.*</strong></p>
+<!-- 헤더: Tailwind CSS 클래스로 스타일링 -->
+<header class="w-full max-w-3xl mx-auto px-4 flex justify-between items-center my-4">
+    <a href="index.html" class="text-lg font-serif font-semibold text-gray-700 hover:text-gray-900 transition-colors">
+        &larr; Interactive TCM
+    </a>
+    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300 transition-colors">
+        Kor / Eng
+    </a>
+</header>
+
+<!-- container에 Tailwind 클래스를 추가하여 헤더와 너비를 맞춤 -->
+<div class="container w-full max-w-3xl">
+    <h1>Yin Yang Diagram</h1>
+    
+    <div class="yin-yang-container">
+        <div class="diagram">
+            <svg id="yinYang1" width="200" height="200" viewBox="0 0 200 200" onclick="toggleRotation(this)">
+                <circle cx="100" cy="100" r="90" fill="#fff" stroke="#333" stroke-width="2"/>
+                <path d="M 100 10 
+                         A 45 45 0 0 0 100 100 
+                         A 45 45 0 0 1 100 190 
+                         A 90 90 0 0 0 100 10 Z" 
+                      fill="#000"/>
+                <circle cx="100" cy="55" r="15" fill="#fff"/>
+                <circle cx="100" cy="145" r="15" fill="#000"/>
+            </svg>
         </div>
     </div>
-
-    <script>
-        function toggleDirection(svg) {
-            if (svg.classList.contains('rotating-reverse')) {
-                svg.classList.remove('rotating-reverse');
-                svg.classList.add('rotating');
-            } else {
-                svg.classList.remove('rotating');
-                svg.classList.add('rotating-reverse');
-            }
-        }
+    
+    <div class="description">
+        <p>When we look at the yin-yang diagram, it is not simply divided into black and white halves. It resembles fish chasing each other's tails. It is very dynamic. This depicts the continuous movement between yin and yang. Moreover, there is a white dot in the black area and a black dot in the white area. Additionally, one side is thick while the other is thin like a tail, so there are places where yin and yang are completely equal (horizontal center), and parts where one side dominates while the other is barely present (vertical center). Although yin and yang are divided, their proportions differ. Why was this simple yin-yang diagram drawn in such a way? This diagram addresses all the important properties of yin and yang.</p>
         
-        // 페이지 로드 시 애니메이션 효과
-        window.addEventListener('load', function() {
-            const svgs = document.querySelectorAll('svg');
-            svgs.forEach((svg, index) => {
-                setTimeout(() => {
-                    svg.style.opacity = '0';
-                    svg.style.transform = 'scale(0.5)';
-                    svg.style.transition = 'all 0.6s ease';
-                    
-                    setTimeout(() => {
-                        svg.style.opacity = '1';
-                        svg.style.transform = 'scale(1)';
-                    }, 100);
-                }, index * 300);
-            });
-        });
-    </script>
-  <!-- Footer for Individual Pages -->
+        <h4>1. Why does it move?</h4>
+        <p>Yin and yang are not fixed. The shaded part of a hill in the morning receives sunlight in the afternoon. Yin becomes yang. The same applies to our bodies and diseases. Just as everything in nature changes through the four seasons, yin and yang transform. This is called the mutual transformation of yin and yang.</p>
+        
+        <h4>2. What do the white dot in the black area and the black dot in the white area represent?</h4>
+        <p>Yin and yang are not a dichotomy. There is no purely yin or purely yang. There is always yang within yin, and yin within yang. The same applies to constitution and disease. There are no purely heat diseases or purely cold diseases. This is called the infinite divisibility of yin and yang.</p>
+        
+        <h4>3. What is the meaning of the different area proportions?</h4>
+        <p>While yin and yang are divided, some areas have more yin and others have more yang. However, even when the proportions differ, the total sum remains the same. This expresses how yin and yang consume each other. When one increases, the other naturally decreases. And when this tendency becomes extreme, it returns to the original state. It moves like a seesaw. When one rises, the other falls, but neither rises nor falls eternally—they trace a circle. In our bodies too, when yin is deficient, yang rises, and when yang rises, yin falls. When fever occurs, body fluids are damaged, and when blood is deficient, deficiency heat arises. This is called the mutual consumption of yin and yang.</p>
+        
+        <p><strong>*Modern Traditional Chinese Medicine tends to ignore this movement, proportional changes, and non-binary nature, and instead tries to categorize diseases and people in a simplistic binary way as either yin or yang, cold or hot—this represents a fundamental misunderstanding of yin and yang.*</strong></p>
+    </div>
+</div>
+
+<!-- Footer for Individual Pages -->
 <footer class="text-center py-8 mt-12 text-sm text-gray-500">
     <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
 </footer>
+
+<script>
+    /**
+     * SVG 요소의 회전 애니메이션을 멈추거나 다시 시작합니다.
+     * @param {SVGElement} svg - 제어할 SVG 요소
+     */
+    function toggleRotation(svg) {
+        const isPaused = svg.style.animationPlayState === 'paused';
+        svg.style.animationPlayState = isPaused ? 'running' : 'paused';
+    }
+
+    /**
+     * 언어 전환을 위한 임시 함수입니다.
+     * @param {Event} event - 클릭 이벤트 객체
+     */
+    function toggleLanguage(event) {
+        event.preventDefault(); // 링크의 기본 동작(페이지 이동)을 막습니다.
+        alert('Language switching feature is under preparation.'); // 사용자에게 알림
+    }
+    
+    // 페이지 로드 시 나타나는 애니메이션 효과
+    window.addEventListener('load', function() {
+        const svg = document.getElementById('yinYang1');
+        if (svg) {
+            svg.style.opacity = '0';
+            svg.style.transform = 'scale(0.5)';
+            svg.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            
+            setTimeout(() => {
+                svg.style.opacity = '1';
+                svg.style.transform = 'scale(1)';
+            }, 100);
+        }
+    });
+</script>
 </body>
 </html>
