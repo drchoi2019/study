@@ -33,11 +33,16 @@
 <body class="text-gray-800">
 
     <!-- Main Header -->
-    <header id="main-header" class="text-center py-16 md:py-20">
-        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700">
+    <header id="main-header" class="text-center py-16 md:py-20 relative">
+        <div class="absolute top-4 right-4">
+            <button id="lang-toggle" onclick="toggleLanguage()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+                Kor / Eng
+            </button>
+        </div>
+        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM" data-ko="한의학 공부">
             Interactive TCM
         </h1>
-        <p id="author" class="text-gray-500 mt-2 text-lg">by Hyungsuk Choi</p>
+        <p id="author" class="text-gray-500 mt-2 text-lg" data-en="Hyungsuk Choi" data-ko="최형석">Hyungsuk Choi</p>
     </header>
 
     <!-- Main Navigation Menu -->
@@ -45,28 +50,29 @@
         <div class="grid md:grid-cols-3 gap-10">
             <!-- Theory -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Theory</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2" data-en="Theory" data-ko="이론">Theory</h2>
                 <ul class="space-y-2">
-                    <li><a href="five_organs.html" class="nav-link">Five Organs</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link">Pattern Diagnosis Basic</a></li>
-                    <li><a href="pulse_tongue.html" class="nav-link">Basic Tongue/Pulse Pattern</a></li>
-                    <li><a href="yinyang.html" class="nav-link">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse_quiz.html" class="nav-link">Pulse Quiz</a></li>
+                    <li><a href="five_organs.html" class="nav-link" data-en="Five Organs" data-ko="오장">Five Organs</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" data-en="Pattern Diagnosis Basic" data-ko="변증 기초">Pattern Diagnosis Basic</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link" data-en="Basic Tongue/Pulse Pattern" data-ko="기본 설/맥 증">Basic Tongue/Pulse Pattern</a></li>
+                    <li><a href="yinyang_consum.html" class="nav-link" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
+                    <li><a href="yinyang.html" class="nav-link" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                    <li><a href="pulse.html" class="nav-link" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
                 </ul>
             </div>
             <!-- Formula -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">Formula</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2" data-en="Formula" data-ko="방제학">Formula</h2>
                 <ul class="space-y-2">
-                    <li><a href="what_formula.html" class="nav-link">What is Formula</a></li>
+                    <li><a href="what_formula.html" class="nav-link" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
                 </ul>
             </div>
             <!-- History -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b pb-2">History</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2" data-en="History" data-ko="한의학사">History</h2>
                 <ul class="space-y-2">
-                    <li><a href="history.html" class="nav-link">Brief History of TCM</a></li>
-                    <li><a href="four_masters.html" class="nav-link">Four Grand Masters</a></li>
+                    <li><a href="history.html" class="nav-link" data-en="Brief History of TCM" data-ko="한의학 약사">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
                 </ul>
             </div>
         </div>
@@ -76,6 +82,36 @@
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ko' : 'en';
+
+            // Translate all elements with data attributes
+            const elementsToTranslate = document.querySelectorAll('[data-en]');
+            elementsToTranslate.forEach(el => {
+                el.textContent = el.dataset[currentLanguage];
+            });
+
+            // Update all links
+            const linksToUpdate = document.querySelectorAll('a.nav-link');
+            linksToUpdate.forEach(link => {
+                const baseHref = link.getAttribute('href').replace('_k.html', '').replace('.html', '');
+                if (currentLanguage === 'ko') {
+                    // Handle history.html exception
+                    if (baseHref === 'history') {
+                         link.href = 'history_kor.html';
+                    } else {
+                         link.href = `${baseHref}_k.html`;
+                    }
+                } else {
+                    link.href = `${baseHref}.html`;
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>
