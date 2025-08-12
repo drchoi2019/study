@@ -50,7 +50,7 @@
 </style>
 </head>
 <body class="bg-[#F5F5DC] text-[#44403C]">
-<!-- Top Menu for Individual Pages -->
+<!-- Top Menu for Individual Pages (Updated) -->
 <header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
     <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
         &larr; Home
@@ -60,26 +60,43 @@
     </a>
 </header>
 <script>
-    function toggleLanguage(event) {
+    async function toggleLanguage(event) {
         event.preventDefault();
         const currentPath = window.location.pathname;
         const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
         let targetFile;
 
+        // 대상 파일 결정
         if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로
+            // 현재 한글 페이지 -> 영어 페이지로 이동
+            // 영어 페이지는 항상 존재한다고 가정하고 바로 이동합니다.
             targetFile = currentFile.replace('_k.html', '.html');
-        } else if (currentFile.includes('history.html')) {
-            // history.html 예외 처리
-             targetFile = 'history_kor.html';
-        }
-        else {
-            // 현재 영어 페이지 -> 한글 페이지로
-            targetFile = currentFile.replace('.html', '_k.html');
+            window.location.href = targetFile;
+            return;
+        } else {
+            // 현재 영어 페이지 -> 한글 페이지로 이동
+            if (currentFile.includes('history.html')) {
+                targetFile = 'history_kor.html';
+            } else {
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
         }
         
-        // 페이지 이동
-        window.location.href = targetFile;
+        // 이동할 한글 페이지가 실제로 존재하는지 확인
+        try {
+            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
+            if (response.ok) {
+                // 페이지가 존재하면 (상태 코드 200-299) 해당 페이지로 이동
+                window.location.href = targetFile;
+            } else {
+                // 페이지가 존재하지 않으면 (예: 404 오류) 알림을 표시
+                alert('준비중입니다.');
+            }
+        } catch (error) {
+            // 네트워크 오류 등이 발생한 경우
+            console.error('페이지 확인 중 오류 발생:', error);
+            alert('준비중입니다.');
+        }
     }
 </script>
     <div class="container mx-auto p-4 md:p-8">
