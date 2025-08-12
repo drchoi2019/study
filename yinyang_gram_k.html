@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음양(태극) 다이어그램</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #F7F3EF 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .yin-yang-container {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .diagram {
+            text-align: center;
+        }
+        
+        .diagram h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        svg {
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            animation: rotate 20s linear infinite;
+        }
+        
+        svg:hover {
+            transform: scale(1.05);
+        }
+        
+        .controls {
+            margin: 30px 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .description {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .description h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .rotating {
+            animation: rotate 20s linear infinite;
+        }
+        
+        .rotating-reverse {
+            animation: rotate-reverse 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotate-reverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>음양(陰陽) 태극도</h1>
+        
+        <div class="yin-yang-container">
+            <div class="diagram">
+                <h3>기본 태극도</h3>
+                <svg id="yinYang1" width="200" height="200" viewBox="0 0 200 200" onclick="toggleDirection(this)">
+                    <!-- 배경 원 전체를 흰색으로 -->
+                    <circle cx="100" cy="100" r="90" fill="#fff" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- 음(黑) 부분 - S자 모양의 반쪽 -->
+                    <path d="M 100 10 
+                             A 45 45 0 0 0 100 100 
+                             A 45 45 0 0 1 100 190 
+                             A 90 90 0 0 0 100 10 Z" 
+                          fill="#000"/>
+                    
+                    <!-- 위쪽 작은 양 원 (음 부분 안) -->
+                    <circle cx="100" cy="55" r="15" fill="#fff"/>
+                    
+                    <!-- 아래쪽 작은 음 원 (양 부분 안) -->
+                    <circle cx="100" cy="145" r="15" fill="#000"/>
+                </svg>
+            </div>
+            
+            <div class="diagram">
+                <h3>컬러 버전</h3>
+                <svg id="yinYang2" width="200" height="200" viewBox="0 0 200 200" onclick="toggleDirection(this)">
+                    <defs>
+                        <radialGradient id="yinGradient" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#000;stop-opacity:1" />
+                        </radialGradient>
+                        <radialGradient id="yangGradient" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
+                        </radialGradient>
+                    </defs>
+                    
+                    <!-- 배경 원 전체를 흰색으로 -->
+                    <circle cx="100" cy="100" r="90" fill="url(#yangGradient)" stroke="#666" stroke-width="2"/>
+                    
+                    <!-- 음(黑) 부분 - S자 모양의 반쪽 -->
+                    <path d="M 100 10 
+                             A 45 45 0 0 0 100 100 
+                             A 45 45 0 0 1 100 190 
+                             A 90 90 0 0 0 100 10 Z" 
+                          fill="url(#yinGradient)"/>
+                    
+                    <!-- 위쪽 작은 양 원 (음 부분 안) -->
+                    <circle cx="100" cy="55" r="15" fill="url(#yangGradient)" stroke="#ddd" stroke-width="1"/>
+                    
+                    <!-- 아래쪽 작은 음 원 (양 부분 안) -->
+                    <circle cx="100" cy="145" r="15" fill="url(#yinGradient)" stroke="#333" stroke-width="1"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <!-- 버튼들 제거됨 -->
+        </div>
+        
+        <div class="description">
+            <p>음양의 다이어그램을 보면 딱 반으로 나뉜 흑과 백이 아닙니다. 마치 물고기가 서로의 꼬리를 쫓는 모양입니다. 매우 율동적이죠. 이는 음양이 서로 계속 움직임을 묘사합니다. 게다가, 검은 곳에 하얀 점, 하얀 곳에 검은 점이 있습니다. 또한 한쪽은 두껍고 한쪽은 꼬리처럼 얇아서 완전히 음양이 동일한 곳도 있고(가로 중앙), 한쪽만 많고 한쪽은 거의 없는 부분(세로 중앙)도 있습니다. 음양이 나뉘지만 그 비율이 다르죠. 왜 단순한 음양의 그림을 이렇게 그렸을까요? 이 그림은 음양의 모든 중요한 속성을 다루고 있습니다.</p>
+            
+            <h4>1. 왜 움직이나?</h4>
+            <p>음양은 고정된 것이 아닙니다. 아침에 언덕의 그늘진 부분이 오후엔 해가 듭니다. 음이 양이 되지요. 우리 몸도 병도 마찬가지입니다. 자연의 모든 것이 사시사철 변하듯 음과 양이 변합니다. 이를 음양의 상호전변(mutual transformation)이라고 합니다.</p>
+            
+            <h4>2. 검은 곳에 하얀 점, 하얀 곳의 검은 점은 무엇인가?</h4>
+            <p>음양은 이분법이 아닙니다. 순수하게 음도, 양도 없습니다. 늘 음속에는 양이 있고, 양속에는 음이 있습니다. 체질도 병도 마찬가지입니다. 순수하게 열병도 없고, 한병도 없습니다. 이를 음양의 무한한 분열(infinite divisibility)이라고 합니다.</p>
+            
+            <h4>3. 다른 영역 비율은 어떤 의미인가?</h4>
+            <p>음양이 나뉘기는 하는데, 어떤 곳에는 음이 많고 어떤 곳은 양이 많아요. 그런데 비율이 달라도 총합은 같습니다. 이는 음양이 서로 소모함을 표현합니다. 하나가 많아지면 자연히 하나가 줄어듭니다. 그리고, 이 경향이 심해지면 다시 원상태로 돌립니다. 마치 시소처럼 움직이지요. 하나가 오르면 하나가 내리지만, 영원히 오르거나 내리지는 않고 원을 그려나갑니다. 우리 몸도 음이 부족하면 양이 올라가고, 양이 오르면 음이 내립니다. 열이 나면 진액이 손상되고, 혈이 부족하면 허열이 생깁니다. 이를 음양의 상호 소모(mutual consumption)라고 합니다.</p>
+            
+            <p><strong>*현대 중의학은 이 움직임, 비율의 변화, 이분되지 않는 속성을 무시하고, 단순하게 병과 사람을 음이니 양이니, 한이니 열이니 이분법적으로 구분하려는 경향이 있는데 음양에 대해 크게 잘못 이해하고 있는 것입니다.*</strong></p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDirection(svg) {
+            if (svg.classList.contains('rotating-reverse')) {
+                svg.classList.remove('rotating-reverse');
+                svg.classList.add('rotating');
+            } else {
+                svg.classList.remove('rotating');
+                svg.classList.add('rotating-reverse');
+            }
+        }
+        
+        // 페이지 로드 시 애니메이션 효과
+        window.addEventListener('load', function() {
+            const svgs = document.querySelectorAll('svg');
+            svgs.forEach((svg, index) => {
+                setTimeout(() => {
+                    svg.style.opacity = '0';
+                    svg.style.transform = 'scale(0.5)';
+                    svg.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        svg.style.opacity = '1';
+                        svg.style.transform = 'scale(1)';
+                    }, 100);
+                }, index * 300);
+            });
+        });
+    </script>
+  <!-- Footer for Individual Pages -->
+<footer class="text-center py-8 mt-12 text-sm text-gray-500">
+    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+</footer>
+</body>
+</html>
