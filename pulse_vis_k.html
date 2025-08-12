@@ -206,9 +206,11 @@
                         scales: {
                             r: {
                                 angleLines: { display: true },
+                                min: 0,
+                                max: 10,
                                 ticks: {
                                     display: false, // Hide tick labels (0, 5, 10)
-                                    count: 3 // Set 3 steps for the grid
+                                    stepSize: 5 
                                 },
                                 pointLabels: { 
                                     font: { size: 12, weight: '500', family: "'Noto Sans KR', sans-serif" } 
