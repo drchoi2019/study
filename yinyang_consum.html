@@ -50,18 +50,6 @@
             position: relative;
         }
 
-        /* 기준선 추가 */
-        .chart-container::after {
-            content: '';
-            position: absolute;
-            /* 라벨 높이(font-size + margin-top)만큼 위로 이동 */
-            bottom: 38px; 
-            left: 10%; /* 양쪽 여백 */
-            right: 10%;
-            height: 2px;
-            background-color: #DCD1C1;
-        }
-        
         .bar-wrapper {
             display: flex;
             flex-direction: column;
@@ -146,6 +134,13 @@
             margin-bottom: 8px;
         }
 
+        .copyright {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #A89584;
+        }
+
     </style>
 </head>
 <body>
@@ -172,6 +167,10 @@
         
         <div class="diagnosis-display" id="diagnosis">
             <!-- JavaScript will update this area -->
+        </div>
+
+        <div class="copyright">
+            © 2024 Hyungsuk Choi. All Rights Reserved.
         </div>
         
     </div>
