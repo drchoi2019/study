@@ -4,120 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCM Zang-Fu Organs Infographic</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; /* Retaining for broader character support, English will render with system fonts */ }
-        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
-        .hwa-element { background-color: #FF6B6B; color: white; } /* Fire (火) */
-        .mok-element { background-color: #06D6A0; color: white; } /* Wood (木) */
-        .to-element { background-color: #FFD166; color: #073B4C; } /* Earth (土) */
-        .geum-element { background-color: #118AB2; color: white; } /* Metal (金) */
-        .su-element { background-color: #073B4C; color: white; } /* Water (水) */
-        .exam-point { background-color: #FFD166; color: #073B4C; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px; }
-        .flow-arrow { display: flex; align-items: center; justify-content: center; margin: 10px 0; font-size: 2rem; color: #118AB2; }
-        .comparison-table th, .comparison-table td { border: 1px solid #073B4C; padding: 8px; text-align: left; }
-        .sticky-nav { position: sticky; top: 0; background-color: rgba(7, 59, 76, 0.9); z-index: 50; padding: 0.5rem 0; backdrop-filter: blur(5px); }
-        .sticky-nav a { color: white; margin: 0 0.75rem; font-size: 0.875rem; transition: color 0.3s; }
-        .sticky-nav a:hover { color: #FFD166; }
-        h2, h3 { color: #073B4C; }
-        h2 { border-bottom: 2px solid #118AB2; padding-bottom: 0.5rem; margin-top: 2rem; }
-        h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #118AB2; }
-        .card { background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); padding: 1.5rem; margin-bottom: 1.5rem; }
-        .jangbu-title { font-size: 1.5rem; font-weight: bold; }
-        .bu-title { font-size: 1.25rem; font-weight: bold; margin-top:1rem; color: #073B4C; }
-        .palette-comment { display: none; }
-        .exam-group-title { font-size: 1.25rem; font-weight:bold; margin-top:1.5rem; margin-bottom:0.5rem;}
-        .emphasized-paragraph { background-color: #f0f9ff; /* Tailwind sky-50 */ padding: 0.75rem; border-radius: 0.375rem; font-weight: 500; border-left: 4px solid #0ea5e9 /* Tailwind sky-500 */; }
-    </style>
+        /* --- Calm & Scholarly Palette --- */
+        /* Main BG: #F7F3EF */
+        /* Text/Primary: #5D534A */
+        /* Accent: #8E6F58 */
 
-    <!-- Tailwind CSS and Google Fonts for consistent styling -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-        background-color: #F7F3EF;
-        color: #333;
-    }
-    h1, h2, .font-serif {
-        font-family: 'Cormorant Garamond', serif;
-    }
-</style>
-    
-</head>
-<body class="bg-gray-100 text-gray-800">
-    <!-- Top Menu for Individual Pages -->
-<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-        &larr; Home
-    </a>
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-        Kor / Eng
-    </a>
-</header>
-<script>
-    function toggleLanguage(event) {
-        event.preventDefault();
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-        let targetFile;
-
-        if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로
-            targetFile = currentFile.replace('_k.html', '.html');
-        } else if (currentFile.includes('history.html')) {
-            // history.html 예외 처리
-             targetFile = 'history_kor.html';
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #5D534A;
         }
-        else {
-            // 현재 영어 페이지 -> 한글 페이지로
-            targetFile = currentFile.replace('.html', '_k.html');
+
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* New Five Elements Palette */
+        .hwa-element { background-color: #D87C7C; color: white; } /* Fire (火) */
+        .mok-element { background-color: #8BAA76; color: white; } /* Wood (木) */
+        .to-element { background-color: #C7A67C; color: white; } /* Earth (土) */
+        .geum-element { background-color: #A7B0B4; color: #333; } /* Metal (金) */
+        .su-element { background-color: #6C7A89; color: white; } /* Water (水) */
+        
+        .exam-point {
+            background-color: #EAE3DC; /* Light Taupe */
+            color: #5D534A;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 4px;
         }
         
-        // 페이지 이동
-        window.location.href = targetFile;
-    }
-</script>
-    <div class="palette-comment">Selected Palette: Energetic & Playful (#FF6B6B, #FFD166, #06D6A0, #118AB2, #073B4C)</div>
-    
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            font-size: 2rem;
+            color: #8E6F58;
+        }
 
-    <header class="bg-[#073B4C] text-white p-6 text-center">
-        <h1 class="text-4xl font-bold">Traditional Chinese Medicine: Zang-Fu Organ Functions</h1>
-        <p class="mt-2 text-lg">A visual summary of the primary functions and interrelationships of the Five Zang (Liver, Heart, Spleen, Lungs, Kidneys) and their paired Six Fu organs in TCM.</p>
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #D1C7BD; /* Lighter border */
+            padding: 8px;
+            text-align: left;
+        }
+        .table-header-bg { 
+            background-color: #8E6F58; 
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(247, 243, 239, 0.85); /* BG color with blur */
+            z-index: 50;
+            padding: 0.75rem 0;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #EAE3DC;
+        }
+
+        .sticky-nav a {
+            color: #5D534A; /* Main text color */
+            margin: 0 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .sticky-nav a:hover {
+            color: #000; /* Darker hover for emphasis */
+        }
+
+        h2 {
+            border-bottom: 2px solid #8E6F58; /* Accent color */
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #8E6F58; /* Accent color */
+        }
+        
+        .card {
+            background-color: #FCFBF9; /* Slightly off-white card */
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px -2px rgba(93, 83, 74, 0.08); /* Softer shadow */
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #EAE3DC;
+        }
+
+        .jangbu-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .bu-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: #5D534A;
+        }
+
+        .exam-group-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .emphasized-paragraph {
+            background-color: #EFEAE6; /* Lighter version of accent bg */
+            padding: 1rem;
+            border-radius: 0.375rem;
+            border-left: 4px solid #8E6F58; /* Accent color */
+        }
+    </style>
+</head>
+<body>
+    <header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+            &larr; Home
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            Kor / Eng
+        </a>
     </header>
 
+    <script>
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            let targetFile;
+
+            if (currentFile.includes('_k.html')) {
+                targetFile = currentFile.replace('_k.html', '.html');
+            } else if (currentFile.includes('history.html')) {
+                targetFile = 'history_kor.html';
+            } else {
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
+            window.location.href = targetFile;
+        }
+    </script>
+    
+    <div class="text-center pt-8 pb-12 px-4">
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-[#5D534A]">
+            Zang-Fu Organ Functions
+        </h1>
+        <p class="mt-4 text-lg max-w-2xl mx-auto text-[#8E6F58]">
+            A visual summary of the primary functions of the Zang-Fu organs in TCM.
+        </p>
+    </div>
+
     <nav class="sticky-nav text-center">
-        <a href="#section-comparison-summary">Zang Organ Comparison</a>
-        <a href="#section-liver">Liver (肝)</a>
-        <a href="#section-heart">Heart (心)</a>
-        <a href="#section-spleen">Spleen (脾)</a>
-        <a href="#section-lungs">Lungs (肺)</a>
-        <a href="#section-kidneys">Kidneys (腎)</a>
+        <a href="#section-comparison-summary">Overview</a>
+        <a href="#section-liver">Liver</a>
+        <a href="#section-heart">Heart</a>
+        <a href="#section-spleen">Spleen</a>
+        <a href="#section-lungs">Lungs</a>
+        <a href="#section-kidneys">Kidneys</a>
         <a href="#section-five-elements">Five Elements</a>
         <a href="#section-qi-blood">Qi & Blood</a>
-        <a href="#section-exam-points-list">Comprehensive Exam Points</a>
+        <a href="#section-exam-points-list">Exam Points</a>
     </nav>
 
     <main class="container mx-auto p-4 md:p-8">
 
         <section id="section-comparison-summary" class="mb-12">
             <div class="card">
-                <h2 class="text-2xl font-bold mb-6 text-center">Zang Organ Function Comparison Summary Table</h2>
-                <p class="text-center mb-6">This table provides an at-a-glance comparison of the main functions, governed tissues, openings, emotions, and Five Element correspondences of the Zang organs for a holistic understanding.</p>
+                <h2 class="text-2xl font-bold mb-6 text-center">Organ Function Comparison Summary Table</h2>
+     
                 <div class="overflow-x-auto">
                     <table class="min-w-full comparison-table">
                         <thead>
-                            <tr class="bg-[#073B4C] text-white">
-                                <th>Zang Organ (臟腑)</th>
-                                <th>Main Function 1</th>
-                                <th>Main Function 2</th>
-                                <th>Governs Tissue/Organ</th>
-                                <th>Opens into (開竅)</th>
-                                <th>Emotion (情志)</th>
-                                <th>Five Elements (五行)</th>
+                            <tr class="table-header-bg text-white">
+                                <th>Zang Organ </th>
+                                <th>Function 1</th>
+                                <th>Function 2</th>
+                                <th>Governs Tissue</th>
+                                <th>Opens into</th>
+                                <th>Emotion</th>
+                                <th>Five Elements</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -242,9 +322,9 @@
                     <p><strong class="to-element p-1 rounded">Taste:</strong> Sweet (甘)</p>
                     <p><strong class="to-element p-1 rounded">Climate:</strong> Dampness (濕) (The Spleen loathes Dampness: 喜燥惡濕)</p>
                     
-                    <div class="grid md:grid-cols-2 gap-4 mt-4 border p-4 rounded-md">
+                    <div class="grid md:grid-cols-2 gap-4 mt-4 border border-[#D1C7BD] p-4 rounded-md">
                         <div>
-                            <h4 class="font-bold text-lg text-[#073B4C]">Spleen (脾) - The Stove 🔥</h4>
+                            <h4 class="font-bold text-lg text-[#5D534A]">Spleen (脾) - The Stove 🔥</h4>
                             <p>The Spleen, creating energy, is like a stove that warms and brightens a room.</p>
                             <ul class="list-disc list-inside text-sm">
                                 <li>Transformation (運化): Converts food into pure energy for the limbs.</li>
@@ -254,7 +334,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 class="font-bold text-lg text-[#073B4C]">Stomach (胃) - The Blender 🍇</h4>
+                            <h4 class="font-bold text-lg text-[#5D534A]">Stomach (胃) - The Blender 🍇</h4>
                             <p>The Stomach is like a blender that grinds food into a pulp.</p>
                             <ul class="list-disc list-inside text-sm">
                                 <li>Rotting & Ripening (腐熟): Decomposes food into an absorbable form.</li>
@@ -328,7 +408,7 @@
                 </div>
             </div>
         </section>
-
+        
         <section id="section-five-elements" class="mb-12">
             <div class="card">
                 <h2 class="text-2xl font-bold mb-6 text-center">Five Zang & Five Elements Relationship</h2>
@@ -375,7 +455,6 @@
                         <p>Tissue: Bones (骨)</p>
                     </div>
                 </div>
-                <p class="mt-6 text-sm text-gray-600 text-center">This information is based on the provided PDF and general TCM theory.</p>
             </div>
         </section>
         
@@ -384,13 +463,13 @@
                 <h2 class="text-2xl font-bold mb-6 text-center">Production of Qi (氣) & Blood (血) and Key Organs</h2>
                 <p class="text-center mb-4">Qi is the fundamental substance maintaining life activities, and Blood nourishes the entire body. Several organs are involved in their production and circulation.</p>
                 <div class="text-center">
-                    <div class="inline-block bg-yellow-100 p-3 rounded-lg shadow">Spleen (脾): Produces Food Qi (穀氣) (Digestion)</div>
-                    <div class="flow-arrow text-yellow-500">+</div>
-                    <div class="inline-block bg-blue-100 p-3 rounded-lg shadow">Lungs (肺): Absorb Natural Air Qi (天氣) (Respiration)</div>
-                    <div class="flow-arrow text-green-500">⬇</div>
-                    <div class="inline-block bg-green-100 p-3 rounded-lg shadow">Combine in Chest to form Pectoral Qi (宗氣)</div>
-                    <div class="flow-arrow text-red-500">⬇</div>
-                    <div class="inline-block bg-red-100 p-3 rounded-lg shadow">Heart (心): Circulates Pectoral Qi with Blood (血) throughout body</div>
+                    <div class="inline-block bg-[#FDF8F0] border border-[#C7A67C] p-3 rounded-lg shadow-sm">Spleen (脾): Produces Food Qi (穀氣) (Digestion)</div>
+                    <div class="flow-arrow">+</div>
+                    <div class="inline-block bg-[#F7F8F8] border border-[#A7B0B4] p-3 rounded-lg shadow-sm">Lungs (肺): Absorb Natural Air Qi (天氣) (Respiration)</div>
+                    <div class="flow-arrow">⬇</div>
+                    <div class="inline-block bg-[#FBF6F6] border border-[#D87C7C] p-3 rounded-lg shadow-sm">Combine in Chest to form Pectoral Qi (宗氣)</div>
+                    <div class="flow-arrow">⬇</div>
+                    <div class="inline-block bg-[#FBF6F6] border border-[#D87C7C] p-3 rounded-lg shadow-sm">Heart (心): Circulates Pectoral Qi with Blood (血) throughout body</div>
                 </div>
                 <div class="mt-6">
                     <h3 class="text-xl font-semibold">Key Organ Functions Related to Blood (血):</h3>
@@ -407,114 +486,87 @@
             <div class="card">
                 <h2 class="text-2xl font-bold mb-6 text-center">Comprehensive List of Key Examination Points</h2>
                 <p class="text-center mb-6">This section provides a comprehensive list of all key examination points for study.</p>
-                                    
-                    <div class="exam-group-title mok-element p-2 rounded-md">Liver (肝) & Gallbladder (膽)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">Liver stores Blood.</span></li>
-                        <li><span class="exam-point">Liver ensures the smooth flow of Qi.</span></li>
-                        <li><span class="exam-point">Liver controls the muscles and sinews.</span></li>
-                        <li><span class="exam-point">Liver manifests in the nails.</span></li>
-                        <li><span class="exam-point">Liver opens into the eye.</span></li>
-                        <li><span class="exam-point">Liver is affected by anger.</span></li>
-                        <li><span class="exam-point">Liver's taste is sour.</span></li>
-                        <li><span class="exam-point">Liver's climate is wind.</span></li>
-                        <li><span class="exam-point">The Gall Bladder stores and excretes bile.</span></li>
-                        <li><span class="exam-point">The Gall Bladder controls decisiveness.</span></li>
-                        <li><span class="exam-point">The Gall Bladder controls the muscles and sinews.</span></li>
-                    </ul>
+                
+                <div class="exam-group-title mok-element p-2 rounded-md">Liver (肝) & Gallbladder (膽)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">Liver stores Blood.</span></li>
+                    <li><span class="exam-point">Liver ensures the smooth flow of Qi.</span></li>
+                    <li><span class="exam-point">Liver controls the muscles and sinews.</span></li>
+                    <li><span class="exam-point">Liver manifests in the nails.</span></li>
+                    <li><span class="exam-point">Liver opens into the eye.</span></li>
+                    <li><span class="exam-point">Liver is affected by anger.</span></li>
+                    <li><span class="exam-point">Liver's taste is sour.</span></li>
+                    <li><span class="exam-point">Liver's climate is wind.</span></li>
+                    <li><span class="exam-point">The Gall Bladder stores and excretes bile.</span></li>
+                    <li><span class="exam-point">The Gall Bladder controls decisiveness.</span></li>
+                    <li><span class="exam-point">The Gall Bladder controls the muscles and sinews.</span></li>
+                </ul>
 
-                    <div class="exam-group-title hwa-element p-2 rounded-md">Heart (心) & Small Intestine (小腸)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">It governs Blood. (Heart)</span></li>
-                        <li><span class="exam-point">It controls the blood vessels. (Heart)</span></li>
-                        <li><span class="exam-point">It manifests in the complexion. (Heart)</span></li>
-                        <li><span class="exam-point">It houses the Mind. (Heart)</span></li>
-                        <li><span class="exam-point">It is related to joy. (Heart)</span></li>
-                        <li><span class="exam-point">It opens into the tongue. (Heart)</span></li>
-                        <li><span class="exam-point">It controls sweat. (Heart)</span></li>
-                        <li><span class="exam-point">The taste of the Heart is bitter.</span></li>
-                        <li><span class="exam-point">Fire is related to the Heart.</span></li>
-                        <li><span class="exam-point">The Small Intestine controls receiving and transforming.</span></li>
-                        <li><span class="exam-point">The Small Intestine separates fluids.</span></li>
-                    </ul>
+                <div class="exam-group-title hwa-element p-2 rounded-md">Heart (心) & Small Intestine (小腸)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">It governs Blood. (Heart)</span></li>
+                    <li><span class="exam-point">It controls the blood vessels. (Heart)</span></li>
+                    <li><span class="exam-point">It manifests in the complexion. (Heart)</span></li>
+                    <li><span class="exam-point">It houses the Mind. (Heart)</span></li>
+                    <li><span class="exam-point">It is related to joy. (Heart)</span></li>
+                    <li><span class="exam-point">It opens into the tongue. (Heart)</span></li>
+                    <li><span class="exam-point">It controls sweat. (Heart)</span></li>
+                    <li><span class="exam-point">The taste of the Heart is bitter.</span></li>
+                    <li><span class="exam-point">Fire is related to the Heart.</span></li>
+                    <li><span class="exam-point">The Small Intestine controls receiving and transforming.</span></li>
+                    <li><span class="exam-point">The Small Intestine separates fluids.</span></li>
+                </ul>
 
-                    <div class="exam-group-title to-element p-2 rounded-md">Spleen (脾) & Stomach (胃)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">The Spleen governs transformation and transportation.</span></li>
-                        <li><span class="exam-point">The Spleen controls the ascending of Qi.</span></li>
-                        <li><span class="exam-point">The Spleen controls Blood.</span></li>
-                        <li><span class="exam-point">The Spleen controls the muscles and flesh (flesh) and the four limbs.</span></li>
-                        <li><span class="exam-point">The Spleen opens into the mouth, lips, and saliva.</span></li>
-                        <li><span class="exam-point">The Spleen is affected by pensiveness.</span></li>
-                        <li><span class="exam-point">The Spleen's taste is sweet.</span></li>
-                        <li><span class="exam-point">The Spleen's climate is dampness. (The Spleen loathes Dampness.)</span></li>
-                        <li><span class="exam-point">The Stomach controls 'receiving'.</span></li>
-                        <li><span class="exam-point">The Stomach controls the 'rotting and ripening' of food.</span></li>
-                        <li><span class="exam-point">The Stomach controls the transportation of food essences.</span></li>
-                        <li><span class="exam-point">The Stomach controls the descending of Qi.</span></li>
-                        <li><span class="exam-point">The Stomach is the origin of fluids.</span></li>
-                    </ul>
+                <div class="exam-group-title to-element p-2 rounded-md">Spleen (脾) & Stomach (胃)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">The Spleen governs transformation and transportation.</span></li>
+                    <li><span class="exam-point">The Spleen controls the ascending of Qi.</span></li>
+                    <li><span class="exam-point">The Spleen controls Blood.</span></li>
+                    <li><span class="exam-point">The Spleen controls the muscles and flesh (flesh) and the four limbs.</span></li>
+                    <li><span class="exam-point">The Spleen opens into the mouth, lips, and saliva.</span></li>
+                    <li><span class="exam-point">The Spleen is affected by pensiveness.</span></li>
+                    <li><span class="exam-point">The Spleen's taste is sweet.</span></li>
+                    <li><span class="exam-point">The Spleen's climate is dampness. (The Spleen loathes Dampness.)</span></li>
+                    <li><span class="exam-point">The Stomach controls 'receiving'.</span></li>
+                    <li><span class="exam-point">The Stomach controls the 'rotting and ripening' of food.</span></li>
+                    <li><span class="exam-point">The Stomach controls the transportation of food essences.</span></li>
+                    <li><span class="exam-point">The Stomach controls the descending of Qi.</span></li>
+                    <li><span class="exam-point">The Stomach is the origin of fluids.</span></li>
+                </ul>
 
-                    <div class="exam-group-title geum-element p-2 rounded-md">Lungs (肺) & Large Intestine (大腸)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">The Lungs govern Qi and respiration.</span></li>
-                        <li><span class="exam-point">The Lungs control channels.</span></li>
-                        <li><span class="exam-point">The Lungs control diffusing and descending of Qi.</span></li>
-                        <li><span class="exam-point">The Lungs regulate all physiological activities.</span></li>
-                        <li><span class="exam-point">The Lungs regulate Water passages.</span></li>
-                        <li><span class="exam-point">The Lungs control the skin.</span></li>
-                        <li><span class="exam-point">The Lungs control Protective qi (the space between skin and muscles).</span></li>
-                        <li><span class="exam-point">The Lungs open into the nose.</span></li>
-                        <li><span class="exam-point">The Lungs are affected by worry, grief and sadness.</span></li>
-                        <li><span class="exam-point">The Large Intestine controls passage and conduction.</span></li>
-                        <li><span class="exam-point">The Large Intestine transforms stools and reabsorbs fluids.</span></li>
-                    </ul>
+                <div class="exam-group-title geum-element p-2 rounded-md">Lungs (肺) & Large Intestine (大腸)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">The Lungs govern Qi and respiration.</span></li>
+                    <li><span class="exam-point">The Lungs control channels.</span></li>
+                    <li><span class="exam-point">The Lungs control diffusing and descending of Qi.</span></li>
+                    <li><span class="exam-point">The Lungs regulate all physiological activities.</span></li>
+                    <li><span class="exam-point">The Lungs regulate Water passages.</span></li>
+                    <li><span class="exam-point">The Lungs control the skin.</span></li>
+                    <li><span class="exam-point">The Lungs control Protective qi (the space between skin and muscles).</span></li>
+                    <li><span class="exam-point">The Lungs open into the nose.</span></li>
+                    <li><span class="exam-point">The Lungs are affected by worry, grief and sadness.</span></li>
+                    <li><span class="exam-point">The Large Intestine controls passage and conduction.</span></li>
+                    <li><span class="exam-point">The Large Intestine transforms stools and reabsorbs fluids.</span></li>
+                </ul>
 
-                    <div class="exam-group-title su-element p-2 rounded-md">Kidneys (腎) & Bladder (膀胱)</div>
-                    <ul class="list-none space-y-1 p-4">
-                        <li><span class="exam-point">Store Essence and govern birth, growth, reproduction and development. (Kidneys)</span></li>
-                        <li><span class="exam-point">Produce Marrow, fill up the brain and control bones. (Kidneys)</span></li>
-                        <li><span class="exam-point">Govern Water. (Kidneys)</span></li>
-                        <li><span class="exam-point">Control the reception of Qi. (Kidneys)</span></li>
-                        <li><span class="exam-point">Open into the ears. (Kidneys)</span></li>
-                        <li><span class="exam-point">Manifest in the hair. (Kidneys)</span></li>
-                        <li><span class="exam-point">Control spittle. (Kidneys)</span></li>
-                        <li><span class="exam-point">Control the two lower orifices. (Kidneys)</span></li>
-                        <li><span class="exam-point">The Bladder removes water by Qi transformation.</span></li>
-                    </ul>
-                </div>
+                <div class="exam-group-title su-element p-2 rounded-md">Kidneys (腎) & Bladder (膀胱)</div>
+                <ul class="list-none space-y-1 p-4">
+                    <li><span class="exam-point">Store Essence and govern birth, growth, reproduction and development. (Kidneys)</span></li>
+                    <li><span class="exam-point">Produce Marrow, fill up the brain and control bones. (Kidneys)</span></li>
+                    <li><span class="exam-point">Govern Water. (Kidneys)</span></li>
+                    <li><span class="exam-point">Control the reception of Qi. (Kidneys)</span></li>
+                    <li><span class="exam-point">Open into the ears. (Kidneys)</span></li>
+                    <li><span class="exam-point">Manifest in the hair. (Kidneys)</span></li>
+                    <li><span class="exam-point">Control spittle. (Kidneys)</span></li>
+                    <li><span class="exam-point">Control the two lower orifices. (Kidneys)</span></li>
+                    <li><span class="exam-point">The Bladder removes water by Qi transformation.</span></li>
+                </ul>
             </div>
         </section>
     </main>
 
-    <script>
-        // Chart.js related script has been removed as per user request.
-        // The wrapLabels function is kept in case other charts are added later that might need it.
-        function wrapLabels(label) {
-            const maxLen = 16; 
-            if (typeof label === 'string' && label.length > maxLen) {
-                const words = label.split(' ');
-                const lines = [];
-                let currentLine = '';
-                for (const word of words) {
-                    if ((currentLine + word).length > maxLen && currentLine.length > 0) {
-                        lines.push(currentLine.trim());
-                        currentLine = '';
-                    }
-                    currentLine += word + ' ';
-                }
-                lines.push(currentLine.trim());
-                return lines;
-            }
-            return label;
-        }
-        
-    </script>
-
-    <!-- Footer for Individual Pages -->
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-</footer>
-    
-    </body>
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+</body>
 </html>
