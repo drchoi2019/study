@@ -5,167 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yin & Yang Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
+
     <style>
+        /* CSS 스타일을 하나로 통합하고 배경색을 적용합니다. */
         body {
             font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF; /* 요청하신 배경색으로 변경 */
+            color: #333;
         }
     </style>
-
-
-    <!-- Tailwind CSS and Google Fonts for consistent styling (Final) -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- 'Cormorant Garamond' 폰트를 완전히 제거했습니다. -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
-
-<style>
-    body {
-        /* 모든 텍스트의 기본 폰트를 'Noto Sans KR'로 설정합니다. */
-        font-family: 'Noto Sans KR', sans-serif;
-        background-color: #F7F3EF;
-        color: #333;
-    }
-    /* - 문제가 되었던 명조체(Cormorant Garamond) 관련 스타일 규칙을 완전히 삭제했습니다.
-      - 이제 h1, h2, Home 링크 등 모든 요소가 위의 body 폰트를 따라갑니다.
-    */
-</style>
-    
 </head>
-<!-- Removed dark mode classes, forcing a white background -->
-<body class="bg-white flex items-center justify-center min-h-screen p-4">
-<!-- Top Menu for Individual Pages (Updated) -->
-<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-        &larr; Home
-    </a>
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-        Kor / Eng
-    </a>
-</header>
-<script>
-    async function toggleLanguage(event) {
-        event.preventDefault();
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-        let targetFile;
+<!-- body 클래스를 수정하여 flex-col 레이아웃을 만들고, 헤더/메인/푸터를 분리합니다. -->
+<body class="flex flex-col min-h-screen">
 
-        // 대상 파일 결정
-        if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로 이동
-            // 영어 페이지는 항상 존재한다고 가정하고 바로 이동합니다.
-            targetFile = currentFile.replace('_k.html', '.html');
-            window.location.href = targetFile;
-            return;
-        } else {
-            // 현재 영어 페이지 -> 한글 페이지로 이동
-            if (currentFile.includes('history.html')) {
-                targetFile = 'history_kor.html';
-            } else {
-                targetFile = currentFile.replace('.html', '_k.html');
-            }
-        }
-        
-        // 이동할 한글 페이지가 실제로 존재하는지 확인
-        try {
-            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
-            if (response.ok) {
-                // 페이지가 존재하면 (상태 코드 200-299) 해당 페이지로 이동
+    <!-- 1. Header: 페이지 상단에 위치 -->
+    <header class="w-full max-w-5xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-semibold hover:text-gray-500">
+            &larr; Home
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            Kor / Eng
+        </a>
+    </header>
+    
+    <!-- 언어 전환 스크립트 -->
+    <script>
+        async function toggleLanguage(event) {
+            event.preventDefault();
+            const currentPath = window.location.pathname;
+            const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+            let targetFile;
+
+            if (currentFile.includes('_k.html')) {
+                targetFile = currentFile.replace('_k.html', '.html');
                 window.location.href = targetFile;
+                return;
             } else {
-                // 페이지가 존재하지 않으면 (예: 404 오류) 알림을 표시
+                if (currentFile.includes('history.html')) {
+                    targetFile = 'history_kor.html';
+                } else {
+                    targetFile = currentFile.replace('.html', '_k.html');
+                }
+            }
+            
+            try {
+                const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
+                if (response.ok) {
+                    window.location.href = targetFile;
+                } else {
+                    alert('준비중입니다.');
+                }
+            } catch (error) {
+                console.error('페이지 확인 중 오류 발생:', error);
                 alert('준비중입니다.');
             }
-        } catch (error) {
-            // 네트워크 오류 등이 발생한 경우
-            console.error('페이지 확인 중 오류 발생:', error);
-            alert('준비중입니다.');
         }
-    }
-</script>
-    <div class="w-full max-w-lg mx-auto">
-        <!-- Card style updated for better contrast -->
-        <div class="bg-gray-100 rounded-2xl shadow-lg p-6 sm:p-8 text-center text-gray-800 border border-gray-200">
-            <h1 class="text-3xl sm:text-4xl font-bold mb-2 text-black">Yin & Yang<span class="text-gray-500">(陰陽)</span> Quiz</h1>
-            <p id="score" class="text-lg mb-6 text-gray-600">Score: 0 / 10</p>
+    </script>
 
-            <div id="quiz-area" class="min-h-[120px] flex items-center justify-center">
-                <div id="question-container" class="p-4 bg-white rounded-lg w-full">
-                    <p id="question" class="text-xl sm:text-2xl font-semibold"></p>
+    <!-- 2. Main Content: 중앙 정렬되고, 남은 공간을 채움 -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="w-full max-w-lg">
+            <!-- Card style updated for better contrast -->
+            <div class="bg-gray-100 rounded-2xl shadow-lg p-6 sm:p-8 text-center text-gray-800 border border-gray-200">
+                <h1 class="text-3xl sm:text-4xl font-bold mb-2 text-black">Yin & Yang<span class="text-gray-500">(陰陽)</span> Quiz</h1>
+                <p id="score" class="text-lg mb-6 text-gray-600">Score: 0 / 10</p>
+
+                <div id="quiz-area" class="min-h-[120px] flex items-center justify-center">
+                    <div id="question-container" class="p-4 bg-white rounded-lg w-full">
+                        <p id="question" class="text-xl sm:text-2xl font-semibold"></p>
+                    </div>
+                </div>
+
+                <div id="result" class="mt-4 min-h-[3rem] flex items-center justify-center text-2xl font-bold"></div>
+
+                <div id="button-area" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button id="yin-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-slate-400 disabled:opacity-50 disabled:transform-none">Yin (陰)</button>
+                    <button id="yang-btn" class="bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-400 disabled:opacity-50 disabled:transform-none">Yang (陽)</button>
+                </div>
+                
+                <button id="next-btn" class="mt-6 w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-400 hidden">Next Question</button>
+                
+                <div id="final-result" class="hidden text-center mt-6">
+                    <h2 class="text-3xl font-bold mb-4">Quiz Complete!</h2>
+                    <p id="final-score" class="text-2xl mb-6"></p>
+                    <button id="restart-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300">Restart Quiz</button>
                 </div>
             </div>
-
-            <div id="result" class="mt-4 min-h-[3rem] flex items-center justify-center text-2xl font-bold"></div>
-
-            <div id="button-area" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Button colors remain earthy -->
-                <button id="yin-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-slate-400 disabled:opacity-50 disabled:transform-none">Yin (陰)</button>
-                <button id="yang-btn" class="bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-400 disabled:opacity-50 disabled:transform-none">Yang (陽)</button>
-            </div>
-            
-            <button id="next-btn" class="mt-6 w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-400 hidden">Next Question</button>
-            
-            <div id="final-result" class="hidden text-center mt-6">
-                <h2 class="text-3xl font-bold mb-4">Quiz Complete!</h2>
-                <p id="final-score" class="text-2xl mb-6"></p>
-                <button id="restart-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-300">Restart Quiz</button>
-            </div>
         </div>
-        <p>by Hyungsuk Choi</p>
-    </div>
-
+    </main>
+    
+    <!-- 퀴즈 로직 스크립트 -->
     <script>
         // --- Data Definition ---
-        // Expanded list of Yin-Yang concepts. The array is in [Yin, Yang] order.
         const pairs = [
-            // Fundamental Concepts
-            ['Darkness', 'Light'],
-            ['Moon', 'Sun'],
-            ['Night', 'Day'],
-            ['Earth', 'Heaven'],
-            ['Water', 'Fire'],
-            ['Feminine', 'Masculine'],
-            
-            // Qualities & States
-            ['Rest', 'Activity'],
-            ['Stillness', 'Movement'],
-            ['Cold', 'Hot'],
-            ['Wet', 'Dry'],
-            ['Slow', 'Fast'],
-            ['Contraction', 'Expansion'],
-            ['Substantial', 'Non-substantial'],
-            ['Matter', 'Energy'],
-            ['Storage', 'Creation'],
-            ['Structure', 'Function'],
-            ['Chronic', 'Acute'],
-            ['Deficiency', 'Excess'],
-
-            // Direction & Position
-            ['Descending', 'Rising'],
-            ['Below', 'Above'],
-            ['Inward', 'Outward'],
-            ['West', 'East'],
-            ['North', 'South'],
-            ['Right', 'Left'],
-            ['Valley', 'Mountain'],
-            ['Low', 'High'],
-            ['Interior', 'Exterior'],
-            ['Front (of body)', 'Back (of body)'],
-
-            // Cycles & Time
-            ['Autumn', 'Spring'],
-            ['Winter', 'Summer'],
-            ['Space', 'Time'],
-            ['Death', 'Birth'],
-            
-            // Abstract & Human
-            ['Receiving', 'Giving'],
-            ['Introvert', 'Extrovert'],
-            ['Feeling', 'Thinking'],
-            ['Even (number)', 'Odd (number)'],
-            ['Blood', 'Qi (Energy)']
-        
+            ['Darkness', 'Light'], ['Moon', 'Sun'], ['Night', 'Day'], ['Earth', 'Heaven'], ['Water', 'Fire'], ['Feminine', 'Masculine'],
+            ['Rest', 'Activity'], ['Stillness', 'Movement'], ['Cold', 'Hot'], ['Wet', 'Dry'], ['Slow', 'Fast'], ['Contraction', 'Expansion'],
+            ['Substantial', 'Non-substantial'], ['Matter', 'Energy'], ['Storage', 'Creation'], ['Structure', 'Function'], ['Chronic', 'Acute'], ['Deficiency', 'Excess'],
+            ['Descending', 'Rising'], ['Below', 'Above'], ['Inward', 'Outward'], ['West', 'East'], ['North', 'South'], ['Right', 'Left'],
+            ['Valley', 'Mountain'], ['Low', 'High'], ['Interior', 'Exterior'], ['Front (of body)', 'Back (of body)'],
+            ['Autumn', 'Spring'], ['Winter', 'Summer'], ['Space', 'Time'], ['Death', 'Birth'],
+            ['Receiving', 'Giving'], ['Introvert', 'Extrovert'], ['Feeling', 'Thinking'], ['Even (number)', 'Odd (number)'], ['Blood', 'Qi (Energy)']
         ];
 
         // --- State Variables ---
@@ -187,39 +129,25 @@
         const restartBtn = document.getElementById('restart-btn');
 
         // --- Functions ---
-
-        /**
-         * Generates 10 random quiz questions.
-         */
         function generateQuestions() {
             questions = [];
             const usedPairs = new Set();
-            
             while (questions.length < 10) {
                 const pairIndex = Math.floor(Math.random() * pairs.length);
                 if (usedPairs.has(pairIndex)) continue;
                 usedPairs.add(pairIndex);
 
                 const [yinItem, yangItem] = pairs[pairIndex];
-                
-                // Randomly assign A and B, then set the question format and answer.
                 const flip = Math.random() < 0.5;
                 const itemA = flip ? yangItem : yinItem;
                 const itemB = flip ? yinItem : yangItem;
                 
-                // Question: Compared to A, is B Yin or Yang?
-                // If A is Yang and B is Yin -> Answer: Yin
-                // If A is Yin and B is Yang -> Answer: Yang
                 const questionText = `Compared to ${itemA}, is ${itemB} Yin (陰) or Yang (陽)?`;
                 const answer = (itemA === yangItem && itemB === yinItem) ? 'Yin' : 'Yang';
-
                 questions.push({ text: questionText, answer: answer });
             }
         }
 
-        /**
-         * Displays the current question on the screen.
-         */
         function displayQuestion() {
             if (currentQuestionIndex < questions.length) {
                 questionEl.textContent = questions[currentQuestionIndex].text;
@@ -229,9 +157,6 @@
             }
         }
 
-        /**
-         * Resets the UI to its initial state for the next question.
-         */
         function resetUI() {
             resultEl.textContent = '';
             resultEl.className = 'mt-4 min-h-[3rem] flex items-center justify-center text-2xl font-bold';
@@ -240,10 +165,6 @@
             nextBtn.classList.add('hidden');
         }
 
-        /**
-         * Checks the user's answer and displays the result.
-         * @param {string} userAnswer - The answer selected by the user ('Yin' or 'Yang').
-         */
         function checkAnswer(userAnswer) {
             const correctAnswer = questions[currentQuestionIndex].answer;
             yinBtn.disabled = true;
@@ -261,9 +182,6 @@
             scoreEl.textContent = `Score: ${score} / 10`;
         }
 
-        /**
-         * Displays the final score after the quiz is finished.
-         */
         function showFinalScore() {
             quizArea.classList.add('hidden');
             buttonArea.classList.add('hidden');
@@ -273,9 +191,6 @@
             finalScoreEl.textContent = `Final Score: ${score} / 10`;
         }
         
-        /**
-         * Restarts the quiz.
-         */
         function restartQuiz() {
             currentQuestionIndex = 0;
             score = 0;
@@ -300,14 +215,14 @@
         restartBtn.addEventListener('click', restartQuiz);
 
         // --- Initialization ---
-        // Starts the quiz when the page loads.
         restartQuiz();
     </script>
 
-<!-- Footer for Individual Pages -->
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-</footer>
+    <!-- 3. Footer: 페이지 하단에 위치하며 크레딧 정보를 포함 -->
+    <footer class="text-center py-4 text-sm text-gray-500">
+        <p>by Hyungsuk Choi</p>
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
     
 </body>
 </html>
