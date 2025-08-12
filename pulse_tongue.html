@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Tongue and Pulse Diagnosis</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +13,7 @@
         /* Custom styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F7F3EF; /* Exactly matching the reference site */
+            background-color: #f8f7f5; /* Consistent background color */
             color: #383431;
         }
         /* Style for the active button */
@@ -30,82 +31,45 @@
             opacity: 0;
             transform: translateY(10px);
         }
+        /* Custom slider styles for the radar chart */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #8B725A; /* Consistent brown tone */
+            cursor: pointer;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #8B725A; /* Consistent brown tone */
+            cursor: pointer;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
     </style>
-
-<!-- Tailwind CSS and Google Fonts for consistent styling (Final) -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- 'Cormorant Garamond' 폰트를 완전히 제거했습니다. -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Yeon+Sung&display=swap" rel="stylesheet">
-
-<style>
-    body {
-        /* 모든 텍스트의 기본 폰트를 'Noto Sans KR'로 설정합니다. */
-        font-family: 'Noto Sans KR', sans-serif;
-        background-color: #F7F3EF;
-        color: #333;
-    }
-    /* - 문제가 되었던 명조체(Cormorant Garamond) 관련 스타일 규칙을 완전히 삭제했습니다.
-      - 이제 h1, h2, Home 링크 등 모든 요소가 위의 body 폰트를 따라갑니다.
-    */
-</style>
-
-    
 </head>
 <body class="min-h-screen antialiased">
 
-
-<!-- Top Menu for Individual Pages (Updated) -->
-<header class="max-w-5xl mx-auto p-4 flex justify-between items-center">
-    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
-        &larr; Home
-    </a>
-    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-        Kor / Eng
-    </a>
-</header>
-<script>
-    async function toggleLanguage(event) {
-        event.preventDefault();
-        const currentPath = window.location.pathname;
-        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-        let targetFile;
-
-        // 대상 파일 결정
-        if (currentFile.includes('_k.html')) {
-            // 현재 한글 페이지 -> 영어 페이지로 이동
-            // 영어 페이지는 항상 존재한다고 가정하고 바로 이동합니다.
-            targetFile = currentFile.replace('_k.html', '.html');
-            window.location.href = targetFile;
-            return;
-        } else {
-            // 현재 영어 페이지 -> 한글 페이지로 이동
-            if (currentFile.includes('history.html')) {
-                targetFile = 'history_kor.html';
-            } else {
-                targetFile = currentFile.replace('.html', '_k.html');
-            }
-        }
-        
-        // 이동할 한글 페이지가 실제로 존재하는지 확인
-        try {
-            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
-            if (response.ok) {
-                // 페이지가 존재하면 (상태 코드 200-299) 해당 페이지로 이동
-                window.location.href = targetFile;
-            } else {
-                // 페이지가 존재하지 않으면 (예: 404 오류) 알림을 표시
-                alert('준비중입니다.');
-            }
-        } catch (error) {
-            // 네트워크 오류 등이 발생한 경우
-            console.error('페이지 확인 중 오류 발생:', error);
-            alert('준비중입니다.');
-        }
-    }
-</script>
-    
     <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
 
         <!-- Header -->
@@ -135,7 +99,7 @@
     </div>
 
     <script>
-        // Traditional Chinese Medicine (TCM) Pattern Data
+        // Traditional Chinese Medicine (TCM) Pattern Data (Corrected as per user request)
         const tcmPatterns = [
             { 
                 name_en: "Normal",
@@ -247,8 +211,8 @@
             },
             {
                 name_en: "Wind",
-                pulse_en: "Floating",
-                pulse_desc: "superficial level",
+                pulse_en: "Floating,Wiry,Rapid,etc",
+                pulse_desc: "various",
                 tongueCoating_en: "Thin, white",
                 tongueCoating_desc: "Thin white coating",
                 tongueBody_en: "Stiff, deviated, or trembling",
@@ -260,9 +224,91 @@
         const patternListContainer = document.getElementById('pattern-list');
         const displayContentContainer = document.getElementById('display-content');
 
+        // Function to initialize the interactive radar chart
+        function initializeRadarChart() {
+            const controlsContainer = document.getElementById('controls');
+            const ctx = document.getElementById('pulseChart').getContext('2d');
+
+            // 1. Define chart axes in English
+            const axes = [
+                { id: 'depth', label: 'Depth', minLabel: 'Floating', maxLabel: 'Deep' },
+                { id: 'speed', label: 'Speed', minLabel: 'Slow', maxLabel: 'Rapid' },
+                { id: 'strength', label: 'Strength', minLabel: 'Weak', maxLabel: 'Strong' },
+                { id: 'rhythm', label: 'Rhythm', minLabel: 'Choppy', maxLabel: 'Smooth' },
+                { id: 'softness', label: 'Softness', minLabel: 'Wiry', maxLabel: 'Soft' }
+            ];
+
+            // 2. Dynamically create slider controls
+            controlsContainer.innerHTML = ''; // Clear previous controls
+            axes.forEach(axis => {
+                const controlHTML = `
+                    <div class="w-full">
+                        <label for="${axis.id}" class="block text-md font-medium text-gray-700 mb-2">${axis.label}</label>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xs text-gray-500 w-16 text-right">${axis.minLabel}</span>
+                            <input type="range" id="${axis.id}" min="-10" max="10" value="0" class="flex-1 slider">
+                            <span class="text-xs text-gray-500 w-16 text-left">${axis.maxLabel}</span>
+                        </div>
+                    </div>
+                `;
+                controlsContainer.innerHTML += controlHTML;
+            });
+
+            // 3. Initialize the chart
+            const pulseChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: axes.map(a => a.label),
+                    datasets: [{
+                        label: 'Pulse State',
+                        data: axes.map(() => 5), // Initial value (center)
+                        fill: true,
+                        backgroundColor: 'rgba(139, 114, 90, 0.2)',
+                        borderColor: 'rgb(139, 114, 90)',
+                        pointBackgroundColor: 'rgb(139, 114, 90)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(139, 114, 90)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            pointLabels: {
+                                font: { size: 14, weight: '500' }
+                            },
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // 4. Add slider event listeners and chart update function
+            function updateChart() {
+                const newData = axes.map(axis => {
+                    const sliderValue = document.getElementById(axis.id).value;
+                    return (parseInt(sliderValue) + 10) / 2;
+                });
+                pulseChart.data.datasets[0].data = newData;
+                pulseChart.update();
+            }
+            
+            updateChart();
+
+            document.querySelectorAll('.slider').forEach(slider => {
+                slider.addEventListener('input', updateChart);
+            });
+        }
+
         // Function to update the display with pattern info
         function updateDisplay(pattern) {
-            // Add a loading effect for smooth transition
             displayContentContainer.parentElement.classList.add('loading');
             
             setTimeout(() => {
@@ -306,10 +352,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Interactive Chart Section -->
+                    <hr class="my-8 border-gray-200">
+                    <div>
+                        <div class="grid grid-cols-1 gap-8 items-center">
+                            <div id="controls" class="space-y-5">
+                                <!-- Controls are generated dynamically -->
+                            </div>
+                            <div class="relative w-full h-80 md:h-96">
+                                <canvas id="pulseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 `;
-                // Remove loading effect
+                
+                initializeRadarChart();
+
                 displayContentContainer.parentElement.classList.remove('loading');
-            }, 250); // Delay matches CSS transition
+            }, 250);
         }
 
         // Function to create and append buttons
@@ -320,7 +381,6 @@
                 button.innerHTML = `<span class="font-semibold">${pattern.name_en}</span>`;
                 button.dataset.index = index;
 
-                // Set the first button as active by default
                 if (index === 0) {
                     button.classList.add('active');
                 }
@@ -329,20 +389,17 @@
             });
         }
 
-        // Event Listener for the pattern list container (using event delegation)
+        // Event Listener for the pattern list container
         patternListContainer.addEventListener('click', (e) => {
             const button = e.target.closest('.pattern-btn');
-            if (!button) return; // Exit if the click was not on a button
+            if (!button) return;
 
-            // Remove 'active' class from all buttons
             document.querySelectorAll('.pattern-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // Add 'active' class to the clicked button
             button.classList.add('active');
 
-            // Get the pattern data and update the display
             const patternIndex = button.dataset.index;
             const selectedPattern = tcmPatterns[patternIndex];
             updateDisplay(selectedPattern);
@@ -351,17 +408,11 @@
         // Initial Load
         window.addEventListener('DOMContentLoaded', () => {
             initializePatternList();
-            // Display the first pattern's info on initial load
             if (tcmPatterns.length > 0) {
                 updateDisplay(tcmPatterns[0]);
             }
         });
     </script>
-
-    <!-- Footer for Individual Pages -->
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-</footer>
 
 </body>
 </html>
