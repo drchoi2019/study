@@ -163,7 +163,7 @@
             'pulse_tongue_k.html'
         ];
 
-        // Function to fetch and display content
+        // Function to fetch and display content, including executing scripts
         async function fetchAndDisplay(url) {
             try {
                 const response = await fetch(url);
@@ -171,10 +171,31 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const htmlText = await response.text();
-                // Use DOMParser to avoid issues with full HTML files
+                
+                // Use DOMParser to parse the fetched HTML
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlText, 'text/html');
+                
+                // Set the innerHTML of the content wrapper with the body of the fetched doc
                 contentWrapper.innerHTML = doc.body.innerHTML;
+                
+                // Find all script tags in the newly added content and re-create them to execute
+                const scripts = contentWrapper.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    
+                    // Copy all attributes from the old script to the new one
+                    Array.from(oldScript.attributes).forEach(attr => {
+                        newScript.setAttribute(attr.name, attr.value);
+                    });
+                    
+                    // Copy the inline script content
+                    newScript.textContent = oldScript.textContent;
+                    
+                    // Replace the old script tag with the new one in the DOM to trigger execution
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+
             } catch (error) {
                 console.error("Error fetching page:", error);
                 contentWrapper.innerHTML = `<p class="text-center text-red-500">Error: Could not load content from ${url}.</p>`;
