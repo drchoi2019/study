@@ -207,9 +207,11 @@
             const v2 = Math.round(value2);
             
             if (v2 > v1) { // Yang > Yin => Yin Deficiency
-                diagnosisDisplay.innerHTML = `<strong>Yin Deficiency (음허 / 陰虛)</strong>Empty heat, tidal fever, night sweat, 5 palm heat, fine and rapid pulse, dry tongue`;
+                diagnosisDisplay.innerHTML = `<strong>Yin Deficiency (음허 / 陰虛)</strong>음이 허해지면 상대적으로 양이 성해집니다. 성해진 양은 열증과 조증으로 나타납니다. 음허로 인해 열이 생기기도 하지만, 열이 진액을 손상시켜 음허를 유발할 수도 있습니다. 음허로 인해 생긴 열을 ‘음허열’이라고 합니다. 음허열의 특징은 오후와 야간에 심한 조열이 나타나는 것이며, 이 외에도 식은땀, 오장심열, 세삭한 맥, 건조한 설태 등이 동반됩니다.
+`;
             } else if (v1 > v2) { // Yin > Yang => Yang Deficiency
-                diagnosisDisplay.innerHTML = `<strong>Yang Deficiency (양허 / 陽虛)</strong>Cold and dampness, chills, edema, tongue teeth mark, white greasy coating, soggy slow pulse`;
+                diagnosisDisplay.innerHTML = `<strong>Yang Deficiency (양허 / 陽虛)</strong>양이 허해지면 상대적으로 음이 성해집니다. 성해진 음은 한증과 습증으로 나타납니다. 양허증은 기허증에 추위를 심하게 타는 증상이 더해진 것으로 표현됩니다. 기운이 없고 창백하며, 추위를 많이 타게 됩니다. 습증이 겸하면 전신에 부종이 생깁니다. 양허증은 무력감, 추위, 부종, 지맥 혹은 유맥, 부은 혀, 희고 두꺼운 설태, 치흔 등으로 나타납니다.
+`;
             } else {
                 diagnosisDisplay.innerHTML = `<strong>Balanced State (음양조화 / 陰陽調和)</strong>Yin and Yang are in harmony.`;
             }
