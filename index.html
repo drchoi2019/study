@@ -33,12 +33,15 @@
             justify-content: space-between;
             padding-left: 2rem;
             padding-right: 2rem;
+            display: flex; /* 명시적으로 flex 유지 */
         }
         #main-header.shrunk #title-container {
             text-align: left;
+            display: block; /* 명시적으로 표시 */
         }
         #main-header.shrunk h1 {
             font-size: 1.5rem; /* 24px */
+            display: block; /* 명시적으로 표시 */
         }
         #main-header.shrunk p {
             display: none;
