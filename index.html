@@ -58,7 +58,7 @@
             color: #000;
         }
 
-        /* Content area styling */
+        /* Iframe styling for seamless integration */
         #content-wrapper {
             max-width: 1000px;
             margin: 0 auto;
@@ -68,6 +68,13 @@
         }
         #content-wrapper.visible {
             opacity: 1;
+        }
+        #content-frame {
+            width: 100%;
+            border: none; /* Removed border */
+            background-color: transparent; /* Made background transparent */
+            /* Height is now set dynamically by JavaScript */
+            transition: height 0.2s ease-in-out;
         }
         
         /* Language Toggle Button Style */
@@ -136,11 +143,13 @@
         </div>
     </nav>
 
-    <!-- Main Content Area - Content will be loaded here dynamically -->
-    <main id="content-wrapper" class="hidden"></main>
+    <!-- Main Content Area with Iframe -->
+    <main id="content-wrapper">
+        <iframe id="content-frame" name="content-frame" class="hidden" frameborder="0"></iframe>
+    </main>
 
     <!-- Footer Section -->
-    <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
+    <footer class="text-center py-4 mt-8 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
@@ -148,11 +157,23 @@
         const header = document.getElementById('main-header');
         const nav = document.getElementById('main-nav');
         const contentWrapper = document.getElementById('content-wrapper');
-        const footer = document.getElementById('main-footer');
+        const iframe = document.getElementById('content-frame');
         const langToggle = document.getElementById('lang-toggle');
         
         let currentEnglishUrl = '';
         let currentLang = 'en';
+
+        // Listen for messages from the iframe to resize it
+        window.addEventListener('message', function(event) {
+            // A basic security check. In a real app, you might want to check event.origin
+            if (event.data && event.data.type === 'iframeResize') {
+                const newHeight = event.data.height;
+                if (newHeight) {
+                    iframe.style.height = newHeight + 'px';
+                }
+            }
+        }, false);
+
 
         const existingKoreanPages = [
             'five_organs_k.html',
@@ -160,80 +181,37 @@
             'pulse_k.html',
             'history_kor.html',
             'what_formula_k.html',
-            'pulse_tongue_k.html'
+            'pulse_tongue_k.html' // Added support for this page
         ];
 
-        // Function to fetch and display content, including executing scripts
-        async function fetchAndDisplay(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const htmlText = await response.text();
-                
-                // Use DOMParser to parse the fetched HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
-                
-                // Set the innerHTML of the content wrapper with the body of the fetched doc
-                contentWrapper.innerHTML = doc.body.innerHTML;
-                
-                // Find all script tags in the newly added content and re-create them to execute
-                const scripts = contentWrapper.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    
-                    // Copy all attributes from the old script to the new one
-                    Array.from(oldScript.attributes).forEach(attr => {
-                        newScript.setAttribute(attr.name, attr.value);
-                    });
-                    
-                    // Copy the inline script content
-                    newScript.textContent = oldScript.textContent;
-                    
-                    // Replace the old script tag with the new one in the DOM to trigger execution
-                    oldScript.parentNode.replaceChild(newScript, oldScript);
-                });
-
-            } catch (error) {
-                console.error("Error fetching page:", error);
-                contentWrapper.innerHTML = `<p class="text-center text-red-500">Error: Could not load content from ${url}.</p>`;
-            }
-        }
-
-        async function loadPage(url) {
+        function loadPage(url) {
             event.preventDefault();
             currentEnglishUrl = url;
+            iframe.src = url; 
             currentLang = 'en';
             langToggle.textContent = 'Kor';
             
-            await fetchAndDisplay(url);
-            
             header.classList.add('shrunk');
-            nav.classList.add('hidden');
-            footer.classList.add('hidden');
-            contentWrapper.classList.remove('hidden');
+            nav.style.display = 'none';
+            iframe.classList.remove('hidden');
             contentWrapper.classList.add('visible');
         }
 
         function resetView() {
             header.classList.remove('shrunk');
-            nav.classList.remove('hidden');
-            footer.classList.remove('hidden');
-            contentWrapper.classList.add('hidden');
+            nav.style.display = 'block';
+            iframe.classList.add('hidden');
             contentWrapper.classList.remove('visible');
-            contentWrapper.innerHTML = ''; // Clear content
+            iframe.src = 'about:blank';
+            iframe.style.height = '0px'; // Reset height
             currentEnglishUrl = '';
             currentLang = 'en';
             langToggle.textContent = 'Kor';
         }
 
-        async function toggleLanguage(event) {
+        function toggleLanguage(event) {
             event.preventDefault();
             if (!currentEnglishUrl) return;
-
-            let targetUrl;
 
             if (currentLang === 'en') {
                 // Switch to Korean
@@ -245,23 +223,50 @@
                 }
 
                 if (existingKoreanPages.includes(koreanPage)) {
-                    targetUrl = koreanPage;
+                    iframe.src = koreanPage;
                     currentLang = 'ko';
                     langToggle.textContent = 'Eng';
                 } else {
                     alert('한글 페이지가 아직 준비되지 않았습니다.');
-                    return;
                 }
             } else {
                 // Switch back to English
-                targetUrl = currentEnglishUrl;
+                iframe.src = currentEnglishUrl;
                 currentLang = 'en';
                 langToggle.textContent = 'Kor';
             }
-            
-            await fetchAndDisplay(targetUrl);
         }
     </script>
+
+    <!-- 
+    ******************************************************************
+    ** 중요: 아래 스크립트를 각 콘텐츠 페이지(five_organs.html 등)의  **
+    ** </body> 태그 바로 앞에 추가해야 합니다.                   **
+    ******************************************************************
+
+    <script>
+        function sendHeight() {
+            // 부모 창이 있는지 확인
+            if (window.parent) {
+                const height = document.body.scrollHeight;
+                // 부모 창으로 콘텐츠의 높이 정보를 메시지로 전송
+                window.parent.postMessage({ type: 'iframeResize', height: height }, '*');
+            }
+        }
+
+        // 페이지가 처음 로드될 때 높이 전송
+        window.onload = sendHeight;
+
+        // ResizeObserver를 사용하여 콘텐츠 크기가 변경될 때마다 높이를 전송.
+        // setInterval보다 훨씬 효율적입니다.
+        const resizeObserver = new ResizeObserver(entries => {
+            sendHeight();
+        });
+
+        // body 요소의 크기 변경을 감지
+        resizeObserver.observe(document.body);
+    </script>
+    -->
 
 </body>
 </html>
