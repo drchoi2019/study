@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Does Spleen or Liver Govern Muscle?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #3d405b;
+        }
+        .hanja {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 700;
+            color: #81b29a;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #81b29a;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #6a9a81;
+        }
+        .quiz-feedback {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left-width: 5px;
+        }
+        .feedback-correct {
+            background-color: #f0fff4;
+            border-color: #38a169;
+            color: #2f855a;
+        }
+        .feedback-incorrect {
+            background-color: #fff5f5;
+            border-color: #e53e3e;
+            color: #c53030;
+        }
+        .equation-card {
+             cursor: pointer;
+             border: 2px dashed #cbd5e0;
+        }
+        .equation-card .plus {
+            transition: transform 0.3s ease;
+        }
+        .equation-card:hover .plus {
+            transform: scale(1.2) rotate(90deg);
+        }
+        .dict-card {
+            background: #fafafa;
+            border-left: 5px solid #81b29a;
+        }
+        .text-main { color: #3d405b; }
+        .text-subtle { color: #6b7280; }
+        .border-error { border-color: #ef4444; }
+        .text-error { color: #b91c1c; }
+        .border-correct { border-color: #22c55e; }
+        .text-correct { color: #15803d; }
+
+
+    </style>
+</head>
+<body class="p-8">
+    
+    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+        &larr; Interactve TCM
+    </a>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <!-- Header -->
+        <header class="text-center mb-12 pt-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-main mb-2">Does Spleen or Liver Govern Muscle?</h1>
+            <p class="text-xl text-subtle">Clarifying a Key Translation Error in TCM</p>
+        </header>
+
+        <!-- Introduction: The Classical Quote and Central Question -->
+        <section class="mb-16 text-center">
+            <blockquote class="text-3xl md:text-4xl font-semibold text-main mb-6 italic">
+                "脾主肉, 肝主筋"
+                <footer class="text-lg mt-2 text-subtle not-italic">— Huangdi Neijing (The Yellow Emperor's Inner Canon)</footer>
+            </blockquote>
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-main">How Should We Interpret This Foundation?</h2>
+            <p class="text-lg max-w-3xl mx-auto text-subtle">
+                This classical statement is fundamental to TCM. But its modern interpretation has created a critical split in understanding.
+            </p>
+            <div class="mt-8 grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="p-6 bg-white rounded-lg border-t-4 border-error shadow-md">
+                    <h3 class="font-bold text-xl mb-2 text-error">Common Error</h3>
+                    <p class="text-lg text-main">Spleen governs <span class="font-semibold">Muscle</span></p>
+                    <p class="text-lg text-main">Liver governs <span class="font-semibold">Sinew/Tendon</span></p>
+                </div>
+                <div class="p-6 bg-white rounded-lg border-t-4 border-correct shadow-md">
+                    <h3 class="font-bold text-xl mb-2 text-correct">Classical Truth</h3>
+                    <p class="text-lg text-main">Spleen governs <span class="font-semibold">Flesh (肉)</span></p>
+                    <p class="text-lg text-main">Liver governs <span class="font-semibold">Muscle (筋)</span></p>
+                </div>
+            </div>
+            <p class="mt-8 text-lg max-w-3xl mx-auto text-subtle">The key to resolving this confusion lies in the original Chinese characters themselves.</p>
+        </section>
+
+        <!-- The Root of the Problem -->
+        <section class="mb-16 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-main">The Answer is in the Characters</h2>
+            <p class="text-lg max-w-3xl mx-auto text-subtle mb-8">When we move away from a Western anatomical view and look at the functional meaning of the characters, the confusion becomes clear.</p>
+            <div class="flex justify-center items-center gap-8 md:gap-16">
+                <div>
+                    <p class="text-8xl md:text-9xl hanja">肉</p>
+                    <p class="text-2xl font-semibold mt-2">ròu</p>
+                </div>
+                <div>
+                    <p class="text-8xl md:text-9xl hanja">筋</p>
+                    <p class="text-2xl font-semibold mt-2">jīn</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Dictionary Evidence -->
+        <section class="mb-16">
+            <div class="grid md:grid-cols-1 gap-8">
+                <div class="card dict-card">
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-4xl hanja">肉 <span class="text-2xl text-gray-500 font-normal">(ròu)</span></p>
+                            <ul class="list-disc list-inside mt-2 text-lg text-main space-y-1">
+                                <li><strong>Collins:</strong> 1. (human) <span class="font-semibold text-correct">flesh</span> 2. (animal) <span class="font-semibold text-correct">meat</span></li>
+                                <li><strong>Google Translate:</strong> <span class="font-semibold text-correct">meat</span></li>
+                                <li><span class="font-semibold text-error">Key Point:</span> No dictionary translates it as 'muscle'.</li>
+                            </ul>
+                        </div>
+                        <hr class="my-4">
+                        <div>
+                            <p class="text-4xl hanja">筋 <span class="text-2xl text-gray-500 font-normal">(jīn)</span></p>
+                             <ul class="list-disc list-inside mt-2 text-lg text-main space-y-1">
+                                <li><strong>Collins:</strong> 1. (tendon) tendon 2. (muscle) <span class="font-semibold text-correct">muscle</span></li>
+                                <li><strong>Google Translate:</strong> <span class="font-semibold text-correct">muscle</span></li>
+                                 <li><strong>Related term (筋骨):</strong> Wiktionary & LIFE Science Dictionary define this as "muscles and bones" or "musculoskeletal system".</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center mt-6 text-subtle">Dictionaries consistently point to <span class="hanja">筋</span> as muscle and <span class="hanja">肉</span> as flesh/meat.</p>
+        </section>
+
+
+        <!-- The Functional Distinction: Interactive Element -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-main">A Difference in Function, Not Form</h2>
+            <div id="equation" class="card equation-card text-center" onclick="toggleExplanation()">
+                <div class="flex justify-center items-center flex-wrap gap-4 md:gap-8">
+                    <div class="text-center">
+                        <p class="text-7xl hanja">肉</p>
+                        <p class="text-xl font-semibold">Flesh / Inactive Muscle</p>
+                    </div>
+                    <p class="text-6xl font-thin text-gray-400 plus">+</p>
+                    <div class="text-center">
+                        <p class="text-7xl hanja">力</p>
+                        <p class="text-xl font-semibold">Action / Force</p>
+                    </div>
+                    <p class="text-6xl font-thin text-gray-400">=</p>
+                    <div class="text-center">
+                        <p class="text-7xl hanja">筋</p>
+                        <p class="text-xl font-semibold">Muscle in Action</p>
+                    </div>
+                </div>
+                 <p class="mt-6 text-subtle text-sm">(Click this card to reveal the explanation)</p>
+            </div>
+            <div id="explanation" class="hidden mt-6 p-6 bg-green-50/30 border border-green-200/50 rounded-lg">
+                <p class="text-lg text-correct">In TCM, <span class="hanja text-2xl">肉</span> (ròu) and <span class="hanja text-2xl">筋</span> (jīn) are not materially different. They describe the *same tissue* in different functional states.
+                <br><br>
+                <span class="hanja">肉</span> (ròu) refers to the tissue in its passive, structural, and nourishing state—like flesh or an inactive muscle. It provides form and substance. This is the domain of the <span class="font-bold">Spleen</span>.
+                <br><br>
+                When that same tissue is engaged in movement, contraction, and exertion, it is called <span class="hanja">筋</span> (jīn). This refers to its active, dynamic function. This is the domain of the <span class="font-bold">Liver</span>.</p>
+            </div>
+        </section>
+
+        <!-- Practical Implications -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-main">Practical Implications in Diagnosis</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-2xl font-semibold mb-4 text-center">Spleen Governs <span class="hanja">肉</span> (Flesh)</h3>
+                    <div class="flex items-center mb-3">
+                        <svg class="w-8 h-8 mr-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h1a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.881 4.002l.023.023a1 1 0 010 1.414l-2.122 2.121a1 1 0 01-1.414 0l-.023-.023a1 1 0 010-1.414l2.122-2.121a1 1 0 011.414 0zM16.12 4.002l.023.023a1 1 0 000 1.414l-2.122 2.121a1 1 0 00-1.414 0l-.023-.023a1 1 0 000-1.414l2.122-2.121a1 1 0 001.414 0zM12 21a9 9 0 100-18 9 9 0 000 18z"></path></svg>
+                        <p class="text-lg font-semibold">Focus: Structure, Metabolism, Nourishment</p>
+                    </div>
+                    <ul class="list-disc list-inside space-y-2 text-main">
+                        <li>Weight gain or muscle atrophy</li>
+                        <li>Feeling sluggish and heavy</li>
+                        <li>Poor digestion and metabolism</li>
+                        <li>Weak limbs, lack of substance</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-semibold mb-4 text-center">Liver Governs <span class="hanja">筋</span> (Muscle)</h3>
+                     <div class="flex items-center mb-3">
+                        <svg class="w-8 h-8 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <p class="text-lg font-semibold">Focus: Movement, Flexibility, Tension</p>
+                    </div>
+                    <ul class="list-disc list-inside space-y-2 text-main">
+                        <li>Muscle spasms, cramps, or tremors</li>
+                        <li>Tight, stiff, or inflexible muscles</li>
+                        <li>Tendonitis or issues with joint mobility</li>
+                        <li>Conditions related to Wind, like tetanus</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="card">
+            <h2 class="text-3xl font-bold text-center mb-2 text-main">Test Your Understanding</h2>
+            <p class="text-center text-subtle mb-8">Check the core distinction: passive substance vs. active function.</p>
+
+            <!-- Quiz 1 -->
+            <div class="mb-8">
+                <p class="text-lg font-semibold mb-3 text-main">Quiz 1: You've ordered sirloin at a steakhouse. Is the sirloin on your plate governed by the Spleen or the Liver?</p>
+                <div class="flex gap-4">
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(1, 'spleen')">Flesh (Spleen)</button>
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(1, 'liver')">Muscle (Liver)</button>
+                </div>
+                <div id="feedback-1" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Quiz 2 -->
+            <div class="mb-8">
+                <p class="text-lg font-semibold mb-3 text-main">Quiz 2: You repeatedly injure your calf muscle or Achilles tendon at the gym. Is this recurring injury related to the Spleen or the Liver?</p>
+                 <div class="flex gap-4">
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(2, 'spleen')">Flesh (Spleen)</button>
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(2, 'liver')">Muscle (Liver)</button>
+                </div>
+                <div id="feedback-2" class="quiz-feedback"></div>
+            </div>
+            
+            <!-- Quiz 3 -->
+            <div class="mb-8">
+                <p class="text-lg font-semibold mb-3 text-main">Quiz 3: You sprained your back while exercising and now can't walk. Should you needle the Liver channel or the Spleen channel?</p>
+                 <div class="flex gap-4">
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(3, 'spleen')">Spleen Channel</button>
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(3, 'liver')">Liver Channel</button>
+                </div>
+                <div id="feedback-3" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Quiz 4 -->
+            <div>
+                <p class="text-lg font-semibold mb-3 text-main">Quiz 4: You've been gaining weight for no obvious reason. In Korean, people often say they are “gaining 살,” where 살 means “flesh” (肉, ròu). Is this related to the Spleen or the Liver?</p>
+                 <div class="flex gap-4">
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(4, 'spleen')">Spleen Issue</button>
+                    <button class="btn btn-primary flex-1" onclick="checkAnswer(4, 'liver')">Liver Issue</button>
+                </div>
+                <div id="feedback-4" class="quiz-feedback"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- Interactive Explanation Script ---
+        function toggleExplanation() {
+            const explanationDiv = document.getElementById('explanation');
+            explanationDiv.classList.toggle('hidden');
+        }
+
+        // --- Quiz Logic Script ---
+        const answers = {
+            1: {
+                correct: 'spleen',
+                explanation: '<strong>Correct!</strong> The sirloin on the plate is meat—a passive, structural substance without action. In TCM, this is <span class="hanja">肉</span> (ròu), or flesh, which is governed by the <strong>Spleen</strong>.'
+            },
+            2: {
+                correct: 'liver',
+                explanation: '<strong>Correct!</strong> Repetitive injuries to muscles and tendons from activity relate to their function, flexibility, and resilience. This falls under the domain of <span class="hanja">筋</span> (jīn), which is governed by the <strong>Liver</strong>.'
+            },
+            3: {
+                correct: 'liver',
+                explanation: '<strong>Correct!</strong> An acute sprain from movement is an issue of the <span class="hanja">筋</span> (muscle/tendon) in a state of dysfunction. This is a classic Liver channel condition, as the Liver governs movement and the free flow of Qi in the sinews.'
+            },
+            4: {
+                correct: 'spleen',
+                explanation: '<strong>Correct!</strong> Unexplained weight gain, or the accumulation of "살" (<span class="hanja">肉</span>), points to a metabolic and structural issue. This is a primary concern of the Spleen, which governs the transformation of food and the substance of the flesh.'
+            }
+        };
+
+        function checkAnswer(questionNum, selectedAnswer) {
+            const feedbackDiv = document.getElementById(`feedback-${questionNum}`);
+            const correctAnswer = answers[questionNum].correct;
+            
+            feedbackDiv.innerHTML = answers[questionNum].explanation;
+
+            if (selectedAnswer === correctAnswer) {
+                feedbackDiv.className = 'quiz-feedback feedback-correct';
+            } else {
+                feedbackDiv.className = 'quiz-feedback feedback-incorrect';
+            }
+            
+            feedbackDiv.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
