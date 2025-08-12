@@ -67,24 +67,69 @@
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Top Menu for Individual Pages (Updated) -->
+<header class="w-full max-w-3xl mx-auto px-4 flex justify-between items-center mb-4">
+    <a href="index.html" class="text-lg font-serif font-semibold hover:text-gray-500">
+        &larr; Interactive TCM
+    </a>
+    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+        Kor / Eng
+    </a>
+</header>
+<script>
+    async function toggleLanguage(event) {
+        event.preventDefault();
+        const currentPath = window.location.pathname;
+        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+        let targetFile;
 
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">복합 맥상의 시각화</h1>
-
-    <div class="w-full max-w-xl grid grid-cols-1 md:grid-cols-5 gap-4">
+        // 대상 파일 결정
+        if (currentFile.includes('_k.html')) {
+            // 현재 한글 페이지 -> 영어 페이지로 이동
+            targetFile = currentFile.replace('_k.html', '.html');
+            window.location.href = targetFile;
+            return;
+        } else {
+            // 현재 영어 페이지 -> 한글 페이지로 이동
+            if (currentFile.includes('history.html')) {
+                targetFile = 'history_kor.html';
+            } else {
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
+        }
         
-        <!-- Left Column: Diagnosis Selection (Narrowed to 2/5 width) -->
+        // 이동할 한글 페이지가 실제로 존재하는지 확인
+        try {
+            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
+            if (response.ok) {
+                window.location.href = targetFile;
+            } else {
+                alert('준비중입니다.');
+            }
+        } catch (error) {
+            console.error('페이지 확인 중 오류 발생:', error);
+            alert('준비중입니다.');
+        }
+    }
+</script>
+
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">복합맥상의 시각화</h1>
+
+    <div class="w-full max-w-3xl grid grid-cols-1 md:grid-cols-5 gap-6">
+        
+        <!-- Left Column: Diagnosis Selection -->
         <div class="md:col-span-2 bg-white/60 backdrop-blur-sm p-3 rounded-2xl shadow-lg border border-gray-200/80">
             <div class="space-y-3">
                 <!-- 풍 (Wind) Section -->
                 <div class="p-2 bg-blue-50 border border-blue-200 rounded-lg">
                     <div class="space-y-2">
                         <div>
-                            <span class="font-semibold text-sm">풍한 (風寒)</span>
-                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "softness":-7, "strength":5}'>부+긴</button><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "speed":-9}'>부+지</button><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "strength":-9}'>부+약</button></div>
+                            <span class="font-semibold text-base">풍한 (風寒)</span>
+                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "softness":-7, "strength":5}'>부+긴</button><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "speed":-9}'>부+지</button><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "strength":-9}'>부+약</button></div>
                         </div>
                         <div>
-                            <span class="font-semibold text-sm">풍열 (風熱)</span>
-                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "speed":9}'>부+삭</button></div>
+                            <span class="font-semibold text-base">풍열 (風熱)</span>
+                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "speed":9}'>부+삭</button></div>
                         </div>
                     </div>
                 </div>
@@ -92,8 +137,8 @@
                 <!-- 간 (Liver) Section -->
                 <div class="p-2 bg-green-50 border border-green-200 rounded-lg">
                     <div class="space-y-2">
-                        <div><span class="font-semibold text-sm">간양상항</span><div class="mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"softness":-9, "strength":-5}'>현+세</button></div></div>
-                        <div><span class="font-semibold text-sm">간화상염</span><div class="mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"softness":-9, "speed":9}'>현+삭</button></div></div>
+                        <div><span class="font-semibold text-base">간양상항</span><div class="mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"softness":-9, "strength":-5}'>현+세</button></div></div>
+                        <div><span class="font-semibold text-base">간화상염</span><div class="mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"softness":-9, "speed":9}'>현+삭</button></div></div>
                     </div>
                 </div>
 
@@ -101,16 +146,16 @@
                 <div class="p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
                      <div class="space-y-2">
                         <div>
-                            <span class="font-semibold text-sm">음허 (陰虛)</span>
-                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"strength":-5, "speed":9}'>세+삭</button><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "strength":-7}'>부+허</button></div>
+                            <span class="font-semibold text-base">음허 (陰虛)</span>
+                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"strength":-5, "speed":9}'>세+삭</button><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":9, "strength":-7}'>부+허</button></div>
                         </div>
                         <div>
-                            <span class="font-semibold text-sm">양허 (陽虛)</span>
-                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":-9, "speed":-9}'>침+지</button><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":-9, "strength":-5}'>침+약</button></div>
+                            <span class="font-semibold text-base">양허 (陽虛)</span>
+                            <div class="flex flex-wrap gap-1 mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":-9, "speed":-9}'>침+지</button><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"depth":-9, "strength":-5}'>침+세</button></div>
                         </div>
                         <div>
-                            <span class="font-semibold text-sm">혈허 (血虛)</span>
-                            <div class="mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"strength":-9, "rhythm":-7}'>세+약+삽</button></div>
+                            <span class="font-semibold text-base">혈허 (血虛)</span>
+                            <div class="mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"strength":-9, "rhythm":-7}'>세+약+삽</button></div>
                         </div>
                     </div>
                 </div>
@@ -118,15 +163,15 @@
                 <!-- 실 (Excess) Section -->
                 <div class="p-2 bg-red-50 border border-red-200 rounded-lg">
                     <div class="space-y-2">
-                        <div><span class="font-semibold text-sm">혈어 (血瘀)</span><div class="mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"rhythm":-9, "strength":-5}'>삽+세</button></div></div>
-                        <div><span class="font-semibold text-sm">습열 (濕熱)</span><div class="mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"rhythm":9, "speed":9}'>활+삭</button></div></div>
-                        <div><span class="font-semibold text-sm">습담 (濕痰)</span><div class="mt-1"><button class="pulse-btn text-xs bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"softness":9, "rhythm":9}'>유+활</button></div></div>
+                        <div><span class="font-semibold text-base">혈어 (血瘀)</span><div class="mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"rhythm":-9, "strength":-5}'>삽+세</button></div></div>
+                        <div><span class="font-semibold text-base">습열 (濕熱)</span><div class="mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"rhythm":9, "speed":9}'>활+삭</button></div></div>
+                        <div><span class="font-semibold text-base">습담 (濕痰)</span><div class="mt-1"><button class="pulse-btn text-sm bg-white border border-gray-300 rounded-full px-2 py-0.5" data-pulse='{"softness":9, "rhythm":9}'>유+활</button></div></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Right Column: Interactive Chart (Compacted) -->
+        <!-- Right Column: Interactive Chart -->
         <div class="md:col-span-3 bg-white/50 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-gray-200/80">
             <div class="flex flex-col h-full gap-4">
                 <div id="controls" class="space-y-2">
@@ -151,7 +196,7 @@
                 { id: 'depth', label: '부침 (깊이)', minLabel: '침(沈)', maxLabel: '부(浮)' },
                 { id: 'strength', label: '허실 (세기)', minLabel: '허(虛)', maxLabel: '실(實)' },
                 { id: 'rhythm', label: '규칙성', minLabel: '삽(澀)', maxLabel: '활(滑)' },
-                { id: 'softness', label: '유연함', minLabel: '현긴(弦緊)', maxLabel: '유(濡)' }
+                { id: 'softness', label: '유연함', minLabel: '현/긴(弦/緊)', maxLabel: '유(濡)' }
             ];
 
             function initializeApp() {
@@ -166,11 +211,11 @@
                 axes.forEach(axis => {
                     const controlHTML = `
                         <div>
-                            <label for="${axis.id}" class="block text-xs font-medium text-gray-700 mb-0.5">${axis.label}</label>
+                            <label for="${axis.id}" class="block text-sm font-medium text-gray-700 mb-0.5">${axis.label}</label>
                             <div class="flex items-center space-x-2">
-                                <span class="text-xs text-gray-500 w-12 text-right">${axis.minLabel}</span>
+                                <span class="text-sm text-gray-500 w-12 text-right">${axis.minLabel}</span>
                                 <input type="range" id="${axis.id}" min="-10" max="10" value="0" class="flex-1 slider">
-                                <span class="text-xs text-gray-500 w-12 text-left">${axis.maxLabel}</span>
+                                <span class="text-sm text-gray-500 w-12 text-left">${axis.maxLabel}</span>
                             </div>
                         </div>
                     `;
@@ -205,7 +250,7 @@
                                     count: 3 // Set 3 steps for the grid
                                 },
                                 pointLabels: { 
-                                    font: { size: 10, weight: '500', family: "'Noto Sans KR', sans-serif" } 
+                                    font: { size: 12, weight: '500', family: "'Noto Sans KR', sans-serif" } 
                                 }
                             }
                         },
