@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Er Chen Tang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #374151; /* text-gray-700 */
+            overflow-x: hidden;
+        }
+        .font-serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+        .visualization-area {
+            background-color: #FDFBFA;
+            border: 1px solid #EAE3DB;
+        }
+        .herb-card {
+            transition: all 0.25s ease-in-out;
+            border: 2px solid transparent;
+            background-color: #FFFFFF;
+        }
+        .herb-card.active {
+            background-color: #EAE3DB;
+            border-color: #BCAEA0;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        .herb-card:not(.active):hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        
+        /* --- SVG Animation States --- */
+        #clog, #bubbles, #push-effect, #water-flush {
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #bubbles, #push-effect, #water-flush {
+            opacity: 0;
+        }
+        .ban-xia-active #clog { transform: scale(0.9); opacity: 0.7; filter: blur(1px); }
+        .ban-xia-active #bubbles { opacity: 1; }
+        .chen-pi-active #clog { transform: translateX(80px) scale(0.8); opacity: 0.5; }
+        .chen-pi-active #push-effect { opacity: 1; transform: translateX(40px); }
+        .fu-ling-active #clog { transform: translateX(150px) scale(0.4); opacity: 0; }
+        .fu-ling-active #water-flush { opacity: 1; transform: scaleX(1); transform-origin: left; }
+
+        /* --- Formula Visualization Styles --- */
+        .formula-item {
+            background-color: #e9e2d9;
+            color: #5a5a5a;
+        }
+        .formula-item.active {
+            background-color: #A67B5B;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .central-orb {
+            background: radial-gradient(circle, #A67B5B 0%, #6F5B3E 70%);
+            box-shadow: 0 0 20px #C89F76, 0 0 40px #C89F76, inset 0 0 15px #e6c5a8;
+        }
+        .herb-orb {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 0;
+            transform: scale(0);
+        }
+        .herb-orb.visible { opacity: 1; transform: scale(1); }
+        .herb-orb.base {
+            background: radial-gradient(circle, #D4A373, #A17C4F); /* Brownish */
+            box-shadow: 0 0 10px #D4A373, inset 0 0 5px #f3d8b7;
+            color: white;
+        }
+        .herb-orb.added {
+            background: radial-gradient(circle, #81A89D, #52796F); /* Greenish */
+            box-shadow: 0 0 10px #81A89D, inset 0 0 5px #bde0d9;
+            color: white;
+        }
+        .herb-orb.group {
+            background: radial-gradient(circle, #A3A8B8, #6B7280); /* Grayish-blue */
+            box-shadow: 0 0 10px #A3A8B8, inset 0 0 5px #d1d5db;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" style="font-family: 'Noto Serif KR', serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+
+    <main class="flex-grow">
+        <div class="container mx-auto px-4 py-8 max-w-4xl">
+            
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Er Chen Tang</h1>
+            </div>
+
+            <!-- Section 1: Drain Analogy -->
+            <div class="mb-20">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-8">Mechanism of Action</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div id="visualization-container" class="visualization-area w-full h-80 rounded-2xl shadow-inner p-4 flex items-center justify-center">
+                        <svg viewBox="0 0 200 100" class="w-full h-full">
+                            <path d="M 0 20 H 200 V 80 H 0 Z" fill="#D6CDBF" />
+                            <path d="M 0 25 H 200 V 75 H 0 Z" fill="#F7F3EF" />
+                            <g id="water-flush" style="transform: scaleX(0);"><rect x="0" y="25" width="200" height="50" fill="#60A5FA" fill-opacity="0.5" /></g>
+                            <g id="clog">
+                                <path d="M 50 40 C 55 30, 70 30, 80 45 C 90 60, 75 70, 60 65 C 45 70, 45 50, 50 40 Z" fill="#A78BFA" opacity="0.8"/>
+                                <path d="M 65 35 C 70 30, 85 35, 90 45 C 95 55, 85 65, 75 60 C 65 65, 60 40, 65 35 Z" fill="#A78BFA" opacity="0.7"/>
+                            </g>
+                            <g id="bubbles">
+                                <circle cx="60" cy="45" r="3" fill="#34D399" class="animate-pulse"/>
+                                <circle cx="80" cy="55" r="2" fill="#34D399" class="animate-pulse delay-100"/>
+                                <circle cx="70" cy="38" r="2.5" fill="#34D399" class="animate-pulse delay-200"/>
+                            </g>
+                            <g id="push-effect">
+                                <path d="M 20 50 L 50 50" stroke="#F97316" stroke-width="3" stroke-linecap="round" />
+                                <path d="M 40 40 L 50 50 L 40 60" fill="none" stroke="#F97316" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col space-y-4">
+                        <div id="card-ban-xia" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                            <h3 class="text-xl font-bold text-emerald-800">Ban Xia: Dissolving Agent (Resolves Phlegm)</h3>
+                            <p class="text-gray-600 mt-1">Like a chemical agent, it dissolves and breaks down sticky phlegm (Tán).</p>
+                        </div>
+                        <div id="card-chen-pi" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                            <h3 class="text-xl font-bold text-orange-800">Chen Pi: Plunger (Moves Qi)</h3>
+                            <p class="text-gray-600 mt-1">Like a plunger, it moves Qi to push away the dissolved phlegm.</p>
+                        </div>
+                        <div id="card-fu-ling" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                            <h3 class="text-xl font-bold text-sky-800">Fu Ling: Flushing Agent (Drains Dampness)</h3>
+                            <p class="text-gray-600 mt-1">Like flushing a drain with hot water, it expels the remaining residue through urination.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Formula Derivations -->
+            <div>
+                <header class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-8">Er Chen Tang Based Formulas</h2>
+                </header>
+                <div class="p-4 rounded-2xl mb-8">
+                    <div id="formula-list" class="flex flex-wrap justify-center gap-2"></div>
+                </div>
+                <div class="bg-white/50 p-6 rounded-2xl shadow-lg min-h-[500px] flex flex-col justify-between">
+                    <div id="vis-container" class="relative w-full h-[400px] md:h-[450px]">
+                        <div id="central-orb" class="central-orb absolute top-1/2 left-1/2 w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center text-center -translate-x-1/2 -translate-y-1/2 transition-all duration-500">
+                            <h2 id="info-title" class="text-2xl md:text-3xl font-bold text-white"></h2>
+                        </div>
+                    </div>
+                    <div id="info-panel" class="text-center mt-4">
+                        <p id="info-derivation" class="text-lg text-amber-800 font-medium mb-2"></p>
+                        <p id="info-treats" class="text-gray-600"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- Script for Section 1: Drain Analogy ---
+        const vizContainer = document.getElementById('visualization-container');
+        const cards = {
+            banXia: document.getElementById('card-ban-xia'),
+            chenPi: document.getElementById('card-chen-pi'),
+            fuLing: document.getElementById('card-fu-ling'),
+        };
+        let activeHerb = null;
+
+        function setActiveHerb(herbName) {
+            if (activeHerb === herbName) {
+                resetState();
+                return;
+            }
+            activeHerb = herbName;
+            vizContainer.className = 'visualization-area w-full h-80 rounded-2xl shadow-inner p-4 flex items-center justify-center';
+            Object.values(cards).forEach(card => card.classList.remove('active'));
+            vizContainer.classList.add(`${herbName}-active`);
+            document.getElementById(`card-${herbName}`).classList.add('active');
+        }
+
+        function resetState() {
+            activeHerb = null;
+            vizContainer.className = 'visualization-area w-full h-80 rounded-2xl shadow-inner p-4 flex items-center justify-center';
+            Object.values(cards).forEach(card => card.classList.remove('active'));
+        }
+
+        cards.banXia.addEventListener('click', () => setActiveHerb('ban-xia'));
+        cards.chenPi.addEventListener('click', () => setActiveHerb('chen-pi'));
+        cards.fuLing.addEventListener('click', () => setActiveHerb('fu-ling'));
+        
+        document.body.addEventListener('click', (e) => {
+            if (!e.target.closest('.herb-card') && !e.target.closest('.formula-item')) {
+                resetState();
+            }
+        }, true);
+
+        // --- Script for Section 2: Formula Derivations ---
+        const allHerbs = [
+            { id: 'banha', name: 'Ban Xia' }, { id: 'jinpi', name: 'Chen Pi' }, { id: 'bongnyeong', name: 'Fu Ling' },
+            { id: 'gamcho', name: 'Gan Cao' }, { id: 'namseong', name: 'Nan Xing' }, { id: 'jisil', name: 'Zhi Shi' },
+            { id: 'jukyeo', name: 'Zhu Ru' }, { id: 'cheonma', name: 'Tian Ma' }, { id: 'baekchul', name: 'Bai Zhu' },
+            { id: 'sikcheyak', name: 'Food Stag. Herbs' }, { id: 'yeongyo', name: 'Lian Qiao' }, { id: 'sukjihwang', name: 'Shu Di Huang' },
+            { id: 'danggwi', name: 'Dang Gui' }, { id: 'gwaru', name: 'Gua Lou' }, { id: 'hwanggeum', name: 'Huang Qin' },
+            { id: 'hwangnyeon', name: 'Huang Lian' }, { id: 'haengin', name: 'Xing Ren' }, { id: 'gilgyeong', name: 'Jie Geng' },
+            { id: 'soyeop', name: 'Su Ye' }, { id: 'jeonho', name: 'Qian Hu' }, { id: 'jigak', name: 'Zhi Ke' },
+            { id: 'hyangbuja', name: 'Xiang Fu' }, { id: 'changchul', name: 'Cang Zhu' }, { id: 'pyeongwisan', name: 'Ping Wei San' },
+            { id: 'gwakhyang', name: 'Huo Xiang' }, { id: 'geoseupyak', name: 'Damp Drain. Herbs' }
+        ];
+
+        const formulas = {
+            'ijin-tang': { name: 'Er Chen Tang', treats: 'Base formula for treating damp-phlegm (Shī Tán).', derivation_text: "Base Formula", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: [] } },
+            'dodam-tang': { name: 'Dao Tan Tang', treats: 'Treats symptoms due to wind-phlegm (Fēng Tán).', derivation_text: "Er Chen Tang + Nan Xing, Zhi Shi", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['namseong', 'jisil'] } },
+            'ondam-tang': { name: 'Wen Dan Tang', treats: 'Treats irritability and insomnia due to heat-phlegm (Rè Tán).', derivation_text: "Er Chen Tang + Zhu Ru, Zhi Shi", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['jukyeo', 'jisil'] } },
+            'banha-baekchul-cheonma-tang': { name: 'Ban Xia Bai Zhu Tian Ma Tang', treats: 'Treats dizziness and headache due to phlegm-fluid (Tán Yǐn).', derivation_text: "Er Chen Tang + Tian Ma, Bai Zhu", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['cheonma', 'baekchul'] } },
+            'bohwa-hwan': { name: 'Bao He Wan', treats: 'Treats symptoms due to food stagnation (Shí Zhì).', derivation_text: "Er Chen Tang + Food Stag. Herbs, Lian Qiao", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['sikcheyak', 'yeongyo'] } },
+            'geumsu-yukgun-jeon': { name: 'Jin Shui Liu Jun Jian', treats: 'Treats chronic cough due to phlegm.', derivation_text: "Er Chen Tang + Shu Di Huang, Dang Gui", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['sukjihwang', 'danggwi'] } },
+            'cheonggi-hwadam-hwan': { name: 'Qing Qi Hua Tan Wan', treats: 'Treats cough due to heat-phlegm (Rè Tán).', derivation_text: "Er Chen Tang + Gua Lou, Nan Xing, Huang Qin, Zhi Shi, Huang Lian", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['gwaru', 'namseong', 'hwanggeum', 'jisil', 'hwangnyeon'] } },
+            'haengso-san': { name: 'Xing Su San', treats: 'Treats cough due to cool-dryness (Liáng Zào).', derivation_text: "Er Chen Tang + Xing Ren, Jie Geng, Su Ye, Qian Hu, Zhi Ke", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['haengin', 'gilgyeong', 'soyeop', 'jeonho', 'jigak'] } },
+            'changbu-dodam-tang': { name: 'Chang Fu Dao Tan Tang', treats: 'Treats infertility in obese individuals.', derivation_text: "Er Chen Tang + Nan Xing, Zhi Shi, Xiang Fu, Cang Zhu", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['namseong', 'jisil', 'hyangbuja', 'changchul'] } },
+            'gwakhyang-jeonggi-san': { name: 'Huo Xiang Zheng Qi San', treats: 'Treats vomit and diarrhea with exterior symptoms (Biǎo Lǐ).', derivation_text: "Er Chen Tang + Ping Wei San, Huo Xiang, Su Ye, Damp Drain. Herbs", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['pyeongwisan', 'gwakhyang', 'soyeop', 'geoseupyak'] } }
+        };
+        
+        const visContainer2 = document.getElementById('vis-container');
+        const formulaListEl = document.getElementById('formula-list');
+        const infoTitle = document.getElementById('info-title');
+        const infoDerivation = document.getElementById('info-derivation');
+        const infoTreats = document.getElementById('info-treats');
+
+        function initializeFormulas() {
+            allHerbs.forEach(herb => {
+                const orb = document.createElement('div');
+                orb.id = `herb-${herb.id}`;
+                orb.className = 'herb-orb';
+                orb.textContent = herb.name;
+                visContainer2.appendChild(orb);
+            });
+
+            Object.keys(formulas).forEach(key => {
+                const formula = formulas[key];
+                const item = document.createElement('button');
+                item.dataset.id = key;
+                item.textContent = formula.name;
+                item.className = 'formula-item font-medium py-2 px-4 rounded-full cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md';
+                item.addEventListener('click', () => updateDisplay(key));
+                formulaListEl.appendChild(item);
+            });
+            updateDisplay('ijin-tang');
+        }
+
+        function updateDisplay(formulaId) {
+            const formula = formulas[formulaId];
+            if (!formula) return;
+
+            infoTitle.textContent = formula.name;
+            infoDerivation.textContent = formula.derivation_text;
+            infoTreats.textContent = formula.treats;
+
+            document.querySelectorAll('.formula-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.id === formulaId);
+            });
+
+            const currentHerbs = [...new Set([...formula.composition.base, ...formula.composition.added])];
+            const radius = Math.min(visContainer2.clientWidth, visContainer2.clientHeight) / 2 * 0.7;
+            const angleStep = currentHerbs.length > 0 ? (2 * Math.PI) / currentHerbs.length : 0;
+
+            const groupHerbIds = ['sikcheyak', 'pyeongwisan', 'geoseupyak'];
+
+            let visibleHerbCount = 0;
+            allHerbs.forEach(herb => {
+                const orb = document.getElementById(`herb-${herb.id}`);
+                if (currentHerbs.includes(herb.id)) {
+                    orb.classList.add('visible');
+                    
+                    const isGroup = groupHerbIds.includes(herb.id);
+                    const isBase = formula.composition.base.includes(herb.id);
+
+                    orb.classList.remove('base', 'added', 'group'); // Clear all color classes
+
+                    if (isGroup) {
+                        orb.classList.add('group');
+                    } else if (isBase) {
+                        orb.classList.add('base');
+                    } else { // Is an added single herb
+                        orb.classList.add('added');
+                    }
+
+                    const angle = angleStep * visibleHerbCount - (Math.PI / 2);
+                    const x = (visContainer2.clientWidth / 2) + radius * Math.cos(angle) - 40;
+                    const y = (visContainer2.clientHeight / 2) + radius * Math.sin(angle) - 40;
+                    orb.style.left = `${x}px`;
+                    orb.style.top = `${y}px`;
+                    visibleHerbCount++;
+                } else {
+                    orb.classList.remove('visible', 'base', 'added', 'group');
+                }
+            });
+        }
+
+        initializeFormulas();
+        window.addEventListener('resize', () => {
+            const activeFormula = document.querySelector('.formula-item.active')?.dataset.id || 'ijin-tang';
+            updateDisplay(activeFormula);
+        });
+    </script>
+</body>
+</html>
