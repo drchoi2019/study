@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>허열의 특징 시각화 | Interactive TCM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 스타일 */
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #374151;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 56rem; /* 너비 확장 */
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* 헤더 */
+        .header {
+            width: 100%;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header a {
+            font-family: 'Noto Serif KR', serif; /* 홈 버튼만 세리프체 유지 */
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #374151;
+            text-decoration: none;
+        }
+
+        /* 본문 */
+        .main-content {
+            text-align: center;
+        }
+        .main-content h1, .main-content h2 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+        .main-content h1 {
+            font-size: 2.25rem;
+            margin-top: 2rem;
+        }
+        .main-content h2 {
+            font-size: 1.75rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .main-content p.intro {
+            max-width: 48rem;
+            margin: 0 auto 3rem;
+            text-align: left; /* 왼쪽 정렬로 변경 */
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        .main-content p.summary {
+            max-width: 48rem;
+            margin: 3rem auto 0;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+
+        /* 증상 카드 그리드 */
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* 증상 카드 스타일 */
+        .symptom-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .symptom-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .symptom-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c7a7b; /* 청녹색으로 변경 */
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        .symptom-card h3 .icon-wrapper {
+            font-size: 1.75rem; /* 이모지 크기 조절 */
+            width: 32px;
+            margin-right: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .symptom-card p {
+            margin-bottom: 0;
+            font-size: 1rem;
+            color: #4a5568;
+            flex-grow: 1;
+        }
+        /* 강조 텍스트 스타일 */
+        .highlight {
+            color: #dd6b20;
+            font-weight: 700;
+        }
+
+        /* 비교표 */
+        .comparison-table {
+            width: 100%;
+            margin: 2rem auto;
+            border-collapse: collapse;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #e2e8f0;
+            padding: 1rem 1.25rem;
+            text-align: center;
+        }
+        .comparison-table th {
+            background-color: #f7fafc;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .comparison-table td {
+            font-size: 1rem;
+            color: #4a5568;
+        }
+        .comparison-table td strong {
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        /* 푸터 */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <a href="index.html">
+                &larr; Interactive TCM
+            </a>
+        </header>
+
+        <main class="main-content">
+            <h1>음허열(陰虛熱)의 다섯 가지 특징</h1>
+            <p class="intro">
+                <strong style="color: #2b6cb0;">음허열은 1. 식은땀, 2. 오후 조열, 3. 수족장심열, 4. 세삭한 맥, 5. 건조한 설로 표현됩니다. 왜 그럴까 생각해 보겠습니다.</strong><br><br>
+                먼저 음허라는 것은 우리 몸의 물과 같은 성질의 진액(땀, 분비물, 수분)과 혈액이 모두 부족한 상태를 말합니다. 음허열은 진짜 열이 아니라, 음이 부족해서 음양의 원리에 따라 상대적으로 양이 성해져서 나타나는 가짜 열입니다.
+            </p>
+
+            <div class="symptoms-grid">
+                <div class="symptom-card">
+                    <h3>
+                        <span class="icon-wrapper">💦</span>
+                        1. 식은땀 (도한)
+                    </h3>
+                    <p>진짜 열은 실증의 발열(감기, 염증 등)로 열을 해소하기 위해 땀을 냅니다. 음허열도 열이 나기 때문에 땀을 내고자 하지만, <strong class="highlight">음허(수분 부족)해서</strong> 충분히 땀을 낼 수 없습니다. 그래서 식은땀이 납니다(도한).</p>
+                </div>
+                <div class="symptom-card">
+                    <h3>
+                        <span class="icon-wrapper">🌇</span>
+                        2. 오후 조열
+                    </h3>
+                    <p>진짜 열은 충분한 열을 내기 때문에 하루 종일 열이 나지만, 음허열은 <strong class="highlight">제한된 시간</strong>, 보통 저녁 시간에 주기적으로 열이 납니다(조열). 실제 소모성 질환인 폐결핵이나 암 환자에서 많이 보이는 패턴입니다.</p>
+                </div>
+                <div class="symptom-card">
+                    <h3>
+                        <span class="icon-wrapper">✋</span>
+                        3. 수족장심열
+                    </h3>
+                    <p>진짜 열은 충분한 열을 내기 때문에 전신에 열을 내지만, 음허열은 마치 <strong class="highlight">숯 끝의 남은 불씨처럼</strong> 우리 몸의 끝부분에만 열이 납니다. 손·발끝(수족장심열), 얼굴(관홍).</p>
+                </div>
+                <div class="symptom-card">
+                    <h3>
+                        <span class="icon-wrapper">📈</span>
+                        4. 세삭맥
+                    </h3>
+                    <p>맥관 내 흐를 혈액도 적어져서 맥이 가늘고 약하지만, 열이 나기 때문에 속도는 빠릅니다(세삭맥).</p>
+                </div>
+                <div class="symptom-card">
+                    <h3>
+                        <span class="icon-wrapper">👅</span>
+                        5. 건조한 설
+                    </h3>
+                    <p>소화기도 진액 부족으로 설태는 없고, 열증으로 혀는 건조하고 갈라집니다.</p>
+                </div>
+            </div>
+            
+            <p class="summary">원리를 이해하면 음허열의 특징적 증상들을 자연스럽게 떠올릴 수 있습니다.</p>
+
+            <h2>실열과 음허열 비교</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>실열 (實熱)</th>
+                        <th>음허열 (陰虛熱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>발열 양상</strong></td>
+                        <td>전신에 높은 열 (전신열)</td>
+                        <td>손/발바닥, 얼굴에 열감 (수족장심열)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>발열 시간</strong></td>
+                        <td>하루 종일 지속 (지속열)</td>
+                        <td>오후에 주기적으로 발열 (오후조열)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>땀</strong></td>
+                        <td>온몸에 땀이 남 (전신한출)</td>
+                        <td>잘 때 식은땀이 남 (도한)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>맥박</strong></td>
+                        <td>빠르고 힘참 (삭맥)</td>
+                        <td>가늘고 빠름 (세삭맥)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>혀 (설진)</strong></td>
+                        <td>누렇고 두꺼운 설태 (황태)</td>
+                        <td>설태가 적거나 없고 건조함 (소태/무태, 건조설)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>기허열과 음허열 비교</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>기허열 (氣虛熱)</th>
+                        <th>음허열 (陰虛熱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>발열 시간</strong></td>
+                        <td>주로 낮에 나타남 (주간발열)</td>
+                        <td>주로 오후에 나타남 (오후조열)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>발열 부위</strong></td>
+                        <td>몸의 표면에서 열감 (체표발열)</td>
+                        <td>손발바닥, 가슴에서 열감 (장심발열)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>주요 특징</strong></td>
+                        <td>과로하면 심해짐</td>
+                        <td>몸의 진액이 부족함</td>
+                    </tr>
+                     <tr>
+                        <td><strong>공통점</strong></td>
+                        <td colspan="2">은은한 미열(微熱)의 형태로 나타남</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
