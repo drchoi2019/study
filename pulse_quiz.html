@@ -77,8 +77,17 @@
 <!-- Main quiz container that grows to fill available space -->
 <main id="quiz-container" class="w-full max-w-2xl mx-auto flex-grow flex items-center justify-center p-4">
     <div class="quiz-card rounded-xl p-6 md:p-8 w-full">
-        <div id="start-screen">
+        <div id="start-screen" class="text-center">
+            <!-- Image added here -->
+            <img src="https://bkimg.cdn.bcebos.com/pic/b64543a98226cffc1e17e19fc5585d90f603738dbcdf?x-bce-process=image/format,f_auto/quality,Q_70/resize,m_lfit,limit_1,w_536" alt="Binhu Maixue book cover" class="mx-auto h-48 md:h-64 mb-6 rounded-lg shadow-md">
+            
             <h1 class="text-3xl font-bold text-center text-[#4A3F35] mb-4">Binhu Pulsology Quiz</h1>
+            
+            <!-- Inserted Introduction Text -->
+            <p class="text-sm text-left text-gray-600 mb-6 p-4 bg-stone-50 rounded-lg border border-stone-200">
+                <i>Binhu Maixue</i> is a classic Chinese medical treatise on pulse diagnosis (脈法), authored during the Ming dynasty by Li Shizhen (李時珍) of Binhu. Renowned for his highly empirical approach, Li Shizhen is also the author of the celebrated <i>Bencao Gangmu</i> (Compendium of Materia Medica). In his work—whether on materia medica (bencao), pulse diagnosis (mai), or acupuncture—he placed great emphasis on direct, firsthand experience. In <i>Binhu Maixue</i>, he recorded his observations of the pulse in vivid, poetic, and concrete language. These descriptions remain among the most authoritative references in use today. All pulse depictions featured in this quiz are drawn from Li Shizhen’s <i>Binhu Maixue</i>.
+            </p>
+            
             <p class="text-center text-gray-600 mb-8">Match the correct pulse (脈) based on the given information.</p>
             <button id="start-btn" class="w-full btn-next font-bold py-3 px-4 rounded-lg text-lg">Start Quiz</button>
         </div>
@@ -212,6 +221,11 @@
     let score = 0;
     const QUIZ_LENGTH = 10;
 
+    // Event listeners
+    startBtn.addEventListener('click', startQuiz);
+    nextBtn.addEventListener('click', showNextQuestion);
+    restartBtn.addEventListener('click', startQuiz);
+
     // Function to start the quiz
     function startQuiz() {
         // Reset state
@@ -324,28 +338,25 @@
         quizScreen.classList.add('hidden');
         resultScreen.classList.remove('hidden');
 
+        // Update final score
         finalScoreEl.textContent = score;
         finalTotalEl.textContent = QUIZ_LENGTH;
 
-        let message = '';
+        // Display a message based on score
         const percentage = (score / QUIZ_LENGTH) * 100;
+        let message = "";
         if (percentage === 100) {
-            message = 'Perfect! You are a master of pulsology!';
+            message = "Excellent! You're a master of pulsology!";
         } else if (percentage >= 70) {
-            message = 'Excellent! With a little more study, you could be an expert.';
-        } else if (percentage >= 40) {
-            message = 'Good job! Reviewing will lead to even better results.';
+            message = "Great job! You have a good grasp of the pulses.";
+        } else if (percentage >= 50) {
+            message = "Good effort. Keep practicing to improve.";
         } else {
-            message = 'Needs improvement. How about we start over from the beginning?';
+            message = "Don't worry, practice makes perfect. Try again!";
         }
         resultMessageEl.textContent = message;
     }
-
-    // Event listeners
-    startBtn.addEventListener('click', startQuiz);
-    nextBtn.addEventListener('click', showNextQuestion);
-    restartBtn.addEventListener('click', startQuiz);
-
 </script>
+
 </body>
 </html>
