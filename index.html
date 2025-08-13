@@ -52,32 +52,32 @@
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Theory" data-ko="이론">Theory</h2>
                 <ul class="space-y-2 pl-0">
-                    <li><a href="five_organs.html" class="nav-link" data-en="Five Organs" data-ko="오장">Five Organs</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" data-en="Pattern Diagnosis Basic" data-ko="변증 기초">Pattern Diagnosis Basic</a></li>
-                    <li><a href="pulse_tongue.html" class="nav-link" data-en="Basic Tongue/Pulse Pattern" data-ko="기본 설/맥 증">Basic Tongue/Pulse Pattern</a></li>
-                    <li><a href="yinyang_consum.html" class="nav-link" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
-                    <li><a href="yinyang_gram.html" class="nav-link" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
-                    <li><a href="pulse_vis.html" class="nav-link" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
-                    <li><a href="yinyang.html" class="nav-link" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse.html" class="nav-link" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
+                    <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Organs" data-ko="오장">Five Organs</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pattern Diagnosis Basic" data-ko="변증 기초">Pattern Diagnosis Basic</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Tongue/Pulse Pattern" data-ko="기본 설/맥 증">Basic Tongue/Pulse Pattern</a></li>
+                    <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
+                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
+                    <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
+                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                    <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
                 </ul>
             </div>
             <!-- Formula -->
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Formula" data-ko="방제학">Formula</h2>
                 <ul class="space-y-2 pl-0">
-                    <li><a href="what_formula.html" class="nav-link" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
-                    <li><a href="guizhi_v.html" class="nav-link" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
-                    <li><a href="hack_names.html" class="nav-link" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
+                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
+                    <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
+                    <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
                 </ul>
             </div>
             <!-- History -->
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="History" data-ko="한의학사">History</h2>
                 <ul class="space-y-2 pl-0">
-                    <li><a href="history.html" class="nav-link" data-en="Brief History of TCM" data-ko="한의학 약사">Brief History of TCM</a></li>
-                    <li><a href="four_masters.html" class="nav-link" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
-                    <li><a href="spleen_liver.html" class="nav-link" data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
+                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Brief History of TCM" data-ko="한의학 약사">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
+                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
                 </ul>
             </div>
         </div>
@@ -91,6 +91,28 @@
     <script>
         let currentLanguage = 'en';
 
+        // Function to check if a file exists before navigating
+        async function checkAndNavigate(event) {
+            event.preventDefault(); // Stop the link from navigating immediately
+            const url = event.currentTarget.href;
+
+            try {
+                // Use HEAD request for efficiency, it only fetches headers
+                const response = await fetch(url, { method: 'HEAD' });
+                if (response.ok) {
+                    // If the file exists (status 200-299), navigate to the page
+                    window.location.href = url;
+                } else {
+                    // If the file doesn't exist (e.g., 404), show a message
+                    alert('콘텐츠 준비중입니다.');
+                }
+            } catch (error) {
+                // Handle network errors or other fetch issues
+                console.error('Navigation check failed:', error);
+                alert('페이지를 확인할 수 없습니다. 네트워크 연결을 확인해주세요.');
+            }
+        }
+
         function toggleLanguage() {
             currentLanguage = currentLanguage === 'en' ? 'ko' : 'en';
 
@@ -103,7 +125,8 @@
             // Update all links
             const linksToUpdate = document.querySelectorAll('a.nav-link');
             linksToUpdate.forEach(link => {
-                const baseHref = link.getAttribute('href').replace('_k.html', '').replace('.html', '');
+                const baseHref = link.getAttribute('href').replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
+                
                 if (currentLanguage === 'ko') {
                     // Handle history.html exception
                     if (baseHref === 'history') {
