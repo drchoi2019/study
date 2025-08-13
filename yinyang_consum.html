@@ -16,6 +16,7 @@
             color: #5C3D2E; /* 부드러운 갈색 텍스트 */
             min-height: 100vh;
             display: flex;
+            flex-direction: column; /* 수정: 항목들을 세로로 정렬 */
             justify-content: center;
             align-items: center;
         }
@@ -145,12 +146,12 @@
 </head>
 <body>
     <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-    <a href="index.html" 
-       style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
-        &larr; Interactive TCM
-    </a>
-</header>
-    <br>
+        <a href="index.html" 
+           style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+    
     <div class="container">
         <div class="title">Yin & Yang Mutual Consumption</div>
         
@@ -214,8 +215,7 @@
             const v2 = Math.round(value2);
             
             if (v2 > v1) { // Yang > Yin => Yin Deficiency
-                diagnosisDisplay.innerHTML = `<strong>Yin Deficiency (음허 / 陰虛)</strong>When Yin becomes deficient, Yang becomes relatively predominant. Excess Yang manifests as heat syndromes and dryness syndromes. Yin deficiency may generate heat, but heat can also consume body fluids and lead to Yin deficiency. Heat arising from Yin deficiency is called Yin-deficiency heat. Its characteristics include pronounced tidal fever in the afternoon and at night, along with sticky sweating, a sensation of heat in the five centers (palms, soles, and chest), a thin and rapid pulse, and a dry tongue coating.
-`;
+                diagnosisDisplay.innerHTML = `<strong>Yin Deficiency (음허 / 陰虛)</strong>When Yin becomes deficient, Yang becomes relatively predominant. Excess Yang manifests as heat syndromes and dryness syndromes. Yin deficiency may generate heat, but heat can also consume body fluids and lead to Yin deficiency. Heat arising from Yin deficiency is called Yin-deficiency heat. Its characteristics include pronounced tidal fever in the afternoon and at night, along with sticky sweating, a sensation of heat in the five centers (palms, soles, and chest), a thin and rapid pulse, and a dry tongue coating.`;
             } else if (v1 > v2) { // Yin > Yang => Yang Deficiency
                 diagnosisDisplay.innerHTML = `<strong>Yang Deficiency (양허 / 陽虛)</strong>When Yang becomes deficient, Yin becomes relatively predominant. Excess Yin manifests as cold syndromes and dampness syndromes. Yang-deficiency syndrome is essentially Qi-deficiency syndrome with pronounced sensitivity to cold. Patients may present with fatigue, a pale complexion, and strong aversion to cold. If dampness is also present, generalized edema may occur. Symptoms of Yang-deficiency include weakness, cold intolerance, edema, a slow or deep pulse, a swollen tongue, a thick white tongue coating, and teeth marks on the tongue.`;
             } else {
