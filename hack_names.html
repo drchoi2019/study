@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Formula Names</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Inter', sans-serif;
+        }
+        .noto-serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+        .btn {
+            transition: all 0.2s ease-in-out;
+            transform: scale(1);
+        }
+        .btn.active-action, .btn.active-target {
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 14px 0 rgb(0 0 0 / 10%);
+        }
+        /* Action color is brown */
+        .btn.active-action {
+            background-color: #A16207; /* amber-700 */
+            border-color: #A16207;
+        }
+        .btn.active-target {
+            background-color: #14B8A6; /* teal-500 */
+            border-color: #14B8A6;
+        }
+        .result-card {
+            transition: all 0.3s ease-out;
+            min-height: 160px;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header class="w-full max-w-5xl mx-auto my-4 md:my-8 px-4 flex justify-between items-center">
+        <a href="#" class="noto-serif text-xl font-semibold text-gray-700 no-underline" onclick="event.preventDefault(); window.location.reload();">
+            &larr; Interactive TCM
+        </a>
+    </header>
+
+    <main class="w-full max-w-5xl mx-auto px-4 pb-16">
+        
+        <div class="text-center mb-10">
+            <!-- Title font is sans-serif (Inter) -->
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Hacking Formula Names</h1>
+            <p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto">The most common naming convention combines an <span class="font-semibold text-amber-700">action</span> with its <span class="font-semibold text-teal-600">target</span>. Click a button from each category to see how they combine.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            <!-- Actions Section -->
+            <div>
+                <h2 class="text-2xl font-bold mb-4 noto-serif text-amber-700 text-center">Actions</h2>
+                <!-- Centered the container -->
+                <div id="actions-container" class="flex flex-wrap justify-center gap-3">
+                    <!-- Action buttons will be injected here -->
+                </div>
+            </div>
+
+            <!-- Targets Section -->
+            <div>
+                <h2 class="text-2xl font-bold mb-4 noto-serif text-teal-500 text-center">Targets</h2>
+                <!-- Centered the container -->
+                <div id="targets-container" class="flex flex-wrap justify-center gap-3">
+                    <!-- Target buttons will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Combination Result Section -->
+        <div class="mt-12">
+            <!-- Replaced "Combination Result" text with an icon -->
+            <div class="flex justify-center mb-4 text-gray-500" aria-label="Combination Result">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 14h16M4 14c0 2.21 1.79 4 4 4h8c2.21 0 4-1.79 4-4M4 14V9.5c0-.83.67-1.5 1.5-1.5h13c.83 0 1.5.67 1.5 1.5V14" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 4L12 8l2-4" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+             </div>
+            <div id="result-card" class="result-card bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200 flex flex-col justify-center items-center text-center">
+                <p id="result-placeholder" class="text-gray-500">Select an action and a target to see the result.</p>
+                <div id="result-content" class="hidden">
+                    <h3 id="combined-term" class="text-3xl md:text-4xl font-bold text-gray-800"></h3>
+                    <p id="combined-meaning" class="text-lg md:text-xl text-gray-600 mt-2"></p>
+                    <div id="example-container" class="mt-4 pt-4 border-t border-gray-200 w-full hidden">
+                         <p class="text-sm text-gray-500 mb-1">Example Formula:</p>
+                         <p id="example-formula" class="text-xl font-semibold text-gray-700 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button id="clear-button" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">Clear Selection</button>
+            </div>
+        </div>
+
+        <!-- Answer Key Section -->
+        <div class="mt-16 text-center border-t pt-8">
+            <button id="toggle-answers-btn" class="bg-gray-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors">
+                숨어있는 처방들을 보려면 클릭
+            </button>
+            <div id="answer-key-list" class="hidden mt-6 bg-white p-6 rounded-xl shadow-lg text-left max-w-2xl mx-auto">
+                <!-- The list of formulas will be generated here by JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Data for actions, 'gu' removed
+            const actions = {
+                'Xie': 'Drain excess',
+                'Qing': 'Clear heat',
+                'Xiao': 'Eliminate',
+                'Bu': 'Tonify',
+                'Jian': 'Tonify',
+                'Yi': 'Tonify',
+                'Ping': 'Pacify',
+                'Wen': 'Warm, tonify',
+                'li': 'Regulate'
+            };
+
+            // Data for targets
+            const targets = {
+                'Xin': 'Heart',
+                'Dan': 'Gallbladder',
+                'Gan': 'Liver',
+                'Pi': 'Spleen',
+                'Wei': 'Stomach',
+                'Fei': 'Lung',
+                'Zhong': 'Middle Jiao',
+                'Huang': 'Yellow, imply Earth, Spleen',
+                'Bai': 'White, imply Metal, Lung',
+                'Feng': 'Wind',
+                'Xue': 'Blood',
+                'Qi': 'Qi, energy',
+                'Du': 'Toxin',
+                'Jing': 'Meridian, Menstruation'
+            };
+
+            // Data for example formulas, with consistent capitalization
+            const examples = {
+                'XieGan': 'Long Dan Xie Gan Tang',
+                'XieXin': 'Ban Xia Xie Xin Tang',
+                'XieHuang': 'Xie Huang San',
+                'XieBai': 'Xie Bai San',
+                'QingWei': 'Qing Wei San',
+                'QingGan': 'Qing Gan Ming Mu Tang',
+                'QingXin': 'Niu Huang Qing Xin Wan',
+                'QingFei': 'Qing Qi Hua Tan Wan',
+                'QingXue': 'Qing Xue Si Wu Tang',
+                'QingJin': 'Qing Qi Hua Tan Wan', // Alias
+                'QingQi': 'Qing Qi Hua Tan Wan',  // Alias
+                'BuXue': 'Dang Gui Bu Xue Tang',
+                'BuXin': 'Tian Wang Bu Xin Dan',
+                'BuFei': 'Bu Fei Yuan Tang',
+                'BuZhong': 'Bu Zhong Yi Qi Tang',
+                'JianZhong': 'Xiao Jian Zhong Tang',
+                'JianPi': 'Jian Pi Wan',
+                'XiaoFeng': 'Xiao Feng San',
+                'XiaoDu': 'Pu Ji Xiao Du Yin, Wu Wei Xiao Du Yin',
+                'PingWei': 'Ping Wei San',
+                'WenJing': 'Wen Jing Tang',
+                'WenDan': 'Wen Dan Tang',
+                'LiZhong': 'Li Zhong Wan',
+                'LiQi': 'Li Qi Qu Feng San',
+                'YiQi': 'Bu Zhong Yi Qi Tang'
+            };
+
+            const actionsContainer = document.getElementById('actions-container');
+            const targetsContainer = document.getElementById('targets-container');
+            
+            let selectedAction = null;
+            let selectedTarget = null;
+
+            // Function to create a button element
+            const createButton = (term, meaning, type) => {
+                const button = document.createElement('button');
+                button.className = `btn bg-white border border-gray-300 rounded-lg px-4 py-2 text-left shadow-sm hover:border-gray-400 hover:bg-gray-50`;
+                button.innerHTML = `<span class="font-bold text-lg">${term}</span><br><span class="text-sm text-gray-600">${meaning}</span>`;
+                button.dataset.term = term;
+                button.dataset.type = type;
+                button.dataset.meaning = meaning;
+                return button;
+            };
+
+            // Populate action buttons
+            for (const term in actions) {
+                const btn = createButton(term, actions[term], 'action');
+                actionsContainer.appendChild(btn);
+            }
+
+            // Populate target buttons
+            for (const term in targets) {
+                const btn = createButton(term, targets[term], 'target');
+                targetsContainer.appendChild(btn);
+            }
+
+            const allButtons = document.querySelectorAll('.btn');
+            const resultPlaceholder = document.getElementById('result-placeholder');
+            const resultContent = document.getElementById('result-content');
+            const combinedTermEl = document.getElementById('combined-term');
+            const combinedMeaningEl = document.getElementById('combined-meaning');
+            const exampleContainer = document.getElementById('example-container');
+            const exampleFormulaEl = document.getElementById('example-formula');
+            const clearButton = document.getElementById('clear-button');
+
+            // Event handler for button clicks
+            allButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const { term, type, meaning } = button.dataset;
+
+                    if (type === 'action') {
+                        document.querySelectorAll('.btn[data-type="action"]').forEach(b => b.classList.remove('active-action'));
+                        button.classList.add('active-action');
+                        selectedAction = { term, meaning };
+                    } else if (type === 'target') {
+                        document.querySelectorAll('.btn[data-type="target"]').forEach(b => b.classList.remove('active-target'));
+                        button.classList.add('active-target');
+                        selectedTarget = { term, meaning };
+                    }
+
+                    updateResult();
+                });
+            });
+
+            // Function to update the result display
+            const updateResult = () => {
+                if (selectedAction && selectedTarget) {
+                    const term = `${selectedAction.term} ${selectedTarget.term}`;
+                    const meaning = `${selectedAction.meaning} ${selectedTarget.meaning}`;
+                    
+                    // Standardize key for lookup: e.g., "jian", "Pi" -> "JianPi"
+                    const actionKey = selectedAction.term.charAt(0).toUpperCase() + selectedAction.term.slice(1);
+                    const targetKey = selectedTarget.term.charAt(0).toUpperCase() + selectedTarget.term.slice(1);
+                    const exampleKey = `${actionKey}${targetKey}`;
+                    
+                    resultPlaceholder.classList.add('hidden');
+                    resultContent.classList.remove('hidden');
+                    
+                    combinedTermEl.textContent = term;
+                    combinedMeaningEl.textContent = meaning;
+
+                    if (examples[exampleKey]) {
+                        // Handle multiple formulas in one entry
+                        const formulaText = examples[exampleKey].replace(/, /g, '<br>');
+                        exampleFormulaEl.innerHTML = formulaText;
+                        exampleContainer.classList.remove('hidden');
+                    } else {
+                        exampleContainer.classList.add('hidden');
+                    }
+                }
+            };
+            
+            // Event handler for the clear button
+            clearButton.addEventListener('click', () => {
+                selectedAction = null;
+                selectedTarget = null;
+                allButtons.forEach(b => {
+                    b.classList.remove('active-action');
+                    b.classList.remove('active-target');
+                });
+                
+                resultPlaceholder.classList.remove('hidden');
+                resultContent.classList.add('hidden');
+                exampleContainer.classList.add('hidden');
+            });
+
+            // --- Answer Key Logic ---
+            const toggleBtn = document.getElementById('toggle-answers-btn');
+            const answerListDiv = document.getElementById('answer-key-list');
+
+            // Get unique, sorted list of formulas, splitting combined ones
+            const allFormulas = [...new Set(Object.values(examples).flatMap(f => f.split(', ')))].sort();
+
+            // Create the list HTML
+            const ul = document.createElement('ul');
+ul.className = 'list-disc list-inside grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2';
+            allFormulas.forEach(formula => {
+                const li = document.createElement('li');
+                li.textContent = formula;
+                ul.appendChild(li);
+            });
+            answerListDiv.appendChild(ul);
+
+            // Toggle visibility on click
+            toggleBtn.addEventListener('click', () => {
+                const isHidden = answerListDiv.classList.contains('hidden');
+                if (isHidden) {
+                    answerListDiv.classList.remove('hidden');
+                    toggleBtn.textContent = '처방 목록 숨기기';
+                } else {
+                    answerListDiv.classList.add('hidden');
+                    toggleBtn.textContent = '숨어있는 처방들을 보려면 클릭';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
