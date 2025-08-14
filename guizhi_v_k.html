@@ -38,9 +38,14 @@
             text-align: center;
             font-size: 14px;
             font-weight: 500;
+            padding: 2px;
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             opacity: 0;
             transform: scale(0);
+            cursor: pointer; /* 클릭 가능한 약재에 커서 포인터 추가 */
+        }
+        .herb-orb:hover {
+            transform: scale(1.1) !important; /* 마우스 오버 효과 추가 */
         }
         .herb-orb.visible {
             opacity: 1;
@@ -56,29 +61,32 @@
             box-shadow: 0 0 10px #81A89D, inset 0 0 5px #bde0d9;
             color: white;
         }
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
 <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-    <a href="index.html" 
-       style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+    <a href="index.html" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
         &larr; Interactive TCM
     </a>
 </header>
-
 
     <main class="flex-grow">
         <div class="max-w-4xl mx-auto px-4">
             <header class="text-center mb-8">
                 <br>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800" style="font-family: 'Playfair Display', serif;">계지탕 변방 처방구성</h1>
+                <p class="mt-2 text-gray-600">처방을 선택하여 구성을 보고, 약재를 클릭하여 효능을 확인하세요.</p>
             </header>
 
             <!-- Formula List -->
             <div class="p-4 rounded-2xl mb-8">
                 <div id="formula-list" class="flex flex-wrap justify-center gap-2">
-                     <!-- Formula list will be populated by JS -->
+                    <!-- Formula list will be populated by JS -->
                 </div>
             </div>
 
@@ -86,7 +94,7 @@
             <div class="bg-white/50 p-6 rounded-2xl shadow-lg min-h-[500px] flex flex-col justify-between">
                 <div id="vis-container" class="relative w-full h-[400px] md:h-[450px]">
                     <div id="central-orb" class="central-orb absolute top-1/2 left-1/2 w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center text-center -translate-x-1/2 -translate-y-1/2 transition-all duration-500">
-                        <h2 id="info-title" class="text-2xl md:text-3xl font-bold text-white"></h2>
+                        <h2 id="info-title" class="text-2xl md:text-3xl font-bold text-white p-2"></h2>
                     </div>
                     <!-- Herb orbs will be populated here -->
                 </div>
@@ -98,12 +106,26 @@
         </div>
     </main>
 
+    <!-- Herb Info Modal -->
+    <div id="herb-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-herb-name" class="text-2xl font-bold text-gray-800" style="font-family: 'Playfair Display', serif;"></h3>
+                <button id="modal-close-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800 transition-colors">&times;</button>
+            </div>
+            <div>
+                <p id="modal-herb-effect" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer for Individual Pages -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
+        // 모든 약재 데이터
         const allHerbs = [
             { id: 'gyeji', name: '계지' }, { id: 'jakyak', name: '작약' }, { id: 'saenggang', name: '생강' },
             { id: 'daejo', name: '대조' }, { id: 'gamcho', name: '감초' }, { id: 'mahwang', name: '마황' },
@@ -112,6 +134,25 @@
             { id: 'hwanggi', name: '황기' }, { id: 'baekhasuo', name: '백하수오' }
         ];
 
+        // 'herb_db.txt' 데이터를 시뮬레이션하는 객체
+        const herbEffects = {
+            'gyeji': '온경통맥하고 해기하며 양기를 돕습니다.',
+            'jakyak': '양혈하고 월경을 조절하며 간양을 평안하게 하고 통증을 완화합니다.',
+            'saenggang': '중초를 따뜻하게 하고 구토를 멈추게 하며 담을 삭이고 해표합니다.',
+            'daejo': '기를 보하고 혈을 영양하며 다른 약의 성질을 조화시킵니다.',
+            'gamcho': '비기를 보하고 폐를 윤택하게 하며 열을 내리고 독을 풀며 다른 약을 조화시킵니다.',
+            'mahwang': '땀을 내어 해표하고 폐기를 선발하며 천식을 평안하게 합니다.',
+            'galgeun': '해표하고 열을 내리며 진액을 생성하고 양기를 들어 올립니다.',
+            'idang': '중초를 보하고 통증을 완화하며 폐를 윤택하게 합니다.',
+            'dangwi': '혈을 보하고 혈액순환을 활발하게 하며 월경을 조절하고 통증을 완화합니다.',
+            'moktong': '이뇨를 촉진하고 열을 내리며 경락을 통하게 합니다.',
+            'sesin': '한사를 흩어지게 하고 통증을 완화하며 폐를 따뜻하게 하고 담을 삭입니다.',
+            'samultang': '혈을 보하고 활혈하는 기본 처방입니다. 단일 약재가 아닙니다.',
+            'hwanggi': '기와 혈을 보하고 양기를 들어 올리며 표를 견고하게 합니다.',
+            'baekhasuo': '혈과 음을 영양하고 정을 굳건히 합니다.'
+        };
+
+        // 각 처방 데이터
         const formulas = {
             'gyeji-tang': {
                 name: '계지탕',
@@ -163,21 +204,34 @@
             }
         };
         
+        // DOM 요소 참조
         const visContainer = document.getElementById('vis-container');
         const formulaListEl = document.getElementById('formula-list');
         const infoTitle = document.getElementById('info-title');
         const infoDerivation = document.getElementById('info-derivation');
         const infoTreats = document.getElementById('info-treats');
+        
+        // 모달 DOM 요소 참조
+        const herbModal = document.getElementById('herb-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalHerbName = document.getElementById('modal-herb-name');
+        const modalHerbEffect = document.getElementById('modal-herb-effect');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
 
+        // 애플리케이션 초기화
         function initialize() {
+            // 약재 오브 생성 및 시각화 컨테이너에 추가
             allHerbs.forEach(herb => {
                 const orb = document.createElement('div');
                 orb.id = `herb-${herb.id}`;
                 orb.className = 'herb-orb';
                 orb.textContent = herb.name;
+                // 약재 정보 팝업을 표시하는 클릭 이벤트 추가
+                orb.addEventListener('click', () => showHerbInfo(herb.id));
                 visContainer.appendChild(orb);
             });
 
+            // 처방 선택 버튼 생성
             Object.keys(formulas).forEach(key => {
                 const formula = formulas[key];
                 const item = document.createElement('button');
@@ -187,27 +241,40 @@
                 item.addEventListener('click', () => updateDisplay(key));
                 formulaListEl.appendChild(item);
             });
+            
+            // 모달 닫기 이벤트 리스너 추가
+            modalCloseBtn.addEventListener('click', closeHerbInfo);
+            herbModal.addEventListener('click', (event) => {
+                if (event.target === herbModal) {
+                    closeHerbInfo();
+                }
+            });
 
+            // 초기 화면을 기본 처방으로 설정
             updateDisplay('gyeji-tang');
         }
 
+        // 새 처방 선택 시 화면 업데이트
         function updateDisplay(formulaId) {
             const formula = formulas[formulaId];
             if (!formula) return;
 
+            // 정보 패널 텍스트 업데이트
             infoTitle.textContent = formula.name;
             infoDerivation.textContent = formula.derivation_text;
             infoTreats.textContent = formula.treats;
 
+            // 활성 상태인 처방 버튼 업데이트
             document.querySelectorAll('.formula-item').forEach(item => {
                 item.classList.toggle('active', item.dataset.id === formulaId);
             });
 
             const currentHerbs = [...new Set([...formula.composition.base, ...formula.composition.added])];
-            const radius = Math.min(visContainer.clientWidth, visContainer.clientHeight) / 2 * 0.7;
+            const radius = Math.min(visContainer.clientWidth, visContainer.clientHeight) / 2 * 0.75;
             const angleStep = currentHerbs.length > 0 ? (2 * Math.PI) / currentHerbs.length : 0;
 
             let visibleHerbCount = 0;
+            // 약재 오브 위치 및 스타일 지정
             allHerbs.forEach(herb => {
                 const orb = document.getElementById(`herb-${herb.id}`);
                 if (currentHerbs.includes(herb.id)) {
@@ -215,9 +282,9 @@
                     orb.classList.toggle('base', formula.composition.base.includes(herb.id));
                     orb.classList.toggle('added', formula.composition.added.includes(herb.id));
                     
-                    const angle = angleStep * visibleHerbCount - (Math.PI / 2);
-                    const x = (visContainer.clientWidth / 2) + radius * Math.cos(angle) - 40;
-                    const y = (visContainer.clientHeight / 2) + radius * Math.sin(angle) - 40;
+                    const angle = angleStep * visibleHerbCount - (Math.PI / 2); // 위쪽에서 시작
+                    const x = (visContainer.clientWidth / 2) + radius * Math.cos(angle) - 40; // 40은 오브 너비의 절반
+                    const y = (visContainer.clientHeight / 2) + radius * Math.sin(angle) - 40; // 40은 오브 높이의 절반
                     orb.style.left = `${x}px`;
                     orb.style.top = `${y}px`;
                     visibleHerbCount++;
@@ -227,7 +294,36 @@
             });
         }
 
+        // 약재 정보 팝업 표시
+        function showHerbInfo(herbId) {
+            const herb = allHerbs.find(h => h.id === herbId);
+            const effect = herbEffects[herbId];
+
+            if (herb && effect) {
+                modalHerbName.textContent = herb.name;
+                modalHerbEffect.textContent = effect;
+                herbModal.classList.remove('hidden');
+                // 트랜지션 트리거
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10); 
+            }
+        }
+
+        // 약재 정보 팝업 닫기
+        function closeHerbInfo() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                herbModal.classList.add('hidden');
+            }, 300); // 트랜지션 시간과 일치
+        }
+
+        // 초기 설정
         initialize();
+
+        // 창 크기 조절 시 위치 재계산을 위한 이벤트 리스너 추가
         window.addEventListener('resize', () => {
             const activeFormula = document.querySelector('.formula-item.active')?.dataset.id || 'gyeji-tang';
             updateDisplay(activeFormula);
