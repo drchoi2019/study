@@ -26,6 +26,7 @@
             transition: all 0.25s ease-in-out;
             border: 2px solid transparent;
             background-color: #FFFFFF;
+            cursor: pointer;
         }
         .herb-card.active {
             background-color: #EAE3DB;
@@ -81,6 +82,10 @@
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             opacity: 0;
             transform: scale(0);
+            cursor: pointer;
+        }
+        .herb-orb:hover {
+            transform: scale(1.1) !important;
         }
         .herb-orb.visible { opacity: 1; transform: scale(1); }
         .herb-orb.base {
@@ -92,6 +97,15 @@
             background: radial-gradient(circle, #81A89D, #52796F);
             box-shadow: 0 0 10px #81A89D, inset 0 0 5px #bde0d9;
             color: white;
+        }
+        .herb-orb.group {
+            background: radial-gradient(circle, #A3A8B8, #6B7280); /* Grayish-blue */
+            box-shadow: 0 0 10px #A3A8B8, inset 0 0 5px #d1d5db;
+            color: white;
+        }
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -137,15 +151,15 @@
                         </svg>
                     </div>
                     <div class="flex flex-col space-y-4">
-                        <div id="card-ban-xia" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                        <div id="card-ban-xia" data-herb-id="banha" class="herb-card p-4 rounded-lg shadow-sm">
                             <h3 class="text-xl font-bold text-emerald-800">반하: 용해제 (거담)</h3>
                             <p class="text-gray-600 mt-1">화학약품처럼 끈적한 담(痰)을 녹여 분해합니다.</p>
                         </div>
-                        <div id="card-chen-pi" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                        <div id="card-chen-pi" data-herb-id="jinpi" class="herb-card p-4 rounded-lg shadow-sm">
                             <h3 class="text-xl font-bold text-orange-800">진피: 압축기 (행기)</h3>
                             <p class="text-gray-600 mt-1">플런저(압축기)처럼 기(氣)를 움직여 녹은 담을 밀어냅니다.</p>
                         </div>
-                        <div id="card-fu-ling" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                        <div id="card-fu-ling" data-herb-id="bongnyeong" class="herb-card p-4 rounded-lg shadow-sm">
                             <h3 class="text-xl font-bold text-sky-800">복령: 세척제 (거습)</h3>
                             <p class="text-gray-600 mt-1">뜨거운 물로 하수구를 씻어내듯, 남은 찌꺼기를 소변으로 깨끗이 배출합니다.</p>
                         </div>
@@ -176,12 +190,67 @@
         </div>
     </main>
 
+    <!-- Herb Info Modal -->
+    <div id="herb-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-herb-name" class="text-2xl font-bold text-gray-800" style="font-family: 'Noto Serif KR', serif;"></h3>
+                <button id="modal-close-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800 transition-colors">&times;</button>
+            </div>
+            <div>
+                <p id="modal-herb-effect" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
+        // --- Herb Data and Effects ---
+        const allHerbs = [
+            { id: 'banha', name: '반하' }, { id: 'jinpi', name: '진피' }, { id: 'bongnyeong', name: '복령' },
+            { id: 'gamcho', name: '감초' }, { id: 'namseong', name: '남성' }, { id: 'jisil', name: '지실' },
+            { id: 'jukyeo', name: '죽여' }, { id: 'cheonma', name: '천마' }, { id: 'baekchul', name: '백출' },
+            { id: 'sikcheyak', name: '식체약' }, { id: 'yeongyo', name: '연교' }, { id: 'sukjihwang', name: '숙지황' },
+            { id: 'danggwi', name: '당귀' }, { id: 'gwaru', name: '과루' }, { id: 'hwanggeum', name: '황금' },
+            { id: 'hwangnyeon', name: '황련' }, { id: 'haengin', name: '행인' }, { id: 'gilgyeong', name: '길경' },
+            { id: 'soyeop', name: '소엽' }, { id: 'jeonho', name: '전호' }, { id: 'jigak', name: '지각' },
+            { id: 'hyangbuja', name: '향부자' }, { id: 'changchul', name: '창출' }, { id: 'pyeongwisan', name: '평위산' },
+            { id: 'gwakhyang', name: '곽향' }, { id: 'geoseupyak', name: '거습약' }
+        ];
+
+        const herbEffects = {
+            'banha': '습을 말리고 담을 삭이며, 거역하는 기를 아래로 내립니다.',
+            'jinpi': '기를 조절하고 중초를 조정하며, 습을 말리고 담을 삭입니다.',
+            'bongnyeong': '소변을 잘 나오게 하고 습을 배출하며, 비장을 강화하고 중초를 조화롭게 합니다.',
+            'gamcho': '비장의 기를 보하고 폐를 촉촉하게 하며, 다른 약의 성질을 완화하고 조화시킵니다.',
+            'namseong': '습을 말리고 담을 삭이며, 경락의 풍담을 흩어지게 합니다.',
+            'jisil': '기의 정체를 깨뜨리고 적체를 줄이며, 담을 삭입니다.',
+            'jukyeo': '열을 내리고 담을 삭이며, 위를 편안하게 합니다.',
+            'cheonma': '풍을 끄고 떨림을 멈추게 하며, 통증을 완화합니다.',
+            'baekchul': '비장을 보하고 기를 더하며, 습을 말리고 수분 대사를 촉진합니다.',
+            'sikcheyak': '음식 정체를 완화하는 약재의 한 종류입니다.',
+            'yeongyo': '열을 내리고 독을 풀며, 농양을 줄입니다.',
+            'sukjihwang': '혈을 영양하고 음을 풍부하게 합니다.',
+            'danggwi': '혈을 보하고 혈액 순환을 활발하게 하며, 월경을 조절합니다.',
+            'gwaru': '열을 내리고 담열을 삭이며, 가슴을 넓혀줍니다.',
+            'hwanggeum': '열을 내리고 습을 말리며, 독성을 해소합니다.',
+            'hwangnyeon': '열을 내리고 습을 말리며, 화독을 해소합니다.',
+            'haengin': '기침을 멈추고 천식을 진정시킵니다.',
+            'gilgyeong': '폐를 열어주고 담을 배출하며, 목을 이롭게 합니다.',
+            'soyeop': '표를 풀고 한기를 흩어지게 하며, 기의 움직임을 촉진합니다.',
+            'jeonho': '기를 아래로 내리고 풍열을 흩어지게 하며, 담을 삭입니다.',
+            'jigak': '기의 움직임을 촉진하고 팽만감을 줄입니다.',
+            'hyangbuja': '간기를 퍼뜨리고 조절합니다.',
+            'changchul': '강력하게 습을 말리고 비장을 강화합니다.',
+            'pyeongwisan': '습을 말리고 비장 기능을 개선하는 처방입니다. 단일 약재가 아닙니다.',
+            'gwakhyang': '습을 삭이고 표를 풀며, 중초를 조화롭게 합니다.',
+            'geoseupyak': '습을 배출하는 약재의 한 종류입니다.'
+        };
+
         // --- Script for Section 1: Drain Analogy ---
         const vizContainer = document.getElementById('visualization-container');
         const cards = {
@@ -209,29 +278,17 @@
             Object.values(cards).forEach(card => card.classList.remove('active'));
         }
 
-        cards.banXia.addEventListener('click', () => setActiveHerb('ban-xia'));
-        cards.chenPi.addEventListener('click', () => setActiveHerb('chen-pi'));
-        cards.fuLing.addEventListener('click', () => setActiveHerb('fu-ling'));
+        cards.banXia.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('ban-xia'); });
+        cards.chenPi.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('chen-pi'); });
+        cards.fuLing.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('fu-ling'); });
         
         document.body.addEventListener('click', (e) => {
-            if (!e.target.closest('.herb-card') && !e.target.closest('.formula-item')) {
+            if (!e.target.closest('.herb-card') && !e.target.closest('.formula-item') && !e.target.closest('.herb-orb') && !e.target.closest('#modal-content')) {
                 resetState();
             }
         }, true);
 
         // --- Script for Section 2: Formula Derivations ---
-        const allHerbs = [
-            { id: 'banha', name: '반하' }, { id: 'jinpi', name: '진피' }, { id: 'bongnyeong', name: '복령' },
-            { id: 'gamcho', name: '감초' }, { id: 'namseong', name: '남성' }, { id: 'jisil', name: '지실' },
-            { id: 'jukyeo', name: '죽여' }, { id: 'cheonma', name: '천마' }, { id: 'baekchul', name: '백출' },
-            { id: 'sikcheyak', name: '식체약' }, { id: 'yeongyo', name: '연교' }, { id: 'sukjihwang', name: '숙지황' },
-            { id: 'danggwi', name: '당귀' }, { id: 'gwaru', name: '과루' }, { id: 'hwanggeum', name: '황금' },
-            { id: 'hwangnyeon', name: '황련' }, { id: 'haengin', name: '행인' }, { id: 'gilgyeong', name: '길경' },
-            { id: 'soyeop', name: '소엽' }, { id: 'jeonho', name: '전호' }, { id: 'jigak', name: '지각' },
-            { id: 'hyangbuja', name: '향부자' }, { id: 'changchul', name: '창출' }, { id: 'pyeongwisan', name: '평위산' },
-            { id: 'gwakhyang', name: '곽향' }, { id: 'geoseupyak', name: '거습약' }
-        ];
-
         const formulas = {
             'ijin-tang': { name: '이진탕', treats: '습담(濕痰)을 치료하는 기본 처방입니다.', derivation_text: "기본 처방", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: [] } },
             'dodam-tang': { name: '도담탕', treats: '풍담(風痰)으로 인한 증상을 치료합니다.', derivation_text: "이진탕에 '남성', '지실'을 추가합니다.", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['namseong', 'jisil'] } },
@@ -257,6 +314,7 @@
                 orb.id = `herb-${herb.id}`;
                 orb.className = 'herb-orb';
                 orb.textContent = herb.name;
+                orb.addEventListener('click', () => showHerbInfo(herb.id));
                 visContainer2.appendChild(orb);
             });
 
@@ -288,13 +346,27 @@
             const radius = Math.min(visContainer2.clientWidth, visContainer2.clientHeight) / 2 * 0.7;
             const angleStep = currentHerbs.length > 0 ? (2 * Math.PI) / currentHerbs.length : 0;
 
+            const groupHerbIds = ['sikcheyak', 'pyeongwisan', 'geoseupyak'];
+
             let visibleHerbCount = 0;
             allHerbs.forEach(herb => {
                 const orb = document.getElementById(`herb-${herb.id}`);
                 if (currentHerbs.includes(herb.id)) {
                     orb.classList.add('visible');
-                    orb.classList.toggle('base', formula.composition.base.includes(herb.id));
-                    orb.classList.toggle('added', formula.composition.added.includes(herb.id));
+                    
+                    const isGroup = groupHerbIds.includes(herb.id);
+                    const isBase = formula.composition.base.includes(herb.id);
+
+                    orb.classList.remove('base', 'added', 'group');
+
+                    if (isGroup) {
+                        orb.classList.add('group');
+                    } else if (isBase) {
+                        orb.classList.add('base');
+                    } else {
+                        orb.classList.add('added');
+                    }
+
                     const angle = angleStep * visibleHerbCount - (Math.PI / 2);
                     const x = (visContainer2.clientWidth / 2) + radius * Math.cos(angle) - 40;
                     const y = (visContainer2.clientHeight / 2) + radius * Math.sin(angle) - 40;
@@ -302,7 +374,7 @@
                     orb.style.top = `${y}px`;
                     visibleHerbCount++;
                 } else {
-                    orb.classList.remove('visible', 'base', 'added');
+                    orb.classList.remove('visible', 'base', 'added', 'group');
                 }
             });
         }
@@ -311,6 +383,42 @@
         window.addEventListener('resize', () => {
             const activeFormula = document.querySelector('.formula-item.active')?.dataset.id || 'ijin-tang';
             updateDisplay(activeFormula);
+        });
+
+        // --- Modal Logic ---
+        const herbModal = document.getElementById('herb-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalHerbName = document.getElementById('modal-herb-name');
+        const modalHerbEffect = document.getElementById('modal-herb-effect');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        function showHerbInfo(herbId) {
+            const herb = allHerbs.find(h => h.id === herbId);
+            const effect = herbEffects[herbId];
+            if (herb && effect) {
+                modalHerbName.textContent = herb.name;
+                modalHerbEffect.textContent = effect;
+                herbModal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
+
+        function closeHerbInfo() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                herbModal.classList.add('hidden');
+            }, 300);
+        }
+
+        modalCloseBtn.addEventListener('click', closeHerbInfo);
+        herbModal.addEventListener('click', (event) => {
+            if (event.target === herbModal) {
+                closeHerbInfo();
+            }
         });
     </script>
 </body>
