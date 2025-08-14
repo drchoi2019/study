@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Organ Pattern Identification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        /* Ensure parent lists do not have bullets */
+        #organ-list, #pattern-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* Base styles for list items */
+        .list-item {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            text-align: center;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #FFFFFF;
+            border-color: #D1D5DB; /* gray-300 */
+            color: #374151; /* gray-700 */
+            cursor: pointer;
+        }
+        /* Hover effect for interactive items */
+        .list-item:not(.inactive):hover {
+            transform: translateY(-2px);
+            border-color: #BDBDBD; /* gray-400 */
+            background-color: #F5F5F5; /* gray-100 */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+        }
+        
+        /* New selected color for Organs (light brown) */
+        #organ-list .list-item.selected {
+            border-color: #A1887F; /* brown-300 */
+            background-color: #D7CCC8; /* brown-100 */
+            color: #4E342E; /* brown-800 */
+            font-weight: 600;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* New selected color for Patterns (desaturated teal) */
+        #pattern-list .list-item.selected {
+            border-color: #4DB6AC; /* teal-300 */
+            background-color: #B2DFDB; /* teal-100 */
+            color: #004D40; /* teal-900 */
+            font-weight: 600;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Style for items that are made inactive after a selection */
+        .list-item.inactive {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #F3F4F6; /* gray-100 */
+            border-color: #E5E7EB; /* gray-200 */
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+
+    <main class="w-full max-w-5xl mx-auto p-4">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-700">Basic Organ Pattern Identification</h1>
+            <p class="text-gray-500 mt-2">Select an organ, then choose an associated pattern to see the result.</p>
+        </div>
+
+        <!-- Main interactive layout: always horizontal and responsive -->
+        <div class="flex flex-row flex-nowrap items-start justify-center gap-4">
+            <!-- Left Column: Organs (allows shrinking) -->
+            <div class="w-1/3" style="min-width: 120px;">
+                <h2 class="text-xl font-semibold mb-3 text-center text-gray-600">Organs</h2>
+                <div id="organ-list" class="space-y-3">
+                    <!-- Organ items will be injected here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Center Column: Plus Sign -->
+            <div class="flex-shrink-0 flex items-center justify-center w-auto pt-16 px-2">
+                <span class="text-5xl text-gray-300 font-light">+</span>
+            </div>
+
+            <!-- Right Column: Patterns (flexible width) -->
+            <div class="w-2/3" style="min-width: 200px;">
+                <h2 class="text-xl font-semibold mb-3 text-center text-gray-600">Patterns</h2>
+                <div id="pattern-list" class="grid grid-cols-2 gap-3">
+                    <!-- Pattern items will be injected here by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Display Area -->
+        <div id="result-display" class="mt-10 min-h-[10rem] bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">
+             <p class="text-center text-gray-500">Results will be displayed here.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Data structure containing all TCM information
+        const TCM_DATA = {
+            organs: {
+                'Liver': { name: 'Liver', details: 'Moodiness, irritability, Eye problems, A feeling of \'distension\', Gynaecological problems, Wiry pulse' },
+                'Heart': { name: 'Heart', details: 'Mental–emotional symptoms, Depression, anxiety, insomnia, Problems with blood circulation, Palpitations' },
+                'Spleen': { name: 'Spleen', details: 'Poor appetite, Tiredness, Digestive disorders, Dull-yellow(sallow) complexion, epigastic pain' },
+                'Lung': { name: 'Lung', details: 'Respiratory issues, voice, cough, and phlegm, common cold' },
+                'Kidney': { name: 'Kidney', details: 'Bone problems, Backache, Weak knee and legs, Sexual issues, Tinnitus, Problems with reproductive organs, Urinary problems' }
+            },
+            patterns: {
+                'Qi Deficiency': { name: 'Qi Deficiency', details: 'weakness, lethargy' },
+                'Blood Deficiency': { name: 'Blood Deficiency', details: 'Pallor, cold limbs, fine pulse' },
+                'Qi Stagnation': { name: 'Qi Stagnation', details: 'Pain, distension, moving pain' },
+                'Blood Stasis': { name: 'Blood Stasis', details: 'Purple lesions, purple lips and tongue, stabbing pain, palpable masses, choppy pulse' },
+                'Essence Deficiency': { name: 'Essence Deficiency', details: 'Developmental delay, sexual dysfunction, premature aging' },
+                'Yang Deficiency': { name: 'Yang Deficiency', details: 'Qi deficiency + cold, dampness' },
+                'Yin Deficiency': { name: 'Yin Deficiency', details: 'Blood deficiency + heat, dryness, scanty fluids, night sweats, tidal fever, five-palm heat, fine-rapid pulse' },
+                'Heat': { name: 'Heat (Fire)', details: 'Heat sensation, vexation, rapid pulse, yellow discharge, yellow tongue coating, constipation' },
+                'Cold': { name: 'Cold', details: 'Cold, slowness, slow pulse, tight pulse, clear discharge' },
+                'Dampness': { name: 'Dampness', details: 'Edema, inflammation, slippery pulse, heaviness, thick tongue coating' }
+            },
+            syndromes: [
+                { name: 'Liver Blood Deficiency', organ: 'Liver', patterns: ['Blood Deficiency'], description: 'Dizziness, insomnia, dull-pale complexion, pale lips. Blurred vision, "floaters", withered/brittle nails, dry hair/skin. Numbness of limbs, muscular weakness and spasm, cramps. Scanty menstruation or amenorrhea' },
+                { name: 'Liver Qi Stagnation', organ: 'Liver', patterns: ['Qi Stagnation'], description: 'Melancholy, moodiness, fluctuating mental state, unhappiness, "feeling wound up". Hypochondric/chest distention. Epigastric pain, ST churning, abdominal distention. Nausea, vomiting, hiccup, no appetite, borborygmus, diarrhea. Feeling of lump in the throat, difficulty swallowing. Irregular periods, painful periods, distention of breasts before the periods, premenstrual tension and irritability' },
+                { name: 'Liver Blood Stasis', organ: 'Liver', patterns: ['Blood Stasis'], description: 'Painful(fixed, stabbing, worsen at night) periods, irregular periods, dark and clotted menses. Abdominal pain, "masses" in abdomen. Purple nails, purple lips, purple complexion. Dry skin (in severe cases), petechiae(purple spot)' },
+                { name: 'Stagnation of Cold in the Liver Meridian', organ: 'Liver', patterns: ['Cold'], description: 'Pain refering to the scrotum and testis. Pain is alleviated by warmth' },
+                { name: 'Damp-Heat in Liver and Gallbladder', organ: 'Liver', patterns: ['Heat', 'Dampness'], description: 'Hypochondriac fullness, bitter taste, no appetite. Nausea, vomiting, abdominal distention, scanty-dark urine. Fever, jaundice. ♂ Pain-redness-swelling of scrotum. ♀ Yellow foul leukorrhea with pruritus vulvae' },
+                { name: 'Liver Fire Flare-up', organ: 'Liver', patterns: ['Heat'], description: 'Temporal headache, dizziness, tinnitus, deafness. Red face and eyes, thirst, bitter taste. Irritability, propensity to anger, dream disturbed sleep. Constipation with dry stools, dark-yellow urine. Epistaxis, hematemesis, hemoptysis' },
+                { name: 'Heart Qi Deficiency', organ: 'Heart', patterns: ['Qi Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness' },
+                { name: 'Heart Yang Deficiency', organ: 'Heart', patterns: ['Yang Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness. Feeling of cold, bright-pale face, cold limbs (esp. hands)' },
+                { name: 'Heart Blood Deficiency', organ: 'Heart', patterns: ['Blood Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep. Dizziness, poor memory. Dull-pale complexion, pale lips. Anxiety, propensity to be startled' },
+                { name: 'Heart Yin Deficiency', organ: 'Heart', patterns: ['Yin Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep, poor memory, anxiety, mental restlessness, "five palm heat", night sweating, dry mouth and throat.' },
+                { name: 'Heart Blood Stasis', organ: 'Heart', patterns: ['Blood Stasis'], description: 'Palpitations. Pain in the heart region, discomfort or feeling of oppression or constriction of the chest. Cyanosis of lips and nails, cold hands' },
+                { name: 'Heart Fire Blazing', organ: 'Heart', patterns: ['Heat'], description: 'Palpitations, restlessness, agitation, insomnia, impulsiveness. Thirst, red face, feeling of heat, bitter taste. Mouth and Tongue ulcers. Dark urine or blood in urine' },
+                { name: 'Spleen Qi Deficiency', organ: 'Spleen', patterns: ['Qi Deficiency'], description: 'Sallow complexion, tiredness, lassitude, weakness of the limbs. No appetite, abdominal distention after eating, loose stools' },
+                { name: 'Spleen Yang Deficiency', organ: 'Spleen', patterns: ['Yang Deficiency'], description: 'SP-Qi deficiency + Chilliness, cold limbs, weakness of the limbs, loose stools, edema' },
+                { name: 'Cold-Damp Invading Spleen', organ: 'Spleen', patterns: ['Cold', 'Dampness'], description: 'Oppression feeling of the chest and epigastrium, feeling of cold in the epigastrium which improves with warmth. No appetite, sweetish taste or absence of taste, no thirst. Heaviness of the head, lassitude and feeling of heaviness. Loose-thin stools, white vaginal discharge' },
+                { name: 'Lung Qi Deficiency', organ: 'Lung', patterns: ['Qi Deficiency'], description: 'Shortness of breath, cough. Watery sputum. Weak voice, dislike to speak, tiredness. Dislike of cold, propensity to catching colds. Daytime sweating. Bright-white complexion' },
+                { name: 'Lung Yin Deficiency', organ: 'Lung', patterns: ['Yin Deficiency'], description: 'Dry cough, scanty-sticky sputum, feeling of heat in the afternoon, malar flush, night sweating, 5-palm heat, dry mouth, thin body.' },
+                { name: 'Wind-Cold Invading Lung', organ: 'Lung', patterns: ['Cold'], description: 'Cough. Stuffed nose or runny nose with clear-watery mucus, sneezing. Fever, aversion to cold, itchy throat. Occipital headache, body aches. Absence of thirst, absence of sweating' },
+                { name: 'Wind-Heat Invading Lung', organ: 'Lung', patterns: ['Heat'], description: 'Cough, fever, aversion to cold, sore throat, runny nose with yellow discharge, headache, body aches, slight sweating, thirst.' },
+                { name: 'Kidney Yang Deficiency', organ: 'Kidney', patterns: ['Yang Deficiency'], description: 'Aversion to cold, bright-white complexion, lassitude, poor appetite, loose stools. Soreness of the back, cold knees, sensation of cold in the back, weak legs, weak knees. Impotence, premature ejaculation, infertility, abundant-clear urination, scanty-clear urination, apathy, edema of the legs' },
+                { name: 'Kidney Yin Deficiency', organ: 'Kidney', patterns: ['Yin Deficiency'], description: 'Dizziness, tinnitus, vertigo, poor memory, deafness. Sore back, ache in bones. Nocturnal emission. Night sweating, dry mouth at night, 5-palm heat, thirst. Constipation, dark-scanty urine' },
+                { name: 'Kidney Essence Deficiency', organ: 'Kidney', patterns: ['Essence Deficiency'], description: 'In children: poor bone development, late closure of fontanelle, mental dullness or retardation. In adults: softening of bones, weakness of knees and legs, poor memory, loose teeth, falling hair or premature greying of hair, weakness of sexual activity, soreness of the back' },
+                { name: 'Kidney Qi Not Firm', organ: 'Kidney', patterns: ['Qi Deficiency'], description: 'Soreness and weakness of the back. Clear-frequent urination. Weak stream urination, dribbling after urination. Incontinence of urine, enuresis, urination at night, premature ejaculation, spermatorrhea, nocturnal emissions without dreams. In women prolapse of uterus, chronic vaginal discharge' }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const organList = document.getElementById('organ-list');
+            const patternList = document.getElementById('pattern-list');
+            const resultDisplay = document.getElementById('result-display');
+
+            let selectedOrgan = null;
+            let selectedPattern = null;
+
+            // Function to render list items
+            const renderList = (container, items) => {
+                container.innerHTML = '';
+                for (const key in items) {
+                    const item = items[key];
+                    // Use a div instead of li to avoid default list styles
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.textContent = item.name;
+                    div.dataset.name = key;
+                    container.appendChild(div);
+                }
+            };
+
+            // Initial render of all lists
+            renderList(organList, TCM_DATA.organs);
+            renderList(patternList, TCM_DATA.patterns);
+
+            // Event listener for the organ list
+            organList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('list-item')) {
+                    selectedOrgan = e.target.dataset.name;
+                    
+                    organList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    
+                    patternList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected'));
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500">Please select a related pattern on the right.</p>`;
+
+                    const relatedPatterns = new Set();
+                    TCM_DATA.syndromes
+                        .filter(s => s.organ === selectedOrgan)
+                        .forEach(s => {
+                            s.patterns.forEach(p => relatedPatterns.add(p));
+                        });
+
+                    patternList.querySelectorAll('.list-item').forEach(el => {
+                        if (relatedPatterns.has(el.dataset.name)) {
+                            el.classList.remove('inactive');
+                        } else {
+                            el.classList.add('inactive');
+                        }
+                    });
+                }
+            });
+
+            // Event listener for the pattern list
+            patternList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('list-item') && !e.target.classList.contains('inactive')) {
+                    selectedPattern = e.target.dataset.name;
+
+                    patternList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected'));
+                    e.target.classList.add('selected');
+
+                    updateResultDisplay(selectedOrgan, selectedPattern);
+                }
+            });
+
+            // Function to process descriptions that reference other patterns
+            const processDescription = (description) => {
+                const abbrevMap = { 'SP': 'Spleen' };
+                const normalizePatternName = (name) => name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                
+                const match = description.match(/([A-Z]{2})-(.+) (?:symptoms )?\+ (.*)/);
+
+                if (match) {
+                    const [, abbrev, patternStr, rest] = match;
+                    const organFullName = abbrevMap[abbrev];
+                    const patternFullName = normalizePatternName(patternStr.trim());
+                    
+                    if (organFullName) {
+                        const baseSyndrome = TCM_DATA.syndromes.find(s => s.name === `${organFullName} ${patternFullName}`);
+                        if (baseSyndrome) {
+                            return `(${baseSyndrome.description}) + ${rest}`;
+                        }
+                    }
+                }
+                return description; // Return original if no match
+            };
+
+            // Function to update the result display area
+            const updateResultDisplay = (organName, patternName) => {
+                if (!organName) {
+                    resultDisplay.innerHTML = `<p class="text-center text-red-500">Please select an organ first.</p>`;
+                    return;
+                }
+
+                const organData = TCM_DATA.organs[organName];
+                const patternData = TCM_DATA.patterns[patternName];
+                
+                const matchingSyndromes = TCM_DATA.syndromes.filter(s => 
+                    s.organ === organName && s.patterns.includes(patternName)
+                );
+
+                if (matchingSyndromes.length === 0) {
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500">No information found for this combination.</p>`;
+                    return;
+                }
+
+                let html = '';
+                matchingSyndromes.forEach((syndrome, index) => {
+                    const processedDescription = processDescription(syndrome.description);
+                    html += `
+                        <div class="${index > 0 ? 'mt-6 pt-6 border-t border-gray-200' : ''}">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">${syndrome.name}</h3>
+                            <div class="space-y-3 text-gray-700">
+                                <p><strong class="font-semibold text-gray-800">${organData.name}:</strong> ${organData.details}</p>
+                                <p><strong class="font-semibold text-gray-800">${patternData.name}:</strong> ${patternData.details}</p>
+                                <p><strong class="font-semibold text-gray-800">Symptoms:</strong> ${processedDescription}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                resultDisplay.innerHTML = html;
+            };
+        });
+    </script>
+</body>
+</html>
