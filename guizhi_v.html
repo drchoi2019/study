@@ -36,12 +36,16 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 12px; /* Adjusted for longer English names */
+            font-size: 12px;
             font-weight: 500;
             padding: 2px;
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             opacity: 0;
             transform: scale(0);
+            cursor: pointer; /* Add cursor pointer for clickable herbs */
+        }
+        .herb-orb:hover {
+            transform: scale(1.1) !important; /* Add hover effect */
         }
         .herb-orb.visible {
             opacity: 1;
@@ -57,24 +61,26 @@
             box-shadow: 0 0 10px #81A89D, inset 0 0 5px #bde0d9;
             color: white;
         }
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
 <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-    <a href="index.html" 
-       style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+    <a href="index.html" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
         &larr; Interactive TCM
     </a>
 </header>
-
 
     <main class="flex-grow">
         <div class="max-w-4xl mx-auto px-4">
             <header class="text-center mb-8">
                 <br>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800" style="font-family: 'Playfair Display', serif;">Variations of Gui Zhi Tang</h1>
-                <p class="mt-2 text-gray-600">Select a formula from the list below to see its composition.</p>
+                <p class="mt-2 text-gray-600">Select a formula to see its composition, and click on an herb to see its effects.</p>
             </header>
 
             <!-- Formula List -->
@@ -100,6 +106,19 @@
         </div>
     </main>
 
+    <!-- Herb Info Modal -->
+    <div id="herb-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-herb-name" class="text-2xl font-bold text-gray-800" style="font-family: 'Playfair Display', serif;"></h3>
+                <button id="modal-close-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800 transition-colors">&times;</button>
+            </div>
+            <div>
+                <p id="modal-herb-effect" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer for Individual Pages -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
@@ -115,7 +134,26 @@
             { id: 'huang-qi', name: 'Huang Qi' }, { id: 'bai-shou-wu', name: 'Bai Shou Wu' }
         ];
 
-        // Data for each formula, its composition, and what it treats, using Pinyin names and IDs
+        // This object simulates the data from 'herb_db.txt'
+        // Structure: herb_id, effect
+        const herbEffects = {
+            'gui-zhi': 'Warms the channels and collaterals, releases the exterior, and assists Yang Qi.',
+            'bai-shao': 'Nourishes blood, regulates menstruation, calms Liver Yang, and alleviates pain.',
+            'sheng-jiang': 'Warms the middle burner, stops vomiting, resolves phlegm, and releases the exterior.',
+            'da-zao': 'Tonifies Qi, nourishes blood, and harmonizes the properties of other herbs.',
+            'gan-cao': 'Tonifies Spleen Qi, moistens the Lungs, clears heat, resolves toxicity, and moderates other herbs.',
+            'ma-huang': 'Induces sweating to release the exterior, disseminates Lung Qi, and calms wheezing.',
+            'ge-gen': 'Releases the exterior, clears heat, generates fluids, and lifts Yang Qi.',
+            'yi-tang': 'Tonifies the middle burner, alleviates pain, and moistens the Lungs.',
+            'dang-gui': 'Tonifies blood, invigorates blood circulation, regulates menstruation, and alleviates pain.',
+            'mu-tong': 'Promotes urination, clears heat, and unblocks the channels.',
+            'xi-xin': 'Disperses cold, relieves pain, warms the Lungs, and transforms phlegm.',
+            'si-wu-tang': 'A foundational formula that tonifies and invigorates blood. Not a single herb.',
+            'huang-qi': 'Tonifies Qi and blood, raises Yang Qi, and strengthens the exterior.',
+            'bai-shou-wu': 'Nourishes blood and yin, and secures the essence.'
+        };
+
+        // Data for each formula
         const formulas = {
             'gui-zhi-tang': {
                 name: 'Gui Zhi Tang',
@@ -173,6 +211,13 @@
         const infoTitle = document.getElementById('info-title');
         const infoDerivation = document.getElementById('info-derivation');
         const infoTreats = document.getElementById('info-treats');
+        
+        // Modal DOM element references
+        const herbModal = document.getElementById('herb-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalHerbName = document.getElementById('modal-herb-name');
+        const modalHerbEffect = document.getElementById('modal-herb-effect');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
 
         // Initializes the application
         function initialize() {
@@ -182,6 +227,8 @@
                 orb.id = `herb-${herb.id}`;
                 orb.className = 'herb-orb';
                 orb.textContent = herb.name;
+                // Add click event to show herb info popup
+                orb.addEventListener('click', () => showHerbInfo(herb.id));
                 visContainer.appendChild(orb);
             });
 
@@ -194,6 +241,14 @@
                 item.className = 'formula-item font-medium py-2 px-4 rounded-full cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md';
                 item.addEventListener('click', () => updateDisplay(key));
                 formulaListEl.appendChild(item);
+            });
+            
+            // Add event listeners for closing the modal
+            modalCloseBtn.addEventListener('click', closeHerbInfo);
+            herbModal.addEventListener('click', (event) => {
+                if (event.target === herbModal) {
+                    closeHerbInfo();
+                }
             });
 
             // Set the initial display to the base formula
@@ -215,7 +270,6 @@
                 item.classList.toggle('active', item.dataset.id === formulaId);
             });
 
-            // Get all unique herbs for the selected formula
             const currentHerbs = [...new Set([...formula.composition.base, ...formula.composition.added])];
             const radius = Math.min(visContainer.clientWidth, visContainer.clientHeight) / 2 * 0.75;
             const angleStep = currentHerbs.length > 0 ? (2 * Math.PI) / currentHerbs.length : 0;
@@ -229,7 +283,6 @@
                     orb.classList.toggle('base', formula.composition.base.includes(herb.id));
                     orb.classList.toggle('added', formula.composition.added.includes(herb.id));
                     
-                    // Calculate position around the central orb
                     const angle = angleStep * visibleHerbCount - (Math.PI / 2); // Start from the top
                     const x = (visContainer.clientWidth / 2) + radius * Math.cos(angle) - 40; // 40 is half orb width
                     const y = (visContainer.clientHeight / 2) + radius * Math.sin(angle) - 40; // 40 is half orb height
@@ -240,6 +293,32 @@
                     orb.classList.remove('visible', 'base', 'added');
                 }
             });
+        }
+
+        // Shows the herb information popup
+        function showHerbInfo(herbId) {
+            const herb = allHerbs.find(h => h.id === herbId);
+            const effect = herbEffects[herbId];
+
+            if (herb && effect) {
+                modalHerbName.textContent = herb.name;
+                modalHerbEffect.textContent = effect;
+                herbModal.classList.remove('hidden');
+                // Trigger transition
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10); 
+            }
+        }
+
+        // Closes the herb information popup
+        function closeHerbInfo() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                herbModal.classList.add('hidden');
+            }, 300); // Match transition duration
         }
 
         // Initial setup
