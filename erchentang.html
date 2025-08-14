@@ -278,9 +278,9 @@
             Object.values(cards).forEach(card => card.classList.remove('active'));
         }
 
-        cards.banXia.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('ban-xia'); showHerbInfo('banha'); });
-        cards.chenPi.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('chen-pi'); showHerbInfo('jinpi'); });
-        cards.fuLing.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('fu-ling'); showHerbInfo('bongnyeong'); });
+        cards.banXia.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('ban-xia'); });
+        cards.chenPi.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('chen-pi'); });
+        cards.fuLing.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('fu-ling'); });
         
         document.body.addEventListener('click', (e) => {
             if (!e.target.closest('.herb-card') && !e.target.closest('.formula-item') && !e.target.closest('.herb-orb') && !e.target.closest('#modal-content')) {
@@ -357,13 +357,13 @@
                     const isGroup = groupHerbIds.includes(herb.id);
                     const isBase = formula.composition.base.includes(herb.id);
 
-                    orb.classList.remove('base', 'added', 'group'); // Clear all color classes
+                    orb.classList.remove('base', 'added', 'group');
 
                     if (isGroup) {
                         orb.classList.add('group');
                     } else if (isBase) {
                         orb.classList.add('base');
-                    } else { // Is an added single herb
+                    } else {
                         orb.classList.add('added');
                     }
 
