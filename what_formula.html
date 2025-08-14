@@ -175,11 +175,15 @@
             background-color: white;
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            cursor: default;
+            cursor: pointer; /* Changed to pointer for click interaction */
             color: var(--text-color);
             font-weight: 500;
             transition: all 0.3s ease-in-out;
             font-size: 0.9rem;
+        }
+        .herb-item:hover {
+             transform: scale(1.05);
+             border-color: var(--herb-color);
         }
         .herb-item.highlight {
             background-color: var(--highlight-bg-color);
@@ -217,6 +221,10 @@
             background-color: var(--formula-color);
             color: white;
             box-shadow: 0 4px 14px 0 rgba(74, 124, 155, 0.3);
+        }
+         /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -308,6 +316,19 @@ When we study these compositional principles, our questions must evolve. Instead
         <p style="margin-top: 10px;">A. Think about it before reading the answer. It's because 'Fu Ling' has a downward-draining action. Since the goal is to lift the Qi up, a downward-moving herb would be counterproductive. For the same reason, 'Fu Ling' is removed to create 'Tai Shan Pan Shi San'. Understanding these details is what formula studies is all about.</p>
     </div>
 
+    <!-- Herb Info Modal -->
+    <div id="herb-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-herb-name" class="text-2xl font-bold text-gray-800" style="font-family: 'Cormorant Garamond', serif;"></h3>
+                <button id="modal-close-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800 transition-colors">&times;</button>
+            </div>
+            <div>
+                <p id="modal-herb-effect" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Logic for the first diagram (Flowchart) ---
@@ -319,9 +340,9 @@ When we study these compositional principles, our questions must evolve. Instead
                 'Spleen Qi Sinking': `<p><span class="herb">+ Huang Qi, Sheng Ma, Chai Hu, Dang Gui, Chen Pi</span></p><p><span class="formula">Bu Zhong Yi Qi Tang</span></p>`,
                 'Spleen Failing to Control Blood': `<p><span class="herb">+ Dang Gui</span> + <span class="herb">Calming herbs</span></p><p><span class="formula">Gui Pi Tang</span></p>`,
                 'Qi and Blood Deficiency': `<p><span class="herb">+ Si Wu Tang</span></p>
-                                         <p><span class="formula">Ba Zhen Tang</span></p>
-                                         <p>→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
-                                         <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span> <span class="removed-herb">(-Fu Ling)</span></p>`
+                                        <p><span class="formula">Ba Zhen Tang</span></p>
+                                        <p>→ <span class="formula">Shi Quan Da Bu Tang</span> <span class="herb">(+Huang Qi, Rou Gui)</span></p>
+                                        <p>→ <span class="formula">Tai Shan Pan Shi San</span> <span class="herb">(+An Tai Yao)</span> <span class="removed-herb">(-Fu Ling)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
@@ -363,6 +384,26 @@ When we study these compositional principles, our questions must evolve. Instead
 
             const allHerbsPinyin = ['Ren Shen', 'Bai Zhu', 'Gan Cao', 'Fu Ling', 'Gan Jiang', 'Chen Pi', 'Huang Qi', 'Dang Gui', 'Rou Gui', 'Shan Yao', 'Sheng Ma', 'Chai Hu', 'Si Wu Tang', 'An Shen Yao', 'An Tai Yao', 'Qu Shi Yao', 'Er Chen Tang'];
 
+            const herbEffectsPinyin = {
+                'Ren Shen': 'Greatly tonifies original Qi, nourishes yin, and generates fluids.',
+                'Bai Zhu': 'Tonifies the Spleen, dries dampness, and quiets the fetus.',
+                'Gan Cao': 'Tonifies Qi, harmonizes other herbs, clears heat and resolves toxicity.',
+                'Fu Ling': 'Drains dampness, strengthens the Spleen, and calms the Spirit.',
+                'Gan Jiang': 'Warms the middle burner and expels deep cold.',
+                'Chen Pi': 'Regulates Qi, dries dampness, and transforms phlegm.',
+                'Huang Qi': 'Tonifies Qi and blood, raises Yang Qi, and strengthens the exterior.',
+                'Dang Gui': 'Tonifies and invigorates blood, regulates menstruation.',
+                'Rou Gui': 'Warms the interior, disperses deep cold, and relieves pain.',
+                'Shan Yao': 'Tonifies Spleen and Stomach Qi and Yin.',
+                'Sheng Ma': 'Lifts sunken Yang Qi, clears heat and resolves toxicity.',
+                'Chai Hu': 'Spreads Liver Qi, resolves depression, and raises Yang Qi.',
+                'Si Wu Tang': 'A foundational formula to tonify and invigorate blood. Not a single herb.',
+                'An Shen Yao': 'A category of herbs that calm the Spirit.',
+                'An Tai Yao': 'A category of herbs that calm the fetus.',
+                'Qu Shi Yao': 'A category of herbs that drain dampness.',
+                'Er Chen Tang': 'A formula that dries dampness and transforms phlegm. Not a single herb.'
+            };
+
             const mainContainer = document.getElementById('interactive-diagram-container');
             const herbGrid = document.getElementById('herb-grid');
             const formulaList = document.getElementById('formula-list');
@@ -373,6 +414,8 @@ When we study these compositional principles, our questions must evolve. Instead
                 herbDiv.dataset.herb = herb;
                 herbDiv.className = 'herb-item';
                 herbGrid.appendChild(herbDiv);
+                // Add click event for modal
+                herbDiv.addEventListener('click', () => showHerbInfo(herb));
             });
 
             const borderHerbs = ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao'];
@@ -437,6 +480,41 @@ When we study these compositional principles, our questions must evolve. Instead
             mainContainer.addEventListener('click', (e) => {
                 if (!e.target.closest('.formula-button') && !e.target.closest('.herb-item')) {
                      resetSelection();
+                }
+            });
+
+            // --- Modal Logic ---
+            const herbModal = document.getElementById('herb-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalHerbName = document.getElementById('modal-herb-name');
+            const modalHerbEffect = document.getElementById('modal-herb-effect');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            function showHerbInfo(herbName) {
+                const effect = herbEffectsPinyin[herbName];
+                if (effect) {
+                    modalHerbName.textContent = herbName;
+                    modalHerbEffect.textContent = effect;
+                    herbModal.classList.remove('hidden');
+                    setTimeout(() => {
+                        modalContent.classList.remove('scale-95', 'opacity-0');
+                        modalContent.classList.add('scale-100', 'opacity-100');
+                    }, 10);
+                }
+            }
+
+            function closeHerbInfo() {
+                modalContent.classList.add('scale-95', 'opacity-0');
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                setTimeout(() => {
+                    herbModal.classList.add('hidden');
+                }, 300);
+            }
+
+            modalCloseBtn.addEventListener('click', closeHerbInfo);
+            herbModal.addEventListener('click', (event) => {
+                if (event.target === herbModal) {
+                    closeHerbInfo();
                 }
             });
         });
