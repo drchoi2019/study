@@ -89,6 +89,9 @@
 
     <!-- Main Footer -->
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
+        <div id="visitor-counter" class="mb-4 text-xs text-gray-400">
+            <span id="today-count">0</span> / <span id="total-count">0</span>
+        </div>
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
@@ -143,6 +146,81 @@
                 }
             });
         }
+
+        // Visitor Counter Function
+        function updateVisitorCount() {
+            // --- Total Visitors ---
+            let totalVisitors = localStorage.getItem('totalVisitors');
+            totalVisitors = totalVisitors ? parseInt(totalVisitors) : 0;
+            totalVisitors++;
+            localStorage.setItem('totalVisitors', totalVisitors.toString());
+
+            // --- Today's Visitors ---
+            const today = new Date().toISOString().split('T')[0]; // Get YYYY-MM-DD
+            let lastVisitDate = localStorage.getItem('lastVisitDate');
+            let todayVisitors = localStorage.getItem('todayVisitors');
+            
+            if (lastVisitDate === today) {
+                // Same day, do not increment today's count again
+                todayVisitors = todayVisitors ? parseInt(todayVisitors) : 0;
+            } else {
+                // New day, reset today's count to 1
+                todayVisitors = 1;
+                localStorage.setItem('lastVisitDate', today);
+            }
+            // Check if this is the first visit of the session to increment today's count
+            if (!sessionStorage.getItem('sessionVisit')) {
+                todayVisitors++;
+                sessionStorage.setItem('sessionVisit', 'true');
+            }
+
+            localStorage.setItem('todayVisitors', todayVisitors.toString());
+
+            // --- Display Counts ---
+            document.getElementById('today-count').textContent = todayVisitors;
+            document.getElementById('total-count').textContent = totalVisitors;
+        }
+        
+        // A more robust way to handle the daily counter
+        function initializeVisitorCount() {
+             // --- Total Visitors ---
+            let totalVisitors = localStorage.getItem('totalVisitors');
+            if (totalVisitors === null) {
+                totalVisitors = 1;
+            } else {
+                 if (!sessionStorage.getItem('totalVisitCounted')) {
+                    totalVisitors = parseInt(totalVisitors) + 1;
+                    sessionStorage.setItem('totalVisitCounted', 'true');
+                 }
+            }
+            localStorage.setItem('totalVisitors', totalVisitors.toString());
+
+            // --- Today's Visitors ---
+            const todayStr = new Date().toISOString().split('T')[0];
+            let dailyData = localStorage.getItem('dailyData');
+            dailyData = dailyData ? JSON.parse(dailyData) : {};
+
+            if (dailyData.date !== todayStr) {
+                dailyData = { date: todayStr, count: 1 };
+            } else {
+                if (!sessionStorage.getItem('dailyVisitCounted')) {
+                    dailyData.count++;
+                    sessionStorage.setItem('dailyVisitCounted', 'true');
+                }
+            }
+            localStorage.setItem('dailyData', JSON.stringify(dailyData));
+
+            // --- Display Counts ---
+            document.getElementById('today-count').textContent = dailyData.count;
+            document.getElementById('total-count').textContent = totalVisitors;
+        }
+
+
+        // Run functions on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeVisitorCount();
+        });
+
     </script>
 
 </body>
