@@ -26,6 +26,7 @@
             transition: all 0.25s ease-in-out;
             border: 2px solid transparent;
             background-color: #FFFFFF;
+            cursor: pointer;
         }
         .herb-card.active {
             background-color: #EAE3DB;
@@ -81,6 +82,10 @@
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             opacity: 0;
             transform: scale(0);
+            cursor: pointer;
+        }
+        .herb-orb:hover {
+            transform: scale(1.1) !important;
         }
         .herb-orb.visible { opacity: 1; transform: scale(1); }
         .herb-orb.base {
@@ -97,6 +102,10 @@
             background: radial-gradient(circle, #A3A8B8, #6B7280); /* Grayish-blue */
             box-shadow: 0 0 10px #A3A8B8, inset 0 0 5px #d1d5db;
             color: white;
+        }
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -142,15 +151,15 @@
                         </svg>
                     </div>
                     <div class="flex flex-col space-y-4">
-                        <div id="card-ban-xia" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                        <div id="card-ban-xia" data-herb-id="banha" class="herb-card p-4 rounded-lg shadow-sm">
                             <h3 class="text-xl font-bold text-emerald-800">Ban Xia: Dissolving Agent (Resolves Phlegm)</h3>
                             <p class="text-gray-600 mt-1">Like a chemical agent, it dissolves and breaks down sticky phlegm (Tán).</p>
                         </div>
-                        <div id="card-chen-pi" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                        <div id="card-chen-pi" data-herb-id="jinpi" class="herb-card p-4 rounded-lg shadow-sm">
                             <h3 class="text-xl font-bold text-orange-800">Chen Pi: Plunger (Moves Qi)</h3>
                             <p class="text-gray-600 mt-1">Like a plunger, it moves Qi to push away the dissolved phlegm.</p>
                         </div>
-                        <div id="card-fu-ling" class="herb-card p-4 rounded-lg cursor-pointer shadow-sm">
+                        <div id="card-fu-ling" data-herb-id="bongnyeong" class="herb-card p-4 rounded-lg shadow-sm">
                             <h3 class="text-xl font-bold text-sky-800">Fu Ling: Flushing Agent (Drains Dampness)</h3>
                             <p class="text-gray-600 mt-1">Like flushing a drain with hot water, it expels the remaining residue through urination.</p>
                         </div>
@@ -181,12 +190,67 @@
         </div>
     </main>
 
+    <!-- Herb Info Modal -->
+    <div id="herb-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-herb-name" class="text-2xl font-bold text-gray-800" style="font-family: 'Noto Serif KR', serif;"></h3>
+                <button id="modal-close-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800 transition-colors">&times;</button>
+            </div>
+            <div>
+                <p id="modal-herb-effect" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
+        // --- Herb Data and Effects ---
+        const allHerbs = [
+            { id: 'banha', name: 'Ban Xia' }, { id: 'jinpi', name: 'Chen Pi' }, { id: 'bongnyeong', name: 'Fu Ling' },
+            { id: 'gamcho', name: 'Gan Cao' }, { id: 'namseong', name: 'Nan Xing' }, { id: 'jisil', name: 'Zhi Shi' },
+            { id: 'jukyeo', name: 'Zhu Ru' }, { id: 'cheonma', name: 'Tian Ma' }, { id: 'baekchul', name: 'Bai Zhu' },
+            { id: 'sikcheyak', name: 'Food Stag. Herbs' }, { id: 'yeongyo', name: 'Lian Qiao' }, { id: 'sukjihwang', name: 'Shu Di Huang' },
+            { id: 'danggwi', name: 'Dang Gui' }, { id: 'gwaru', name: 'Gua Lou' }, { id: 'hwanggeum', name: 'Huang Qin' },
+            { id: 'hwangnyeon', name: 'Huang Lian' }, { id: 'haengin', name: 'Xing Ren' }, { id: 'gilgyeong', name: 'Jie Geng' },
+            { id: 'soyeop', name: 'Su Ye' }, { id: 'jeonho', name: 'Qian Hu' }, { id: 'jigak', name: 'Zhi Ke' },
+            { id: 'hyangbuja', name: 'Xiang Fu' }, { id: 'changchul', name: 'Cang Zhu' }, { id: 'pyeongwisan', name: 'Ping Wei San' },
+            { id: 'gwakhyang', name: 'Huo Xiang' }, { id: 'geoseupyak', name: 'Damp Drain. Herbs' }
+        ];
+
+        const herbEffects = {
+            'banha': 'Dries dampness, transforms phlegm, and directs rebellious Qi downward.',
+            'jinpi': 'Regulates Qi, adjusts the middle, dries dampness, and transforms phlegm.',
+            'bongnyeong': 'Promotes urination, leaches out dampness, strengthens the Spleen, and harmonizes the middle burner.',
+            'gamcho': 'Tonifies Spleen Qi, moistens the Lungs, and moderates and harmonizes the characteristics of other herbs.',
+            'namseong': 'Dries dampness, transforms phlegm, and disperses wind-phlegm in the channels.',
+            'jisil': 'Breaks up Qi stagnation, reduces accumulation, and transforms phlegm.',
+            'jukyeo': 'Clears heat, transforms phlegm, and calms the Stomach.',
+            'cheonma': 'Extinguishes wind, stops tremors, and alleviates pain.',
+            'baekchul': 'Tonifies the Spleen, augments Qi, dries dampness, and promotes water metabolism.',
+            'sikcheyak': 'A category of herbs that relieve food stagnation.',
+            'yeongyo': 'Clears heat, resolves toxicity, and reduces abscesses.',
+            'sukjihwang': 'Nourishes blood and enriches yin.',
+            'danggwi': 'Tonifies blood, invigorates blood, and regulates menstruation.',
+            'gwaru': 'Clears heat, transforms phlegm-heat, and expands the chest.',
+            'hwanggeum': 'Clears heat, dries dampness, and resolves toxicity.',
+            'hwangnyeon': 'Clears heat, dries dampness, and resolves fire toxicity.',
+            'haengin': 'Stops cough and calms wheezing.',
+            'gilgyeong': 'Opens up the Lungs, expels phlegm, and benefits the throat.',
+            'soyeop': 'Releases the exterior, disperses cold, and promotes the movement of Qi.',
+            'jeonho': 'Directs Qi downward, disperses wind-heat, and transforms phlegm.',
+            'jigak': 'Promotes the movement of Qi and reduces distention.',
+            'hyangbuja': 'Spreads and regulates Liver Qi.',
+            'changchul': 'Strongly dries dampness and strengthens the Spleen.',
+            'pyeongwisan': 'A formula that dries dampness and improves Spleen function. Not a single herb.',
+            'gwakhyang': 'Transforms dampness, releases the exterior, and harmonizes the middle.',
+            'geoseupyak': 'A category of herbs that drain dampness.'
+        };
+
         // --- Script for Section 1: Drain Analogy ---
         const vizContainer = document.getElementById('visualization-container');
         const cards = {
@@ -214,29 +278,17 @@
             Object.values(cards).forEach(card => card.classList.remove('active'));
         }
 
-        cards.banXia.addEventListener('click', () => setActiveHerb('ban-xia'));
-        cards.chenPi.addEventListener('click', () => setActiveHerb('chen-pi'));
-        cards.fuLing.addEventListener('click', () => setActiveHerb('fu-ling'));
+        cards.banXia.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('ban-xia'); showHerbInfo('banha'); });
+        cards.chenPi.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('chen-pi'); showHerbInfo('jinpi'); });
+        cards.fuLing.addEventListener('click', (e) => { e.stopPropagation(); setActiveHerb('fu-ling'); showHerbInfo('bongnyeong'); });
         
         document.body.addEventListener('click', (e) => {
-            if (!e.target.closest('.herb-card') && !e.target.closest('.formula-item')) {
+            if (!e.target.closest('.herb-card') && !e.target.closest('.formula-item') && !e.target.closest('.herb-orb') && !e.target.closest('#modal-content')) {
                 resetState();
             }
         }, true);
 
         // --- Script for Section 2: Formula Derivations ---
-        const allHerbs = [
-            { id: 'banha', name: 'Ban Xia' }, { id: 'jinpi', name: 'Chen Pi' }, { id: 'bongnyeong', name: 'Fu Ling' },
-            { id: 'gamcho', name: 'Gan Cao' }, { id: 'namseong', name: 'Nan Xing' }, { id: 'jisil', name: 'Zhi Shi' },
-            { id: 'jukyeo', name: 'Zhu Ru' }, { id: 'cheonma', name: 'Tian Ma' }, { id: 'baekchul', name: 'Bai Zhu' },
-            { id: 'sikcheyak', name: 'Food Stag. Herbs' }, { id: 'yeongyo', name: 'Lian Qiao' }, { id: 'sukjihwang', name: 'Shu Di Huang' },
-            { id: 'danggwi', name: 'Dang Gui' }, { id: 'gwaru', name: 'Gua Lou' }, { id: 'hwanggeum', name: 'Huang Qin' },
-            { id: 'hwangnyeon', name: 'Huang Lian' }, { id: 'haengin', name: 'Xing Ren' }, { id: 'gilgyeong', name: 'Jie Geng' },
-            { id: 'soyeop', name: 'Su Ye' }, { id: 'jeonho', name: 'Qian Hu' }, { id: 'jigak', name: 'Zhi Ke' },
-            { id: 'hyangbuja', name: 'Xiang Fu' }, { id: 'changchul', name: 'Cang Zhu' }, { id: 'pyeongwisan', name: 'Ping Wei San' },
-            { id: 'gwakhyang', name: 'Huo Xiang' }, { id: 'geoseupyak', name: 'Damp Drain. Herbs' }
-        ];
-
         const formulas = {
             'ijin-tang': { name: 'Er Chen Tang', treats: 'Base formula for treating damp-phlegm (Shī Tán).', derivation_text: "Base Formula", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: [] } },
             'dodam-tang': { name: 'Dao Tan Tang', treats: 'Treats symptoms due to wind-phlegm (Fēng Tán).', derivation_text: "Er Chen Tang + Nan Xing, Zhi Shi", composition: { base: ['banha', 'jinpi', 'bongnyeong', 'gamcho'], added: ['namseong', 'jisil'] } },
@@ -262,6 +314,7 @@
                 orb.id = `herb-${herb.id}`;
                 orb.className = 'herb-orb';
                 orb.textContent = herb.name;
+                orb.addEventListener('click', () => showHerbInfo(herb.id));
                 visContainer2.appendChild(orb);
             });
 
@@ -330,6 +383,42 @@
         window.addEventListener('resize', () => {
             const activeFormula = document.querySelector('.formula-item.active')?.dataset.id || 'ijin-tang';
             updateDisplay(activeFormula);
+        });
+
+        // --- Modal Logic ---
+        const herbModal = document.getElementById('herb-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalHerbName = document.getElementById('modal-herb-name');
+        const modalHerbEffect = document.getElementById('modal-herb-effect');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        function showHerbInfo(herbId) {
+            const herb = allHerbs.find(h => h.id === herbId);
+            const effect = herbEffects[herbId];
+            if (herb && effect) {
+                modalHerbName.textContent = herb.name;
+                modalHerbEffect.textContent = effect;
+                herbModal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
+
+        function closeHerbInfo() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                herbModal.classList.add('hidden');
+            }, 300);
+        }
+
+        modalCloseBtn.addEventListener('click', closeHerbInfo);
+        herbModal.addEventListener('click', (event) => {
+            if (event.target === herbModal) {
+                closeHerbInfo();
+            }
         });
     </script>
 </body>
