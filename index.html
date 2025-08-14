@@ -93,6 +93,7 @@
             <span id="today-count">0</span> / <span id="total-count">0</span>
         </div>
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
     </footer>
 
     <script>
@@ -145,40 +146,6 @@
                     link.href = `${baseHref}.html`;
                 }
             });
-        }
-
-        // Visitor Counter Function
-        function updateVisitorCount() {
-            // --- Total Visitors ---
-            let totalVisitors = localStorage.getItem('totalVisitors');
-            totalVisitors = totalVisitors ? parseInt(totalVisitors) : 0;
-            totalVisitors++;
-            localStorage.setItem('totalVisitors', totalVisitors.toString());
-
-            // --- Today's Visitors ---
-            const today = new Date().toISOString().split('T')[0]; // Get YYYY-MM-DD
-            let lastVisitDate = localStorage.getItem('lastVisitDate');
-            let todayVisitors = localStorage.getItem('todayVisitors');
-            
-            if (lastVisitDate === today) {
-                // Same day, do not increment today's count again
-                todayVisitors = todayVisitors ? parseInt(todayVisitors) : 0;
-            } else {
-                // New day, reset today's count to 1
-                todayVisitors = 1;
-                localStorage.setItem('lastVisitDate', today);
-            }
-            // Check if this is the first visit of the session to increment today's count
-            if (!sessionStorage.getItem('sessionVisit')) {
-                todayVisitors++;
-                sessionStorage.setItem('sessionVisit', 'true');
-            }
-
-            localStorage.setItem('todayVisitors', todayVisitors.toString());
-
-            // --- Display Counts ---
-            document.getElementById('today-count').textContent = todayVisitors;
-            document.getElementById('total-count').textContent = totalVisitors;
         }
         
         // A more robust way to handle the daily counter
