@@ -20,8 +20,11 @@
             --subtle-text-color: #7a7a7a;
             --connector-color: #c0b8ae;
             --herb-color: #5a7d5a;
+            --removed-herb-color: #ed8936;
             --formula-color: #4a7c9b;
             --shadow-color: rgba(0, 0, 0, 0.05);
+            --highlight-bg-color: #4a7c9b;
+            --highlight-text-color: #ffffff;
         }
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -88,7 +91,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4rem 20px; /* Vertical padding adjusted, min-height removed */
+            padding: 4rem 20px;
             width: 100%;
             box-sizing: border-box;
             overflow-x: auto;
@@ -175,17 +178,21 @@
             background-color: var(--box-bg-color);
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            cursor: default;
+            cursor: pointer; /* Changed to pointer */
             color: var(--text-color);
             font-weight: 500;
             transition: all 0.3s ease-in-out;
         }
+        .herb-item:hover {
+             transform: scale(1.05);
+             border-color: var(--herb-color);
+        }
         .herb-item.highlight {
-            background-color: var(--formula-color);
-            color: white;
+            background-color: var(--highlight-bg-color);
+            color: var(--highlight-text-color);
             transform: scale(1.05);
-            border-color: var(--formula-color);
-            box-shadow: 0 4px 12px rgba(74, 124, 155, 0.3);
+            box-shadow: 0 4px 14px 0 rgba(74, 124, 155, 0.3);
+            border-color: var(--highlight-bg-color);
         }
         .herb-item.special-border {
             border-color: var(--herb-color);
@@ -215,6 +222,10 @@
             background-color: var(--formula-color);
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(74, 124, 155, 0.4);
+        }
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -293,7 +304,7 @@
     </div>
 
     <!-- New Interactive Diagram -->
-    <div class="interactive-diagram-container">
+    <div id="interactive-diagram-container" class="interactive-diagram-container">
         <div class="herb-grid-container">
             <div id="herb-grid" class="herb-grid">
                 <!-- Herb items will be injected here by JS -->
@@ -309,6 +320,19 @@
         <p style="margin-top: 10px;">답을 먼저 보기 전에 생각해 보시기 바랍니다. 복령은 습을 아래로 내리는 하기(下氣)하는 작용이 있기 때문입니다. 마찬가지 이유로 태산반석탕에서도 역시 사군자탕에서 복령을 빼고 사물탕과 합하여 사용한 것입니다. 이러한 과정을 이해하는 것이 바로 방제학입니다.</p>
     </div>
 
+    <!-- Herb Info Modal -->
+    <div id="herb-modal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modal-herb-name" class="text-2xl font-bold text-gray-800" style="font-family: 'Cormorant Garamond', serif;"></h3>
+                <button id="modal-close-btn" class="text-3xl font-light leading-none text-gray-500 hover:text-gray-800 transition-colors">&times;</button>
+            </div>
+            <div>
+                <p id="modal-herb-effect" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Script for the first diagram ---
@@ -320,8 +344,8 @@
                 '비기하함': `<p><span class="herb">+ 황기, 당귀, 진피</span></p><p><span class="herb">+ 승마, 시호</span></p><p><span class="formula">보중익기탕</span></p>`,
                 '비불통혈': `<p><span class="herb">+ 당귀</span> + <span class="herb">안신제</span></p><p><span class="formula">귀비탕</span></p>`,
                 '기혈양허': `<p><span class="herb">+ 사물탕</span></p><p><span class="formula">팔물탕</span></p>
-                                         <p style="margin-top: 12px;"><span class="formula">십전대보탕</span> <span class="herb">(+황기,육계)</span></p>
-                                         <p><span class="formula">태산반석탕</span> <span class="herb">(-복령+안태약)</span></p>`
+                                        <p style="margin-top: 12px;"><span class="formula">십전대보탕</span> <span class="herb">(+황기,육계)</span></p>
+                                        <p><span class="formula">태산반석탕</span> <span class="herb">(-복령+안태약)</span></p>`
             };
 
             const boxes = document.querySelectorAll('.flow-box');
@@ -365,6 +389,26 @@
             };
 
             const allHerbs = ['인삼', '백출', '감초', '복령', '건강', '진피', '황기', '당귀', '육계', '산약', '승마', '시호', '사물탕', '안신약', '안태약', '거습약', '이진탕'];
+            
+            const herbEffectsKor = {
+                '인삼': '원기를 크게 보하고, 음을 자양하며 진액을 생성합니다.',
+                '백출': '비장을 보하고 습을 말리며 태아를 안정시킵니다.',
+                '감초': '기를 보하고 다른 약을 조화시키며 열을 내리고 독을 해독합니다.',
+                '복령': '습을 배출하고 비장을 강화하며 정신을 안정시킵니다.',
+                '건강': '중초를 따뜻하게 하고 깊은 한기를 몰아냅니다.',
+                '진피': '기를 조절하고 습을 말리며 담을 삭입니다.',
+                '황기': '기와 혈을 보하고 양기를 들어 올리며 표를 견고하게 합니다.',
+                '당귀': '혈을 보하고 활혈하며 월경을 조절합니다.',
+                '육계': '속을 따뜻하게 하고 깊은 한기를 흩어지게 하며 통증을 완화합니다.',
+                '산약': '비위의 기와 음을 보합니다.',
+                '승마': '가라앉은 양기를 들어 올리고 열을 내리며 독을 해독합니다.',
+                '시호': '간기를 소통시키고 울결을 풀며 양기를 들어 올립니다.',
+                '사물탕': '혈을 보하고 활혈하는 기본 처방입니다. 단일 약재가 아닙니다.',
+                '안신약': '정신을 안정시키는 약재의 분류입니다.',
+                '안태약': '태아를 안정시키는 약재의 분류입니다.',
+                '거습약': '습을 배출하는 약재의 분류입니다.',
+                '이진탕': '습을 말리고 담을 삭이는 처방입니다. 단일 약재가 아닙니다.'
+            };
 
             const diagramContainer = document.querySelector('.interactive-diagram-container');
             const herbGrid = document.getElementById('herb-grid');
@@ -378,6 +422,8 @@
                     herbDiv.dataset.herb = herb;
                     herbDiv.className = 'herb-item';
                     herbGrid.appendChild(herbDiv);
+                    // Add click event for modal
+                    herbDiv.addEventListener('click', () => showHerbInfo(herb));
                 });
 
                 // 1.5. Add special border to Sagunja-tang base herbs
@@ -438,8 +484,43 @@
                 
                 // 4. Deselect when clicking outside the diagram
                 document.addEventListener('click', (e) => {
-                    if (!diagramContainer.contains(e.target)) {
+                    if (!diagramContainer.contains(e.target) && !e.target.closest('.herb-item')) {
                          resetSelection();
+                    }
+                });
+                
+                // --- Modal Logic ---
+                const herbModal = document.getElementById('herb-modal');
+                const modalContent = document.getElementById('modal-content');
+                const modalHerbName = document.getElementById('modal-herb-name');
+                const modalHerbEffect = document.getElementById('modal-herb-effect');
+                const modalCloseBtn = document.getElementById('modal-close-btn');
+
+                function showHerbInfo(herbName) {
+                    const effect = herbEffectsKor[herbName];
+                    if (effect) {
+                        modalHerbName.textContent = herbName;
+                        modalHerbEffect.textContent = effect;
+                        herbModal.classList.remove('hidden');
+                        setTimeout(() => {
+                            modalContent.classList.remove('scale-95', 'opacity-0');
+                            modalContent.classList.add('scale-100', 'opacity-100');
+                        }, 10);
+                    }
+                }
+
+                function closeHerbInfo() {
+                    modalContent.classList.add('scale-95', 'opacity-0');
+                    modalContent.classList.remove('scale-100', 'opacity-100');
+                    setTimeout(() => {
+                        herbModal.classList.add('hidden');
+                    }, 300);
+                }
+
+                modalCloseBtn.addEventListener('click', closeHerbInfo);
+                herbModal.addEventListener('click', (event) => {
+                    if (event.target === herbModal || event.target.closest('#modal-close-btn')) {
+                        closeHerbInfo();
                     }
                 });
             }
