@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find the Formula within a Formula (Pinyin)</title>
+    <title>Formulas in Formulas</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Noto Sans KR -->
@@ -28,8 +28,8 @@
         }
         .herb-btn[disabled] {
             cursor: not-allowed;
-            opacity: 0.6; /* 비활성화 시 더 명확하게 보이도록 수정 */
-            background-color: #F3F4F6; /* 비활성화 배경색 */
+            opacity: 0.6;
+            background-color: #F3F4F6;
         }
         /* Style for unincluded herb buttons */
         .extra-herb-btn {
@@ -42,6 +42,14 @@
             background-color: #4B5563; /* gray-600 */
             color: white;
             border-color: #1F2937; /* gray-800 */
+        }
+        /* Style for prescription list buttons */
+        .prescription-list-btn {
+             transition: all 0.2s ease-in-out;
+        }
+        .prescription-list-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
@@ -56,10 +64,18 @@
 
     <!-- Main Content -->
     <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
-        <div id="game-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm">
+        <!-- Menu Container -->
+        <div id="menu-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm">
+            <h2 class="text-2xl font-bold mb-6 text-center">Formulas in Formulas</h2>
+            <div id="prescription-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Prescription buttons will be generated here -->
+            </div>
+        </div>
+
+        <!-- Game Container (initially hidden) -->
+        <div id="game-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm hidden">
             <div class="text-center mb-6">
-                <h2 id="question-title" class="text-2xl font-bold mb-2"></h2>
-                <p id="question-description" class="text-gray-600">Click the herbs to find the <span id="sub-count" class="font-bold"></span> hidden formulas.</p>
+                 <p id="question-description" class="text-gray-600">Click the herbs to find the <span id="sub-count" class="font-bold"></span> hidden formulas.</p>
             </div>
 
             <!-- Prescription info and herb list -->
@@ -89,8 +105,9 @@
 
             <!-- Navigation buttons -->
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
-                <button id="show-all-btn" class="bg-white text-gray-700 font-bold py-2 px-8 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Show All Formulas</button>
-                <button id="next-btn" class="bg-gray-800 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-700 transition-colors shadow-md">Next Question</button>
+                <button id="show-all-btn" class="bg-white text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Show All</button>
+                <button id="reset-btn" class="bg-white text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Reset</button>
+                <button id="back-btn" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors shadow-md">Back to List</button>
             </div>
         </div>
     </main>
@@ -103,6 +120,88 @@
     <script>
         // Quiz Data (Pinyin Version)
         const quizData = [
+            {
+                mainPrescription: "Liu Jun Zi Tang",
+                description: "Tonifies Spleen Qi and transforms phlegm.",
+                herbs: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao", "Ban Xia", "Chen Pi"],
+                subPrescriptions: [
+                    { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." },
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Wen Dan Tang",
+                description: "Clears Gallbladder heat and resolves phlegm.",
+                herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Zhi Shi", "Zhu Ru"],
+                subPrescriptions: [
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Ban Xia Bai Zhu Tian Ma Tang",
+                description: "Dries dampness, resolves phlegm, and extinguishes wind.",
+                herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Bai Zhu", "Tian Ma"],
+                subPrescriptions: [
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Qing Qi Hua Tan Wan",
+                description: "Clears heat and resolves phlegm from the Lungs.",
+                herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Gua Lou Ren", "Dan Nan Xing", "Huang Qin", "Zhi Shi", "Xing Ren"],
+                subPrescriptions: [
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Dao Tan Tang",
+                description: "Transforms stubborn phlegm obstructing the channels.",
+                herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Dan Nan Xing", "Zhi Shi"],
+                subPrescriptions: [
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Xing Su San",
+                description: "Disseminates Lung qi and resolves phlegm for externally-contracted cool-dryness.",
+                herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Xing Ren", "Jie Geng", "Zi Su Ye", "Qian Hu", "Zhi Shi"],
+                subPrescriptions: [
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Bao He Wan",
+                description: "Reduces food stagnation and harmonizes the stomach.",
+                herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Shan Zha", "Lian Qiao", "Mai Ya", "Shen Qu", "Lai Fu Zi"],
+                subPrescriptions: [
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+             {
+                mainPrescription: "Qu Feng Chu Shi Tang",
+                description: "Expels wind-dampness and relieves pain.",
+                herbs: ["Gan Cao", "Qiang Huo", "Zhi Qiao", "Jie Geng", "Dang Gui", "Ban Xia", "Fang Feng", "Fu Ling", "Bai Zhi", "Bai Zhu", "Wu Yao", "Ren Shen", "Chi Shao", "Chen Pi", "Cang Zhu", "Chuan Xiong", "Huang Qin", "Huang Lian"],
+                subPrescriptions: [
+                    { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." },
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Tao He Cheng Qi Tang",
+                description: "Drains heat and breaks up blood stasis in the lower jiao.",
+                herbs: ["Da Huang", "Mang Xiao", "Gan Cao", "Tao Ren", "Gui Zhi"],
+                subPrescriptions: [
+                    { name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." }
+                ]
+            },
+            {
+                mainPrescription: "Xiao Ji Yin Zi",
+                description: "Cools the Blood, stops bleeding, promotes urination, and unblocks painful urinary dribbling.",
+                herbs: ["Xiao Ji", "Ou Jie", "Pu Huang", "Sheng Di Huang", "Dan Zhu Ye", "Zhi Zi", "Hua Shi", "Mu Tong", "Dang Gui", "Zhi Gan Cao"],
+                subPrescriptions: [
+                    { name: "Dao Chi San", ingredients: ["Sheng Di Huang", "Mu Tong", "Dan Zhu Ye", "Zhi Gan Cao"], notIncluded: [], description: "Clears Heart-heat, nourishes Yin, and promotes urination." }
+                ]
+            },
             {
                 mainPrescription: "Shi Quan Da Bu Tang",
                 description: "A representative formula that tonifies both Qi and Blood.",
@@ -195,7 +294,9 @@
         ];
 
         // DOM Elements
-        const questionTitleEl = document.getElementById('question-title');
+        const menuContainer = document.getElementById('menu-container');
+        const prescriptionList = document.getElementById('prescription-list');
+        const gameContainer = document.getElementById('game-container');
         const subCountEl = document.getElementById('sub-count');
         const prescriptionNameEl = document.getElementById('prescription-name');
         const prescriptionDescriptionEl = document.getElementById('prescription-description-main');
@@ -204,7 +305,8 @@
         const extraHerbsContainerEl = document.getElementById('extra-herbs-container');
         const feedbackContainerEl = document.getElementById('feedback-container');
         const summaryContainerEl = document.getElementById('summary-container');
-        const nextBtn = document.getElementById('next-btn');
+        const backBtn = document.getElementById('back-btn');
+        const resetBtn = document.getElementById('reset-btn');
         const showAllBtn = document.getElementById('show-all-btn');
 
         // Game State
@@ -317,6 +419,7 @@
 
         // Function to load a question
         function loadQuestion(index) {
+            currentQuestionIndex = index;
             selectedHerbs = [];
             foundPrescriptions = [];
             herbsContainerEl.innerHTML = '';
@@ -326,7 +429,6 @@
             showAllBtn.style.display = 'inline-block';
 
             const question = quizData[index];
-            questionTitleEl.textContent = `Question ${index + 1} / ${quizData.length}`;
             subCountEl.textContent = question.subPrescriptions.length;
             prescriptionNameEl.textContent = question.mainPrescription;
             prescriptionDescriptionEl.textContent = question.description;
@@ -358,33 +460,34 @@
             } else {
                 extraHerbsWrapperEl.style.display = 'none';
             }
-            
-            if(index === quizData.length - 1) {
-                nextBtn.textContent = 'Finish Quiz';
-            } else {
-                nextBtn.textContent = 'Next Question';
-            }
+        }
+
+        // Function to initialize the menu
+        function initMenu() {
+            menuContainer.classList.remove('hidden');
+            gameContainer.classList.add('hidden');
+            prescriptionList.innerHTML = '';
+
+            quizData.forEach((quiz, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = quiz.mainPrescription;
+                btn.className = 'prescription-list-btn w-full text-left p-4 bg-white rounded-lg shadow-sm hover:bg-gray-100 border';
+                btn.addEventListener('click', () => {
+                    menuContainer.classList.add('hidden');
+                    gameContainer.classList.remove('hidden');
+                    loadQuestion(index);
+                });
+                prescriptionList.appendChild(btn);
+            });
         }
         
-        // Handler for the "Next Question" button
-        nextBtn.addEventListener('click', () => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizData.length) {
-                loadQuestion(currentQuestionIndex);
-            } else {
-                document.getElementById('game-container').innerHTML = `
-                    <div class="text-center py-10">
-                        <h2 class="text-3xl font-bold mb-4">Good Job!</h2>
-                        <p class="text-gray-700">You have completed all the questions.</p>
-                        <button onclick="location.reload()" class="mt-8 bg-gray-800 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-700 transition-colors">
-                            Restart
-                        </button>
-                    </div>
-                `;
-            }
+        // Button Event Listeners
+        backBtn.addEventListener('click', initMenu);
+        
+        resetBtn.addEventListener('click', () => {
+            loadQuestion(currentQuestionIndex);
         });
 
-        // Handler for the "Show All Formulas" button
         showAllBtn.addEventListener('click', () => {
             const question = quizData[currentQuestionIndex];
             summaryContainerEl.innerHTML = '';
@@ -396,8 +499,8 @@
             showAllBtn.style.display = 'none';
         });
 
-        // Load the initial question
-        loadQuestion(currentQuestionIndex);
+        // Initial call
+        initMenu();
     </script>
 </body>
 </html>
