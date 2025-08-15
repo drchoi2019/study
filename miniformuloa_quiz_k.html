@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>처방 속 처방 찾기</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 배경색 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        /* 약재 버튼 기본 스타일 */
+        .herb-btn {
+            transition: all 0.2s ease-in-out;
+            border: 2px solid #D1D5DB; /* gray-300 */
+        }
+        .herb-btn:hover:not([disabled]) {
+            border-color: #6B7280; /* gray-500 */
+            transform: translateY(-2px);
+        }
+        .herb-btn[disabled] {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        /* 미포함 약재 버튼 스타일 */
+        .extra-herb-btn {
+            border-style: dashed;
+            border-color: #9CA3AF; /* gray-400 */
+            color: #4B5563; /* gray-600 */
+        }
+        /* 선택된 약재 버튼 스타일 (무채색으로 변경) */
+        .herb-btn.selected {
+            background-color: #4B5563; /* gray-600 */
+            color: white;
+            border-color: #1F2937; /* gray-800 */
+        }
+        /* 정답으로 확인된 약재 버튼 색상들 */
+        .correct-0 { background-color: #5F9EA0; color: white; border-color: #4a7c7d; } /* CadetBlue (무채색 청록 계열) */
+        .correct-1 { background-color: #708090; color: white; border-color: #5a6773; } /* SlateGray (무채색 고동 계열) */
+        .correct-2 { background-color: #9370DB; color: white; border-color: #7659b1; } /* MediumPurple (무채색 보라 계열) */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- 제공된 헤더 -->
+    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <div id="game-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm">
+            <div class="text-center mb-6">
+                <h2 id="question-title" class="text-2xl font-bold mb-2"></h2>
+                <p id="question-description" class="text-gray-600">처방을 구성하는 약재를 클릭하여 숨어있는 <span id="sub-count" class="font-bold"></span>가지 처방을 찾아보세요.</p>
+            </div>
+
+            <!-- 처방 소개 및 약재 목록 -->
+            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h3 id="prescription-name" class="text-xl font-semibold text-center mb-1"></h3>
+                <p id="prescription-description-main" class="text-center text-gray-500 text-sm mb-4"></p>
+                <div id="herbs-container" class="flex flex-wrap gap-3 justify-center">
+                    <!-- 주 처방 약재 버튼이 동적으로 생성됩니다 -->
+                </div>
+                <div id="extra-herbs-wrapper" class="mt-4 pt-4 border-t border-dashed hidden">
+                    <p class="text-center text-sm text-gray-500 mb-3">다른 처방에 필요한 약재</p>
+                    <div id="extra-herbs-container" class="flex flex-wrap gap-3 justify-center">
+                        <!-- 미포함 약재 버튼이 동적으로 생성됩니다 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 피드백 메시지 영역 -->
+            <div id="feedback-container" class="min-h-[3rem] text-center py-2 text-lg font-semibold text-gray-700">
+                <!-- 정답/오답 메시지가 표시됩니다 -->
+            </div>
+
+            <!-- 찾은 처방 목록 -->
+            <div id="summary-container" class="mt-4 space-y-3">
+                <!-- 찾은 처방 정보가 동적으로 추가됩니다 -->
+            </div>
+
+            <!-- 네비게이션 버튼 -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+                <button id="show-all-btn" class="bg-white text-gray-700 font-bold py-2 px-8 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">모든 처방 보기</button>
+                <button id="next-btn" class="bg-gray-800 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-700 transition-colors shadow-md">다음 문제</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 제공된 푸터 -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // 퀴즈 데이터
+        const quizData = [
+            {
+                mainPrescription: "십전대보탕 (十全大補湯)",
+                description: "기(氣)와 혈(血)을 모두 보하는 대표적인 처방입니다.",
+                herbs: ["백작", "당귀", "지황", "천궁", "인삼", "백출", "복령", "감초", "황기", "육계"],
+                subPrescriptions: [
+                    { name: "사물탕 (四物湯)", ingredients: ["백작", "당귀", "지황", "천궁"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." },
+                    { name: "사군자탕 (四君子湯)", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }
+                ]
+            },
+            {
+                mainPrescription: "온청음 (溫淸飮)",
+                description: "혈열(血熱)로 인한 출혈성 질환이나 피부 질환에 사용됩니다.",
+                herbs: ["지황", "당귀", "작약", "천궁", "황연", "황금", "황백", "치자"],
+                subPrescriptions: [
+                    { name: "황련해독탕 (黃連解毒湯)", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: [], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." },
+                    { name: "사물탕 (四物湯)", ingredients: ["작약", "당귀", "지황", "천궁"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }
+                ]
+            },
+            {
+                mainPrescription: "청온패독음 (淸瘟敗毒飮)",
+                description: "온역(瘟疫)으로 기분(氣分)과 혈분(血分)의 열독이 극심할 때 사용합니다.",
+                herbs: ["황연", "황금", "연교", "치자", "지황", "서각", "목단피", "적작약", "지모", "석고", "현삼", "죽엽", "감초", "길경"],
+                subPrescriptions: [
+                    { name: "황련해독탕 (黃連解毒湯)", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: ["황백"], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." },
+                    { name: "서각지황탕 (犀角地黃湯)", ingredients: ["지황", "목단피", "서각", "적작약"], notIncluded: [], description: "열이 영혈(營血)에 들어가 생긴 각종 출혈과 반진을 치료합니다." }
+                ]
+            },
+            {
+                mainPrescription: "양격산 (涼膈散)",
+                description: "상·중초에 쌓인 열로 인한 구내염, 변비, 두통 등을 치료합니다.",
+                herbs: ["대황", "망초", "감초", "황금", "연교", "치자", "박하"],
+                subPrescriptions: [
+                    { name: "조위승기탕 (調胃承氣湯)", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." },
+                    { name: "황련해독탕 (黃連解毒湯)", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: ["황연", "황백"], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." },
+                    { name: "삼황사심탕 (三黃瀉心湯)", ingredients: ["대황", "황금", "황연"], notIncluded: ["황연"], description: "심위(心胃)의 화열(火熱)을 직접적으로 내리는 처방입니다." }
+                ]
+            },
+            { // *** 데이터 수정됨 ***
+                mainPrescription: "청영탕 (淸營湯)",
+                description: "열이 영분(營分)에 들어가 밤에 열이 심해지고 정신이 혼미한 증상을 치료합니다.",
+                herbs: ["황연", "금은화", "연교", "단삼", "지황", "현삼", "맥문동", "서각", "죽엽"],
+                subPrescriptions: [
+                    { name: "증액탕 (增液湯)", ingredients: ["지황", "현삼", "맥문동"], notIncluded: [], description: "진액(津液)을 보충하여 변비나 마른기침 등을 치료하는 처방입니다." }
+                ]
+            },
+            {
+                mainPrescription: "가미소요산 (加味逍遙散)",
+                description: "간기울결(肝氣鬱結)로 인한 화(火)를 식히고 혈(血)을 보하여 스트레스성 증상을 완화합니다.",
+                herbs: ["시호", "작약", "당귀", "복령", "백출", "감초", "목단피", "치자"],
+                subPrescriptions: [
+                    { name: "사역산 (四逆散)", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: ["지실"], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." },
+                    { name: "사군자탕 (四君子湯)", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: ["인삼"], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }
+                ]
+            },
+            {
+                mainPrescription: "시호소간산 (柴胡疏肝散)",
+                description: "사역산에서 파생되어, 옆구리 통증 등 간기울결(肝氣鬱結) 증상에 더 효과적입니다.",
+                herbs: ["시호", "작약", "천궁", "감초", "향부자", "진피", "지실"],
+                subPrescriptions: [
+                    { name: "사역산 (四逆散)", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: [], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." }
+                ]
+            },
+            {
+                mainPrescription: "혈부축어탕 (血府逐瘀湯) 구성",
+                description: "가슴 부위의 어혈(瘀血)로 인한 통증 및 순환 장애를 치료합니다.",
+                herbs: ["시호", "작약", "지실", "감초", "당귀", "천궁", "지황", "적작", "도인", "홍화", "우슬", "길경"],
+                subPrescriptions: [
+                    { name: "사역산 (四逆散)", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: [], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." },
+                    { name: "도홍사물탕 (桃紅四物湯)", ingredients: ["당귀", "천궁", "지황", "적작", "도인", "홍화"], notIncluded: [], description: "사물탕에 어혈을 제거하는 약재를 더해 혈액순환을 더욱 강력하게 촉진합니다." }
+                ]
+            },
+            {
+                mainPrescription: "곽향정기산 (藿香正氣散)",
+                description: "여름철 감기, 소화불량, 구토, 설사 등 다양한 증상에 사용됩니다.",
+                herbs: ["곽향", "소엽", "반하", "진피", "복령", "감초", "창출", "백지", "후박", "대복피", "길경"],
+                subPrescriptions: [
+                    { name: "평위산 (平胃散)", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." },
+                    { name: "이진탕 (二陳湯)", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }
+                ]
+            },
+            {
+                mainPrescription: "방풍통성산 (防風通聖散)",
+                description: "표리(表裏)의 열을 모두 식혀 피부질환, 비만, 변비 등에 널리 응용됩니다.",
+                herbs: ["방풍", "형개", "백출", "치자", "마황", "박하", "대황", "망초", "연교", "당귀", "천궁", "백작", "석고", "길경", "황금", "활석", "감초"],
+                subPrescriptions: [
+                    { name: "조위승기탕 (調胃承氣湯)", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." },
+                    { name: "사물탕 (四物湯)", ingredients: ["백작", "당귀", "지황", "천궁"], notIncluded: ["지황"], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }
+                ]
+            }
+        ];
+
+        // DOM 요소
+        const questionTitleEl = document.getElementById('question-title');
+        const subCountEl = document.getElementById('sub-count');
+        const prescriptionNameEl = document.getElementById('prescription-name');
+        const prescriptionDescriptionEl = document.getElementById('prescription-description-main');
+        const herbsContainerEl = document.getElementById('herbs-container');
+        const extraHerbsWrapperEl = document.getElementById('extra-herbs-wrapper');
+        const extraHerbsContainerEl = document.getElementById('extra-herbs-container');
+        const feedbackContainerEl = document.getElementById('feedback-container');
+        const summaryContainerEl = document.getElementById('summary-container');
+        const nextBtn = document.getElementById('next-btn');
+        const showAllBtn = document.getElementById('show-all-btn');
+
+        // 게임 상태
+        let currentQuestionIndex = 0;
+        let selectedHerbs = [];
+        let foundPrescriptions = [];
+        const correctColors = ['correct-0', 'correct-1', 'correct-2'];
+
+        // 약재 배열 비교 함수
+        function areArraysEqual(arr1, arr2) {
+            if (arr1.length !== arr2.length) return false;
+            const sortedArr1 = [...arr1].sort();
+            const sortedArr2 = [...arr2].sort();
+            return sortedArr1.every((value, index) => value === sortedArr2[index]);
+        }
+        
+        // 찾은 처방 표시 함수
+        function displayFoundPrescription(sub) {
+            const foundDiv = document.createElement('div');
+            foundDiv.className = 'bg-green-50 p-4 rounded-lg border border-green-200';
+            
+            let ingredientsHTML = sub.ingredients.join(', ');
+            let notIncludedHTML = '';
+            if (sub.notIncluded.length > 0) {
+                notIncludedHTML = `<div class="mt-2"><span class="font-semibold text-red-600">미포함 약재:</span> <span class="text-red-500">${sub.notIncluded.join(', ')}</span></div>`;
+            }
+
+            foundDiv.innerHTML = `
+                <p class="font-bold text-green-800">${sub.name}</p>
+                <p class="text-sm text-gray-600 mt-1">${sub.description}</p>
+                <div class="mt-2">
+                    <span class="font-semibold">구성 약재:</span> ${ingredientsHTML}
+                </div>
+                ${notIncludedHTML}
+            `;
+            summaryContainerEl.appendChild(foundDiv);
+        }
+
+        // *** 정답 확인 함수 (버그 수정) ***
+        function checkAnswer() {
+            const question = quizData[currentQuestionIndex];
+            let foundSub = null;
+
+            for (const sub of question.subPrescriptions) {
+                if (!foundPrescriptions.includes(sub.name) && areArraysEqual(selectedHerbs, sub.ingredients)) {
+                    foundSub = sub;
+                    break;
+                }
+            }
+
+            if (foundSub) {
+                foundPrescriptions.push(foundSub.name);
+                
+                feedbackContainerEl.textContent = `정답! '${foundSub.name}'을(를) 찾았습니다.`;
+                setTimeout(() => { feedbackContainerEl.textContent = ''; }, 2000);
+                displayFoundPrescription(foundSub);
+
+                const colorClass = correctColors[(foundPrescriptions.length - 1) % correctColors.length];
+                
+                // 정답 약재들의 UI를 업데이트합니다.
+                foundSub.ingredients.forEach(herb => {
+                    const mainBtn = document.querySelector(`#herbs-container .herb-btn[data-herb="${herb}"]`);
+                    const extraBtn = document.querySelector(`#extra-herbs-container .herb-btn[data-herb="${herb}"]`);
+                    const btn = mainBtn || extraBtn;
+                    
+                    if (btn) {
+                        // 선택 상태와 기본 스타일을 모두 제거
+                        btn.classList.remove('selected');
+                        btn.className = btn.className.replace(/correct-\d+/g, ''); // 기존 정답 색상 제거
+                        
+                        // 정답 색상 적용
+                        btn.classList.add(colorClass);
+
+                        // 다른 처방에서 필요한지 확인하여 비활성화 여부 결정
+                        const isNeededForOther = question.subPrescriptions.some(s => 
+                            !foundPrescriptions.includes(s.name) && s.ingredients.includes(herb)
+                        );
+                        if (!isNeededForOther) {
+                            btn.disabled = true;
+                        }
+                    }
+                });
+
+                // 선택된 약재 목록을 초기화합니다.
+                selectedHerbs = [];
+
+                if (foundPrescriptions.length === question.subPrescriptions.length) {
+                    setTimeout(() => { 
+                        feedbackContainerEl.textContent = '축하합니다! 이 처방의 모든 구성을 찾았습니다.';
+                        showAllBtn.style.display = 'none';
+                    }, 2000);
+                }
+            }
+        }
+
+        // 약재 버튼 클릭 핸들러
+        function handleHerbClick(e) {
+            const clickedBtn = e.target;
+            if (clickedBtn.disabled) return;
+
+            const herbName = clickedBtn.dataset.herb;
+            clickedBtn.classList.toggle('selected');
+
+            if (selectedHerbs.includes(herbName)) {
+                selectedHerbs = selectedHerbs.filter(h => h !== herbName);
+            } else {
+                selectedHerbs.push(herbName);
+            }
+            checkAnswer();
+        }
+
+        // 문제 로드 함수
+        function loadQuestion(index) {
+            selectedHerbs = [];
+            foundPrescriptions = [];
+            herbsContainerEl.innerHTML = '';
+            extraHerbsContainerEl.innerHTML = '';
+            summaryContainerEl.innerHTML = '';
+            feedbackContainerEl.textContent = '';
+            showAllBtn.style.display = 'inline-block';
+
+            const question = quizData[index];
+            questionTitleEl.textContent = `문제 ${index + 1} / ${quizData.length}`;
+            subCountEl.textContent = question.subPrescriptions.length;
+            prescriptionNameEl.textContent = question.mainPrescription;
+            prescriptionDescriptionEl.textContent = question.description;
+
+            // 주 처방 약재 버튼 생성
+            question.herbs.forEach(herb => {
+                const btn = document.createElement('button');
+                btn.textContent = herb;
+                btn.dataset.herb = herb;
+                btn.className = 'herb-btn px-4 py-2 rounded-md bg-white shadow-sm font-medium';
+                btn.addEventListener('click', handleHerbClick);
+                herbsContainerEl.appendChild(btn);
+            });
+            
+            // 미포함 약재 버튼 생성
+            const extraHerbs = new Set();
+            question.subPrescriptions.forEach(sub => {
+                sub.notIncluded.forEach(herb => extraHerbs.add(herb));
+            });
+
+            if (extraHerbs.size > 0) {
+                extraHerbsWrapperEl.style.display = 'block';
+                extraHerbs.forEach(herb => {
+                    const btn = document.createElement('button');
+                    btn.textContent = herb;
+                    btn.dataset.herb = herb;
+                    btn.className = 'herb-btn extra-herb-btn px-4 py-2 rounded-md bg-white shadow-sm font-medium';
+                    btn.addEventListener('click', handleHerbClick);
+                    extraHerbsContainerEl.appendChild(btn);
+                });
+            } else {
+                extraHerbsWrapperEl.style.display = 'none';
+            }
+            
+            if(index === quizData.length - 1) {
+                nextBtn.textContent = '퀴즈 종료';
+            } else {
+                nextBtn.textContent = '다음 문제';
+            }
+        }
+        
+        // 다음 문제 버튼 핸들러
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion(currentQuestionIndex);
+            } else {
+                document.getElementById('game-container').innerHTML = `
+                    <div class="text-center py-10">
+                        <h2 class="text-3xl font-bold mb-4">수고하셨습니다!</h2>
+                        <p class="text-gray-700">모든 문제를 완료했습니다.</p>
+                        <button onclick="location.reload()" class="mt-8 bg-gray-800 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-700 transition-colors">
+                            다시 시작
+                        </button>
+                    </div>
+                `;
+            }
+        });
+
+        // 모든 처방 보기 버튼 핸들러
+        showAllBtn.addEventListener('click', () => {
+            const question = quizData[currentQuestionIndex];
+            summaryContainerEl.innerHTML = ''; // 기존 목록 초기화
+            question.subPrescriptions.forEach(sub => {
+                displayFoundPrescription(sub);
+            });
+            feedbackContainerEl.textContent = '모든 숨은 처방의 구성을 표시했습니다.';
+            // 모든 약재 버튼 비활성화
+            document.querySelectorAll('.herb-btn').forEach(btn => btn.disabled = true);
+            showAllBtn.style.display = 'none'; // 버튼 숨기기
+        });
+
+        // 초기 문제 로드
+        loadQuestion(currentQuestionIndex);
+    </script>
+</body>
+</html>
