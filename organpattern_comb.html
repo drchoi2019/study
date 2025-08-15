@@ -113,8 +113,8 @@
         </div>
 
         <!-- Result Display Area -->
-        <div id="result-display" class="mt-10 min-h-[10rem] bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">
-             <p class="text-center text-gray-500">Results will be displayed here.</p>
+        <div id="result-display" class="mt-10 min-h-[10rem] bg-transparent p-0 rounded-lg">
+             <p class="text-center text-gray-500 pt-6">Results will be displayed here.</p>
         </div>
     </main>
 
@@ -147,7 +147,7 @@
             },
             syndromes: [
                 { name: 'Liver Blood Deficiency', organ: 'Liver', patterns: ['Blood Deficiency'], description: 'Dizziness, insomnia, dull-pale complexion, pale lips. Blurred vision, "floaters", withered/brittle nails, dry hair/skin. Numbness of limbs, muscular weakness and spasm, cramps. Scanty menstruation or amenorrhea' },
-                { name: 'Liver Qi Stagnation', organ: 'Liver', patterns: ['Qi Stagnation'], description: 'Melancholy, moodiness, fluctuating mental state, unhappiness, "feeling wound up". Hypochondric/chest distention. Epigastric pain, ST churning, abdominal distention. Nausea, vomiting, hiccup, no appetite, borborygmus, diarrhea. Feeling of lump in the throat, difficulty swallowing. Irregular periods, painful periods, distention of breasts before the periods, premenstrual tension and irritability' },
+                { name: 'Liver Qi Stagnation', organ: 'Liver', patterns: ['Qi Stagnation'], description: 'Melancholy, moodiness, fluctuating mental state, unhappiness, "feeling wound up". Hypochondric pain. Epigastric pain, ST churning, abdominal distention. Nausea, vomiting, hiccup, no appetite, borborygmus, diarrhea. Feeling of lump in the throat, difficulty swallowing. Irregular periods, painful periods, distention of breasts before the periods, premenstrual tension and irritability' },
                 { name: 'Liver Blood Stasis', organ: 'Liver', patterns: ['Blood Stasis'], description: 'Painful(fixed, stabbing, worsen at night) periods, irregular periods, dark and clotted menses. Abdominal pain, "masses" in abdomen. Purple nails, purple lips, purple complexion. Dry skin (in severe cases), petechiae(purple spot)' },
                 { name: 'Stagnation of Cold in the Liver Meridian', organ: 'Liver', patterns: ['Cold'], description: 'Pain refering to the scrotum and testis. Pain is alleviated by warmth' },
                 { name: 'Liver Fire Flare-up', organ: 'Liver', patterns: ['Heat'], description: 'Temporal headache, dizziness, tinnitus, deafness. Red face and eyes, thirst, bitter taste. Irritability, propensity to anger, dream disturbed sleep. Constipation with dry stools, dark-yellow urine. Epistaxis, hematemesis, hemoptysis' },
@@ -198,7 +198,7 @@
                 selectedPattern = null;
                 organList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected', 'inactive'));
                 patternList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected', 'inactive'));
-                resultDisplay.innerHTML = `<p class="text-center text-gray-500">Results will be displayed here.</p>`;
+                resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">Results will be displayed here.</p>`;
             };
 
             const updateUI = () => {
@@ -210,7 +210,6 @@
                     TCM_DATA.syndromes
                         .filter(s => s.organ === selectedOrgan)
                         .forEach(s => s.patterns.forEach(p => {
-                            // Only add the pattern to the active set if it exists in the main patterns list
                             if (TCM_DATA.patterns[p]) {
                                 activePatterns.add(p);
                             }
@@ -236,8 +235,10 @@
 
                 if (selectedOrgan && selectedPattern) {
                     updateResultDisplay(selectedOrgan, selectedPattern);
+                } else if (!selectedOrgan && !selectedPattern) {
+                     resetAll();
                 } else {
-                    resultDisplay.innerHTML = `<p class="text-center text-gray-500">Please select a combination.</p>`;
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">Please select a combination.</p>`;
                 }
             };
             
@@ -283,45 +284,39 @@
                 );
 
                 if (matchingSyndromes.length === 0) {
-                    resultDisplay.innerHTML = `<p class="text-center text-gray-500">No information found for this combination.</p>`;
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">No information found for this combination.</p>`;
                     return;
                 }
 
-                let html = '';
-                // If multiple syndromes match, display Organ and Pattern details once at the top.
-                if (matchingSyndromes.length > 1) {
-                    html += `
-                        <div class="space-y-3 text-gray-700 mb-6 pb-6 border-b border-gray-200">
-                            <p><strong class="font-semibold text-gray-800">${organData.name}:</strong> ${organData.details}</p>
-                            <p><strong class="font-semibold text-gray-800">${patternData.name}:</strong> ${patternData.details}</p>
-                        </div>
-                    `;
-
-                    matchingSyndromes.forEach((syndrome, index) => {
-                        const processedDescription = processDescription(syndrome.description);
-                        html += `
-                            <div class="${index > 0 ? 'mt-6' : ''}">
-                                <h3 class="text-xl font-bold text-gray-800 mb-3">${syndrome.name}</h3>
-                                <div class="space-y-3 text-gray-700">
-                                    <p><strong class="font-semibold text-gray-800">Symptoms:</strong> ${processedDescription}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                } else { // If only one syndrome, display as before.
-                    const syndrome = matchingSyndromes[0];
+                let syndromeHtml = '';
+                matchingSyndromes.forEach((syndrome, index) => {
                     const processedDescription = processDescription(syndrome.description);
-                    html += `
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">${syndrome.name}</h3>
-                            <div class="space-y-3 text-gray-700">
-                                <p><strong class="font-semibold text-gray-800">${organData.name}:</strong> ${organData.details}</p>
-                                <p><strong class="font-semibold text-gray-800">${patternData.name}:</strong> ${patternData.details}</p>
-                                <p><strong class="font-semibold text-gray-800">Symptoms:</strong> ${processedDescription}</p>
-                            </div>
+                    syndromeHtml += `
+                        <div class="${index > 0 ? 'mt-4' : ''}">
+                            <h3 class="text-xl font-bold mb-2"><span style="color: #00695C;">${syndrome.name}</span></h3>
+                            <p>${processedDescription}</p>
                         </div>
                     `;
-                }
+                });
+
+                const html = `
+                    <div class="space-y-4">
+                        <div class="flex flex-row gap-2 items-center justify-center">
+                            <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #D7CCC8; border: 1px solid #A1887F;">
+                                <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${organData.name}</h4>
+                                <p class="text-gray-800 text-sm">${organData.details}</p>
+                            </div>
+                            <div class="flex-shrink-0 text-4xl text-gray-400 font-light">+</div>
+                            <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #B2DFDB; border: 1px solid #4DB6AC;">
+                                <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${patternData.name}</h4>
+                                <p class="text-gray-800 text-sm">${patternData.details}</p>
+                            </div>
+                        </div>
+                        <div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">
+                             ${syndromeHtml}
+                        </div>
+                    </div>
+                `;
                 
                 resultDisplay.innerHTML = html;
             };
