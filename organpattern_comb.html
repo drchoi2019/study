@@ -138,20 +138,20 @@
                 'Blood Deficiency': { name: 'Blood Deficiency', details: 'Pallor, cold limbs, fine pulse' },
                 'Qi Stagnation': { name: 'Qi Stagnation', details: 'Pain, distension, moving pain' },
                 'Blood Stasis': { name: 'Blood Stasis', details: 'Purple lesions, purple lips and tongue, stabbing pain, palpable masses, choppy pulse' },
-                'Essence Deficiency': { name: 'Essence Deficiency', details: 'Developmental delay, sexual dysfunction, premature aging' },
                 'Yang Deficiency': { name: 'Yang Deficiency', details: 'Qi deficiency + cold, dampness' },
                 'Yin Deficiency': { name: 'Yin Deficiency', details: 'Blood deficiency + heat, dryness, scanty fluids, night sweats, tidal fever, five-palm heat, fine-rapid pulse' },
                 'Heat': { name: 'Heat (Fire)', details: 'Heat sensation, vexation, rapid pulse, yellow discharge, yellow tongue coating, constipation' },
                 'Cold': { name: 'Cold', details: 'Cold, slowness, slow pulse, tight pulse, clear discharge' },
-                'Dampness': { name: 'Dampness', details: 'Edema, inflammation, slippery pulse, heaviness, thick tongue coating' }
+                'Essence Deficiency': { name: 'Essence Deficiency', details: 'Developmental delay, sexual dysfunction, premature aging' },
+                // 'Dampness' is removed from the selectable patterns but its data is kept in the syndromes below.
             },
             syndromes: [
                 { name: 'Liver Blood Deficiency', organ: 'Liver', patterns: ['Blood Deficiency'], description: 'Dizziness, insomnia, dull-pale complexion, pale lips. Blurred vision, "floaters", withered/brittle nails, dry hair/skin. Numbness of limbs, muscular weakness and spasm, cramps. Scanty menstruation or amenorrhea' },
                 { name: 'Liver Qi Stagnation', organ: 'Liver', patterns: ['Qi Stagnation'], description: 'Melancholy, moodiness, fluctuating mental state, unhappiness, "feeling wound up". Hypochondric/chest distention. Epigastric pain, ST churning, abdominal distention. Nausea, vomiting, hiccup, no appetite, borborygmus, diarrhea. Feeling of lump in the throat, difficulty swallowing. Irregular periods, painful periods, distention of breasts before the periods, premenstrual tension and irritability' },
                 { name: 'Liver Blood Stasis', organ: 'Liver', patterns: ['Blood Stasis'], description: 'Painful(fixed, stabbing, worsen at night) periods, irregular periods, dark and clotted menses. Abdominal pain, "masses" in abdomen. Purple nails, purple lips, purple complexion. Dry skin (in severe cases), petechiae(purple spot)' },
                 { name: 'Stagnation of Cold in the Liver Meridian', organ: 'Liver', patterns: ['Cold'], description: 'Pain refering to the scrotum and testis. Pain is alleviated by warmth' },
-                { name: 'Damp-Heat in Liver and Gallbladder', organ: 'Liver', patterns: ['Heat', 'Dampness'], description: 'Hypochondriac fullness, bitter taste, no appetite. Nausea, vomiting, abdominal distention, scanty-dark urine. Fever, jaundice. ♂ Pain-redness-swelling of scrotum. ♀ Yellow foul leukorrhea with pruritus vulvae' },
                 { name: 'Liver Fire Flare-up', organ: 'Liver', patterns: ['Heat'], description: 'Temporal headache, dizziness, tinnitus, deafness. Red face and eyes, thirst, bitter taste. Irritability, propensity to anger, dream disturbed sleep. Constipation with dry stools, dark-yellow urine. Epistaxis, hematemesis, hemoptysis' },
+                { name: 'Damp-Heat in Liver and Gallbladder', organ: 'Liver', patterns: ['Heat', 'Dampness'], description: 'Hypochondriac fullness, bitter taste, no appetite. Nausea, vomiting, abdominal distention, scanty-dark urine. Fever, jaundice. ♂ Pain-redness-swelling of scrotum. ♀ Yellow foul leukorrhea with pruritus vulvae' },
                 { name: 'Heart Qi Deficiency', organ: 'Heart', patterns: ['Qi Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness' },
                 { name: 'Heart Yang Deficiency', organ: 'Heart', patterns: ['Yang Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness. Feeling of cold, bright-pale face, cold limbs (esp. hands)' },
                 { name: 'Heart Blood Deficiency', organ: 'Heart', patterns: ['Blood Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep. Dizziness, poor memory. Dull-pale complexion, pale lips. Anxiety, propensity to be startled' },
@@ -209,7 +209,12 @@
                     activePatterns.clear();
                     TCM_DATA.syndromes
                         .filter(s => s.organ === selectedOrgan)
-                        .forEach(s => s.patterns.forEach(p => activePatterns.add(p)));
+                        .forEach(s => s.patterns.forEach(p => {
+                            // Only add the pattern to the active set if it exists in the main patterns list
+                            if (TCM_DATA.patterns[p]) {
+                                activePatterns.add(p);
+                            }
+                        }));
                 }
 
                 if (selectedPattern) {
@@ -232,7 +237,7 @@
                 if (selectedOrgan && selectedPattern) {
                     updateResultDisplay(selectedOrgan, selectedPattern);
                 } else {
-                     resultDisplay.innerHTML = `<p class="text-center text-gray-500">Please select a combination.</p>`;
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500">Please select a combination.</p>`;
                 }
             };
             
