@@ -36,16 +36,12 @@
             border-color: #9CA3AF; /* gray-400 */
             color: #4B5563; /* gray-600 */
         }
-        /* Style for selected herb buttons (changed to a neutral color) */
+        /* Style for selected or correct herb buttons */
         .herb-btn.selected {
             background-color: #4B5563; /* gray-600 */
             color: white;
             border-color: #1F2937; /* gray-800 */
         }
-        /* Colors for correctly identified herb buttons */
-        .correct-0 { background-color: #5F9EA0; color: white; border-color: #4a7c7d; } /* CadetBlue (neutral teal series) */
-        .correct-1 { background-color: #708090; color: white; border-color: #5a6773; } /* SlateGray (neutral brown series) */
-        .correct-2 { background-color: #9370DB; color: white; border-color: #7659b1; } /* MediumPurple (neutral purple series) */
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -214,7 +210,6 @@
         let currentQuestionIndex = 0;
         let selectedHerbs = [];
         let foundPrescriptions = [];
-        const correctColors = ['correct-0', 'correct-1', 'correct-2'];
 
         // Function to compare arrays regardless of order
         function areArraysEqual(arr1, arr2) {
@@ -246,6 +241,39 @@
             summaryContainerEl.appendChild(foundDiv);
         }
 
+        // *** NEW: Central UI Update Function ***
+        function updateButtonsUI() {
+            const question = quizData[currentQuestionIndex];
+            const allFoundHerbs = new Set(
+                question.subPrescriptions
+                    .filter(p => foundPrescriptions.includes(p.name))
+                    .flatMap(p => p.ingredients)
+            );
+
+            document.querySelectorAll('.herb-btn').forEach(btn => {
+                const herbName = btn.dataset.herb;
+                
+                // Reset styles
+                btn.classList.remove('selected');
+                btn.disabled = false;
+
+                // Apply styles based on state
+                if (allFoundHerbs.has(herbName) || selectedHerbs.includes(herbName)) {
+                    btn.classList.add('selected');
+                }
+
+                // Determine if button should be disabled
+                if (allFoundHerbs.has(herbName)) {
+                    const isNeededForOther = question.subPrescriptions.some(p => 
+                        !foundPrescriptions.includes(p.name) && p.ingredients.includes(herbName)
+                    );
+                    if (!isNeededForOther) {
+                        btn.disabled = true;
+                    }
+                }
+            });
+        }
+
         // Function to check the answer
         function checkAnswer() {
             const question = quizData[currentQuestionIndex];
@@ -259,40 +287,14 @@
             }
 
             if (foundSub) {
+                // Update state
                 foundPrescriptions.push(foundSub.name);
-                
+                selectedHerbs = [];
+
+                // Display feedback
                 feedbackContainerEl.textContent = `Correct! You found '${foundSub.name}'.`;
                 setTimeout(() => { feedbackContainerEl.textContent = ''; }, 2000);
                 displayFoundPrescription(foundSub);
-
-                const colorClass = correctColors[(foundPrescriptions.length - 1) % correctColors.length];
-                
-                // Update the UI of the correct herbs
-                foundSub.ingredients.forEach(herb => {
-                    const mainBtn = document.querySelector(`#herbs-container .herb-btn[data-herb="${herb}"]`);
-                    const extraBtn = document.querySelector(`#extra-herbs-container .herb-btn[data-herb="${herb}"]`);
-                    const btn = mainBtn || extraBtn;
-                    
-                    if (btn) {
-                        // Remove selection and any previous correct colors
-                        btn.classList.remove('selected');
-                        btn.className = btn.className.replace(/correct-\d+/g, ''); 
-                        
-                        // Apply the new correct color
-                        btn.classList.add(colorClass);
-
-                        // Disable the button only if it's not needed for other remaining formulas
-                        const isNeededForOther = question.subPrescriptions.some(s => 
-                            !foundPrescriptions.includes(s.name) && s.ingredients.includes(herb)
-                        );
-                        if (!isNeededForOther) {
-                            btn.disabled = true;
-                        }
-                    }
-                });
-
-                // Reset selected herbs
-                selectedHerbs = [];
 
                 if (foundPrescriptions.length === question.subPrescriptions.length) {
                     setTimeout(() => { 
@@ -300,7 +302,9 @@
                         showAllBtn.style.display = 'none';
                     }, 2000);
                 }
+                return true; // Indicates a formula was found
             }
+            return false; // No formula found
         }
 
         // Handler for clicking an herb button
@@ -309,14 +313,16 @@
             if (clickedBtn.disabled) return;
 
             const herbName = clickedBtn.dataset.herb;
-            clickedBtn.classList.toggle('selected');
-
+            
+            // Update selection state
             if (selectedHerbs.includes(herbName)) {
                 selectedHerbs = selectedHerbs.filter(h => h !== herbName);
             } else {
                 selectedHerbs.push(herbName);
             }
+            
             checkAnswer();
+            updateButtonsUI();
         }
 
         // Function to load a question
