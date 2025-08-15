@@ -28,7 +28,8 @@
         }
         .herb-btn[disabled] {
             cursor: not-allowed;
-            opacity: 0.8;
+            opacity: 0.6; /* 비활성화 시 더 명확하게 보이도록 수정 */
+            background-color: #F3F4F6; /* 비활성화 배경색 */
         }
         /* Style for unincluded herb buttons */
         .extra-herb-btn {
@@ -36,7 +37,7 @@
             border-color: #9CA3AF; /* gray-400 */
             color: #4B5563; /* gray-600 */
         }
-        /* Style for selected or correct herb buttons */
+        /* Style for selected herb buttons */
         .herb-btn.selected {
             background-color: #4B5563; /* gray-600 */
             color: white;
@@ -241,7 +242,7 @@
             summaryContainerEl.appendChild(foundDiv);
         }
 
-        // *** NEW: Central UI Update Function ***
+        // UI Update Function
         function updateButtonsUI() {
             const question = quizData[currentQuestionIndex];
             const allFoundHerbs = new Set(
@@ -253,16 +254,13 @@
             document.querySelectorAll('.herb-btn').forEach(btn => {
                 const herbName = btn.dataset.herb;
                 
-                // Reset styles
                 btn.classList.remove('selected');
                 btn.disabled = false;
 
-                // Apply styles based on state
-                if (allFoundHerbs.has(herbName) || selectedHerbs.includes(herbName)) {
+                if (selectedHerbs.includes(herbName)) {
                     btn.classList.add('selected');
                 }
 
-                // Determine if button should be disabled
                 if (allFoundHerbs.has(herbName)) {
                     const isNeededForOther = question.subPrescriptions.some(p => 
                         !foundPrescriptions.includes(p.name) && p.ingredients.includes(herbName)
@@ -287,24 +285,17 @@
             }
 
             if (foundSub) {
-                // Update state
                 foundPrescriptions.push(foundSub.name);
                 selectedHerbs = [];
 
-                // Display feedback
                 feedbackContainerEl.textContent = `Correct! You found '${foundSub.name}'.`;
                 setTimeout(() => { feedbackContainerEl.textContent = ''; }, 2000);
                 displayFoundPrescription(foundSub);
 
                 if (foundPrescriptions.length === question.subPrescriptions.length) {
-                    setTimeout(() => { 
-                        feedbackContainerEl.textContent = 'Congratulations! You found all the formulas.';
-                        showAllBtn.style.display = 'none';
-                    }, 2000);
+                    showAllBtn.style.display = 'none';
                 }
-                return true; // Indicates a formula was found
             }
-            return false; // No formula found
         }
 
         // Handler for clicking an herb button
@@ -314,7 +305,6 @@
 
             const herbName = clickedBtn.dataset.herb;
             
-            // Update selection state
             if (selectedHerbs.includes(herbName)) {
                 selectedHerbs = selectedHerbs.filter(h => h !== herbName);
             } else {
@@ -341,7 +331,6 @@
             prescriptionNameEl.textContent = question.mainPrescription;
             prescriptionDescriptionEl.textContent = question.description;
 
-            // Create main prescription herb buttons
             question.herbs.forEach(herb => {
                 const btn = document.createElement('button');
                 btn.textContent = herb;
@@ -351,7 +340,6 @@
                 herbsContainerEl.appendChild(btn);
             });
             
-            // Create unincluded herb buttons
             const extraHerbs = new Set();
             question.subPrescriptions.forEach(sub => {
                 sub.notIncluded.forEach(herb => extraHerbs.add(herb));
@@ -399,14 +387,13 @@
         // Handler for the "Show All Formulas" button
         showAllBtn.addEventListener('click', () => {
             const question = quizData[currentQuestionIndex];
-            summaryContainerEl.innerHTML = ''; // Clear previous summary
+            summaryContainerEl.innerHTML = '';
             question.subPrescriptions.forEach(sub => {
                 displayFoundPrescription(sub);
             });
             feedbackContainerEl.textContent = 'Displayed all hidden formulas.';
-            // Disable all herb buttons
             document.querySelectorAll('.herb-btn').forEach(btn => btn.disabled = true);
-            showAllBtn.style.display = 'none'; // Hide the button
+            showAllBtn.style.display = 'none';
         });
 
         // Load the initial question
