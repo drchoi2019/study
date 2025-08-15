@@ -263,12 +263,7 @@
                 
                 feedbackContainerEl.textContent = `Correct! You found '${foundSub.name}'.`;
                 setTimeout(() => { feedbackContainerEl.textContent = ''; }, 2000);
-                summaryContainerEl.innerHTML = ''; // Clear previous summary
-                foundPrescriptions.forEach(pName => {
-                    const p = question.subPrescriptions.find(sub => sub.name === pName);
-                    if(p) displayFoundPrescription(p);
-                });
-
+                displayFoundPrescription(foundSub);
 
                 const colorClass = correctColors[(foundPrescriptions.length - 1) % correctColors.length];
                 
@@ -279,9 +274,14 @@
                     const btn = mainBtn || extraBtn;
                     
                     if (btn) {
+                        // Remove selection and any previous correct colors
                         btn.classList.remove('selected');
+                        btn.className = btn.className.replace(/correct-\d+/g, ''); 
+                        
+                        // Apply the new correct color
                         btn.classList.add(colorClass);
 
+                        // Disable the button only if it's not needed for other remaining formulas
                         const isNeededForOther = question.subPrescriptions.some(s => 
                             !foundPrescriptions.includes(s.name) && s.ingredients.includes(herb)
                         );
@@ -293,8 +293,6 @@
 
                 // Reset selected herbs
                 selectedHerbs = [];
-                document.querySelectorAll('.herb-btn.selected').forEach(b => b.classList.remove('selected'));
-
 
                 if (foundPrescriptions.length === question.subPrescriptions.length) {
                     setTimeout(() => { 
