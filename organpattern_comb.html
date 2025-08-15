@@ -85,7 +85,7 @@
     <main id="main-container" class="w-full max-w-3xl mx-auto p-4">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-700">Basic Organ Pattern Identification</h1>
-            <p class="text-gray-500 mt-2">Select an organ or a pattern to begin. Click the background to reset.</p>
+            <p class="text-gray-500 mt-2">Select an organ or a pattern to begin. <a href="#" id="reset-link" class="text-indigo-600 hover:underline">Click here to reset</a>.</p>
         </div>
 
         <!-- Main interactive layout: always horizontal and responsive -->
@@ -177,6 +177,7 @@
             const patternList = document.getElementById('pattern-list');
             const resultDisplay = document.getElementById('result-display');
             const mainContainer = document.getElementById('main-container');
+            const resetLink = document.getElementById('reset-link');
 
             let selectedOrgan = null;
             let selectedPattern = null;
@@ -233,13 +234,7 @@
                     el.classList.toggle('selected', el.dataset.name === selectedPattern);
                 });
 
-                if (selectedOrgan && selectedPattern) {
-                    updateResultDisplay(selectedOrgan, selectedPattern);
-                } else if (!selectedOrgan && !selectedPattern) {
-                     resetAll();
-                } else {
-                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">Please select a combination.</p>`;
-                }
+                updateResultDisplay();
             };
             
             organList.addEventListener('click', (e) => {
@@ -258,10 +253,9 @@
                 }
             });
             
-            document.body.addEventListener('click', (e) => {
-                if (!mainContainer.contains(e.target) && !e.target.closest('header, footer')) {
-                    resetAll();
-                }
+            resetLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetAll();
             });
 
             const processDescription = (description) => {
@@ -275,50 +269,81 @@
                 return description;
             };
 
-            const updateResultDisplay = (organName, patternName) => {
-                const organData = TCM_DATA.organs[organName];
-                const patternData = TCM_DATA.patterns[patternName];
-                
-                const matchingSyndromes = TCM_DATA.syndromes.filter(s => 
-                    s.organ === organName && s.patterns.includes(patternName)
-                );
-
-                if (matchingSyndromes.length === 0) {
-                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">No information found for this combination.</p>`;
+            const updateResultDisplay = () => {
+                if (!selectedOrgan && !selectedPattern) {
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">Results will be displayed here.</p>`;
                     return;
                 }
 
+                let organHtml = '';
+                let patternHtml = '';
                 let syndromeHtml = '';
-                matchingSyndromes.forEach((syndrome, index) => {
-                    const processedDescription = processDescription(syndrome.description);
-                    syndromeHtml += `
-                        <div class="${index > 0 ? 'mt-4' : ''}">
-                            <h3 class="text-xl font-bold mb-2"><span style="color: #00695C;">${syndrome.name}</span></h3>
-                            <p>${processedDescription}</p>
-                        </div>
-                    `;
-                });
 
-                const html = `
+                // Build Organ Box HTML
+                if (selectedOrgan) {
+                    const organData = TCM_DATA.organs[selectedOrgan];
+                    organHtml = `
+                        <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #D7CCC8; border: 1px solid #A1887F;">
+                            <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${organData.name}</h4>
+                            <p class="text-gray-800 text-sm">${organData.details}</p>
+                        </div>`;
+                } else {
+                    organHtml = `
+                        <div class="w-1/2 p-4 rounded-lg shadow-inner bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center min-h-[100px]">
+                            <p class="text-gray-400">Select an Organ</p>
+                        </div>`;
+                }
+
+                // Build Pattern Box HTML
+                if (selectedPattern) {
+                    const patternData = TCM_DATA.patterns[selectedPattern];
+                    patternHtml = `
+                        <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #B2DFDB; border: 1px solid #4DB6AC;">
+                            <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${patternData.name}</h4>
+                            <p class="text-gray-800 text-sm">${patternData.details}</p>
+                        </div>`;
+                } else {
+                    patternHtml = `
+                        <div class="w-1/2 p-4 rounded-lg shadow-inner bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center min-h-[100px]">
+                            <p class="text-gray-400">Select a Pattern</p>
+                        </div>`;
+                }
+
+                // Build Syndrome Box HTML
+                if (selectedOrgan && selectedPattern) {
+                    const matchingSyndromes = TCM_DATA.syndromes.filter(s => 
+                        s.organ === selectedOrgan && s.patterns.includes(selectedPattern)
+                    );
+
+                    if (matchingSyndromes.length > 0) {
+                        let syndromesContent = '';
+                        matchingSyndromes.forEach((syndrome, index) => {
+                            const processedDescription = processDescription(syndrome.description);
+                            syndromesContent += `
+                                <div class="${index > 0 ? 'mt-4' : ''}">
+                                    <h3 class="text-xl font-bold mb-2"><span style="color: #00695C;">${syndrome.name}</span></h3>
+                                    <p>${processedDescription}</p>
+                                </div>`;
+                        });
+                        syndromeHtml = `<div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">${syndromesContent}</div>`;
+                    } else {
+                        syndromeHtml = `<div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200 text-center text-gray-500">No information found for this combination.</div>`;
+                    }
+                }
+
+                // Assemble the final HTML
+                const finalHtml = `
                     <div class="space-y-4">
                         <div class="flex flex-row gap-2 items-center justify-center">
-                            <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #D7CCC8; border: 1px solid #A1887F;">
-                                <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${organData.name}</h4>
-                                <p class="text-gray-800 text-sm">${organData.details}</p>
-                            </div>
+                            ${organHtml}
                             <div class="flex-shrink-0 text-4xl text-gray-400 font-light">+</div>
-                            <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #B2DFDB; border: 1px solid #4DB6AC;">
-                                <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${patternData.name}</h4>
-                                <p class="text-gray-800 text-sm">${patternData.details}</p>
-                            </div>
+                            ${patternHtml}
                         </div>
-                        <div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">
-                             ${syndromeHtml}
-                        </div>
+                        ${syndromeHtml}
                     </div>
                 `;
                 
-                resultDisplay.innerHTML = html;
+                resultDisplay.innerHTML = finalHtml;
             };
 
             // Initial render
