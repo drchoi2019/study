@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the Formula within a Formula (Pinyin)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Default font and background color settings */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        /* Default herb button style */
+        .herb-btn {
+            transition: all 0.2s ease-in-out;
+            border: 2px solid #D1D5DB; /* gray-300 */
+        }
+        .herb-btn:hover:not([disabled]) {
+            border-color: #6B7280; /* gray-500 */
+            transform: translateY(-2px);
+        }
+        .herb-btn[disabled] {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        /* Style for unincluded herb buttons */
+        .extra-herb-btn {
+            border-style: dashed;
+            border-color: #9CA3AF; /* gray-400 */
+            color: #4B5563; /* gray-600 */
+        }
+        /* Style for selected herb buttons (changed to a neutral color) */
+        .herb-btn.selected {
+            background-color: #4B5563; /* gray-600 */
+            color: white;
+            border-color: #1F2937; /* gray-800 */
+        }
+        /* Colors for correctly identified herb buttons */
+        .correct-0 { background-color: #5F9EA0; color: white; border-color: #4a7c7d; } /* CadetBlue (neutral teal series) */
+        .correct-1 { background-color: #708090; color: white; border-color: #5a6773; } /* SlateGray (neutral brown series) */
+        .correct-2 { background-color: #9370DB; color: white; border-color: #7659b1; } /* MediumPurple (neutral purple series) */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Provided Header -->
+    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <div id="game-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm">
+            <div class="text-center mb-6">
+                <h2 id="question-title" class="text-2xl font-bold mb-2"></h2>
+                <p id="question-description" class="text-gray-600">Click the herbs to find the <span id="sub-count" class="font-bold"></span> hidden formulas.</p>
+            </div>
+
+            <!-- Prescription info and herb list -->
+            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h3 id="prescription-name" class="text-xl font-semibold text-center mb-1"></h3>
+                <p id="prescription-description-main" class="text-center text-gray-500 text-sm mb-4"></p>
+                <div id="herbs-container" class="flex flex-wrap gap-3 justify-center">
+                    <!-- Main prescription herb buttons are dynamically generated here -->
+                </div>
+                <div id="extra-herbs-wrapper" class="mt-4 pt-4 border-t border-dashed hidden">
+                    <p class="text-center text-sm text-gray-500 mb-3">Herbs needed for other formulas</p>
+                    <div id="extra-herbs-container" class="flex flex-wrap gap-3 justify-center">
+                        <!-- Unincluded herb buttons are dynamically generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback message area -->
+            <div id="feedback-container" class="min-h-[3rem] text-center py-2 text-lg font-semibold text-gray-700">
+                <!-- Correct/incorrect messages are displayed here -->
+            </div>
+
+            <!-- List of found formulas -->
+            <div id="summary-container" class="mt-4 space-y-3">
+                <!-- Found formula info is dynamically added here -->
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+                <button id="show-all-btn" class="bg-white text-gray-700 font-bold py-2 px-8 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Show All Formulas</button>
+                <button id="next-btn" class="bg-gray-800 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-700 transition-colors shadow-md">Next Question</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Provided Footer -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Quiz Data (Pinyin Version)
+        const quizData = [
+            {
+                mainPrescription: "Shi Quan Da Bu Tang",
+                description: "A representative formula that tonifies both Qi and Blood.",
+                herbs: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong", "Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao", "Huang Qi", "Rou Gui"],
+                subPrescriptions: [
+                    { name: "Si Wu Tang", ingredients: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." },
+                    { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }
+                ]
+            },
+            {
+                mainPrescription: "Wen Qing Yin",
+                description: "Used for bleeding disorders or skin conditions caused by heat in the blood.",
+                herbs: ["Di Huang", "Dang Gui", "Shao Yao", "Chuan Xiong", "Huang Lian", "Huang Qin", "Huang Bai", "Zhi Zi"],
+                subPrescriptions: [
+                    { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: [], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." },
+                    { name: "Si Wu Tang", ingredients: ["Shao Yao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." }
+                ]
+            },
+            {
+                mainPrescription: "Qing Wen Bai Du Yin",
+                description: "Used when heat-toxin from an epidemic disease is severe in both the Qi and Blood levels.",
+                herbs: ["Huang Lian", "Huang Qin", "Lian Qiao", "Zhi Zi", "Di Huang", "Xi Jiao", "Mu Dan Pi", "Chi Shao", "Zhi Mu", "Shi Gao", "Xuan Shen", "Dan Zhu Ye", "Gan Cao", "Jie Geng"],
+                subPrescriptions: [
+                    { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: ["Huang Bai"], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." },
+                    { name: "Xi Jiao Di Huang Tang", ingredients: ["Di Huang", "Mu Dan Pi", "Xi Jiao", "Chi Shao"], notIncluded: [], description: "Treats various bleeding and rashes caused by heat entering the nutritive and blood levels." }
+                ]
+            },
+            {
+                mainPrescription: "Liang Ge San",
+                description: "Treats stomatitis, constipation, and headaches from accumulated heat in the upper and middle jiaos.",
+                herbs: ["Da Huang", "Mang Xiao", "Gan Cao", "Huang Qin", "Lian Qiao", "Zhi Zi", "Bo He"],
+                subPrescriptions: [
+                    { name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." },
+                    { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: ["Huang Lian", "Huang Bai"], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." },
+                    { name: "San Huang Xie Xin Tang", ingredients: ["Da Huang", "Huang Qin", "Huang Lian"], notIncluded: ["Huang Lian"], description: "Directly drains fire-heat from the Heart and Stomach." }
+                ]
+            },
+            {
+                mainPrescription: "Qing Ying Tang",
+                description: "Treats symptoms of severe fever at night and mental confusion when heat enters the nutritive level.",
+                herbs: ["Huang Lian", "Jin Yin Hua", "Lian Qiao", "Dan Shen", "Di Huang", "Xuan Shen", "Mai Men Dong", "Xi Jiao", "Dan Zhu Ye"],
+                subPrescriptions: [
+                    { name: "Zeng Ye Tang", ingredients: ["Di Huang", "Xuan Shen", "Mai Men Dong"], notIncluded: [], description: "A formula that replenishes fluids to treat constipation or dry cough." }
+                ]
+            },
+            {
+                mainPrescription: "Jia Wei Xiao Yao San",
+                description: "Cools fire from liver qi stagnation and tonifies blood to alleviate stress-related symptoms.",
+                herbs: ["Chai Hu", "Shao Yao", "Dang Gui", "Fu Ling", "Bai Zhu", "Gan Cao", "Mu Dan Pi", "Zhi Zi"],
+                subPrescriptions: [
+                    { name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: ["Zhi Shi"], description: "A key formula for soothing the liver and resolving qi stagnation." },
+                    { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: ["Ren Shen"], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }
+                ]
+            },
+            {
+                mainPrescription: "Chai Hu Shu Gan San",
+                description: "Derived from Si Ni San, it is more effective for symptoms of liver qi stagnation like flank pain.",
+                herbs: ["Chai Hu", "Shao Yao", "Chuan Xiong", "Gan Cao", "Xiang Fu", "Chen Pi", "Zhi Shi"],
+                subPrescriptions: [
+                    { name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: [], description: "A key formula for soothing the liver and resolving qi stagnation." }
+                ]
+            },
+            {
+                mainPrescription: "Xue Fu Zhu Yu Tang",
+                description: "Treats pain and circulatory disorders due to blood stasis in the chest area.",
+                herbs: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao", "Dang Gui", "Chuan Xiong", "Di Huang", "Chi Shao", "Tao Ren", "Hong Hua", "Niu Xi", "Jie Geng"],
+                subPrescriptions: [
+                    { name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: [], description: "A key formula for soothing the liver and resolving qi stagnation." },
+                    { name: "Tao Hong Si Wu Tang", ingredients: ["Dang Gui", "Chuan Xiong", "Di Huang", "Chi Shao", "Tao Ren", "Hong Hua"], notIncluded: [], description: "Adds blood stasis-removing herbs to Si Wu Tang for stronger circulation." }
+                ]
+            },
+            {
+                mainPrescription: "Huo Xiang Zheng Qi San",
+                description: "Used for various summer cold symptoms, indigestion, vomiting, and diarrhea.",
+                herbs: ["Huo Xiang", "Zi Su Ye", "Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Cang Zhu", "Bai Zhi", "Hou Po", "Da Fu Pi", "Jie Geng"],
+                subPrescriptions: [
+                    { name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." },
+                    { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }
+                ]
+            },
+            {
+                mainPrescription: "Fang Feng Tong Sheng San",
+                description: "Cools both exterior and interior heat, widely used for skin diseases, obesity, and constipation.",
+                herbs: ["Fang Feng", "Jing Jie", "Bai Zhu", "Zhi Zi", "Ma Huang", "Bo He", "Da Huang", "Mang Xiao", "Lian Qiao", "Dang Gui", "Chuan Xiong", "Bai Shao", "Shi Gao", "Jie Geng", "Huang Qin", "Hua Shi", "Gan Cao"],
+                subPrescriptions: [
+                    { name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." },
+                    { name: "Si Wu Tang", ingredients: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: ["Di Huang"], description: "A fundamental formula to tonify Blood and promote circulation." }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const questionTitleEl = document.getElementById('question-title');
+        const subCountEl = document.getElementById('sub-count');
+        const prescriptionNameEl = document.getElementById('prescription-name');
+        const prescriptionDescriptionEl = document.getElementById('prescription-description-main');
+        const herbsContainerEl = document.getElementById('herbs-container');
+        const extraHerbsWrapperEl = document.getElementById('extra-herbs-wrapper');
+        const extraHerbsContainerEl = document.getElementById('extra-herbs-container');
+        const feedbackContainerEl = document.getElementById('feedback-container');
+        const summaryContainerEl = document.getElementById('summary-container');
+        const nextBtn = document.getElementById('next-btn');
+        const showAllBtn = document.getElementById('show-all-btn');
+
+        // Game State
+        let currentQuestionIndex = 0;
+        let selectedHerbs = [];
+        let foundPrescriptions = [];
+        const correctColors = ['correct-0', 'correct-1', 'correct-2'];
+
+        // Function to compare arrays regardless of order
+        function areArraysEqual(arr1, arr2) {
+            if (arr1.length !== arr2.length) return false;
+            const sortedArr1 = [...arr1].sort();
+            const sortedArr2 = [...arr2].sort();
+            return sortedArr1.every((value, index) => value === sortedArr2[index]);
+        }
+        
+        // Function to display a found formula
+        function displayFoundPrescription(sub) {
+            const foundDiv = document.createElement('div');
+            foundDiv.className = 'bg-green-50 p-4 rounded-lg border border-green-200';
+            
+            let ingredientsHTML = sub.ingredients.join(', ');
+            let notIncludedHTML = '';
+            if (sub.notIncluded.length > 0) {
+                notIncludedHTML = `<div class="mt-2"><span class="font-semibold text-red-600">Not Included Herbs:</span> <span class="text-red-500">${sub.notIncluded.join(', ')}</span></div>`;
+            }
+
+            foundDiv.innerHTML = `
+                <p class="font-bold text-green-800">${sub.name}</p>
+                <p class="text-sm text-gray-600 mt-1">${sub.description}</p>
+                <div class="mt-2">
+                    <span class="font-semibold">Ingredients:</span> ${ingredientsHTML}
+                </div>
+                ${notIncludedHTML}
+            `;
+            summaryContainerEl.appendChild(foundDiv);
+        }
+
+        // Function to check the answer
+        function checkAnswer() {
+            const question = quizData[currentQuestionIndex];
+            let foundSub = null;
+
+            for (const sub of question.subPrescriptions) {
+                if (!foundPrescriptions.includes(sub.name) && areArraysEqual(selectedHerbs, sub.ingredients)) {
+                    foundSub = sub;
+                    break;
+                }
+            }
+
+            if (foundSub) {
+                foundPrescriptions.push(foundSub.name);
+                
+                feedbackContainerEl.textContent = `Correct! You found '${foundSub.name}'.`;
+                setTimeout(() => { feedbackContainerEl.textContent = ''; }, 2000);
+                summaryContainerEl.innerHTML = ''; // Clear previous summary
+                foundPrescriptions.forEach(pName => {
+                    const p = question.subPrescriptions.find(sub => sub.name === pName);
+                    if(p) displayFoundPrescription(p);
+                });
+
+
+                const colorClass = correctColors[(foundPrescriptions.length - 1) % correctColors.length];
+                
+                // Update the UI of the correct herbs
+                foundSub.ingredients.forEach(herb => {
+                    const mainBtn = document.querySelector(`#herbs-container .herb-btn[data-herb="${herb}"]`);
+                    const extraBtn = document.querySelector(`#extra-herbs-container .herb-btn[data-herb="${herb}"]`);
+                    const btn = mainBtn || extraBtn;
+                    
+                    if (btn) {
+                        btn.classList.remove('selected');
+                        btn.classList.add(colorClass);
+
+                        const isNeededForOther = question.subPrescriptions.some(s => 
+                            !foundPrescriptions.includes(s.name) && s.ingredients.includes(herb)
+                        );
+                        if (!isNeededForOther) {
+                            btn.disabled = true;
+                        }
+                    }
+                });
+
+                // Reset selected herbs
+                selectedHerbs = [];
+                document.querySelectorAll('.herb-btn.selected').forEach(b => b.classList.remove('selected'));
+
+
+                if (foundPrescriptions.length === question.subPrescriptions.length) {
+                    setTimeout(() => { 
+                        feedbackContainerEl.textContent = 'Congratulations! You found all the formulas.';
+                        showAllBtn.style.display = 'none';
+                    }, 2000);
+                }
+            }
+        }
+
+        // Handler for clicking an herb button
+        function handleHerbClick(e) {
+            const clickedBtn = e.target;
+            if (clickedBtn.disabled) return;
+
+            const herbName = clickedBtn.dataset.herb;
+            clickedBtn.classList.toggle('selected');
+
+            if (selectedHerbs.includes(herbName)) {
+                selectedHerbs = selectedHerbs.filter(h => h !== herbName);
+            } else {
+                selectedHerbs.push(herbName);
+            }
+            checkAnswer();
+        }
+
+        // Function to load a question
+        function loadQuestion(index) {
+            selectedHerbs = [];
+            foundPrescriptions = [];
+            herbsContainerEl.innerHTML = '';
+            extraHerbsContainerEl.innerHTML = '';
+            summaryContainerEl.innerHTML = '';
+            feedbackContainerEl.textContent = '';
+            showAllBtn.style.display = 'inline-block';
+
+            const question = quizData[index];
+            questionTitleEl.textContent = `Question ${index + 1} / ${quizData.length}`;
+            subCountEl.textContent = question.subPrescriptions.length;
+            prescriptionNameEl.textContent = question.mainPrescription;
+            prescriptionDescriptionEl.textContent = question.description;
+
+            // Create main prescription herb buttons
+            question.herbs.forEach(herb => {
+                const btn = document.createElement('button');
+                btn.textContent = herb;
+                btn.dataset.herb = herb;
+                btn.className = 'herb-btn px-4 py-2 rounded-md bg-white shadow-sm font-medium';
+                btn.addEventListener('click', handleHerbClick);
+                herbsContainerEl.appendChild(btn);
+            });
+            
+            // Create unincluded herb buttons
+            const extraHerbs = new Set();
+            question.subPrescriptions.forEach(sub => {
+                sub.notIncluded.forEach(herb => extraHerbs.add(herb));
+            });
+
+            if (extraHerbs.size > 0) {
+                extraHerbsWrapperEl.style.display = 'block';
+                extraHerbs.forEach(herb => {
+                    const btn = document.createElement('button');
+                    btn.textContent = herb;
+                    btn.dataset.herb = herb;
+                    btn.className = 'herb-btn extra-herb-btn px-4 py-2 rounded-md bg-white shadow-sm font-medium';
+                    btn.addEventListener('click', handleHerbClick);
+                    extraHerbsContainerEl.appendChild(btn);
+                });
+            } else {
+                extraHerbsWrapperEl.style.display = 'none';
+            }
+            
+            if(index === quizData.length - 1) {
+                nextBtn.textContent = 'Finish Quiz';
+            } else {
+                nextBtn.textContent = 'Next Question';
+            }
+        }
+        
+        // Handler for the "Next Question" button
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion(currentQuestionIndex);
+            } else {
+                document.getElementById('game-container').innerHTML = `
+                    <div class="text-center py-10">
+                        <h2 class="text-3xl font-bold mb-4">Good Job!</h2>
+                        <p class="text-gray-700">You have completed all the questions.</p>
+                        <button onclick="location.reload()" class="mt-8 bg-gray-800 text-white font-bold py-2 px-8 rounded-lg hover:bg-gray-700 transition-colors">
+                            Restart
+                        </button>
+                    </div>
+                `;
+            }
+        });
+
+        // Handler for the "Show All Formulas" button
+        showAllBtn.addEventListener('click', () => {
+            const question = quizData[currentQuestionIndex];
+            summaryContainerEl.innerHTML = ''; // Clear previous summary
+            question.subPrescriptions.forEach(sub => {
+                displayFoundPrescription(sub);
+            });
+            feedbackContainerEl.textContent = 'Displayed all hidden formulas.';
+            // Disable all herb buttons
+            document.querySelectorAll('.herb-btn').forEach(btn => btn.disabled = true);
+            showAllBtn.style.display = 'none'; // Hide the button
+        });
+
+        // Load the initial question
+        loadQuestion(currentQuestionIndex);
+    </script>
+</body>
+</html>
