@@ -114,6 +114,7 @@
                     <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
                     <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
                     <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
+                    <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
                     <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
                 </ul>
@@ -153,6 +154,7 @@
                     <p><strong class="text-yellow-400">Controls:</strong></p>
                     <ul class="list-disc list-inside pl-2">
                         <li><strong>Move:</strong> ← → Arrow Keys / Touch Buttons</li>
+                        <li><strong>Shoot:</strong> Spacebar</li>
                     </ul>
                 </div>
                 <button id="help-close-button" class="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Close</button>
@@ -204,11 +206,13 @@
 
         async function checkAndNavigate(event) {
             event.preventDefault();
-            const url = event.currentTarget.href;
+            const originalUrl = event.currentTarget.href;
+            const baseUrl = originalUrl.split('?')[0]; // URL without parameters
+
             try {
-                const response = await fetch(url, { method: 'HEAD' });
+                const response = await fetch(baseUrl, { method: 'HEAD' });
                 if (response.ok) {
-                    window.location.href = url;
+                    window.location.href = originalUrl;
                 } else {
                     alert('Content is being prepared.');
                 }
@@ -218,23 +222,40 @@
             }
         }
 
+        function setLanguage(lang) {
+            if (lang !== currentLanguage) {
+                currentLanguage = lang === 'ko' ? 'en' : 'ko';
+                toggleLanguage();
+            }
+        }
+
         function toggleLanguage() {
             currentLanguage = currentLanguage === 'en' ? 'ko' : 'en';
+
             const elementsToTranslate = document.querySelectorAll('[data-en]');
             elementsToTranslate.forEach(el => {
                 el.textContent = el.dataset[currentLanguage];
             });
+
             const linksToUpdate = document.querySelectorAll('a.nav-link');
             linksToUpdate.forEach(link => {
-                const baseHref = link.getAttribute('href').replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
+                const originalHref = link.getAttribute('href').split('?')[0];
+
+                if (originalHref.includes('lwdh_variations.html')) {
+                    link.href = `${originalHref}?lang=${currentLanguage}`;
+                    return; 
+                }
+
+                const baseHref = originalHref.replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
+                
                 if (currentLanguage === 'ko') {
                     if (baseHref === 'history') {
-                        link.href = 'history_kor.html';
+                         link.href = 'history_kor.html';
                     } else {
-                        link.href = `${baseHref}_k.html`;
+                         link.href = `${baseHref}_k.html`;
                     }
                 } else {
-                    link.href = `${baseHref}.html`;
+                     link.href = `${baseHref}.html`;
                 }
             });
         }
@@ -541,6 +562,14 @@
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', function() {
             initializeVisitorCount();
+            
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang');
+            if (lang === 'ko') {
+                setLanguage('ko');
+            } else {
+                setLanguage('en');
+            }
 
             // Setup game listeners
             startButton.addEventListener('click', startGame);
