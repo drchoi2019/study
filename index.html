@@ -53,20 +53,6 @@
             z-index: 20;
             text-align: center;
         }
-        /* --- Mobile Fullscreen Styles --- */
-        .fullscreen-game {
-            position: fixed !important;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #F7F3EF;
-            z-index: 50;
-            padding: 1rem;
-            padding-bottom: 100px; /* Space for mobile controls */
-            display: flex;
-            flex-direction: column;
-        }
         .touch-button {
             width: 70px;
             height: 70px;
@@ -147,19 +133,6 @@
     <!-- ★★★★★ Fully Integrated Mini Game Section (Position adjusted) ★★★★★ -->
     <section id="mini-game-section" class="max-w-sm mx-auto px-4 pb-16 flex flex-col items-center">
         
-        <!-- Mobile UI Bar (Top, inside fullscreen container) -->
-        <div id="mobile-ui-bar" class="hidden w-full mb-2 flex justify-between items-center text-gray-600">
-            <div>
-                <p id="mobile-player-status" class="text-xs font-semibold">Status: Heat</p>
-            </div>
-            <div class="flex items-center gap-3 text-xs">
-                <p>Score: <span id="mobile-score" class="font-bold">0</span></p>
-                <p>Level: <span id="mobile-level" class="font-bold">1</span></p>
-                <p>Lives: <span id="mobile-lives" class="font-bold">3</span></p>
-                <button id="mobile-help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
-            </div>
-        </div>
-
         <div id="game-container" class="w-full mx-auto overflow-hidden relative flex flex-col">
             <canvas id="gameCanvas"></canvas>
 
@@ -179,8 +152,7 @@
                     </ul>
                     <p><strong class="text-yellow-400">Controls:</strong></p>
                     <ul class="list-disc list-inside pl-2">
-                        <li><strong>Move:</strong> ← → Arrow Keys</li>
-                        <li><strong>Shoot:</strong> Spacebar</li>
+                        <li><strong>Move:</strong> ← → Arrow Keys / Touch Buttons</li>
                     </ul>
                 </div>
                 <button id="help-close-button" class="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Close</button>
@@ -195,7 +167,7 @@
             </div>
         </div>
         
-        <!-- Game UI Bar (Below Canvas, for Desktop) -->
+        <!-- Game UI Bar (Below Canvas) -->
         <div id="game-ui-bar" class="w-full mt-2 flex justify-between items-center text-gray-600 invisible">
             <div>
                 <p id="player-status" class="text-xs font-semibold">Status: Heat</p>
@@ -207,15 +179,15 @@
                 <button id="help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
             </div>
         </div>
+        
+        <!-- Mobile Touch Controls (Initially hidden) -->
+        <div id="mobile-controls" class="hidden w-full max-w-sm mt-4 flex justify-around items-center">
+             <button id="left-btn" class="touch-button">&#8592;</button>
+             <button id="shoot-btn" class="touch-button shoot">Shoot</button>
+             <button id="right-btn" class="touch-button">&#8594;</button>
+        </div>
 
     </section>
-
-    <!-- Mobile Touch Controls (Initially hidden) -->
-    <div id="mobile-controls" class="hidden fixed bottom-5 left-0 right-0 w-full z-50 flex justify-around items-center px-4">
-        <button id="left-btn" class="touch-button">&#8592;</button>
-        <button id="shoot-btn" class="touch-button shoot">Shoot</button>
-        <button id="right-btn" class="touch-button">&#8594;</button>
-    </div>
 
     <!-- Main Footer -->
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
@@ -305,13 +277,6 @@
         const playerStatusEl = document.getElementById('player-status');
         const helpButton = document.getElementById('help-button');
         
-        const mobileUiBar = document.getElementById('mobile-ui-bar');
-        const mobileScoreEl = document.getElementById('mobile-score');
-        const mobileLivesEl = document.getElementById('mobile-lives');
-        const mobileLevelEl = document.getElementById('mobile-level');
-        const mobilePlayerStatusEl = document.getElementById('mobile-player-status');
-        const mobileHelpButton = document.getElementById('mobile-help-button');
-
         const gameOverScreen = document.getElementById('game-over-screen');
         const finalScoreEl = document.getElementById('final-score');
         const restartButton = document.getElementById('restart-button');
@@ -347,23 +312,8 @@
         const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
 
         function resizeCanvasAndElements() {
-            let newWidth, newHeight;
-
-            if (isMobile()) {
-                if (gameStarted) {
-                    newWidth = window.innerWidth - 32; 
-                    newHeight = window.innerHeight - 150;
-                } else {
-                    newWidth = gameContainer.clientWidth > 0 ? gameContainer.clientWidth : window.innerWidth - 32;
-                    newHeight = 450;
-                }
-            } else {
-                newWidth = gameContainer.clientWidth;
-                newHeight = 450;
-            }
-
-            canvas.width = newWidth;
-            canvas.height = newHeight;
+            canvas.width = gameContainer.clientWidth;
+            canvas.height = 450;
             
             laneWidth = canvas.width / NUM_LANES;
             if (player) {
@@ -390,7 +340,6 @@
 
             startScreen.classList.remove('hidden');
             gameUiBar.classList.add('invisible');
-            mobileUiBar.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
         }
 
@@ -402,17 +351,9 @@
             startScreen.classList.add('hidden');
 
             if (isMobile()) {
-                document.getElementById('main-header').classList.add('hidden');
-                document.getElementById('main-nav').classList.add('hidden');
-                document.getElementById('main-footer').classList.add('hidden');
-                document.getElementById('mini-game-section').classList.add('fullscreen-game');
                 mobileControls.classList.remove('hidden');
-                mobileUiBar.classList.remove('hidden');
-                gameUiBar.classList.add('hidden');
-                resizeCanvasAndElements();
-            } else {
-                gameUiBar.classList.remove('invisible');
             }
+            gameUiBar.classList.remove('invisible');
 
             initGame();
         }
@@ -554,16 +495,10 @@
 
         function updateUI() {
             const statusText = `Status: ${playerState === 'red' ? 'Heat' : 'Cold'}`;
-            // Desktop UI
             scoreEl.textContent = score; 
             livesEl.textContent = lives; 
             levelEl.textContent = level;
             playerStatusEl.textContent = statusText;
-            // Mobile UI
-            mobileScoreEl.textContent = score; 
-            mobileLivesEl.textContent = lives; 
-            mobileLevelEl.textContent = level;
-            mobilePlayerStatusEl.textContent = statusText;
 
             checkLevelUp();
             if (lives <= 0) { endGame(); }
@@ -609,13 +544,7 @@
 
             // Setup game listeners
             startButton.addEventListener('click', startGame);
-            restartButton.addEventListener('click', () => {
-                if (isMobile()) {
-                    initGame();
-                } else {
-                    initGame();
-                }
-            });
+            restartButton.addEventListener('click', initGame);
 
             window.addEventListener('keydown', (e) => {
                 if (e.code === 'ArrowLeft') movePlayer('left');
@@ -644,9 +573,7 @@
 
             messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
             
-            const openHelp = () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } };
-            helpButton.addEventListener('click', openHelp);
-            mobileHelpButton.addEventListener('click', openHelp);
+            helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
 
             helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
             
