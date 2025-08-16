@@ -553,7 +553,6 @@
 
         function shoot() {
             if (gameOver || paused || !gameStarted) return;
-            Tone.start(); // Ensure audio context is active on shoot
             shootSound.triggerAttackRelease("A5", "32n");
             bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, width: 5, height: 10, speed: 8 });
         }
@@ -579,10 +578,8 @@
             startButton.addEventListener('click', startGame);
             restartButton.addEventListener('click', () => {
                 if (isMobile()) {
-                    // Just restart the game logic, don't exit fullscreen
                     initGame();
                 } else {
-                    // For desktop, it's fine to just re-init
                     initGame();
                 }
             });
@@ -597,9 +594,18 @@
             const leftBtn = document.getElementById('left-btn');
             const rightBtn = document.getElementById('right-btn');
             const shootBtn = document.getElementById('shoot-btn');
-            leftBtn.addEventListener('click', () => movePlayer('left'));
-            rightBtn.addEventListener('click', () => movePlayer('right'));
-            shootBtn.addEventListener('click', (e) => { e.preventDefault(); shoot(); });
+            
+            const mobileAction = (action) => {
+                Tone.start(); // Ensure audio context is started on any mobile interaction
+                action();
+            };
+
+            leftBtn.addEventListener('click', () => mobileAction(() => movePlayer('left')));
+            rightBtn.addEventListener('click', () => mobileAction(() => movePlayer('right')));
+            shootBtn.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                mobileAction(shoot); 
+            });
 
             messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
             
