@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liu Wei Di Huang Wan Variations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif:wght@600&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Noto Sans', sans-serif;
+            background-color: #F7F3EF;
+            color: #4a4a4a;
+            overflow-x: hidden;
+        }
+        .formula-item {
+            background-color: #e9e2d9;
+            color: #5a5a5a;
+        }
+        .formula-item.active {
+            background-color: #A67B5B;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .central-orb {
+            background: radial-gradient(circle, #A67B5B 0%, #6F5B3E 70%);
+            box-shadow: 0 0 20px #C89F76, 0 0 40px #C89F76, inset 0 0 15px #e6c5a8;
+        }
+        .herb-orb {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 0;
+            transform: scale(0);
+            cursor: pointer;
+        }
+        .herb-orb.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .herb-orb.base {
+            background: radial-gradient(circle, #D4A373, #A17C4F);
+            box-shadow: 0 0 10px #D4A373, inset 0 0 5px #f3d8b7;
+            color: white;
+        }
+        .herb-orb.added {
+            background: radial-gradient(circle, #81A89D, #52796F);
+            box-shadow: 0 0 10px #81A89D, inset 0 0 5px #bde0d9;
+            color: white;
+        }
+        .herb-orb.removed {
+            background: radial-gradient(circle, #a1a1aa, #52525b);
+            box-shadow: 0 0 10px #a1a1aa, inset 0 0 5px #d4d4d8;
+            color: white;
+            text-decoration: line-through;
+        }
+        #modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        #modal-content {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="flex-grow">
+        <div class="max-w-4xl mx-auto px-4">
+            <header class="text-center mb-8">
+                <br>
+                <h1 id="main-title" class="text-3xl md:text-4xl font-semibold" style="color: #6B4F4B;"></h1>
+            </header>
+
+            <div class="p-4 rounded-2xl mb-8">
+                <div id="formula-list" class="flex flex-wrap justify-center gap-2"></div>
+            </div>
+
+            <div class="bg-white/50 p-6 rounded-2xl shadow-lg min-h-[500px] flex flex-col justify-between">
+                <div id="vis-container" class="relative w-full h-[400px] md:h-[450px]">
+                    <div id="central-orb" class="central-orb absolute top-1/2 left-1/2 w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center text-center -translate-x-1/2 -translate-y-1/2 transition-all duration-500">
+                        <h2 id="info-title" class="text-2xl md:text-3xl font-bold text-white leading-tight"></h2>
+                    </div>
+                </div>
+                <div id="info-panel" class="text-center mt-4">
+                    <p id="info-derivation" class="text-lg text-amber-800 font-medium mb-2"></p>
+                    <p id="info-signs" class="text-gray-600"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-[#F7F3EF] rounded-xl shadow-2xl p-6 w-full max-w-md transform scale-95 opacity-0 relative">
+            <button id="modal-close-x" class="absolute top-3 right-4 text-gray-500 hover:text-gray-800 text-3xl leading-none font-light transition-colors">&times;</button>
+            <h3 id="modal-title" class="text-2xl font-bold text-amber-900 mb-4 pr-8"></h3>
+            <p id="modal-effects" class="text-gray-700"></p>
+        </div>
+    </div>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- DATA OBJECT ---
+        const data = {
+            en: {
+                ui: {
+                    headerLinkFont: "'Noto Serif', serif",
+                    mainTitle: "Liu Wei Di Huang Wan Variations",
+                    signsPrefix: "Key Signs: "
+                },
+                herbs: [
+                    { id: 'shu-di-huang', name: 'Shu Di Huang', effects: 'Nourishes Kidney Yin and replenishes essence and blood.' },
+                    { id: 'shan-zhu-yu', name: 'Shan Zhu Yu', effects: 'Nourishes the Liver and Kidneys, astringes essence.' },
+                    { id: 'shan-yao', name: 'Shan Yao', effects: 'Tonifies the Spleen, Lung, and Kidney Qi.' },
+                    { id: 'mu-dan-pi', name: 'Mu Dan Pi', effects: 'Clears deficiency heat, cools the blood, and resolves blood stasis.' },
+                    { id: 'fu-ling', name: 'Fu Ling', effects: 'Drains dampness, strengthens the Spleen, and calms the spirit.' },
+                    { id: 'ze-xie', name: 'Ze Xie', effects: 'Promotes urination to drain Kidney dampness and clears deficiency fire.' },
+                    { id: 'wu-wei-zi', name: 'Wu Wei Zi', effects: 'Astringes Lung Qi to stop cough, and tonifies the Kidneys to secure essence.' },
+                    { id: 'mai-men-dong', name: 'Mai Men Dong', effects: 'Nourishes Lung Yin and moistens dryness to treat dry cough.' },
+                    { id: 'shi-chang-pu', name: 'Shi Chang Pu', effects: 'Opens the orifices, transforms phlegm, and benefits the ears and eyes.' },
+                    { id: 'ci-shi', name: 'Ci Shi', effects: 'Subdues Liver Yang and nourishes the Kidneys to improve hearing.' },
+                    { id: 'gui-zhi', name: 'Gui Zhi', effects: 'Warms and unblocks the channels and collaterals, assists Yang.' },
+                    { id: 'fu-zi', name: 'Fu Zi', effects: 'Strongly tonifies Kidney Yang and dispels cold.' },
+                    { id: 'zhi-mu', name: 'Zhi Mu', effects: 'Nourishes Yin and clears deficiency heat.' },
+                    { id: 'huang-bai', name: 'Huang Bai', effects: 'Clears damp-heat from the lower jiao and drains Kidney deficiency fire.' },
+                    { id: 'gou-qi-zi', name: 'Gou Qi Zi', effects: 'Nourishes the Liver and Kidneys, and benefits the eyes.' },
+                    { id: 'ju-hua', name: 'Ju Hua', effects: 'Clears Liver heat, disperses wind, and benefits the eyes.' },
+                    { id: 'bai-ji-li', name: 'Bai Ji Li', effects: 'Calms the Liver, extinguishes wind, and benefits the eyes.' },
+                    { id: 'shi-jue-ming', name: 'Shi Jue Ming', effects: 'Calms the Liver, anchors Yang, and improves vision.' },
+                    { id: 'bai-shao', name: 'Bai Shao', effects: 'Nourishes the blood and softens the Liver.' },
+                    { id: 'dang-gui', name: 'Dang Gui', effects: 'Tonifies and invigorates the blood.' },
+                    { id: 'niu-xi', name: 'Niu Xi', effects: 'Invigorates blood, guides herbs downward, and promotes urination.' },
+                    { id: 'che-qian-zi', name: 'Che Qian Zi', effects: 'Promotes urination and clears damp-heat.' },
+                    { id: 'gan-cao', name: 'Gan Cao', effects: 'Harmonizes other herbs and tonifies Qi.' },
+                    { id: 'rou-gui', name: 'Rou Gui', effects: 'Tonifies Kidney Yang and dispels deep cold.' },
+                    { id: 'du-zhong', name: 'Du Zhong', effects: 'Tonifies the Liver and Kidneys, strengthens the lower back and knees.' },
+                    { id: 'tu-si-zi', name: 'Tu Si Zi', effects: 'Tonifies both Kidney Yang and Yin, secures essence.' },
+                    { id: 'lu-jiao', name: 'Lu Jiao', effects: 'Tonifies Kidney Yang, nourishes blood and essence.' },
+                    { id: 'gui-ban', name: 'Gui Ban', effects: 'Nourishes Kidney Yin, anchors Yang, and strengthens bones.' }
+                ],
+                formulas: {
+                    'liu-wei-di-huang-wan': { name: 'Liu Wei Di Huang Wan', derivation_text: "Base formula for nourishing Kidney Yin.", signs: "Soreness in lower back/knees, dizziness, tinnitus, night sweats.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: [], removed: [] } },
+                    'du-qi-wan': { name: 'Du Qi Wan', derivation_text: "Adds Wu Wei Zi to tonify both the Lungs and Kidneys.", signs: "Cough, wheezing.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['wu-wei-zi'], removed: [] } },
+                    'mai-wei-di-huang-wan': { name: 'Mai Wei Di Huang Wan', derivation_text: "Adds Mai Men Dong to Du Qi Wan to moisten Lung dryness.", signs: "Lung Yin deficiency, dry cough.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['wu-wei-zi', 'mai-men-dong'], removed: [] } },
+                    'er-long-zuo-ci-wan': { name: 'Er Long Zuo Ci Wan', derivation_text: "Adds Shi Chang Pu and Ci Shi to improve hearing.", signs: "Ear problems (tinnitus, hearing loss).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['shi-chang-pu', 'ci-shi'], removed: [] } },
+                    'jin-gui-shen-qi-wan': { name: 'Jin Gui Shen Qi Wan', derivation_text: "Adds Gui Zhi and Fu Zi to tonify Kidney Yang.", signs: "Kidney Yang deficiency (coldness, sore back, frequent urination).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['gui-zhi', 'fu-zi'], removed: [] } },
+                    'zhi-bai-di-huang-wan': { name: 'Zhi Bai Di Huang Wan', derivation_text: "Adds Zhi Mu and Huang Bai to clear deficiency heat.", signs: "Deficiency heat from Kidney Yin deficiency (steaming bones, hot palms/soles).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['zhi-mu', 'huang-bai'], removed: [] } },
+                    'qi-ju-di-huang-wan': { name: 'Qi Ju Di Huang Wan', derivation_text: "Adds Gou Qi Zi and Ju Hua to benefit the eyes.", signs: "Eye disorders (blurry vision, dry eyes).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['gou-qi-zi', 'ju-hua'], removed: [] } },
+                    'ming-mu-di-huang-wan': { name: 'Ming Mu Di Huang Wan', derivation_text: "Further reinforces eye-benefiting herbs based on Qi Ju Di Huang Wan.", signs: "Eye disorders (blurry vision, photophobia).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['bai-ji-li', 'shi-jue-ming', 'bai-shao', 'gou-qi-zi'], removed: [] } },
+                    'gui-shao-di-huang-wan': { name: 'Gui Shao Di Huang Wan', derivation_text: "Adds Dang Gui and Bai Shao to nourish the blood.", signs: "Blood deficiency symptoms (pale complexion, dizziness).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['dang-gui', 'bai-shao'], removed: [] } },
+                    'niu-che-di-huang-wan': { name: 'Niu Che Di Huang Wan', derivation_text: "Adds Niu Xi and Che Qian Zi to address urinary issues.", signs: "Urinary problems (difficult urination, edema).", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['niu-xi', 'che-qian-zi'], removed: [] } },
+                    'zuo-gui-yin': { name: 'Zuo Gui Yin', derivation_text: "Removes draining herbs and adds tonifying herbs.", signs: "Kidney Yin deficiency.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'fu-ling'], added: ['gou-qi-zi', 'gan-cao'], removed: ['mu-dan-pi', 'ze-xie'] } },
+                    'zuo-gui-wan': { name: 'Zuo Gui Wan', derivation_text: "Removes draining herbs and strongly tonifies Yin.", signs: "Severe Kidney Yin deficiency.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao'], added: ['gou-qi-zi', 'gui-ban', 'lu-jiao', 'tu-si-zi', 'niu-xi'], removed: ['mu-dan-pi', 'fu-ling', 'ze-xie'] } },
+                    'you-gui-yin': { name: 'You Gui Yin', derivation_text: "Removes draining herbs and adds Yang-tonifying herbs.", signs: "Severe Kidney Yang deficiency.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'fu-ling'], added: ['fu-zi', 'rou-gui', 'gou-qi-zi', 'du-zhong', 'gan-cao'], removed: ['mu-dan-pi', 'ze-xie'] } },
+                    'you-gui-wan': { name: 'You Gui Wan', derivation_text: "Removes all draining herbs and strongly tonifies Yang.", signs: "More severe Kidney Yang deficiency.", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao'], added: ['fu-zi', 'rou-gui', 'gou-qi-zi', 'dang-gui', 'tu-si-zi', 'lu-jiao', 'du-zhong'], removed: ['mu-dan-pi', 'fu-ling', 'ze-xie'] } }
+                }
+            },
+            ko: {
+                ui: {
+                    headerLinkFont: "'Noto Serif KR', serif",
+                    mainTitle: "육미지황환 변방",
+                    signsPrefix: "주요 증상: "
+                },
+                herbs: [
+                    { id: 'shu-di-huang', name: '숙지황', effects: '신음(腎陰)을 보하고 정혈(精血)을 채워줍니다.' },
+                    { id: 'shan-zhu-yu', name: '산수유', effects: '간과 신장을 보하고 정(精)을 수렴하여 굳건하게 합니다.' },
+                    { id: 'shan-yao', name: '산약', effects: '비장과 폐, 신장의 기운을 보합니다.' },
+                    { id: 'mu-dan-pi', name: '목단피', effects: '허열(虛熱)을 내리고 혈액을 식히며 어혈을 풀어줍니다.' },
+                    { id: 'fu-ling', name: '복령', effects: '습기를 배출하고 비장을 튼튼하게 하며 정신을 안정시킵니다.' },
+                    { id: 'ze-xie', name: '택사', effects: '신장의 불필요한 수분을 배출시키고 허화(虛火)를 내립니다.' },
+                    { id: 'wu-wei-zi', name: '오미자', effects: '폐 기운을 수렴하여 기침을 멎게 하고 신장을 도와 정(精)을 보존합니다.' },
+                    { id: 'mai-men-dong', name: '맥문동', effects: '폐음을 자양하고 건조함을 촉촉하게 하여 마른기침을 치료합니다.' },
+                    { id: 'shi-chang-pu', name: '석창포', effects: '정신을 맑게 하고 담(痰)을 제거하여 귀와 눈을 밝게 합니다.' },
+                    { id: 'ci-shi', name: '자석', effects: '간의 양기를 가라앉히고 신장을 도와 청력을 개선합니다.' },
+                    { id: 'gui-zhi', name: '계지', effects: '양기를 통하게 하고 몸을 따뜻하게 하여 양기 부족을 돕습니다.' },
+                    { id: 'fu-zi', name: '부자', effects: '신장의 양기를 강력하게 보하고 한기를 몰아냅니다.' },
+                    { id: 'zhi-mu', name: '지모', effects: '음액을 자양하고 허열을 내리는 데 효과적입니다.' },
+                    { id: 'huang-bai', name: '황백', effects: '하초의 습열을 제거하고 신장의 허화를 내립니다.' },
+                    { id: 'gou-qi-zi', name: '구기자', effects: '간과 신장을 자양하고 눈을 밝게 합니다.' },
+                    { id: 'ju-hua', name: '국화', effects: '간의 열을 내리고 풍사를 흩어내어 눈의 피로를 풉니다.' },
+                    { id: 'bai-ji-li', name: '백질려', effects: '간의 기운을 평온하게 하고 풍사를 흩어내며 눈을 밝게 합니다.' },
+                    { id: 'shi-jue-ming', name: '석결명', effects: '간의 열을 내리고 양기를 가라앉혀 시력을 보호합니다.' },
+                    { id: 'bai-shao', name: '백작약', effects: '혈액을 자양하고 간을 부드럽게 합니다.' },
+                    { id: 'dang-gui', name: '당귀', effects: '혈액을 보하고 순환을 촉진합니다.' },
+                    { id: 'niu-xi', name: '우슬', effects: '혈액 순환을 돕고 하초로 약효를 인도하며 소변을 원활하게 합니다.' },
+                    { id: 'che-qian-zi', name: '차전자', effects: '소변을 잘 나오게 하여 습열을 제거합니다.' },
+                    { id: 'gan-cao', name: '감초', effects: '다른 약재를 조화시키고 기운을 보합니다.' },
+                    { id: 'rou-gui', name: '육계', effects: '신장의 양기를 보하고 몸 속 깊은 곳의 한기를 몰아냅니다.' },
+                    { id: 'du-zhong', name: '두충', effects: '간과 신장을 보하고 허리와 무릎을 튼튼하게 합니다.' },
+                    { id: 'tu-si-zi', name: '토사자', effects: '신장의 양과 음을 보하고 정(精)을 굳건히 합니다.' },
+                    { id: 'lu-jiao', name: '녹각', effects: '신장의 양을 보하고 혈과 정(精)을 자양합니다.' },
+                    { id: 'gui-ban', name: '구판', effects: '신음을 자양하고 양기를 잠재우며, 뼈를 튼튼하게 합니다.' }
+                ],
+                formulas: {
+                    'liu-wei-di-huang-wan': { name: '육미지황환', derivation_text: "신음(腎陰)을 보하는 기본 처방입니다.", signs: "허리/무릎 시큰거림, 어지럼증, 이명, 도한(盜汗)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: [], removed: [] } },
+                    'du-qi-wan': { name: '도기환', derivation_text: "육미지황환에 '오미자'를 더해 폐와 신장을 함께 보합니다.", signs: "기침, 천식", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['wu-wei-zi'], removed: [] } },
+                    'mai-wei-di-huang-wan': { name: '맥미지황환', derivation_text: "도기환에 '맥문동'을 더해 폐의 건조함을 해소합니다.", signs: "폐음허, 마른기침", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['wu-wei-zi', 'mai-men-dong'], removed: [] } },
+                    'er-long-zuo-ci-wan': { name: '이롱좌자환', derivation_text: "육미지황환에 '석창포', '자석'을 더해 청력을 개선합니다.", signs: "귀 관련 문제 (이명, 난청)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['shi-chang-pu', 'ci-shi'], removed: [] } },
+                    'jin-gui-shen-qi-wan': { name: '금궤신기환', derivation_text: "육미지황환에 '계지', '부자'를 더해 신장의 양기를 보합니다.", signs: "신양허 (추위, 허리 냉통, 소변 빈삭)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['gui-zhi', 'fu-zi'], removed: [] } },
+                    'zhi-bai-di-huang-wan': { name: '지백지황환', derivation_text: "육미지황환에 '지모', '황백'을 더해 허열을 내립니다.", signs: "신음허로 인한 허열 (골증조열, 수족심열)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['zhi-mu', 'huang-bai'], removed: [] } },
+                    'qi-ju-di-huang-wan': { name: '기국지황환', derivation_text: "육미지황환에 '구기자', '국화'를 더해 눈을 밝게 합니다.", signs: "눈 관련 질환 (시력 저하, 안구 건조)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['gou-qi-zi', 'ju-hua'], removed: [] } },
+                    'ming-mu-di-huang-wan': { name: '명목지황환', derivation_text: "기국지황환을 기반으로 눈에 좋은 약재를 더 보강합니다.", signs: "눈 관련 질환 (시력 저하, 눈부심)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['bai-ji-li', 'shi-jue-ming', 'bai-shao', 'gou-qi-zi'], removed: [] } },
+                    'gui-shao-di-huang-wan': { name: '귀작지황환', derivation_text: "육미지황환에 '당귀', '백작약'을 더해 혈을 보합니다.", signs: "혈허 증상 (안색 창백, 어지럼증)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['dang-gui', 'bai-shao'], removed: [] } },
+                    'niu-che-di-huang-wan': { name: '우차지황환', derivation_text: "육미지황환에 '우슬', '차전자'를 더해 소변 문제를 치료합니다.", signs: "소변 문제 (배뇨 곤란, 부종)", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'mu-dan-pi', 'fu-ling', 'ze-xie'], added: ['niu-xi', 'che-qian-zi'], removed: [] } },
+                    'zuo-gui-yin': { name: '좌귀음', derivation_text: "육미지황환에서 사(瀉)하는 약재를 빼고 보(補)하는 약재를 더합니다.", signs: "신음허", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'fu-ling'], added: ['gou-qi-zi', 'gan-cao'], removed: ['mu-dan-pi', 'ze-xie'] } },
+                    'zuo-gui-wan': { name: '좌귀환', derivation_text: "육미지황환에서 사(瀉)하는 약재를 빼고 음을 보하는 약재를 대폭 강화합니다.", signs: "심각한 신음허", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao'], added: ['gou-qi-zi', 'gui-ban', 'lu-jiao', 'tu-si-zi', 'niu-xi'], removed: ['mu-dan-pi', 'fu-ling', 'ze-xie'] } },
+                    'you-gui-yin': { name: '우귀음', derivation_text: "육미지황환에서 사(瀉)하는 약재를 빼고 양기를 보하는 약재를 더합니다.", signs: "심한 신양허", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao', 'fu-ling'], added: ['fu-zi', 'rou-gui', 'gou-qi-zi', 'du-zhong', 'gan-cao'], removed: ['mu-dan-pi', 'ze-xie'] } },
+                    'you-gui-wan': { name: '우귀환', derivation_text: "육미지황환에서 사(瀉)하는 약재를 모두 빼고 양기를 강하게 보합니다.", signs: "더 심한 신양허", composition: { base: ['shu-di-huang', 'shan-zhu-yu', 'shan-yao'], added: ['fu-zi', 'rou-gui', 'gou-qi-zi', 'dang-gui', 'tu-si-zi', 'lu-jiao', 'du-zhong'], removed: ['mu-dan-pi', 'fu-ling', 'ze-xie'] } }
+                }
+            }
+        };
+
+        // --- APPLICATION STATE ---
+        let currentLang = 'ko';
+        let currentFormula = 'liu-wei-di-huang-wan';
+
+        // --- DOM ELEMENTS ---
+        const headerLink = document.getElementById('header-link');
+        const mainTitle = document.getElementById('main-title');
+        const visContainer = document.getElementById('vis-container');
+        const formulaListEl = document.getElementById('formula-list');
+        const infoTitle = document.getElementById('info-title');
+        const infoDerivation = document.getElementById('info-derivation');
+        const infoSigns = document.getElementById('info-signs');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalEffects = document.getElementById('modal-effects');
+        const modalCloseX = document.getElementById('modal-close-x');
+
+        // --- FUNCTIONS ---
+        function toggleLanguage(event) {
+            event.preventDefault();
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            renderPage();
+        }
+
+        function renderPage() {
+            const langData = data[currentLang];
+            document.documentElement.lang = currentLang;
+            
+            // Render static UI text
+            headerLink.style.fontFamily = langData.ui.headerLinkFont;
+            mainTitle.textContent = langData.ui.mainTitle;
+
+            // Render formula list
+            formulaListEl.innerHTML = '';
+            Object.keys(langData.formulas).forEach(key => {
+                const formula = langData.formulas[key];
+                const item = document.createElement('button');
+                item.dataset.id = key;
+                item.textContent = formula.name;
+                item.className = 'formula-item font-medium py-2 px-4 rounded-full cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md';
+                item.addEventListener('click', () => {
+                    currentFormula = key;
+                    updateDisplay();
+                });
+                formulaListEl.appendChild(item);
+            });
+            
+            updateDisplay();
+        }
+
+        function showModal(herbId) {
+            const herb = data[currentLang].herbs.find(h => h.id === herbId);
+            if (!herb) return;
+            
+            modalTitle.textContent = herb.name;
+            modalEffects.textContent = herb.effects;
+            modalOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function hideModal() {
+            modalOverlay.classList.add('opacity-0');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+            }, 300);
+        }
+
+        function updateDisplay() {
+            const langData = data[currentLang];
+            const formula = langData.formulas[currentFormula];
+            if (!formula) return;
+
+            // Update info panel
+            infoTitle.textContent = formula.name;
+            infoDerivation.textContent = formula.derivation_text;
+            infoSigns.textContent = langData.ui.signsPrefix + formula.signs;
+
+            // Update active button
+            document.querySelectorAll('.formula-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.id === currentFormula);
+            });
+
+            // Update visualization
+            const baseHerbs = data.en.formulas['liu-wei-di-huang-wan'].composition.base; // Use EN as the structural reference
+            const currentFormulaData = data.en.formulas[currentFormula];
+            
+            const visibleHerbIds = [...new Set([...baseHerbs, ...currentFormulaData.composition.added])];
+            
+            const radius = Math.min(visContainer.clientWidth, visContainer.clientHeight) / 2 * 0.7;
+            const angleStep = visibleHerbIds.length > 0 ? (2 * Math.PI) / visibleHerbIds.length : 0;
+
+            let visibleHerbCount = 0;
+            data.en.herbs.forEach(herbRef => {
+                const orb = document.getElementById(`herb-${herbRef.id}`);
+                const isBase = baseHerbs.includes(herbRef.id);
+                const isAdded = currentFormulaData.composition.added.includes(herbRef.id);
+                const isRemoved = currentFormulaData.composition.removed.includes(herbRef.id);
+                
+                const herbLangData = langData.herbs.find(h => h.id === herbRef.id);
+                orb.textContent = herbLangData ? herbLangData.name : herbRef.name;
+
+                if ((isBase && !isRemoved) || isAdded) {
+                    orb.classList.add('visible');
+                    orb.classList.remove('removed');
+                    orb.classList.toggle('base', isBase && !isRemoved);
+                    orb.classList.toggle('added', isAdded);
+                    
+                    const angle = angleStep * visibleHerbCount - (Math.PI / 2);
+                    const x = (visContainer.clientWidth / 2) + radius * Math.cos(angle) - (orb.clientWidth / 2);
+                    const y = (visContainer.clientHeight / 2) + radius * Math.sin(angle) - (orb.clientHeight / 2);
+                    orb.style.left = `${x}px`;
+                    orb.style.top = `${y}px`;
+                    visibleHerbCount++;
+                } else if (isBase && isRemoved) {
+                    orb.classList.add('visible', 'removed');
+                    orb.classList.remove('base', 'added');
+                    const angle = angleStep * visibleHerbCount - (Math.PI / 2);
+                    const x = (visContainer.clientWidth / 2) + radius * Math.cos(angle) - (orb.clientWidth / 2);
+                    const y = (visContainer.clientHeight / 2) + radius * Math.sin(angle) - (orb.clientHeight / 2);
+                    orb.style.left = `${x}px`;
+                    orb.style.top = `${y}px`;
+                    visibleHerbCount++;
+                }
+                else {
+                    orb.classList.remove('visible', 'base', 'added', 'removed');
+                }
+            });
+        }
+
+        function initialize() {
+            // Create all orb elements once
+            data.en.herbs.forEach(herb => {
+                const orb = document.createElement('div');
+                orb.id = `herb-${herb.id}`;
+                orb.className = 'herb-orb';
+                orb.addEventListener('click', () => showModal(herb.id));
+                visContainer.appendChild(orb);
+            });
+            
+            modalOverlay.addEventListener('click', hideModal);
+            modalCloseX.addEventListener('click', hideModal);
+            modalContent.addEventListener('click', (e) => e.stopPropagation());
+
+            renderPage(); // Initial render
+        }
+
+        // --- EVENT LISTENERS ---
+        window.addEventListener('resize', updateDisplay);
+
+        // --- STARTUP ---
+        initialize();
+    </script>
+</body>
+</html>
