@@ -115,6 +115,7 @@
                     <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
                     <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
                     <li><a href="lwdh_variations.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
+                    <li><a href="pws_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
                     <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
                 </ul>
@@ -233,7 +234,7 @@
             linksToUpdate.forEach(link => {
                 const originalHref = link.getAttribute('href').split('?')[0];
 
-                if (originalHref.includes('lwdh_variations.html')) {
+                if (originalHref.includes('lwdh_variations.html') || originalHref.includes('pws_var.html')) {
                     link.href = `${originalHref}?lang=${currentLanguage}`;
                     return;
                 }
