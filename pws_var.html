@@ -1,655 +1,343 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive TCM with Mini Game</title>
+    <title>Ping Wei San Variations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif:wght@600&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
     <style>
-        /* --- Main Page Styles --- */
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Noto Sans KR', 'Noto Sans', sans-serif;
             background-color: #F7F3EF;
-            color: #333;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            touch-action: manipulation; /* Prevents double-tap to zoom on mobile */
+            color: #4a4a4a;
+            overflow-x: hidden;
         }
-        h1, h2, .font-serif {
-            font-family: 'Cormorant Garamond', serif;
-        }
-        .nav-link {
-            display: block;
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            transition: background-color 0.3s, color 0.3s;
+        .formula-item {
+            background-color: #e9e2d9;
             color: #5a5a5a;
         }
-        .nav-link:hover {
-            background-color: #EAE8E1;
-            color: #000;
-        }
-
-        /* --- Embedded Game Styles --- */
-        #gameCanvas {
-            background-color: #F7F3EF; /* Match page background for seamless look */
-            display: block;
-            touch-action: none;
-            image-rendering: pixelated;
-        }
-        .message-box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px 40px;
-            background-color: rgba(0, 0, 0, 0.85);
+        .formula-item.active {
+            background-color: #A67B5B;
             color: white;
-            border-radius: 10px;
-            z-index: 20;
-            text-align: center;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .touch-button {
-            width: 70px;
-            height: 70px;
+        .central-orb {
+            background: radial-gradient(circle, #A67B5B 0%, #6F5B3E 70%);
+            box-shadow: 0 0 20px #C89F76, 0 0 40px #C89F76, inset 0 0 15px #e6c5a8;
+        }
+        .herb-orb {
+            position: absolute;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            user-select: none;
-            background-color: #D1C7BC;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 0;
+            transform: scale(0);
+            cursor: pointer;
         }
-        .touch-button.shoot {
-            background-color: #B9A38D;
-            transform: scale(1.1);
+        .herb-orb.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .herb-orb.base {
+            background: radial-gradient(circle, #D4A373, #A17C4F);
+            box-shadow: 0 0 10px #D4A373, inset 0 0 5px #f3d8b7;
+            color: white;
+        }
+        .herb-orb.added {
+            background: radial-gradient(circle, #81A89D, #52796F);
+            box-shadow: 0 0 10px #81A89D, inset 0 0 5px #bde0d9;
+            color: white;
+        }
+        #modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        #modal-content {
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="flex flex-col min-h-screen">
 
-    <!-- Main Header -->
-    <header id="main-header" class="text-center py-16 md:py-20 relative">
-        <div class="absolute top-4 right-4">
-            <button id="lang-toggle" onclick="toggleLanguage()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-                Kor / Eng
-            </button>
-        </div>
-        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM" data-ko="한의학 공부">
-            Interactive TCM
-        </h1>
-        <p id="author" class="text-gray-500 mt-2 text-lg" data-en="Hyungsuk Choi" data-ko="최형석">Hyungsuk Choi</p>
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
     </header>
 
-    <!-- Main Navigation Menu -->
-    <nav id="main-nav" class="max-w-5xl mx-auto px-10 pb-8">
-        <div class="grid md:grid-cols-3 gap-10">
-            <!-- Theory -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Theory" data-ko="이론">Theory</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Organs" data-ko="오장">Five Organs</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pattern Diagnosis Basic" data-ko="변증 기초">Pattern Diagnosis Basic</a></li>
-                    <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Tongue/Pulse Pattern" data-ko="기본 설/맥 증">Basic Tongue/Pulse Pattern</a></li>
-                    <li><a href="organpattern_comb.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Pattern Combination" data-ko="장부변증 조합">Organ Pattern Combination</a></li>
-                    <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
-                    <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
-                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
-                    <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
-                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
-                </ul>
-            </div>
-            <!-- Formula -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Formula" data-ko="방제학">Formula</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
-                    <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
-                    <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
-                    <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
-                    <li><a href="lwdh_variations.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
-                    <li><a href="pws_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
-                    <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
-                    <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
-                </ul>
-            </div>
-            <!-- History -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="History" data-ko="한의학사">History</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Brief History of TCM" data-ko="한의학 약사">Brief History of TCM</a></li>
-                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
-                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <main class="flex-grow">
+        <div class="max-w-4xl mx-auto px-4">
+            <header class="text-center mb-8">
+                <br>
+                <h1 id="main-title" class="text-3xl md:text-4xl font-semibold" style="color: #6B4F4B;"></h1>
+            </header>
 
-    <!-- ★★★★★ Fully Integrated Mini Game Section (Position adjusted) ★★★★★ -->
-    <section id="mini-game-section" class="max-w-sm mx-auto px-4 pb-16 flex flex-col items-center">
-        
-        <div id="game-container" class="w-full mx-auto overflow-hidden relative flex flex-col">
-            <canvas id="gameCanvas"></canvas>
-
-            <!-- Start Game Button -->
-            <div id="start-screen" class="absolute inset-0 flex justify-center items-center z-10">
-                <button id="start-button" class="px-6 py-3 bg-[#B9A38D] text-white hover:bg-[#A9937D] rounded-lg text-lg font-semibold transition-colors">Start Game</button>
+            <div class="p-4 rounded-2xl mb-8">
+                <div id="formula-list" class="flex flex-wrap justify-center gap-2"></div>
             </div>
 
-            <!-- Game Messages (remain positioned over canvas) -->
-            <div id="game-message" class="message-box hidden"><p id="message-text" class="text-2xl font-bold mb-4"></p><button id="message-close-button" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Continue</button></div>
-            <div id="help-modal" class="message-box hidden w-11/12 max-w-sm">
-                <h2 class="text-2xl font-bold mb-4">How to Play</h2>
-                <div class="text-left space-y-3 text-sm">
-                    <ul class="space-y-2">
-                        <li><strong>Heat Pattern (Red Hat):</strong> Eat COLD herbs, shoot HOT herbs.</li>
-                        <li><strong>Cold Pattern (Blue Hat):</strong> Eat HOT herbs, shoot COLD herbs.</li>
-                    </ul>
-                    <p><strong class="text-yellow-400">Controls:</strong></p>
-                    <ul class="list-disc list-inside pl-2">
-                        <li><strong>Move:</strong> ← → Arrow Keys / Touch Buttons</li>
-                        <li><strong>Shoot:</strong> Spacebar</li>
-                    </ul>
+            <div class="bg-white/50 p-6 rounded-2xl shadow-lg min-h-[500px] flex flex-col justify-between">
+                <div id="vis-container" class="relative w-full h-[400px] md:h-[450px]">
+                    <div id="central-orb" class="central-orb absolute top-1/2 left-1/2 w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center text-center -translate-x-1/2 -translate-y-1/2 transition-all duration-500">
+                        <h2 id="info-title" class="text-2xl md:text-3xl font-bold text-white leading-tight"></h2>
+                    </div>
                 </div>
-                <button id="help-close-button" class="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Close</button>
-            </div>
-            <!-- Game Over Screen (Minimal Box Style) -->
-            <div id="game-over-screen" class="hidden absolute inset-0 flex flex-col justify-center items-center z-10">
-                <div class="bg-[#EAE8E1] p-6 rounded-lg shadow-md text-center text-gray-800">
-                    <h2 class="text-3xl font-bold mb-2 font-serif">Game Over</h2>
-                    <p class="text-lg mb-4">Final Score: <span id="final-score">0</span></p>
-                    <button id="restart-button" class="px-5 py-2 bg-[#B9A38D] text-white hover:bg-[#A9937D] rounded-lg text-base font-semibold transition-colors">Restart</button>
+                <div id="info-panel" class="text-center mt-4">
+                    <p id="info-derivation" class="text-lg text-amber-800 font-medium mb-2"></p>
+                    <p id="info-signs" class="text-gray-600"></p>
                 </div>
             </div>
         </div>
-        
-        <!-- Game UI Bar (Below Canvas) -->
-        <div id="game-ui-bar" class="w-full mt-2 flex justify-between items-center text-gray-600 invisible">
-            <div>
-                <p id="player-status" class="text-xs font-semibold">Status: Heat</p>
-            </div>
-            <div class="flex items-center gap-3 text-xs">
-                <p>Score: <span id="score" class="font-bold">0</span></p>
-                <p>Level: <span id="level" class="font-bold">1</span></p>
-                <p>Lives: <span id="lives" class="font-bold">3</span></p>
-                <button id="help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
-            </div>
-        </div>
-        
-        <!-- Mobile Touch Controls (Initially hidden) -->
-        <div id="mobile-controls" class="hidden w-full max-w-sm mt-4 flex justify-around items-center">
-             <button id="left-btn" class="touch-button">&#8592;</button>
-             <button id="shoot-btn" class="touch-button shoot">Shoot</button>
-             <button id="right-btn" class="touch-button">&#8594;</button>
-        </div>
+    </main>
 
-    </section>
-
-    <!-- Main Footer -->
-    <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
-        <div id="visitor-counter" class="mb-4 text-xs text-gray-400">
-            <span id="today-count">0</span> / <span id="total-count">0</span>
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div id="modal-content" class="bg-[#F7F3EF] rounded-xl shadow-2xl p-6 w-full max-w-md transform scale-95 opacity-0 relative">
+            <button id="modal-close-x" class="absolute top-3 right-4 text-gray-500 hover:text-gray-800 text-3xl leading-none font-light transition-colors">&times;</button>
+            <h3 id="modal-title" class="text-2xl font-bold text-amber-900 mb-4 pr-8"></h3>
+            <p id="modal-effects" class="text-gray-700"></p>
         </div>
+    </div>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
     </footer>
 
     <script>
-        // --- Main Page Script ---
-        let currentLanguage = 'en';
-
-        async function checkAndNavigate(event) {
-            event.preventDefault();
-            const linkElement = event.currentTarget;
-            const relativeUrl = linkElement.getAttribute('href');
-            
-            const fullUrl = new URL(relativeUrl, window.location.href);
-            const urlToCheck = new URL(fullUrl.pathname, window.location.href);
-
-            try {
-                const response = await fetch(urlToCheck.href, { method: 'HEAD' });
-                if (response.ok) {
-                    window.location.href = fullUrl.href;
-                } else {
-                    alert('Content is being prepared.');
+        // --- DATA OBJECT ---
+        const data = {
+            en: {
+                ui: {
+                    headerLinkFont: "'Noto Serif', serif",
+                    mainTitle: "Ping Wei San Variations",
+                    signsPrefix: "Key Signs: "
+                },
+                herbs: [
+                    { id: 'cang-zhu', name: 'Cang Zhu', effects: 'Strongly dries dampness and strengthens the Spleen.' },
+                    { id: 'hou-po', name: 'Hou Po', effects: 'Moves Qi downward, resolves stagnation, and dries dampness.' },
+                    { id: 'chen-pi', name: 'Chen Pi', effects: 'Regulates Qi, strengthens the Spleen, and dries dampness.' },
+                    { id: 'gan-cao', name: 'Gan Cao', effects: 'Tonifies Spleen Qi and harmonizes the other herbs in the formula.' },
+                    { id: 'bai-zhu', name: 'Bai Zhu', effects: 'Tonifies the Spleen and Qi, dries dampness.' },
+                    { id: 'fu-ling', name: 'Fu Ling', effects: 'Drains dampness, strengthens the Spleen, and calms the spirit.' },
+                    { id: 'ding-xiang', name: 'Ding Xiang', effects: 'Warms the Middle Jiao, directs rebellious Qi downward.' },
+                    { id: 'gan-jiang', name: 'Gan Jiang', effects: 'Warms the Middle Jiao and dispels cold.' },
+                    { id: 'shan-zha', name: 'Shan Zha', effects: 'Reduces food stagnation, especially from meat and greasy foods.' },
+                    { id: 'zhi-shi', name: 'Zhi Shi', effects: 'Breaks up Qi stagnation and reduces accumulation.' },
+                    { id: 'cao-guo', name: 'Cao Guo', effects: 'Strongly dries dampness and dispels cold from the Spleen/Stomach.' },
+                    { id: 'huang-lian', name: 'Huang Lian', effects: 'Clears heat and drains dampness, especially in the Middle Jiao.' },
+                    { id: 'huo-xiang', name: 'Huo Xiang', effects: 'Aromatically transforms dampness, harmonizes the Middle Jiao.' },
+                    { id: 'mu-xiang', name: 'Mu Xiang', effects: 'Promotes the movement of Qi to alleviate pain.' },
+                    { id: 'su-sha', name: 'Su Sha', effects: 'Aromatically transforms dampness, moves Qi, and warms the Middle Jiao.' },
+                    { id: 'xiang-fu-zi', name: 'Xiang Fu Zi', effects: 'Spreads and regulates Liver Qi.' },
+                    { id: 'bai-dou-kou', name: 'Bai Dou Kou', effects: 'Aromatically transforms dampness and promotes the movement of Qi.' },
+                    { id: 'ren-shen', name: 'Ren Shen', effects: 'Strongly tonifies primal Qi and strengthens the Spleen.' },
+                    { id: 'ban-xia', name: 'Ban Xia', effects: 'Dries dampness, transforms phlegm, and directs rebellious Qi downward.' },
+                    { id: 'sheng-jiang', name: 'Sheng Jiang', effects: 'Warms the Middle Jiao, adjusts the Ying and Wei.' },
+                    { id: 'da-zao', name: 'Da Zao', effects: 'Tonifies the Spleen and Stomach Qi, nourishes the blood.' }
+                ],
+                formulas: {
+                    'ping-wei-san': { name: 'Ping Wei San', derivation_text: "Base formula for resolving dampness in the Spleen and Stomach.", signs: "Abdominal distention, loss of appetite, heavy sensation.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: [], removed: [] } },
+                    'tiao-wei-san': { name: 'Tiao Wei San', derivation_text: "Adds herbs to strengthen the Spleen and warm the middle. (Tangye Boncho)", signs: "Spleen deficiency with dampness.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['bai-zhu', 'fu-ling', 'ding-xiang'], removed: [] } },
+                    'daoshi-ping-wei-san': { name: 'Daoshi Ping Wei San', derivation_text: "Adds herbs to clear heat and reduce food stagnation. (Bangyak Happyeon)", signs: "Damp-Heat with food stagnation.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['gan-jiang', 'bai-zhu', 'shan-zha', 'zhi-shi', 'cao-guo', 'huang-lian'], removed: [] } },
+                    'xiang-sha-ping-wei-san': { name: 'Xiang Sha Ping Wei San', derivation_text: "Adds aromatic, Qi-moving herbs to resolve stagnation. (Manbyeong Hoichun)", signs: "Dampness obstructing the Qi mechanism.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['huo-xiang', 'zhi-shi', 'mu-xiang', 'su-sha', 'xiang-fu-zi'], removed: [] } },
+                    'xiang-sha-yang-wei-tang': { name: 'Xiang Sha Yang Wei Tang', derivation_text: "Adds herbs to tonify Qi and strengthen the Stomach. (Gogeum Uigam, different from Sasang formula)", signs: "Spleen/Stomach deficiency with dampness and Qi stagnation.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['mu-xiang', 'bai-dou-kou', 'fu-ling', 'bai-zhu', 'ren-shen', 'su-sha'], removed: [] } },
+                    'ren-shen-yang-wei-tang': { name: 'Ren Shen Yang Wei Tang', derivation_text: "Adds herbs to tonify Qi and resolve phlegm-damp. (Uihak Ipmun)", signs: "Spleen Qi deficiency with phlegm-damp.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['ban-xia', 'fu-ling', 'huo-xiang', 'ren-shen', 'cao-guo', 'sheng-jiang', 'da-zao'], removed: [] } }
                 }
-            } catch (error) {
-                console.error('Navigation check failed:', error);
-                alert('Could not verify the page. Please check your network connection.');
-            }
-        }
-
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            const elementsToTranslate = document.querySelectorAll('[data-en]');
-            elementsToTranslate.forEach(el => {
-                el.textContent = el.dataset[currentLanguage];
-            });
-
-            const linksToUpdate = document.querySelectorAll('a.nav-link');
-            linksToUpdate.forEach(link => {
-                const originalHref = link.getAttribute('href').split('?')[0];
-
-                if (originalHref.includes('lwdh_variations.html') || originalHref.includes('pws_var.html')) {
-                    link.href = `${originalHref}?lang=${currentLanguage}`;
-                    return;
-                }
-
-                const baseHref = originalHref.replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
-                
-                if (currentLanguage === 'ko') {
-                    if (baseHref === 'history') {
-                         link.href = 'history_kor.html';
-                    } else {
-                         link.href = `${baseHref}_k.html`;
-                    }
-                } else {
-                     link.href = `${baseHref}.html`;
-                }
-            });
-
-            if (typeof updateGameLanguage === 'function') {
-                updateGameLanguage();
-            }
-        }
-
-        function toggleLanguage() {
-            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
-            setLanguage(newLang);
-        }
-        
-        function initializeVisitorCount() {
-            let totalVisitors = localStorage.getItem('totalVisitors');
-            if (totalVisitors === null) {
-                totalVisitors = 1;
-            } else {
-                if (!sessionStorage.getItem('totalVisitCounted')) {
-                    totalVisitors = parseInt(totalVisitors) + 1;
-                    sessionStorage.setItem('totalVisitCounted', 'true');
-                }
-            }
-            localStorage.setItem('totalVisitors', totalVisitors.toString());
-            const todayStr = new Date().toISOString().split('T')[0];
-            let dailyData = localStorage.getItem('dailyData');
-            dailyData = dailyData ? JSON.parse(dailyData) : {};
-            if (dailyData.date !== todayStr) {
-                dailyData = { date: todayStr, count: 1 };
-            } else {
-                if (!sessionStorage.getItem('dailyVisitCounted')) {
-                    dailyData.count++;
-                    sessionStorage.setItem('dailyVisitCounted', 'true');
+            },
+            ko: {
+                ui: {
+                    headerLinkFont: "'Noto Serif KR', serif",
+                    mainTitle: "평위산 변방",
+                    signsPrefix: "주요 증상: "
+                },
+                herbs: [
+                    { id: 'cang-zhu', name: '창출', effects: '강력하게 습기를 말리고 비장을 튼튼하게 합니다.' },
+                    { id: 'hou-po', name: '후박', effects: '기를 아래로 내리고, 막힌 것을 풀며, 습기를 말립니다.' },
+                    { id: 'chen-pi', name: '진피', effects: '기를 조절하고, 비장을 튼튼하게 하며, 습기를 말립니다.' },
+                    { id: 'gan-cao', name: '감초', effects: '비장의 기를 보하고 다른 약재들을 조화시킵니다.' },
+                    { id: 'bai-zhu', name: '백출', effects: '비장의 기를 보하고 습기를 말립니다.' },
+                    { id: 'fu-ling', name: '복령', effects: '습기를 배출하고 비장을 튼튼하게 하며 정신을 안정시킵니다.' },
+                    { id: 'ding-xiang', name: '정향', effects: '중초를 따뜻하게 하고 거역하는 기를 아래로 내립니다.' },
+                    { id: 'gan-jiang', name: '건강', effects: '중초를 따뜻하게 하고 한기를 몰아냅니다.' },
+                    { id: 'shan-zha', name: '산사', effects: '특히 육류나 기름진 음식으로 인한 식체를 해소합니다.' },
+                    { id: 'zhi-shi', name: '지실', effects: '기의 막힘을 깨뜨리고 쌓인 것을 줄여줍니다.' },
+                    { id: 'cao-guo', name: '초과', effects: '강력하게 습기를 말리고 비위의 한기를 몰아냅니다.' },
+                    { id: 'huang-lian', name: '황련', effects: '특히 중초의 열을 내리고 습기를 말립니다.' },
+                    { id: 'huo-xiang', name: '곽향', effects: '방향성으로 습기를 변화시키고 중초를 조화롭게 합니다.' },
+                    { id: 'mu-xiang', name: '목향', effects: '기의 순환을 촉진하여 통증을 완화합니다.' },
+                    { id: 'su-sha', name: '축사', effects: '방향성으로 습기를 변화시키고, 기를 움직이며, 중초를 따뜻하게 합니다.' },
+                    { id: 'xiang-fu-zi', name: '향부자', effects: '간의 기를 퍼뜨리고 조절합니다.' },
+                    { id: 'bai-dou-kou', name: '백두구', effects: '방향성으로 습기를 변화시키고 기의 순환을 촉진합니다.' },
+                    { id: 'ren-shen', name: '인삼', effects: '원기를 강력하게 보하고 비장을 튼튼하게 합니다.' },
+                    { id: 'ban-xia', name: '반하', effects: '습기를 말리고, 담을 삭이며, 거역하는 기를 아래로 내립니다.' },
+                    { id: 'sheng-jiang', name: '생강', effects: '중초를 따뜻하게 하고 영위(營衛)를 조절합니다.' },
+                    { id: 'da-zao', name: '대조', effects: '비위의 기를 보하고 혈을 자양합니다.' }
+                ],
+                formulas: {
+                    'ping-wei-san': { name: '평위산', derivation_text: "비위의 습(濕)을 해결하는 기본 처방입니다.", signs: "복부 팽만, 식욕 부진, 몸이 무거운 느낌.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: [], removed: [] } },
+                    'tiao-wei-san': { name: '조위산', derivation_text: "비장을 강화하고 중초를 따뜻하게 하는 약재를 추가합니다. (탕액본초)", signs: "습을 동반한 비허(脾虛).", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['bai-zhu', 'fu-ling', 'ding-xiang'], removed: [] } },
+                    'daoshi-ping-wei-san': { name: '도씨평위산', derivation_text: "열을 내리고 식체를 해소하는 약재를 추가합니다. (방약합편)", signs: "식체를 동반한 습열(濕熱).", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['gan-jiang', 'bai-zhu', 'shan-zha', 'zhi-shi', 'cao-guo', 'huang-lian'], removed: [] } },
+                    'xiang-sha-ping-wei-san': { name: '향사평위산', derivation_text: "방향성 있고 기를 움직이는 약재를 더해 막힌 것을 풉니다. (만병회춘)", signs: "습이 기의 흐름을 막는 증상.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['huo-xiang', 'zhi-shi', 'mu-xiang', 'su-sha', 'xiang-fu-zi'], removed: [] } },
+                    'xiang-sha-yang-wei-tang': { name: '향사양위탕', derivation_text: "기를 보하고 위를 강화하는 약재를 추가합니다. (고금의감, 사상처방과 다름)", signs: "비위허약에 습과 기체가 겹친 증상.", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['mu-xiang', 'bai-dou-kou', 'fu-ling', 'bai-zhu', 'ren-shen', 'su-sha'], removed: [] } },
+                    'ren-shen-yang-wei-tang': { name: '인삼양위탕', derivation_text: "기를 보하고 담습을 제거하는 약재를 추가합니다. (의학입문)", signs: "비기허(脾氣虛)와 담습(痰濕).", composition: { base: ['cang-zhu', 'hou-po', 'chen-pi', 'gan-cao'], added: ['ban-xia', 'fu-ling', 'huo-xiang', 'ren-shen', 'cao-guo', 'sheng-jiang', 'da-zao'], removed: [] } }
                 }
             }
-            localStorage.setItem('dailyData', JSON.stringify(dailyData));
-            document.getElementById('today-count').textContent = dailyData.count;
-            document.getElementById('total-count').textContent = totalVisitors;
-        }
+        };
 
-        // --- Embedded Game Script ---
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // UI Elements
-        const scoreEl = document.getElementById('score');
-        const livesEl = document.getElementById('lives');
-        const levelEl = document.getElementById('level');
-        const playerStatusEl = document.getElementById('player-status');
-        const helpButton = document.getElementById('help-button');
-        
-        const gameOverScreen = document.getElementById('game-over-screen');
-        const finalScoreEl = document.getElementById('final-score');
-        const restartButton = document.getElementById('restart-button');
-        const gameMessageEl = document.getElementById('game-message');
-        const messageTextEl = document.getElementById('message-text');
-        const messageCloseButton = document.getElementById('message-close-button');
-        const helpModal = document.getElementById('help-modal');
-        const helpCloseButton = document.getElementById('help-close-button');
-        const gameContainer = document.getElementById('game-container');
-        const startScreen = document.getElementById('start-screen');
-        const startButton = document.getElementById('start-button');
-        const gameUiBar = document.getElementById('game-ui-bar');
-        const mobileControls = document.getElementById('mobile-controls');
-        
-        // Herb Name Data
-        let groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
-        let groupA_ko = ['인삼', '부자', '건강', '계지', '오약', '오수유', '마황'];
-        let groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
-        let groupB_ko = ['석고', '황련', '황금', '박하', '국화', '상엽', '지모', '황백'];
-        const groupA_level2 = ['xixin', 'banxia', 'chuanxiong', 'duhuo', 'kuandonghua', 'muxiang', 'nanxing', 'jiegeng', 'zisuye', 'qianghuo', 'weilingxian', 'wujiapi', 'baijiezi', 'lurong', 'xianmao'];
-        const groupA_level2_ko = ['세신', '반하', '천궁', '독활', '관동화', '목향', '남성', '길경', '소엽', '강활', '위령선', '오가피', '백계자', '녹용', '선모'];
-        const groupB_level2 = ['niubangzi', 'dandouchi', 'lugen', 'zhuru', 'kushen', 'jinyinhua', 'lianqiao', 'banlangen', 'dahuang', 'fanxieye', 'daji', 'zexie', 'huashi', 'beimu', 'muli', 'chuanlianzi'];
-        const groupB_level2_ko = ['우방자', '담두시', '노근', '죽여', '고삼', '금은화', '연교', '판람근', '대황', '번사엽', '대계', '택사', '활석', '패모', '모려', '천련자'];
+        // --- APPLICATION STATE ---
+        let currentLang = 'ko';
+        let currentFormula = 'ping-wei-san';
 
-        const NUM_LANES = 4;
-        let laneWidth, player, items, bullets, score, lives, playerState, gameOver, itemSpawnInterval, stateChangeInterval, level, gameWon, baseItemSpeed, paused, gameStarted;
-        const PIXEL_SIZE = 6;
+        // --- DOM ELEMENTS ---
+        const headerLink = document.getElementById('header-link');
+        const mainTitle = document.getElementById('main-title');
+        const visContainer = document.getElementById('vis-container');
+        const formulaListEl = document.getElementById('formula-list');
+        const infoTitle = document.getElementById('info-title');
+        const infoDerivation = document.getElementById('info-derivation');
+        const infoSigns = document.getElementById('info-signs');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalEffects = document.getElementById('modal-effects');
+        const modalCloseX = document.getElementById('modal-close-x');
 
-        // --- Sound Definitions ---
-        const successSound = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.2 } }).toDestination();
-        const shootSound = new Tone.Synth({ oscillator: { type: 'sine' }, volume: -12, envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.1 } }).toDestination();
-        const mistakeSound = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 0.1 } }).toDestination();
-
-        let lastMistakeSoundTime = 0, lastSuccessSoundTime = 0;
-        const soundCooldown = 0.05;
-
-        const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
-
-        function resizeCanvasAndElements() {
-            canvas.width = gameContainer.clientWidth;
-            canvas.height = 450;
-            
-            laneWidth = canvas.width / NUM_LANES;
-            if (player) {
-                player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
-                player.y = canvas.height - (8 * PIXEL_SIZE) - 10;
-            }
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (player) {
-                drawPixelArtPlayer();
-            }
-            if(gameStarted && !gameOver && !paused){
-                drawItems();
-                drawBullets();
-            }
-        }
-
-        function setupInitialScreen() {
-            gameStarted = false;
-            player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: 0, x: 0, direction: 'right' };
-            playerState = 'red';
-            
-            resizeCanvasAndElements();
-
-            startScreen.classList.remove('hidden');
-            gameUiBar.classList.add('invisible');
-            gameOverScreen.classList.add('hidden');
-        }
-
-        async function startGame() {
-            if (Tone.context.state !== 'running') {
-                await Tone.start();
-            }
-            gameStarted = true;
-            startScreen.classList.add('hidden');
-
-            if (isMobile()) {
-                mobileControls.classList.remove('hidden');
-            }
-            gameUiBar.classList.remove('invisible');
-
-            initGame();
-        }
-
-        function initGame() {
-            playerState = 'red';
-            items = []; bullets = []; score = 0; lives = 3; level = 1; gameWon = false; baseItemSpeed = 1.2; gameOver = false; paused = false;
-            groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
-            groupA_ko = ['인삼', '부자', '건강', '계지', '오약', '오수유', '마황'];
-            groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
-            groupB_ko = ['석고', '황련', '황금', '박하', '국화', '상엽', '지모', '황백'];
-            
-            resizeCanvasAndElements();
-            
-            updateUI();
-            gameOverScreen.classList.add('hidden');
-            if (itemSpawnInterval) clearInterval(itemSpawnInterval);
-            if (stateChangeInterval) clearInterval(stateChangeInterval);
-            itemSpawnInterval = setInterval(spawnItem, 1500);
-            stateChangeInterval = setInterval(togglePlayerState, 20000);
-            gameLoop();
-        }
-
-        function pauseGame() { paused = true; }
-        function resumeGame() { paused = false; gameLoop(); }
-
-        function togglePlayerState() {
-            if (gameOver || paused) return;
-            playerState = (playerState === 'red') ? 'blue' : 'red';
-            updateUI();
-            items = []; bullets = [];
-        }
-
-        function spawnItem() {
-            if (gameOver || paused) return;
-            const occupiedLanes = items.filter(item => item.y < item.height * 3).map(item => item.lane);
-            let availableLanes = [];
-            for (let i = 0; i < NUM_LANES; i++) { if (!occupiedLanes.includes(i)) availableLanes.push(i); }
-            if (availableLanes.length === 0) return;
-            const lane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
-            const type = Math.random() < 0.5 ? 'A' : 'B';
-            
-            const currentGroup = type === 'A' ? groupA : groupB;
-            const currentGroupKo = type === 'A' ? groupA_ko : groupB_ko;
-            const randomIndex = Math.floor(Math.random() * currentGroup.length);
-            
-            const text = {
-                en: currentGroup[randomIndex],
-                ko: currentGroupKo[randomIndex]
-            };
-            const displayText = currentLanguage === 'ko' ? text.ko : text.en;
-
-            ctx.font = '16px sans-serif';
-            const textWidth = ctx.measureText(displayText).width;
-            const xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
-            items.push({ x: xPos, y: -20, text: text, displayText: displayText, type: type, width: textWidth, height: 16, speed: baseItemSpeed, lane: lane });
-        }
-
-        function drawPixelArtPlayer() {
-            if (!player) return;
-            const faceColor = (playerState === 'red') ? '#d32f2f' : '#1976d2';
-            const clothesColor = '#808080';
-            const art = ['  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', 'C   C', 'C   C'];
-            for (let r = 0; r < art.length; r++) {
-                for (let c = 0; c < art[r].length; c++) {
-                    if (art[r][c] === 'F') {
-                        ctx.fillStyle = faceColor;
-                        ctx.fillRect(player.x + c * PIXEL_SIZE, player.y + r * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
-                    } else if (art[r][c] === 'C') {
-                        ctx.fillStyle = clothesColor;
-                        ctx.fillRect(player.x + c * PIXEL_SIZE, player.y + r * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
-                    }
-                }
-            }
-        }
-
-        function drawItems() { 
-            ctx.font = '16px sans-serif'; 
-            ctx.fillStyle = '#333'; 
-            items.forEach(item => ctx.fillText(item.displayText, item.x, item.y)); 
-        }
-        function drawBullets() { bullets.forEach(bullet => { ctx.fillStyle = 'orange'; ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
-
-        function updateGame() {
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                const bullet = bullets[i]; if (!bullet) continue; bullet.y -= bullet.speed;
-                if (bullet.y < 0) { bullets.splice(i, 1); continue; }
-                let bulletHit = false;
-                for (let j = items.length - 1; j >= 0; j--) {
-                    const item = items[j]; if (!item) continue;
-                    if (bullet.x < item.x + item.width && bullet.x + bullet.width > item.x && bullet.y < item.y + item.height && bullet.y + bullet.height > item.y) {
-                        handleBulletItemCollision(item, j, i); bulletHit = true; break;
-                    }
-                }
-                if (bulletHit) continue;
-            }
-            for (let i = items.length - 1; i >= 0; i--) {
-                const item = items[i]; if (!item) continue; item.y += item.speed;
-                if (item.y > canvas.height) {
-                    playMistakeSound(); lives--; updateUI(); items.splice(i, 1); continue;
-                }
-                if (player.x < item.x + item.width && player.x + player.width > item.x && player.y < item.y + item.height && player.y + player.height > item.y) {
-                    handlePlayerItemCollision(item, i); break;
-                }
-            }
-        }
-        
-        function playMistakeSound() { 
-            const now = Tone.now(); 
-            if (now - lastMistakeSoundTime > soundCooldown) { 
-                mistakeSound.triggerAttackRelease('C5', '8n', now); 
-                lastMistakeSoundTime = now; 
-            } 
-        }
-        function playSuccessSound() { 
-            const now = Tone.now(); 
-            if (now - lastSuccessSoundTime > soundCooldown) { 
-                successSound.triggerAttackRelease("C5", "16n", now);
-                successSound.triggerAttackRelease("E5", "16n", now + 0.07);
-                successSound.triggerAttackRelease("G5", "16n", now + 0.14);
-                lastSuccessSoundTime = now; 
-            } 
-        }
-
-        function handlePlayerItemCollision(item, itemIndex) {
-            const correctCatch = (playerState === 'red' && item.type === 'B') || (playerState === 'blue' && item.type === 'A');
-            if (correctCatch) { score += 10; playSuccessSound(); } else { lives--; playMistakeSound(); }
-            items.splice(itemIndex, 1); updateUI();
-        }
-
-        function handleBulletItemCollision(item, itemIndex, bulletIndex) {
-            const correctShot = (playerState === 'red' && item.type === 'A') || (playerState === 'blue' && item.type === 'B');
-            if (correctShot) { score += 5; playSuccessSound(); } else { lives--; playMistakeSound(); }
-            items.splice(itemIndex, 1); bullets.splice(bulletIndex, 1); updateUI();
-        }
-
-        function showMessage(text, showButton = false) {
-            pauseGame(); messageTextEl.innerHTML = text;
-            messageCloseButton.style.display = showButton ? 'inline-block' : 'none';
-            gameMessageEl.classList.remove('hidden');
-        }
-
-        function checkLevelUp() {
-            if (level === 1 && score >= 100) { // Level up score changed to 100
-                level = 2; baseItemSpeed = 1.5;
-                groupA = groupA.concat(groupA_level2);
-                groupA_ko = groupA_ko.concat(groupA_level2_ko);
-                groupB = groupB.concat(groupB_level2);
-                groupB_ko = groupB_ko.concat(groupB_level2_ko);
-                showMessage("Level 2!<br><small class='text-lg'>More herbs will appear!</small>", true);
-            }
-            if (!gameWon && score >= 500) {
-                gameWon = true; showMessage("Congratulations!", false);
-                setTimeout(() => { gameMessageEl.classList.add('hidden'); resumeGame(); }, 3000);
-            }
-        }
-
-        function updateUI() {
-            const statusText = `Status: ${playerState === 'red' ? 'Heat' : 'Cold'}`;
-            scoreEl.textContent = score; 
-            livesEl.textContent = lives; 
-            levelEl.textContent = level;
-            playerStatusEl.textContent = statusText;
-
-            checkLevelUp();
-            if (lives <= 0) { endGame(); }
-        }
-
-        function endGame() {
-            gameOver = true;
-            clearInterval(itemSpawnInterval);
-            clearInterval(stateChangeInterval);
-            finalScoreEl.textContent = score;
-            gameOverScreen.classList.remove('hidden');
-        }
-
-        function gameLoop() {
-            if (gameOver || paused || !gameStarted) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            updateGame(); drawPixelArtPlayer(); drawItems(); drawBullets();
-            requestAnimationFrame(gameLoop);
-        }
-
-        function shoot() {
-            if (gameOver || paused || !gameStarted) return;
-            shootSound.triggerAttackRelease("A5", "32n");
-            bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, width: 5, height: 10, speed: 8 });
-        }
-
-        function movePlayer(direction) {
-            if (paused || !gameStarted) return;
-            player.direction = direction;
-            if (direction === 'left' && player.currentLane > 0) { player.currentLane--; }
-            else if (direction === 'right' && player.currentLane < NUM_LANES - 1) { player.currentLane++; }
-            player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
-            
-            if (!gameStarted || paused) {
-                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                 drawPixelArtPlayer();
-            }
-        }
-        
-        function updateGameLanguage() {
-            if (!gameStarted) return;
-            items.forEach(item => {
-                item.displayText = currentLanguage === 'ko' ? item.text.ko : item.text.en;
-                ctx.font = '16px sans-serif';
-                const textWidth = ctx.measureText(item.displayText).width;
-                item.width = textWidth;
-                item.x = (laneWidth * item.lane) + (laneWidth / 2) - (textWidth / 2);
-            });
-        }
-
-        // --- Event Listeners ---
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeVisitorCount();
-            
+        // --- FUNCTIONS ---
+        function getLanguageFromURL() {
             const params = new URLSearchParams(window.location.search);
             const lang = params.get('lang');
-            if (lang === 'ko') {
-                setLanguage('ko');
-            } else {
-                setLanguage('en');
-            }
+            return (lang === 'en' || lang === 'ko') ? lang : 'ko'; // Default to Korean
+        }
 
-            // Setup game listeners
-            startButton.addEventListener('click', startGame);
-            restartButton.addEventListener('click', initGame);
+        function toggleLanguage(event) {
+            event.preventDefault();
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            renderPage();
+        }
 
-            window.addEventListener('keydown', (e) => {
-                if (e.code === 'ArrowLeft') movePlayer('left');
-                if (e.code === 'ArrowRight') movePlayer('right');
-                if (e.code === 'Space') { e.preventDefault(); shoot(); }
+        function renderPage() {
+            const langData = data[currentLang];
+            document.documentElement.lang = currentLang;
+            
+            headerLink.style.fontFamily = langData.ui.headerLinkFont;
+            mainTitle.textContent = langData.ui.mainTitle;
+
+            formulaListEl.innerHTML = '';
+            Object.keys(langData.formulas).forEach(key => {
+                const formula = langData.formulas[key];
+                const item = document.createElement('button');
+                item.dataset.id = key;
+                item.textContent = formula.name;
+                item.className = 'formula-item font-medium py-2 px-4 rounded-full cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md';
+                item.addEventListener('click', () => {
+                    currentFormula = key;
+                    updateDisplay();
+                });
+                formulaListEl.appendChild(item);
             });
             
-            // Mobile controls
-            const leftBtn = document.getElementById('left-btn');
-            const rightBtn = document.getElementById('right-btn');
-            const shootBtn = document.getElementById('shoot-btn');
+            updateDisplay();
+        }
+
+        function showModal(herbId) {
+            const herb = data[currentLang].herbs.find(h => h.id === herbId);
+            if (!herb) return;
             
-            const mobileAction = (action) => {
-                if (Tone.context.state !== 'running') {
-                    Tone.start();
+            modalTitle.textContent = herb.name;
+            modalEffects.textContent = herb.effects;
+            modalOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function hideModal() {
+            modalOverlay.classList.add('opacity-0');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+            }, 300);
+        }
+
+        function updateDisplay() {
+            const langData = data[currentLang];
+            const formula = langData.formulas[currentFormula];
+            if (!formula) return;
+
+            infoTitle.textContent = formula.name;
+            infoDerivation.textContent = formula.derivation_text;
+            infoSigns.textContent = langData.ui.signsPrefix + formula.signs;
+
+            document.querySelectorAll('.formula-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.id === currentFormula);
+            });
+
+            const baseHerbs = data.en.formulas['ping-wei-san'].composition.base;
+            const currentFormulaData = data.en.formulas[currentFormula];
+            
+            const visibleHerbIds = baseHerbs
+                .filter(herbId => !currentFormulaData.composition.removed.includes(herbId))
+                .concat(currentFormulaData.composition.added);
+            
+            const radius = Math.min(visContainer.clientWidth, visContainer.clientHeight) / 2 * 0.7;
+            const angleStep = visibleHerbIds.length > 0 ? (2 * Math.PI) / visibleHerbIds.length : 0;
+
+            let visibleHerbCount = 0;
+            data.en.herbs.forEach(herbRef => {
+                const orb = document.getElementById(`herb-${herbRef.id}`);
+                const herbLangData = langData.herbs.find(h => h.id === herbRef.id);
+                orb.textContent = herbLangData ? herbLangData.name : herbRef.name;
+
+                if (visibleHerbIds.includes(herbRef.id)) {
+                    const isBase = baseHerbs.includes(herbRef.id);
+                    
+                    orb.classList.add('visible');
+                    orb.classList.toggle('base', isBase);
+                    orb.classList.toggle('added', !isBase);
+                    
+                    const angle = angleStep * visibleHerbCount - (Math.PI / 2);
+                    const x = (visContainer.clientWidth / 2) + radius * Math.cos(angle) - (orb.clientWidth / 2);
+                    const y = (visContainer.clientHeight / 2) + radius * Math.sin(angle) - (orb.clientHeight / 2);
+                    orb.style.left = `${x}px`;
+                    orb.style.top = `${y}px`;
+                    visibleHerbCount++;
+                } else {
+                    orb.classList.remove('visible', 'base', 'added');
                 }
-                action();
-            };
-
-            leftBtn.addEventListener('click', () => mobileAction(() => movePlayer('left')));
-            rightBtn.addEventListener('click', () => mobileAction(() => movePlayer('right')));
-            shootBtn.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                mobileAction(shoot); 
             });
+        }
 
-            messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
-            
-            helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
+        function initialize() {
+            currentLang = getLanguageFromURL();
 
-            helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
+            data.en.herbs.forEach(herb => {
+                const orb = document.createElement('div');
+                orb.id = `herb-${herb.id}`;
+                orb.className = 'herb-orb';
+                orb.addEventListener('click', () => showModal(herb.id));
+                visContainer.appendChild(orb);
+            });
             
-            window.addEventListener('resize', resizeCanvasAndElements);
-            
-            // Show initial screen
-            setupInitialScreen();
-        });
+            modalOverlay.addEventListener('click', hideModal);
+            modalCloseX.addEventListener('click', hideModal);
+            modalContent.addEventListener('click', (e) => e.stopPropagation());
+
+            renderPage();
+        }
+
+        window.addEventListener('resize', updateDisplay);
+        initialize();
     </script>
-
 </body>
 </html>
