@@ -63,6 +63,8 @@
             z-index: 50;
             padding: 1rem;
             padding-bottom: 100px; /* Space for mobile controls */
+            display: flex;
+            flex-direction: column;
         }
         .touch-button {
             width: 70px;
@@ -144,6 +146,19 @@
     <!-- ★★★★★ Fully Integrated Mini Game Section (Position adjusted) ★★★★★ -->
     <section id="mini-game-section" class="max-w-sm mx-auto px-4 pb-16 flex flex-col items-center">
         
+        <!-- Mobile UI Bar (Top, inside fullscreen container) -->
+        <div id="mobile-ui-bar" class="hidden w-full mb-2 flex justify-between items-center text-gray-600">
+            <div>
+                <p id="mobile-player-status" class="text-xs font-semibold">Status: Heat</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+                <p>Score: <span id="mobile-score" class="font-bold">0</span></p>
+                <p>Level: <span id="mobile-level" class="font-bold">1</span></p>
+                <p>Lives: <span id="mobile-lives" class="font-bold">3</span></p>
+                <button id="mobile-help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
+            </div>
+        </div>
+
         <div id="game-container" class="w-full mx-auto overflow-hidden relative flex flex-col">
             <canvas id="gameCanvas"></canvas>
 
@@ -179,7 +194,7 @@
             </div>
         </div>
         
-        <!-- Game UI Bar (Below Canvas) -->
+        <!-- Game UI Bar (Below Canvas, for Desktop) -->
         <div id="game-ui-bar" class="w-full mt-2 flex justify-between items-center text-gray-600 invisible">
             <div>
                 <p id="player-status" class="text-xs font-semibold">Status: Heat</p>
@@ -281,17 +296,27 @@
         // --- Embedded Game Script ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        
+        // UI Elements
         const scoreEl = document.getElementById('score');
         const livesEl = document.getElementById('lives');
         const levelEl = document.getElementById('level');
         const playerStatusEl = document.getElementById('player-status');
+        const helpButton = document.getElementById('help-button');
+        
+        const mobileUiBar = document.getElementById('mobile-ui-bar');
+        const mobileScoreEl = document.getElementById('mobile-score');
+        const mobileLivesEl = document.getElementById('mobile-lives');
+        const mobileLevelEl = document.getElementById('mobile-level');
+        const mobilePlayerStatusEl = document.getElementById('mobile-player-status');
+        const mobileHelpButton = document.getElementById('mobile-help-button');
+
         const gameOverScreen = document.getElementById('game-over-screen');
         const finalScoreEl = document.getElementById('final-score');
         const restartButton = document.getElementById('restart-button');
         const gameMessageEl = document.getElementById('game-message');
         const messageTextEl = document.getElementById('message-text');
         const messageCloseButton = document.getElementById('message-close-button');
-        const helpButton = document.getElementById('help-button');
         const helpModal = document.getElementById('help-modal');
         const helpCloseButton = document.getElementById('help-close-button');
         const gameContainer = document.getElementById('game-container');
@@ -335,6 +360,7 @@
 
             startScreen.classList.remove('hidden');
             gameUiBar.classList.add('invisible');
+            mobileUiBar.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
         }
 
@@ -342,7 +368,6 @@
             Tone.start(); // Initialize audio context on game start
             gameStarted = true;
             startScreen.classList.add('hidden');
-            gameUiBar.classList.remove('invisible');
 
             if (isMobile()) {
                 document.getElementById('main-header').classList.add('hidden');
@@ -350,7 +375,11 @@
                 document.getElementById('main-footer').classList.add('hidden');
                 document.getElementById('mini-game-section').classList.add('fullscreen-game');
                 mobileControls.classList.remove('hidden');
-                canvas.height = window.innerHeight * 0.7; // Adjust canvas height for fullscreen
+                mobileUiBar.classList.remove('hidden');
+                gameUiBar.classList.add('hidden');
+                canvas.height = window.innerHeight - 150; // Adjust canvas height for fullscreen
+            } else {
+                gameUiBar.classList.remove('invisible');
             }
 
             initGame();
@@ -365,7 +394,6 @@
             groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
             groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
             updateUI();
-            playerStatusEl.textContent = `Status: Heat`;
             gameOverScreen.classList.add('hidden');
             if (itemSpawnInterval) clearInterval(itemSpawnInterval);
             if (stateChangeInterval) clearInterval(stateChangeInterval);
@@ -380,7 +408,7 @@
         function togglePlayerState() {
             if (gameOver || paused) return;
             playerState = (playerState === 'red') ? 'blue' : 'red';
-            playerStatusEl.textContent = `Status: ${playerState === 'red' ? 'Heat' : 'Cold'}`;
+            updateUI();
             items = []; bullets = [];
         }
 
@@ -480,7 +508,7 @@
         }
 
         function checkLevelUp() {
-            if (level === 1 && score >= 150) {
+            if (level === 1 && score >= 100) { // Level up score changed to 100
                 level = 2; baseItemSpeed = 1.5;
                 groupA = groupA.concat(groupA_level2); groupB = groupB.concat(groupB_level2);
                 showMessage("Level 2!<br><small class='text-lg'>More herbs will appear!</small>", true);
@@ -492,7 +520,18 @@
         }
 
         function updateUI() {
-            scoreEl.textContent = score; livesEl.textContent = lives; levelEl.textContent = level;
+            const statusText = `Status: ${playerState === 'red' ? 'Heat' : 'Cold'}`;
+            // Desktop UI
+            scoreEl.textContent = score; 
+            livesEl.textContent = lives; 
+            levelEl.textContent = level;
+            playerStatusEl.textContent = statusText;
+            // Mobile UI
+            mobileScoreEl.textContent = score; 
+            mobileLivesEl.textContent = lives; 
+            mobileLevelEl.textContent = level;
+            mobilePlayerStatusEl.textContent = statusText;
+
             checkLevelUp();
             if (lives <= 0) { endGame(); }
         }
@@ -514,6 +553,7 @@
 
         function shoot() {
             if (gameOver || paused || !gameStarted) return;
+            Tone.start(); // Ensure audio context is active on shoot
             shootSound.triggerAttackRelease("A5", "32n");
             bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, width: 5, height: 10, speed: 8 });
         }
@@ -537,7 +577,15 @@
 
             // Setup game listeners
             startButton.addEventListener('click', startGame);
-            restartButton.addEventListener('click', initGame);
+            restartButton.addEventListener('click', () => {
+                if (isMobile()) {
+                    // Just restart the game logic, don't exit fullscreen
+                    initGame();
+                } else {
+                    // For desktop, it's fine to just re-init
+                    initGame();
+                }
+            });
 
             window.addEventListener('keydown', (e) => {
                 if (e.code === 'ArrowLeft') movePlayer('left');
@@ -554,16 +602,25 @@
             shootBtn.addEventListener('click', (e) => { e.preventDefault(); shoot(); });
 
             messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
-            helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
+            
+            const openHelp = () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } };
+            helpButton.addEventListener('click', openHelp);
+            mobileHelpButton.addEventListener('click', openHelp);
+
             helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
             
             window.addEventListener('resize', () => {
-                canvas.width = gameContainer.clientWidth;
-                if (!isMobile()) {
-                    canvas.height = 450;
-                } else {
-                    canvas.height = window.innerHeight * 0.7;
+                let newWidth = gameContainer.clientWidth;
+                let newHeight = 450;
+                
+                if (isMobile()) {
+                    newWidth = window.innerWidth - 32; // Corresponds to p-4 on each side (1rem * 2)
+                    newHeight = window.innerHeight - 150;
                 }
+
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                
                 laneWidth = canvas.width / NUM_LANES;
                 player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
