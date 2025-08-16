@@ -250,6 +250,10 @@
                      link.href = `${baseHref}.html`;
                 }
             });
+
+            if (typeof updateGameLanguage === 'function') {
+                updateGameLanguage();
+            }
         }
 
         function toggleLanguage() {
@@ -309,11 +313,15 @@
         const gameUiBar = document.getElementById('game-ui-bar');
         const mobileControls = document.getElementById('mobile-controls');
         
-        // English Pinyin Herb Lists
-        let groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang']; // Hot Herbs
-        let groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai']; // Cold Herbs
+        // Herb Name Data
+        let groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
+        let groupA_ko = ['인삼', '부자', '건강', '계지', '오약', '오수유', '마황'];
+        let groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
+        let groupB_ko = ['석고', '황련', '황금', '박하', '국화', '상엽', '지모', '황백'];
         const groupA_level2 = ['xixin', 'banxia', 'chuanxiong', 'duhuo', 'kuandonghua', 'muxiang', 'nanxing', 'jiegeng', 'zisuye', 'qianghuo', 'weilingxian', 'wujiapi', 'baijiezi', 'lurong', 'xianmao'];
+        const groupA_level2_ko = ['세신', '반하', '천궁', '독활', '관동화', '목향', '남성', '길경', '소엽', '강활', '위령선', '오가피', '백계자', '녹용', '선모'];
         const groupB_level2 = ['niubangzi', 'dandouchi', 'lugen', 'zhuru', 'kushen', 'jinyinhua', 'lianqiao', 'banlangen', 'dahuang', 'fanxieye', 'daji', 'zexie', 'huashi', 'beimu', 'muli', 'chuanlianzi'];
+        const groupB_level2_ko = ['우방자', '담두시', '노근', '죽여', '고삼', '금은화', '연교', '판람근', '대황', '번사엽', '대계', '택사', '활석', '패모', '모려', '천련자'];
 
         const NUM_LANES = 4;
         let laneWidth, player, items, bullets, score, lives, playerState, gameOver, itemSpawnInterval, stateChangeInterval, level, gameWon, baseItemSpeed, paused, gameStarted;
@@ -380,7 +388,9 @@
             playerState = 'red';
             items = []; bullets = []; score = 0; lives = 3; level = 1; gameWon = false; baseItemSpeed = 1.2; gameOver = false; paused = false;
             groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
+            groupA_ko = ['인삼', '부자', '건강', '계지', '오약', '오수유', '마황'];
             groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
+            groupB_ko = ['석고', '황련', '황금', '박하', '국화', '상엽', '지모', '황백'];
             
             resizeCanvasAndElements();
             
@@ -411,12 +421,21 @@
             if (availableLanes.length === 0) return;
             const lane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
             const type = Math.random() < 0.5 ? 'A' : 'B';
+            
             const currentGroup = type === 'A' ? groupA : groupB;
-            const text = currentGroup[Math.floor(Math.random() * currentGroup.length)];
-            ctx.font = '16px sans-serif'; // smaller font for pinyin
-            const textWidth = ctx.measureText(text).width;
+            const currentGroupKo = type === 'A' ? groupA_ko : groupB_ko;
+            const randomIndex = Math.floor(Math.random() * currentGroup.length);
+            
+            const text = {
+                en: currentGroup[randomIndex],
+                ko: currentGroupKo[randomIndex]
+            };
+            const displayText = currentLanguage === 'ko' ? text.ko : text.en;
+
+            ctx.font = '16px sans-serif';
+            const textWidth = ctx.measureText(displayText).width;
             const xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
-            items.push({ x: xPos, y: -20, text: text, type: type, width: textWidth, height: 16, speed: baseItemSpeed, lane: lane });
+            items.push({ x: xPos, y: -20, text: text, displayText: displayText, type: type, width: textWidth, height: 16, speed: baseItemSpeed, lane: lane });
         }
 
         function drawPixelArtPlayer() {
@@ -437,7 +456,11 @@
             }
         }
 
-        function drawItems() { ctx.font = '16px sans-serif'; ctx.fillStyle = '#333'; items.forEach(item => ctx.fillText(item.text, item.x, item.y)); }
+        function drawItems() { 
+            ctx.font = '16px sans-serif'; 
+            ctx.fillStyle = '#333'; 
+            items.forEach(item => ctx.fillText(item.displayText, item.x, item.y)); 
+        }
         function drawBullets() { bullets.forEach(bullet => { ctx.fillStyle = 'orange'; ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
 
         function updateGame() {
@@ -502,7 +525,10 @@
         function checkLevelUp() {
             if (level === 1 && score >= 100) { // Level up score changed to 100
                 level = 2; baseItemSpeed = 1.5;
-                groupA = groupA.concat(groupA_level2); groupB = groupB.concat(groupB_level2);
+                groupA = groupA.concat(groupA_level2);
+                groupA_ko = groupA_ko.concat(groupA_level2_ko);
+                groupB = groupB.concat(groupB_level2);
+                groupB_ko = groupB_ko.concat(groupB_level2_ko);
                 showMessage("Level 2!<br><small class='text-lg'>More herbs will appear!</small>", true);
             }
             if (!gameWon && score >= 500) {
@@ -554,6 +580,17 @@
                  ctx.clearRect(0, 0, canvas.width, canvas.height);
                  drawPixelArtPlayer();
             }
+        }
+        
+        function updateGameLanguage() {
+            if (!gameStarted) return;
+            items.forEach(item => {
+                item.displayText = currentLanguage === 'ko' ? item.text.ko : item.text.en;
+                ctx.font = '16px sans-serif';
+                const textWidth = ctx.measureText(item.displayText).width;
+                item.width = textWidth;
+                item.x = (laneWidth * item.lane) + (laneWidth / 2) - (textWidth / 2);
+            });
         }
 
         // --- Event Listeners ---
