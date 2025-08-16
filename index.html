@@ -17,6 +17,7 @@
             color: #333;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            touch-action: manipulation; /* Prevents double-tap to zoom on mobile */
         }
         h1, h2, .font-serif {
             font-family: 'Cormorant Garamond', serif;
@@ -325,9 +326,6 @@
         const gameUiBar = document.getElementById('game-ui-bar');
         const mobileControls = document.getElementById('mobile-controls');
         
-        canvas.width = gameContainer.clientWidth;
-        canvas.height = 450;
-
         // English Pinyin Herb Lists
         let groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang']; // Hot Herbs
         let groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai']; // Cold Herbs
@@ -348,15 +346,44 @@
 
         const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
 
-        function setupInitialScreen() {
-            gameStarted = false;
+        function resizeCanvasAndElements() {
+            let newWidth = gameContainer.clientWidth;
+            let newHeight = 450;
+            
+            if (isMobile() && gameStarted) {
+                newWidth = window.innerWidth - 32; 
+                newHeight = window.innerHeight - 150;
+            } else if (isMobile() && !gameStarted) {
+                newWidth = gameContainer.clientWidth;
+                newHeight = 450;
+            }
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            
             laneWidth = canvas.width / NUM_LANES;
-            player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: canvas.height - (8 * PIXEL_SIZE) - 10, x: 0, direction: 'right' };
-            player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
-            playerState = 'red'; // Default state for drawing
+            if (player) {
+                player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
+            }
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPixelArtPlayer();
+            if (player) {
+                drawPixelArtPlayer();
+            }
+            if(gameStarted && !gameOver && !paused){
+                drawItems();
+                drawBullets();
+            }
+        }
+
+        function setupInitialScreen() {
+            gameStarted = false;
+            player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: 0, x: 0, direction: 'right' };
+            playerState = 'red';
+            
+            resizeCanvasAndElements(); // Set initial size and position
+            player.y = canvas.height - (8 * PIXEL_SIZE) - 10; // Set y after height is known
+            resizeCanvasAndElements(); // Redraw with correct y position
 
             startScreen.classList.remove('hidden');
             gameUiBar.classList.add('invisible');
@@ -364,8 +391,8 @@
             gameOverScreen.classList.add('hidden');
         }
 
-        function startGame() {
-            Tone.start(); // Initialize audio context on game start
+        async function startGame() {
+            await Tone.start(); // Ensure audio context is ready.
             gameStarted = true;
             startScreen.classList.add('hidden');
 
@@ -377,7 +404,7 @@
                 mobileControls.classList.remove('hidden');
                 mobileUiBar.classList.remove('hidden');
                 gameUiBar.classList.add('hidden');
-                canvas.height = window.innerHeight - 150; // Adjust canvas height for fullscreen
+                resizeCanvasAndElements();
             } else {
                 gameUiBar.classList.remove('invisible');
             }
@@ -386,13 +413,14 @@
         }
 
         function initGame() {
-            laneWidth = canvas.width / NUM_LANES;
             playerState = 'red';
-            player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: canvas.height - (8 * PIXEL_SIZE) - 10, x: 0, direction: 'right' };
-            player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
             items = []; bullets = []; score = 0; lives = 3; level = 1; gameWon = false; baseItemSpeed = 1.2; gameOver = false; paused = false;
             groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
             groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
+            
+            resizeCanvasAndElements(); // Ensure canvas/player are correct size
+            player.y = canvas.height - (8 * PIXEL_SIZE) - 10;
+            
             updateUI();
             gameOverScreen.classList.add('hidden');
             if (itemSpawnInterval) clearInterval(itemSpawnInterval);
@@ -429,6 +457,7 @@
         }
 
         function drawPixelArtPlayer() {
+            if (!player) return;
             const faceColor = (playerState === 'red') ? '#d32f2f' : '#1976d2';
             const clothesColor = '#808080';
             const art = ['  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', 'C   C', 'C   C'];
@@ -615,27 +644,7 @@
 
             helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
             
-            window.addEventListener('resize', () => {
-                let newWidth = gameContainer.clientWidth;
-                let newHeight = 450;
-                
-                if (isMobile()) {
-                    newWidth = window.innerWidth - 32; // Corresponds to p-4 on each side (1rem * 2)
-                    newHeight = window.innerHeight - 150;
-                }
-
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                
-                laneWidth = canvas.width / NUM_LANES;
-                player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawPixelArtPlayer();
-                if(gameStarted && !gameOver && !paused){
-                    drawItems();
-                    drawBullets();
-                }
-            });
+            window.addEventListener('resize', resizeCanvasAndElements);
             
             // Show initial screen
             setupInitialScreen();
