@@ -299,6 +299,7 @@
         }
 
         function startGame() {
+            Tone.start(); // Initialize audio context on game start
             gameStarted = true;
             startScreen.classList.add('hidden');
             gameUiBar.classList.remove('invisible');
@@ -450,7 +451,6 @@
 
         function shoot() {
             if (gameOver || paused || !gameStarted) return;
-            Tone.start();
             bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, width: 5, height: 10, speed: 8 });
         }
 
