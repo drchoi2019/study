@@ -347,13 +347,17 @@
         const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
 
         function resizeCanvasAndElements() {
-            let newWidth = gameContainer.clientWidth;
-            let newHeight = 450;
-            
-            if (isMobile() && gameStarted) {
-                newWidth = window.innerWidth - 32; 
-                newHeight = window.innerHeight - 150;
-            } else if (isMobile() && !gameStarted) {
+            let newWidth, newHeight;
+
+            if (isMobile()) {
+                if (gameStarted) {
+                    newWidth = window.innerWidth - 32; 
+                    newHeight = window.innerHeight - 150;
+                } else {
+                    newWidth = gameContainer.clientWidth > 0 ? gameContainer.clientWidth : window.innerWidth - 32;
+                    newHeight = 450;
+                }
+            } else {
                 newWidth = gameContainer.clientWidth;
                 newHeight = 450;
             }
@@ -364,6 +368,7 @@
             laneWidth = canvas.width / NUM_LANES;
             if (player) {
                 player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
+                player.y = canvas.height - (8 * PIXEL_SIZE) - 10;
             }
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -381,9 +386,7 @@
             player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: 0, x: 0, direction: 'right' };
             playerState = 'red';
             
-            resizeCanvasAndElements(); // Set initial size and position
-            player.y = canvas.height - (8 * PIXEL_SIZE) - 10; // Set y after height is known
-            resizeCanvasAndElements(); // Redraw with correct y position
+            resizeCanvasAndElements();
 
             startScreen.classList.remove('hidden');
             gameUiBar.classList.add('invisible');
@@ -392,7 +395,9 @@
         }
 
         async function startGame() {
-            await Tone.start(); // Ensure audio context is ready.
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+            }
             gameStarted = true;
             startScreen.classList.add('hidden');
 
@@ -418,8 +423,7 @@
             groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
             groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
             
-            resizeCanvasAndElements(); // Ensure canvas/player are correct size
-            player.y = canvas.height - (8 * PIXEL_SIZE) - 10;
+            resizeCanvasAndElements();
             
             updateUI();
             gameOverScreen.classList.add('hidden');
@@ -625,7 +629,9 @@
             const shootBtn = document.getElementById('shoot-btn');
             
             const mobileAction = (action) => {
-                Tone.start(); // Ensure audio context is started on any mobile interaction
+                if (Tone.context.state !== 'running') {
+                    Tone.start();
+                }
                 action();
             };
 
