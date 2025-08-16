@@ -114,7 +114,7 @@
                     <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
                     <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
                     <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
-                    <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
+                    <li><a href="lwdh_variations.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
                     <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
                 </ul>
@@ -207,10 +207,10 @@
         async function checkAndNavigate(event) {
             event.preventDefault();
             const originalUrl = event.currentTarget.href;
-            const baseUrl = originalUrl.split('?')[0]; // URL without parameters
+            const urlToCheck = originalUrl.split('?')[0];
 
             try {
-                const response = await fetch(baseUrl, { method: 'HEAD' });
+                const response = await fetch(urlToCheck, { method: 'HEAD' });
                 if (response.ok) {
                     window.location.href = originalUrl;
                 } else {
@@ -223,15 +223,7 @@
         }
 
         function setLanguage(lang) {
-            if (lang !== currentLanguage) {
-                currentLanguage = lang === 'ko' ? 'en' : 'ko';
-                toggleLanguage();
-            }
-        }
-
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === 'en' ? 'ko' : 'en';
-
+            currentLanguage = lang;
             const elementsToTranslate = document.querySelectorAll('[data-en]');
             elementsToTranslate.forEach(el => {
                 el.textContent = el.dataset[currentLanguage];
@@ -243,7 +235,7 @@
 
                 if (originalHref.includes('lwdh_variations.html')) {
                     link.href = `${originalHref}?lang=${currentLanguage}`;
-                    return; 
+                    return;
                 }
 
                 const baseHref = originalHref.replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
@@ -258,6 +250,11 @@
                      link.href = `${baseHref}.html`;
                 }
             });
+        }
+
+        function toggleLanguage() {
+            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
         }
         
         function initializeVisitorCount() {
