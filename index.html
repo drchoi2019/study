@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive TCM</title>
+    <title>Interactive TCM with Mini Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
     <style>
+        /* --- Main Page Styles --- */
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #F7F3EF;
             color: #333;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         h1, h2, .font-serif {
             font-family: 'Cormorant Garamond', serif;
@@ -27,6 +31,26 @@
         .nav-link:hover {
             background-color: #EAE8E1;
             color: #000;
+        }
+
+        /* --- Embedded Game Styles --- */
+        #gameCanvas {
+            background-color: #F7F3EF; /* Match page background for seamless look */
+            display: block;
+            touch-action: none;
+            image-rendering: pixelated;
+        }
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            border-radius: 10px;
+            z-index: 20;
+            text-align: center;
         }
     </style>
 </head>
@@ -46,7 +70,7 @@
     </header>
 
     <!-- Main Navigation Menu -->
-    <nav id="main-nav" class="max-w-5xl mx-auto px-10 pb-16">
+    <nav id="main-nav" class="max-w-5xl mx-auto px-10 pb-8">
         <div class="grid md:grid-cols-3 gap-10">
             <!-- Theory -->
             <div class="p-6">
@@ -88,6 +112,59 @@
         </div>
     </nav>
 
+    <!-- ★★★★★ Fully Integrated Mini Game Section (Position adjusted) ★★★★★ -->
+    <section id="mini-game-section" class="max-w-sm mx-auto px-4 pb-16 flex flex-col items-center">
+        
+        <div id="game-container" class="w-full mx-auto overflow-hidden relative flex flex-col">
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- Start Game Button -->
+            <div id="start-screen" class="absolute inset-0 flex justify-center items-center z-10">
+                <button id="start-button" class="px-6 py-3 bg-[#B9A38D] text-white hover:bg-[#A9937D] rounded-lg text-lg font-semibold transition-colors">Start Game</button>
+            </div>
+
+            <!-- Game Messages (remain positioned over canvas) -->
+            <div id="game-message" class="message-box hidden"><p id="message-text" class="text-2xl font-bold mb-4"></p><button id="message-close-button" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Continue</button></div>
+            <div id="help-modal" class="message-box hidden w-11/12 max-w-sm">
+                <h2 class="text-2xl font-bold mb-4">How to Play</h2>
+                <div class="text-left space-y-3 text-sm">
+                    <ul class="space-y-2">
+                        <li><strong>Heat Pattern (Red Face):</strong> Eat COLD herbs, shoot HOT herbs.</li>
+                        <li><strong>Cold Pattern (Blue Face):</strong> Eat HOT herbs, shoot COLD herbs.</li>
+                    </ul>
+                    <p><strong class="text-yellow-400">Controls:</strong></p>
+                    <ul class="list-disc list-inside pl-2">
+                        <li><strong>Move:</strong> ← → Arrow Keys</li>
+                        <li><strong>Shoot:</strong> Spacebar</li>
+                    </ul>
+                </div>
+                <button id="help-close-button" class="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Close</button>
+            </div>
+            <!-- Game Over Screen (Minimal Box Style) -->
+            <div id="game-over-screen" class="hidden absolute inset-0 flex flex-col justify-center items-center z-10">
+                <div class="bg-[#EAE8E1] p-6 rounded-lg shadow-md text-center text-gray-800">
+                    <h2 class="text-3xl font-bold mb-2 font-serif">Game Over</h2>
+                    <p class="text-lg mb-4">Final Score: <span id="final-score">0</span></p>
+                    <button id="restart-button" class="px-5 py-2 bg-[#B9A38D] text-white hover:bg-[#A9937D] rounded-lg text-base font-semibold transition-colors">Restart</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game UI Bar (Below Canvas) -->
+        <div id="game-ui-bar" class="w-full mt-2 flex justify-between items-center text-gray-600 invisible">
+            <div>
+                <p id="player-status" class="text-xs font-semibold">Status: Heat</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+                <p>Score: <span id="score" class="font-bold">0</span></p>
+                <p>Level: <span id="level" class="font-bold">1</span></p>
+                <p>Lives: <span id="lives" class="font-bold">3</span></p>
+                <button id="help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
+            </div>
+        </div>
+
+    </section>
+
     <!-- Main Footer -->
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
         <div id="visitor-counter" class="mb-4 text-xs text-gray-400">
@@ -98,50 +175,39 @@
     </footer>
 
     <script>
+        // --- Main Page Script ---
         let currentLanguage = 'en';
 
-        // Function to check if a file exists before navigating
         async function checkAndNavigate(event) {
-            event.preventDefault(); // Stop the link from navigating immediately
+            event.preventDefault();
             const url = event.currentTarget.href;
-
             try {
-                // Use HEAD request for efficiency, it only fetches headers
                 const response = await fetch(url, { method: 'HEAD' });
                 if (response.ok) {
-                    // If the file exists (status 200-299), navigate to the page
                     window.location.href = url;
                 } else {
-                    // If the file doesn't exist (e.g., 404), show a message
-                    alert('콘텐츠 준비중입니다.');
+                    alert('Content is being prepared.');
                 }
             } catch (error) {
-                // Handle network errors or other fetch issues
                 console.error('Navigation check failed:', error);
-                alert('페이지를 확인할 수 없습니다. 네트워크 연결을 확인해주세요.');
+                alert('Could not verify the page. Please check your network connection.');
             }
         }
 
         function toggleLanguage() {
             currentLanguage = currentLanguage === 'en' ? 'ko' : 'en';
-
-            // Translate all elements with data attributes
             const elementsToTranslate = document.querySelectorAll('[data-en]');
             elementsToTranslate.forEach(el => {
                 el.textContent = el.dataset[currentLanguage];
             });
-
-            // Update all links
             const linksToUpdate = document.querySelectorAll('a.nav-link');
             linksToUpdate.forEach(link => {
                 const baseHref = link.getAttribute('href').replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
-                
                 if (currentLanguage === 'ko') {
-                    // Handle history.html exception
                     if (baseHref === 'history') {
-                         link.href = 'history_kor.html';
+                        link.href = 'history_kor.html';
                     } else {
-                         link.href = `${baseHref}_k.html`;
+                        link.href = `${baseHref}_k.html`;
                     }
                 } else {
                     link.href = `${baseHref}.html`;
@@ -149,25 +215,20 @@
             });
         }
         
-        // A more robust way to handle the daily counter
         function initializeVisitorCount() {
-             // --- Total Visitors ---
             let totalVisitors = localStorage.getItem('totalVisitors');
             if (totalVisitors === null) {
                 totalVisitors = 1;
             } else {
-                 if (!sessionStorage.getItem('totalVisitCounted')) {
+                if (!sessionStorage.getItem('totalVisitCounted')) {
                     totalVisitors = parseInt(totalVisitors) + 1;
                     sessionStorage.setItem('totalVisitCounted', 'true');
-                 }
+                }
             }
             localStorage.setItem('totalVisitors', totalVisitors.toString());
-
-            // --- Today's Visitors ---
             const todayStr = new Date().toISOString().split('T')[0];
             let dailyData = localStorage.getItem('dailyData');
             dailyData = dailyData ? JSON.parse(dailyData) : {};
-
             if (dailyData.date !== todayStr) {
                 dailyData = { date: todayStr, count: 1 };
             } else {
@@ -177,18 +238,268 @@
                 }
             }
             localStorage.setItem('dailyData', JSON.stringify(dailyData));
-
-            // --- Display Counts ---
             document.getElementById('today-count').textContent = dailyData.count;
             document.getElementById('total-count').textContent = totalVisitors;
         }
 
+        // --- Embedded Game Script ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const livesEl = document.getElementById('lives');
+        const levelEl = document.getElementById('level');
+        const playerStatusEl = document.getElementById('player-status');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreEl = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-button');
+        const gameMessageEl = document.getElementById('game-message');
+        const messageTextEl = document.getElementById('message-text');
+        const messageCloseButton = document.getElementById('message-close-button');
+        const helpButton = document.getElementById('help-button');
+        const helpModal = document.getElementById('help-modal');
+        const helpCloseButton = document.getElementById('help-close-button');
+        const gameContainer = document.getElementById('game-container');
+        const startScreen = document.getElementById('start-screen');
+        const startButton = document.getElementById('start-button');
+        const gameUiBar = document.getElementById('game-ui-bar');
+        
+        canvas.width = gameContainer.clientWidth;
+        canvas.height = 450;
 
-        // Run functions on page load
+        // English Pinyin Herb Lists
+        let groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang']; // Hot Herbs
+        let groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai']; // Cold Herbs
+        const groupA_level2 = ['xixin', 'banxia', 'chuanxiong', 'duhuo', 'kuandonghua', 'muxiang', 'nanxing', 'jiegeng', 'zisuye', 'qianghuo', 'weilingxian', 'wujiapi', 'baijiezi', 'lurong', 'xianmao'];
+        const groupB_level2 = ['niubangzi', 'dandouchi', 'lugen', 'zhuru', 'kushen', 'jinyinhua', 'lianqiao', 'banlangen', 'dahuang', 'fanxieye', 'daji', 'zexie', 'huashi', 'beimu', 'muli', 'chuanlianzi'];
+
+        const NUM_LANES = 4;
+        let laneWidth, player, items, bullets, score, lives, playerState, gameOver, itemSpawnInterval, stateChangeInterval, level, gameWon, baseItemSpeed, paused, gameStarted;
+        const PIXEL_SIZE = 6;
+
+        const catchSound = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 0.1 } }).toDestination();
+        const fmSynth = new Tone.FMSynth({ harmonicity: 8, modulationIndex: 20, detune: 0, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.5, sustain: 0.1, release: 1 }, modulation: { type: "square" }, modulationEnvelope: { attack: 0.002, decay: 0.2, sustain: 0, release: 0.2 } }).toDestination();
+        const mistakeSound = new Tone.Synth({ oscillator: { type: 'square' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.2 } }).toDestination();
+
+        let lastMistakeSoundTime = 0, lastCatchSoundTime = 0, lastDestroySoundTime = 0;
+        const soundCooldown = 0.1;
+
+        function setupInitialScreen() {
+            gameStarted = false;
+            laneWidth = canvas.width / NUM_LANES;
+            player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: canvas.height - (8 * PIXEL_SIZE) - 10, x: 0, direction: 'right' };
+            player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
+            playerState = 'red'; // Default state for drawing
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPixelArtPlayer();
+
+            startScreen.classList.remove('hidden');
+            gameUiBar.classList.add('invisible');
+            gameOverScreen.classList.add('hidden');
+        }
+
+        function startGame() {
+            gameStarted = true;
+            startScreen.classList.add('hidden');
+            gameUiBar.classList.remove('invisible');
+            initGame();
+        }
+
+        function initGame() {
+            laneWidth = canvas.width / NUM_LANES;
+            playerState = 'red';
+            player = { currentLane: Math.floor(NUM_LANES / 2), width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, y: canvas.height - (8 * PIXEL_SIZE) - 10, x: 0, direction: 'right' };
+            player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
+            items = []; bullets = []; score = 0; lives = 3; level = 1; gameWon = false; baseItemSpeed = 1.2; gameOver = false; paused = false;
+            groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
+            groupB = ['shigao', 'huanglian', 'huangqin', 'bohe', 'juhua', 'sangye', 'zhimu', 'huangbai'];
+            updateUI();
+            playerStatusEl.textContent = `Status: Heat`;
+            gameOverScreen.classList.add('hidden');
+            if (itemSpawnInterval) clearInterval(itemSpawnInterval);
+            if (stateChangeInterval) clearInterval(stateChangeInterval);
+            itemSpawnInterval = setInterval(spawnItem, 1500);
+            stateChangeInterval = setInterval(togglePlayerState, 20000);
+            gameLoop();
+        }
+
+        function pauseGame() { paused = true; }
+        function resumeGame() { paused = false; gameLoop(); }
+
+        function togglePlayerState() {
+            if (gameOver || paused) return;
+            playerState = (playerState === 'red') ? 'blue' : 'red';
+            playerStatusEl.textContent = `Status: ${playerState === 'red' ? 'Heat' : 'Cold'}`;
+            items = []; bullets = [];
+        }
+
+        function spawnItem() {
+            if (gameOver || paused) return;
+            const occupiedLanes = items.filter(item => item.y < item.height * 3).map(item => item.lane);
+            let availableLanes = [];
+            for (let i = 0; i < NUM_LANES; i++) { if (!occupiedLanes.includes(i)) availableLanes.push(i); }
+            if (availableLanes.length === 0) return;
+            const lane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
+            const type = Math.random() < 0.5 ? 'A' : 'B';
+            const currentGroup = type === 'A' ? groupA : groupB;
+            const text = currentGroup[Math.floor(Math.random() * currentGroup.length)];
+            ctx.font = '16px sans-serif'; // smaller font for pinyin
+            const textWidth = ctx.measureText(text).width;
+            const xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
+            items.push({ x: xPos, y: -20, text: text, type: type, width: textWidth, height: 16, speed: baseItemSpeed, lane: lane });
+        }
+
+        function drawPixelArtPlayer() {
+            const faceColor = (playerState === 'red') ? '#d32f2f' : '#1976d2';
+            const clothesColor = '#808080';
+            const art = ['  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', 'C   C', 'C   C'];
+            for (let r = 0; r < art.length; r++) {
+                for (let c = 0; c < art[r].length; c++) {
+                    if (art[r][c] === 'F') {
+                        ctx.fillStyle = faceColor;
+                        ctx.fillRect(player.x + c * PIXEL_SIZE, player.y + r * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                    } else if (art[r][c] === 'C') {
+                        ctx.fillStyle = clothesColor;
+                        ctx.fillRect(player.x + c * PIXEL_SIZE, player.y + r * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                    }
+                }
+            }
+        }
+
+        function drawItems() { ctx.font = '16px sans-serif'; ctx.fillStyle = '#333'; items.forEach(item => ctx.fillText(item.text, item.x, item.y)); }
+        function drawBullets() { bullets.forEach(bullet => { ctx.fillStyle = 'orange'; ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
+
+        function updateGame() {
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i]; if (!bullet) continue; bullet.y -= bullet.speed;
+                if (bullet.y < 0) { bullets.splice(i, 1); continue; }
+                let bulletHit = false;
+                for (let j = items.length - 1; j >= 0; j--) {
+                    const item = items[j]; if (!item) continue;
+                    if (bullet.x < item.x + item.width && bullet.x + bullet.width > item.x && bullet.y < item.y + item.height && bullet.y + bullet.height > item.y) {
+                        handleBulletItemCollision(item, j, i); bulletHit = true; break;
+                    }
+                }
+                if (bulletHit) continue;
+            }
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i]; if (!item) continue; item.y += item.speed;
+                if (item.y > canvas.height) {
+                    playMistakeSound(); lives--; updateUI(); items.splice(i, 1); continue;
+                }
+                if (player.x < item.x + item.width && player.x + player.width > item.x && player.y < item.y + item.height && player.y + player.height > item.y) {
+                    handlePlayerItemCollision(item, i); break;
+                }
+            }
+        }
+
+        function playMistakeSound() { const now = Tone.now(); if (now - lastMistakeSoundTime > soundCooldown) { mistakeSound.triggerAttackRelease('C3', '4n'); lastMistakeSoundTime = now; } }
+        function playCatchSound() { const now = Tone.now(); if (now - lastCatchSoundTime > soundCooldown) { catchSound.triggerAttackRelease('C5', '8n'); lastCatchSoundTime = now; } }
+        function playDestroySound() { const now = Tone.now(); if (now - lastDestroySoundTime > soundCooldown) { fmSynth.triggerAttackRelease('C1', '1n'); lastDestroySoundTime = now; } }
+
+        function handlePlayerItemCollision(item, itemIndex) {
+            const correctCatch = (playerState === 'red' && item.type === 'B') || (playerState === 'blue' && item.type === 'A');
+            if (correctCatch) { score += 10; playCatchSound(); } else { lives--; playMistakeSound(); }
+            items.splice(itemIndex, 1); updateUI();
+        }
+
+        function handleBulletItemCollision(item, itemIndex, bulletIndex) {
+            const correctShot = (playerState === 'red' && item.type === 'A') || (playerState === 'blue' && item.type === 'B');
+            if (correctShot) { score += 5; playDestroySound(); } else { lives--; playMistakeSound(); }
+            items.splice(itemIndex, 1); bullets.splice(bulletIndex, 1); updateUI();
+        }
+
+        function showMessage(text, showButton = false) {
+            pauseGame(); messageTextEl.innerHTML = text;
+            messageCloseButton.style.display = showButton ? 'inline-block' : 'none';
+            gameMessageEl.classList.remove('hidden');
+        }
+
+        function checkLevelUp() {
+            if (level === 1 && score >= 150) {
+                level = 2; baseItemSpeed = 1.5;
+                groupA = groupA.concat(groupA_level2); groupB = groupB.concat(groupB_level2);
+                showMessage("Level 2!<br><small class='text-lg'>More herbs will appear!</small>", true);
+            }
+            if (!gameWon && score >= 500) {
+                gameWon = true; showMessage("Congratulations!", false);
+                setTimeout(() => { gameMessageEl.classList.add('hidden'); resumeGame(); }, 3000);
+            }
+        }
+
+        function updateUI() {
+            scoreEl.textContent = score; livesEl.textContent = lives; levelEl.textContent = level;
+            checkLevelUp();
+            if (lives <= 0) { endGame(); }
+        }
+
+        function endGame() {
+            gameOver = true;
+            clearInterval(itemSpawnInterval);
+            clearInterval(stateChangeInterval);
+            finalScoreEl.textContent = score;
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        function gameLoop() {
+            if (gameOver || paused || !gameStarted) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            updateGame(); drawPixelArtPlayer(); drawItems(); drawBullets();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function shoot() {
+            if (gameOver || paused || !gameStarted) return;
+            Tone.start();
+            bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, width: 5, height: 10, speed: 8 });
+        }
+
+        function movePlayer(direction) {
+            if (paused || !gameStarted) return;
+            player.direction = direction;
+            if (direction === 'left' && player.currentLane > 0) { player.currentLane--; }
+            else if (direction === 'right' && player.currentLane < NUM_LANES - 1) { player.currentLane++; }
+            player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
+            
+            if (!gameStarted || paused) {
+                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                 drawPixelArtPlayer();
+            }
+        }
+
+        // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', function() {
             initializeVisitorCount();
-        });
 
+            // Setup game listeners
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', initGame);
+
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'ArrowLeft') movePlayer('left');
+                if (e.code === 'ArrowRight') movePlayer('right');
+                if (e.code === 'Space') { e.preventDefault(); shoot(); }
+            });
+            
+            messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
+            helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
+            helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
+            
+            window.addEventListener('resize', () => {
+                canvas.width = gameContainer.clientWidth;
+                laneWidth = canvas.width / NUM_LANES;
+                player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawPixelArtPlayer();
+                if(gameStarted && !gameOver && !paused){
+                    drawItems();
+                    drawBullets();
+                }
+            });
+            
+            // Show initial screen
+            setupInitialScreen();
+        });
     </script>
 
 </body>
