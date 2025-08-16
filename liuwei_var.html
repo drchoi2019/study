@@ -389,3 +389,256 @@
     </script>
 </body>
 </html>
+" and am asking a query about/based on this code below.
+Instructions to follow:
+  * Don't output/edit the document if the query is Direct/Simple. For example, if the query asks for a simple explanation, output a direct answer.
+  * Make sure to **edit** the document if the query shows the intent of editing the document, in which case output the entire edited document, **not just that section or the edits**.
+    * Don't output the same document/empty document and say that you have edited it.
+    * Don't change unrelated code in the document.
+  * Don't output  and  in your final response.
+  * Any references like "this" or "selected code" refers to the code between  and  tags.
+  * Just acknowledge my request in the introduction.
+  * Make sure to refer to the document as "Canvas" in your response.
+
+한글버전도 똑 같이 링크되게하고, 제목 검은색과 고동색 중간정도 약간 연하게; <!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>금원사대가 (金元四大家)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 기본 폰트 및 색상 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF; /* 요청하신 배경색 */
+            color: #4A4441; /* 가독성을 위한 부드러운 텍스트 색상 */
+        }
+        /* 제목용 세리프 폰트 설정 */
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        /* 네비게이션 아이템(사진 메뉴) 스타일 */
+        .nav-item {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        /* 마우스를 올렸을 때 효과 */
+        .nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        /* 활성화된 메뉴 아이템 스타일 (테두리 효과) */
+        .nav-item.active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            --tw-ring-color: #A07C5B; /* 활성 테두리 색상 */
+            --tw-ring-offset-width: 4px;
+            --tw-ring-offset-color: #F7F3EF;
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+            border-width: 0;
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+        }
+        /* 탭 컨텐츠 스타일 */
+        .tab-content {
+            background-color: #FFFFFF;
+            border: 1px solid #EAE0D5;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<!-- 페이지 상단 메뉴 -->
+<header class="w-full max-w-6xl mx-auto p-4 flex justify-between items-center">
+    <a href="index.html" class="text-lg font-serif font-semibold hover:text-amber-800 transition-colors">
+        &larr; Home
+    </a>
+    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+        Kor / Eng
+    </a>
+</header>
+
+<div class="container mx-auto p-4 md:p-8 flex-grow">
+
+    <!-- 페이지 제목 및 설명 -->
+    <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-[#6B4F4B] mb-3">금원사대가 (金元四大家)</h1>
+        <p class="text-lg text-stone-600 max-w-3xl mx-auto">중국 의학사의 흐름을 바꾼 네 명의 거장과 그들의 학파를 탐구합니다.</p>
+        <p class="mt-4 text-md font-medium text-stone-700">by Hyungsuk Choi, PHD</p>
+        <p class="mt-4 text-md text-stone-600 max-w-3xl mx-auto text-left leading-relaxed">
+            금원 시대의 의학적 혁신과 발전은 중국 의학 역사상 가장 중요한 변화 중 하나로 여겨집니다. 이 시대를 이끌었던 의가들은 대부분 유의(儒醫)라 불리는 유학자들이었습니다. 몽골의 지배를 받기를 거부했던 이 학자들은 새로운 의학 사상을 발전시키는 데 헌신했습니다. 그들의 지식과 관점을 바탕으로 다양한 학파가 설립되었으며, 여기서는 그중 가장 중요한 네 학파를 소개합니다.
+        </p>
+    </header>
+
+    <!-- 네비게이션 (사진 바둑판 메뉴) -->
+    <nav id="navigation" class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-12 max-w-5xl mx-auto">
+        <!-- 유완소 -->
+        <a data-tab="liu" class="nav-item group active bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="four_m_1.png" alt="유완소" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x600/F7F3EF/6B4F4B?text=Liu+Wansu';">
+            <div class="p-4 text-center">
+                <strong class="text-lg font-semibold text-stone-800">유완소</strong><br>
+                <span class="text-sm text-stone-500">한강파 (寒凉派)</span>
+            </div>
+        </a>
+        <!-- 장종정 -->
+        <a data-tab="zhang" class="nav-item group bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="four_m_2.png" alt="장종정" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x600/F7F3EF/6B4F4B?text=Zhang+Congzheng';">
+            <div class="p-4 text-center">
+                <strong class="text-lg font-semibold text-stone-800">장종정</strong><br>
+                <span class="text-sm text-stone-500">공하파 (攻下派)</span>
+            </div>
+        </a>
+        <!-- 주단계 -->
+        <a data-tab="zhu" class="nav-item group bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="four_m_3.png" alt="주단계" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x600/F7F3EF/6B4F4B?text=Zhu+Danxi';">
+            <div class="p-4 text-center">
+                <strong class="text-lg font-semibold text-stone-800">주단계</strong><br>
+                <span class="text-sm text-stone-500">자음파 (滋陰派)</span>
+            </div>
+        </a>
+        <!-- 이고 -->
+        <a data-tab="li" class="nav-item group bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="four_m_4.png" alt="이고" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x600/F7F3EF/6B4F4B?text=Li+Gao';">
+            <div class="p-4 text-center">
+                <strong class="text-lg font-semibold text-stone-800">이고</strong><br>
+                <span class="text-sm text-stone-500">보토파 (補土派)</span>
+            </div>
+        </a>
+    </nav>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main id="content-container" class="max-w-5xl mx-auto">
+        <div id="liu-content" class="tab-content p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">한량파 (寒凉派): 유완소</h2>
+            <div class="prose max-w-none text-stone-700 leading-relaxed">
+                <p class="lead">이 섹션에서는 질병이 궁극적으로 병적인 화(火)로 나타난다고 주장한 유완소의 철학을 자세히 설명합니다. 송나라 시대의 온보법(溫補法)을 비판한 그의 접근 방식은 후대 온병학파(溫病學派)의 기초를 마련했습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">핵심 철학</h3>
+                <p>유완소는 병을 유발하는 한사(寒邪)조차 열(熱)로 변할 수 있다고 주장했습니다. 따라서 차갑고 서늘한 성질의 약재가 그의 치료법의 중심이었습니다. 이는 당시 주류였던 온보(溫補) 및 보익(補益) 치료법에서 중요한 전환이었습니다. 그의 방법은 체질이 튼튼한 환자에게 가장 적합한 것으로 간주되었습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">오해의 교정</h3>
+                <p>그의 학파는 영향력이 컸지만, 후대에는 종종 극도로 차가운 약재만을 사용한다고 오해받았습니다. 그의 저서인 『선명론방(宣明論方)』을 분석해 보면, 처방의 66%가 한열(寒熱)을 배합하고, 21%는 온열(溫熱) 위주이며, 단 13%만이 한량(寒凉) 위주로 구성되어 있어 훨씬 미묘하고 균형 잡힌 접근법을 사용했음을 알 수 있습니다.</p>
+            </div>
+        </div>
+
+        <div id="zhang-content" class="tab-content hidden p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">공하파 (攻下派): 장종정</h2>
+            <div class="prose max-w-none text-stone-700 leading-relaxed">
+                <p class="lead">이 섹션에서는 유완소의 제자인 장종정의 공격적인 '공하(攻下)' 철학을 탐구합니다. 그는 질병이 외부 병원체, 즉 '사기(邪氣)'의 침입으로 인해 발생하며, 치료는 이를 제거하는 데 중점을 두어야 한다고 믿었습니다. 그의 핵심 교리를 살펴보고, 그의 사상과 후대 일본 한방의학의 고방파(古方派) 사이의 놀라운 유사점을 확인할 수 있습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">핵심 철학</h3>
+                <p>장종정은 대부분의 질병이 외인성 병원체의 침입으로 발생한다고 주장했습니다. 그는 강한 '정기(正氣, 신체의 방어력)'가 질병을 예방한다는 믿음에 도전했습니다. 대신, 그는 '사기(邪氣, 병원체)'를 제거하면 정기가 자연스럽게 회복된다고 주장했습니다. 그의 주된 초점은 이러한 해로운 요인들을 몸에서 몰아내는 것이었습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">일본 한방(Kampo)과의 비교</h3>
+                <p>장종정의 관점은 일본의 고방파(古方派)와 매우 유사합니다. 다음 비교는 치료에 대한 그들의 급진적인 견해의 유사성을 보여줍니다.</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div>
+                        <h4 class="font-bold text-[#654321] mb-2">장종정의 교리</h4>
+                        <blockquote class="border-l-4 border-[#A07C5B] pl-4 italic text-stone-600">
+                            "사기를 제거하면 정기는 저절로 강해진다... 약초로 사기를 몰아내고, 음식과 생활 습관 개선으로 보하라."
+                        </blockquote>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-[#654321] mb-2">요시마스 토도 (고방파)</h4>
+                         <blockquote class="border-l-4 border-[#A07C5B] pl-4 italic text-stone-600">
+                            "사람은 오직 병만을 치료할 뿐, 하늘이 돌보는 정기를 치료하는 것이 아니다... 모든 약은 독이며, 보할 수 없다."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="zhu-content" class="tab-content hidden p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">자음파 (滋陰派): 주단계</h2>
+            <div class="prose max-w-none text-stone-700 leading-relaxed">
+                <p class="lead">이 섹션에서는 네 대가 중 가장 후대의 인물인 주단계의 사상을 다룹니다. 그의 업적은 선대 학자들의 사상을 종합한 것입니다. 그는 열을 내리는 데 동의했지만, 그 원인을 독특하게 내부의 음(陰) 부족으로 보았습니다. 그의 핵심 철학과 보(補)와 사(瀉)를 결합한 치료법을 살펴보세요.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">핵심 철학</h3>
+                <p>주단계의 유명한 격언은 "양은 항상 남아돌고, 음은 항상 부족하다(陽常有餘, 陰常不足)"였습니다. 그는 많은 열 관련 질환의 근본 원인이 외부 병원체가 아니라 내부의 음(陰) 부족이라고 믿었습니다. 따라서 그의 치료는 근본적으로 열을 해결하기 위해 신체의 음, 특히 신음(腎陰)을 보충하는 것을 목표로 했습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">치료 접근법</h3>
+                <p>그의 처방은 종종 보하는 방법과 사하는 방법을 결합했습니다. 일반적인 전략은 신음을 보충하면서 동시에 '상화(相火, 허증에서 비롯된 병적인 열)'를 끄는 처방을 사용하는 것이었습니다.</p>
+            </div>
+        </div>
+
+        <div id="li-content" class="tab-content hidden p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-[#8A5A44] mb-4">보토파 (補土派): 이고</h2>
+            <div class="prose max-w-none text-stone-700 leading-relaxed">
+                <p class="lead">이 섹션은 대부분의 질병이 후천적 에너지의 기반인 비위(脾胃) 계통의 손상에서 비롯된다고 주장한 이고에 초점을 맞춥니다. 그가 이러한 손상의 원인이라고 믿었던 세 가지 주요 요인과 그의 전체론적 치료 접근법을 알아보세요. 이는 일본의 후세파(後世派)와 복진(腹診) 발전에 큰 영향을 미쳤습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">핵심 철학</h3>
+                <p>이고의 관점은 대부분의 질병이 비위 손상에서 비롯된다는 것이었습니다. 그는 '중기하함(中氣下陷)'을 중요한 문제로 파악하고, 이 기운을 끌어올리는 치료를 주장했습니다. 그의 접근 방식은 신체의 소화 및 대사 시스템의 전반적인 건강과 균형을 강조하는 전체론적인 것이었습니다.</p>
+                <h3 class="text-xl font-semibold text-[#654321] mt-6">질병의 원인</h3>
+                <p>그는 비위 손상의 원인을 부적절한 식단, 과로, 정신적 스트레스라는 세 가지 주요 요인으로 보았습니다. 그의 가장 유명한 처방인 보중익기탕(補中益氣湯)은 이러한 병리를 바로잡는 그의 접근법을 잘 보여줍니다.</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- 페이지 하단 푸터 -->
+<footer class="text-center py-8 mt-12 text-sm text-stone-500">
+    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // 언어 전환 기능
+    async function toggleLanguage(event) {
+        event.preventDefault();
+        const currentPath = window.location.pathname;
+        const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+        let targetFile;
+
+        if (currentFile.includes('_k.html') || currentFile.includes('_kor.html')) {
+            targetFile = currentFile.replace('_k.html', '.html').replace('_kor.html', '.html');
+            window.location.href = targetFile;
+            return;
+        } else {
+            if (currentFile.includes('history.html')) {
+                targetFile = 'history_kor.html';
+            } else {
+                targetFile = currentFile.replace('.html', '_k.html');
+            }
+        }
+        
+        try {
+            const response = await fetch(targetFile, { method: 'HEAD', cache: 'no-cache' });
+            if (response.ok) {
+                window.location.href = targetFile;
+            } else {
+                alert('준비중입니다.');
+            }
+        } catch (error) {
+            console.error('페이지 확인 중 오류 발생:', error);
+            alert('준비중입니다.');
+        }
+    }
+
+    // 탭 전환 기능
+    document.addEventListener('DOMContentLoaded', function () {
+        const navigation = document.getElementById('navigation');
+        const contentContainer = document.getElementById('content-container');
+        const navItems = navigation.querySelectorAll('.nav-item');
+        const contents = contentContainer.querySelectorAll('.tab-content');
+
+        function showTab(tabId) {
+            contents.forEach(content => {
+                content.classList.toggle('hidden', content.id !== `${tabId}-content`);
+            });
+            navItems.forEach(item => {
+                item.classList.toggle('active', item.dataset.tab === tabId);
+            });
+        }
+
+        navigation.addEventListener('click', function(e) {
+            const navItem = e.target.closest('.nav-item');
+            if (navItem) {
+                e.preventDefault(); // a 태그의 기본 동작 방지
+                const tabId = navItem.dataset.tab;
+                showTab(tabId);
+            }
+        });
+        
+        // 초기 탭 로드
+        showTab('liu');
+    });
+</script>
+
+</body>
+</ht
