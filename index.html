@@ -52,6 +52,35 @@
             z-index: 20;
             text-align: center;
         }
+        /* --- Mobile Fullscreen Styles --- */
+        .fullscreen-game {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #F7F3EF;
+            z-index: 50;
+            padding: 1rem;
+            padding-bottom: 100px; /* Space for mobile controls */
+        }
+        .touch-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            user-select: none;
+            background-color: #D1C7BC;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .touch-button.shoot {
+            background-color: #B9A38D;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -165,6 +194,13 @@
 
     </section>
 
+    <!-- Mobile Touch Controls (Initially hidden) -->
+    <div id="mobile-controls" class="hidden fixed bottom-5 left-0 right-0 w-full z-50 flex justify-around items-center px-4">
+        <button id="left-btn" class="touch-button">&#8592;</button>
+        <button id="shoot-btn" class="touch-button shoot">Shoot</button>
+        <button id="right-btn" class="touch-button">&#8594;</button>
+    </div>
+
     <!-- Main Footer -->
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
         <div id="visitor-counter" class="mb-4 text-xs text-gray-400">
@@ -262,6 +298,7 @@
         const startScreen = document.getElementById('start-screen');
         const startButton = document.getElementById('start-button');
         const gameUiBar = document.getElementById('game-ui-bar');
+        const mobileControls = document.getElementById('mobile-controls');
         
         canvas.width = gameContainer.clientWidth;
         canvas.height = 450;
@@ -284,6 +321,8 @@
         let lastMistakeSoundTime = 0, lastSuccessSoundTime = 0;
         const soundCooldown = 0.05;
 
+        const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
+
         function setupInitialScreen() {
             gameStarted = false;
             laneWidth = canvas.width / NUM_LANES;
@@ -304,6 +343,16 @@
             gameStarted = true;
             startScreen.classList.add('hidden');
             gameUiBar.classList.remove('invisible');
+
+            if (isMobile()) {
+                document.getElementById('main-header').classList.add('hidden');
+                document.getElementById('main-nav').classList.add('hidden');
+                document.getElementById('main-footer').classList.add('hidden');
+                document.getElementById('mini-game-section').classList.add('fullscreen-game');
+                mobileControls.classList.remove('hidden');
+                canvas.height = window.innerHeight * 0.7; // Adjust canvas height for fullscreen
+            }
+
             initGame();
         }
 
@@ -395,7 +444,6 @@
             }
         }
         
-        // --- Sound Playback Functions (Re-mapped) ---
         function playMistakeSound() { 
             const now = Tone.now(); 
             if (now - lastMistakeSoundTime > soundCooldown) { 
@@ -497,12 +545,25 @@
                 if (e.code === 'Space') { e.preventDefault(); shoot(); }
             });
             
+            // Mobile controls
+            const leftBtn = document.getElementById('left-btn');
+            const rightBtn = document.getElementById('right-btn');
+            const shootBtn = document.getElementById('shoot-btn');
+            leftBtn.addEventListener('click', () => movePlayer('left'));
+            rightBtn.addEventListener('click', () => movePlayer('right'));
+            shootBtn.addEventListener('click', (e) => { e.preventDefault(); shoot(); });
+
             messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
             helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
             helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
             
             window.addEventListener('resize', () => {
                 canvas.width = gameContainer.clientWidth;
+                if (!isMobile()) {
+                    canvas.height = 450;
+                } else {
+                    canvas.height = window.innerHeight * 0.7;
+                }
                 laneWidth = canvas.width / NUM_LANES;
                 player.x = (laneWidth * player.currentLane) + (laneWidth / 2) - (player.width / 2);
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
