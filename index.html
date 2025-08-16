@@ -129,8 +129,8 @@
                 <h2 class="text-2xl font-bold mb-4">How to Play</h2>
                 <div class="text-left space-y-3 text-sm">
                     <ul class="space-y-2">
-                        <li><strong>Heat Pattern (Red Face):</strong> Eat COLD herbs, shoot HOT herbs.</li>
-                        <li><strong>Cold Pattern (Blue Face):</strong> Eat HOT herbs, shoot COLD herbs.</li>
+                        <li><strong>Heat Pattern (Red Hat):</strong> Eat COLD herbs, shoot HOT herbs.</li>
+                        <li><strong>Cold Pattern (Blue Hat):</strong> Eat HOT herbs, shoot COLD herbs.</li>
                     </ul>
                     <p><strong class="text-yellow-400">Controls:</strong></p>
                     <ul class="list-disc list-inside pl-2">
@@ -276,12 +276,13 @@
         let laneWidth, player, items, bullets, score, lives, playerState, gameOver, itemSpawnInterval, stateChangeInterval, level, gameWon, baseItemSpeed, paused, gameStarted;
         const PIXEL_SIZE = 6;
 
-        const catchSound = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 0.1 } }).toDestination();
-        const fmSynth = new Tone.FMSynth({ harmonicity: 8, modulationIndex: 20, detune: 0, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.5, sustain: 0.1, release: 1 }, modulation: { type: "square" }, modulationEnvelope: { attack: 0.002, decay: 0.2, sustain: 0, release: 0.2 } }).toDestination();
-        const mistakeSound = new Tone.Synth({ oscillator: { type: 'square' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 0.2 } }).toDestination();
+        // --- Sound Definitions ---
+        const successSound = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.2 } }).toDestination();
+        const shootSound = new Tone.Synth({ oscillator: { type: 'sine' }, volume: -12, envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.1 } }).toDestination();
+        const mistakeSound = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 0.1 } }).toDestination();
 
-        let lastMistakeSoundTime = 0, lastCatchSoundTime = 0, lastDestroySoundTime = 0;
-        const soundCooldown = 0.1;
+        let lastMistakeSoundTime = 0, lastSuccessSoundTime = 0;
+        const soundCooldown = 0.05;
 
         function setupInitialScreen() {
             gameStarted = false;
@@ -393,20 +394,34 @@
                 }
             }
         }
-
-        function playMistakeSound() { const now = Tone.now(); if (now - lastMistakeSoundTime > soundCooldown) { mistakeSound.triggerAttackRelease('C3', '4n'); lastMistakeSoundTime = now; } }
-        function playCatchSound() { const now = Tone.now(); if (now - lastCatchSoundTime > soundCooldown) { catchSound.triggerAttackRelease('C5', '8n'); lastCatchSoundTime = now; } }
-        function playDestroySound() { const now = Tone.now(); if (now - lastDestroySoundTime > soundCooldown) { fmSynth.triggerAttackRelease('C1', '1n'); lastDestroySoundTime = now; } }
+        
+        // --- Sound Playback Functions (Re-mapped) ---
+        function playMistakeSound() { 
+            const now = Tone.now(); 
+            if (now - lastMistakeSoundTime > soundCooldown) { 
+                mistakeSound.triggerAttackRelease('C5', '8n', now); 
+                lastMistakeSoundTime = now; 
+            } 
+        }
+        function playSuccessSound() { 
+            const now = Tone.now(); 
+            if (now - lastSuccessSoundTime > soundCooldown) { 
+                successSound.triggerAttackRelease("C5", "16n", now);
+                successSound.triggerAttackRelease("E5", "16n", now + 0.07);
+                successSound.triggerAttackRelease("G5", "16n", now + 0.14);
+                lastSuccessSoundTime = now; 
+            } 
+        }
 
         function handlePlayerItemCollision(item, itemIndex) {
             const correctCatch = (playerState === 'red' && item.type === 'B') || (playerState === 'blue' && item.type === 'A');
-            if (correctCatch) { score += 10; playCatchSound(); } else { lives--; playMistakeSound(); }
+            if (correctCatch) { score += 10; playSuccessSound(); } else { lives--; playMistakeSound(); }
             items.splice(itemIndex, 1); updateUI();
         }
 
         function handleBulletItemCollision(item, itemIndex, bulletIndex) {
             const correctShot = (playerState === 'red' && item.type === 'A') || (playerState === 'blue' && item.type === 'B');
-            if (correctShot) { score += 5; playDestroySound(); } else { lives--; playMistakeSound(); }
+            if (correctShot) { score += 5; playSuccessSound(); } else { lives--; playMistakeSound(); }
             items.splice(itemIndex, 1); bullets.splice(bulletIndex, 1); updateUI();
         }
 
@@ -451,6 +466,7 @@
 
         function shoot() {
             if (gameOver || paused || !gameStarted) return;
+            shootSound.triggerAttackRelease("A5", "32n");
             bullets.push({ x: player.x + player.width / 2 - 2.5, y: player.y, width: 5, height: 10, speed: 8 });
         }
 
