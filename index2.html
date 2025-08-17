@@ -38,7 +38,7 @@
             background-color: #F7F3EF;
             display: block;
             max-width: 100%;
-            border-radius: 8px;
+            border-radius: 0;
         }
         #gameOverScreen {
             position: absolute;
@@ -50,7 +50,7 @@
             justify-content: center;
             align-items: center;
             background-color: rgba(247, 243, 239, 0.9);
-            border-radius: 8px;
+            border-radius: 0;
         }
         .ui-button {
             width: 28px;
@@ -152,12 +152,7 @@
 
     <!-- Herbal Runner Game Section -->
     <section id="herbal-runner-section" class="max-w-4xl mx-auto px-4 pb-16 flex flex-col items-center">
-        <div class="text-center mb-6">
-            <h2 class="text-3xl font-serif text-gray-700 mb-2" data-en="Herbal Runner" data-ko="약초 러너">Herbal Runner</h2>
-            <p class="text-gray-600 text-sm" data-en="Learn about hot and cold herbs while running!" data-ko="달리면서 뜨거운 약재와 차가운 약재를 배워보세요!">Learn about hot and cold herbs while running!</p>
-        </div>
-        
-        <div id="game-container" class="relative bg-[#F7F3EF] rounded-lg shadow-lg overflow-hidden">
+        <div id="game-container" class="relative bg-[#F7F3EF] overflow-hidden">
             <canvas id="gameCanvas" width="800" height="150"></canvas>
             <div id="ui-container" class="absolute top-2 right-2 flex gap-1">
                 <button id="langBtn" class="ui-button">한</button>
@@ -509,237 +504,3 @@
             }
 
             if (player.y >= GROUND_Y) {
-                player.y = GROUND_Y;
-                player.vy = 0;
-                player.isJumping = false;
-            }
-        }
-
-        function updateHerbs() {
-            for (let i = herbs.length - 1; i >= 0; i--) {
-                herbs[i].x -= gameSpeed;
-                if (herbs[i].x < -100) {
-                    herbs.splice(i, 1);
-                }
-            }
-            if (herbs.length < 3) {
-                 spawnHerb();
-            }
-        }
-
-        function checkCollisions() {
-            herbs.forEach((herb, index) => {
-                const herbName = herb.name[currentLanguage];
-                const herbWidth = ctx.measureText(herbName).width;
-                const playerCenterX = player.x + player.width / 2;
-
-                if (player.x > herb.x + herbWidth && !herb.awardedJumpPoints) {
-                    score += 5;
-                    herb.awardedJumpPoints = true;
-                }
-                
-                // 맨 뒤 한글자/영어 2-3글자 정도만 충돌 판정 (약 15-20픽셀)
-                const herbEndX = herb.x + herbWidth;
-                const collisionZoneWidth = Math.min(20, herbWidth * 0.3);
-                const collisionZoneStart = herbEndX - collisionZoneWidth;
-                
-                // 플레이어가 충돌 구역에 들어가고, 땅에 있을 때만 충돌
-                const isInCollisionZone = player.x >= collisionZoneStart && 
-                                         player.x < herbEndX;
-                const isOnGround = player.y >= GROUND_Y - 5;
-                
-                const isColliding = isInCollisionZone &&
-                                    isOnGround &&
-                                    player.y < herb.y &&
-                                    player.y + player.height > herb.y - 20;
-
-                if (isColliding) {
-                    if (player.isJumping) {
-                        endGame();
-                        return;
-                    }
-
-                    if (!player.isJumping) {
-                        if (playerState === 'neutral') {
-                            if (herb.group === 'A') {
-                                playerState = 'heated';
-                                neutralStateTimer = 0;
-                                herbs.splice(index, 1);
-                            } else {
-                                endGame();
-                            }
-                        } else { // heated
-                            if (herb.group === 'B') {
-                                coolingHerbCounter++;
-                                if (coolingHerbCounter >= 3) {
-                                    playerState = 'neutral';
-                                    coolingHerbCounter = 0;
-                                }
-                                herbs.splice(index, 1);
-                            } else {
-                                endGame();
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        function jump() {
-            if (!player.isJumping && !isGameOver && !isPaused && !showHelp) {
-                player.isJumping = true;
-                player.vy = JUMP_STRENGTH;
-            }
-        }
-
-        function showGameOverScreen() {
-            document.getElementById('gameOverScreen').style.display = 'flex';
-        }
-
-        function endGame() {
-            if (!isGameOver) isGameOver = true;
-        }
-
-        function resetGame() {
-            playerState = 'neutral';
-            player.y = GROUND_Y;
-            player.vy = 0;
-            player.isJumping = false;
-            player.rotation = 0;
-            score = 0;
-            coolingHerbCounter = 0;
-            neutralStateTimer = 0;
-            baseSpeed = 3;
-            gameSpeed = 3;
-            scoreTimer = 0;
-            speedTimer = 0;
-            herbs = [];
-            isGameOver = false;
-            isPaused = false;
-            showHelp = false;
-            gameBeaten = false;
-            celebrationTimer = 0;
-            document.getElementById('gameOverScreen').style.display = 'none';
-            spawnHerb();
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-            gameLoop();
-        }
-        
-        let animationFrameId;
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            if (!isGameOver && !isPaused && !showHelp) {
-                updateGameLogic();
-            }
-            
-            if (isGameOver) {
-                if (player.rotation < Math.PI / 2) {
-                    player.rotation += 0.08;
-                } else {
-                    player.rotation = Math.PI / 2;
-                    showGameOverScreen();
-                }
-            }
-
-            drawGround();
-            drawHerbs();
-            drawPixelArtPlayer();
-            drawScore();
-            drawCelebrationMessage();
-
-            if (showHelp) drawHelpScreen();
-            if (isPaused) drawPauseScreen();
-            
-            animationFrameId = requestAnimationFrame(gameLoop);
-        }
-
-        function updateGameLanguage() {
-            document.getElementById('langBtn').textContent = (currentLanguage === 'ko') ? 'En' : '한';
-            document.getElementById('restartButton').textContent = textData[currentLanguage].restart;
-        }
-
-        // Event Listeners
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') jump();
-            if (e.key.toLowerCase() === 'p' && !isGameOver) {
-                isPaused = !isPaused;
-                if(isPaused) showHelp = false;
-            }
-        });
-        canvas.addEventListener('click', jump);
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
-        
-        document.getElementById('restartButton').addEventListener('click', resetGame);
-        
-        document.getElementById('langBtn').addEventListener('click', () => {
-            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
-            setLanguage(newLang);
-        });
-
-        document.getElementById('helpBtn').addEventListener('click', () => {
-            if (!isGameOver) {
-                document.getElementById('helpModal').classList.remove('hidden');
-            }
-        });
-
-        document.getElementById('helpCloseBtn').addEventListener('click', () => {
-            document.getElementById('helpModal').classList.add('hidden');
-        });
-
-        // Visitor Counter with error handling
-        async function initializeVisitorCount() {
-            try {
-                // Simplified counter without Firebase for now
-                const today = new Date().toISOString().split('T')[0];
-                let todayCount = parseInt(localStorage.getItem(`visit_${today}`) || '0');
-                let totalCount = parseInt(localStorage.getItem('total_visits') || '0');
-                
-                // Only increment if not visited today
-                if (!localStorage.getItem(`visited_${today}`)) {
-                    todayCount++;
-                    totalCount++;
-                    localStorage.setItem(`visit_${today}`, todayCount.toString());
-                    localStorage.setItem('total_visits', totalCount.toString());
-                    localStorage.setItem(`visited_${today}`, 'true');
-                }
-                
-                document.getElementById('today-count').textContent = todayCount;
-                document.getElementById('total-count').textContent = totalCount;
-            } catch (error) {
-                console.error("Error with visitor counter:", error);
-                document.getElementById('today-count').textContent = '0';
-                document.getElementById('total-count').textContent = '0';
-            }
-        }
-
-        // Initialize everything
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeVisitorCount();
-            
-            const params = new URLSearchParams(window.location.search);
-            const lang = params.get('lang');
-            if (lang === 'ko') {
-                setLanguage('ko');
-            } else {
-                setLanguage('en');
-            }
-
-            // Initialize game
-            player.y = GROUND_Y;
-            spawnHerb();
-            gameLoop();
-        });
-
-        // Close help modal when clicking outside
-        document.getElementById('helpModal').addEventListener('click', (e) => {
-            if (e.target.id === 'helpModal') {
-                document.getElementById('helpModal').classList.add('hidden');
-            }
-        });
-    </script>
-
-</body>
-</html>
