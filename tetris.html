@@ -31,6 +31,84 @@
             opacity: 0.1;
             background-color: red;
         }
+        
+        /* Desktop layout (default) */
+        .desktop-layout {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            gap: 1rem;
+        }
+        
+        .mobile-layout {
+            display: none;
+        }
+        
+        /* Mobile layout */
+        @media (max-width: 768px) {
+            .desktop-layout {
+                display: none;
+            }
+            
+            .mobile-layout {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                gap: 1rem;
+            }
+            
+            .mobile-game-area {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .mobile-controls {
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 1rem;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                max-width: 400px;
+                gap: 1rem;
+            }
+            
+            .mobile-next-block {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+            }
+            
+            .mobile-stats {
+                display: flex;
+                gap: 1.5rem;
+            }
+            
+            .mobile-stat {
+                text-align: center;
+            }
+            
+            .mobile-actions {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+            }
+            
+            .touch-areas-container {
+                display: block !important;
+            }
+        }
+        
         @media (hover: none) and (pointer: coarse) {
             .touch-areas-container {
                 display: block !important;
@@ -42,8 +120,8 @@
 
     <div class="w-full max-w-md mx-auto">
         
-        <!-- Top section: Game + Sidebar -->
-        <div class="flex justify-center items-start gap-4">
+        <!-- Desktop Layout -->
+        <div class="desktop-layout">
             <!-- Main Game Area -->
             <div class="w-full max-w-sm">
                 <div id="game-container" class="relative w-full aspect-[5/8]">
@@ -94,7 +172,7 @@
                 </div>
             </div>
 
-            <!-- Sidebar -->
+            <!-- Desktop Sidebar -->
             <div class="w-24 flex-shrink-0 pt-2">
                 <div class="text-left text-stone-600">
                     <canvas id="nextBlockCanvas" class="rounded-lg"></canvas>
@@ -111,38 +189,121 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Mobile Layout -->
+        <div class="mobile-layout">
+            <!-- Mobile Game Area -->
+            <div class="mobile-game-area">
+                <div id="mobile-game-container" class="relative w-full aspect-[5/8] max-w-sm">
+                    <canvas id="mobileGameCanvas"></canvas>
+                    
+                    <!-- Touch Areas for Mobile -->
+                    <div class="touch-areas-container absolute inset-0">
+                        <!-- Top area for fast drop -->
+                        <div id="mobileTopTouchArea" class="touch-area" style="top: 0; left: 0; width: 100%; height: 25%;"></div>
+                        <!-- Left area for move left -->
+                        <div id="mobileLeftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
+                        <!-- Right area for move right -->
+                        <div id="mobileRightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
+                    </div>
+                    
+                    <div id="mobilePauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
+                        <h2 class="text-4xl font-bold text-stone-500">Paused</h2>
+                    </div>
+
+                    <div id="mobileHelpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
+                        <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
+                            <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-start"><span class="mr-2">1.</span><span>Touch left/right side to move the block.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span>Touch top area for fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
+                                <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
+                            </ul>
+                            <button id="mobileCloseHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition">Close</button>
+                        </div>
+                    </div>
+
+                    <div id="mobileLevelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                        <h2 id="mobileLevelUpTitle" class="text-4xl font-bold text-stone-500">Level Up!</h2>
+                        <p id="mobileLevelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
+                        <button id="mobileContinueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                            Continue
+                        </button>
+                    </div>
+
+                    <div id="mobileGameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                        <h2 class="text-4xl font-bold text-stone-500">Game Over</h2>
+                        <p class="text-lg mt-2 text-stone-600">Score: <span id="mobileFinalScore">0</span></p>
+                        <button id="mobileRestartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                            Restart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Controls at Bottom -->
+            <div class="mobile-controls">
+                <div class="mobile-next-block">
+                    <div class="text-xs font-bold text-stone-600">Next</div>
+                    <canvas id="mobileNextBlockCanvas" class="rounded"></canvas>
+                </div>
+                
+                <div class="mobile-stats">
+                    <div class="mobile-stat">
+                        <div class="text-xs font-bold text-stone-600">Score</div>
+                        <div id="mobileScore" class="text-lg font-bold text-stone-700">0</div>
+                    </div>
+                    <div class="mobile-stat">
+                        <div class="text-xs font-bold text-stone-600">Level</div>
+                        <div id="mobileLevel" class="text-lg font-bold text-stone-700">1</div>
+                    </div>
+                </div>
+                
+                <div class="mobile-actions">
+                    <canvas id="mobilePixelPersonCanvas"></canvas>
+                    <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800 mt-1">
+                        Help
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500 desktop-layout">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
+        // Detect if mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        // Get elements based on layout
+        const canvas = document.getElementById(isMobile ? 'mobileGameCanvas' : 'gameCanvas');
         const ctx = canvas.getContext('2d');
-        const nextBlockCanvas = document.getElementById('nextBlockCanvas');
+        const nextBlockCanvas = document.getElementById(isMobile ? 'mobileNextBlockCanvas' : 'nextBlockCanvas');
         const nextCtx = nextBlockCanvas.getContext('2d');
-        const pixelPersonCanvas = document.getElementById('pixelPersonCanvas');
+        const pixelPersonCanvas = document.getElementById(isMobile ? 'mobilePixelPersonCanvas' : 'pixelPersonCanvas');
         const personCtx = pixelPersonCanvas.getContext('2d');
-        const gameContainer = document.getElementById('game-container');
-        const scoreEl = document.getElementById('score');
-        const levelEl = document.getElementById('level');
-        const gameOverScreen = document.getElementById('gameOverScreen');
-        const finalScoreEl = document.getElementById('finalScore');
-        const restartButton = document.getElementById('restartButton');
-        const levelUpScreen = document.getElementById('levelUpScreen');
-        const continueButton = document.getElementById('continueButton');
-        const levelUpTitle = document.getElementById('levelUpTitle');
-        const levelUpSubtitle = document.getElementById('levelUpSubtitle');
-        const helpButton = document.getElementById('help-button');
-        const helpModal = document.getElementById('helpModal');
-        const closeHelpButton = document.getElementById('closeHelpButton');
-        const pauseScreen = document.getElementById('pauseScreen');
+        const gameContainer = document.getElementById(isMobile ? 'mobile-game-container' : 'game-container');
+        const scoreEl = document.getElementById(isMobile ? 'mobileScore' : 'score');
+        const levelEl = document.getElementById(isMobile ? 'mobileLevel' : 'level');
+        const gameOverScreen = document.getElementById(isMobile ? 'mobileGameOverScreen' : 'gameOverScreen');
+        const finalScoreEl = document.getElementById(isMobile ? 'mobileFinalScore' : 'finalScore');
+        const restartButton = document.getElementById(isMobile ? 'mobileRestartButton' : 'restartButton');
+        const levelUpScreen = document.getElementById(isMobile ? 'mobileLevelUpScreen' : 'levelUpScreen');
+        const continueButton = document.getElementById(isMobile ? 'mobileContinueButton' : 'continueButton');
+        const levelUpTitle = document.getElementById(isMobile ? 'mobileLevelUpTitle' : 'levelUpTitle');
+        const levelUpSubtitle = document.getElementById(isMobile ? 'mobileLevelUpSubtitle' : 'levelUpSubtitle');
+        const helpButton = document.getElementById(isMobile ? 'mobile-help-button' : 'help-button');
+        const helpModal = document.getElementById(isMobile ? 'mobileHelpModal' : 'helpModal');
+        const closeHelpButton = document.getElementById(isMobile ? 'mobileCloseHelpButton' : 'closeHelpButton');
+        const pauseScreen = document.getElementById(isMobile ? 'mobilePauseScreen' : 'pauseScreen');
         
         // Touch areas
-        const topTouchArea = document.getElementById('topTouchArea');
-        const leftTouchArea = document.getElementById('leftTouchArea');
-        const rightTouchArea = document.getElementById('rightTouchArea');
+        const topTouchArea = document.getElementById(isMobile ? 'mobileTopTouchArea' : 'topTouchArea');
+        const leftTouchArea = document.getElementById(isMobile ? 'mobileLeftTouchArea' : 'leftTouchArea');
+        const rightTouchArea = document.getElementById(isMobile ? 'mobileRightTouchArea' : 'rightTouchArea');
 
         const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
@@ -217,7 +378,7 @@
         ];
 
         function drawPixelPerson() {
-            const pixelSize = 4;
+            const pixelSize = isMobile ? 2 : 4;
             personCtx.clearRect(0, 0, pixelPersonCanvas.width, pixelPersonCanvas.height);
             const frame = personFrames[personFrame];
             const colors = { 'B': '#3b82f6', 'G': '#6b7280' }; // Blue, Grey
@@ -280,11 +441,17 @@
             canvas.height = containerHeight;
             blockSize = canvas.width / COLS;
             
-            nextBlockCanvas.width = blockSize;
-            nextBlockCanvas.height = blockSize;
-
-            pixelPersonCanvas.width = 24;
-            pixelPersonCanvas.height = 28;
+            if (isMobile) {
+                nextBlockCanvas.width = blockSize * 0.8;
+                nextBlockCanvas.height = blockSize * 0.8;
+                pixelPersonCanvas.width = 12;
+                pixelPersonCanvas.height = 14;
+            } else {
+                nextBlockCanvas.width = blockSize;
+                nextBlockCanvas.height = blockSize;
+                pixelPersonCanvas.width = 24;
+                pixelPersonCanvas.height = 28;
+            }
         }
         
         function moveFallingBlock(direction) {
@@ -389,7 +556,7 @@
                 });
             } else {
                 targetCtx.fillStyle = block.textColor;
-                const fontSize = size * 0.18;
+                const fontSize = size * (isMobile ? 0.16 : 0.18);
                 targetCtx.font = `bold ${fontSize}px 'Noto Sans'`;
                 targetCtx.textAlign = 'center';
                 targetCtx.textBaseline = 'middle';
@@ -428,7 +595,7 @@
 
             nextCtx.clearRect(0, 0, nextBlockCanvas.width, nextBlockCanvas.height);
             if(nextBlock) {
-                const previewSize = blockSize;
+                const previewSize = isMobile ? blockSize * 0.8 : blockSize;
                 const x = (nextBlockCanvas.width - previewSize) / 2;
                 const y = (nextBlockCanvas.height - previewSize) / 2;
                 drawBlock(nextBlock, x, y, previewSize, nextCtx);
@@ -736,7 +903,15 @@
             }
         });
         
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', () => {
+            // Update mobile detection on resize
+            const newIsMobile = window.innerWidth <= 768;
+            if (newIsMobile !== isMobile) {
+                location.reload(); // Reload to switch layouts
+            } else {
+                resizeCanvas();
+            }
+        });
         
         init();
     </script>
