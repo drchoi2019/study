@@ -30,6 +30,14 @@
 </head>
 <body class="bg-[#F7F3EF] flex flex-col items-center justify-center min-h-screen p-4">
 
+    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+    
+    <div class="my-4"></div> <!-- Added spacing -->
+
     <div class="w-full max-w-md mx-auto">
         
         <!-- Top section: Game + Sidebar -->
@@ -39,6 +47,19 @@
                 <div id="game-container" class="relative w-full aspect-[5/8]">
                     <canvas id="gameCanvas"></canvas>
                     
+                    <div id="helpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
+                        <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
+                            <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-start"><span class="mr-2">1.</span><span>Use ← → arrow keys to move the block.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span>Press ↓ arrow key for a fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
+                                <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
+                            </ul>
+                            <button id="closeHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition">Close</button>
+                        </div>
+                    </div>
+
                     <div id="levelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
                         <h2 id="levelUpTitle" class="text-4xl font-bold text-stone-500">Level Up!</h2>
                         <p id="levelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
@@ -59,14 +80,17 @@
 
             <!-- Sidebar -->
             <div class="w-24 flex-shrink-0 pt-2">
-                <div class="text-center text-stone-600">
+                <div class="text-left text-stone-600">
                     <canvas id="nextBlockCanvas" class="rounded-lg"></canvas>
-                </div>
-                <div class="mt-4 text-center text-stone-600">
-                    <div class="text-lg font-bold">Score</div>
-                    <div id="score" class="text-xl">0</div>
-                    <div class="text-lg font-bold mt-4">Level</div>
-                    <div id="level" class="text-xl">1</div>
+                    <div class="mt-4">
+                        <div class="text-base font-bold">Score</div>
+                        <div id="score" class="text-lg">0</div>
+                        <div class="text-base font-bold mt-2">Level</div>
+                        <div id="level" class="text-lg">1</div>
+                        <div id="help-button" class="text-base font-bold mt-2 cursor-pointer hover:text-stone-800">
+                             Help
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,6 +105,10 @@
             </button>
         </div>
     </div>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
 
 
     <script>
@@ -101,6 +129,9 @@
         const levelUpTitle = document.getElementById('levelUpTitle');
         const levelUpSubtitle = document.getElementById('levelUpSubtitle');
         const touchControls = document.getElementById('touch-controls');
+        const helpButton = document.getElementById('help-button');
+        const helpModal = document.getElementById('helpModal');
+        const closeHelpButton = document.getElementById('closeHelpButton');
 
         const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
@@ -297,7 +328,7 @@
 
             nextCtx.clearRect(0, 0, nextBlockCanvas.width, nextBlockCanvas.height);
             if(nextBlock) {
-                const previewSize = blockSize; // --- SIZE CHANGE ---
+                const previewSize = blockSize;
                 const x = (nextBlockCanvas.width - previewSize) / 2;
                 const y = (nextBlockCanvas.height - previewSize) / 2;
                 drawBlock(nextBlock, x, y, previewSize, nextCtx);
@@ -515,6 +546,18 @@
         rightButton.addEventListener('click', () => moveFallingBlock('right'));
         restartButton.addEventListener('click', init);
         continueButton.addEventListener('click', resumeGame);
+        helpButton.addEventListener('click', () => {
+            gameRunning = false;
+            helpModal.classList.remove('hidden');
+            helpModal.classList.add('flex');
+        });
+        closeHelpButton.addEventListener('click', () => {
+            helpModal.classList.add('hidden');
+            helpModal.classList.remove('flex');
+            gameRunning = true;
+            lastUpdateTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        });
         window.addEventListener('resize', resizeCanvas);
         
         init();
