@@ -120,6 +120,7 @@
                     <li><a href="sinisan_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
                     <li><a href="hack_names.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
+                    <li><a href="herb_shooting_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
                 </ul>
             </div>
             <!-- History -->
@@ -156,8 +157,8 @@
                     </ul>
                     <p><strong class="text-yellow-400">Controls:</strong></p>
                     <ul class="list-disc list-inside pl-2">
-                        <li><strong>Move:</strong> ← → Arrow Keys / Touch Buttons</li>
-                        <li><strong>Shoot:</strong> Spacebar</li>
+                        <li><strong>Keyboard:</strong> ← → (Move), Spacebar (Shoot)</li>
+                        <li><strong>Touch:</strong> Tap Left/Right side (Move), Tap Center (Shoot)</li>
                     </ul>
                 </div>
                 <button id="help-close-button" class="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Close</button>
@@ -203,16 +204,19 @@
         <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
     </footer>
 
-    <script>
+    <script type="module">
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, runTransaction, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         // --- Main Page Script ---
         let currentLanguage = 'en';
 
         async function checkAndNavigate(event) {
             event.preventDefault();
             const linkElement = event.currentTarget;
-            const relativeUrl = linkElement.getAttribute('href');
-            
-            const fullUrl = new URL(relativeUrl, window.location.href);
+            const fullUrl = new URL(linkElement.href);
             const urlToCheck = new URL(fullUrl.pathname, window.location.href);
 
             try {
@@ -267,31 +271,51 @@
             setLanguage(newLang);
         }
         
-        function initializeVisitorCount() {
-            let totalVisitors = localStorage.getItem('totalVisitors');
-            if (totalVisitors === null) {
-                totalVisitors = 1;
-            } else {
-                if (!sessionStorage.getItem('totalVisitCounted')) {
-                    totalVisitors = parseInt(totalVisitors) + 1;
-                    sessionStorage.setItem('totalVisitCounted', 'true');
+        // --- Firebase Visitor Counter ---
+        async function initializeVisitorCount() {
+            try {
+                const firebaseConfig = __firebase_config ? JSON.parse(__firebase_config) : null;
+                if (!firebaseConfig) {
+                    console.error("Firebase config not found.");
+                    return;
                 }
-            }
-            localStorage.setItem('totalVisitors', totalVisitors.toString());
-            const todayStr = new Date().toISOString().split('T')[0];
-            let dailyData = localStorage.getItem('dailyData');
-            dailyData = dailyData ? JSON.parse(dailyData) : {};
-            if (dailyData.date !== todayStr) {
-                dailyData = { date: todayStr, count: 1 };
-            } else {
-                if (!sessionStorage.getItem('dailyVisitCounted')) {
-                    dailyData.count++;
-                    sessionStorage.setItem('dailyVisitCounted', 'true');
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+                const auth = getAuth(app);
+
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
                 }
+
+                const todayStr = new Date().toISOString().split('T')[0];
+                const totalRef = doc(db, `artifacts/${appId}/public/data/visitorStats`, "total");
+                const todayRef = doc(db, `artifacts/${appId}/public/data/visitorStats`, todayStr);
+
+                // Listen for real-time updates
+                onSnapshot(totalRef, (docSnap) => {
+                    document.getElementById('total-count').textContent = docSnap.data()?.count || 0;
+                });
+                onSnapshot(todayRef, (docSnap) => {
+                    document.getElementById('today-count').textContent = docSnap.data()?.count || 0;
+                });
+
+                // Increment count only if not already counted in this session
+                if (!sessionStorage.getItem('visitCounted')) {
+                    await runTransaction(db, async (transaction) => {
+                        transaction.set(totalRef, { count: increment(1) }, { merge: true });
+                        transaction.set(todayRef, { count: increment(1) }, { merge: true });
+                    });
+                    sessionStorage.setItem('visitCounted', 'true');
+                }
+            } catch (error) {
+                console.error("Error initializing visitor counter:", error);
+                document.getElementById('today-count').textContent = 'N/A';
+                document.getElementById('total-count').textContent = 'N/A';
             }
-            localStorage.setItem('dailyData', JSON.stringify(dailyData));
-            document.getElementById('today-count').textContent = dailyData.count;
-            document.getElementById('total-count').textContent = totalVisitors;
         }
 
         // --- Embedded Game Script ---
@@ -612,8 +636,8 @@
             }
 
             // Setup game listeners
-            startButton.addEventListener('click', startGame);
-            restartButton.addEventListener('click', initGame);
+            if(startButton) startButton.addEventListener('click', startGame);
+            if(restartButton) restartButton.addEventListener('click', initGame);
 
             window.addEventListener('keydown', (e) => {
                 if (e.code === 'ArrowLeft') movePlayer('left');
@@ -633,23 +657,25 @@
                 action();
             };
 
-            leftBtn.addEventListener('click', () => mobileAction(() => movePlayer('left')));
-            rightBtn.addEventListener('click', () => mobileAction(() => movePlayer('right')));
-            shootBtn.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                mobileAction(shoot); 
-            });
+            if (leftBtn && rightBtn && shootBtn) {
+                leftBtn.addEventListener('click', () => mobileAction(() => movePlayer('left')));
+                rightBtn.addEventListener('click', () => mobileAction(() => movePlayer('right')));
+                shootBtn.addEventListener('click', (e) => { 
+                    e.preventDefault(); 
+                    mobileAction(shoot); 
+                });
+            }
 
-            messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
+            if(messageCloseButton) messageCloseButton.addEventListener('click', () => { gameMessageEl.classList.add('hidden'); resumeGame(); });
             
-            helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
+            if(helpButton) helpButton.addEventListener('click', () => { if(gameStarted) { pauseGame(); helpModal.classList.remove('hidden'); } });
 
-            helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
+            if(helpCloseButton) helpCloseButton.addEventListener('click', () => { helpModal.classList.add('hidden'); if(gameStarted) resumeGame(); });
             
             window.addEventListener('resize', resizeCanvasAndElements);
             
             // Show initial screen
-            setupInitialScreen();
+            if(canvas) setupInitialScreen();
         });
     </script>
 
