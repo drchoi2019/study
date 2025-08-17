@@ -104,6 +104,7 @@
                     <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
                     <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
                     <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
+                    <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>
                 </ul>
             </div>
             <!-- Formula -->
@@ -248,7 +249,7 @@
                 if (currentLanguage === 'ko') {
                     if (baseHref === 'history') {
                          link.href = 'history_kor.html';
-                    } else {
+                    } else if (baseHref !== 'tetris') { // Exception for Tetris
                          link.href = `${baseHref}_k.html`;
                     }
                 } else {
