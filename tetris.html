@@ -39,6 +39,10 @@
                 <div id="game-container" class="relative w-full aspect-[5/8]">
                     <canvas id="gameCanvas"></canvas>
                     
+                    <div id="pauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
+                        <h2 class="text-5xl font-bold text-stone-500">Paused</h2>
+                    </div>
+
                     <div id="helpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
                         <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
                             <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
@@ -83,6 +87,7 @@
                              Help
                         </div>
                     </div>
+                    <canvas id="pixelPersonCanvas" class="mt-4"></canvas>
                 </div>
             </div>
         </div>
@@ -108,6 +113,8 @@
         const ctx = canvas.getContext('2d');
         const nextBlockCanvas = document.getElementById('nextBlockCanvas');
         const nextCtx = nextBlockCanvas.getContext('2d');
+        const pixelPersonCanvas = document.getElementById('pixelPersonCanvas');
+        const personCtx = pixelPersonCanvas.getContext('2d');
         const gameContainer = document.getElementById('game-container');
         const scoreEl = document.getElementById('score');
         const levelEl = document.getElementById('level');
@@ -124,9 +131,12 @@
         const helpButton = document.getElementById('help-button');
         const helpModal = document.getElementById('helpModal');
         const closeHelpButton = document.getElementById('closeHelpButton');
+        const pauseScreen = document.getElementById('pauseScreen');
 
         const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
+        const landingSynth = new Tone.MembraneSynth({ pitchDecay: 0.01, octaves: 2, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.1, sustain: 0.01, release: 0.1 } }).toDestination();
+
 
         const LEVEL_DATA = [
             { // Level 1
@@ -172,6 +182,46 @@
         let gameRunning = true;
         let blockIdCounter = 0;
 
+        let personFrame = 0;
+        const personFrames = [
+             [ // Frame 1
+                "  BB  ",
+                "  BB  ",
+                "  G   ",
+                " GGG  ",
+                "G G G ",
+                " G G  ",
+                " G G  ",
+            ],
+            [ // Frame 2
+                "  BB  ",
+                "  BB  ",
+                "  G   ",
+                " GGG  ",
+                "G G G ",
+                " G G  ",
+                "G   G ",
+            ]
+        ];
+
+        function drawPixelPerson() {
+            const pixelSize = 4;
+            personCtx.clearRect(0, 0, pixelPersonCanvas.width, pixelPersonCanvas.height);
+            const frame = personFrames[personFrame];
+            const colors = { 'B': '#3b82f6', 'G': '#6b7280' }; // Blue, Grey
+            
+            for (let y = 0; y < frame.length; y++) {
+                for (let x = 0; x < frame[y].length; x++) {
+                    if (colors[frame[y][x]]) {
+                        personCtx.fillStyle = colors[frame[y][x]];
+                        personCtx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+                    }
+                }
+            }
+            personFrame = (personFrame + 1) % personFrames.length;
+        }
+
+
         function updateDataForLevel(levelNumber) {
             const levelIndex = levelNumber - 1;
             if (levelIndex >= LEVEL_DATA.length) return; 
@@ -204,12 +254,14 @@
             levelEl.textContent = level;
             gameOverScreen.classList.add('hidden');
             levelUpScreen.classList.add('hidden');
+            pauseScreen.classList.add('hidden');
             
             generateNewBlock();
             spawnFallingBlock();
 
             lastUpdateTime = performance.now();
             requestAnimationFrame(gameLoop);
+            setInterval(drawPixelPerson, 300);
         }
 
         function resizeCanvas() {
@@ -221,6 +273,9 @@
             
             nextBlockCanvas.width = blockSize;
             nextBlockCanvas.height = blockSize;
+
+            pixelPersonCanvas.width = 24;
+            pixelPersonCanvas.height = 28;
         }
         
         function moveFallingBlock(direction) {
@@ -340,10 +395,9 @@
             const landingY = canvas.height - stackHeight;
 
             if (fallingBlock.y + blockSize >= landingY) {
-                if (!fallingBlock.isLanding) {
-                    fallingBlock.isLanding = true;
-                    handleLanding();
-                }
+                const blockToLand = fallingBlock;
+                fallingBlock = null;
+                handleLanding(blockToLand);
             }
         }
         
@@ -425,10 +479,10 @@
             }
         }
 
-        async function handleLanding() {
-            const landedBlock = fallingBlock;
-            fallingBlock = null;
+        async function handleLanding(landedBlock) {
             if (!landedBlock) return;
+            
+            landingSynth.triggerAttackRelease("C2", "8n");
 
             const col = landedBlock.col;
             landedBlock.y = canvas.height - (stackedBlocks[col].length + 1) * blockSize;
@@ -494,6 +548,20 @@
             gameOverScreen.classList.add('flex');
         }
 
+        function togglePause() {
+            if (helpModal.classList.contains('flex')) return; // Don't pause if help is open
+            gameRunning = !gameRunning;
+            if (gameRunning) {
+                pauseScreen.classList.add('hidden');
+                pauseScreen.classList.remove('flex');
+                lastUpdateTime = performance.now(); // Reset timer to prevent jump
+                requestAnimationFrame(gameLoop);
+            } else {
+                pauseScreen.classList.remove('hidden');
+                pauseScreen.classList.add('flex');
+            }
+        }
+
         function gameLoop(timestamp) {
             if (!gameRunning) return;
             update(timestamp);
@@ -520,6 +588,11 @@
         document.body.addEventListener('keydown', startAudioContext, { once: true });
 
         window.addEventListener('keydown', (e) => {
+            if (e.key === ' ') { // Spacebar for pause
+                e.preventDefault();
+                togglePause();
+                return;
+            }
             if (!gameRunning) return;
             if (e.key === 'ArrowLeft') moveFallingBlock('left');
             else if (e.key === 'ArrowRight') moveFallingBlock('right');
