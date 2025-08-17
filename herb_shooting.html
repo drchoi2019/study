@@ -99,13 +99,19 @@
         
         <!-- Game UI Bar (Below Canvas) -->
         <div id="game-ui-bar" class="w-full mt-2 flex justify-between items-center text-gray-600 invisible">
+            <!-- Left Side -->
             <div>
-                <p id="player-status" class="text-xs font-semibold">Status: Heat</p>
+                <p id="player-status" class="text-xs font-semibold">Heat</p>
             </div>
+            <!-- Center -->
             <div class="flex items-center gap-3 text-xs">
                 <p>Score: <span id="score" class="font-bold">0</span></p>
-                <p>Level: <span id="level" class="font-bold">1</span></p>
+                <p>LV. <span id="level" class="font-bold">1</span></p>
                 <p>Lives: <span id="lives" class="font-bold">3</span></p>
+            </div>
+            <!-- Right Side -->
+            <div class="flex items-center gap-3 text-xs">
+                <button id="lang-toggle-btn" class="w-8 h-5 bg-gray-300 hover:bg-gray-400 rounded text-gray-700 text-xs font-bold flex items-center justify-center transition-all">Kor</button>
                 <button id="help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
             </div>
         </div>
@@ -118,6 +124,11 @@
         </div>
 
     </section>
+    
+    <footer class="text-center text-xs text-gray-500 pb-4">
+        <p>© 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
 
     <script>
         // --- Embedded Game Script ---
@@ -130,6 +141,7 @@
         const levelEl = document.getElementById('level');
         const playerStatusEl = document.getElementById('player-status');
         const helpButton = document.getElementById('help-button');
+        const langToggleButton = document.getElementById('lang-toggle-btn');
         
         const gameOverScreen = document.getElementById('game-over-screen');
         const finalScoreEl = document.getElementById('final-score');
@@ -371,7 +383,7 @@
         }
 
         function updateUI() {
-            const statusText = `Status: ${playerState === 'red' ? 'Heat' : 'Cold'}`;
+            const statusText = playerState === 'red' ? 'Heat' : 'Cold';
             scoreEl.textContent = score; 
             livesEl.textContent = lives; 
             levelEl.textContent = level;
@@ -415,6 +427,17 @@
             }
         }
         
+        function toggleLanguage() {
+            if (currentLanguage === 'en') {
+                currentLanguage = 'ko';
+                langToggleButton.textContent = 'Eng';
+            } else {
+                currentLanguage = 'en';
+                langToggleButton.textContent = 'Kor';
+            }
+            updateGameLanguage();
+        }
+
         function updateGameLanguage() {
             if (!gameStarted) return;
             items.forEach(item => {
@@ -431,6 +454,7 @@
             // Setup game listeners
             if(startButton) startButton.addEventListener('click', startGame);
             if(restartButton) restartButton.addEventListener('click', initGame);
+            if(langToggleButton) langToggleButton.addEventListener('click', toggleLanguage);
 
             window.addEventListener('keydown', (e) => {
                 if (e.code === 'ArrowLeft') movePlayer('left');
