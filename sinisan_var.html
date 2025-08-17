@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sayuksan Variations</title>
+    <title>Si Ni San Variations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif:wght@600&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
     <style>
@@ -119,7 +119,7 @@
             en: {
                 ui: {
                     headerLinkFont: "'Noto Serif', serif",
-                    mainTitle: "Sayuksan Variations",
+                    mainTitle: "Si Ni San Variations",
                     signsPrefix: "Key Signs: "
                 },
                 herbs: [
@@ -137,24 +137,20 @@
                     { id: 'hong-hua', name: 'Hong Hua', effects: 'Invigorates blood, dispels stasis, and alleviates pain.' },
                     { id: 'niu-xi', name: 'Niu Xi', effects: 'Invigorates blood, guides herbs downward, and promotes urination.' },
                     { id: 'jie-geng', name: 'Jie Geng', effects: 'Opens up and disseminates Lung Qi, transforms phlegm.' },
-                    { id: 'si-wu-tang', name: 'Si Wu Tang', effects: 'A fundamental formula to tonify and regulate blood.' },
+                    { id: 'sheng-di-huang', name: 'Sheng Di Huang', effects: 'Clears heat, cools the blood, nourishes Yin, and generates fluids.' },
                     { id: 'ban-xia', name: 'Ban Xia', effects: 'Dries dampness, transforms phlegm, and directs rebellious Qi downward.' },
                     { id: 'huang-qin', name: 'Huang Qin', effects: 'Clears heat and dries dampness.' },
                     { id: 'gui-zhi', name: 'Gui Zhi', effects: 'Warms and unblocks the channels and collaterals, assists Yang.' },
                     { id: 'da-zao', name: 'Da Zao', effects: 'Tonifies the Spleen and Stomach Qi, nourishes the blood.' },
                     { id: 'ren-shen', name: 'Ren Shen', effects: 'Strongly tonifies primal Qi and strengthens the Spleen.' },
-                    { id: 'sheng-jiang', name: 'Sheng Jiang', effects: 'Warms the Middle Jiao, adjusts the Ying and Wei.' },
-                    { id: 'sheng-di-huang', name: 'Sheng Di Huang', effects: 'Clears heat, cools the blood, nourishes Yin, and generates fluids.' },
-                    { id: 'shu-di-huang', name: 'Shu Di Huang', effects: 'Nourishes Kidney Yin and replenishes essence and blood.' },
-                    { id: 'cang-zhu', name: 'Cang Zhu', effects: 'Strongly dries dampness and strengthens the Spleen.' },
-                    { id: 'huang-qi', name: 'Huang Qi', effects: 'Tonifies Qi and blood, raises Yang Qi, and strengthens the exterior.' }
+                    { id: 'sheng-jiang', name: 'Sheng Jiang', effects: 'Warms the Middle Jiao, adjusts the Ying and Wei.' }
                 ],
                 formulas: {
-                    'sayuk-san': { name: 'Sayuksan', derivation_text: "Base formula for spreading Liver Qi and resolving stagnation.", signs: "Cold fingers/toes with warm body, irritability, flank pain.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: [], removed: [] } },
-                    'soyo-san': { name: 'Soyosan', derivation_text: "Removes Zhi Shi, adds herbs to nourish blood and strengthen the Spleen.", signs: "Liver Qi stagnation with blood deficiency and Spleen weakness.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['fu-ling', 'bai-zhu', 'dang-gui'], removed: ['zhi-shi'] } },
-                    'siho-sogan-san': { name: 'Sihosogansan', derivation_text: "Adds herbs to enhance Qi-moving and pain-relieving effects.", signs: "More severe Liver Qi stagnation with pain.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['chuan-xiong', 'xiang-fu-zi', 'chen-pi'], removed: [] } },
-                    'xuefu-zhuyu-tang': { name: 'Xuefu Zhuyu Tang', derivation_text: "Adds herbs that strongly invigorate blood and dispel stasis.", signs: "Blood stasis in the chest with Liver Qi stagnation.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['tao-ren', 'hong-hua', 'niu-xi', 'jie-geng', 'si-wu-tang'], removed: [] } },
-                    'siho-gyeji-tang': { name: 'Siho Gyeji Tang', derivation_text: "Combines elements of Sayuksan and Gyeji Tang to harmonize exterior and interior.", signs: "Alternating fever and chills, joint pain, fullness in chest.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['ban-xia', 'huang-qin', 'gui-zhi', 'da-zao', 'ren-shen', 'sheng-jiang'], removed: ['zhi-shi'] } }
+                    'si-ni-san': { name: 'Si Ni San', derivation_text: "Base formula for spreading Liver Qi and resolving stagnation.", signs: "Cold fingers/toes with warm body, irritability, flank pain.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: [], removed: [] } },
+                    'xiao-yao-san': { name: 'Xiao Yao San', derivation_text: "Removes Zhi Shi, adds herbs to nourish blood and strengthen the Spleen.", signs: "Liver Qi stagnation with blood deficiency and Spleen weakness.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['fu-ling', 'bai-zhu', 'dang-gui'], removed: ['zhi-shi'] } },
+                    'chai-hu-shu-gan-san': { name: 'Chai Hu Shu Gan San', derivation_text: "Adds herbs to enhance Qi-moving and pain-relieving effects.", signs: "More severe Liver Qi stagnation with pain.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['chuan-xiong', 'xiang-fu-zi', 'chen-pi'], removed: [] } },
+                    'xuefu-zhuyu-tang': { name: 'Xue Fu Zhu Yu Tang', derivation_text: "Adds herbs that strongly invigorate blood and dispel stasis.", signs: "Blood stasis in the chest with Liver Qi stagnation.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['tao-ren', 'hong-hua', 'niu-xi', 'jie-geng', 'dang-gui', 'chuan-xiong', 'sheng-di-huang'], removed: [] } },
+                    'chai-hu-gui-zhi-tang': { name: 'Chai Hu Gui Zhi Tang', derivation_text: "Combines elements of Si Ni San and Gui Zhi Tang to harmonize exterior and interior.", signs: "Alternating fever and chills, joint pain, fullness in chest.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['ban-xia', 'huang-qin', 'gui-zhi', 'da-zao', 'ren-shen', 'sheng-jiang'], removed: ['zhi-shi'] } }
                 }
             },
             ko: {
@@ -178,31 +174,27 @@
                     { id: 'hong-hua', name: '홍화', effects: '혈을 활발하게 하고 어혈을 풀며, 통증을 완화합니다.' },
                     { id: 'niu-xi', name: '우슬', effects: '혈액 순환을 돕고 하초로 약효를 인도하며 소변을 원활하게 합니다.' },
                     { id: 'jie-geng', name: '길경', effects: '폐기를 열고 퍼뜨리며, 담을 삭입니다.' },
-                    { id: 'si-wu-tang', name: '사물탕', effects: '혈을 보하고 조절하는 기본적인 처방입니다.' },
+                    { id: 'sheng-di-huang', name: '생지황', effects: '열을 내리고 혈을 식히며, 음을 자양하고 진액을 생성합니다.' },
                     { id: 'ban-xia', name: '반하', effects: '습기를 말리고, 담을 삭이며, 거역하는 기를 아래로 내립니다.' },
                     { id: 'huang-qin', name: '황금', effects: '열을 내리고 습기를 말립니다.' },
                     { id: 'gui-zhi', name: '계지', effects: '경락을 따뜻하게 하고 통하게 하며, 양기를 돕습니다.' },
                     { id: 'da-zao', name: '대조', effects: '비위의 기를 보하고 혈을 자양합니다.' },
                     { id: 'ren-shen', name: '인삼', effects: '원기를 강력하게 보하고 비장을 튼튼하게 합니다.' },
-                    { id: 'sheng-jiang', name: '생강', effects: '중초를 따뜻하게 하고 영위(營衛)를 조절합니다.' },
-                    { id: 'sheng-di-huang', name: '생지황', effects: '열을 내리고 혈을 식히며, 음을 자양하고 진액을 생성합니다.' },
-                    { id: 'shu-di-huang', name: '숙지황', effects: '신음(腎陰)을 보하고 정혈(精血)을 채워줍니다.' },
-                    { id: 'cang-zhu', name: '창출', effects: '강력하게 습기를 말리고 비장을 튼튼하게 합니다.' },
-                    { id: 'huang-qi', name: '황기', effects: '기와 혈을 보하고, 양기를 끌어올리며, 외부를 튼튼하게 합니다.' }
+                    { id: 'sheng-jiang', name: '생강', effects: '중초를 따뜻하게 하고 영위(營衛)를 조절합니다.' }
                 ],
                 formulas: {
-                    'sayuk-san': { name: '사역산', derivation_text: "간기를 퍼뜨리고 울결을 푸는 기본 처방입니다.", signs: "몸은 따뜻하나 손발이 참, 짜증, 옆구리 통증.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: [], removed: [] } },
-                    'soyo-san': { name: '소요산', derivation_text: "지실을 빼고, 혈을 자양하고 비장을 강화하는 약재를 추가합니다.", signs: "간기울결에 혈허와 비허가 겹친 증상.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['fu-ling', 'bai-zhu', 'dang-gui'], removed: ['zhi-shi'] } },
-                    'siho-sogan-san': { name: '시호소간산', derivation_text: "기를 움직이고 통증을 완화하는 효과를 강화하는 약재를 추가합니다.", signs: "더 심한 간기울결과 통증.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['chuan-xiong', 'xiang-fu-zi', 'chen-pi'], removed: [] } },
-                    'xuefu-zhuyu-tang': { name: '혈부축어탕', derivation_text: "혈액순환을 강력하게 촉진하고 어혈을 푸는 약재를 추가합니다.", signs: "가슴 부위의 혈어와 간기울결.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['tao-ren', 'hong-hua', 'niu-xi', 'jie-geng', 'si-wu-tang'], removed: [] } },
-                    'siho-gyeji-tang': { name: '시호계지탕', derivation_text: "사역산과 계지탕의 요소를 결합하여 표리와 내부를 조화시킵니다.", signs: "한열왕래, 관절통, 가슴 답답함.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['ban-xia', 'huang-qin', 'gui-zhi', 'da-zao', 'ren-shen', 'sheng-jiang'], removed: ['zhi-shi'] } }
+                    'si-ni-san': { name: '사역산', derivation_text: "간기를 퍼뜨리고 울결을 푸는 기본 처방입니다.", signs: "몸은 따뜻하나 손발이 참, 짜증, 옆구리 통증.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: [], removed: [] } },
+                    'xiao-yao-san': { name: '소요산', derivation_text: "지실을 빼고, 혈을 자양하고 비장을 강화하는 약재를 추가합니다.", signs: "간기울결에 혈허와 비허가 겹친 증상.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['fu-ling', 'bai-zhu', 'dang-gui'], removed: ['zhi-shi'] } },
+                    'chai-hu-shu-gan-san': { name: '시호소간산', derivation_text: "기를 움직이고 통증을 완화하는 효과를 강화하는 약재를 추가합니다.", signs: "더 심한 간기울결과 통증.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['chuan-xiong', 'xiang-fu-zi', 'chen-pi'], removed: [] } },
+                    'xuefu-zhuyu-tang': { name: '혈부축어탕', derivation_text: "혈액순환을 강력하게 촉진하고 어혈을 푸는 약재를 추가합니다.", signs: "가슴 부위의 혈어와 간기울결.", composition: { base: ['chai-hu', 'bai-shao', 'zhi-shi', 'gan-cao'], added: ['tao-ren', 'hong-hua', 'niu-xi', 'jie-geng', 'dang-gui', 'chuan-xiong', 'sheng-di-huang'], removed: [] } },
+                    'chai-hu-gui-zhi-tang': { name: '시호계지탕', derivation_text: "사역산과 계지탕의 요소를 결합하여 표리와 내부를 조화시킵니다.", signs: "한열왕래, 관절통, 가슴 답답함.", composition: { base: ['chai-hu', 'bai-shao', 'gan-cao'], added: ['ban-xia', 'huang-qin', 'gui-zhi', 'da-zao', 'ren-shen', 'sheng-jiang'], removed: ['zhi-shi'] } }
                 }
             }
         };
 
         // --- APPLICATION STATE ---
         let currentLang = 'ko';
-        let currentFormula = 'sayuk-san';
+        let currentFormula = 'si-ni-san';
 
         // --- DOM ELEMENTS ---
         const headerLink = document.getElementById('header-link');
@@ -289,7 +281,7 @@
                 item.classList.toggle('active', item.dataset.id === currentFormula);
             });
 
-            const baseHerbs = data.en.formulas['sayuk-san'].composition.base;
+            const baseHerbs = data.en.formulas['si-ni-san'].composition.base;
             const currentFormulaData = data.en.formulas[currentFormula];
             
             const visibleHerbIds = baseHerbs
