@@ -49,7 +49,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            background-color: rgba(247, 243, 239, 0.9);
+            background-color: transparent;
             border-radius: 0;
         }
         .ui-button {
@@ -169,16 +169,18 @@
                 <h3 class="text-xl font-bold mb-4" data-en="How to Play" data-ko="게임 방법">How to Play</h3>
                 <div class="text-left space-y-3 text-sm">
                     <div id="help-content-en">
-                        <p><strong>Goal:</strong> Run and collect herbs while managing your body temperature!</p>
-                        <p><strong>Normal state (gray face):</strong> Run as far as possible while jumping over obstacles. If you eat a Heat Herb, you switch to the Heated state (red face). In this state, eat 3 Cool Herbs to return to Normal. If you eat a Heat Herb while in the Heated state, or a Cool Herb while in the Normal state, the game ends.</p>
-                        <p><strong>Controls:</strong> Space/Click/Touch to jump</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Normal state (gray face):</strong> Run as far as possible jumping abstacles</li>
+                            <li><strong>Heated state (red face):</strong> Eat 3 Cool herbs to return to normal</li>
+                            <li><strong>Game Over:</strong> Eating hot herb in normal state, or Eating cool herb in normal state</li>
+                            <li><strong>Controls:</strong> Space/Click/Touch to jump</li>
+                        </ul>
                     </div>
                     <div id="help-content-ko" class="hidden">
-                        <p><strong>목표:</strong> 달리면서 체온을 관리하며 약초를 수집하세요!</p>
-                        <ul class="list-disc list-inside space-y-1 mt-2">
-                            <li><strong>평상시 (회색 얼굴):</strong> 뜨거운 약재를 먹어 몸을 따뜻하게</li>
-                            <li><strong>열이 날 때 (빨간 얼굴):</strong> 차가운 약재 3개를 먹어 정상으로</li>
-                            <li><strong>게임오버:</strong> 잘못된 약재 또는 점프 중 충돌</li>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>평상시 (회색 얼굴):</strong> 장애물을 피하며 가능한 멀리 달리세요</li>
+                            <li><strong>열이 날 때 (빨간 얼굴):</strong> 차가운 약재 3개를 먹어 정상으로 돌아오세요</li>
+                            <li><strong>게임오버:</strong> 보통 상태에서 찬약을 먹거나, 열난 사애에서 더운 약을 먹는 경우</li>
                             <li><strong>조작:</strong> 스페이스/클릭/터치로 점프</li>
                         </ul>
                     </div>
@@ -191,8 +193,7 @@
     <!-- Main Footer -->
     <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
         <div id="visitor-counter" class="mb-4 text-xs text-gray-400">
-            <span data-en="Today: " data-ko="오늘: ">Today: </span><span id="today-count">0</span> / 
-            <span data-en="Total: " data-ko="전체: ">Total: </span><span id="total-count">0</span>
+            <span id="today-count">0</span> / <span id="total-count">0</span>
         </div>
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
         <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
@@ -312,14 +313,34 @@
         const textData = {
             ko: { 
                 restart: "다시 시작", 
-                help: ["오래 뛰거나 더운 약을 먹으면 열이 납니다 (빨간 얼굴).","차가운 성질의 약을 3개 먹으면 정상으로 돌아옵니다.","평소 상태에서 차가운 약을 먹거나,","열이 난 상태에서 더운 약을 먹으면 게임오버.","알맞은 약을 먹으며 목표에 도달해보세요."], 
+                help: [
+                    "• 평상시 (회색 얼굴): 장애물을 뛰어넘으며 달리기.",
+                    "  뜨거운 약재를 먹으면 열난 상태로 변경",
+                    "",
+                    "• 열난 상태 (빨간 얼굴): 차가운 약재 3개를 먹어 정상으로",
+                    "",
+                    "• 게임오버: 열난 상태에서 뜨거운 약재 섭취 또는",
+                    "  평상시에 차가운 약재 섭취",
+                    "",
+                    "• 조작: 스페이스/클릭/터치로 점프"
+                ], 
                 paused: "일시정지", 
                 win: "목표 달성!", 
                 infinite: "무한 모드" 
             },
             en: { 
                 restart: "RESTART", 
-                help: ["Running long or eating hot herbs causes heat (red face).","Eating 3 cool herbs returns you to normal.","Game over if you eat a cool herb when normal,","or a hot herb when heated.","Eat the right herbs to reach your goal."], 
+                help: [
+                    "• Normal state (gray face): Jump over obstacles while running.",
+                    "  Eating Heat Herb switches to Heated state",
+                    "",
+                    "• Heated state (red face): Eat 3 Cool Herbs to return to Normal",
+                    "",
+                    "• Game Over: Eating Heat Herb while Heated or",
+                    "  Cool Herb while Normal",
+                    "",
+                    "• Controls: Space/Click/Touch to jump"
+                ], 
                 paused: "PAUSED", 
                 win: "You beat the game!", 
                 infinite: "Infinite Mode" 
@@ -346,8 +367,8 @@
         // Character & World Settings
         const PIXEL_SIZE = 5;
         let player = { x: 100, y: 0, width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, vy: 0, isJumping: false, animationFrame: 0, rotation: 0 };
-        const GRAVITY = 0.072;
-        const JUMP_STRENGTH = -2.5;
+        const GRAVITY = 0.094;
+        const JUMP_STRENGTH = -2.2;
         const GROUND_Y = canvas.height - 50;
         let herbs = [];
         let groundOffset = 0;
@@ -384,10 +405,10 @@
             ctx.beginPath();
             ctx.moveTo(0, groundLineY);
             ctx.lineTo(canvas.width, groundLineY);
-            ctx.strokeStyle = '#333';
+            ctx.strokeStyle = '#888';
             ctx.lineWidth = 2;
             ctx.stroke();
-            ctx.strokeStyle = '#555';
+            ctx.strokeStyle = '#999';
             for (let i = -HASH_SPACING; i < canvas.width + HASH_SPACING; i += HASH_SPACING) {
                 const x = i - (groundOffset % HASH_SPACING);
                 ctx.beginPath();
@@ -476,7 +497,7 @@
 
             speedTimer++;
             if (speedTimer >= 600) {
-                baseSpeed *= 1.10;
+                baseSpeed = Math.min(baseSpeed * 1.02, 3.3); // 최대 10%까지만 빨라짐
                 speedTimer = 0;
             }
 
@@ -529,14 +550,14 @@
                     herb.awardedJumpPoints = true;
                 }
                 
-                // 맨 뒤 한글자/영어 2-3글자 정도만 충돌 판정 (약 15-20픽셀)
+                // 충돌 판정을 중간 부분으로 (약재 텍스트의 중앙 5픽셀 범위)
                 const herbEndX = herb.x + herbWidth;
-                const collisionZoneWidth = Math.min(20, herbWidth * 0.3);
-                const collisionZoneStart = herbEndX - collisionZoneWidth;
+                const collisionZoneWidth = 5;
+                const collisionZoneStart = herb.x + (herbWidth / 2) - (collisionZoneWidth / 2);
                 
                 // 플레이어가 충돌 구역에 들어가고, 땅에 있을 때만 충돌
                 const isInCollisionZone = player.x >= collisionZoneStart && 
-                                         player.x < herbEndX;
+                                         player.x < collisionZoneStart + collisionZoneWidth;
                 const isOnGround = player.y >= GROUND_Y - 5;
                 
                 const isColliding = isInCollisionZone &&
@@ -561,6 +582,8 @@
                             }
                         } else { // heated
                             if (herb.group === 'B') {
+                                // 긍정적 효과음 재생
+                                playPositiveSound();
                                 coolingHerbCounter++;
                                 if (coolingHerbCounter >= 3) {
                                     playerState = 'neutral';
@@ -588,7 +611,10 @@
         }
 
         function endGame() {
-            if (!isGameOver) isGameOver = true;
+            if (!isGameOver) {
+                isGameOver = true;
+                playDeathSound();
+            }
         }
 
         function resetGame() {
@@ -652,6 +678,69 @@
             document.getElementById('restartButton').textContent = textData[currentLanguage].restart;
         }
 
+        // 긍정적 효과음 함수
+        function playPositiveSound() {
+            try {
+                // Web Audio API를 사용한 간단한 긍정적 효과음 (띠리링)
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 세 개의 음표로 구성된 멜로디 (C-E-G)
+                const frequencies = [523.25, 659.25, 783.99]; // C5, E5, G5
+                
+                frequencies.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    oscillator.type = 'sine';
+                    
+                    // 볼륨 조절
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    
+                    // 각 음표를 약간의 딜레이를 두고 재생
+                    oscillator.start(audioContext.currentTime + index * 0.1);
+                    oscillator.stop(audioContext.currentTime + index * 0.1 + 0.2);
+                });
+            } catch (error) {
+                console.log('Audio not supported');
+            }
+        }
+
+        // 사망 효과음 함수
+        function playDeathSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 하강하는 톤의 사망 효과음
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'sawtooth';
+                
+                // 주파수가 하강하는 효과
+                oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.5);
+                
+                // 볼륨 조절
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (error) {
+                console.log('Audio not supported');
+            }
+        }
+
         // Event Listeners
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space') jump();
@@ -672,11 +761,13 @@
 
         document.getElementById('helpBtn').addEventListener('click', () => {
             if (!isGameOver) {
+                isPaused = true;
                 document.getElementById('helpModal').classList.remove('hidden');
             }
         });
 
         document.getElementById('helpCloseBtn').addEventListener('click', () => {
+            isPaused = false;
             document.getElementById('helpModal').classList.add('hidden');
         });
 
@@ -727,6 +818,7 @@
         // Close help modal when clicking outside
         document.getElementById('helpModal').addEventListener('click', (e) => {
             if (e.target.id === 'helpModal') {
+                isPaused = false;
                 document.getElementById('helpModal').classList.add('hidden');
             }
         });
