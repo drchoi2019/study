@@ -148,16 +148,16 @@
             },
             { // Level 2
                 'Wood': { core: 'Wood', items: ['Anger', 'Blue', 'Gall'] },
-                'Fire': { core: 'Fire', items: ['Joy', 'Red', 'S. Intestine'] },
+                'Fire': { core: 'Fire', items: ['Joy', 'Red', 'Small\nIntestine'] },
                 'Earth': { core: 'Earth', items: ['Thought', 'Yellow', 'Stomach'] },
-                'Metal': { core: 'Metal', items: ['Grief', 'White', 'L. Intestine'] },
+                'Metal': { core: 'Metal', items: ['Grief', 'White', 'Large\nIntestine'] },
                 'Water': { core: 'Water', items: ['Fear', 'Black', 'Bladder'] }
             },
             { // Level 3
                 'Wood': { core: 'Wood', items: ['Spring', 'Nails', 'Sour', 'East'] },
                 'Fire': { core: 'Fire', items: ['Summer', 'Face', 'Bitter', 'South'] },
                 'Earth': { core: 'Earth', items: ['Lips', 'Sweet'] },
-                'Metal': { core: 'Metal', items: ['Autumn', 'Hair', 'Spicy', 'West'] },
+                'Metal': { core: 'Metal', items: ['Autumn', 'Body\nHair', 'Spicy', 'West'] },
                 'Water': { core: 'Water', items: ['Winter', 'Hair', 'Salty', 'North'] }
             }
         ];
@@ -181,6 +181,7 @@
         let lastUpdateTime = 0;
         let gameRunning = true;
         let blockIdCounter = 0;
+        let isLanding = false;
 
         let personFrame = 0;
         const personFrames = [
@@ -250,6 +251,7 @@
             fallingBlock = null;
             nextBlock = null;
             gameRunning = true;
+            isLanding = false;
             scoreEl.textContent = score;
             levelEl.textContent = level;
             gameOverScreen.classList.add('hidden');
@@ -289,6 +291,18 @@
         }
 
         function generateNewBlock() {
+            const randomChance = 30 + Math.random() * 40; // Random between 30 and 70
+            if (Math.random() < 1 / randomChance) {
+                nextBlock = {
+                    id: blockIdCounter++,
+                    name: '',
+                    type: 'star',
+                    color: '#F7F3EF', // Same as background
+                    textColor: '#000000',
+                };
+                return;
+            }
+
             if (ALL_ITEMS.length === 0) return null;
             const randomItemName = ALL_ITEMS[Math.floor(Math.random() * ALL_ITEMS.length)];
             const coreElement = ITEM_CORE_MAP[randomItemName];
@@ -309,7 +323,6 @@
                 col: Math.floor(COLS / 2),
                 x: Math.floor(COLS / 2) * blockSize,
                 y: -blockSize,
-                isLanding: false,
             };
             generateNewBlock();
         }
@@ -343,12 +356,34 @@
             targetCtx.fill();
             targetCtx.stroke();
             
-            targetCtx.fillStyle = block.textColor;
-            const fontSize = size * 0.18;
-            targetCtx.font = `bold ${fontSize}px 'Noto Sans'`;
-            targetCtx.textAlign = 'center';
-            targetCtx.textBaseline = 'middle';
-            targetCtx.fillText(block.name, x + size / 2, y + size / 2 + 1);
+            if (block.type === 'star') {
+                const sparkleSize = size * 0.08;
+                const sparkleColor = `rgba(220, 180, 0, ${0.5 + Math.sin(Date.now() / 150) * 0.5})`;
+                targetCtx.fillStyle = sparkleColor;
+                
+                const positions = [
+                    [-0.2, -0.2], [0.2, -0.15], [-0.1, 0.25]
+                ];
+                positions.forEach(([px, py]) => {
+                    targetCtx.beginPath();
+                    targetCtx.arc(x + size / 2 + size * px, y + size / 2 + size * py, sparkleSize, 0, Math.PI * 2);
+                    targetCtx.fill();
+                });
+            } else {
+                targetCtx.fillStyle = block.textColor;
+                const fontSize = size * 0.18;
+                targetCtx.font = `bold ${fontSize}px 'Noto Sans'`;
+                targetCtx.textAlign = 'center';
+                targetCtx.textBaseline = 'middle';
+                
+                if (block.name.includes('\n')) {
+                    const lines = block.name.split('\n');
+                    targetCtx.fillText(lines[0], x + size / 2, y + size / 2 - fontSize / 1.5);
+                    targetCtx.fillText(lines[1], x + size / 2, y + size / 2 + fontSize / 1.5);
+                } else {
+                    targetCtx.fillText(block.name, x + size / 2, y + size / 2 + 1);
+                }
+            }
         }
         
         function draw() {
@@ -395,9 +430,12 @@
             const landingY = canvas.height - stackHeight;
 
             if (fallingBlock.y + blockSize >= landingY) {
-                const blockToLand = fallingBlock;
-                fallingBlock = null;
-                handleLanding(blockToLand);
+                if (!isLanding) {
+                    isLanding = true;
+                    const blockToLand = fallingBlock;
+                    fallingBlock = null;
+                    handleLanding(blockToLand);
+                }
             }
         }
         
@@ -413,7 +451,7 @@
             for (let c = 0; c < COLS; c++) {
                 for (let r = 0; r < stackedBlocks[c].length; r++) {
                     const startBlock = getBlock(c, r);
-                    if (!startBlock || visited.has(startBlock.id)) continue;
+                    if (!startBlock || startBlock.type === 'star' || visited.has(startBlock.id)) continue;
 
                     const component = [];
                     const queue = [[c, r]];
@@ -480,13 +518,37 @@
         }
 
         async function handleLanding(landedBlock) {
-            if (!landedBlock) return;
+            if (!landedBlock) {
+                isLanding = false;
+                return;
+            }
             
             landingSynth.triggerAttackRelease("C2", "8n");
 
             const col = landedBlock.col;
             landedBlock.y = canvas.height - (stackedBlocks[col].length + 1) * blockSize;
             stackedBlocks[col].push(landedBlock);
+            
+            if (landedBlock.type === 'star') {
+                const r = stackedBlocks[col].length - 1;
+                const toRemove = new Set([landedBlock.id]);
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        const neighbor = getBlock(col + i, r + j);
+                        if (neighbor) {
+                            toRemove.add(neighbor.id);
+                        }
+                    }
+                }
+                score += toRemove.size * 15; // Star bonus
+                scoreEl.textContent = score;
+                polySynth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "8n");
+
+                for (let c = 0; c < COLS; c++) {
+                    stackedBlocks[c] = stackedBlocks[c].filter(block => !toRemove.has(block.id));
+                }
+            }
+            
             draw();
 
             await processMatchesAndChains();
@@ -502,6 +564,7 @@
             if (gameRunning) {
                 spawnFallingBlock();
             }
+            isLanding = false;
         }
 
         function showLevelUpScreen() {
@@ -549,12 +612,12 @@
         }
 
         function togglePause() {
-            if (helpModal.classList.contains('flex')) return; // Don't pause if help is open
+            if (helpModal.classList.contains('flex')) return;
             gameRunning = !gameRunning;
             if (gameRunning) {
                 pauseScreen.classList.add('hidden');
                 pauseScreen.classList.remove('flex');
-                lastUpdateTime = performance.now(); // Reset timer to prevent jump
+                lastUpdateTime = performance.now();
                 requestAnimationFrame(gameLoop);
             } else {
                 pauseScreen.classList.remove('hidden');
@@ -588,7 +651,7 @@
         document.body.addEventListener('keydown', startAudioContext, { once: true });
 
         window.addEventListener('keydown', (e) => {
-            if (e.key === ' ') { // Spacebar for pause
+            if (e.key === ' ') { 
                 e.preventDefault();
                 togglePause();
                 return;
@@ -612,16 +675,20 @@
         restartButton.addEventListener('click', init);
         continueButton.addEventListener('click', resumeGame);
         helpButton.addEventListener('click', () => {
-            gameRunning = false;
-            helpModal.classList.remove('hidden');
-            helpModal.classList.add('flex');
+            if (gameRunning) {
+                gameRunning = false;
+                helpModal.classList.remove('hidden');
+                helpModal.classList.add('flex');
+            }
         });
         closeHelpButton.addEventListener('click', () => {
             helpModal.classList.add('hidden');
             helpModal.classList.remove('flex');
-            gameRunning = true;
-            lastUpdateTime = performance.now();
-            requestAnimationFrame(gameLoop);
+            if (!pauseScreen.classList.contains('flex')) {
+                gameRunning = true;
+                lastUpdateTime = performance.now();
+                requestAnimationFrame(gameLoop);
+            }
         });
         window.addEventListener('resize', resizeCanvas);
         
