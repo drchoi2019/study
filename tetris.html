@@ -18,12 +18,22 @@
             background-color: #F7F3EF; /* Match canvas background with body */
             display: block;
         }
-        .touch-button-container.hidden-on-desktop {
-            display: none; /* Hide by default on non-touch devices */
+        .touch-area {
+            position: absolute;
+            opacity: 0;
+            z-index: 10;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .touch-area.debug {
+            opacity: 0.1;
+            background-color: red;
         }
         @media (hover: none) and (pointer: coarse) {
-            .touch-button-container.hidden-on-desktop {
-                display: flex;
+            .touch-areas-container {
+                display: block !important;
             }
         }
     </style>
@@ -39,6 +49,16 @@
                 <div id="game-container" class="relative w-full aspect-[5/8]">
                     <canvas id="gameCanvas"></canvas>
                     
+                    <!-- Touch Areas for Mobile -->
+                    <div class="touch-areas-container absolute inset-0 hidden">
+                        <!-- Top area for fast drop -->
+                        <div id="topTouchArea" class="touch-area" style="top: 0; left: 0; width: 100%; height: 25%;"></div>
+                        <!-- Left area for move left -->
+                        <div id="leftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
+                        <!-- Right area for move right -->
+                        <div id="rightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
+                    </div>
+                    
                     <div id="pauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
                         <h2 class="text-5xl font-bold text-stone-500">Paused</h2>
                     </div>
@@ -47,8 +67,8 @@
                         <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
                             <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
                             <ul class="space-y-2 text-sm">
-                                <li class="flex items-start"><span class="mr-2">1.</span><span>Use ← → arrow keys to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span>Press ↓ arrow key for a fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">1.</span><span>Touch left/right side to move the block.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span>Touch top area for fast drop.</span></li>
                                 <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
                                 <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
                             </ul>
@@ -91,22 +111,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- Controls section -->
-        <div id="touch-controls" class="touch-button-container hidden-on-desktop justify-center space-x-4 mt-4">
-            <button id="leftButton" class="w-20 h-20 bg-stone-300 rounded-full flex items-center justify-center text-4xl shadow-lg active:bg-stone-400 transition text-stone-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8_0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/></svg>
-            </button>
-            <button id="rightButton" class="w-20 h-20 bg-stone-300 rounded-full flex items-center justify-center text-4xl shadow-lg active:bg-stone-400 transition text-stone-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/></svg>
-            </button>
-        </div>
     </div>
 
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
-
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -121,22 +130,23 @@
         const gameOverScreen = document.getElementById('gameOverScreen');
         const finalScoreEl = document.getElementById('finalScore');
         const restartButton = document.getElementById('restartButton');
-        const leftButton = document.getElementById('leftButton');
-        const rightButton = document.getElementById('rightButton');
         const levelUpScreen = document.getElementById('levelUpScreen');
         const continueButton = document.getElementById('continueButton');
         const levelUpTitle = document.getElementById('levelUpTitle');
         const levelUpSubtitle = document.getElementById('levelUpSubtitle');
-        const touchControls = document.getElementById('touch-controls');
         const helpButton = document.getElementById('help-button');
         const helpModal = document.getElementById('helpModal');
         const closeHelpButton = document.getElementById('closeHelpButton');
         const pauseScreen = document.getElementById('pauseScreen');
+        
+        // Touch areas
+        const topTouchArea = document.getElementById('topTouchArea');
+        const leftTouchArea = document.getElementById('leftTouchArea');
+        const rightTouchArea = document.getElementById('rightTouchArea');
 
         const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
         const landingSynth = new Tone.MembraneSynth({ pitchDecay: 0.01, octaves: 2, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.1, sustain: 0.01, release: 0.1 } }).toDestination();
-
 
         const LEVEL_DATA = [
             { // Level 1
@@ -182,6 +192,7 @@
         let gameRunning = true;
         let blockIdCounter = 0;
         let isLanding = false;
+        let isFastDropping = false;
 
         let personFrame = 0;
         const personFrames = [
@@ -222,7 +233,6 @@
             personFrame = (personFrame + 1) % personFrames.length;
         }
 
-
         function updateDataForLevel(levelNumber) {
             const levelIndex = levelNumber - 1;
             if (levelIndex >= LEVEL_DATA.length) return; 
@@ -237,10 +247,6 @@
         }
 
         function init() {
-            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-            if (isTouchDevice) touchControls.style.display = 'flex';
-            else touchControls.style.display = 'none';
-
             resizeCanvas();
             score = 0;
             level = 1;
@@ -252,6 +258,7 @@
             nextBlock = null;
             gameRunning = true;
             isLanding = false;
+            isFastDropping = false;
             scoreEl.textContent = score;
             levelEl.textContent = level;
             gameOverScreen.classList.add('hidden');
@@ -288,6 +295,17 @@
                 if (fallingBlock.col < COLS - 1) fallingBlock.col++;
             }
             fallingBlock.x = fallingBlock.col * blockSize;
+        }
+
+        function startFastDrop() {
+            if (!gameRunning || !fallingBlock) return;
+            isFastDropping = true;
+            fallInterval = 50;
+        }
+
+        function stopFastDrop() {
+            isFastDropping = false;
+            fallInterval = baseFallInterval;
         }
 
         function generateNewBlock() {
@@ -524,6 +542,7 @@
             }
             
             landingSynth.triggerAttackRelease("C2", "8n");
+            stopFastDrop(); // Stop fast drop when block lands
 
             const col = landedBlock.col;
             landedBlock.y = canvas.height - (stackedBlocks[col].length + 1) * blockSize;
@@ -648,8 +667,10 @@
             }
         }
         document.body.addEventListener('click', startAudioContext, { once: true });
+        document.body.addEventListener('touchstart', startAudioContext, { once: true });
         document.body.addEventListener('keydown', startAudioContext, { once: true });
 
+        // Desktop keyboard controls
         window.addEventListener('keydown', (e) => {
             if (e.key === ' ') { 
                 e.preventDefault();
@@ -660,20 +681,43 @@
             if (e.key === 'ArrowLeft') moveFallingBlock('left');
             else if (e.key === 'ArrowRight') moveFallingBlock('right');
             else if (e.key === 'ArrowDown') {
-                 if(fallingBlock) fallInterval = 50;
+                 if(fallingBlock) startFastDrop();
             }
         });
         
         window.addEventListener('keyup', (e) => {
             if (e.key === 'ArrowDown') {
-                fallInterval = baseFallInterval;
+                stopFastDrop();
             }
         });
-        
-        leftButton.addEventListener('click', () => moveFallingBlock('left'));
-        rightButton.addEventListener('click', () => moveFallingBlock('right'));
+
+        // Touch controls for mobile
+        function addTouchEventListeners(element, onStart, onEnd) {
+            element.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (onStart) onStart();
+            });
+            
+            element.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                if (onEnd) onEnd();
+            });
+            
+            element.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                if (onEnd) onEnd();
+            });
+        }
+
+        // Add touch listeners
+        addTouchEventListeners(leftTouchArea, () => moveFallingBlock('left'));
+        addTouchEventListeners(rightTouchArea, () => moveFallingBlock('right'));
+        addTouchEventListeners(topTouchArea, () => startFastDrop(), () => stopFastDrop());
+
+        // Button event listeners
         restartButton.addEventListener('click', init);
         continueButton.addEventListener('click', resumeGame);
+        
         helpButton.addEventListener('click', () => {
             if (gameRunning) {
                 gameRunning = false;
@@ -681,6 +725,7 @@
                 helpModal.classList.add('flex');
             }
         });
+        
         closeHelpButton.addEventListener('click', () => {
             helpModal.classList.add('hidden');
             helpModal.classList.remove('flex');
@@ -690,6 +735,7 @@
                 requestAnimationFrame(gameLoop);
             }
         });
+        
         window.addEventListener('resize', resizeCanvas);
         
         init();
