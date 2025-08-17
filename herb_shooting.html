@@ -81,7 +81,7 @@
                     </ul>
                     <p><strong class="text-yellow-400">Controls:</strong></p>
                     <ul class="list-disc list-inside pl-2">
-                        <li><strong>Keyboard:</strong> ← → (Move), Spacebar (Shoot)</li>
+                        <li><strong>Keyboard:</strong> ← → (Move), Spacebar (Shoot), P (Pause)</li>
                         <li><strong>Touch:</strong> Tap Left/Right side (Move), Tap Center (Shoot)</li>
                     </ul>
                 </div>
@@ -248,8 +248,21 @@
             gameLoop();
         }
 
-        function pauseGame() { paused = true; }
-        function resumeGame() { paused = false; gameLoop(); }
+        function pauseGame() { 
+            paused = true; 
+        }
+        function resumeGame() { 
+            paused = false; 
+            gameLoop(); 
+        }
+
+        function togglePause() {
+            if (!gameStarted || gameOver) return;
+            paused = !paused;
+            if (!paused) {
+                gameLoop();
+            }
+        }
 
         function togglePlayerState() {
             if (gameOver || paused) return;
@@ -277,10 +290,17 @@
             };
             const displayText = currentLanguage === 'ko' ? text.ko : text.en;
 
-            ctx.font = '16px sans-serif';
+            const isLifeUp = Math.random() < 0.01; // 1% chance for a life-up herb
+            const isBig = isLifeUp || Math.random() < 0.1; // A life-up herb is always big. Otherwise, 10% chance.
+            const fontSize = isBig ? 24 : 16; // 1.5x size
+            ctx.font = `bold ${fontSize}px sans-serif`;
             const textWidth = ctx.measureText(displayText).width;
             const xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
-            items.push({ x: xPos, y: -20, text: text, displayText: displayText, type: type, width: textWidth, height: 16, speed: baseItemSpeed, lane: lane });
+            items.push({ 
+                x: xPos, y: -20, text: text, displayText: displayText, 
+                type: type, width: textWidth, height: fontSize, 
+                speed: baseItemSpeed, lane: lane, isBig: isBig, isLifeUp: isLifeUp 
+            });
         }
 
         function drawPixelArtPlayer() {
@@ -302,9 +322,13 @@
         }
 
         function drawItems() { 
-            ctx.font = '16px sans-serif'; 
-            ctx.fillStyle = '#333'; 
-            items.forEach(item => ctx.fillText(item.displayText, item.x, item.y)); 
+            items.forEach(item => {
+                ctx.fillStyle = item.isLifeUp ? '#e53e3e' : '#333'; // Set color to red for life-up items
+                const fontSize = item.isBig ? 24 : 16;
+                ctx.font = `bold ${fontSize}px sans-serif`;
+                ctx.fillText(item.displayText, item.x, item.y);
+            });
+            ctx.fillStyle = '#333'; // Reset to default
         }
         function drawBullets() { bullets.forEach(bullet => { ctx.fillStyle = 'orange'; ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
 
@@ -351,14 +375,37 @@
 
         function handlePlayerItemCollision(item, itemIndex) {
             const correctCatch = (playerState === 'red' && item.type === 'B') || (playerState === 'blue' && item.type === 'A');
-            if (correctCatch) { score += 10; playSuccessSound(); } else { lives--; playMistakeSound(); }
-            items.splice(itemIndex, 1); updateUI();
+            const points = item.isBig ? 20 : 10;
+            if (correctCatch) { 
+                score += points; 
+                playSuccessSound();
+                if (item.isLifeUp) {
+                    lives++;
+                }
+            } else { 
+                lives--; 
+                playMistakeSound(); 
+            }
+            items.splice(itemIndex, 1); 
+            updateUI();
         }
 
         function handleBulletItemCollision(item, itemIndex, bulletIndex) {
             const correctShot = (playerState === 'red' && item.type === 'A') || (playerState === 'blue' && item.type === 'B');
-            if (correctShot) { score += 5; playSuccessSound(); } else { lives--; playMistakeSound(); }
-            items.splice(itemIndex, 1); bullets.splice(bulletIndex, 1); updateUI();
+            const points = item.isBig ? 10 : 5;
+            if (correctShot) { 
+                score += points; 
+                playSuccessSound();
+                if (item.isLifeUp) {
+                    lives++;
+                }
+            } else { 
+                lives--; 
+                playMistakeSound(); 
+            }
+            items.splice(itemIndex, 1); 
+            bullets.splice(bulletIndex, 1); 
+            updateUI();
         }
 
         function showMessage(text, showButton = false) {
@@ -402,9 +449,36 @@
         }
 
         function gameLoop() {
-            if (gameOver || paused || !gameStarted) return;
+            if (gameOver || !gameStarted) return;
+
+            if (paused) {
+                // Draw a small box for the pause message
+                const boxWidth = 150;
+                const boxHeight = 70;
+                const boxX = (canvas.width - boxWidth) / 2;
+                const boxY = (canvas.height - boxHeight) / 2;
+
+                ctx.fillStyle = 'rgba(247, 243, 239, 0.95)'; // Opaque version of background
+                ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+                ctx.strokeStyle = '#B9A38D';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+                // Draw the text
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 24px "Cormorant Garamond", serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Paused', canvas.width / 2, canvas.height / 2 + 8);
+                ctx.textAlign = 'left'; // Reset alignment
+                return; // Stop the loop
+            }
+
+            // Normal game loop execution
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            updateGame(); drawPixelArtPlayer(); drawItems(); drawBullets();
+            updateGame();
+            drawPixelArtPlayer();
+            drawItems();
+            drawBullets();
             requestAnimationFrame(gameLoop);
         }
 
@@ -442,7 +516,8 @@
             if (!gameStarted) return;
             items.forEach(item => {
                 item.displayText = currentLanguage === 'ko' ? item.text.ko : item.text.en;
-                ctx.font = '16px sans-serif';
+                const fontSize = item.isBig ? 24 : 16;
+                ctx.font = `bold ${fontSize}px sans-serif`;
                 const textWidth = ctx.measureText(item.displayText).width;
                 item.width = textWidth;
                 item.x = (laneWidth * item.lane) + (laneWidth / 2) - (textWidth / 2);
@@ -460,10 +535,11 @@
                 if (e.code === 'ArrowLeft') movePlayer('left');
                 if (e.code === 'ArrowRight') movePlayer('right');
                 if (e.code === 'Space') { e.preventDefault(); shoot(); }
+                if (e.code === 'KeyP') { e.preventDefault(); togglePause(); }
             });
             
             canvas.addEventListener('click', (e) => {
-                if (isMobile() && gameStarted) {
+                if (isMobile() && gameStarted && !paused) {
                     const rect = canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const third = canvas.width / 3;
