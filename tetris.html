@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Five Elements Block Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            touch-action: manipulation; /* Disable double tap to zoom */
+        }
+        canvas {
+            background-color: #F7F3EF; /* Match canvas background with body */
+            display: block;
+        }
+        .touch-button-container.hidden-on-desktop {
+            display: none; /* Hide by default on non-touch devices */
+        }
+        @media (hover: none) and (pointer: coarse) {
+            .touch-button-container.hidden-on-desktop {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F7F3EF] flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md mx-auto">
+        
+        <!-- Top section: Game + Sidebar -->
+        <div class="flex justify-center items-start gap-4">
+            <!-- Main Game Area -->
+            <div class="w-full max-w-sm">
+                <div id="game-container" class="relative w-full aspect-[5/8]">
+                    <canvas id="gameCanvas"></canvas>
+                    
+                    <div id="levelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                        <h2 id="levelUpTitle" class="text-4xl font-bold text-stone-500">Level Up!</h2>
+                        <p id="levelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
+                        <button id="continueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                            Continue
+                        </button>
+                    </div>
+
+                    <div id="gameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                        <h2 class="text-4xl font-bold text-stone-500">Game Over</h2>
+                        <p class="text-lg mt-2 text-stone-600">Score: <span id="finalScore">0</span></p>
+                        <button id="restartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                            Restart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="w-24 flex-shrink-0 pt-2">
+                <div class="text-center text-stone-600">
+                    <canvas id="nextBlockCanvas" class="rounded-lg"></canvas>
+                </div>
+                <div class="mt-4 text-center text-stone-600">
+                    <div class="text-lg font-bold">Score</div>
+                    <div id="score" class="text-xl">0</div>
+                    <div class="text-lg font-bold mt-4">Level</div>
+                    <div id="level" class="text-xl">1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls section -->
+        <div id="touch-controls" class="touch-button-container hidden-on-desktop justify-center space-x-4 mt-4">
+            <button id="leftButton" class="w-20 h-20 bg-stone-300 rounded-full flex items-center justify-center text-4xl shadow-lg active:bg-stone-400 transition text-stone-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8_0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/></svg>
+            </button>
+            <button id="rightButton" class="w-20 h-20 bg-stone-300 rounded-full flex items-center justify-center text-4xl shadow-lg active:bg-stone-400 transition text-stone-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/></svg>
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const nextBlockCanvas = document.getElementById('nextBlockCanvas');
+        const nextCtx = nextBlockCanvas.getContext('2d');
+        const gameContainer = document.getElementById('game-container');
+        const scoreEl = document.getElementById('score');
+        const levelEl = document.getElementById('level');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalScoreEl = document.getElementById('finalScore');
+        const restartButton = document.getElementById('restartButton');
+        const leftButton = document.getElementById('leftButton');
+        const rightButton = document.getElementById('rightButton');
+        const levelUpScreen = document.getElementById('levelUpScreen');
+        const continueButton = document.getElementById('continueButton');
+        const levelUpTitle = document.getElementById('levelUpTitle');
+        const levelUpSubtitle = document.getElementById('levelUpSubtitle');
+        const touchControls = document.getElementById('touch-controls');
+
+        const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
+        const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
+
+        const LEVEL_DATA = [
+            { // Level 1
+                'Wood': { core: 'Wood', items: ['Wood', 'Eyes', 'Liver', 'Wind'] },
+                'Fire': { core: 'Fire', items: ['Fire', 'Tongue', 'Heart', 'Heat'] },
+                'Earth': { core: 'Earth', items: ['Earth', 'Mouth', 'Spleen', 'Damp'] },
+                'Metal': { core: 'Metal', items: ['Metal', 'Nose', 'Lung', 'Dry'] },
+                'Water': { core: 'Water', items: ['Water', 'Ears', 'Kidney', 'Cold'] }
+            },
+            { // Level 2
+                'Wood': { core: 'Wood', items: ['Anger', 'Blue', 'Gall'] },
+                'Fire': { core: 'Fire', items: ['Joy', 'Red', 'S. Intestine'] },
+                'Earth': { core: 'Earth', items: ['Thought', 'Yellow', 'Stomach'] },
+                'Metal': { core: 'Metal', items: ['Grief', 'White', 'L. Intestine'] },
+                'Water': { core: 'Water', items: ['Fear', 'Black', 'Bladder'] }
+            },
+            { // Level 3
+                'Wood': { core: 'Wood', items: ['Spring', 'Nails', 'Sour', 'East'] },
+                'Fire': { core: 'Fire', items: ['Summer', 'Face', 'Bitter', 'South'] },
+                'Earth': { core: 'Earth', items: ['Lips', 'Sweet'] },
+                'Metal': { core: 'Metal', items: ['Autumn', 'Hair', 'Spicy', 'West'] },
+                'Water': { core: 'Water', items: ['Winter', 'Hair', 'Salty', 'North'] }
+            }
+        ];
+
+        const BLOCK_COLORS = ['#f5f5dc', '#ffe4c4', '#deb887', '#d2b48c'];
+        const TEXT_COLOR = '#44403c';
+        
+        let ALL_ITEMS = [];
+        let ITEM_CORE_MAP = {};
+
+        const COLS = 5;
+        const ROWS = 8;
+        let blockSize;
+        let fallingBlock = null;
+        let nextBlock = null;
+        let stackedBlocks = Array(COLS).fill(0).map(() => []);
+        let score = 0;
+        let level = 1;
+        let fallInterval = 1000;
+        let baseFallInterval = 1000;
+        let lastUpdateTime = 0;
+        let gameRunning = true;
+        let blockIdCounter = 0;
+
+        function updateDataForLevel(levelNumber) {
+            const levelIndex = levelNumber - 1;
+            if (levelIndex >= LEVEL_DATA.length) return; 
+            const currentLevelData = LEVEL_DATA[levelIndex];
+            ALL_ITEMS = Object.values(currentLevelData).flatMap(data => data.items);
+            ITEM_CORE_MAP = {};
+            for (const coreElement in currentLevelData) {
+                for (const item of currentLevelData[coreElement].items) {
+                    if (!ITEM_CORE_MAP[item]) ITEM_CORE_MAP[item] = coreElement;
+                }
+            }
+        }
+
+        function init() {
+            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            if (isTouchDevice) touchControls.style.display = 'flex';
+            else touchControls.style.display = 'none';
+
+            resizeCanvas();
+            score = 0;
+            level = 1;
+            updateDataForLevel(1);
+            baseFallInterval = 1000;
+            fallInterval = 1000;
+            stackedBlocks = Array(COLS).fill(0).map(() => []);
+            fallingBlock = null;
+            nextBlock = null;
+            gameRunning = true;
+            scoreEl.textContent = score;
+            levelEl.textContent = level;
+            gameOverScreen.classList.add('hidden');
+            levelUpScreen.classList.add('hidden');
+            
+            generateNewBlock();
+            spawnFallingBlock();
+
+            lastUpdateTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resizeCanvas() {
+            const containerWidth = gameContainer.clientWidth;
+            const containerHeight = gameContainer.clientHeight;
+            canvas.width = containerWidth;
+            canvas.height = containerHeight;
+            blockSize = canvas.width / COLS;
+            
+            nextBlockCanvas.width = blockSize;
+            nextBlockCanvas.height = blockSize;
+        }
+        
+        function moveFallingBlock(direction) {
+            if (!gameRunning || !fallingBlock) return;
+            if (direction === 'left') {
+                if (fallingBlock.col > 0) fallingBlock.col--;
+            } else if (direction === 'right') {
+                if (fallingBlock.col < COLS - 1) fallingBlock.col++;
+            }
+            fallingBlock.x = fallingBlock.col * blockSize;
+        }
+
+        function generateNewBlock() {
+            if (ALL_ITEMS.length === 0) return null;
+            const randomItemName = ALL_ITEMS[Math.floor(Math.random() * ALL_ITEMS.length)];
+            const coreElement = ITEM_CORE_MAP[randomItemName];
+            const randomColor = BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)];
+            
+            nextBlock = {
+                id: blockIdCounter++,
+                name: randomItemName,
+                core: coreElement,
+                color: randomColor,
+                textColor: TEXT_COLOR,
+            };
+        }
+
+        function spawnFallingBlock() {
+            fallingBlock = {
+                ...nextBlock,
+                col: Math.floor(COLS / 2),
+                x: Math.floor(COLS / 2) * blockSize,
+                y: -blockSize,
+                isLanding: false,
+            };
+            generateNewBlock();
+        }
+
+        function drawBlock(block, x, y, size, targetCtx = ctx) {
+            const cornerRadius = size * 0.2;
+            const strokeColor = '#854d0e';
+            const strokeWidth = 2;
+            
+            const padding = strokeWidth / 2;
+            const drawX = x + padding;
+            const drawY = y + padding;
+            const drawSize = size - (padding * 2);
+
+            targetCtx.fillStyle = block.color;
+            targetCtx.strokeStyle = strokeColor;
+            targetCtx.lineWidth = strokeWidth;
+
+            targetCtx.beginPath();
+            targetCtx.moveTo(drawX + cornerRadius, drawY);
+            targetCtx.lineTo(drawX + drawSize - cornerRadius, drawY);
+            targetCtx.arcTo(drawX + drawSize, drawY, drawX + drawSize, drawY + cornerRadius, cornerRadius);
+            targetCtx.lineTo(drawX + drawSize, drawY + drawSize - cornerRadius);
+            targetCtx.arcTo(drawX + drawSize, drawY + drawSize, drawX + drawSize - cornerRadius, drawY + drawSize, cornerRadius);
+            targetCtx.lineTo(drawX + cornerRadius, drawY + drawSize);
+            targetCtx.arcTo(drawX, drawY + drawSize, drawX, drawY + drawSize - cornerRadius, cornerRadius);
+            targetCtx.lineTo(drawX, drawY + cornerRadius);
+            targetCtx.arcTo(drawX, drawY, drawX + cornerRadius, drawY, cornerRadius);
+            targetCtx.closePath();
+            
+            targetCtx.fill();
+            targetCtx.stroke();
+            
+            targetCtx.fillStyle = block.textColor;
+            const fontSize = size * 0.18;
+            targetCtx.font = `bold ${fontSize}px 'Noto Sans'`;
+            targetCtx.textAlign = 'center';
+            targetCtx.textBaseline = 'middle';
+            targetCtx.fillText(block.name, x + size / 2, y + size / 2 + 1);
+        }
+        
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = '#D7CCC8';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(1, 0);
+            ctx.lineTo(1, canvas.height);
+            ctx.moveTo(canvas.width - 1, 0);
+            ctx.lineTo(canvas.width - 1, canvas.height);
+            ctx.stroke();
+
+            stackedBlocks.forEach((col, colIndex) => {
+                col.forEach((block, rowIndex) => {
+                    const y = canvas.height - (rowIndex + 1) * blockSize;
+                    drawBlock(block, colIndex * blockSize, y, blockSize);
+                });
+            });
+            if (fallingBlock) {
+                drawBlock(fallingBlock, fallingBlock.x, fallingBlock.y, blockSize);
+            }
+
+            nextCtx.clearRect(0, 0, nextBlockCanvas.width, nextBlockCanvas.height);
+            if(nextBlock) {
+                const previewSize = blockSize; // --- SIZE CHANGE ---
+                const x = (nextBlockCanvas.width - previewSize) / 2;
+                const y = (nextBlockCanvas.height - previewSize) / 2;
+                drawBlock(nextBlock, x, y, previewSize, nextCtx);
+            }
+        }
+
+        function update(timestamp) {
+            if (!gameRunning || fallingBlock === null) return;
+            const deltaTime = timestamp - lastUpdateTime;
+            lastUpdateTime = timestamp;
+
+            const fallSpeed = blockSize / fallInterval; 
+            fallingBlock.y += fallSpeed * deltaTime;
+
+            const col = fallingBlock.col;
+            const stackHeight = stackedBlocks[col].length * blockSize;
+            const landingY = canvas.height - stackHeight;
+
+            if (fallingBlock.y + blockSize >= landingY) {
+                if (!fallingBlock.isLanding) {
+                    fallingBlock.isLanding = true;
+                    handleLanding();
+                }
+            }
+        }
+        
+        function getBlock(c, r) {
+            if (c < 0 || c >= COLS || r < 0 || !stackedBlocks[c] || r >= stackedBlocks[c].length) return null;
+            return stackedBlocks[c][r];
+        }
+
+        function findMatches() {
+            const components = [];
+            const visited = new Set();
+
+            for (let c = 0; c < COLS; c++) {
+                for (let r = 0; r < stackedBlocks[c].length; r++) {
+                    const startBlock = getBlock(c, r);
+                    if (!startBlock || visited.has(startBlock.id)) continue;
+
+                    const component = [];
+                    const queue = [[c, r]];
+                    const componentVisited = new Set([startBlock.id]);
+                    visited.add(startBlock.id);
+
+                    while (queue.length > 0) {
+                        const [currC, currR] = queue.shift();
+                        const currentBlock = getBlock(currC, currR);
+                        component.push(currentBlock);
+
+                        const neighbors = [[currC, currR + 1], [currC, currR - 1], [currC + 1, currR], [currC - 1, currR]];
+
+                        for (const [nextC, nextR] of neighbors) {
+                            const neighborBlock = getBlock(nextC, nextR);
+                            if (neighborBlock && !componentVisited.has(neighborBlock.id) && neighborBlock.core === startBlock.core) {
+                                componentVisited.add(neighborBlock.id);
+                                visited.add(neighborBlock.id);
+                                queue.push([nextC, nextR]);
+                            }
+                        }
+                    }
+
+                    if (component.length >= 3) {
+                       components.push(component);
+                    }
+                }
+            }
+            return components;
+        }
+
+        async function processMatchesAndChains() {
+            while (true) {
+                const componentsToRemove = findMatches();
+                if (componentsToRemove.length === 0) break;
+
+                const toRemove = new Set();
+                for(const component of componentsToRemove) {
+                    const now = Tone.now();
+                    if (component.length >= 4) {
+                        score += component.length * 20;
+                        const notes = ["C5", "D5", "E5", "G5", "A5"];
+                        notes.forEach((note, i) => {
+                            polySynth.triggerAttackRelease(note, "16n", now + i * 0.08);
+                        });
+                    } else {
+                        score += component.length * 10;
+                        synth.triggerAttackRelease("C5", "16n", now);
+                        synth.triggerAttackRelease("E5", "16n", now + 0.1);
+                        synth.triggerAttackRelease("G5", "16n", now + 0.2);
+                    }
+                    component.forEach(block => toRemove.add(block.id));
+                }
+
+                scoreEl.textContent = score;
+                
+                for (let c = 0; c < COLS; c++) {
+                    stackedBlocks[c] = stackedBlocks[c].filter(block => !toRemove.has(block.id));
+                }
+                
+                draw();
+                await new Promise(resolve => setTimeout(resolve, 250));
+            }
+        }
+
+        async function handleLanding() {
+            const landedBlock = fallingBlock;
+            fallingBlock = null;
+            if (!landedBlock) return;
+
+            const col = landedBlock.col;
+            landedBlock.y = canvas.height - (stackedBlocks[col].length + 1) * blockSize;
+            stackedBlocks[col].push(landedBlock);
+            draw();
+
+            await processMatchesAndChains();
+            checkLevelUp();
+
+            for (let c = 0; c < COLS; c++) {
+                if (stackedBlocks[c].length >= ROWS) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            if (gameRunning) {
+                spawnFallingBlock();
+            }
+        }
+
+        function showLevelUpScreen() {
+            gameRunning = false;
+            levelUpScreen.classList.remove('hidden');
+            levelUpScreen.classList.add('flex');
+            levelUpTitle.textContent = `Level ${level}!`;
+            levelUpSubtitle.textContent = `Stage ${level} Start`;
+            levelEl.textContent = level;
+            updateDataForLevel(level);
+            baseFallInterval = Math.max(150, baseFallInterval * 0.9);
+            fallInterval = baseFallInterval;
+        }
+
+        function checkLevelUp() {
+            let leveledUp = false;
+            if (level === 1 && score >= 100) {
+                level = 2;
+                leveledUp = true;
+            } else if (level === 2 && score >= 200) {
+                level = 3;
+                leveledUp = true;
+            } else if (level === 3 && score >= 300) {
+                level = 4;
+                levelEl.textContent = level;
+                levelUpTitle.textContent = `Level ${level}!`;
+                levelUpSubtitle.textContent = `Speed Up!`;
+                gameRunning = false;
+                levelUpScreen.classList.remove('hidden');
+                levelUpScreen.classList.add('flex');
+                baseFallInterval = Math.max(150, baseFallInterval * 0.7);
+                fallInterval = baseFallInterval;
+            }
+
+            if (leveledUp) {
+                showLevelUpScreen();
+            }
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            finalScoreEl.textContent = score;
+            gameOverScreen.classList.remove('hidden');
+            gameOverScreen.classList.add('flex');
+        }
+
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            update(timestamp);
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resumeGame() {
+            levelUpScreen.classList.add('hidden');
+            levelUpScreen.classList.remove('flex');
+            gameRunning = true;
+            fallingBlock = null;
+            spawnFallingBlock();
+            lastUpdateTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startAudioContext() {
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+        }
+        document.body.addEventListener('click', startAudioContext, { once: true });
+        document.body.addEventListener('keydown', startAudioContext, { once: true });
+
+        window.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+            if (e.key === 'ArrowLeft') moveFallingBlock('left');
+            else if (e.key === 'ArrowRight') moveFallingBlock('right');
+            else if (e.key === 'ArrowDown') {
+                 if(fallingBlock) fallInterval = 50;
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowDown') {
+                fallInterval = baseFallInterval;
+            }
+        });
+        
+        leftButton.addEventListener('click', () => moveFallingBlock('left'));
+        rightButton.addEventListener('click', () => moveFallingBlock('right'));
+        restartButton.addEventListener('click', init);
+        continueButton.addEventListener('click', resumeGame);
+        window.addEventListener('resize', resizeCanvas);
+        
+        init();
+    </script>
+</body>
+</html>
