@@ -120,7 +120,7 @@
                     <li><a href="sinisan_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
                     <li><a href="hack_names.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
-                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
+                    <li><a href="herb_shooting_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
                 </ul>
             </div>
             <!-- History -->
@@ -208,12 +208,46 @@
         // --- Firebase SDK Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, runTransaction, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, runTransaction, onSnapshot, increment, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- Main Page Script ---
         let currentLanguage = 'en';
 
-        async function checkAndNavigate(event) {
+        function showPageMessage(message) {
+            const existingModal = document.getElementById('page-message-modal');
+            if (existingModal) return;
+
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'page-message-modal';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full';
+            modalContent.innerHTML = `<p class="mb-4 text-gray-800">${message}</p>`;
+            
+            const closeButton = document.createElement('button');
+            closeButton.className = 'px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors';
+            closeButton.textContent = 'OK';
+            
+            modalContent.appendChild(closeButton);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+            
+            const closeModal = () => {
+                if(document.body.contains(modalOverlay)){
+                    document.body.removeChild(modalOverlay);
+                }
+            };
+
+            closeButton.onclick = closeModal;
+            modalOverlay.onclick = (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            };
+        }
+
+        window.checkAndNavigate = async function(event) {
             event.preventDefault();
             const linkElement = event.currentTarget;
             const fullUrl = new URL(linkElement.href);
@@ -224,11 +258,11 @@
                 if (response.ok) {
                     window.location.href = fullUrl.href;
                 } else {
-                    alert('Content is being prepared.');
+                    showPageMessage('Content is being prepared.');
                 }
             } catch (error) {
                 console.error('Navigation check failed:', error);
-                alert('Could not verify the page. Please check your network connection.');
+                showPageMessage('Could not verify the page. Please check your network connection.');
             }
         }
 
@@ -266,7 +300,7 @@
             }
         }
 
-        function toggleLanguage() {
+        window.toggleLanguage = function() {
             const newLang = currentLanguage === 'en' ? 'ko' : 'en';
             setLanguage(newLang);
         }
@@ -274,9 +308,11 @@
         // --- Firebase Visitor Counter ---
         async function initializeVisitorCount() {
             try {
-                const firebaseConfig = __firebase_config ? JSON.parse(__firebase_config) : null;
+                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
                 if (!firebaseConfig) {
                     console.error("Firebase config not found.");
+                    document.getElementById('today-count').textContent = 'N/A';
+                    document.getElementById('total-count').textContent = 'N/A';
                     return;
                 }
                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -284,6 +320,9 @@
                 const app = initializeApp(firebaseConfig);
                 const db = getFirestore(app);
                 const auth = getAuth(app);
+
+                // Enable Firestore debug logging to help diagnose issues.
+                setLogLevel('debug');
 
                 if (typeof __initial_auth_token !== 'undefined') {
                     await signInWithCustomToken(auth, __initial_auth_token);
