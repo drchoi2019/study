@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive TCM with Herbal Runner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Main Page Styles --- */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: manipulation;
+        }
+        h1, h2, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.3s, color 0.3s;
+            color: #5a5a5a;
+        }
+        .nav-link:hover {
+            background-color: #EAE8E1;
+            color: #000;
+        }
+
+        /* --- Herbal Runner Game Styles --- */
+        #gameCanvas {
+            background-color: #F7F3EF;
+            display: block;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(247, 243, 239, 0.9);
+            border-radius: 8px;
+        }
+        .ui-button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background-color: transparent;
+            color: #555;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ui-button:hover {
+            background-color: #e0dace;
+        }
+        #restartButton {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: #B9A38D;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 8px;
+        }
+        #restartButton:hover {
+            background-color: #A9937D;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Main Header -->
+    <header id="main-header" class="text-center py-16 md:py-20 relative">
+        <div class="absolute top-4 right-4">
+            <button id="lang-toggle" onclick="toggleLanguage()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+                Kor / Eng
+            </button>
+        </div>
+        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM" data-ko="한의학 공부">
+            Interactive TCM
+        </h1>
+        <p id="author" class="text-gray-500 mt-2 text-lg" data-en="Hyungsuk Choi" data-ko="최형석">Hyungsuk Choi</p>
+    </header>
+
+    <!-- Main Navigation Menu -->
+    <nav id="main-nav" class="max-w-5xl mx-auto px-10 pb-8">
+        <div class="grid md:grid-cols-3 gap-10">
+            <!-- Theory -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Theory" data-ko="이론">Theory</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Organs" data-ko="오장">Five Organs</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pattern Diagnosis Basic" data-ko="변증 기초">Pattern Diagnosis Basic</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Tongue/Pulse Pattern" data-ko="기본 설/맥 증">Basic Tongue/Pulse Pattern</a></li>
+                    <li><a href="organpattern_comb.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Pattern Combination" data-ko="장부변증 조합">Organ Pattern Combination</a></li>
+                    <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
+                    <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
+                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
+                    <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
+                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                    <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
+                    <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>
+                </ul>
+            </div>
+            <!-- Formula -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Formula" data-ko="방제학">Formula</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
+                    <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
+                    <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
+                    <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
+                    <li><a href="lwdh_variations.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
+                    <li><a href="pws_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
+                    <li><a href="sinisan_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
+                    <li><a href="hack_names.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
+                    <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
+                    <li><a href="herb_shooting_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
+                </ul>
+            </div>
+            <!-- History -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="History" data-ko="한의학사">History</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Brief History of TCM" data-ko="한의학 약사">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
+                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Herbal Runner Game Section -->
+    <section id="herbal-runner-section" class="max-w-4xl mx-auto px-4 pb-16 flex flex-col items-center">
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-serif text-gray-700 mb-2" data-en="Herbal Runner" data-ko="약초 러너">Herbal Runner</h2>
+            <p class="text-gray-600 text-sm" data-en="Learn about hot and cold herbs while running!" data-ko="달리면서 뜨거운 약재와 차가운 약재를 배워보세요!">Learn about hot and cold herbs while running!</p>
+        </div>
+        
+        <div id="game-container" class="relative bg-[#F7F3EF] rounded-lg shadow-lg overflow-hidden">
+            <canvas id="gameCanvas" width="800" height="150"></canvas>
+            <div id="ui-container" class="absolute top-2 right-2 flex gap-1">
+                <button id="langBtn" class="ui-button">한</button>
+                <button id="helpBtn" class="ui-button">?</button>
+            </div>
+            <div id="gameOverScreen">
+                <button id="restartButton">RESTART</button>
+            </div>
+        </div>
+        
+        <!-- Help Modal -->
+        <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-lg w-full mx-4">
+                <h3 class="text-xl font-bold mb-4" data-en="How to Play" data-ko="게임 방법">How to Play</h3>
+                <div class="text-left space-y-3 text-sm">
+                    <div id="help-content-en">
+                        <p><strong>Goal:</strong> Run and collect herbs while managing your body temperature!</p>
+                        <ul class="list-disc list-inside space-y-1 mt-2">
+                            <li><strong>Normal state (gray face):</strong> Eat hot herbs to warm up</li>
+                            <li><strong>Heated state (red face):</strong> Eat 3 cool herbs to return to normal</li>
+                            <li><strong>Game Over:</strong> Wrong herb type or touching while jumping</li>
+                            <li><strong>Controls:</strong> Space/Click/Touch to jump</li>
+                        </ul>
+                    </div>
+                    <div id="help-content-ko" class="hidden">
+                        <p><strong>목표:</strong> 달리면서 체온을 관리하며 약초를 수집하세요!</p>
+                        <ul class="list-disc list-inside space-y-1 mt-2">
+                            <li><strong>평상시 (회색 얼굴):</strong> 뜨거운 약재를 먹어 몸을 따뜻하게</li>
+                            <li><strong>열이 날 때 (빨간 얼굴):</strong> 차가운 약재 3개를 먹어 정상으로</li>
+                            <li><strong>게임오버:</strong> 잘못된 약재 또는 점프 중 충돌</li>
+                            <li><strong>조작:</strong> 스페이스/클릭/터치로 점프</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="helpCloseBtn" class="mt-4 px-4 py-2 bg-[#B9A38D] text-white rounded hover:bg-[#A9937D]" data-en="Close" data-ko="닫기">Close</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Footer -->
+    <footer id="main-footer" class="text-center py-4 mt-8 text-sm text-gray-500">
+        <div id="visitor-counter" class="mb-4 text-xs text-gray-400">
+            <span data-en="Today: " data-ko="오늘: ">Today: </span><span id="today-count">0</span> / 
+            <span data-en="Total: " data-ko="전체: ">Total: </span><span id="total-count">0</span>
+        </div>
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
+    </footer>
+
+    <script>
+        // --- Main Page Script ---
+        let currentLanguage = 'en';
+
+        function showPageMessage(message) {
+            const existingModal = document.getElementById('page-message-modal');
+            if (existingModal) return;
+
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'page-message-modal';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full';
+            modalContent.innerHTML = `<p class="mb-4 text-gray-800">${message}</p>`;
+            
+            const closeButton = document.createElement('button');
+            closeButton.className = 'px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors';
+            closeButton.textContent = 'OK';
+            
+            modalContent.appendChild(closeButton);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+            
+            const closeModal = () => {
+                if(document.body.contains(modalOverlay)){
+                    document.body.removeChild(modalOverlay);
+                }
+            };
+
+            closeButton.onclick = closeModal;
+            modalOverlay.onclick = (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            };
+        }
+
+        window.checkAndNavigate = async function(event) {
+            event.preventDefault();
+            const linkElement = event.currentTarget;
+            const fullUrl = new URL(linkElement.href);
+            const urlToCheck = new URL(fullUrl.pathname, window.location.href);
+
+            try {
+                const response = await fetch(urlToCheck.href, { method: 'HEAD' });
+                if (response.ok) {
+                    window.location.href = fullUrl.href;
+                } else {
+                    showPageMessage('Content is being prepared.');
+                }
+            } catch (error) {
+                console.error('Navigation check failed:', error);
+                showPageMessage('Could not verify the page. Please check your network connection.');
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const elementsToTranslate = document.querySelectorAll('[data-en]');
+            elementsToTranslate.forEach(el => {
+                el.textContent = el.dataset[currentLanguage];
+            });
+
+            // Update help content
+            if (lang === 'ko') {
+                document.getElementById('help-content-en').classList.add('hidden');
+                document.getElementById('help-content-ko').classList.remove('hidden');
+            } else {
+                document.getElementById('help-content-ko').classList.add('hidden');
+                document.getElementById('help-content-en').classList.remove('hidden');
+            }
+
+            // Update game language
+            if (typeof updateGameLanguage === 'function') {
+                updateGameLanguage();
+            }
+
+            const linksToUpdate = document.querySelectorAll('a.nav-link');
+            linksToUpdate.forEach(link => {
+                const originalHref = link.getAttribute('href').split('?')[0];
+
+                if (originalHref.includes('lwdh_variations.html') || originalHref.includes('pws_var.html') || originalHref.includes('hack_names.html') || originalHref.includes('sinisan_var.html')) {
+                    link.href = `${originalHref}?lang=${currentLanguage}`;
+                    return;
+                }
+
+                const baseHref = originalHref.replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
+                
+                if (currentLanguage === 'ko') {
+                    if (baseHref === 'history') {
+                         link.href = 'history_kor.html';
+                    } else if (baseHref !== 'tetris') {
+                         link.href = `${baseHref}_k.html`;
+                    }
+                } else {
+                     link.href = `${baseHref}.html`;
+                }
+            });
+        }
+
+        window.toggleLanguage = function() {
+            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+        }
+
+        // --- Herbal Runner Game ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Text & Language Data
+        const textData = {
+            ko: { 
+                restart: "다시 시작", 
+                help: ["오래 뛰거나 더운 약을 먹으면 열이 납니다 (빨간 얼굴).","차가운 성질의 약을 3개 먹으면 정상으로 돌아옵니다.","평소 상태에서 차가운 약을 먹거나,","열이 난 상태에서 더운 약을 먹으면 게임오버.","알맞은 약을 먹으며 목표에 도달해보세요."], 
+                paused: "일시정지", 
+                win: "목표 달성!", 
+                infinite: "무한 모드" 
+            },
+            en: { 
+                restart: "RESTART", 
+                help: ["Running long or eating hot herbs causes heat (red face).","Eating 3 cool herbs returns you to normal.","Game over if you eat a cool herb when normal,","or a hot herb when heated.","Eat the right herbs to reach your goal."], 
+                paused: "PAUSED", 
+                win: "You beat the game!", 
+                infinite: "Infinite Mode" 
+            }
+        };
+        const groupA = [ {ko: '인삼', en: 'Renshen'}, {ko: '부자', en: 'Fuzi'}, {ko: '건강', en: 'Ganjiang'}, {ko: '계지', en: 'Guizhi'}, {ko: '오약', en: 'Wuyao'}, {ko: '오수유', en: 'Wuzhuyu'}, {ko: '마황', en: 'Mahuang'} ];
+        const groupB = [ {ko: '석고', en: 'Shigao'}, {ko: '황련', en: 'Huanglian'}, {ko: '황금', en: 'Huangqin'}, {ko: '박하', en: 'Bohe'}, {ko: '국화', en: 'Juhua'}, {ko: '상엽', en: 'Sangye'}, {ko: '지모', en: 'Zhimu'}, {ko: '지황', en: 'Dihuang'}, {ko: '노근', en: 'Lugen'} ];
+
+        // Game State
+        let playerState = 'neutral';
+        let score = 0;
+        let coolingHerbCounter = 0;
+        let neutralStateTimer = 0;
+        let baseSpeed = 3;
+        let gameSpeed = 3;
+        let isGameOver = false;
+        let isPaused = false;
+        let showHelp = false;
+        let gameBeaten = false;
+        let celebrationTimer = 0;
+        let scoreTimer = 0;
+        let speedTimer = 0;
+
+        // Character & World Settings
+        const PIXEL_SIZE = 5;
+        let player = { x: 100, y: 0, width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, vy: 0, isJumping: false, animationFrame: 0, rotation: 0 };
+        const GRAVITY = 0.072;
+        const JUMP_STRENGTH = -2.5;
+        const GROUND_Y = canvas.height - 50;
+        let herbs = [];
+        let groundOffset = 0;
+        const HASH_SPACING = 60;
+        const art_run1 = [ '  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', 'C   C', ' C C ' ];
+        const art_run2 = [ '  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', ' C C ', 'C   C' ];
+        const playerArt = [art_run1, art_run2];
+
+        // Drawing Functions
+        function drawPixelArtPlayer() {
+            let faceColor = (playerState === 'heated') ? '#d32f2f' : '#808080';
+            const clothesColor = '#555555';
+            const currentArt = playerArt[Math.floor(player.animationFrame / 10) % playerArt.length];
+            ctx.save();
+            ctx.translate(player.x + player.width / 2, player.y + player.height);
+            ctx.rotate(player.rotation);
+            for (let r = 0; r < currentArt.length; r++) {
+                for (let c = 0; c < currentArt[r].length; c++) {
+                    let color = null;
+                    if (currentArt[r][c] === 'F') color = faceColor;
+                    else if (currentArt[r][c] === 'C') color = clothesColor;
+                    if (color) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(c * PIXEL_SIZE - player.width / 2, r * PIXEL_SIZE - player.height, PIXEL_SIZE, PIXEL_SIZE);
+                    }
+                }
+            }
+            ctx.restore();
+            if (!isGameOver && !isPaused && !showHelp) player.animationFrame++;
+        }
+
+        function drawGround() {
+            const groundLineY = GROUND_Y + player.height;
+            ctx.beginPath();
+            ctx.moveTo(0, groundLineY);
+            ctx.lineTo(canvas.width, groundLineY);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.strokeStyle = '#555';
+            for (let i = -HASH_SPACING; i < canvas.width + HASH_SPACING; i += HASH_SPACING) {
+                const x = i - (groundOffset % HASH_SPACING);
+                ctx.beginPath();
+                ctx.moveTo(x, groundLineY);
+                ctx.lineTo(x - 10, groundLineY + 10);
+                ctx.stroke();
+            }
+        }
+
+        function drawScore() {
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${score} miles`, player.x + player.width / 2, player.y - 10);
+        }
+
+        function drawHerbs() {
+            ctx.fillStyle = '#4A4A4A';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'left';
+            herbs.forEach(herb => ctx.fillText(herb.name[currentLanguage], herb.x, herb.y));
+        }
+
+        function drawHelpScreen() {
+            ctx.fillStyle = 'rgba(247, 243, 239, 0.8)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px monospace';
+            ctx.textAlign = 'center';
+            const helpLines = textData[currentLanguage].help;
+            const startY = canvas.height / 2 - (helpLines.length / 2 * 20);
+            helpLines.forEach((line, index) => {
+                ctx.fillText(line, canvas.width / 2, startY + index * 20);
+            });
+        }
+        
+        function drawPauseScreen() {
+             ctx.fillStyle = 'rgba(247, 243, 239, 0.8)';
+             ctx.fillRect(0, 0, canvas.width, canvas.height);
+             ctx.fillStyle = '#333';
+             ctx.font = 'bold 30px sans-serif';
+             ctx.textAlign = 'center';
+             ctx.fillText(textData[currentLanguage].paused, canvas.width / 2, canvas.height / 2);
+        }
+
+        function drawCelebrationMessage() {
+            if (celebrationTimer > 0) {
+                const alpha = Math.min(1, celebrationTimer / 60);
+                ctx.fillStyle = `rgba(211, 47, 47, ${alpha})`;
+                ctx.font = 'bold 24px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(textData[currentLanguage].win, canvas.width / 2, canvas.height / 2 - 15);
+                ctx.font = 'bold 18px sans-serif';
+                ctx.fillText(textData[currentLanguage].infinite, canvas.width / 2, canvas.height / 2 + 15);
+            }
+        }
+
+        // Game Logic
+        function spawnHerb() {
+            const isGroupA = Math.random() > 0.5;
+            const group = isGroupA ? groupA : groupB;
+            const herbData = group[Math.floor(Math.random() * group.length)];
+            const lastHerbX = herbs.length > 0 ? herbs[herbs.length - 1].x : 0;
+            const spawnX = Math.max(canvas.width, lastHerbX + 400 + Math.random() * 400);
+            herbs.push({ x: spawnX, y: GROUND_Y + player.height - 10, name: herbData, group: isGroupA ? 'A' : 'B', awardedJumpPoints: false });
+        }
+
+        function updateGameLogic() {
+            updatePlayer();
+            updateHerbs();
+            checkCollisions();
+            
+            if (playerState === 'neutral') {
+                neutralStateTimer++;
+                if (neutralStateTimer >= 600) {
+                    playerState = 'heated';
+                    neutralStateTimer = 0;
+                }
+            }
+            
+            scoreTimer++;
+            if (scoreTimer >= 300) {
+                score += 5;
+                scoreTimer = 0;
+            }
+
+            speedTimer++;
+            if (speedTimer >= 600) {
+                baseSpeed *= 1.10;
+                speedTimer = 0;
+            }
+
+            gameSpeed = (playerState === 'heated') ? baseSpeed * 1.5 : baseSpeed;
+            groundOffset += gameSpeed;
+
+            if (!gameBeaten && score >= 100) {
+                gameBeaten = true;
+                celebrationTimer = 180;
+            }
+
+            if (celebrationTimer > 0) {
+                celebrationTimer--;
+            }
+        }
+
+        function updatePlayer() {
+            if (player.isJumping) {
+                player.vy += GRAVITY;
+                player.y += player.vy;
+            }
+
+            if (player.y >= GROUND_Y) {
+                player.y = GROUND_Y;
+                player.vy = 0;
+                player.isJumping = false;
+            }
+        }
+
+        function updateHerbs() {
+            for (let i = herbs.length - 1; i >= 0; i--) {
+                herbs[i].x -= gameSpeed;
+                if (herbs[i].x < -100) {
+                    herbs.splice(i, 1);
+                }
+            }
+            if (herbs.length < 3) {
+                 spawnHerb();
+            }
+        }
+
+        function checkCollisions() {
+            herbs.forEach((herb, index) => {
+                const herbName = herb.name[currentLanguage];
+                const herbWidth = ctx.measureText(herbName).width;
+                const playerCenterX = player.x + player.width / 2;
+
+                if (player.x > herb.x + herbWidth && !herb.awardedJumpPoints) {
+                    score += 5;
+                    herb.awardedJumpPoints = true;
+                }
+                
+                // 맨 뒤 한글자/영어 2-3글자 정도만 충돌 판정 (약 15-20픽셀)
+                const herbEndX = herb.x + herbWidth;
+                const collisionZoneWidth = Math.min(20, herbWidth * 0.3);
+                const collisionZoneStart = herbEndX - collisionZoneWidth;
+                
+                // 플레이어가 충돌 구역에 들어가고, 땅에 있을 때만 충돌
+                const isInCollisionZone = player.x >= collisionZoneStart && 
+                                         player.x < herbEndX;
+                const isOnGround = player.y >= GROUND_Y - 5;
+                
+                const isColliding = isInCollisionZone &&
+                                    isOnGround &&
+                                    player.y < herb.y &&
+                                    player.y + player.height > herb.y - 20;
+
+                if (isColliding) {
+                    if (player.isJumping) {
+                        endGame();
+                        return;
+                    }
+
+                    if (!player.isJumping) {
+                        if (playerState === 'neutral') {
+                            if (herb.group === 'A') {
+                                playerState = 'heated';
+                                neutralStateTimer = 0;
+                                herbs.splice(index, 1);
+                            } else {
+                                endGame();
+                            }
+                        } else { // heated
+                            if (herb.group === 'B') {
+                                coolingHerbCounter++;
+                                if (coolingHerbCounter >= 3) {
+                                    playerState = 'neutral';
+                                    coolingHerbCounter = 0;
+                                }
+                                herbs.splice(index, 1);
+                            } else {
+                                endGame();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function jump() {
+            if (!player.isJumping && !isGameOver && !isPaused && !showHelp) {
+                player.isJumping = true;
+                player.vy = JUMP_STRENGTH;
+            }
+        }
+
+        function showGameOverScreen() {
+            document.getElementById('gameOverScreen').style.display = 'flex';
+        }
+
+        function endGame() {
+            if (!isGameOver) isGameOver = true;
+        }
+
+        function resetGame() {
+            playerState = 'neutral';
+            player.y = GROUND_Y;
+            player.vy = 0;
+            player.isJumping = false;
+            player.rotation = 0;
+            score = 0;
+            coolingHerbCounter = 0;
+            neutralStateTimer = 0;
+            baseSpeed = 3;
+            gameSpeed = 3;
+            scoreTimer = 0;
+            speedTimer = 0;
+            herbs = [];
+            isGameOver = false;
+            isPaused = false;
+            showHelp = false;
+            gameBeaten = false;
+            celebrationTimer = 0;
+            document.getElementById('gameOverScreen').style.display = 'none';
+            spawnHerb();
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            gameLoop();
+        }
+        
+        let animationFrameId;
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (!isGameOver && !isPaused && !showHelp) {
+                updateGameLogic();
+            }
+            
+            if (isGameOver) {
+                if (player.rotation < Math.PI / 2) {
+                    player.rotation += 0.08;
+                } else {
+                    player.rotation = Math.PI / 2;
+                    showGameOverScreen();
+                }
+            }
+
+            drawGround();
+            drawHerbs();
+            drawPixelArtPlayer();
+            drawScore();
+            drawCelebrationMessage();
+
+            if (showHelp) drawHelpScreen();
+            if (isPaused) drawPauseScreen();
+            
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function updateGameLanguage() {
+            document.getElementById('langBtn').textContent = (currentLanguage === 'ko') ? 'En' : '한';
+            document.getElementById('restartButton').textContent = textData[currentLanguage].restart;
+        }
+
+        // Event Listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') jump();
+            if (e.key.toLowerCase() === 'p' && !isGameOver) {
+                isPaused = !isPaused;
+                if(isPaused) showHelp = false;
+            }
+        });
+        canvas.addEventListener('click', jump);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+        
+        document.getElementById('restartButton').addEventListener('click', resetGame);
+        
+        document.getElementById('langBtn').addEventListener('click', () => {
+            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+        });
+
+        document.getElementById('helpBtn').addEventListener('click', () => {
+            if (!isGameOver) {
+                document.getElementById('helpModal').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('helpCloseBtn').addEventListener('click', () => {
+            document.getElementById('helpModal').classList.add('hidden');
+        });
+
+        // Visitor Counter with error handling
+        async function initializeVisitorCount() {
+            try {
+                // Simplified counter without Firebase for now
+                const today = new Date().toISOString().split('T')[0];
+                let todayCount = parseInt(localStorage.getItem(`visit_${today}`) || '0');
+                let totalCount = parseInt(localStorage.getItem('total_visits') || '0');
+                
+                // Only increment if not visited today
+                if (!localStorage.getItem(`visited_${today}`)) {
+                    todayCount++;
+                    totalCount++;
+                    localStorage.setItem(`visit_${today}`, todayCount.toString());
+                    localStorage.setItem('total_visits', totalCount.toString());
+                    localStorage.setItem(`visited_${today}`, 'true');
+                }
+                
+                document.getElementById('today-count').textContent = todayCount;
+                document.getElementById('total-count').textContent = totalCount;
+            } catch (error) {
+                console.error("Error with visitor counter:", error);
+                document.getElementById('today-count').textContent = '0';
+                document.getElementById('total-count').textContent = '0';
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeVisitorCount();
+            
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang');
+            if (lang === 'ko') {
+                setLanguage('ko');
+            } else {
+                setLanguage('en');
+            }
+
+            // Initialize game
+            player.y = GROUND_Y;
+            spawnHerb();
+            gameLoop();
+        });
+
+        // Close help modal when clicking outside
+        document.getElementById('helpModal').addEventListener('click', (e) => {
+            if (e.target.id === 'helpModal') {
+                document.getElementById('helpModal').classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>
