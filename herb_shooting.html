@@ -39,23 +39,6 @@
             z-index: 20;
             text-align: center;
         }
-        .touch-button {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            user-select: none;
-            background-color: #D1C7BC;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .touch-button.shoot {
-            background-color: #B9A38D;
-            transform: scale(1.1);
-        }
     </style>
 </head>
 <body class="bg-[#F7F3EF] flex flex-col items-center justify-center min-h-screen">
@@ -82,7 +65,7 @@
                     <p><strong class="text-yellow-400">Controls:</strong></p>
                     <ul class="list-disc list-inside pl-2">
                         <li><strong>Keyboard:</strong> ← → (Move), Spacebar (Shoot), P (Pause)</li>
-                        <li><strong>Touch:</strong> Tap Left/Right side (Move), Tap Center (Shoot)</li>
+                        <li><strong>Touch:</strong> Tap Left/Right side (Move), Tap Top (Shoot)</li>
                     </ul>
                 </div>
                 <button id="help-close-button" class="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-md font-semibold transition-colors">Close</button>
@@ -114,13 +97,6 @@
                 <button id="lang-toggle-btn" class="w-8 h-5 bg-gray-300 hover:bg-gray-400 rounded text-gray-700 text-xs font-bold flex items-center justify-center transition-all">Kor</button>
                 <button id="help-button" class="w-5 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-gray-700 text-xs font-bold flex items-center justify-center transition-all">?</button>
             </div>
-        </div>
-        
-        <!-- Mobile Touch Controls (Initially hidden) -->
-        <div id="mobile-controls" class="hidden w-full max-w-sm mt-4 flex justify-around items-center">
-             <button id="left-btn" class="touch-button">&#8592;</button>
-             <button id="shoot-btn" class="touch-button shoot">Shoot</button>
-             <button id="right-btn" class="touch-button">&#8594;</button>
         </div>
 
     </section>
@@ -155,7 +131,6 @@
         const startScreen = document.getElementById('start-screen');
         const startButton = document.getElementById('start-button');
         const gameUiBar = document.getElementById('game-ui-bar');
-        const mobileControls = document.getElementById('mobile-controls');
         
         // Herb Name Data
         let groupA = ['renshen', 'fuzi', 'ganjiang', 'guizhi', 'wuyao', 'wuzhuyu', 'mahuang'];
@@ -220,10 +195,6 @@
             }
             gameStarted = true;
             startScreen.classList.add('hidden');
-
-            if (isMobile()) {
-                mobileControls.classList.remove('hidden');
-            }
             gameUiBar.classList.remove('invisible');
 
             initGame();
@@ -539,17 +510,26 @@
             });
             
             canvas.addEventListener('click', (e) => {
-                if (isMobile() && gameStarted && !paused) {
+                if (gameStarted && !paused) {
                     const rect = canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
-                    const third = canvas.width / 3;
-
-                    if (x < third) {
-                        movePlayer('left');
-                    } else if (x > third * 2) {
-                        movePlayer('right');
-                    } else {
+                    const y = e.clientY - rect.top;
+                    
+                    // Divide screen into three horizontal zones
+                    const leftZone = canvas.width * 0.33;
+                    const rightZone = canvas.width * 0.67;
+                    const topZone = canvas.height * 0.5; // Top half for shooting
+                    
+                    if (y < topZone) {
+                        // Top half - shoot
                         shoot();
+                    } else {
+                        // Bottom half - move left or right
+                        if (x < leftZone) {
+                            movePlayer('left');
+                        } else if (x > rightZone) {
+                            movePlayer('right');
+                        }
                     }
                 }
             });
