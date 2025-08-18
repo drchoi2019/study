@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herbal Runner Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #F7F3EF;
+            font-family: 'Noto Sans KR', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #game-container {
+            position: relative;
+            background-color: #F7F3EF;
+            overflow: hidden;
+        }
+        #gameCanvas {
+            background-color: #F7F3EF;
+            display: block;
+            max-width: 100%;
+        }
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+        .ui-button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background-color: transparent;
+            color: #555;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ui-button:hover {
+            background-color: #e0dace;
+        }
+        #restartButton {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: #B9A38D;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 8px;
+        }
+        #restartButton:hover {
+            background-color: #A9937D;
+        }
+        #helpModal {
+            position: fixed;
+            inset: 0;
+            background: transparent; /* 반투명 배경을 투명하게 변경 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+        #helpModal.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 24rem;
+            width: 90%;
+            margin: 0.5rem;
+        }
+        .help-list {
+            list-style-type: disc;
+            list-style-position: inside;
+            text-align: left;
+            font-size: 0.75rem;
+            margin: 0.5rem 0;
+            padding: 0;
+        }
+        .help-list li {
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+        }
+        .help-content {
+            display: none;
+        }
+        .help-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="150"></canvas>
+        <div style="position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.25rem; z-index: 10;">
+            <button id="langBtn" class="ui-button">한</button>
+            <button id="helpBtn" class="ui-button">?</button>
+        </div>
+        <div id="gameOverScreen">
+            <button id="restartButton">RESTART</button>
+        </div>
+    </div>
+    
+    <div id="helpModal" class="hidden">
+        <div class="modal-content">
+            <div id="help-content-en" class="help-content">
+                <ul class="help-list">
+                    <li>Jump to avoid the food obstacles.</li>
+                    <li>Running long or eating a warm (🔥) food makes you Overheated (faster).</li>
+                    <li>Eat 3 cold (🧊) foods while Overheated to return to normal.</li>
+                    <li>Game Over: Eating a cold (🧊) food in normal state, or a warm (🔥) food while Overheated.</li>
+                </ul>
+            </div>
+            <div id="help-content-ko" class="help-content">
+                <ul class="help-list">
+                    <li>점프해서 음식 장애물을 피하세요.</li>
+                    <li>오래 달리거나 따뜻한(🔥) 음식을 먹으면 '열 오른' 상태가 되어 속도가 빨라집니다.</li>
+                    <li>'열 오른' 상태에서 차가운(🧊) 음식을 3번 먹으면 정상으로 돌아옵니다.</li>
+                    <li>게임 오버: 보통 상태에서 차가운(🧊) 음식 섭취 / '열 오른' 상태에서 따뜻한(🔥) 음식 섭취.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language Management
+        let currentLanguage = 'en';
+
+        const textData = {
+            ko: { 
+                restart: "다시 시작", 
+                paused: "일시정지", 
+                win: "목표 달성!", 
+                infinite: "무한 모드",
+                howToPlay: "게임 방법",
+                close: "닫기"
+            },
+            en: { 
+                restart: "RESTART", 
+                paused: "PAUSED", 
+                win: "You beat the game!", 
+                infinite: "Infinite Mode",
+                howToPlay: "How to Play",
+                close: "Close"
+            }
+        };
+
+        // ✅ [수정] groupA: 따뜻한/뜨거운 음식 데이터로 변경
+        const groupA = [ // 🔥 따뜻한/뜨거운 음식 (温热性食物)
+            {ko: '체리', en: 'Cherry'}, {ko: '복숭아', en: 'Peach'}, {ko: '자두', en: 'Plum'},
+            {ko: '용과', en: 'Dragonfruit'}, {ko: '퀴노아', en: 'Quinoa'}, {ko: '옥수수', en: 'Corn'},
+            {ko: '닭고기', en: 'Chicken'}, {ko: '소고기', en: 'Beef'}, {ko: '양고기', en: 'Lamb'},
+            {ko: '연어', en: 'Salmon'}, {ko: '참치', en: 'Tuna'}, {ko: '양파', en: 'Onion'},
+            {ko: '마늘', en: 'Garlic'}, {ko: '생강', en: 'Ginger'}, {ko: '고추', en: 'Chili'},
+            {ko: '호박', en: 'Pumpkin'}, {ko: '홍차', en: 'Black Tea'}, {ko: '코코아', en: 'Cocoa'}, 
+            {ko: '위스키', en: 'Whiskey'}, {ko: '와인', en: 'Wine'}, {ko: '계피', en: 'Cinnamon'}, 
+            {ko: '후추', en: 'Pepper'}, {ko: '정향', en: 'Clove'}, {ko: '커민', en: 'Cumin'}
+        ];
+        // ✅ [수정] groupB: 차가운/서늘한 음식 데이터로 변경
+        const groupB = [ // 🧊 차가운/서늘한 음식 (寒凉性食物)
+            {ko: '수박', en: 'Watermelon'}, {ko: '바나나', en: 'Banana'}, {ko: '오렌지', en: 'Orange'},
+            {ko: '키위', en: 'Kiwi'}, {ko: '블루베리', en: 'Blueberry'}, {ko: '딸기', en: 'Strawberry'},
+            {ko: '토마토', en: 'Tomato'}, {ko: '밀', en: 'Wheat'}, {ko: '귀리', en: 'Oat'},
+            {ko: '보리', en: 'Barley'}, {ko: '오이', en: 'Cucumber'}, {ko: '상추', en: 'Lettuce'},
+            {ko: '브로콜리', en: 'Broccoli'}, {ko: '시금치', en: 'Spinach'}, {ko: '샐러리', en: 'Celery'},
+            {ko: '케일', en: 'Kale'}, {ko: '녹차', en: 'Green Tea'}, {ko: '맥주', en: 'Beer'},
+            {ko: '게', en: 'Crab'}, {ko: '조개', en: 'Clam'}, {ko: '새우', en: 'Shrimp'}
+        ];
+
+
+        // Game Variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game State
+        let playerState = 'neutral';
+        let score = 0;
+        let coolingHerbCounter = 0;
+        let neutralStateTimer = 0;
+        let baseSpeed = 3.3;
+        let gameSpeed = 3.3;
+        let isGameOver = false;
+        let isPaused = false;
+        let gameBeaten = false;
+        let celebrationTimer = 0;
+        let scoreTimer = 0;
+
+        // Player & World Settings
+        const PIXEL_SIZE = 5;
+        let player = { x: 100, y: 0, width: 6 * PIXEL_SIZE, height: 8 * PIXEL_SIZE, vy: 0, isJumping: false, animationFrame: 0, rotation: 0 };
+        const GRAVITY = 0.094;
+        const JUMP_STRENGTH = -2.2;
+        const GROUND_Y = canvas.height - 50;
+        let herbs = [];
+        let groundOffset = 0;
+        const HASH_SPACING = 60;
+        
+        const art_run1 = [ '  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', 'C   C', ' C C ' ];
+        const art_run2 = [ '  FF  ', ' FFFF ', '  CC  ', ' CCC ', 'C C C', ' C C ', ' C C ', 'C   C' ];
+        const playerArt = [art_run1, art_run2];
+
+        let animationFrameId;
+
+        // Language Functions
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            updateGameLanguage();
+            updateHelpContent();
+        }
+
+        function updateGameLanguage() {
+            document.getElementById('langBtn').textContent = (currentLanguage === 'ko') ? 'En' : '한';
+            document.getElementById('restartButton').textContent = textData[currentLanguage].restart;
+        }
+
+        function updateHelpContent() {
+            // 모든 헬프 콘텐츠 숨기기
+            document.querySelectorAll('.help-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 현재 언어의 콘텐츠만 보이기
+            document.getElementById(`help-content-${currentLanguage}`).classList.add('active');
+        }
+
+        // Drawing Functions
+        function drawPixelArtPlayer() {
+            let faceColor = (playerState === 'heated') ? '#d32f2f' : '#808080';
+            const clothesColor = '#555555';
+            const currentArt = playerArt[Math.floor(player.animationFrame / 10) % playerArt.length];
+            
+            ctx.save();
+            ctx.translate(player.x + player.width / 2, player.y + player.height);
+            ctx.rotate(player.rotation);
+            
+            for (let r = 0; r < currentArt.length; r++) {
+                for (let c = 0; c < currentArt[r].length; c++) {
+                    let color = null;
+                    if (currentArt[r][c] === 'F') color = faceColor;
+                    else if (currentArt[r][c] === 'C') color = clothesColor;
+                    if (color) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(c * PIXEL_SIZE - player.width / 2, r * PIXEL_SIZE - player.height, PIXEL_SIZE, PIXEL_SIZE);
+                    }
+                }
+            }
+            ctx.restore();
+            
+            if (!isGameOver && !isPaused) player.animationFrame++;
+        }
+
+        function drawGround() {
+            const groundLineY = GROUND_Y + player.height;
+            ctx.beginPath();
+            ctx.moveTo(0, groundLineY);
+            ctx.lineTo(canvas.width, groundLineY);
+            ctx.strokeStyle = '#888';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.strokeStyle = '#999';
+            for (let i = -HASH_SPACING; i < canvas.width + HASH_SPACING; i += HASH_SPACING) {
+                const x = i - (groundOffset % HASH_SPACING);
+                ctx.beginPath();
+                ctx.moveTo(x, groundLineY);
+                ctx.lineTo(x - 10, groundLineY + 10);
+                ctx.stroke();
+            }
+        }
+
+        function drawScore() {
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${score} miles`, player.x + player.width / 2, player.y - 10);
+        }
+
+        function drawHerbs() {
+            ctx.fillStyle = '#4A4A4A';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'left';
+            herbs.forEach(herb => ctx.fillText(herb.name[currentLanguage], herb.x, herb.y));
+        }
+
+        function drawPauseScreen() {
+             ctx.fillStyle = 'rgba(247, 243, 239, 0.8)';
+             ctx.fillRect(0, 0, canvas.width, canvas.height);
+             ctx.fillStyle = '#333';
+             ctx.font = 'bold 30px sans-serif';
+             ctx.textAlign = 'center';
+             ctx.fillText(textData[currentLanguage].paused, canvas.width / 2, canvas.height / 2);
+        }
+
+        function drawCelebrationMessage() {
+            if (celebrationTimer > 0) {
+                const alpha = Math.min(1, celebrationTimer / 60);
+                ctx.fillStyle = `rgba(211, 47, 47, ${alpha})`;
+                ctx.font = 'bold 24px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(textData[currentLanguage].win, canvas.width / 2, canvas.height / 2 - 15);
+                ctx.font = 'bold 18px sans-serif';
+                ctx.fillText(textData[currentLanguage].infinite, canvas.width / 2, canvas.height / 2 + 15);
+            }
+        }
+
+        // Game Logic
+        function spawnHerb() {
+            const isGroupA = Math.random() > 0.5;
+            const group = isGroupA ? groupA : groupB;
+            const herbData = group[Math.floor(Math.random() * group.length)];
+            const lastHerbX = herbs.length > 0 ? herbs[herbs.length - 1].x : 0;
+            const spawnX = Math.max(canvas.width, lastHerbX + 400 + Math.random() * 400);
+            herbs.push({ x: spawnX, y: GROUND_Y + player.height - 10, name: herbData, group: isGroupA ? 'A' : 'B', awardedJumpPoints: false });
+        }
+
+        function updateGameLogic() {
+            updatePlayer();
+            updateHerbs();
+            checkCollisions();
+            
+            if (playerState === 'neutral') {
+                neutralStateTimer++;
+                if (neutralStateTimer >= 600) {
+                    playerState = 'heated';
+                    neutralStateTimer = 0;
+                }
+            }
+            
+            scoreTimer++;
+            if (scoreTimer >= 300) {
+                score += 5;
+                scoreTimer = 0;
+            }
+
+            let speedMultiplier = 1;
+            if (score >= 100) {
+                const speedBoosts = Math.floor((score - 100) / 50);
+                speedMultiplier = 1 + (speedBoosts * 0.1);
+            }
+            
+            if (playerState === 'heated') {
+                speedMultiplier *= 1.5;
+            }
+            
+            gameSpeed = baseSpeed * speedMultiplier;
+            groundOffset += gameSpeed;
+
+            if (!gameBeaten && score >= 100) {
+                gameBeaten = true;
+                celebrationTimer = 180;
+            }
+
+            if (celebrationTimer > 0) {
+                celebrationTimer--;
+            }
+        }
+
+        function updatePlayer() {
+            if (player.isJumping) {
+                player.vy += GRAVITY;
+                player.y += player.vy;
+            }
+
+            if (player.y >= GROUND_Y) {
+                player.y = GROUND_Y;
+                player.vy = 0;
+                player.isJumping = false;
+            }
+        }
+
+        function updateHerbs() {
+            for (let i = herbs.length - 1; i >= 0; i--) {
+                herbs[i].x -= gameSpeed;
+                if (herbs[i].x < -100) {
+                    herbs.splice(i, 1);
+                }
+            }
+            if (herbs.length < 3) {
+                 spawnHerb();
+            }
+        }
+
+        function checkCollisions() {
+            herbs.forEach((herb, index) => {
+                const herbName = herb.name[currentLanguage];
+                const herbWidth = ctx.measureText(herbName).width;
+
+                if (player.x > herb.x + herbWidth && !herb.awardedJumpPoints) {
+                    score += 5;
+                    herb.awardedJumpPoints = true;
+                }
+                
+                const collisionZoneWidth = 5;
+                const collisionZoneStart = herb.x + (herbWidth / 2) - (collisionZoneWidth / 2);
+                
+                const isInCollisionZone = player.x >= collisionZoneStart && 
+                                          player.x < collisionZoneStart + collisionZoneWidth;
+                const isOnGround = player.y >= GROUND_Y - 5;
+                
+                const isColliding = isInCollisionZone &&
+                                    isOnGround &&
+                                    player.y < herb.y &&
+                                    player.y + player.height > herb.y - 20;
+
+                if (isColliding) {
+                    if (player.isJumping) {
+                        endGame();
+                        return;
+                    }
+
+                    if (!player.isJumping) {
+                        if (playerState === 'neutral') {
+                            if (herb.group === 'A') {
+                                playerState = 'heated';
+                                neutralStateTimer = 0;
+                                herbs.splice(index, 1);
+                            } else {
+                                endGame();
+                            }
+                        } else { // heated
+                            if (herb.group === 'B') {
+                                playPositiveSound();
+                                coolingHerbCounter++;
+                                if (coolingHerbCounter >= 3) {
+                                    playerState = 'neutral';
+                                    coolingHerbCounter = 0;
+                                }
+                                herbs.splice(index, 1);
+                            } else {
+                                endGame();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function jump() {
+            if (!player.isJumping && !isGameOver && !isPaused) {
+                player.isJumping = true;
+                player.vy = JUMP_STRENGTH;
+            }
+        }
+
+        function showGameOverScreen() {
+            document.getElementById('gameOverScreen').style.display = 'flex';
+        }
+
+        function endGame() {
+            if (!isGameOver) {
+                isGameOver = true;
+                playDeathSound();
+            }
+        }
+
+        function resetGame() {
+            playerState = 'neutral';
+            player.y = GROUND_Y;
+            player.vy = 0;
+            player.isJumping = false;
+            player.rotation = 0;
+            score = 0;
+            coolingHerbCounter = 0;
+            neutralStateTimer = 0;
+            baseSpeed = 3.3;
+            gameSpeed = 3.3;
+            scoreTimer = 0;
+            herbs = [];
+            isGameOver = false;
+            isPaused = false;
+            gameBeaten = false;
+            celebrationTimer = 0;
+            document.getElementById('gameOverScreen').style.display = 'none';
+            spawnHerb();
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            gameLoop();
+        }
+        
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (!isGameOver && !isPaused) {
+                updateGameLogic();
+            }
+            
+            if (isGameOver) {
+                if (player.rotation < Math.PI / 2) {
+                    player.rotation += 0.08;
+                } else {
+                    player.rotation = Math.PI / 2;
+                    showGameOverScreen();
+                }
+            }
+
+            drawGround();
+            drawHerbs();
+            drawPixelArtPlayer();
+            drawScore();
+            drawCelebrationMessage();
+
+            if (isPaused) drawPauseScreen();
+            
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // Sound Effects
+        function playPositiveSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const frequencies = [523.25, 659.25, 783.99]; // C5, E5, G5
+                
+                frequencies.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    
+                    oscillator.start(audioContext.currentTime + index * 0.1);
+                    oscillator.stop(audioContext.currentTime + index * 0.1 + 0.2);
+                });
+            } catch (error) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function playDeathSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.5);
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (error) {
+                console.log('Audio not supported');
+            }
+        }
+
+        // Modal Functions
+        function closeHelpModal() {
+            if (!isGameOver) {
+                 isPaused = false;
+            }
+            document.getElementById('helpModal').classList.add('hidden');
+        }
+
+        // Event Listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                jump();
+            }
+            if (e.key.toLowerCase() === 'p' && !isGameOver) {
+                isPaused = !isPaused;
+            }
+        });
+        
+        canvas.addEventListener('click', jump);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+        
+        document.getElementById('restartButton').addEventListener('click', resetGame);
+        
+        document.getElementById('langBtn').addEventListener('click', () => {
+            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({type: 'languageChange', language: newLang}, '*');
+            }
+        });
+
+        document.getElementById('helpBtn').addEventListener('click', () => {
+            if (!isGameOver) {
+                isPaused = true;
+            }
+            document.getElementById('helpModal').classList.remove('hidden');
+        });
+
+        document.getElementById('helpModal').addEventListener('click', (e) => {
+            if (e.target.id === 'helpModal') {
+                closeHelpModal();
+            }
+        });
+
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'changeLanguage') {
+                setLanguage(event.data.language);
+            }
+        });
+
+        // Initialize
+        function initialize() {
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang') || 'en';
+            
+            setLanguage(lang);
+
+            player.y = GROUND_Y;
+            spawnHerb();
+            gameLoop();
+        }
+
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+</html>
