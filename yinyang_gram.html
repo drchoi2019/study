@@ -1,32 +1,31 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yin Yang Diagram</title>
-    <!-- Tailwind CSS CDN 추가 -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif:wght@600&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
+    
     <style>
-        /* 기본 페이지 스타일 */
+        /* 템플릿의 기본 폰트 및 배경색 설정 */
         body {
-            font-family: 'Malgun Gothic', sans-serif;
-            /* 배경색을 참조 페이지와 유사한 밝은 회색으로 변경 */
-            background: #F7F3EF; 
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+            background-color: #F7F3EF; 
+            font-family: 'Noto Sans KR', 'Noto Sans', sans-serif; /* 기본 본문 폰트: 고딕 */
             display: flex;
             flex-direction: column;
-            align-items: center;
-            /* justify-content: center를 제거하여 콘텐츠가 상단부터 표시되도록 함 */
+            min-height: 100vh;
         }
-        
-        /* 메인 컨텐츠 컨테이너 */
+
+        /* 콘텐츠 페이지에서 가져온 스타일 */
         .container {
             background: #F7F3EF;
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            /* 요청에 따라 그림자 효과 제거 */
+            /* box-shadow: 0 20px 40px rgba(0,0,0,0.1); */
             text-align: center;
         }
         
@@ -67,14 +66,19 @@
             margin-top: 30px;
             text-align: left;
             color: #555;
-            line-height: 1.6;
+            line-height: 1.7; /* 가독성을 위해 줄 간격도 약간 조정 */
         }
         
+        /* 요청에 따라 본문 폰트 크기 증가 */
+        .description p {
+            font-size: 1.125rem; /* 16px -> 18px */
+        }
+
         .description h4 {
             color: #333;
             margin-top: 20px;
             margin-bottom: 10px;
-            font-size: 1.1em;
+            font-size: 1.25rem; /* 본문과의 균형을 위해 크기 조정 */
         }
         
         /* 시계 반대 방향 회전 애니메이션 */
@@ -82,98 +86,123 @@
             from { transform: rotate(360deg); }
             to { transform: rotate(0deg); }
         }
-
-        /* 푸터 스타일 */
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 2rem;
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
     </style>
 </head>
 <body>
-<!-- 헤더: Tailwind CSS 클래스로 스타일링 -->
-<header class="w-full max-w-3xl mx-auto px-4 flex justify-between items-center my-4">
-    <a href="index.html" class="text-lg font-serif font-semibold text-gray-700 hover:text-gray-900 transition-colors">
-        &larr; Interactive TCM
-    </a>
-</header>
 
-<!-- container에 Tailwind 클래스를 추가하여 헤더와 너비를 맞춤 -->
-<div class="container w-full max-w-3xl">
-    <h1>Yin Yang Diagram</h1>
-    
-    <div class="yin-yang-container">
-        <div class="diagram">
-            <svg id="yinYang1" width="200" height="200" viewBox="0 0 200 200" onclick="toggleRotation(this)">
-                <circle cx="100" cy="100" r="90" fill="#fff" stroke="#333" stroke-width="2"/>
-                <path d="M 100 10 
-                         A 45 45 0 0 0 100 100 
-                         A 45 45 0 0 1 100 190 
-                         A 90 90 0 0 0 100 10 Z" 
-                      fill="#000"/>
-                <circle cx="100" cy="55" r="15" fill="#fff"/>
-                <circle cx="100" cy="145" r="15" fill="#000"/>
-            </svg>
-        </div>
-    </div>
-    
-    <div class="description">
-        <p>When we look at the yin-yang diagram, it is not simply divided into black and white halves. It resembles fish chasing each other's tails. It is very dynamic. This depicts the continuous movement between yin and yang. Moreover, there is a white dot in the black area and a black dot in the white area. Additionally, one side is thick while the other is thin like a tail, so there are places where yin and yang are completely equal (horizontal center), and parts where one side dominates while the other is barely present (vertical center). Although yin and yang are divided, their proportions differ. Why was this simple yin-yang diagram drawn in such a way? This diagram addresses all the important properties of yin and yang.</p>
-        
-        <h4>1. Why does it move?</h4>
-        <p>Yin and yang are not fixed. The shaded part of a hill in the morning receives sunlight in the afternoon. Yin becomes yang. The same applies to our bodies and diseases. Just as everything in nature changes through the four seasons, yin and yang transform. This is called the mutual transformation of yin and yang.</p>
-        
-        <h4>2. What do the white dot in the black area and the black dot in the white area represent?</h4>
-        <p>Yin and yang are not a dichotomy. There is no purely yin or purely yang. There is always yang within yin, and yin within yang. The same applies to constitution and disease. There are no purely heat diseases or purely cold diseases. This is called the infinite divisibility of yin and yang.</p>
-        
-        <h4>3. What is the meaning of the different area proportions?</h4>
-        <p>While yin and yang are divided, some areas have more yin and others have more yang. However, even when the proportions differ, the total sum remains the same. This expresses how yin and yang consume each other. When one increases, the other naturally decreases. And when this tendency becomes extreme, it returns to the original state. It moves like a seesaw. When one rises, the other falls, but neither rises nor falls eternally—they trace a circle. In our bodies too, when yin is deficient, yang rises, and when yang rises, yin falls. When fever occurs, body fluids are damaged, and when blood is deficient, deficiency heat arises. This is called the mutual consumption of yin and yang.</p>
-        <br><br>
-        <p><strong>*Modern Traditional Chinese Medicine tends to ignore this movement, proportional changes, and non-binary nature, and instead tries to categorize diseases and people in a simplistic binary way as either yin or yang, cold or hot—this represents a fundamental misunderstanding of yin and yang.*</strong></p>
-    </div>
-</div>
+    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a id="lang-toggle-btn" href="#" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
 
-<!-- Footer for Individual Pages -->
-<footer class="text-center py-8 mt-12 text-sm text-gray-500">
-    <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-</footer>
-
-<script>
-    /**
-     * SVG 요소의 회전 애니메이션을 멈추거나 다시 시작합니다.
-     * @param {SVGElement} svg - 제어할 SVG 요소
-     */
-    function toggleRotation(svg) {
-        const isPaused = svg.style.animationPlayState === 'paused';
-        svg.style.animationPlayState = isPaused ? 'running' : 'paused';
-    }
-
-    /**
-     * 언어 전환을 위한 임시 함수입니다.
-     * @param {Event} event - 클릭 이벤트 객체
-     */
-    function toggleLanguage(event) {
-        event.preventDefault(); // 링크의 기본 동작(페이지 이동)을 막습니다.
-        alert('Language switching feature is under preparation.'); // 사용자에게 알림
-    }
-    
-    // 페이지 로드 시 나타나는 애니메이션 효과
-    window.addEventListener('load', function() {
-        const svg = document.getElementById('yinYang1');
-        if (svg) {
-            svg.style.opacity = '0';
-            svg.style.transform = 'scale(0.5)';
-            svg.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    <main style="flex-grow: 1;">
+        <div class="container w-full max-w-3xl">
+            <h1 data-lang="ko">음양(陰陽) 태극도</h1>
+            <h1 data-lang="en">Yin Yang Diagram</h1>
             
-            setTimeout(() => {
-                svg.style.opacity = '1';
-                svg.style.transform = 'scale(1)';
-            }, 100);
+            <div class="yin-yang-container">
+                <div class="diagram">
+                    <svg id="yinYang1" width="200" height="200" viewBox="0 0 200 200" onclick="toggleRotation(this)">
+                        <circle cx="100" cy="100" r="90" fill="#fff" stroke="#333" stroke-width="2"/>
+                        <path d="M 100 10 A 45 45 0 0 0 100 100 A 45 45 0 0 1 100 190 A 90 90 0 0 0 100 10 Z" fill="#000"/>
+                        <circle cx="100" cy="55" r="15" fill="#fff"/>
+                        <circle cx="100" cy="145" r="15" fill="#000"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="description">
+                <p data-lang="ko">음양의 다이어그램을 보면 딱 반으로 나뉜 흑과 백이 아닙니다. 마치 물고기가 서로의 꼬리를 쫓는 모양입니다. 매우 율동적이죠. 이는 음양이 서로 계속 움직임을 묘사합니다. 게다가, 검은 곳에 하얀 점, 하얀 곳에 검은 점이 있습니다. 또한 한쪽은 두껍고 한쪽은 꼬리처럼 얇아서 완전히 음양이 동일한 곳도 있고(가로 중앙), 한쪽만 많고 한쪽은 거의 없는 부분(세로 중앙)도 있습니다. 음양이 나뉘지만 그 비율이 다르죠. 왜 단순한 음양의 그림을 이렇게 그렸을까요? 이 그림은 음양의 모든 중요한 속성을 다루고 있습니다.</p>
+                <p data-lang="en">When we look at the yin-yang diagram, it is not simply divided into black and white halves. It resembles fish chasing each other's tails. It is very dynamic. This depicts the continuous movement between yin and yang. Moreover, there is a white dot in the black area and a black dot in the white area. Additionally, one side is thick while the other is thin like a tail, so there are places where yin and yang are completely equal (horizontal center), and parts where one side dominates while the other is barely present (vertical center). Although yin and yang are divided, their proportions differ. Why was this simple yin-yang diagram drawn in such a way? This diagram addresses all the important properties of yin and yang.</p>
+                
+                <h4 data-lang="ko">1. 왜 움직이나?</h4>
+                <h4 data-lang="en">1. Why does it move?</h4>
+                <p data-lang="ko">음양은 고정된 것이 아닙니다. 아침에 언덕의 그늘진 부분이 오후엔 해가 듭니다. 음이 양이 되지요. 우리 몸도 병도 마찬가지입니다. 자연의 모든 것이 사시사철 변하듯 음과 양이 변합니다. 이를 음양의 상호전변(mutual transformation)이라고 합니다.</p>
+                <p data-lang="en">Yin and yang are not fixed. The shaded part of a hill in the morning receives sunlight in the afternoon. Yin becomes yang. The same applies to our bodies and diseases. Just as everything in nature changes through the four seasons, yin and yang transform. This is called the mutual transformation of yin and yang.</p>
+                
+                <h4 data-lang="ko">2. 검은 곳에 하얀 점, 하얀 곳의 검은 점은 무엇인가?</h4>
+                <h4 data-lang="en">2. What do the white dot in the black area and the black dot in the white area represent?</h4>
+                <p data-lang="ko">음양은 이분법이 아닙니다. 순수하게 음도, 양도 없습니다. 늘 음속에는 양이 있고, 양속에는 음이 있습니다. 체질도 병도 마찬가지입니다. 순수하게 열병도 없고, 한병도 없습니다. 이를 음양의 무한한 분열(infinite divisibility)이라고 합니다.</p>
+                <p data-lang="en">Yin and yang are not a dichotomy. There is no purely yin or purely yang. There is always yang within yin, and yin within yang. The same applies to constitution and disease. There are no purely heat diseases or purely cold diseases. This is called the infinite divisibility of yin and yang.</p>
+                
+                <h4 data-lang="ko">3. 다른 영역 비율은 어떤 의미인가?</h4>
+                <h4 data-lang="en">3. What is the meaning of the different area proportions?</h4>
+                <p data-lang="ko">음양이 나뉘기는 하는데, 어떤 곳에는 음이 많고 어떤 곳은 양이 많아요. 그런데 비율이 달라도 총합은 같습니다. 이는 음양이 서로 소모함을 표현합니다. 하나가 많아지면 자연히 하나가 줄어듭니다. 그리고, 이 경향이 심해지면 다시 원상태로 돌립니다. 마치 시소처럼 움직이지요. 하나가 오르면 하나가 내리지만, 영원히 오르거나 내리지는 않고 원을 그려나갑니다. 우리 몸도 음이 부족하면 양이 올라가고, 양이 오르면 음이 내립니다. 열이 나면 진액이 손상되고, 혈이 부족하면 허열이 생깁니다. 이를 음양의 상호 소모(mutual consumption)라고 합니다.</p>
+                <p data-lang="en">While yin and yang are divided, some areas have more yin and others have more yang. However, even when the proportions differ, the total sum remains the same. This expresses how yin and yang consume each other. When one increases, the other naturally decreases. And when this tendency becomes extreme, it returns to the original state. It moves like a seesaw. When one rises, the other falls, but neither rises nor falls eternally—they trace a circle. In our bodies too, when yin is deficient, yang rises, and when yang rises, yin falls. When fever occurs, body fluids are damaged, and when blood is deficient, deficiency heat arises. This is called the mutual consumption of yin and yang.</p>
+                <br><br>
+                <p><strong data-lang="ko">*현대 중의학은 이 움직임, 비율의 변화, 이분되지 않는 속성을 무시하고, 단순하게 병과 사람을 음이니 양이니, 한이니 열이니 이분법적으로 구분하려는 경향이 있는데 음양에 대해 크게 잘못 이해하고 있는 것입니다.*</strong></p>
+                <p><strong data-lang="en">*Modern Traditional Chinese Medicine tends to ignore this movement, proportional changes, and non-binary nature, and instead tries to categorize diseases and people in a simplistic binary way as either yin or yang, cold or hot—this represents a fundamental misunderstanding of yin and yang.*</strong></p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 템플릿의 언어 설정 및 콘텐츠 표시 스크립트 ---
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang');
+            const currentLang = (lang === 'ko') ? 'ko' : 'en';
+            
+            // html 태그 언어 설정
+            document.documentElement.lang = currentLang;
+
+            // 헤더 링크(`header-link`) 요소를 찾아 언어에 따라 폰트를 명조체(Noto Serif)로 변경
+            const headerLink = document.getElementById('header-link');
+            if (currentLang === 'ko') {
+                headerLink.style.fontFamily = "'Noto Serif KR', serif";
+            } else {
+                headerLink.style.fontFamily = "'Noto Serif', serif";
+            }
+
+            // 언어 전환 버튼 링크 설정
+            const toggleButton = document.getElementById('lang-toggle-btn');
+            const newLang = (currentLang === 'en') ? 'ko' : 'en';
+            const newParams = new URLSearchParams(window.location.search);
+            newParams.set('lang', newLang);
+            toggleButton.href = '?' + newParams.toString();
+
+            // 현재 언어에 맞는 콘텐츠만 표시
+            const allLangElements = document.querySelectorAll('[data-lang]');
+            allLangElements.forEach(el => {
+                if (el.getAttribute('data-lang') === currentLang) {
+                    el.style.display = '';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        })();
+
+        /**
+         * SVG 요소의 회전 애니메이션을 멈추거나 다시 시작합니다.
+         * @param {SVGElement} svg - 제어할 SVG 요소
+         */
+        function toggleRotation(svg) {
+            const isPaused = svg.style.animationPlayState === 'paused';
+            svg.style.animationPlayState = isPaused ? 'running' : 'paused';
         }
-    });
-</script>
+        
+        // 페이지 로드 시 나타나는 애니메이션 효과
+        window.addEventListener('load', function() {
+            const svg = document.getElementById('yinYang1');
+            if (svg) {
+                svg.style.opacity = '0';
+                svg.style.transform = 'scale(0.5)';
+                svg.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                
+                setTimeout(() => {
+                    svg.style.opacity = '1';
+                    svg.style.transform = 'scale(1)';
+                }, 100);
+            }
+        });
+    </script>
 </body>
 </html>
