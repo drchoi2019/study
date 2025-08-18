@@ -379,8 +379,42 @@
 
         let currentLanguage = 'en';
 
+        // Get language from URL parameter
+        function getLanguageFromURL() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const lang = urlParams.get('lang');
+                if (lang === 'kor' || lang === 'ko' || lang === 'korean') {
+                    return 'ko';
+                } else if (lang === 'eng' || lang === 'en' || lang === 'english') {
+                    return 'en';
+                }
+            } catch (e) {
+                // Silently fail in restricted environments
+                console.log('URL parameter reading not available in this environment');
+            }
+            return 'en'; // default
+        }
+
+        // Initialize language from URL
+        currentLanguage = getLanguageFromURL();
+
         function setLanguage(lang) {
             currentLanguage = lang;
+            
+            // Update URL parameter (only if not in iframe/restricted environment)
+            try {
+                const url = new URL(window.location);
+                if (lang === 'ko') {
+                    url.searchParams.set('lang', 'kor');
+                } else {
+                    url.searchParams.set('lang', 'eng');
+                }
+                window.history.replaceState({}, '', url);
+            } catch (e) {
+                // Silently fail in restricted environments (like iframe)
+                console.log('URL update not available in this environment');
+            }
             
             // Update UI elements
             document.querySelectorAll('[data-translate]').forEach(element => {
@@ -1114,6 +1148,8 @@
         });
         
         // Initialize the game
+        // Set initial language from URL before initializing
+        setLanguage(currentLanguage);
         init();
     </script>
 </body>
