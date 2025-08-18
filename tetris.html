@@ -670,19 +670,23 @@
                 if (componentsToRemove.length === 0) break;
 
                 const toRemove = new Set();
+                const now = Tone.now(); // Get time once before the loop
+                let timeOffset = 0;     // Keep track of time for subsequent sounds
+
                 for(const component of componentsToRemove) {
-                    const now = Tone.now();
                     if (component.length >= 4) {
                         score += component.length * 20;
                         const notes = ["C5", "D5", "E5", "G5", "A5"];
                         notes.forEach((note, i) => {
-                            polySynth.triggerAttackRelease(note, "16n", now + i * 0.08);
+                            polySynth.triggerAttackRelease(note, "16n", now + timeOffset + i * 0.08);
                         });
+                        timeOffset += 0.5; // Add delay for the next component's sound
                     } else {
                         score += component.length * 10;
-                        synth.triggerAttackRelease("C5", "16n", now);
-                        synth.triggerAttackRelease("E5", "16n", now + 0.1);
-                        synth.triggerAttackRelease("G5", "16n", now + 0.2);
+                        synth.triggerAttackRelease("C5", "16n", now + timeOffset);
+                        synth.triggerAttackRelease("E5", "16n", now + timeOffset + 0.1);
+                        synth.triggerAttackRelease("G5", "16n", now + timeOffset + 0.2);
+                        timeOffset += 0.3; // Add delay for the next component's sound
                     }
                     component.forEach(block => toRemove.add(block.id));
                 }
