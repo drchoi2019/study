@@ -129,7 +129,7 @@
                     { name: 'Wind-Heat Invading Lung', name_ko: '풍열범폐 (風熱犯肺)', organ: 'Lung', patterns: ['Heat'], description: 'Cough, fever, aversion to cold, sore throat, runny nose with yellow discharge, headache, body aches, slight sweating, thirst.', description_ko: '기침, 발열, 오한, 인후통, 누런 콧물, 두통, 몸살, 약간의 땀, 갈증.' },
                     { name: 'Kidney Yang Deficiency', name_ko: '신양허 (腎陽虛)', organ: 'Kidney', patterns: ['Yang Deficiency'], description: 'Aversion to cold, bright-white complexion, lassitude, poor appetite, loose stools. Soreness of the back, cold knees. Impotence, premature ejaculation, infertility, abundant-clear urination, apathy, edema of the legs', description_ko: '오한, 밝고 흰 안색, 권태, 식욕 부진, 묽은 변. 허리 통증, 차가운 무릎. 발기부전, 조루, 불임, 양이 많은 맑은 소변, 무감정, 다리 부종' },
                     { name: 'Kidney Yin Deficiency', name_ko: '신음허 (腎陰虛)', organ: 'Kidney', patterns: ['Yin Deficiency'], description: 'Dizziness, tinnitus, vertigo, poor memory, deafness. Sore back, ache in bones. Nocturnal emission. Night sweating, dry mouth at night, 5-palm heat, thirst. Constipation, dark-scanty urine', description_ko: '어지러움, 이명, 현훈, 기억력 감퇴, 난청. 허리 통증, 뼈의 통증. 몽정. 도한, 야간 구강 건조, 오심번열, 갈증. 변비, 양이 적고 진한 소변' },
-                    { name: 'Kidney Essence Deficiency', name_ko: '신정부족 (腎精不足)', organ: 'Kidney', patterns: ['Essence Deficiency'], description: 'In children: poor bone development, late closure of fontanelle, mental dullness or retardation. In adults: softening of bones, weakness of knees and legs, poor memory, loose teeth, falling hair or premature greying of hair, weakness of sexual activity, soreness of the back', description_ko: '소아: 뼈 발달 부진, 천문 지연 폐쇄, 정신 지체. 성인: 뼈 연화, 무릎과 다리 약화, 기억력 감퇴, 이완된 치아, 탈모 또는 조기 백발, 성기능 약화, 허리 통증' },
+                    { name: 'Kidney Essence Deficiency', name_ko: '신정부족 (腎精不足)', organ: 'Kidney', patterns: ['Essence Deficiency'], description: 'In children: poor bone development, late closure of fontannelle, mental dullness or retardation. In adults: softening of bones, weakness of knees and legs, poor memory, loose teeth, falling hair or premature greying of hair, weakness of sexual activity, soreness of the back', description_ko: '소아: 뼈 발달 부진, 천문 지연 폐쇄, 정신 지체. 성인: 뼈 연화, 무릎과 다리 약화, 기억력 감퇴, 이완된 치아, 탈모 또는 조기 백발, 성기능 약화, 허리 통증' },
                     { name: 'Kidney Qi Not Firm', name_ko: '신기불고 (腎氣不固)', organ: 'Kidney', patterns: ['Qi Deficiency'], description: 'Soreness and weakness of the back. Clear-frequent urination. Weak stream urination, dribbling after urination. Incontinence of urine, enuresis, nocturnal emissions without dreams. In women prolapse of uterus, chronic vaginal discharge', description_ko: '허리의 시큰거림과 약화. 맑고 잦은 소변. 약한 소변 줄기, 배뇨 후 잔뇨감. 요실금, 유뇨, 꿈 없는 유정. 여성의 경우 자궁 탈출, 만성 대하' }
                 ]
             };
@@ -142,9 +142,21 @@
 
             let selectedOrgan = null;
             let selectedPattern = null;
-            let currentLanguage = localStorage.getItem('tcmLang') || 'en';
             
             // --- FUNCTIONS ---
+            
+            // Function to determine initial language from URL or localStorage
+            const getInitialLanguage = () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const langFromUrl = urlParams.get('lang'); // 'en' or 'ko'
+                if (langFromUrl === 'en' || langFromUrl === 'ko') {
+                    localStorage.setItem('tcmLang', langFromUrl);
+                    return langFromUrl;
+                }
+                return localStorage.getItem('tcmLang') || 'en';
+            };
+
+            let currentLanguage = getInitialLanguage();
 
             const renderList = (container, items, lang) => {
                 container.innerHTML = '';
