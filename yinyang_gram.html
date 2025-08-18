@@ -24,8 +24,6 @@
             background: #F7F3EF;
             border-radius: 20px;
             padding: 30px;
-            /* 요청에 따라 그림자 효과 제거 */
-            /* box-shadow: 0 20px 40px rgba(0,0,0,0.1); */
             text-align: center;
         }
         
@@ -64,21 +62,23 @@
             border-radius: 15px;
             padding: 20px;
             margin-top: 30px;
-            text-align: left;
+            /* [수정] text-align: left 대신 justify로 변경하여 양쪽 정렬 */
+            text-align: justify;
             color: #555;
-            line-height: 1.7; /* 가독성을 위해 줄 간격도 약간 조정 */
+            line-height: 1.7; 
         }
         
-        /* 요청에 따라 본문 폰트 크기 증가 */
         .description p {
-            font-size: 1.125rem; /* 16px -> 18px */
+            font-size: 1.125rem; 
         }
 
         .description h4 {
             color: #333;
             margin-top: 20px;
             margin-bottom: 10px;
-            font-size: 1.25rem; /* 본문과의 균형을 위해 크기 조정 */
+            font-size: 1.25rem;
+            /* [추가] 소제목은 가운데 정렬 유지 */
+            text-align: center;
         }
         
         /* 시계 반대 방향 회전 애니메이션 */
