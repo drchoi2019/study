@@ -13,182 +13,146 @@
             background-color: #F7F3EF;
             font-family: 'Noto Sans KR', sans-serif;
         }
-        /* Ensure parent lists do not have bullets */
         #organ-list, #pattern-list {
             list-style: none !important;
             padding: 0 !important;
             margin: 0 !important;
         }
-
-        /* Base styles for list items */
         .list-item {
-            display: block;
-            width: 100%;
-            padding: 0.75rem;
-            border-width: 1px;
-            border-style: solid;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease-in-out;
-            text-align: center;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            background-color: #FFFFFF;
-            border-color: #D1D5DB; /* gray-300 */
-            color: #374151; /* gray-700 */
-            cursor: pointer;
+            display: block; width: 100%; padding: 0.75rem; border-width: 1px;
+            border-style: solid; border-radius: 0.5rem; transition: all 0.2s ease-in-out;
+            text-align: center; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #FFFFFF; border-color: #D1D5DB; color: #374151; cursor: pointer;
         }
-        /* Hover effect for interactive items */
         .list-item:not(.inactive):hover {
-            transform: translateY(-2px);
-            border-color: #BDBDBD; /* gray-400 */
-            background-color: #F5F5F5; /* gray-100 */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+            transform: translateY(-2px); border-color: #BDBDBD;
+            background-color: #F5F5F5; box-shadow: 0 4px 10px rgba(0,0,0,0.07);
         }
-        
-        /* New selected color for Organs (light brown) */
         #organ-list .list-item.selected {
-            border-color: #A1887F; /* brown-300 */
-            background-color: #D7CCC8; /* brown-100 */
-            color: #4E342E; /* brown-800 */
-            font-weight: 600;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            border-color: #A1887F; background-color: #D7CCC8;
+            color: #4E342E; font-weight: 600; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
-
-        /* New selected color for Patterns (desaturated teal) */
         #pattern-list .list-item.selected {
-            border-color: #4DB6AC; /* teal-300 */
-            background-color: #B2DFDB; /* teal-100 */
-            color: #004D40; /* teal-900 */
-            font-weight: 600;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            border-color: #4DB6AC; background-color: #B2DFDB;
+            color: #004D40; font-weight: 600; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
-
-        /* Style for items that are made inactive after a selection */
         .list-item.inactive {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background-color: #F3F4F6; /* gray-100 */
-            border-color: #E5E7EB; /* gray-200 */
-            box-shadow: none;
+            opacity: 0.5; cursor: not-allowed; background-color: #F3F4F6;
+            border-color: #E5E7EB; box-shadow: none;
         }
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- Header -->
-    <header style="width: 100%; max-width: 36rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" 
-           style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
         </a>
     </header>
 
     <main id="main-container" class="w-full max-w-3xl mx-auto p-4">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-700">Basic Organ Pattern Identification</h1>
-            <p class="text-gray-500 mt-2">Select an organ or a pattern to begin. <a href="#" id="reset-link" class="text-indigo-600 hover:underline">Click here to reset</a>.</p>
+            <h1 class="text-3xl font-bold text-gray-700" data-en="Basic Organ Pattern Identification" data-ko="기본 장부 변증"></h1>
+            <p class="text-gray-500 mt-2">
+                <span data-en="Select an organ or a pattern to begin." data-ko="장기 또는 병리 패턴을 선택하여 시작하세요."></span>
+                <a href="#" id="reset-link" class="text-indigo-600 hover:underline" data-en="Click here to reset" data-ko="초기화하려면 여기를 클릭하세요"></a>.
+            </p>
         </div>
 
-        <!-- Main interactive layout: always horizontal and responsive -->
         <div class="flex flex-row flex-nowrap items-center justify-center gap-4">
-            <!-- Left Column: Organs (allows shrinking) -->
             <div class="w-1/3" style="min-width: 120px;">
-                <h2 class="text-xl font-semibold mb-3 text-center text-gray-600">Organs</h2>
-                <div id="organ-list" class="space-y-3">
-                    <!-- Organ items will be injected here by JavaScript -->
-                </div>
+                <h2 class="text-xl font-semibold mb-3 text-center text-gray-600" data-en="Organs" data-ko="장기 (臟腑)"></h2>
+                <div id="organ-list" class="space-y-3"></div>
             </div>
-
-            <!-- Center Column: Plus Sign -->
             <div class="flex-shrink-0 flex items-center justify-center w-auto px-2">
                 <span class="text-6xl text-gray-300 font-light">+</span>
             </div>
-
-            <!-- Right Column: Patterns (flexible width) -->
             <div class="w-2/3" style="min-width: 200px;">
-                <h2 class="text-xl font-semibold mb-3 text-center text-gray-600">Patterns</h2>
-                <div id="pattern-list" class="grid grid-cols-2 gap-3">
-                    <!-- Pattern items will be injected here by JavaScript -->
-                </div>
+                <h2 class="text-xl font-semibold mb-3 text-center text-gray-600" data-en="Patterns" data-ko="병리 패턴 (病理)"></h2>
+                <div id="pattern-list" class="grid grid-cols-2 gap-3"></div>
             </div>
         </div>
 
-        <!-- Result Display Area -->
         <div id="result-display" class="mt-10 min-h-[10rem] bg-transparent p-0 rounded-lg">
-             <p class="text-center text-gray-500 pt-6">Results will be displayed here.</p>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // Data structure containing all TCM information
-        const TCM_DATA = {
-            organs: {
-                'Liver': { name: 'Liver', details: 'Moodiness, irritability, Eye problems, A feeling of \'distension\', Gynaecological problems, Wiry pulse' },
-                'Heart': { name: 'Heart', details: 'Mental–emotional symptoms, Depression, anxiety, insomnia, Problems with blood circulation, Palpitations' },
-                'Spleen': { name: 'Spleen', details: 'Poor appetite, Tiredness, Digestive disorders, Dull-yellow(sallow) complexion, epigastic pain' },
-                'Lung': { name: 'Lung', details: 'Respiratory issues, voice, cough, and phlegm, common cold' },
-                'Kidney': { name: 'Kidney', details: 'Bone problems, Backache, Weak knee and legs, Sexual issues, Tinnitus, Problems with reproductive organs, Urinary problems' }
-            },
-            patterns: {
-                'Qi Deficiency': { name: 'Qi Deficiency', details: 'weakness, lethargy' },
-                'Blood Deficiency': { name: 'Blood Deficiency', details: 'Pallor, cold limbs, fine pulse' },
-                'Qi Stagnation': { name: 'Qi Stagnation', details: 'Pain, distension, moving pain' },
-                'Blood Stasis': { name: 'Blood Stasis', details: 'Purple lesions, purple lips and tongue, stabbing pain, palpable masses, choppy pulse' },
-                'Yang Deficiency': { name: 'Yang Deficiency', details: 'Qi deficiency + cold, dampness' },
-                'Yin Deficiency': { name: 'Yin Deficiency', details: 'Blood deficiency + heat, dryness, scanty fluids, night sweats, tidal fever, five-palm heat, fine-rapid pulse' },
-                'Heat': { name: 'Heat (Fire)', details: 'Heat sensation, vexation, rapid pulse, yellow discharge, yellow tongue coating, constipation' },
-                'Cold': { name: 'Cold', details: 'Cold, slowness, slow pulse, tight pulse, clear discharge' },
-                'Essence Deficiency': { name: 'Essence Deficiency', details: 'Developmental delay, sexual dysfunction, premature aging' },
-                // 'Dampness' is removed from the selectable patterns but its data is kept in the syndromes below.
-            },
-            syndromes: [
-                { name: 'Liver Blood Deficiency', organ: 'Liver', patterns: ['Blood Deficiency'], description: 'Dizziness, insomnia, dull-pale complexion, pale lips. Blurred vision, "floaters", withered/brittle nails, dry hair/skin. Numbness of limbs, muscular weakness and spasm, cramps. Scanty menstruation or amenorrhea' },
-                { name: 'Liver Qi Stagnation', organ: 'Liver', patterns: ['Qi Stagnation'], description: 'Melancholy, moodiness, fluctuating mental state, unhappiness, "feeling wound up". Hypochondric pain. Epigastric pain, ST churning, abdominal distention. Nausea, vomiting, hiccup, no appetite, borborygmus, diarrhea. Feeling of lump in the throat, difficulty swallowing. Irregular periods, painful periods, distention of breasts before the periods, premenstrual tension and irritability' },
-                { name: 'Liver Blood Stasis', organ: 'Liver', patterns: ['Blood Stasis'], description: 'Painful(fixed, stabbing, worsen at night) periods, irregular periods, dark and clotted menses. Abdominal pain, "masses" in abdomen. Purple nails, purple lips, purple complexion. Dry skin (in severe cases), petechiae(purple spot)' },
-                { name: 'Stagnation of Cold in the Liver Meridian', organ: 'Liver', patterns: ['Cold'], description: 'Pain refering to the scrotum and testis. Pain is alleviated by warmth' },
-                { name: 'Liver Fire Flare-up', organ: 'Liver', patterns: ['Heat'], description: 'Temporal headache, dizziness, tinnitus, deafness. Red face and eyes, thirst, bitter taste. Irritability, propensity to anger, dream disturbed sleep. Constipation with dry stools, dark-yellow urine. Epistaxis, hematemesis, hemoptysis' },
-                { name: 'Damp-Heat in Liver and Gallbladder', organ: 'Liver', patterns: ['Heat', 'Dampness'], description: 'Hypochondriac fullness, bitter taste, no appetite. Nausea, vomiting, abdominal distention, scanty-dark urine. Fever, jaundice. ♂ Pain-redness-swelling of scrotum. ♀ Yellow foul leukorrhea with pruritus vulvae' },
-                { name: 'Heart Qi Deficiency', organ: 'Heart', patterns: ['Qi Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness' },
-                { name: 'Heart Yang Deficiency', organ: 'Heart', patterns: ['Yang Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness. Feeling of cold, bright-pale face, cold limbs (esp. hands)' },
-                { name: 'Heart Blood Deficiency', organ: 'Heart', patterns: ['Blood Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep. Dizziness, poor memory. Dull-pale complexion, pale lips. Anxiety, propensity to be startled' },
-                { name: 'Heart Yin Deficiency', organ: 'Heart', patterns: ['Yin Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep, poor memory, anxiety, mental restlessness, "five palm heat", night sweating, dry mouth and throat.' },
-                { name: 'Heart Blood Stasis', organ: 'Heart', patterns: ['Blood Stasis'], description: 'Palpitations. Pain in the heart region, discomfort or feeling of oppression or constriction of the chest. Cyanosis of lips and nails, cold hands' },
-                { name: 'Heart Fire Blazing', organ: 'Heart', patterns: ['Heat'], description: 'Palpitations, restlessness, agitation, insomnia, impulsiveness. Thirst, red face, feeling of heat, bitter taste. Mouth and Tongue ulcers. Dark urine or blood in urine' },
-                { name: 'Spleen Qi Deficiency', organ: 'Spleen', patterns: ['Qi Deficiency'], description: 'Sallow complexion, tiredness, lassitude, weakness of the limbs. No appetite, abdominal distention after eating, loose stools' },
-                { name: 'Spleen Yang Deficiency', organ: 'Spleen', patterns: ['Yang Deficiency'], description: 'SP-Qi deficiency + Chilliness, cold limbs, weakness of the limbs, loose stools, edema' },
-                { name: 'Cold-Damp Invading Spleen', organ: 'Spleen', patterns: ['Cold', 'Dampness'], description: 'Oppression feeling of the chest and epigastrium, feeling of cold in the epigastrium which improves with warmth. No appetite, sweetish taste or absence of taste, no thirst. Heaviness of the head, lassitude and feeling of heaviness. Loose-thin stools, white vaginal discharge' },
-                { name: 'Lung Qi Deficiency', organ: 'Lung', patterns: ['Qi Deficiency'], description: 'Shortness of breath, cough. Watery sputum. Weak voice, dislike to speak, tiredness. Dislike of cold, propensity to catching colds. Daytime sweating. Bright-white complexion' },
-                { name: 'Lung Yin Deficiency', organ: 'Lung', patterns: ['Yin Deficiency'], description: 'Dry cough, scanty-sticky sputum, feeling of heat in the afternoon, malar flush, night sweating, 5-palm heat, dry mouth, thin body.' },
-                { name: 'Wind-Cold Invading Lung', organ: 'Lung', patterns: ['Cold'], description: 'Cough. Stuffed nose or runny nose with clear-watery mucus, sneezing. Fever, aversion to cold, itchy throat. Occipital headache, body aches. Absence of thirst, absence of sweating' },
-                { name: 'Wind-Heat Invading Lung', organ: 'Lung', patterns: ['Heat'], description: 'Cough, fever, aversion to cold, sore throat, runny nose with yellow discharge, headache, body aches, slight sweating, thirst.' },
-                { name: 'Kidney Yang Deficiency', organ: 'Kidney', patterns: ['Yang Deficiency'], description: 'Aversion to cold, bright-white complexion, lassitude, poor appetite, loose stools. Soreness of the back, cold knees, sensation of cold in the back, weak legs, weak knees. Impotence, premature ejaculation, infertility, abundant-clear urination, scanty-clear urination, apathy, edema of the legs' },
-                { name: 'Kidney Yin Deficiency', organ: 'Kidney', patterns: ['Yin Deficiency'], description: 'Dizziness, tinnitus, vertigo, poor memory, deafness. Sore back, ache in bones. Nocturnal emission. Night sweating, dry mouth at night, 5-palm heat, thirst. Constipation, dark-scanty urine' },
-                { name: 'Kidney Essence Deficiency', organ: 'Kidney', patterns: ['Essence Deficiency'], description: 'In children: poor bone development, late closure of fontanelle, mental dullness or retardation. In adults: softening of bones, weakness of knees and legs, poor memory, loose teeth, falling hair or premature greying of hair, weakness of sexual activity, soreness of the back' },
-                { name: 'Kidney Qi Not Firm', organ: 'Kidney', patterns: ['Qi Deficiency'], description: 'Soreness and weakness of the back. Clear-frequent urination. Weak stream urination, dribbling after urination. Incontinence of urine, enuresis, urination at night, premature ejaculation, spermatorrhea, nocturnal emissions without dreams. In women prolapse of uterus, chronic vaginal discharge' }
-            ]
-        };
-
         document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            const TCM_DATA = {
+                organs: {
+                    'Liver': { name: 'Liver', name_ko: '간 (肝)', details: 'Moodiness, irritability, Eye problems, A feeling of \'distension\', Gynaecological problems, Wiry pulse', details_ko: '정서 불안, 짜증, 눈 문제, 창만감, 부인과 문제, 현맥' },
+                    'Heart': { name: 'Heart', name_ko: '심 (心)', details: 'Mental–emotional symptoms, Depression, anxiety, insomnia, Problems with blood circulation, Palpitations', details_ko: '정신-정서 증상, 우울, 불안, 불면, 혈액 순환 문제, 심계' },
+                    'Spleen': { name: 'Spleen', name_ko: '비 (脾)', details: 'Poor appetite, Tiredness, Digestive disorders, Dull-yellow(sallow) complexion, epigastic pain', details_ko: '식욕 부진, 피로, 소화 장애, 위황색 안색, 상복부 통증' },
+                    'Lung': { name: 'Lung', name_ko: '폐 (肺)', details: 'Respiratory issues, voice, cough, and phlegm, common cold', details_ko: '호흡기 문제, 목소리, 기침, 담, 감기' },
+                    'Kidney': { name: 'Kidney', name_ko: '신 (腎)', details: 'Bone problems, Backache, Weak knee and legs, Sexual issues, Tinnitus, Problems with reproductive organs, Urinary problems', details_ko: '뼈 문제, 허리 통증, 무릎과 다리 약화, 성기능 문제, 이명, 생식기 문제, 비뇨기 문제' }
+                },
+                patterns: {
+                    'Qi Deficiency': { name: 'Qi Deficiency', name_ko: '기허 (氣虛)', details: 'weakness, lethargy', details_ko: '쇠약, 무기력' },
+                    'Blood Deficiency': { name: 'Blood Deficiency', name_ko: '혈허 (血虛)', details: 'Pallor, cold limbs, fine pulse', details_ko: '창백, 사지 냉감, 세맥' },
+                    'Qi Stagnation': { name: 'Qi Stagnation', name_ko: '기체 (氣滯)', details: 'Pain, distension, moving pain', details_ko: '통증, 창만, 이동성 통증' },
+                    'Blood Stasis': { name: 'Blood Stasis', name_ko: '혈어 (血瘀)', details: 'Purple lesions, purple lips and tongue, stabbing pain, palpable masses, choppy pulse', details_ko: '자색 병변, 자색 입술/혀, 자통, 만져지는 종괴, 삽맥' },
+                    'Yang Deficiency': { name: 'Yang Deficiency', name_ko: '양허 (陽虛)', details: 'Qi deficiency + cold, dampness', details_ko: '기허 + 한, 습 증상' },
+                    'Yin Deficiency': { name: 'Yin Deficiency', name_ko: '음허 (陰虛)', details: 'Blood deficiency + heat, dryness, scanty fluids, night sweats, tidal fever, five-palm heat, fine-rapid pulse', details_ko: '혈허 + 열, 건조, 진액 부족, 도한, 조열, 오심번열, 세삭맥' },
+                    'Heat': { name: 'Heat (Fire)', name_ko: '열/화 (熱/火)', details: 'Heat sensation, vexation, rapid pulse, yellow discharge, yellow tongue coating, constipation', details_ko: '열감, 번조, 삭맥, 황색 분비물, 황태, 변비' },
+                    'Cold': { name: 'Cold', name_ko: '한 (寒)', details: 'Cold, slowness, slow pulse, tight pulse, clear discharge', details_ko: '추위, 느림, 지맥, 긴맥, 맑은 분비물' },
+                    'Essence Deficiency': { name: 'Essence Deficiency', name_ko: '정허 (精虛)', details: 'Developmental delay, sexual dysfunction, premature aging', details_ko: '발달 지연, 성기능 장애, 조기 노화' },
+                },
+                syndromes: [
+                    { name: 'Liver Blood Deficiency', name_ko: '간혈허 (肝血虛)', organ: 'Liver', patterns: ['Blood Deficiency'], description: 'Dizziness, insomnia, dull-pale complexion, pale lips. Blurred vision, "floaters", withered/brittle nails, dry hair/skin. Numbness of limbs, muscular weakness and spasm, cramps. Scanty menstruation or amenorrhea', description_ko: '어지러움, 불면, 창백한 안색, 창백한 입술. 시야 흐림, 비문증, 마르고 부서지기 쉬운 손톱, 건조한 모발/피부. 사지 마비, 근육 약화 및 경련. 월경 과소 또는 무월경' },
+                    { name: 'Liver Qi Stagnation', name_ko: '간기울결 (肝氣鬱結)', organ: 'Liver', patterns: ['Qi Stagnation'], description: 'Melancholy, moodiness, fluctuating mental state. Hypochondric pain. Epigastric pain, abdominal distention. Nausea, vomiting. Feeling of lump in the throat. Irregular periods, painful periods, distention of breasts before the periods, premenstrual tension.', description_ko: '우울, 기분 변화, 변덕스러운 정신 상태. 옆구리 통증. 상복부 통증, 복부 팽만. 구역, 구토. 목에 덩어리가 걸린 느낌. 불규칙한 월경, 월경통, 월경 전 유방 팽만, 월경 전 긴장.' },
+                    { name: 'Liver Blood Stasis', name_ko: '간혈어 (肝血瘀)', organ: 'Liver', patterns: ['Blood Stasis'], description: 'Painful(fixed, stabbing, worsen at night) periods, irregular periods, dark and clotted menses. Abdominal pain, "masses" in abdomen. Purple nails, purple lips, purple complexion. Dry skin, petechiae.', description_ko: '월경통(고정성, 자통, 야간 악화), 불규칙 월경, 어둡고 덩어리진 월경혈. 복통, 복부 종괴. 자색 손톱, 입술, 안색. 건조한 피부, 자반.' },
+                    { name: 'Stagnation of Cold in the Liver Meridian', name_ko: '한체간맥 (寒滯肝脈)', organ: 'Liver', patterns: ['Cold'], description: 'Pain refering to the scrotum and testis. Pain is alleviated by warmth', description_ko: '음낭 및 고환으로 뻗치는 통증. 따뜻하게 하면 통증 완화' },
+                    { name: 'Liver Fire Flare-up', name_ko: '간화상염 (肝火上炎)', organ: 'Liver', patterns: ['Heat'], description: 'Temporal headache, dizziness, tinnitus, deafness. Red face and eyes, thirst, bitter taste. Irritability, propensity to anger. Constipation with dry stools, dark-yellow urine. Epistaxis, hematemesis, hemoptysis', description_ko: '측두통, 어지러움, 이명, 난청. 붉은 얼굴과 눈, 갈증, 쓴맛. 짜증, 분노 경향. 건조한 변이 있는 변비, 진한 노란색 소변. 코피, 토혈, 객혈' },
+                    { name: 'Damp-Heat in Liver and Gallbladder', name_ko: '간담습열 (肝膽濕熱)', organ: 'Liver', patterns: ['Heat', 'Dampness'], description: 'Hypochondriac fullness, bitter taste, no appetite. Nausea, vomiting, abdominal distention. Fever, jaundice. ♂ Pain-redness-swelling of scrotum. ♀ Yellow foul leukorrhea with pruritus vulvae', description_ko: '옆구리 그득함, 쓴맛, 식욕 부진. 구역, 구토, 복부 팽만. 발열, 황달. ♂ 음낭의 통증-발적-종창. ♀ 황색의 악취나는 대하와 음부 가려움증' },
+                    { name: 'Heart Qi Deficiency', name_ko: '심기허 (心氣虛)', organ: 'Heart', patterns: ['Qi Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness', description_ko: '심계, 활동 시 숨가쁨. 땀, 창백, 피로, 무기력' },
+                    { name: 'Heart Yang Deficiency', name_ko: '심양허 (心陽虛)', organ: 'Heart', patterns: ['Yang Deficiency'], description: 'Palpitations, shortness of breath on exertion. Sweating, pallor, tiredness, listlessness. Feeling of cold, bright-pale face, cold limbs (esp. hands)', description_ko: '심계, 활동 시 숨가쁨. 땀, 창백, 피로, 무기력. 추위를 느낌, 밝고 창백한 얼굴, 차가운 사지(특히 손)' },
+                    { name: 'Heart Blood Deficiency', name_ko: '심혈허 (心血虛)', organ: 'Heart', patterns: ['Blood Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep. Dizziness, poor memory. Dull-pale complexion, pale lips. Anxiety, propensity to be startled', description_ko: '심계, 불면, 다몽. 어지러움, 기억력 감퇴. 어둡고 창백한 안색, 창백한 입술. 불안, 잘 놀라는 경향' },
+                    { name: 'Heart Yin Deficiency', name_ko: '심음허 (心陰虛)', organ: 'Heart', patterns: ['Yin Deficiency'], description: 'Palpitations, insomnia, dream-disturbed sleep, poor memory, anxiety, mental restlessness, "five palm heat", night sweating, dry mouth and throat.', description_ko: '심계, 불면, 다몽, 기억력 감퇴, 불안, 정신적 불안정, 오심번열, 도한, 마른 입과 목.' },
+                    { name: 'Heart Blood Stasis', name_ko: '심혈어 (心血瘀)', organ: 'Heart', patterns: ['Blood Stasis'], description: 'Palpitations. Pain in the heart region, discomfort or feeling of oppression or constriction of the chest. Cyanosis of lips and nails, cold hands', description_ko: '심계. 심장 부위 통증, 흉부의 불편감 또는 압박감. 입술과 손톱의 청색증, 차가운 손' },
+                    { name: 'Heart Fire Blazing', name_ko: '심화항성 (心火亢盛)', organ: 'Heart', patterns: ['Heat'], description: 'Palpitations, restlessness, agitation, insomnia, impulsiveness. Thirst, red face, feeling of heat, bitter taste. Mouth and Tongue ulcers. Dark urine or blood in urine', description_ko: '심계, 안절부절, 초조, 불면, 충동성. 갈증, 붉은 얼굴, 열감, 쓴맛. 구강 및 혀의 궤양. 진한 소변 또는 혈뇨' },
+                    { name: 'Spleen Qi Deficiency', name_ko: '비기허 (脾氣虛)', organ: 'Spleen', patterns: ['Qi Deficiency'], description: 'Sallow complexion, tiredness, lassitude, weakness of the limbs. No appetite, abdominal distention after eating, loose stools', description_ko: '위황색 안색, 피로, 권태, 사지 무력. 식욕 부진, 식후 복부 팽만, 묽은 변' },
+                    { name: 'Spleen Yang Deficiency', name_ko: '비양허 (脾陽虛)', organ: 'Spleen', patterns: ['Yang Deficiency'], description: 'SP-Qi deficiency + Chilliness, cold limbs, weakness of the limbs, loose stools, edema', description_ko: '비기허 증상 + 오한, 사지 냉감, 사지 무력, 묽은 변, 부종' },
+                    { name: 'Cold-Damp Invading Spleen', name_ko: '한습곤비 (寒濕困脾)', organ: 'Spleen', patterns: ['Cold', 'Dampness'], description: 'Oppression feeling of the chest and epigastrium, feeling of cold in the epigastrium which improves with warmth. No appetite, no thirst. Heaviness of the head. Loose-thin stools, white vaginal discharge', description_ko: '가슴과 상복부의 답답함, 따뜻하게 하면 완화되는 상복부의 냉감. 식욕 부진, 갈증 없음. 머리가 무거움. 묽고 가는 변, 백색 대하' },
+                    { name: 'Lung Qi Deficiency', name_ko: '폐기허 (肺氣虛)', organ: 'Lung', patterns: ['Qi Deficiency'], description: 'Shortness of breath, cough. Watery sputum. Weak voice, dislike to speak. Dislike of cold, propensity to catching colds. Daytime sweating. Bright-white complexion', description_ko: '숨가쁨, 기침. 묽은 가래. 약한 목소리, 말하기 싫어함. 추위를 싫어하고 감기에 잘 걸림. 낮에 땀을 흘림. 밝고 흰 안색' },
+                    { name: 'Lung Yin Deficiency', name_ko: '폐음허 (肺陰虛)', organ: 'Lung', patterns: ['Yin Deficiency'], description: 'Dry cough, scanty-sticky sputum, feeling of heat in the afternoon, malar flush, night sweating, 5-palm heat, dry mouth, thin body.', description_ko: '마른 기침, 적고 끈적한 가래, 오후의 열감, 광대뼈 붉어짐, 도한, 오심번열, 마른 입, 마른 체형.' },
+                    { name: 'Wind-Cold Invading Lung', name_ko: '풍한속폐 (風寒束肺)', organ: 'Lung', patterns: ['Cold'], description: 'Cough. Stuffed nose or runny nose with clear-watery mucus, sneezing. Fever, aversion to cold, itchy throat. Occipital headache, body aches. Absence of thirst, absence of sweating', description_ko: '기침. 코막힘 또는 맑은 콧물, 재채기. 발열, 오한, 목 가려움. 후두통, 몸살. 갈증 없음, 땀 없음' },
+                    { name: 'Wind-Heat Invading Lung', name_ko: '풍열범폐 (風熱犯肺)', organ: 'Lung', patterns: ['Heat'], description: 'Cough, fever, aversion to cold, sore throat, runny nose with yellow discharge, headache, body aches, slight sweating, thirst.', description_ko: '기침, 발열, 오한, 인후통, 누런 콧물, 두통, 몸살, 약간의 땀, 갈증.' },
+                    { name: 'Kidney Yang Deficiency', name_ko: '신양허 (腎陽虛)', organ: 'Kidney', patterns: ['Yang Deficiency'], description: 'Aversion to cold, bright-white complexion, lassitude, poor appetite, loose stools. Soreness of the back, cold knees. Impotence, premature ejaculation, infertility, abundant-clear urination, apathy, edema of the legs', description_ko: '오한, 밝고 흰 안색, 권태, 식욕 부진, 묽은 변. 허리 통증, 차가운 무릎. 발기부전, 조루, 불임, 양이 많은 맑은 소변, 무감정, 다리 부종' },
+                    { name: 'Kidney Yin Deficiency', name_ko: '신음허 (腎陰虛)', organ: 'Kidney', patterns: ['Yin Deficiency'], description: 'Dizziness, tinnitus, vertigo, poor memory, deafness. Sore back, ache in bones. Nocturnal emission. Night sweating, dry mouth at night, 5-palm heat, thirst. Constipation, dark-scanty urine', description_ko: '어지러움, 이명, 현훈, 기억력 감퇴, 난청. 허리 통증, 뼈의 통증. 몽정. 도한, 야간 구강 건조, 오심번열, 갈증. 변비, 양이 적고 진한 소변' },
+                    { name: 'Kidney Essence Deficiency', name_ko: '신정부족 (腎精不足)', organ: 'Kidney', patterns: ['Essence Deficiency'], description: 'In children: poor bone development, late closure of fontanelle, mental dullness or retardation. In adults: softening of bones, weakness of knees and legs, poor memory, loose teeth, falling hair or premature greying of hair, weakness of sexual activity, soreness of the back', description_ko: '소아: 뼈 발달 부진, 천문 지연 폐쇄, 정신 지체. 성인: 뼈 연화, 무릎과 다리 약화, 기억력 감퇴, 이완된 치아, 탈모 또는 조기 백발, 성기능 약화, 허리 통증' },
+                    { name: 'Kidney Qi Not Firm', name_ko: '신기불고 (腎氣不固)', organ: 'Kidney', patterns: ['Qi Deficiency'], description: 'Soreness and weakness of the back. Clear-frequent urination. Weak stream urination, dribbling after urination. Incontinence of urine, enuresis, nocturnal emissions without dreams. In women prolapse of uterus, chronic vaginal discharge', description_ko: '허리의 시큰거림과 약화. 맑고 잦은 소변. 약한 소변 줄기, 배뇨 후 잔뇨감. 요실금, 유뇨, 꿈 없는 유정. 여성의 경우 자궁 탈출, 만성 대하' }
+                ]
+            };
+
+            // --- STATE & ELEMENTS ---
             const organList = document.getElementById('organ-list');
             const patternList = document.getElementById('pattern-list');
             const resultDisplay = document.getElementById('result-display');
-            const mainContainer = document.getElementById('main-container');
             const resetLink = document.getElementById('reset-link');
 
             let selectedOrgan = null;
             let selectedPattern = null;
+            let currentLanguage = localStorage.getItem('tcmLang') || 'en';
+            
+            // --- FUNCTIONS ---
 
-            const renderList = (container, items) => {
+            const renderList = (container, items, lang) => {
                 container.innerHTML = '';
                 for (const key in items) {
                     const item = items[key];
                     const div = document.createElement('div');
                     div.className = 'list-item';
-                    div.textContent = item.name;
+                    div.textContent = lang === 'ko' ? item.name_ko : item.name;
                     div.dataset.name = key;
                     container.appendChild(div);
                 }
@@ -197,9 +161,7 @@
             const resetAll = () => {
                 selectedOrgan = null;
                 selectedPattern = null;
-                organList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected', 'inactive'));
-                patternList.querySelectorAll('.list-item').forEach(el => el.classList.remove('selected', 'inactive'));
-                resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">Results will be displayed here.</p>`;
+                updateUI();
             };
 
             const updateUI = () => {
@@ -211,9 +173,7 @@
                     TCM_DATA.syndromes
                         .filter(s => s.organ === selectedOrgan)
                         .forEach(s => s.patterns.forEach(p => {
-                            if (TCM_DATA.patterns[p]) {
-                                activePatterns.add(p);
-                            }
+                            if (TCM_DATA.patterns[p]) activePatterns.add(p);
                         }));
                 }
 
@@ -236,7 +196,84 @@
 
                 updateResultDisplay();
             };
+
+            const processDescription = (description, lang) => {
+                 const baseSyndromeName = lang === 'ko' ? '비기허 증상' : 'SP-Qi deficiency';
+                if (description.startsWith(baseSyndromeName)) {
+                   const baseSyndrome = TCM_DATA.syndromes.find(s => s.name === 'Spleen Qi Deficiency');
+                   if (baseSyndrome) {
+                       const baseDesc = lang === 'ko' ? baseSyndrome.description_ko : baseSyndrome.description;
+                       const addition = description.substring(baseSyndromeName.length + 3); // " + "
+                       return `(${baseDesc}) + ${addition}`;
+                   }
+                }
+                return description;
+            };
+
+            const updateResultDisplay = () => {
+                if (!selectedOrgan && !selectedPattern) {
+                    const placeholderText = currentLanguage === 'ko' ? '결과는 여기에 표시됩니다.' : 'Results will be displayed here.';
+                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">${placeholderText}</p>`;
+                    return;
+                }
+
+                let organHtml = '', patternHtml = '', syndromeHtml = '';
+                const organPlaceholder = currentLanguage === 'ko' ? '장기 선택' : 'Select an Organ';
+                const patternPlaceholder = currentLanguage === 'ko' ? '패턴 선택' : 'Select a Pattern';
+
+                if (selectedOrgan) {
+                    const organData = TCM_DATA.organs[selectedOrgan];
+                    organHtml = `<div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #D7CCC8; border: 1px solid #A1887F;"><h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${currentLanguage === 'ko' ? organData.name_ko : organData.name}</h4><p class="text-gray-800 text-sm">${currentLanguage === 'ko' ? organData.details_ko : organData.details}</p></div>`;
+                } else {
+                    organHtml = `<div class="w-1/2 p-4 rounded-lg shadow-inner bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center min-h-[100px]"><p class="text-gray-400">${organPlaceholder}</p></div>`;
+                }
+
+                if (selectedPattern) {
+                    const patternData = TCM_DATA.patterns[selectedPattern];
+                    patternHtml = `<div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #B2DFDB; border: 1px solid #4DB6AC;"><h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${currentLanguage === 'ko' ? patternData.name_ko : patternData.name}</h4><p class="text-gray-800 text-sm">${currentLanguage === 'ko' ? patternData.details_ko : patternData.details}</p></div>`;
+                } else {
+                    patternHtml = `<div class="w-1/2 p-4 rounded-lg shadow-inner bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center min-h-[100px]"><p class="text-gray-400">${patternPlaceholder}</p></div>`;
+                }
+
+                if (selectedOrgan && selectedPattern) {
+                    const matchingSyndromes = TCM_DATA.syndromes.filter(s => s.organ === selectedOrgan && s.patterns.includes(selectedPattern));
+                    if (matchingSyndromes.length > 0) {
+                        let syndromesContent = matchingSyndromes.map((syndrome, index) => {
+                            const desc = currentLanguage === 'ko' ? syndrome.description_ko : syndrome.description;
+                            const processedDescription = processDescription(desc, currentLanguage);
+                            return `<div class="${index > 0 ? 'mt-4' : ''}"><h3 class="text-xl font-bold mb-2"><span style="color: #00695C;">${currentLanguage === 'ko' ? syndrome.name_ko : syndrome.name}</span></h3><p>${processedDescription}</p></div>`;
+                        }).join('');
+                        syndromeHtml = `<div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">${syndromesContent}</div>`;
+                    } else {
+                        const noInfoText = currentLanguage === 'ko' ? '이 조합에 대한 정보가 없습니다.' : 'No information found for this combination.';
+                        syndromeHtml = `<div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200 text-center text-gray-500">${noInfoText}</div>`;
+                    }
+                }
+
+                resultDisplay.innerHTML = `<div class="space-y-4"><div class="flex flex-row gap-2 items-center justify-center">${organHtml}<div class="flex-shrink-0 text-4xl text-gray-400 font-light">+</div>${patternHtml}</div>${syndromeHtml}</div>`;
+            };
             
+            const updateLanguageUI = () => {
+                document.documentElement.lang = currentLanguage;
+                document.querySelectorAll('[data-en]').forEach(el => {
+                    if (el.dataset[currentLanguage]) {
+                        el.textContent = el.dataset[currentLanguage];
+                    }
+                });
+                renderList(organList, TCM_DATA.organs, currentLanguage);
+                renderList(patternList, TCM_DATA.patterns, currentLanguage);
+                updateUI();
+            };
+
+            // This function is attached to the window object to be accessible from the onclick attribute.
+            window.toggleLanguage = (event) => {
+                event.preventDefault();
+                currentLanguage = currentLanguage === 'en' ? 'ko' : 'en';
+                localStorage.setItem('tcmLang', currentLanguage);
+                updateLanguageUI();
+            };
+
+            // --- EVENT LISTENERS ---
             organList.addEventListener('click', (e) => {
                 const item = e.target.closest('.list-item');
                 if (item && !item.classList.contains('inactive')) {
@@ -258,97 +295,8 @@
                 resetAll();
             });
 
-            const processDescription = (description) => {
-                const match = description.match(/SP-Qi deficiency \+ (.*)/);
-                if (match) {
-                    const baseSyndrome = TCM_DATA.syndromes.find(s => s.name === 'Spleen Qi Deficiency');
-                    if (baseSyndrome) {
-                        return `(${baseSyndrome.description}) + ${match[1]}`;
-                    }
-                }
-                return description;
-            };
-
-            const updateResultDisplay = () => {
-                if (!selectedOrgan && !selectedPattern) {
-                    resultDisplay.innerHTML = `<p class="text-center text-gray-500 pt-6">Results will be displayed here.</p>`;
-                    return;
-                }
-
-                let organHtml = '';
-                let patternHtml = '';
-                let syndromeHtml = '';
-
-                // Build Organ Box HTML
-                if (selectedOrgan) {
-                    const organData = TCM_DATA.organs[selectedOrgan];
-                    organHtml = `
-                        <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #D7CCC8; border: 1px solid #A1887F;">
-                            <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${organData.name}</h4>
-                            <p class="text-gray-800 text-sm">${organData.details}</p>
-                        </div>`;
-                } else {
-                    organHtml = `
-                        <div class="w-1/2 p-4 rounded-lg shadow-inner bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center min-h-[100px]">
-                            <p class="text-gray-400">Select an Organ</p>
-                        </div>`;
-                }
-
-                // Build Pattern Box HTML
-                if (selectedPattern) {
-                    const patternData = TCM_DATA.patterns[selectedPattern];
-                    patternHtml = `
-                        <div class="w-1/2 p-4 rounded-lg shadow-inner" style="background-color: #B2DFDB; border: 1px solid #4DB6AC;">
-                            <h4 class="font-semibold text-lg mb-2 text-center text-gray-800 border-b border-gray-500/30 pb-2">${patternData.name}</h4>
-                            <p class="text-gray-800 text-sm">${patternData.details}</p>
-                        </div>`;
-                } else {
-                    patternHtml = `
-                        <div class="w-1/2 p-4 rounded-lg shadow-inner bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center min-h-[100px]">
-                            <p class="text-gray-400">Select a Pattern</p>
-                        </div>`;
-                }
-
-                // Build Syndrome Box HTML
-                if (selectedOrgan && selectedPattern) {
-                    const matchingSyndromes = TCM_DATA.syndromes.filter(s => 
-                        s.organ === selectedOrgan && s.patterns.includes(selectedPattern)
-                    );
-
-                    if (matchingSyndromes.length > 0) {
-                        let syndromesContent = '';
-                        matchingSyndromes.forEach((syndrome, index) => {
-                            const processedDescription = processDescription(syndrome.description);
-                            syndromesContent += `
-                                <div class="${index > 0 ? 'mt-4' : ''}">
-                                    <h3 class="text-xl font-bold mb-2"><span style="color: #00695C;">${syndrome.name}</span></h3>
-                                    <p>${processedDescription}</p>
-                                </div>`;
-                        });
-                        syndromeHtml = `<div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200">${syndromesContent}</div>`;
-                    } else {
-                        syndromeHtml = `<div class="bg-white/70 p-6 rounded-lg shadow-inner border border-gray-200 text-center text-gray-500">No information found for this combination.</div>`;
-                    }
-                }
-
-                // Assemble the final HTML
-                const finalHtml = `
-                    <div class="space-y-4">
-                        <div class="flex flex-row gap-2 items-center justify-center">
-                            ${organHtml}
-                            <div class="flex-shrink-0 text-4xl text-gray-400 font-light">+</div>
-                            ${patternHtml}
-                        </div>
-                        ${syndromeHtml}
-                    </div>
-                `;
-                
-                resultDisplay.innerHTML = finalHtml;
-            };
-
-            // Initial render
-            renderList(organList, TCM_DATA.organs);
-            renderList(patternList, TCM_DATA.patterns);
+            // --- INITIALIZATION ---
+            updateLanguageUI();
         });
     </script>
 </body>
