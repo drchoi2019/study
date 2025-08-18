@@ -985,12 +985,26 @@
 
         function startAudioContext() {
             if (Tone.context.state !== 'running') {
-                Tone.start();
+                Tone.start().then(() => {
+                    console.log('Audio context started successfully');
+                }).catch(err => {
+                    console.log('Audio context failed to start:', err);
+                });
             }
         }
-        document.body.addEventListener('click', startAudioContext, { once: true });
-        document.body.addEventListener('touchstart', startAudioContext, { once: true });
-        document.body.addEventListener('keydown', startAudioContext, { once: true });
+        
+        // Start audio on first user interaction
+        function enableAudio() {
+            startAudioContext();
+            // Remove listeners after first activation
+            document.removeEventListener('click', enableAudio);
+            document.removeEventListener('touchstart', enableAudio);
+            document.removeEventListener('keydown', enableAudio);
+        }
+        
+        document.addEventListener('click', enableAudio);
+        document.addEventListener('touchstart', enableAudio);
+        document.addEventListener('keydown', enableAudio);
 
         // Desktop keyboard controls
         window.addEventListener('keydown', (e) => {
