@@ -211,7 +211,7 @@
             linksToUpdate.forEach(link => {
                 const originalHref = link.getAttribute('href').split('?')[0];
                 
-                // 특별한 처리가 필요한 파일들 (기존 파라미터 방식)
+                // 이미 파라미터 방식인 파일들 (기존 방식 유지)
                 const parameterBasedFiles = [
                     'lwdh_variations.html',
                     'pws_var.html', 
@@ -220,26 +220,8 @@
                     'herb_shooting.html'
                 ];
                 
-                // 기존 _k 방식 파일들 (새로운 파라미터 방식으로 전환 대상)
-                const convertToParameterFiles = [
-                    'organpattern_comb.html',
-                    'yinyang_consum.html',
-                    'empty_heat.html',
-                    'yinyang_gram.html',
-                    'pulse_vis.html',
-                    'yinyang.html',
-                    'pulse_quiz.html',
-                    'what_formula.html',
-                    'guizhi_v.html',
-                    'fourgentle.html',
-                    'erchentang.html',
-                    'miniformula_quiz.html',
-                    'four_masters.html',
-                    'spleen_liver.html'
-                ];
-
-                if (parameterBasedFiles.some(file => originalHref.includes(file)) || 
-                    convertToParameterFiles.some(file => originalHref.includes(file))) {
+                // 특별 처리가 필요한 파일들
+                if (parameterBasedFiles.some(file => originalHref.includes(file))) {
                     // 파라미터 방식으로 설정
                     link.href = `${originalHref}?lang=${currentLanguage}`;
                 } else if (originalHref.includes('history.html')) {
@@ -249,8 +231,14 @@
                     // tetris는 언어 변경 없음
                     link.href = 'tetris.html';
                 } else {
-                    // 기본적으로 파라미터 방식
-                    link.href = `${originalHref}?lang=${currentLanguage}`;
+                    // 나머지는 모두 기존 _k 방식으로 처리
+                    const baseHref = originalHref.replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
+                    
+                    if (currentLanguage === 'ko') {
+                        link.href = `${baseHref}_k.html`;
+                    } else {
+                        link.href = `${baseHref}.html`;
+                    }
                 }
             });
         }
