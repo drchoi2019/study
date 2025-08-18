@@ -171,56 +171,59 @@
             const linkElement = event.currentTarget;
             const targetUrl = await determineTargetUrl(linkElement, currentLanguage);
 
+            // targetUrl이 결정되면, 해당 URL이 실제로 유효한지 최종 확인
             try {
                 const response = await fetch(targetUrl, { method: 'HEAD' });
                 if (response.ok) {
                     window.location.href = targetUrl;
                 } else {
-                    showPageMessage('Content is being prepared.');
+                    // determineTargetUrl에서 이미 검사를 거쳤지만, 만약의 경우에 대비한 방어 코드
+                    showPageMessage('콘텐츠를 준비 중입니다.');
                 }
             } catch (error) {
                 console.error('Navigation check failed:', error);
-                showPageMessage('Could not verify the page. Please check your network connection.');
+                showPageMessage('페이지를 확인할 수 없습니다. 네트워크 연결을 확인해 주세요.');
             }
         }
 
-        // 링크 타입에 따라 올바른 URL을 결정하는 함수 - 완전 자동감지
+        // --- 🔄 [수정된 부분] 링크 타입에 따라 올바른 URL을 결정하는 함수 ---
         async function determineTargetUrl(linkElement, lang) {
             const originalHref = linkElement.getAttribute('href').split('?')[0];
             const baseHref = originalHref.replace('.html', '');
 
-            // 자동 감지 로직
+            // 1. 영어 모드일 경우, 간단하게 파라미터를 붙여서 반환
+            if (lang !== 'ko') {
+                return `${originalHref}?lang=en`;
+            }
+
+            // 2. 한글 모드일 경우, 우선순위에 따라 파일 존재 여부 확인
             try {
-                // 1단계: 파라미터 방식 체크 (원본파일?lang=언어)
-                const parameterUrl = `${originalHref}?lang=${lang}`;
-                const parameterResponse = await fetch(parameterUrl, { method: 'HEAD' });
-                
-                if (parameterResponse.ok) {
-                    return parameterUrl;
+                // [우선순위 1] 전통적인 '_k.html' 파일이 있는지 먼저 확인합니다.
+                const kVersionUrl = `${baseHref}_k.html`;
+                const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
+
+                if (kVersionResponse.ok) {
+                    // '_k.html' 파일이 존재하면, 해당 URL을 사용합니다.
+                    return kVersionUrl;
                 }
                 
-                // 2단계: 레거시 _k 방식 체크 (한국어인 경우만)
-                if (lang === 'ko') {
-                    const kVersionUrl = `${baseHref}_k.html`;
-                    const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
-                    
-                    if (kVersionResponse.ok) {
-                        return kVersionUrl;
-                    }
+                // [우선순위 2] '_k.html' 파일이 없다면, 새로운 파라미터 방식 페이지로 간주합니다.
+                // 원본 파일이 존재하는지 확인하여 안전하게 처리합니다.
+                const baseFileResponse = await fetch(originalHref, { method: 'HEAD' });
+                if (baseFileResponse.ok) {
+                    return `${originalHref}?lang=ko`;
                 }
-                
-                // 3단계: 기본 파일로 폴백
+
+                // [폴백] 두 방식 모두 해당하지 않으면, 원본 링크를 반환하여 404 메시지를 띄웁니다.
                 return originalHref;
-                
+
             } catch (error) {
-                console.warn(`Failed to check file existence for ${originalHref}:`, error);
-                // 에러 발생 시 기본 전략: 한국어면 _k 먼저 시도, 실패하면 원본
-                if (lang === 'ko') {
-                    return `${baseHref}_k.html`;
-                }
+                console.warn(`네트워크 오류로 파일 존재 여부 확인에 실패했습니다: ${originalHref}. 기본 링크로 이동합니다.`, error);
+                // 네트워크 에러 발생 시, 안전하게 원본 링크를 반환합니다.
                 return originalHref;
             }
         }
+
 
         function setLanguage(lang) {
             currentLanguage = lang;
