@@ -205,31 +205,25 @@
             updateAllLinksToParameterStyle(lang);
         }
 
-        // 링크 업데이트 함수 - 파라미터 방식으로 통합
+        // 링크 업데이트 함수 - 자동 감지 방식
         function updateAllLinksToParameterStyle(lang) {
             const linksToUpdate = document.querySelectorAll('a.nav-link');
             linksToUpdate.forEach(link => {
                 const originalHref = link.getAttribute('href').split('?')[0];
                 
-                // 이미 파라미터 방식인 파일들 (기존 방식 유지)
-                const parameterBasedFiles = [
-                    'lwdh_variations.html',
-                    'pws_var.html', 
-                    'hack_names.html',
-                    'sinisan_var.html',
-                    'herb_shooting.html'
-                ];
+                // 자동 감지: 이미 ?lang= 파라미터가 있으면 파라미터 방식
+                const isAlreadyParameterBased = link.getAttribute('href').includes('?lang=');
                 
                 // 특별 처리가 필요한 파일들
-                if (parameterBasedFiles.some(file => originalHref.includes(file))) {
-                    // 파라미터 방식으로 설정
-                    link.href = `${originalHref}?lang=${currentLanguage}`;
-                } else if (originalHref.includes('history.html')) {
+                if (originalHref.includes('history.html')) {
                     // history는 아직 별도 파일 방식 유지
                     link.href = currentLanguage === 'ko' ? 'history_kor.html' : 'history.html';
                 } else if (originalHref.includes('tetris.html')) {
                     // tetris는 언어 변경 없음
                     link.href = 'tetris.html';
+                } else if (isAlreadyParameterBased) {
+                    // 이미 파라미터 방식이면 파라미터 방식 유지
+                    link.href = `${originalHref}?lang=${currentLanguage}`;
                 } else {
                     // 나머지는 모두 기존 _k 방식으로 처리
                     const baseHref = originalHref.replace('_k.html', '').replace('_kor.html', '').replace('.html', '');
