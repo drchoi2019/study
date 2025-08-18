@@ -283,8 +283,8 @@
             ctx.font = 'bold 18px sans-serif';
             ctx.textAlign = 'left';
             herbs.forEach(herb => {
-                // 70마일 미만일 때 색상 적용
-                if (score < 70) {
+                // 10마일 미만일 때 색상 적용
+                if (score < 100) {
                     if (herb.group === 'A') { // 따뜻한 음식
                         ctx.fillStyle = '#d32f2f'; // 빨간색
                     } else { // 차가운 음식
