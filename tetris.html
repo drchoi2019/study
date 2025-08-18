@@ -12,10 +12,10 @@
     <style>
         body {
             font-family: 'Noto Sans', sans-serif;
-            touch-action: manipulation; /* Disable double tap to zoom */
+            touch-action: manipulation;
         }
         canvas {
-            background-color: #F7F3EF; /* Match canvas background with body */
+            background-color: #F7F3EF;
             display: block;
         }
         .touch-area {
@@ -27,12 +27,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
         }
-        .touch-area.debug {
-            opacity: 0.1;
-            background-color: red;
-        }
         
-        /* Desktop layout (default) */
         .desktop-layout {
             display: flex;
             justify-content: center;
@@ -44,7 +39,6 @@
             display: none;
         }
         
-        /* Mobile layout */
         @media (max-width: 768px) {
             .desktop-layout {
                 display: none;
@@ -54,30 +48,29 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: flex-start; /* Align to the top */
+                justify-content: flex-start;
                 min-height: 100vh;
-                padding-top: 2rem; /* Add some space from the top of the screen */
-                gap: 0.5rem; /* Space between controls and game */
+                padding-top: 2rem;
+                gap: 0.5rem;
             }
             
             .mobile-game-area {
                 flex: 1;
                 display: flex;
-                align-items: flex-start; /* Align canvas to the top */
+                align-items: flex-start;
                 justify-content: center;
                 width: 100%;
                 max-width: 400px;
             }
             
             .mobile-controls {
-                /* Removed background, border-radius, padding, and box-shadow for integration */
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
                 max-width: 400px;
                 gap: 1rem;
-                padding: 0 0.5rem; /* Add slight horizontal padding */
+                padding: 0 0.5rem;
             }
             
             .mobile-next-block {
@@ -113,9 +106,20 @@
                 display: block !important;
             }
         }
+
+        .language-toggle {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .language-toggle:hover {
+            color: #78716c;
+        }
     </style>
 </head>
 <body class="bg-[#F7F3EF] flex flex-col items-center justify-center min-h-screen p-4">
+    
+
 
     <div class="w-full max-w-md mx-auto">
         
@@ -135,34 +139,34 @@
                     </div>
                     
                     <div id="pauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-5xl font-bold text-stone-500">Paused</h2>
+                        <h2 class="text-5xl font-bold text-stone-500" data-translate="paused">Paused</h2>
                     </div>
 
                     <div id="helpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
                         <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
-                            <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
+                            <h3 class="text-2xl font-bold mb-4 text-center" data-translate="how_to_play">How to Play</h3>
                             <ul class="space-y-2 text-sm">
-                                <li class="flex items-start"><span class="mr-2">1.</span><span>Touch left/right side to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span>Two-finger touch anywhere for fast drop.</span></li>
-                                <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
-                                <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
+                                <li class="flex items-start"><span class="mr-2">1.</span><span data-translate="help_move">Touch left/right side to move the block.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span data-translate="help_drop">Two-finger touch anywhere for fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">3.</span><span data-translate="help_match">Match 3+ adjacent blocks of the same element to clear them.</span></li>
+                                <li class="flex items-start"><span class="mr-2">4.</span><span data-translate="help_bonus">Clearing 4+ blocks at once gives double points.</span></li>
                             </ul>
-                            <button id="closeHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition">Close</button>
+                            <button id="closeHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition" data-translate="close">Close</button>
                         </div>
                     </div>
 
                     <div id="levelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 id="levelUpTitle" class="text-4xl font-bold text-stone-500">Level Up!</h2>
+                        <h2 id="levelUpTitle" class="text-4xl font-bold text-stone-500" data-translate="level_up">Level Up!</h2>
                         <p id="levelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
-                        <button id="continueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                        <button id="continueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="continue">
                             Continue
                         </button>
                     </div>
 
                     <div id="gameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-4xl font-bold text-stone-500">Game Over</h2>
-                        <p class="text-lg mt-2 text-stone-600">Score: <span id="finalScore">0</span></p>
-                        <button id="restartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                        <h2 class="text-4xl font-bold text-stone-500" data-translate="game_over">Game Over</h2>
+                        <p class="text-lg mt-2 text-stone-600"><span data-translate="score">Score</span>: <span id="finalScore">0</span></p>
+                        <button id="restartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="restart">
                             Restart
                         </button>
                     </div>
@@ -174,42 +178,52 @@
                 <div class="text-left text-stone-600">
                     <canvas id="nextBlockCanvas" class="rounded-lg"></canvas>
                     <div class="mt-4">
-                        <div class="text-base font-bold">Score</div>
+                        <div class="text-base font-bold" data-translate="score">Score</div>
                         <div id="score" class="text-lg">0</div>
-                        <div class="text-base font-bold mt-2">Level</div>
+                        <div class="text-base font-bold mt-2" data-translate="level">Level</div>
                         <div id="level" class="text-lg">1</div>
-                        <div id="help-button" class="text-base font-bold mt-2 cursor-pointer hover:text-stone-800">
+                        <div id="help-button" class="text-base font-bold mt-2 cursor-pointer hover:text-stone-800" data-translate="help">
                                 Help
                         </div>
                     </div>
-                    <canvas id="pixelPersonCanvas" class="mt-4"></canvas>
+                    <div class="mt-4 flex items-center gap-2">
+                        <canvas id="pixelPersonCanvas"></canvas>
+                        <div id="language-toggle" class="text-base font-bold cursor-pointer language-toggle text-stone-600">
+                            Kor
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- Mobile Layout -->
         <div class="mobile-layout">
-            <!-- Mobile Controls at Top (Moved from bottom) -->
+            <!-- Mobile Controls at Top -->
             <div class="mobile-controls">
                 <div class="mobile-next-block">
-                    <div class="text-xs font-bold text-stone-600">Next</div>
+                    <div class="text-xs font-bold text-stone-600" data-translate="next">Next</div>
                     <canvas id="mobileNextBlockCanvas" class="rounded"></canvas>
                 </div>
                 
                 <div class="mobile-stats">
                     <div class="mobile-stat">
-                        <div class="text-xs font-bold text-stone-600">Score</div>
+                        <div class="text-xs font-bold text-stone-600" data-translate="score">Score</div>
                         <div id="mobileScore" class="text-lg font-bold text-stone-700">0</div>
                     </div>
                     <div class="mobile-stat">
-                        <div class="text-xs font-bold text-stone-600">Level</div>
+                        <div class="text-xs font-bold text-stone-600" data-translate="level">Level</div>
                         <div id="mobileLevel" class="text-lg font-bold text-stone-700">1</div>
                     </div>
                 </div>
                 
                 <div class="mobile-actions">
-                    <canvas id="mobilePixelPersonCanvas"></canvas>
-                    <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800 mt-1">
+                    <div class="flex items-center gap-1">
+                        <canvas id="mobilePixelPersonCanvas"></canvas>
+                        <div id="mobile-language-toggle" class="text-xs font-bold text-stone-600 cursor-pointer language-toggle">
+                            Kor
+                        </div>
+                    </div>
+                    <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800" data-translate="help">
                         Help
                     </div>
                 </div>
@@ -228,35 +242,36 @@
                         <div id="mobileRightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
                     </div>
                     
+                    <!-- Mobile versions of all overlays with same structure as desktop but prefixed with mobile -->
                     <div id="mobilePauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-4xl font-bold text-stone-500">Paused</h2>
+                        <h2 class="text-4xl font-bold text-stone-500" data-translate="paused">Paused</h2>
                     </div>
 
                     <div id="mobileHelpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
                         <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
-                            <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
+                            <h3 class="text-2xl font-bold mb-4 text-center" data-translate="how_to_play">How to Play</h3>
                             <ul class="space-y-2 text-sm">
-                                <li class="flex items-start"><span class="mr-2">1.</span><span>Touch left/right side to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span>Two-finger touch anywhere for fast drop.</span></li>
-                                <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
-                                <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
+                                <li class="flex items-start"><span class="mr-2">1.</span><span data-translate="help_move">Touch left/right side to move the block.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span data-translate="help_drop">Two-finger touch anywhere for fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">3.</span><span data-translate="help_match">Match 3+ adjacent blocks of the same element to clear them.</span></li>
+                                <li class="flex items-start"><span class="mr-2">4.</span><span data-translate="help_bonus">Clearing 4+ blocks at once gives double points.</span></li>
                             </ul>
-                            <button id="mobileCloseHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition">Close</button>
+                            <button id="mobileCloseHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition" data-translate="close">Close</button>
                         </div>
                     </div>
 
                     <div id="mobileLevelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 id="mobileLevelUpTitle" class="text-4xl font-bold text-stone-500">Level Up!</h2>
+                        <h2 id="mobileLevelUpTitle" class="text-4xl font-bold text-stone-500" data-translate="level_up">Level Up!</h2>
                         <p id="mobileLevelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
-                        <button id="mobileContinueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                        <button id="mobileContinueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="continue">
                             Continue
                         </button>
                     </div>
 
                     <div id="mobileGameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-4xl font-bold text-stone-500">Game Over</h2>
-                        <p class="text-lg mt-2 text-stone-600">Score: <span id="mobileFinalScore">0</span></p>
-                        <button id="mobileRestartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
+                        <h2 class="text-4xl font-bold text-stone-500" data-translate="game_over">Game Over</h2>
+                        <p class="text-lg mt-2 text-stone-600"><span data-translate="score">Score</span>: <span id="mobileFinalScore">0</span></p>
+                        <button id="mobileRestartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="restart">
                             Restart
                         </button>
                     </div>
@@ -270,6 +285,157 @@
     </footer>
 
     <script>
+        // Language system
+        const LANGUAGES = {
+            en: {
+                // UI translations
+                paused: "Paused",
+                how_to_play: "How to Play",
+                help_move: "Touch left/right side to move the block.",
+                help_drop: "Two-finger touch anywhere for fast drop.",
+                help_match: "Match 3+ adjacent blocks of the same element to clear them.",
+                help_bonus: "Clearing 4+ blocks at once gives double points.",
+                close: "Close",
+                level_up: "Level Up!",
+                continue: "Continue",
+                game_over: "Game Over",
+                score: "Score",
+                level: "Level",
+                help: "Help",
+                next: "Next",
+                restart: "Restart",
+                stage: "Stage",
+                speed_up: "Speed Up!",
+                // Game data
+                levels: [
+                    { // Level 1
+                        'Wood': { core: 'Wood', items: ['Wood', 'Eyes', 'Liver', 'Wind'] },
+                        'Fire': { core: 'Fire', items: ['Fire', 'Tongue', 'Heart', 'Heat'] },
+                        'Earth': { core: 'Earth', items: ['Earth', 'Mouth', 'Spleen', 'Damp'] },
+                        'Metal': { core: 'Metal', items: ['Metal', 'Nose', 'Lung', 'Dry'] },
+                        'Water': { core: 'Water', items: ['Water', 'Ears', 'Kidney', 'Cold'] }
+                    },
+                    { // Level 2
+                        'Wood': { core: 'Wood', items: ['Anger', 'Blue', 'Gall'] },
+                        'Fire': { core: 'Fire', items: ['Joy', 'Red', 'Small\nIntestine'] },
+                        'Earth': { core: 'Earth', items: ['Thought', 'Yellow', 'Stomach'] },
+                        'Metal': { core: 'Metal', items: ['Grief', 'White', 'Large\nIntestine'] },
+                        'Water': { core: 'Water', items: ['Fear', 'Black', 'Bladder'] }
+                    },
+                    { // Level 3
+                        'Wood': { core: 'Wood', items: ['Spring', 'Nails', 'Sour', 'East'] },
+                        'Fire': { core: 'Fire', items: ['Summer', 'Face', 'Bitter', 'South'] },
+                        'Earth': { core: 'Earth', items: ['Lips', 'Sweet'] },
+                        'Metal': { core: 'Metal', items: ['Autumn', 'Body\nHair', 'Spicy', 'West'] },
+                        'Water': { core: 'Water', items: ['Winter', 'Hair', 'Salty', 'North'] }
+                    }
+                ]
+            },
+            ko: {
+                // UI translations
+                paused: "일시정지",
+                how_to_play: "게임 방법",
+                help_move: "좌우를 터치하여 블록을 이동하세요.",
+                help_drop: "두 손가락 터치로 빠르게 떨어뜨리기.",
+                help_match: "같은 원소의 인접한 블록 3개 이상을 맞춰 제거하세요.",
+                help_bonus: "4개 이상 한 번에 제거하면 보너스 점수!",
+                close: "닫기",
+                level_up: "레벨 업!",
+                continue: "계속하기",
+                game_over: "게임 오버",
+                score: "점수",
+                level: "레벨",
+                help: "도움말",
+                next: "다음",
+                restart: "다시 시작",
+                stage: "단계",
+                speed_up: "속도 증가!",
+                // Game data
+                levels: [
+                    { // Level 1
+                        'Wood': { core: 'Wood', items: ['나무', '눈', '간장', '바람'] },
+                        'Fire': { core: 'Fire', items: ['불', '혀', '심장', '열'] },
+                        'Earth': { core: 'Earth', items: ['땅', '입', '비장', '습'] },
+                        'Metal': { core: 'Metal', items: ['쇠', '코', '폐장', '건조'] },
+                        'Water': { core: 'Water', items: ['물', '귀', '신장', '추위'] }
+                    },
+                    { // Level 2
+                        'Wood': { core: 'Wood', items: ['분노', '파랑', '담낭'] },
+                        'Fire': { core: 'Fire', items: ['기쁨', '빨강', '소장'] },
+                        'Earth': { core: 'Earth', items: ['생각', '노랑', '위장'] },
+                        'Metal': { core: 'Metal', items: ['슬픔', '하양', '대장'] },
+                        'Water': { core: 'Water', items: ['공포', '검정', '방광'] }
+                    },
+                    { // Level 3
+                        'Wood': { core: 'Wood', items: ['봄', '손톱', '신맛', '동쪽'] },
+                        'Fire': { core: 'Fire', items: ['여름', '얼굴', '쓴맛', '남쪽'] },
+                        'Earth': { core: 'Earth', items: ['입술', '단맛'] },
+                        'Metal': { core: 'Metal', items: ['가을', '체모', '매움', '서쪽'] },
+                        'Water': { core: 'Water', items: ['겨울', '모발', '짠맛', '북쪽'] }
+                    }
+                ]
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update UI elements
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (LANGUAGES[lang][key]) {
+                    element.textContent = LANGUAGES[lang][key];
+                }
+            });
+
+            // Update language toggle buttons
+            const desktopToggle = document.getElementById('language-toggle');
+            const mobileToggle = document.getElementById('mobile-language-toggle');
+            if (lang === 'en') {
+                if (desktopToggle) desktopToggle.textContent = 'Kor';
+                if (mobileToggle) mobileToggle.textContent = 'Kor';
+            } else {
+                if (desktopToggle) desktopToggle.textContent = 'Eng';
+                if (mobileToggle) mobileToggle.textContent = 'Eng';
+            }
+
+            // Update game data
+            updateDataForLevel(level);
+            
+            // Regenerate next block with new language
+            if (nextBlock && nextBlock.type !== 'star') {
+                generateNewBlock();
+            }
+            
+            // Update level up subtitle if visible
+            updateLevelUpSubtitle();
+            
+            draw();
+        }
+
+        function updateLevelUpSubtitle() {
+            const stageText = LANGUAGES[currentLanguage].stage || 'Stage';
+            const speedUpText = LANGUAGES[currentLanguage].speed_up || 'Speed Up!';
+            
+            if (levelUpSubtitle) {
+                if (level <= 3) {
+                    levelUpSubtitle.textContent = `${stageText} ${level} Start`;
+                } else {
+                    levelUpSubtitle.textContent = speedUpText;
+                }
+            }
+            
+            if (document.getElementById('mobileLevelUpSubtitle')) {
+                if (level <= 3) {
+                    document.getElementById('mobileLevelUpSubtitle').textContent = `${stageText} ${level} Start`;
+                } else {
+                    document.getElementById('mobileLevelUpSubtitle').textContent = speedUpText;
+                }
+            }
+        }
+
         // Detect if mobile
         const isMobile = window.innerWidth <= 768;
         
@@ -303,30 +469,6 @@
         const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
         const landingSynth = new Tone.MembraneSynth({ pitchDecay: 0.01, octaves: 2, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.1, sustain: 0.01, release: 0.1 } }).toDestination();
-
-        const LEVEL_DATA = [
-            { // Level 1
-                'Wood': { core: 'Wood', items: ['Wood', 'Eyes', 'Liver', 'Wind'] },
-                'Fire': { core: 'Fire', items: ['Fire', 'Tongue', 'Heart', 'Heat'] },
-                'Earth': { core: 'Earth', items: ['Earth', 'Mouth', 'Spleen', 'Damp'] },
-                'Metal': { core: 'Metal', items: ['Metal', 'Nose', 'Lung', 'Dry'] },
-                'Water': { core: 'Water', items: ['Water', 'Ears', 'Kidney', 'Cold'] }
-            },
-            { // Level 2
-                'Wood': { core: 'Wood', items: ['Anger', 'Blue', 'Gall'] },
-                'Fire': { core: 'Fire', items: ['Joy', 'Red', 'Small\nIntestine'] },
-                'Earth': { core: 'Earth', items: ['Thought', 'Yellow', 'Stomach'] },
-                'Metal': { core: 'Metal', items: ['Grief', 'White', 'Large\nIntestine'] },
-                'Water': { core: 'Water', items: ['Fear', 'Black', 'Bladder'] }
-            },
-            { // Level 3
-                'Wood': { core: 'Wood', items: ['Spring', 'Nails', 'Sour', 'East'] },
-                'Fire': { core: 'Fire', items: ['Summer', 'Face', 'Bitter', 'South'] },
-                'Earth': { core: 'Earth', items: ['Lips', 'Sweet'] },
-                'Metal': { core: 'Metal', items: ['Autumn', 'Body\nHair', 'Spicy', 'West'] },
-                'Water': { core: 'Water', items: ['Winter', 'Hair', 'Salty', 'North'] }
-            }
-        ];
 
         const BLOCK_COLORS = ['#f5f5dc', '#ffe4c4', '#deb887', '#d2b48c'];
         const TEXT_COLOR = '#44403c';
@@ -391,8 +533,9 @@
 
         function updateDataForLevel(levelNumber) {
             const levelIndex = levelNumber - 1;
-            if (levelIndex >= LEVEL_DATA.length) return; 
-            const currentLevelData = LEVEL_DATA[levelIndex];
+            const currentLangData = LANGUAGES[currentLanguage];
+            if (levelIndex >= currentLangData.levels.length) return; 
+            const currentLevelData = currentLangData.levels[levelIndex];
             ALL_ITEMS = Object.values(currentLevelData).flatMap(data => data.items);
             ITEM_CORE_MAP = {};
             for (const coreElement in currentLevelData) {
@@ -552,7 +695,13 @@
                 });
             } else {
                 targetCtx.fillStyle = block.textColor;
-                const fontSize = size * (isMobile ? 0.16 : 0.18);
+                // Increased font size for both languages
+                let fontSize;
+                if (currentLanguage === 'en') {
+                    fontSize = size * (isMobile ? 0.24 : 0.26);
+                } else {
+                    fontSize = size * (isMobile ? 0.20 : 0.22);
+                }
                 targetCtx.font = `bold ${fontSize}px 'Noto Sans'`;
                 targetCtx.textAlign = 'center';
                 targetCtx.textBaseline = 'middle';
@@ -670,8 +819,8 @@
                 if (componentsToRemove.length === 0) break;
 
                 const toRemove = new Set();
-                const now = Tone.now(); // Get time once before the loop
-                let timeOffset = 0;     // Keep track of time for subsequent sounds
+                const now = Tone.now();
+                let timeOffset = 0;
 
                 for(const component of componentsToRemove) {
                     if (component.length >= 4) {
@@ -680,13 +829,13 @@
                         notes.forEach((note, i) => {
                             polySynth.triggerAttackRelease(note, "16n", now + timeOffset + i * 0.08);
                         });
-                        timeOffset += 0.5; // Add delay for the next component's sound
+                        timeOffset += 0.5;
                     } else {
                         score += component.length * 10;
                         synth.triggerAttackRelease("C5", "16n", now + timeOffset);
                         synth.triggerAttackRelease("E5", "16n", now + timeOffset + 0.1);
                         synth.triggerAttackRelease("G5", "16n", now + timeOffset + 0.2);
-                        timeOffset += 0.3; // Add delay for the next component's sound
+                        timeOffset += 0.3;
                     }
                     component.forEach(block => toRemove.add(block.id));
                 }
@@ -709,7 +858,7 @@
             }
             
             landingSynth.triggerAttackRelease("C2", "8n");
-            stopFastDrop(); // Stop fast drop when block lands
+            stopFastDrop();
 
             const col = landedBlock.col;
             landedBlock.y = canvas.height - (stackedBlocks[col].length + 1) * blockSize;
@@ -726,7 +875,7 @@
                         }
                     }
                 }
-                score += toRemove.size * 15; // Star bonus
+                score += toRemove.size * 15;
                 scoreEl.textContent = score;
                 polySynth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "8n");
 
@@ -758,8 +907,8 @@
             if (isMobile) touchAreasContainer.style.display = 'none';
             levelUpScreen.classList.remove('hidden');
             levelUpScreen.classList.add('flex');
-            levelUpTitle.textContent = `Level ${level}!`;
-            levelUpSubtitle.textContent = `Stage ${level} Start`;
+            levelUpTitle.textContent = LANGUAGES[currentLanguage].level_up;
+            updateLevelUpSubtitle();
             levelEl.textContent = level;
             updateDataForLevel(level);
             baseFallInterval = Math.max(150, baseFallInterval * 0.9);
@@ -777,8 +926,8 @@
             } else if (level === 3 && score >= 3000) {
                 level = 4;
                 levelEl.textContent = level;
-                levelUpTitle.textContent = `Level ${level}!`;
-                levelUpSubtitle.textContent = `Speed Up!`;
+                levelUpTitle.textContent = LANGUAGES[currentLanguage].level_up;
+                updateLevelUpSubtitle();
                 gameRunning = false;
                 if (isMobile) touchAreasContainer.style.display = 'none';
                 levelUpScreen.classList.remove('hidden');
@@ -889,27 +1038,33 @@
         // Add new listeners for two-finger fast drop on the whole touch container
         if (isMobile) {
             touchAreasContainer.addEventListener('touchstart', (e) => {
-                // Check for exactly two fingers to start fast drop
                 if (e.touches.length === 2) {
-                    e.preventDefault(); // Prevent default browser actions like zooming
+                    e.preventDefault();
                     startFastDrop();
                 }
             }, { passive: false });
 
             touchAreasContainer.addEventListener('touchend', (e) => {
-                // If the number of touches drops below 2, stop the fast drop
                 if (e.touches.length < 2 && isFastDropping) {
                     stopFastDrop();
                 }
             });
             
             touchAreasContainer.addEventListener('touchcancel', (e) => {
-                // Also stop on touch cancel
                 if (isFastDropping) {
                     stopFastDrop();
                 }
             });
         }
+
+        // Language switching event listeners
+        document.getElementById('language-toggle').addEventListener('click', () => {
+            setLanguage(currentLanguage === 'en' ? 'ko' : 'en');
+        });
+        
+        document.getElementById('mobile-language-toggle').addEventListener('click', () => {
+            setLanguage(currentLanguage === 'en' ? 'ko' : 'en');
+        });
 
         // Button event listeners
         restartButton.addEventListener('click', init);
@@ -936,15 +1091,15 @@
         });
         
         window.addEventListener('resize', () => {
-            // Update mobile detection on resize
             const newIsMobile = window.innerWidth <= 768;
             if (newIsMobile !== isMobile) {
-                location.reload(); // Reload to switch layouts
+                location.reload();
             } else {
                 resizeCanvas();
             }
         });
         
+        // Initialize the game
         init();
     </script>
 </body>
