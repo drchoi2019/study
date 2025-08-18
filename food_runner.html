@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herbal Runner Game</title>
+    <title>Food Runner Game</title>
     <style>
         body {
             margin: 0;
@@ -72,7 +72,7 @@
         #helpModal {
             position: fixed;
             inset: 0;
-            background: transparent; /* 반투명 배경을 투명하게 변경 */
+            background: transparent;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -127,18 +127,18 @@
         <div class="modal-content">
             <div id="help-content-en" class="help-content">
                 <ul class="help-list">
-                    <li>Let's understand hot/cold enegy of food in TCM. Jump to avoid the obstacles.</li>
-                    <li>Running long or eating a warm energy food makes you Overheated (red hat).</li>
-                    <li>Eat 3 cold energy foods while Overheated to return to normal.</li>
-                    <li>Game Over: Eating a cold food in normal state, or a warm food while Overheated.</li>
+                    <li>Jump to avoid the food obstacles.</li>
+                    <li>Running long or eating a warm (🔥) food makes you Overheated (faster).</li>
+                    <li>Eat 3 cold (🧊) foods while Overheated to return to normal.</li>
+                    <li>Game Over: Eating a cold (🧊) food in normal state, or a warm (🔥) food while Overheated.</li>
                 </ul>
             </div>
             <div id="help-content-ko" class="help-content">
                 <ul class="help-list">
-                    <li>음식의 한열을 공부하자! 점프해서 음식 장애물을 피하세요.</li>
-                    <li>오래 달리거나 따뜻한 음식을 먹으면 '열 오른' 상태가 되어 속도가 빨라집니다.</li>
-                    <li>'열 오른' 상태에서 차가운 음식을 3번 먹으면 정상으로 돌아옵니다.</li>
-                    <li>게임 오버: 보통 상태에서 차가운 음식 섭취 / '열 오른' 상태에서 따뜻한 음식 섭취.</li>
+                    <li>점프해서 음식 장애물을 피하세요.</li>
+                    <li>오래 달리거나 따뜻한(🔥) 음식을 먹으면 '열 오른' 상태가 되어 속도가 빨라집니다.</li>
+                    <li>'열 오른' 상태에서 차가운(🧊) 음식을 3번 먹으면 정상으로 돌아옵니다.</li>
+                    <li>게임 오버: 보통 상태에서 차가운(🧊) 음식 섭취 / '열 오른' 상태에서 따뜻한(🔥) 음식 섭취.</li>
                 </ul>
             </div>
         </div>
@@ -149,26 +149,12 @@
         let currentLanguage = 'en';
 
         const textData = {
-            ko: { 
-                restart: "다시 시작", 
-                paused: "일시정지", 
-                win: "목표 달성!", 
-                infinite: "무한 모드",
-                howToPlay: "게임 방법",
-                close: "닫기"
-            },
-            en: { 
-                restart: "RESTART", 
-                paused: "PAUSED", 
-                win: "You beat the game!", 
-                infinite: "Infinite Mode",
-                howToPlay: "How to Play",
-                close: "Close"
-            }
+            ko: { restart: "다시 시작", paused: "일시정지", win: "목표 달성!", infinite: "무한 모드" },
+            en: { restart: "RESTART", paused: "PAUSED", win: "You beat the game!", infinite: "Infinite Mode" }
         };
 
-        // ✅ [수정] groupA: 따뜻한/뜨거운 음식 데이터로 변경
-        const groupA = [ // 🔥 따뜻한/뜨거운 음식 (温热性食物)
+        // 🔥 따뜻한/뜨거운 음식 (温热性食物)
+        const groupA = [
             {ko: '체리', en: 'Cherry'}, {ko: '복숭아', en: 'Peach'}, {ko: '자두', en: 'Plum'},
             {ko: '용과', en: 'Dragonfruit'}, {ko: '퀴노아', en: 'Quinoa'}, {ko: '옥수수', en: 'Corn'},
             {ko: '닭고기', en: 'Chicken'}, {ko: '소고기', en: 'Beef'}, {ko: '양고기', en: 'Lamb'},
@@ -178,8 +164,8 @@
             {ko: '위스키', en: 'Whiskey'}, {ko: '와인', en: 'Wine'}, {ko: '계피', en: 'Cinnamon'}, 
             {ko: '후추', en: 'Pepper'}, {ko: '정향', en: 'Clove'}, {ko: '커민', en: 'Cumin'}
         ];
-        // ✅ [수정] groupB: 차가운/서늘한 음식 데이터로 변경
-        const groupB = [ // 🧊 차가운/서늘한 음식 (寒凉性食物)
+        // 🧊 차가운/서늘한 음식 (寒凉性食物)
+        const groupB = [
             {ko: '수박', en: 'Watermelon'}, {ko: '바나나', en: 'Banana'}, {ko: '오렌지', en: 'Orange'},
             {ko: '키위', en: 'Kiwi'}, {ko: '블루베리', en: 'Blueberry'}, {ko: '딸기', en: 'Strawberry'},
             {ko: '토마토', en: 'Tomato'}, {ko: '밀', en: 'Wheat'}, {ko: '귀리', en: 'Oat'},
@@ -188,7 +174,6 @@
             {ko: '케일', en: 'Kale'}, {ko: '녹차', en: 'Green Tea'}, {ko: '맥주', en: 'Beer'},
             {ko: '게', en: 'Crab'}, {ko: '조개', en: 'Clam'}, {ko: '새우', en: 'Shrimp'}
         ];
-
 
         // Game Variables
         const canvas = document.getElementById('gameCanvas');
@@ -199,8 +184,9 @@
         let score = 0;
         let coolingHerbCounter = 0;
         let neutralStateTimer = 0;
-        let baseSpeed = 3.3;
-        let gameSpeed = 3.3;
+        // ✅ [수정 1] 초기 속도 20% 감소 (3.3 -> 2.64)
+        let baseSpeed = 2.64;
+        let gameSpeed = 2.64;
         let isGameOver = false;
         let isPaused = false;
         let gameBeaten = false;
@@ -236,12 +222,7 @@
         }
 
         function updateHelpContent() {
-            // 모든 헬프 콘텐츠 숨기기
-            document.querySelectorAll('.help-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // 현재 언어의 콘텐츠만 보이기
+            document.querySelectorAll('.help-content').forEach(content => content.classList.remove('active'));
             document.getElementById(`help-content-${currentLanguage}`).classList.add('active');
         }
 
@@ -297,11 +278,23 @@
             ctx.fillText(`${score} miles`, player.x + player.width / 2, player.y - 10);
         }
 
+        // ✅ [수정 3] 점수에 따라 음식 색상 변경
         function drawHerbs() {
-            ctx.fillStyle = '#4A4A4A';
             ctx.font = 'bold 18px sans-serif';
             ctx.textAlign = 'left';
-            herbs.forEach(herb => ctx.fillText(herb.name[currentLanguage], herb.x, herb.y));
+            herbs.forEach(herb => {
+                // 70마일 미만일 때 색상 적용
+                if (score < 70) {
+                    if (herb.group === 'A') { // 따뜻한 음식
+                        ctx.fillStyle = '#d32f2f'; // 빨간색
+                    } else { // 차가운 음식
+                        ctx.fillStyle = '#1976d2'; // 파란색
+                    }
+                } else {
+                    ctx.fillStyle = '#4A4A4A'; // 기본 색상
+                }
+                ctx.fillText(herb.name[currentLanguage], herb.x, herb.y);
+            });
         }
 
         function drawPauseScreen() {
@@ -367,7 +360,8 @@
             gameSpeed = baseSpeed * speedMultiplier;
             groundOffset += gameSpeed;
 
-            if (!gameBeaten && score >= 100) {
+            // ✅ [수정 2] 게임 클리어 점수 200으로 변경
+            if (!gameBeaten && score >= 200) {
                 gameBeaten = true;
                 celebrationTimer = 180;
             }
@@ -484,8 +478,9 @@
             score = 0;
             coolingHerbCounter = 0;
             neutralStateTimer = 0;
-            baseSpeed = 3.3;
-            gameSpeed = 3.3;
+            // ✅ [수정 1] 리셋 시에도 감소된 속도 적용
+            baseSpeed = 2.64;
+            gameSpeed = 2.64;
             scoreTimer = 0;
             herbs = [];
             isGameOver = false;
@@ -531,7 +526,7 @@
         function playPositiveSound() {
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const frequencies = [523.25, 659.25, 783.99]; // C5, E5, G5
+                const frequencies = [523.25, 659.25, 783.99];
                 
                 frequencies.forEach((freq, index) => {
                     const oscillator = audioContext.createOscillator();
@@ -539,20 +534,15 @@
                     
                     oscillator.connect(gainNode);
                     gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
                     oscillator.type = 'sine';
-                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
                     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                     gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.01);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-                    
                     oscillator.start(audioContext.currentTime + index * 0.1);
                     oscillator.stop(audioContext.currentTime + index * 0.1 + 0.2);
                 });
-            } catch (error) {
-                console.log('Audio not supported');
-            }
+            } catch (error) { console.log('Audio not supported'); }
         }
 
         function playDeathSound() {
@@ -563,20 +553,15 @@
                 
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
                 oscillator.type = 'sawtooth';
                 oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
                 oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.5);
-                
                 gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                 gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.5);
-            } catch (error) {
-                console.log('Audio not supported');
-            }
+            } catch (error) { console.log('Audio not supported'); }
         }
 
         // Modal Functions
@@ -589,13 +574,8 @@
 
         // Event Listeners
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                jump();
-            }
-            if (e.key.toLowerCase() === 'p' && !isGameOver) {
-                isPaused = !isPaused;
-            }
+            if (e.code === 'Space') { e.preventDefault(); jump(); }
+            if (e.key.toLowerCase() === 'p' && !isGameOver) { isPaused = !isPaused; }
         });
         
         canvas.addEventListener('click', jump);
@@ -612,31 +592,23 @@
         });
 
         document.getElementById('helpBtn').addEventListener('click', () => {
-            if (!isGameOver) {
-                isPaused = true;
-            }
+            if (!isGameOver) { isPaused = true; }
             document.getElementById('helpModal').classList.remove('hidden');
         });
 
         document.getElementById('helpModal').addEventListener('click', (e) => {
-            if (e.target.id === 'helpModal') {
-                closeHelpModal();
-            }
+            if (e.target.id === 'helpModal') { closeHelpModal(); }
         });
 
         window.addEventListener('message', (event) => {
-            if (event.data.type === 'changeLanguage') {
-                setLanguage(event.data.language);
-            }
+            if (event.data.type === 'changeLanguage') { setLanguage(event.data.language); }
         });
 
         // Initialize
         function initialize() {
             const params = new URLSearchParams(window.location.search);
             const lang = params.get('lang') || 'en';
-            
             setLanguage(lang);
-
             player.y = GROUND_Y;
             spawnHerb();
             gameLoop();
