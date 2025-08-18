@@ -128,8 +128,6 @@
                     
                     <!-- Touch Areas for Mobile -->
                     <div class="touch-areas-container absolute inset-0 hidden">
-                        <!-- Top area for fast drop -->
-                        <div id="topTouchArea" class="touch-area" style="top: 0; left: 0; width: 100%; height: 25%;"></div>
                         <!-- Left area for move left -->
                         <div id="leftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
                         <!-- Right area for move right -->
@@ -145,7 +143,7 @@
                             <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
                             <ul class="space-y-2 text-sm">
                                 <li class="flex items-start"><span class="mr-2">1.</span><span>Touch left/right side to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span>Touch top area for fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span>Two-finger touch anywhere for fast drop.</span></li>
                                 <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
                                 <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
                             </ul>
@@ -224,8 +222,6 @@
                     
                     <!-- Touch Areas for Mobile -->
                     <div class="touch-areas-container absolute inset-0">
-                        <!-- Top area for fast drop -->
-                        <div id="mobileTopTouchArea" class="touch-area" style="top: 0; left: 0; width: 100%; height: 25%;"></div>
                         <!-- Left area for move left -->
                         <div id="mobileLeftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
                         <!-- Right area for move right -->
@@ -241,7 +237,7 @@
                             <h3 class="text-2xl font-bold mb-4 text-center">How to Play</h3>
                             <ul class="space-y-2 text-sm">
                                 <li class="flex items-start"><span class="mr-2">1.</span><span>Touch left/right side to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span>Touch top area for fast drop.</span></li>
+                                <li class="flex items-start"><span class="mr-2">2.</span><span>Two-finger touch anywhere for fast drop.</span></li>
                                 <li class="flex items-start"><span class="mr-2">3.</span><span>Match 3+ adjacent blocks of the same element to clear them.</span></li>
                                 <li class="flex items-start"><span class="mr-2">4.</span><span>Clearing 4+ blocks at once gives double points.</span></li>
                             </ul>
@@ -300,9 +296,9 @@
         const pauseScreen = document.getElementById(isMobile ? 'mobilePauseScreen' : 'pauseScreen');
         
         // Touch areas
-        const topTouchArea = document.getElementById(isMobile ? 'mobileTopTouchArea' : 'topTouchArea');
         const leftTouchArea = document.getElementById(isMobile ? 'mobileLeftTouchArea' : 'leftTouchArea');
         const rightTouchArea = document.getElementById(isMobile ? 'mobileRightTouchArea' : 'rightTouchArea');
+        const touchAreasContainer = gameContainer.querySelector('.touch-areas-container');
 
         const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } }).toDestination();
         const polySynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
@@ -424,6 +420,7 @@
             gameOverScreen.classList.add('hidden');
             levelUpScreen.classList.add('hidden');
             pauseScreen.classList.add('hidden');
+            if (isMobile) touchAreasContainer.style.display = 'block';
             
             generateNewBlock();
             spawnFallingBlock();
@@ -754,6 +751,7 @@
 
         function showLevelUpScreen() {
             gameRunning = false;
+            if (isMobile) touchAreasContainer.style.display = 'none';
             levelUpScreen.classList.remove('hidden');
             levelUpScreen.classList.add('flex');
             levelUpTitle.textContent = `Level ${level}!`;
@@ -766,18 +764,19 @@
 
         function checkLevelUp() {
             let leveledUp = false;
-            if (level === 1 && score >= 100) {
+            if (level === 1 && score >= 1000) {
                 level = 2;
                 leveledUp = true;
-            } else if (level === 2 && score >= 200) {
+            } else if (level === 2 && score >= 2000) {
                 level = 3;
                 leveledUp = true;
-            } else if (level === 3 && score >= 300) {
+            } else if (level === 3 && score >= 3000) {
                 level = 4;
                 levelEl.textContent = level;
                 levelUpTitle.textContent = `Level ${level}!`;
                 levelUpSubtitle.textContent = `Speed Up!`;
                 gameRunning = false;
+                if (isMobile) touchAreasContainer.style.display = 'none';
                 levelUpScreen.classList.remove('hidden');
                 levelUpScreen.classList.add('flex');
                 baseFallInterval = Math.max(150, baseFallInterval * 0.7);
@@ -791,6 +790,7 @@
 
         function gameOver() {
             gameRunning = false;
+            if (isMobile) touchAreasContainer.style.display = 'none';
             finalScoreEl.textContent = score;
             gameOverScreen.classList.remove('hidden');
             gameOverScreen.classList.add('flex');
@@ -800,11 +800,13 @@
             if (helpModal.classList.contains('flex')) return;
             gameRunning = !gameRunning;
             if (gameRunning) {
+                if (isMobile) touchAreasContainer.style.display = 'block';
                 pauseScreen.classList.add('hidden');
                 pauseScreen.classList.remove('flex');
                 lastUpdateTime = performance.now();
                 requestAnimationFrame(gameLoop);
             } else {
+                if (isMobile) touchAreasContainer.style.display = 'none';
                 pauseScreen.classList.remove('hidden');
                 pauseScreen.classList.add('flex');
             }
@@ -821,6 +823,7 @@
             levelUpScreen.classList.add('hidden');
             levelUpScreen.classList.remove('flex');
             gameRunning = true;
+            if (isMobile) touchAreasContainer.style.display = 'block';
             fallingBlock = null;
             spawnFallingBlock();
             lastUpdateTime = performance.now();
@@ -862,23 +865,47 @@
             element.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 if (onStart) onStart();
-            });
+            }, { passive: false });
             
             element.addEventListener('touchend', (e) => {
                 e.preventDefault();
                 if (onEnd) onEnd();
-            });
+            }, { passive: false });
             
             element.addEventListener('touchcancel', (e) => {
                 e.preventDefault();
                 if (onEnd) onEnd();
-            });
+            }, { passive: false });
         }
 
-        // Add touch listeners
+        // Add touch listeners for left/right movement
         addTouchEventListeners(leftTouchArea, () => moveFallingBlock('left'));
         addTouchEventListeners(rightTouchArea, () => moveFallingBlock('right'));
-        addTouchEventListeners(topTouchArea, () => startFastDrop(), () => stopFastDrop());
+
+        // Add new listeners for two-finger fast drop on the whole touch container
+        if (isMobile) {
+            touchAreasContainer.addEventListener('touchstart', (e) => {
+                // Check for exactly two fingers to start fast drop
+                if (e.touches.length === 2) {
+                    e.preventDefault(); // Prevent default browser actions like zooming
+                    startFastDrop();
+                }
+            }, { passive: false });
+
+            touchAreasContainer.addEventListener('touchend', (e) => {
+                // If the number of touches drops below 2, stop the fast drop
+                if (e.touches.length < 2 && isFastDropping) {
+                    stopFastDrop();
+                }
+            });
+            
+            touchAreasContainer.addEventListener('touchcancel', (e) => {
+                // Also stop on touch cancel
+                if (isFastDropping) {
+                    stopFastDrop();
+                }
+            });
+        }
 
         // Button event listeners
         restartButton.addEventListener('click', init);
@@ -887,6 +914,7 @@
         helpButton.addEventListener('click', () => {
             if (gameRunning) {
                 gameRunning = false;
+                if (isMobile) touchAreasContainer.style.display = 'none';
                 helpModal.classList.remove('hidden');
                 helpModal.classList.add('flex');
             }
@@ -897,6 +925,7 @@
             helpModal.classList.remove('flex');
             if (!pauseScreen.classList.contains('flex')) {
                 gameRunning = true;
+                if (isMobile) touchAreasContainer.style.display = 'block';
                 lastUpdateTime = performance.now();
                 requestAnimationFrame(gameLoop);
             }
