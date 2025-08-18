@@ -69,15 +69,15 @@
         #restartButton:hover {
             background-color: #A9937D;
         }
-#helpModal {
-    position: fixed;
-    inset: 0;
-    background: transparent; /* 반투명 배경을 투명하게 변경 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 50;
-}
+        #helpModal {
+            position: fixed;
+            inset: 0;
+            background: transparent; /* 반투명 배경을 투명하게 변경 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
         #helpModal.hidden {
             display: none;
         }
@@ -114,7 +114,7 @@
 <body>
     <div id="game-container">
         <canvas id="gameCanvas" width="800" height="150"></canvas>
-        <div style="position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.25rem;">
+        <div style="position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.25rem; z-index: 10;">
             <button id="langBtn" class="ui-button">한</button>
             <button id="helpBtn" class="ui-button">?</button>
         </div>
@@ -123,7 +123,6 @@
         </div>
     </div>
     
-    <!-- Help Modal -->
     <div id="helpModal" class="hidden">
         <div class="modal-content">
             <div id="help-content-en" class="help-content">
@@ -405,7 +404,7 @@
                 const collisionZoneStart = herb.x + (herbWidth / 2) - (collisionZoneWidth / 2);
                 
                 const isInCollisionZone = player.x >= collisionZoneStart && 
-                                         player.x < collisionZoneStart + collisionZoneWidth;
+                                          player.x < collisionZoneStart + collisionZoneWidth;
                 const isOnGround = player.y >= GROUND_Y - 5;
                 
                 const isColliding = isInCollisionZone &&
@@ -570,7 +569,9 @@
 
         // Modal Functions
         function closeHelpModal() {
-            isPaused = false;
+            if (!isGameOver) {
+                 isPaused = false;
+            }
             document.getElementById('helpModal').classList.add('hidden');
         }
 
@@ -602,8 +603,8 @@
         document.getElementById('helpBtn').addEventListener('click', () => {
             if (!isGameOver) {
                 isPaused = true;
-                document.getElementById('helpModal').classList.remove('hidden');
             }
+            document.getElementById('helpModal').classList.remove('hidden');
         });
 
         // Close help modal when clicking outside
