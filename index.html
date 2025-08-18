@@ -86,11 +86,11 @@
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
                     
                     <!-- 이미 파라미터 방식인 파일들 -->
-                    <li><a href="lwdh_variations.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
-                    <li><a href="pws_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
-                    <li><a href="sinisan_var.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
-                    <li><a href="hack_names.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
-                    <li><a href="herb_shooting.html?lang=en" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
+                    <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
+                    <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
+                    <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
+                    <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
+                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
                     
                     <!-- ✨ 새 방제학 메뉴는 여기에 추가하세요! ✨ -->
                     <!-- 예시: <li><a href="new_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="New Formula" data-ko="새 처방">New Formula</a></li> -->
@@ -169,19 +169,56 @@
         window.checkAndNavigate = async function(event) {
             event.preventDefault();
             const linkElement = event.currentTarget;
-            const fullUrl = new URL(linkElement.href);
-            const urlToCheck = new URL(fullUrl.pathname, window.location.href);
+            const targetUrl = await determineTargetUrl(linkElement, currentLanguage);
 
             try {
-                const response = await fetch(urlToCheck.href, { method: 'HEAD' });
+                const response = await fetch(targetUrl, { method: 'HEAD' });
                 if (response.ok) {
-                    window.location.href = fullUrl.href;
+                    window.location.href = targetUrl;
                 } else {
                     showPageMessage('Content is being prepared.');
                 }
             } catch (error) {
                 console.error('Navigation check failed:', error);
                 showPageMessage('Could not verify the page. Please check your network connection.');
+            }
+        }
+
+        // 링크 타입에 따라 올바른 URL을 결정하는 함수 - 완전 자동감지
+        async function determineTargetUrl(linkElement, lang) {
+            const originalHref = linkElement.getAttribute('href').split('?')[0];
+            const baseHref = originalHref.replace('.html', '');
+
+            // 자동 감지 로직
+            try {
+                // 1단계: 파라미터 방식 체크 (원본파일?lang=언어)
+                const parameterUrl = `${originalHref}?lang=${lang}`;
+                const parameterResponse = await fetch(parameterUrl, { method: 'HEAD' });
+                
+                if (parameterResponse.ok) {
+                    return parameterUrl;
+                }
+                
+                // 2단계: 레거시 _k 방식 체크 (한국어인 경우만)
+                if (lang === 'ko') {
+                    const kVersionUrl = `${baseHref}_k.html`;
+                    const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
+                    
+                    if (kVersionResponse.ok) {
+                        return kVersionUrl;
+                    }
+                }
+                
+                // 3단계: 기본 파일로 폴백
+                return originalHref;
+                
+            } catch (error) {
+                console.warn(`Failed to check file existence for ${originalHref}:`, error);
+                // 에러 발생 시 기본 전략: 한국어면 _k 먼저 시도, 실패하면 원본
+                if (lang === 'ko') {
+                    return `${baseHref}_k.html`;
+                }
+                return originalHref;
             }
         }
 
@@ -197,52 +234,6 @@
             if (gameFrame) {
                 gameFrame.src = `herbal_runner_game.html?lang=${lang}`;
             }
-
-            // 모든 링크를 자동 감지로 업데이트 (비동기)
-            updateAllLinksToParameterStyle(lang);
-        }
-
-        // 완전 자동 감지 링크 업데이트 함수
-        async function updateAllLinksToParameterStyle(lang) {
-            const linksToUpdate = document.querySelectorAll('a.nav-link');
-            
-            // 모든 링크를 병렬로 처리
-            await Promise.all(Array.from(linksToUpdate).map(async (link) => {
-                const originalHref = link.getAttribute('href').split('?')[0];
-                const baseHref = originalHref.replace('_k.html', '').replace('.html', '');
-                
-                try {
-                    // 1단계: 파라미터 방식 체크
-                    const parameterUrl = `${baseHref}.html?lang=${lang}`;
-                    const parameterResponse = await fetch(parameterUrl, { method: 'HEAD' });
-                    
-                    if (parameterResponse.ok) {
-                        // 파라미터 방식이 존재함
-                        link.href = parameterUrl;
-                        return;
-                    }
-                    
-                    // 2단계: _k 방식 체크
-                    if (lang === 'ko') {
-                        const kVersionUrl = `${baseHref}_k.html`;
-                        const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
-                        
-                        if (kVersionResponse.ok) {
-                            // _k 방식이 존재함
-                            link.href = kVersionUrl;
-                            return;
-                        }
-                    }
-                    
-                    // 3단계: 기본 영문 파일로 폴백
-                    link.href = `${baseHref}.html`;
-                    
-                } catch (error) {
-                    console.warn(`Failed to check file existence for ${originalHref}:`, error);
-                    // 에러 발생 시 기본 파일로 설정
-                    link.href = `${baseHref}.html`;
-                }
-            }));
         }
 
         window.toggleLanguage = function() {
