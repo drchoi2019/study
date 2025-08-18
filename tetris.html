@@ -54,31 +54,30 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-start; /* Align to the top */
                 min-height: 100vh;
-                gap: 1rem;
+                padding-top: 2rem; /* Add some space from the top of the screen */
+                gap: 0.5rem; /* Space between controls and game */
             }
             
             .mobile-game-area {
                 flex: 1;
                 display: flex;
-                align-items: center;
+                align-items: flex-start; /* Align canvas to the top */
                 justify-content: center;
                 width: 100%;
                 max-width: 400px;
             }
             
             .mobile-controls {
-                background: rgba(255, 255, 255, 0.9);
-                border-radius: 1rem;
-                padding: 1rem;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                /* Removed background, border-radius, padding, and box-shadow for integration */
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
                 max-width: 400px;
                 gap: 1rem;
+                padding: 0 0.5rem; /* Add slight horizontal padding */
             }
             
             .mobile-next-block {
@@ -182,7 +181,7 @@
                         <div class="text-base font-bold mt-2">Level</div>
                         <div id="level" class="text-lg">1</div>
                         <div id="help-button" class="text-base font-bold mt-2 cursor-pointer hover:text-stone-800">
-                             Help
+                                Help
                         </div>
                     </div>
                     <canvas id="pixelPersonCanvas" class="mt-4"></canvas>
@@ -192,6 +191,32 @@
         
         <!-- Mobile Layout -->
         <div class="mobile-layout">
+            <!-- Mobile Controls at Top (Moved from bottom) -->
+            <div class="mobile-controls">
+                <div class="mobile-next-block">
+                    <div class="text-xs font-bold text-stone-600">Next</div>
+                    <canvas id="mobileNextBlockCanvas" class="rounded"></canvas>
+                </div>
+                
+                <div class="mobile-stats">
+                    <div class="mobile-stat">
+                        <div class="text-xs font-bold text-stone-600">Score</div>
+                        <div id="mobileScore" class="text-lg font-bold text-stone-700">0</div>
+                    </div>
+                    <div class="mobile-stat">
+                        <div class="text-xs font-bold text-stone-600">Level</div>
+                        <div id="mobileLevel" class="text-lg font-bold text-stone-700">1</div>
+                    </div>
+                </div>
+                
+                <div class="mobile-actions">
+                    <canvas id="mobilePixelPersonCanvas"></canvas>
+                    <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800 mt-1">
+                        Help
+                    </div>
+                </div>
+            </div>
+
             <!-- Mobile Game Area -->
             <div class="mobile-game-area">
                 <div id="mobile-game-container" class="relative w-full aspect-[5/8] max-w-sm">
@@ -238,32 +263,6 @@
                         <button id="mobileRestartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105">
                             Restart
                         </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Mobile Controls at Bottom -->
-            <div class="mobile-controls">
-                <div class="mobile-next-block">
-                    <div class="text-xs font-bold text-stone-600">Next</div>
-                    <canvas id="mobileNextBlockCanvas" class="rounded"></canvas>
-                </div>
-                
-                <div class="mobile-stats">
-                    <div class="mobile-stat">
-                        <div class="text-xs font-bold text-stone-600">Score</div>
-                        <div id="mobileScore" class="text-lg font-bold text-stone-700">0</div>
-                    </div>
-                    <div class="mobile-stat">
-                        <div class="text-xs font-bold text-stone-600">Level</div>
-                        <div id="mobileLevel" class="text-lg font-bold text-stone-700">1</div>
-                    </div>
-                </div>
-                
-                <div class="mobile-actions">
-                    <canvas id="mobilePixelPersonCanvas"></canvas>
-                    <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800 mt-1">
-                        Help
                     </div>
                 </div>
             </div>
@@ -360,7 +359,7 @@
              [ // Frame 1
                 "  BB  ",
                 "  BB  ",
-                "  G   ",
+                "   G   ",
                 " GGG  ",
                 "G G G ",
                 " G G  ",
@@ -369,7 +368,7 @@
             [ // Frame 2
                 "  BB  ",
                 "  BB  ",
-                "  G   ",
+                "   G   ",
                 " GGG  ",
                 "G G G ",
                 " G G  ",
