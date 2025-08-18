@@ -198,33 +198,51 @@
                 gameFrame.src = `herbal_runner_game.html?lang=${lang}`;
             }
 
-            // 모든 링크를 파라미터 방식으로 업데이트
+            // 모든 링크를 자동 감지로 업데이트 (비동기)
             updateAllLinksToParameterStyle(lang);
         }
 
-        // 링크 업데이트 함수 - 진짜 자동 감지 방식
-        function updateAllLinksToParameterStyle(lang) {
+        // 완전 자동 감지 링크 업데이트 함수
+        async function updateAllLinksToParameterStyle(lang) {
             const linksToUpdate = document.querySelectorAll('a.nav-link');
-            linksToUpdate.forEach(link => {
+            
+            // 모든 링크를 병렬로 처리
+            await Promise.all(Array.from(linksToUpdate).map(async (link) => {
                 const originalHref = link.getAttribute('href').split('?')[0];
+                const baseHref = originalHref.replace('_k.html', '').replace('.html', '');
                 
-                // 자동 감지: 이미 ?lang= 파라미터가 있으면 파라미터 방식
-                const isAlreadyParameterBased = link.getAttribute('href').includes('?lang=');
-                
-                if (isAlreadyParameterBased) {
-                    // 파라미터 방식
-                    link.href = `${originalHref}?lang=${currentLanguage}`;
-                } else {
-                    // _k 방식
-                    const baseHref = originalHref.replace('_k.html', '').replace('.html', '');
+                try {
+                    // 1단계: 파라미터 방식 체크
+                    const parameterUrl = `${baseHref}.html?lang=${lang}`;
+                    const parameterResponse = await fetch(parameterUrl, { method: 'HEAD' });
                     
-                    if (currentLanguage === 'ko') {
-                        link.href = `${baseHref}_k.html`;
-                    } else {
-                        link.href = `${baseHref}.html`;
+                    if (parameterResponse.ok) {
+                        // 파라미터 방식이 존재함
+                        link.href = parameterUrl;
+                        return;
                     }
+                    
+                    // 2단계: _k 방식 체크
+                    if (lang === 'ko') {
+                        const kVersionUrl = `${baseHref}_k.html`;
+                        const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
+                        
+                        if (kVersionResponse.ok) {
+                            // _k 방식이 존재함
+                            link.href = kVersionUrl;
+                            return;
+                        }
+                    }
+                    
+                    // 3단계: 기본 영문 파일로 폴백
+                    link.href = `${baseHref}.html`;
+                    
+                } catch (error) {
+                    console.warn(`Failed to check file existence for ${originalHref}:`, error);
+                    // 에러 발생 시 기본 파일로 설정
+                    link.href = `${baseHref}.html`;
                 }
-            });
+            }));
         }
 
         window.toggleLanguage = function() {
