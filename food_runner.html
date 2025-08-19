@@ -70,7 +70,7 @@
             height: 28px;
             border: none;
             background-color: transparent;
-            color: #555;
+            color: #555555; /* MODIFIED: Toned down color */
             border-radius: 0.5rem;
             font-size: 0.9rem;
             font-weight: bold;
@@ -188,7 +188,7 @@
         let distanceSinceLastFood = 0;
         let isInvincible = false; 
         let invincibilityTimer = 0; 
-        let overheatDuration = 0; // ✅ For gradual speed increase
+        let overheatDuration = 0;
         let baseSpeed = 2.64;
         let gameSpeed = 2.64;
         let isPaused = false;
@@ -304,7 +304,7 @@
             }
         }
         function drawScore() {
-            ctx.fillStyle = '#333';
+            ctx.fillStyle = '#555555'; // MODIFIED: Toned down color
             ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText(`${score}m`, player.x + player.width / 2, player.y - 10);
@@ -322,7 +322,7 @@
                 const messageText = tutorialTextData[currentLanguage][currentTutorialMessage.key];
                 ctx.save();
                 ctx.globalAlpha = tutorialAlpha;
-                ctx.fillStyle = '#333';
+                ctx.fillStyle = '#555555'; // MODIFIED: Toned down color
                 ctx.font = 'bold 16px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText(messageText, canvas.width / 2, 40);
@@ -589,7 +589,7 @@
             drawPixelArtPlayer();
             drawTutorialMessage();
             if (gameState === 'pregame') {
-                drawPixelText('START', canvas.width / 2, canvas.height - 40, 4, '#555');
+                drawPixelText('START', canvas.width / 2, canvas.height - 40, 4, '#555555'); // MODIFIED: Toned down color
             }
             
             animationFrameId = requestAnimationFrame(gameLoop);
