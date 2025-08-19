@@ -177,8 +177,8 @@
         let coolingHerbCounter = 0;
         let neutralStateTimer = 0;
         let distanceSinceLastFood = 0;
-        let isInvincible = false; // ✅ For post-overheat invincibility
-        let invincibilityTimer = 0; // ✅ Timer for invincibility
+        let isInvincible = false; 
+        let invincibilityTimer = 0; 
         let baseSpeed = 2.64;
         let gameSpeed = 2.64;
         let isPaused = false;
@@ -256,7 +256,6 @@
             const clothesColor = '#555555';
             const currentArt = playerArt[Math.floor(player.animationFrame / 10) % playerArt.length];
             ctx.save();
-            // ✅ [MODIFIED] Add blinking effect when invincible
             if (isInvincible && Math.floor(invincibilityTimer / 6) % 2 === 0) {
                 ctx.globalAlpha = 0.5;
             }
@@ -304,7 +303,8 @@
             ctx.font = 'bold 18px sans-serif';
             ctx.textAlign = 'left';
             herbs.forEach(herb => {
-                ctx.fillStyle = (score < 90) ? (herb.group === 'A' ? '#d32f2f' : '#1976d2') : '#4A4A4A';
+                // ✅ [MODIFIED] Changed 90 to 200
+                ctx.fillStyle = (score < 200) ? (herb.group === 'A' ? '#d32f2f' : '#1976d2') : '#4A4A4A';
                 ctx.fillText(herb.name[currentLanguage], herb.x, herb.y);
             });
         }
@@ -483,7 +483,6 @@
                 case 'playing':
                     if (isPaused) break;
 
-                    // ✅ [MODIFIED] Invincibility timer countdown
                     if (isInvincible) {
                         invincibilityTimer--;
                         if (invincibilityTimer <= 0) {
@@ -500,7 +499,6 @@
                         scoreTimer = 0;
                     }
 
-                    // ✅ [MODIFIED] Auto-overheat logic with new rules
                     if (score >= 100 && playerState === 'neutral' && distanceSinceLastFood >= 50) {
                         playerState = 'heated';
                         distanceSinceLastFood = 0;
@@ -510,11 +508,11 @@
 
                     let speedMultiplier = 1.0;
                     if (playerState === 'heated') {
-                        speedMultiplier *= 1.4; // 40% increase when overheated
+                        speedMultiplier *= 1.4; 
                     }
                     if (score >= 100) {
                         const distanceIncrements = Math.floor((score - 100) / 50);
-                        speedMultiplier *= Math.pow(1.2, distanceIncrements); // 20% increase for every 50m over 100m
+                        speedMultiplier *= Math.pow(1.2, distanceIncrements); 
                     }
                     gameSpeed = baseSpeed * speedMultiplier;
                     groundOffset += gameSpeed;
@@ -527,13 +525,13 @@
                         tutorialFlags.heatedMessageShown = true;
                         showTutorialMessages([{ key: "heatedWarning", duration: 360 }]);
                     }
-                    if (score >= 90 && !tutorialFlags.score90MessageShown) {
+                    // ✅ [MODIFIED] Changed 90 to 200
+                    if (score >= 200 && !tutorialFlags.score90MessageShown) {
                         tutorialFlags.score90MessageShown = true;
                         showTutorialMessages([{ key: "colorBlindWarning", duration: 360 }, { key: "keepRunning", duration: 270 }]);
                     }
                     
                     herbs.forEach((herb, index) => {
-                        // ✅ [MODIFIED] Collision check now respects invincibility
                         if (!isInvincible && player.x < herb.x + ctx.measureText(herb.name[currentLanguage]).width && player.x + player.width > herb.x && player.y + player.height > herb.y - 20 && !player.isJumping) {
                             distanceSinceLastFood = 0;
                             if (playerState === 'neutral') {
