@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>침술과 장기손상</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .hotspot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 188, 212, 0.7);
+            border: 2px solid white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 0 rgba(0, 188, 212, 1);
+            animation: pulse 2s infinite;
+        }
+        .hotspot:hover {
+            transform: scale(1.2);
+            background-color: rgba(0, 188, 212, 1);
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(0, 188, 212, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 188, 212, 0);
+            }
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 90%;
+            width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .ref-link {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div class="container mx-auto p-4 flex flex-col items-center justify-center">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800">침술과 장기손상</h1>
+            <p class="text-lg text-slate-600 mt-2">각 부위를 클릭하여 침술 관련 위험 요소를 확인하세요.</p>
+        </header>
+
+        <div id="visualization-area" class="relative w-full max-w-lg mx-auto">
+            <img src="https://placehold.co/500x600/e2e8f0/94a3b8?text=복부+해부도" alt="복부 해부도" class="w-full rounded-lg shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/500x600/e2e8f0/94a3b8?text=Image+Not+Found';">
+            
+            <!-- Hotspot: 위장 -->
+            <button id="stomach-hotspot" class="hotspot" style="top: 25%; left: 45%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 18a6 6 0 0 0 6-6c0-1.5-.5-2.9-1.4-4"/><path d="M12 6a6 6 0 0 0-6 6c0 1.5.5 2.9 1.4 4"/></svg>
+            </button>
+
+            <!-- Hotspot: 천추혈 -->
+            <button id="st25-hotspot" class="hotspot" style="top: 50%; left: 30%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/><path d="M18 2h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z"/><path d="m21 15-4-4"/><path d="m17 15 4-4"/></svg>
+            </button>
+            
+            <!-- Hotspot: 보고 사례 및 기타 장기 -->
+            <button id="organs-hotspot" class="hotspot" style="top: 35%; left: 70%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/><path d="M12 12v-4"/><path d="M12 16h.01"/></svg>
+            </button>
+        </div>
+        
+    </div>
+
+    <!-- Modals (hidden by default) -->
+    <div id="modal-container"></div>
+
+    <script>
+        const hotspots = [
+            {
+                id: 'stomach-hotspot',
+                title: '위장 천공 및 복막염 위험',
+                content: `
+                    <p class="mb-4">침으로 인해 위벽이 손상되면 <strong class="text-red-600">복막염</strong>을 일으킬 수 있습니다.</p>
+                    <div class="mt-4 p-4 border border-blue-200 bg-blue-50 rounded-lg">
+                        <h3 class="font-bold text-lg text-blue-800 mb-3">평균 복벽 두께 (중완혈, CV12)</h3>
+                        <p class="text-slate-700">"한국인 환자 30명을 대상으로 한 연구에서, 중완혈(CV12)의 평균 복벽 두께는 21.17 ± 5.83mm로 측정되었습니다."</p>
+                        <div class="mt-4 border-t pt-2">
+                            <p class="text-xs text-slate-500">Reference:</p>
+                            <p class="text-xs text-slate-600">Han, S. J. (2016). Measuring the Thickness of the Abdominal Wall at Abdominal Acupoints Using Ultrasonography... J. Int. Korean Med, 37(6), 1008-1011.</p>
+                        </div>
+                    </div>
+                    <img src="https://placehold.co/550x300/1e293b/ffffff?text=CT+Scan+Image+(ct.png)" alt="복부 CT 이미지" class="rounded-lg shadow-md w-full my-6" onerror="this.onerror=null;this.src='https://placehold.co/550x300/e2e8f0/64748b?text=Image+Not+Found';">
+                    <div class="p-4 bg-red-50 border-l-4 border-red-500 text-red-800 rounded-r-lg">
+                        <h3 class="font-bold">자침 시 주의사항</h3>
+                        <ul class="list-disc list-inside mt-2">
+                            <li>포식(과식) 상태, 서 있는 자세에서 복부 자침은 피해야 합니다.</li>
+                            <li>위 확장 시 위벽이 얇아져 천공 위험이 증가합니다.</li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 border-t pt-6">
+                        <img src="https://placehold.co/550x200/e0f2fe/0891b2?text=앙와위에서의+위장+위치+변화+예시" alt="위장의 위치 변화" class="rounded-lg shadow-md w-full mb-4" onerror="this.onerror=null;this.src='https://placehold.co/550x200/e2e8f0/64748b?text=Image+Not+Found';">
+                        <blockquote class="text-md italic text-slate-800 border-l-4 border-slate-300 pl-4">
+                            <p>"무릇 복부의 혈에 침을 놓을 때는 환자를 똑바로 눕게 하여 오장이 수직으로 있게 해야 자침으로 인한 문제를 피할 수 있다."</p>
+                            <p class="mt-2 text-sm text-slate-500">"凡針腹上穴, 令患人仰臥, 使五臟垂直, 以免刺患.”</p>
+                        </blockquote>
+                        <cite class="block text-right mt-2 font-semibold text-sm">- 침구대성 (鍼灸大成)</cite>
+                    </div>
+                `
+            },
+            {
+                id: 'st25-hotspot',
+                title: '천추혈(ST25) 심층 분석: 깊이의 비교',
+                content: `
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- 해부학적 깊이 -->
+                            <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <h3 class="font-bold text-lg text-blue-800 mb-2">해부학적 안전 깊이 (CT 분석)</h3>
+                                <p class="text-xs text-blue-700 mb-3">피부 표면에서 복막까지의 거리</p>
+                                <ul class="space-y-1 text-sm bg-white p-3 rounded-md">
+                                    <li><strong>평균:</strong> 3.21 ± 0.87 cm</li>
+                                    <li><strong>최소:</strong> 1.31 cm</li>
+                                    <li><strong>최대:</strong> 5.63 cm</li>
+                                </ul>
+                            </div>
+                            <!-- 임상 자침 깊이 -->
+                            <div class="p-4 bg-green-50 rounded-lg border border-green-200">
+                                <h3 class="font-bold text-lg text-green-800 mb-2">실제 임상 자침 깊이 (문헌 고찰)</h3>
+                                <p class="text-xs text-green-700 mb-3">부작용 없이 사용된 깊이 (36,619례 분석)</p>
+                                <ul class="list-none space-y-1 text-sm bg-white p-3 rounded-md">
+                                    <li>- <strong>1.25 ~ 2.4 cm:</strong> 917례</li>
+                                    <li>- <strong>2.5 ~ 4.9 cm:</strong> 2,758례</li>
+                                    <li>- <strong>5.0 ~ 7.4 cm:</strong> 1,052례</li>
+                                    <li>- <strong>7.5 ~ 10.0 cm:</strong> 36례</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-cyan-50 border-l-4 border-cyan-500 text-cyan-900 rounded-r-lg">
+                            <h3 class="font-bold">결론 및 제언</h3>
+                            <p class="mt-2">CT로 측정한 해부학적 복막 깊이(평균 약 3.2cm)와 실제 임상에서 부작용 없이 사용된 자침 깊이 사이에는 차이가 있습니다. 이는 임상에서 환자의 상태에 따라 복막을 넘어 더 깊게 자침하는 경우가 있음을 시사합니다. 그러나 <strong class="font-semibold">개인별 해부학적 편차가 크므로, 복강 내 장기를 관통하지 않도록 안전을 최우선으로 고려해야 합니다.</strong></p>
+                        </div>
+                        <div class="border-t pt-2">
+                             <p class="text-xs text-slate-500">※ 모든 임상 연구 및 해부학적 분석 내용은 아래 논문을 출처로 함:</p>
+                             <p class="text-right text-sm text-slate-600 mt-1">박해인. (2014). Computed Tomography를 통한 천추(ST25)의 자침 깊이에 대한 후향적 연구. 대한침구의학회지, 32(1).</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'organs-hotspot',
+                title: '',
+                content: `
+                    <div class="space-y-6">
+                        <!-- Section 1 -->
+                        <div>
+                            <h3 class="font-bold text-xl text-slate-800 mb-3">1. 천공 및 복막염 보고사례</h3>
+                            <div class="p-4 bg-slate-50 rounded-lg space-y-4">
+                                <h4 class="font-semibold text-lg text-slate-700">주요 보고 사례 (Zhang et al. 문헌 고찰)</h4>
+                                <p class="leading-relaxed">Zhang 등은 중국 문헌에 발표된 심각한 부작용 사례를 고찰하여, <strong class="text-slate-800">16건의 담낭, 대장 및 위 천공으로 인한 복막염</strong>을 포함한 복부 장기와 조직 부상 사례를 보고하였습니다.</p>
+                                
+                                <p><strong class="font-semibold text-slate-800">주요 원인:</strong> 너무 깊이 자침한 것</p>
+                                
+                                <div>
+                                    <p class="font-semibold text-slate-800 mb-2">관련 혈자리:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="tag">ST25 (천추)</span>
+                                        <span class="tag">Ren12 (중완)</span>
+                                        <span class="tag">LR14 (기문)</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                     <p class="font-semibold text-slate-800 mt-3 mb-2">주요 증상:</p>
+                                     <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                        <li>심한 복통 및 구토 (혈액 섞임)</li>
+                                        <li>복부 압통 및 근육 강직</li>
+                                        <li>장 연동 운동 정지 및 쇼크</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 border-t pt-4">
+                                <p class="text-sm font-semibold text-slate-600 mb-1">Reference:</p>
+                                <p class="ref-link">Zhang J, Shang H, Gao X, Ernst E. Acupuncture-related adverse events: a systematic review of the Chinese literature. Bulletin of the World Health Organization. 2010;88:915-921C.</p>
+                            </div>
+                        </div>
+
+                        <!-- Section 2 -->
+                        <div class="border-t pt-6">
+                            <h3 class="font-bold text-xl text-slate-800 mb-3">2. 기타 장기 천공</h3>
+                            <div class="divide-y divide-slate-200">
+                                <div class="py-3">
+                                    <h4 class="font-semibold text-lg text-slate-700">간 / 췌장</h4>
+                                    <p class="mt-1">천공 시 심각한 반응은 드물지만 내출혈이 발생할 수 있습니다. (증상: 복통, 근육 경직 등)</p>
+                                </div>
+                                <div class="pt-3">
+                                    <h4 class="font-semibold text-lg text-slate-700">신장</h4>
+                                    <p class="mt-1">천공 시 허리 통증, 압통, 혈뇨 등이 나타날 수 있습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        const modalContainer = document.getElementById('modal-container');
+
+        function createModal(title, content) {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+            
+            let titleHtml = '';
+            if (title) {
+                titleHtml = `<h2 class="text-2xl font-bold text-slate-800">${title}</h2>`;
+            }
+
+            modalOverlay.innerHTML = `
+                <div class="modal-content">
+                    <div class="flex justify-between items-center mb-4">
+                        ${titleHtml}
+                        <button class="close-modal text-3xl font-light text-slate-500 hover:text-slate-800 ml-auto">&times;</button>
+                    </div>
+                    <div>${content}</div>
+                </div>
+            `;
+
+            modalContainer.appendChild(modalOverlay);
+
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay || e.target.classList.contains('close-modal') || e.target.parentElement.classList.contains('close-modal')) {
+                    modalContainer.innerHTML = '';
+                }
+            });
+        }
+
+        hotspots.forEach(hotspot => {
+            document.getElementById(hotspot.id).addEventListener('click', () => {
+                createModal(hotspot.title, hotspot.content);
+            });
+        });
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            // This is a placeholder function.
+            // You can implement language switching logic here.
+            console.log("Language toggle clicked.");
+        }
+    </script>
+
+</body>
+</html>
