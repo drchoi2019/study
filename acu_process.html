@@ -65,6 +65,18 @@
             transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
             pointer-events: none; /* 마우스 이벤트가 통과되도록 설정 */
         }
+        /* 커스텀 그리드 비율 (3:7) */
+        .custom-grid {
+            display: grid;
+            grid-template-columns: 3fr 7fr;
+            gap: 2rem;
+        }
+        @media (max-width: 768px) {
+            .custom-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col p-4">
@@ -94,10 +106,10 @@
         </div>
 
         <!-- 시각화 및 설명 영역 -->
-        <main class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <!-- 왼쪽: 시각화 (피부 단면과 침) -->
-            <div id="visualization-container" class="p-4 rounded-lg flex items-center justify-center aspect-square">
-                <svg viewBox="0 0 200 200" class="w-full h-full">
+        <main class="custom-grid items-center">
+            <!-- 왼쪽: 시각화 (피부 단면과 침) - 3:7 비율에서 3 -->
+            <div id="visualization-container" class="p-2 rounded-lg flex items-center justify-center">
+                <svg viewBox="50 0 100 200" class="w-full h-auto max-w-none" style="min-height: 300px;">
                     <!-- 피부 단면 레이어 -->
                     <defs>
                         <linearGradient id="skin-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -106,10 +118,10 @@
                             <stop offset="100%" style="stop-color:#E8B58F; stop-opacity:1" />
                         </linearGradient>
                     </defs>
-                    <rect x="0" y="80" width="200" height="120" fill="url(#skin-gradient)" />
-                    <line x1="0" y1="80" x2="200" y2="80" stroke="#D2B48C" stroke-width="1.5" />
-                    <line x1="0" y1="110" x2="200" y2="110" stroke="#D2B48C" stroke-width="1" stroke-dasharray="2 2" />
-                    <rect x="0" y="110" width="200" height="90" fill="#F5DEB3" opacity="0.5" />
+                    <rect x="50" y="80" width="100" height="120" fill="url(#skin-gradient)" />
+                    <line x1="50" y1="80" x2="150" y2="80" stroke="#D2B48C" stroke-width="1.5" />
+                    <line x1="50" y1="110" x2="150" y2="110" stroke="#D2B48C" stroke-width="1" stroke-dasharray="2 2" />
+                    <rect x="50" y="110" width="100" height="90" fill="#F5DEB3" opacity="0.5" />
 
                     <!-- 혈자리 (경혈) -->
                     <circle id="acupuncture-point" cx="100" cy="160" r="10" fill="#9CA3AF" opacity="0.8"/>
@@ -126,7 +138,7 @@
                 </svg>
             </div>
 
-            <!-- 오른쪽: 설명 -->
+            <!-- 오른쪽: 설명 - 3:7 비율에서 7 -->
             <div id="description-container" class="h-full">
                 <h2 id="stage-title" class="text-2xl font-bold mb-3 text-gray-700"></h2>
                 <div id="stage-description" class="text-gray-600 space-y-4 leading-relaxed overflow-y-auto h-[250px] md:h-full pr-2">
