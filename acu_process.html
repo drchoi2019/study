@@ -82,7 +82,7 @@
 <body class="min-h-screen flex flex-col p-4">
 
     <!-- Header for Individual Pages -->
-    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
         <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
@@ -91,7 +91,7 @@
         </a>
     </header>
 
-    <div class="w-full max-w-5xl mx-auto p-6 md:p-10 flex-grow">
+    <div class="w-full max-w-3xl mx-auto p-6 md:p-10 flex-grow">
         <!-- 제목 -->
         <header class="text-center mb-8">
             <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-black"></h1>
@@ -254,6 +254,16 @@
         function toggleLanguage(event) {
             event.preventDefault();
             const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            
+            // URL 파라미터 업데이트
+            const url = new URL(window.location);
+            if (newLang === 'en') {
+                url.searchParams.set('lang', 'en');
+            } else {
+                url.searchParams.delete('lang');
+            }
+            window.history.pushState({}, '', url);
+            
             setLanguage(newLang);
         }
 
@@ -312,9 +322,12 @@
             popupVideo.src = "";
         });
 
-        // 초기화
+        // 초기화 - URL 파라미터 체크
         window.onload = () => {
-            setLanguage('ko'); // 기본 언어 설정
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            const initialLang = (langParam === 'en') ? 'en' : 'ko';
+            setLanguage(initialLang);
         };
     </script>
 </body>
