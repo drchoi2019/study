@@ -96,7 +96,7 @@
         </header>
 
         <div id="visualization-area" class="relative w-full max-w-lg mx-auto">
-            <img src="https://placehold.co/500x600/e2e8f0/94a3b8?text=복부+해부도" alt="복부 해부도" class="w-full rounded-lg shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/500x600/e2e8f0/94a3b8?text=Image+Not+Found';">
+            <img src="anatomy-background.png" alt="복부 해부도" class="w-full rounded-lg shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/500x600/e2e8f0/94a3b8?text=Image+Not+Found';">
             
             <!-- Hotspot: 위장 -->
             <button id="stomach-hotspot" class="hotspot" style="top: 25%; left: 45%;">
@@ -108,8 +108,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/><path d="M18 2h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z"/><path d="m21 15-4-4"/><path d="m17 15 4-4"/></svg>
             </button>
             
-            <!-- Hotspot: 보고 사례 및 기타 장기 -->
-            <button id="organs-hotspot" class="hotspot" style="top: 35%; left: 70%;">
+            <!-- Hotspot: 보고 사례 -->
+            <button id="casereport-hotspot" class="hotspot" style="top: 35%; left: 70%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </button>
+
+            <!-- Hotspot: 기타 장기 -->
+            <button id="organs-hotspot" class="hotspot" style="top: 65%; left: 70%;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/><path d="M12 12v-4"/><path d="M12 16h.01"/></svg>
             </button>
         </div>
@@ -134,7 +139,7 @@
                             <p class="text-xs text-slate-600">Han, S. J. (2016). Measuring the Thickness of the Abdominal Wall at Abdominal Acupoints Using Ultrasonography... J. Int. Korean Med, 37(6), 1008-1011.</p>
                         </div>
                     </div>
-                    <img src="https://placehold.co/550x300/1e293b/ffffff?text=CT+Scan+Image+(ct.png)" alt="복부 CT 이미지" class="rounded-lg shadow-md w-full my-6" onerror="this.onerror=null;this.src='https://placehold.co/550x300/e2e8f0/64748b?text=Image+Not+Found';">
+                    <img src="ct.png" alt="복부 CT 이미지" class="rounded-lg shadow-md w-full my-6" onerror="this.onerror=null;this.src='https://placehold.co/550x300/e2e8f0/64748b?text=Image+Not+Found';">
                     <div class="p-4 bg-red-50 border-l-4 border-red-500 text-red-800 rounded-r-lg">
                         <h3 class="font-bold">자침 시 주의사항</h3>
                         <ul class="list-disc list-inside mt-2">
@@ -143,7 +148,7 @@
                         </ul>
                     </div>
                     <div class="mt-6 border-t pt-6">
-                        <img src="https://placehold.co/550x200/e0f2fe/0891b2?text=앙와위에서의+위장+위치+변화+예시" alt="위장의 위치 변화" class="rounded-lg shadow-md w-full mb-4" onerror="this.onerror=null;this.src='https://placehold.co/550x200/e2e8f0/64748b?text=Image+Not+Found';">
+                        <img src="stomach-position-change.png" alt="위장의 위치 변화" class="rounded-lg shadow-md w-full mb-4" onerror="this.onerror=null;this.src='https://placehold.co/550x200/e2e8f0/64748b?text=Image+Not+Found';">
                         <blockquote class="text-md italic text-slate-800 border-l-4 border-slate-300 pl-4">
                             <p>"무릇 복부의 혈에 침을 놓을 때는 환자를 똑바로 눕게 하여 오장이 수직으로 있게 해야 자침으로 인한 문제를 피할 수 있다."</p>
                             <p class="mt-2 text-sm text-slate-500">"凡針腹上穴, 令患人仰臥, 使五臟垂直, 以免刺患.”</p>
@@ -193,56 +198,51 @@
                 `
             },
             {
-                id: 'organs-hotspot',
-                title: '',
+                id: 'casereport-hotspot',
+                title: '천공 및 복막염 보고사례',
                 content: `
-                    <div class="space-y-6">
-                        <!-- Section 1 -->
+                    <div class="p-4 bg-slate-50 rounded-lg space-y-4">
+                        <h4 class="font-semibold text-lg text-slate-700">주요 보고 사례 (Zhang et al. 문헌 고찰)</h4>
+                        <p class="leading-relaxed">Zhang 등은 중국 문헌에 발표된 심각한 부작용 사례를 고찰하여, <strong class="text-slate-800">16건의 담낭, 대장 및 위 천공으로 인한 복막염</strong>을 포함한 복부 장기와 조직 부상 사례를 보고하였습니다.</p>
+                        
+                        <p><strong class="font-semibold text-slate-800">주요 원인:</strong> 너무 깊이 자침한 것</p>
+                        
                         <div>
-                            <h3 class="font-bold text-xl text-slate-800 mb-3">1. 천공 및 복막염 보고사례</h3>
-                            <div class="p-4 bg-slate-50 rounded-lg space-y-4">
-                                <h4 class="font-semibold text-lg text-slate-700">주요 보고 사례 (Zhang et al. 문헌 고찰)</h4>
-                                <p class="leading-relaxed">Zhang 등은 중국 문헌에 발표된 심각한 부작용 사례를 고찰하여, <strong class="text-slate-800">16건의 담낭, 대장 및 위 천공으로 인한 복막염</strong>을 포함한 복부 장기와 조직 부상 사례를 보고하였습니다.</p>
-                                
-                                <p><strong class="font-semibold text-slate-800">주요 원인:</strong> 너무 깊이 자침한 것</p>
-                                
-                                <div>
-                                    <p class="font-semibold text-slate-800 mb-2">관련 혈자리:</p>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="tag">ST25 (천추)</span>
-                                        <span class="tag">Ren12 (중완)</span>
-                                        <span class="tag">LR14 (기문)</span>
-                                    </div>
-                                </div>
-
-                                <div>
-                                     <p class="font-semibold text-slate-800 mt-3 mb-2">주요 증상:</p>
-                                     <ul class="list-disc list-inside space-y-1 text-slate-600">
-                                        <li>심한 복통 및 구토 (혈액 섞임)</li>
-                                        <li>복부 압통 및 근육 강직</li>
-                                        <li>장 연동 운동 정지 및 쇼크</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="mt-4 border-t pt-4">
-                                <p class="text-sm font-semibold text-slate-600 mb-1">Reference:</p>
-                                <p class="ref-link">Zhang J, Shang H, Gao X, Ernst E. Acupuncture-related adverse events: a systematic review of the Chinese literature. Bulletin of the World Health Organization. 2010;88:915-921C.</p>
+                            <p class="font-semibold text-slate-800 mb-2">관련 혈자리:</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="tag">ST25 (천추)</span>
+                                <span class="tag">Ren12 (중완)</span>
+                                <span class="tag">LR14 (기문)</span>
                             </div>
                         </div>
 
-                        <!-- Section 2 -->
-                        <div class="border-t pt-6">
-                            <h3 class="font-bold text-xl text-slate-800 mb-3">2. 기타 장기 천공</h3>
-                            <div class="divide-y divide-slate-200">
-                                <div class="py-3">
-                                    <h4 class="font-semibold text-lg text-slate-700">간 / 췌장</h4>
-                                    <p class="mt-1">천공 시 심각한 반응은 드물지만 내출혈이 발생할 수 있습니다. (증상: 복통, 근육 경직 등)</p>
-                                </div>
-                                <div class="pt-3">
-                                    <h4 class="font-semibold text-lg text-slate-700">신장</h4>
-                                    <p class="mt-1">천공 시 허리 통증, 압통, 혈뇨 등이 나타날 수 있습니다.</p>
-                                </div>
-                            </div>
+                        <div>
+                             <p class="font-semibold text-slate-800 mt-3 mb-2">주요 증상:</p>
+                             <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>심한 복통 및 구토 (혈액 섞임)</li>
+                                <li>복부 압통 및 근육 강직</li>
+                                <li>장 연동 운동 정지 및 쇼크</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4 border-t pt-4">
+                        <p class="text-sm font-semibold text-slate-600 mb-1">Reference:</p>
+                        <p class="ref-link">Zhang J, Shang H, Gao X, Ernst E. Acupuncture-related adverse events: a systematic review of the Chinese literature. Bulletin of the World Health Organization. 2010;88:915-921C.</p>
+                    </div>
+                `
+            },
+            {
+                id: 'organs-hotspot',
+                title: '기타 장기 천공',
+                content: `
+                    <div class="divide-y divide-slate-200">
+                        <div class="py-3">
+                            <h4 class="font-semibold text-lg text-slate-700">간 / 췌장</h4>
+                            <p class="mt-1">천공 시 심각한 반응은 드물지만 내출혈이 발생할 수 있습니다. (증상: 복통, 근육 경직 등)</p>
+                        </div>
+                        <div class="pt-3">
+                            <h4 class="font-semibold text-lg text-slate-700">신장</h4>
+                            <p class="mt-1">천공 시 허리 통증, 압통, 혈뇨 등이 나타날 수 있습니다.</p>
                         </div>
                     </div>
                 `
