@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>침술의 3단계 과정 시각화</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* text-gray-700 */
+        }
+        /* 활성 탭 스타일 */
+        .tab-active {
+            background-color: #3B82F6; /* bg-blue-600 */
+            color: white;
+            border-color: #3B82F6; /* border-blue-600 */
+        }
+        /* 비활성 탭 스타일 */
+        .tab-inactive {
+            background-color: #F7F3EF;
+            color: #4B5563; /* text-gray-600 */
+            border-color: #D1D5DB; /* border-gray-300 */
+        }
+        /* 침 위치 이동 애니메이션 - JS에서 동적으로 제어 */
+        #needle-positioner {
+            /* transition 속성은 script에서 직접 제어합니다. */
+        }
+        /* 3단계 행침 애니메이션: 위아래 진동 (진폭 증가) */
+        @keyframes haengchim-vibration {
+            0%, 100% { transform: translateY(5px); }
+            50% { transform: translateY(-5px); }
+        }
+        .haengchim-active #needle {
+             /* 1.2초 동안 무한 반복하며 부드럽게 진동 */
+            animation: haengchim-vibration 1.2s infinite ease-in-out;
+        }
+        /* 혈자리(경혈) 빛나는 효과 */
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 2px #A0A0A0); }
+            50% { filter: drop-shadow(0 0 6px #A0A0A0); }
+        }
+        #acupuncture-point {
+            animation: glow 3s infinite ease-in-out;
+        }
+        /* 비디오 팝업 관련 스타일 */
+        .has-video-popup {
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            cursor: help;
+        }
+        .video-trigger svg {
+            display: inline-block;
+            width: 1.1em;
+            height: 1.1em;
+            margin-left: 2px;
+            vertical-align: -0.2em;
+            color: #3B82F6; /* blue-600 */
+        }
+        #video-popup {
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            pointer-events: none; /* 마우스 이벤트가 통과되도록 설정 */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-4">
+
+    <!-- Header for Individual Pages -->
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div class="w-full max-w-5xl mx-auto p-6 md:p-10 flex-grow">
+        <!-- 제목 -->
+        <header class="text-center mb-8">
+            <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-black"></h1>
+            <p id="main-subtitle" class="text-gray-500 mt-2"></p>
+        </header>
+
+        <!-- 3단계 탭 버튼 -->
+        <div id="tabs" class="flex justify-center space-x-2 md:space-x-4 mb-8 border-b border-gray-200 pb-4">
+            <button data-stage="0" class="tab-btn text-sm md:text-base font-semibold py-2 px-4 md:px-6 rounded-full border-2 transition-all duration-300"></button>
+            <button data-stage="1" class="tab-btn text-sm md:text-base font-semibold py-2 px-4 md:px-6 rounded-full border-2 transition-all duration-300"></button>
+            <button data-stage="2" class="tab-btn text-sm md:text-base font-semibold py-2 px-4 md:px-6 rounded-full border-2 transition-all duration-300"></button>
+        </div>
+
+        <!-- 시각화 및 설명 영역 -->
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <!-- 왼쪽: 시각화 (피부 단면과 침) -->
+            <div id="visualization-container" class="p-4 rounded-lg flex items-center justify-center aspect-square">
+                <svg viewBox="0 0 200 200" class="w-full h-full">
+                    <!-- 피부 단면 레이어 -->
+                    <defs>
+                        <linearGradient id="skin-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFDAB9; stop-opacity:1" />
+                            <stop offset="15%" style="stop-color:#F0C4A2; stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#E8B58F; stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="0" y="80" width="200" height="120" fill="url(#skin-gradient)" />
+                    <line x1="0" y1="80" x2="200" y2="80" stroke="#D2B48C" stroke-width="1.5" />
+                    <line x1="0" y1="110" x2="200" y2="110" stroke="#D2B48C" stroke-width="1" stroke-dasharray="2 2" />
+                    <rect x="0" y="110" width="200" height="90" fill="#F5DEB3" opacity="0.5" />
+
+                    <!-- 혈자리 (경혈) -->
+                    <circle id="acupuncture-point" cx="100" cy="160" r="10" fill="#9CA3AF" opacity="0.8"/>
+                    <text x="95" y="185" font-size="10" fill="#4A3B2A" class="font-sans font-semibold">혈(穴)</text>
+
+                    <!-- 침 위치 제어 그룹: 초기 위치를 피부 위로 설정 -->
+                    <g id="needle-positioner" transform="translateY(-100px)">
+                        <g id="needle">
+                            <path d="M 95 50 L 90 30 L 110 30 L 105 50 Z" fill="#4A5568"/>
+                            <rect x="95" y="10" width="10" height="20" fill="#718096" rx="2"/>
+                            <line x1="100" y1="50" x2="100" y2="150" stroke="#374151" stroke-width="1.2"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- 오른쪽: 설명 -->
+            <div id="description-container" class="h-full">
+                <h2 id="stage-title" class="text-2xl font-bold mb-3 text-gray-700"></h2>
+                <div id="stage-description" class="text-gray-600 space-y-4 leading-relaxed overflow-y-auto h-[250px] md:h-full pr-2">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 비디오 팝업 요소 -->
+    <div id="video-popup" class="hidden absolute bg-black p-1 rounded-lg shadow-2xl z-50">
+        <video id="popup-video" width="240" height="180" controls autoplay muted loop>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Footer for Individual Pages -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const videoIconSvg = `<span class="video-trigger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /><path d="M14.553 7.106A1 1 0 0014 8v4a1 1 0 001.553.832l3-2a1 1 0 000-1.664l-3-2z" /></svg></span>`;
+        
+        const langData = {
+            ko: {
+                mainTitle: "침술의 3단계 과정",
+                mainSubtitle: "각 단계를 클릭하여 침의 움직임과 설명을 확인해보세요.",
+                tabs: ["1. 자침 (刺針)", "2. 진침 (進針)", "3. 행침 (行針)"],
+                initialTitle: "침술 3단계 과정",
+                initialDesc: "<p>상단 탭을 클릭하여 각 단계를 시작하세요.</p>",
+                stages: [
+                    {
+                        title: "1. 자침 (刺針)",
+                        description: `<p>자침은 침관을 이용하여 빠르고 가볍게 침으로 피부를 뚫는 과정입니다. 이 단계는 침술의 첫 번째이자 가장 기본적인 과정으로, 정확하고 신속한 기법이 요구됩니다.</p><h3 class="font-semibold text-gray-700 mt-4">침관 사용의 중요성</h3><p>침관이 개발되기 전에는 보통 짧은 침의 경우 <span class="has-video-popup" data-video-src="notube1.mov">가운데 손가락으로 침체를 지지하거나${videoIconSvg}</span>, <span class="has-video-popup" data-video-src="notube2.mov">다른 손으로 침체를 잡는 방법${videoIconSvg}</span>으로 자침하였습니다. 그러나 이러한 방법은 세균감염의 위험이 높아, 현재는 반드시 침관을 사용해야 합니다.</p><p>침관을 사용하지 않고 침 손잡이만 잡고 자침할 수도 있으나, 이 경우 침체가 쉽게 휘어져 자침의 방향이 틀어질 수 있고, 침이 휘어지는 문제가 발생할 수 있습니다. 따라서 정확하고 안전한 자침을 위해서는 침관을 사용하는 것이 적극 추천됩니다.</p>`,
+                        needleY: -40
+                    },
+                    {
+                        title: "2. 진침 (進針)",
+                        description: `<p>진침은 가볍고 천천히 침을 진행하는 과정입니다. 이는 침술에서 가장 중요하고 정교한 기술이 요구되는 단계입니다.</p><h3 class="font-semibold text-gray-700 mt-4">천천히 진침하는 이유</h3><p>『내경』을 비롯해 『동의보감』 등 모든 침구서적에서 강조하는 부분이 바로 천천히 진침해야 한다는 것입니다. 왜 천천히 침을 진행해야 하는가? 바로 침이 혈위에 도달했는지 반응을 살피기 위해서입니다.</p><p>진침 과정에서는 다양한 반응이 나타납니다: 침이 단단한 것을 뚫는 느낌, 쑥 빨려들어가는 느낌, 환자가 뻐근함을 호소하는 경우 등. 이러한 반응을 <strong class="text-amber-500">득기(得氣)</strong>라고 합니다. 득기는 진침 시에도 나타나고, 행침 시에도 나타나는 중요한 반응입니다.</p>`,
+                        needleY: 10
+                    },
+                    {
+                        title: "3. 행침 (行針)",
+                        description: `<p>행침은 주로 혈자리에 침이 위치했다고 생각되면 시행하는 단계입니다. 행침은 여러 깊이에서 나누어 실시하기도 합니다.</p><h3 class="font-semibold text-gray-700 mt-4">주요 행침 기법</h3><ul class="list-disc list-inside space-y-1"><li><strong>염전법(捻轉法):</strong> 침을 좌우로 돌리는 기법.</li><li><strong>제삽법(提揷法):</strong> 침을 위아래로 진행했다 후퇴했다 하는 기법.</li><li><strong>작탁법(雀啄法):</strong> 새가 쪼는 듯 빠르게 움직이는 기법.</li><li><strong>탄법(彈法):</strong> 침을 튀기듯이 자극하는 기법.</li><li><strong>자법(刮法):</strong> 침체를 손톱으로 긁어 진동을 전달하는 기법.</li></ul><p class="mt-2">행침을 통하여 득기를 더욱 강화하고, 또한 새롭게 득기를 일으키기도 합니다. 진침과 행침 과정은 득기와 밀접한 관계가 있어 정교한 기술과 예민한 감각이 필요합니다.</p>`,
+                        needleY: 10
+                    }
+                ]
+            },
+            en: {
+                mainTitle: "The 3 Stages of Acupuncture",
+                mainSubtitle: "Click each stage to see the needle's movement and explanation.",
+                tabs: ["1. Insertion (刺針)", "2. Advancing (進針)", "3. Manipulation (行針)"],
+                initialTitle: "3 Stages of Acupuncture",
+                initialDesc: "<p>Click a tab above to begin each stage.</p>",
+                stages: [
+                    {
+                        title: "1. Insertion (刺針)",
+                        description: `<p>Insertion is the process of quickly and lightly piercing the skin with a needle using a guide tube. This is the first and most basic step of acupuncture, requiring precise and swift technique.</p><h3 class="font-semibold text-gray-700 mt-4">Importance of Using a Guide Tube</h3><p>Before guide tubes were developed, insertion was typically done by <span class="has-video-popup" data-video-src="notube1.mov">supporting the needle body with the middle finger${videoIconSvg}</span> or <span class="has-video-popup" data-video-src="notube2.mov">holding the needle body with the other hand${videoIconSvg}</span>. However, these methods had a high risk of bacterial infection, so using a guide tube is now mandatory.</p><p>It is possible to insert the needle by holding only the handle without a guide tube, but the needle can easily bend, causing the insertion direction to be incorrect. Therefore, using a guide tube is highly recommended for accurate and safe insertion.</p>`,
+                        needleY: -40
+                    },
+                    {
+                        title: "2. Advancing (進針)",
+                        description: `<p>Advancing is the process of moving the needle forward lightly and slowly. This is the most crucial and delicate step in acupuncture, requiring sophisticated skill.</p><h3 class="font-semibold text-gray-700 mt-4">The Reason for Advancing Slowly</h3><p>Classical texts like the "Neijing" and "Donguibogam" emphasize the need to advance the needle slowly. This is to observe the reaction and determine if the needle has reached the acupuncture point.</p><p>Various sensations can occur during this process: a feeling of piercing something firm, a sensation of being drawn in, or the patient feeling a dull ache. This reaction is called <strong class="text-amber-500">Deqi (得氣)</strong>. Deqi is an important response that can occur during both advancing and manipulation.</p>`,
+                        needleY: 10
+                    },
+                    {
+                        title: "3. Manipulation (行針)",
+                        description: `<p>Manipulation is the stage performed when the needle is thought to be at the acupuncture point. It can also be performed at various depths.</p><h3 class="font-semibold text-gray-700 mt-4">Major Manipulation Techniques</h3><ul class="list-disc list-inside space-y-1"><li><strong>Twirling (捻轉法):</strong> The most basic method, involving rotating the needle.</li><li><strong>Lifting and Thrusting (提揷法):</strong> Moving the needle up and down to stimulate vertically.</li><li><strong>Pecking (雀啄法):</strong> Rapidly moving the needle back and forth, like a bird pecking.</li><li><strong>Flicking (彈法):</strong> Stimulating by flicking the needle handle.</li><li><strong>Scraping (刮法):</strong> Scraping the needle body with a fingernail to create vibration.</li></ul><p class="mt-2">Manipulation can enhance an existing Deqi sensation or induce a new one. The processes of advancing and manipulation are closely related to Deqi, requiring refined skill and sensitivity.</p>`,
+                        needleY: 10
+                    }
+                ]
+            }
+        };
+
+        // DOM 요소
+        const mainTitle = document.getElementById('main-title');
+        const mainSubtitle = document.getElementById('main-subtitle');
+        const tabsContainer = document.getElementById('tabs');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const needlePositioner = document.getElementById('needle-positioner');
+        const stageTitle = document.getElementById('stage-title');
+        const stageDescription = document.getElementById('stage-description');
+        const visualizationContainer = document.getElementById('visualization-container');
+        const videoPopup = document.getElementById('video-popup');
+        const popupVideo = document.getElementById('popup-video');
+
+        // 상태 변수
+        let currentLang = 'ko';
+        let currentStageIndex = -1; // -1은 아무것도 선택되지 않은 상태
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const data = langData[lang];
+
+            // UI 텍스트 업데이트
+            mainTitle.textContent = data.mainTitle;
+            mainSubtitle.textContent = data.mainSubtitle;
+            tabButtons.forEach((btn, i) => {
+                btn.textContent = data.tabs[i];
+            });
+            
+            // 현재 스테이지가 선택된 경우, 해당 스테이지의 텍스트도 업데이트
+            if (currentStageIndex !== -1) {
+                updateStage(currentStageIndex, false); // 애니메이션 없이 텍스트만 갱신
+            } else {
+                // 초기 상태 텍스트 설정
+                stageTitle.textContent = data.initialTitle;
+                stageDescription.innerHTML = data.initialDesc;
+            }
+        }
+        
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function updateStage(stageIndex, runAnimation = true) {
+            currentStageIndex = stageIndex;
+            const stageData = langData[currentLang].stages[stageIndex];
+
+            // UI 업데이트
+            tabButtons.forEach((btn, index) => {
+                btn.classList.toggle('tab-active', index === stageIndex);
+                btn.classList.toggle('tab-inactive', index !== stageIndex);
+            });
+            stageTitle.textContent = stageData.title;
+            stageDescription.innerHTML = stageData.description;
+
+            visualizationContainer.classList.toggle('haengchim-active', stageIndex === 2);
+
+            if (!runAnimation) return;
+
+            // 애니메이션 및 위치 제어
+            if (stageIndex === 0) {
+                needlePositioner.style.transition = 'none';
+                needlePositioner.style.transform = 'translateY(-100px)';
+                setTimeout(() => {
+                    needlePositioner.style.transition = 'transform 0.5s cubic-bezier(0.6, -0.28, 0.74, 0.05)';
+                    needlePositioner.style.transform = `translateY(${stageData.needleY}px)`;
+                }, 20);
+            } else {
+                let transitionStyle = (stageIndex === 1) ? 'transform 2.5s ease-in-out' : 'transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+                needlePositioner.style.transition = transitionStyle;
+                needlePositioner.style.transform = `translateY(${stageData.needleY}px)`;
+            }
+        }
+
+        // 이벤트 리스너
+        tabsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab-btn')) {
+                updateStage(parseInt(e.target.dataset.stage, 10));
+            }
+        });
+
+        stageDescription.addEventListener('mouseover', (e) => {
+            const trigger = e.target.closest('.has-video-popup');
+            if (!trigger) return;
+            popupVideo.src = trigger.dataset.videoSrc;
+            const rect = trigger.getBoundingClientRect();
+            videoPopup.style.left = `${rect.left + window.scrollX}px`;
+            videoPopup.style.top = `${rect.bottom + window.scrollY + 5}px`;
+            videoPopup.classList.remove('hidden');
+        });
+
+        stageDescription.addEventListener('mouseout', (e) => {
+            const trigger = e.target.closest('.has-video-popup');
+            if (!trigger) return;
+            videoPopup.classList.add('hidden');
+            popupVideo.src = "";
+        });
+
+        // 초기화
+        window.onload = () => {
+            setLanguage('ko'); // 기본 언어 설정
+        };
+    </script>
+</body>
+</html>
