@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QC84KCE6C1');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Runner Game</title>
@@ -179,6 +188,7 @@
         let distanceSinceLastFood = 0;
         let isInvincible = false; 
         let invincibilityTimer = 0; 
+        let overheatDuration = 0; // ✅ For gradual speed increase
         let baseSpeed = 2.64;
         let gameSpeed = 2.64;
         let isPaused = false;
@@ -303,7 +313,6 @@
             ctx.font = 'bold 18px sans-serif';
             ctx.textAlign = 'left';
             herbs.forEach(herb => {
-                // ✅ [MODIFIED] Changed 90 to 200
                 ctx.fillStyle = (score < 200) ? (herb.group === 'A' ? '#d32f2f' : '#1976d2') : '#4A4A4A';
                 ctx.fillText(herb.name[currentLanguage], herb.x, herb.y);
             });
@@ -440,6 +449,7 @@
             distanceSinceLastFood = 0;
             isInvincible = false;
             invincibilityTimer = 0;
+            overheatDuration = 0;
             gameSpeed = baseSpeed;
             herbs = [];
             tutorialMessages = [];
@@ -501,6 +511,7 @@
 
                     if (score >= 100 && playerState === 'neutral' && distanceSinceLastFood >= 50) {
                         playerState = 'heated';
+                        overheatDuration = 0;
                         distanceSinceLastFood = 0;
                         isInvincible = true;
                         invincibilityTimer = 60; // 60 frames = 1 second
@@ -508,7 +519,9 @@
 
                     let speedMultiplier = 1.0;
                     if (playerState === 'heated') {
-                        speedMultiplier *= 1.4; 
+                        overheatDuration++;
+                        const gradualBoost = overheatDuration / 1000; // Gradually increases speed
+                        speedMultiplier *= 1.4 + gradualBoost; 
                     }
                     if (score >= 100) {
                         const distanceIncrements = Math.floor((score - 100) / 50);
@@ -525,7 +538,6 @@
                         tutorialFlags.heatedMessageShown = true;
                         showTutorialMessages([{ key: "heatedWarning", duration: 360 }]);
                     }
-                    // ✅ [MODIFIED] Changed 90 to 200
                     if (score >= 200 && !tutorialFlags.score90MessageShown) {
                         tutorialFlags.score90MessageShown = true;
                         showTutorialMessages([{ key: "colorBlindWarning", duration: 360 }, { key: "keepRunning", duration: 270 }]);
@@ -537,6 +549,7 @@
                             if (playerState === 'neutral') {
                                 if (herb.group === 'A') { 
                                     playerState = 'heated'; 
+                                    overheatDuration = 0;
                                     herbs.splice(index, 1); 
                                     playSound('positive');
                                     isInvincible = true;
@@ -547,6 +560,7 @@
                             } else { // playerState is 'heated'
                                 if (herb.group === 'B') { 
                                     playerState = 'neutral';
+                                    overheatDuration = 0;
                                     herbs.splice(index, 1); 
                                     playSound('positive');
                                 } else { 
