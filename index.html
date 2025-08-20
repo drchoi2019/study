@@ -78,7 +78,8 @@
                     <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
                     <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
                     <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
-                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                                      <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>  
+                  <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
                     <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
                     <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>                    
                 </ul>
@@ -194,11 +195,11 @@
                     window.location.href = targetUrl;
                 } else {
                     // determineTargetUrl에서 이미 검사를 거쳤지만, 만약의 경우에 대비한 방어 코드
-                    showPageMessage('콘텐츠를 준비 중입니다.');
+                    showPageMessage('Under Construction');
                 }
             } catch (error) {
                 console.error('Navigation check failed:', error);
-                showPageMessage('페이지를 확인할 수 없습니다. 네트워크 연결을 확인해 주세요.');
+                showPageMessage('Page cannot be opened.');
             }
         }
 
