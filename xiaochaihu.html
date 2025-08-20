@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sho-saiko-to Event: A Cautionary Tale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+
+        /* --- Language Control --- */
+        /* By default, hide Korean content */
+        body.lang-en [lang="ko"] { display: none; }
+        body.lang-en [lang="en"] { display: block; }
+        
+        /* When body has 'lang-ko', hide English content */
+        body.lang-ko [lang="en"] { display: none; }
+        body.lang-ko [lang="ko"] { display: block; }
+
+
+        /* --- Chart Styles --- */
+        .chart-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .chart-title {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #374151;
+        }
+        .chart {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            gap: 1rem;
+            height: 200px; /* Max height for bars */
+        }
+        .chart-group {
+            width: 45%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chart-bars {
+            display: flex;
+            justify-content: center;
+            gap: 1rem; /* 16px */
+            align-items: flex-end;
+            height: 100%;
+            width: 100%;
+            border-bottom: 2px solid #d1d5db;
+        }
+        .bar {
+            width: 40px;
+            position: relative;
+            background-color: #9ca3af;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease-out;
+        }
+        .bar .value {
+            position: absolute;
+            top: -22px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .bar-japan { background-color: #3b82f6; }
+        .bar-china { background-color: #16a34a; }
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 96px; /* (40px bar * 2) + 16px gap */
+            margin-top: 0.5rem;
+            color: #4b5563;
+            font-size: 0.8rem;
+        }
+        .query-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.75rem;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="lang-en"> <!-- Start with English as default -->
+
+    <!-- Header -->
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" id="lang-toggle-btn" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto p-4 md:p-6">
+        
+        <!-- English Content -->
+        <div lang="en">
+            <article class="space-y-8">
+                <header class="text-center space-y-2">
+                    <h1 class="text-3xl md:text-4xl font-bold text-red-800">The Sho-saiko-to Event</h1>
+                    <p class="text-lg text-gray-600">A Cautionary Tale in Herbal Medicine</p>
+                </header>
+
+                <p class="text-base leading-relaxed">The story of Sho-saiko-to serves as a critical lesson on the intersection of traditional herbalism and modern medicine. It highlights how applying an ancient remedy based solely on a modern biomedical diagnosis, without its traditional diagnostic framework, can lead to severe and unintended consequences.</p>
+                
+                <img src="xiaochaihu.png" alt="Herbal ingredients for Sho-saiko-to" class="w-full rounded-lg shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/800x400/D1C7BD/374151?text=Herbal+Ingredients';">
+
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-bold border-b-2 border-red-700 pb-2">The Rise of a Popular Remedy</h2>
+                    <p>Sho-saiko-to, a cornerstone formula in Japanese Kampo medicine, is known by various names across Asia:</p>
+                    <ul class="list-disc list-inside bg-stone-100 p-4 rounded-lg space-y-2">
+                        <li><strong>China:</strong> <em>Xiao-Chai-Hu-Tang</em> (小柴胡湯)</li>
+                        <li><strong>Korea:</strong> <em>Sosihotang</em> (소시호탕)</li>
+                        <li><strong>Hong Kong:</strong> <em>Siu-caai-wu-tong</em></li>
+                    </ul>
+                    <p>In Japan, where traditional Kampo medicine is prescribed exclusively by medical doctors, Sho-saiko-to gained significant traction. This difference in focus is clearly visible in academic output compared to China, as shown in a PubMed search from February 2025:</p>
+                    
+                    <div class="chart-container">
+                        <h3 class="chart-title">PubMed Search Results (Feb 2025)</h3>
+                        <div class="chart">
+                            <div class="chart-group">
+                                <div class="chart-bars">
+                                    <div class="bar bar-japan" style="height: 116px;"><span class="value">116</span></div>
+                                    <div class="bar bar-china" style="height: 44px;"><span class="value">44</span></div>
+                                </div>
+                                <div class="chart-labels"><span>Japan</span><span>China</span></div>
+                                <p class="query-label">"shosaikoto" vs "xiaochaihutang"</p>
+                            </div>
+                            <div class="chart-group">
+                                <div class="chart-bars">
+                                    <div class="bar bar-japan" style="height: 167px;"><span class="value">167</span></div>
+                                    <div class="bar bar-china" style="height: 53px;"><span class="value">53</span></div>
+                                </div>
+                                <div class="chart-labels"><span>Japan</span><span>China</span></div>
+                                <p class="query-label">"sho saiko to" vs "xiao chai hu tang"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p>Fueled by this interest, numerous clinical trials showed its potential to protect against the development of <strong>hepatocellular carcinoma</strong> in patients with cirrhosis and improve overall liver function. Based on this promising research, the <strong>Japanese Ministry of Health and Welfare officially approved Sho-saiko-to in 1994</strong> for enhancing liver health, adding it to the national formulary. This endorsement led to its widespread use for all types of hepatitis and liver cirrhosis.</p>
+                    <p class="text-center font-bold text-xl text-red-700 bg-red-50 p-4 rounded-lg">At its peak, an estimated 1.5 million hepatitis patients in Japan were being treated long-term with this traditional formula.</p>
+                </section>
+                 <section class="space-y-4">
+                    <h2 class="text-2xl font-bold border-b-2 border-red-700 pb-2">The 1996 Crisis: The "Sho-saiko-to Event"</h2>
+                    <p>The widespread, long-term prescription of the formula soon revealed a dark side. In March 1996, a major health crisis emerged and was quickly brought to light by the media.</p>
+                    <p>It was reported that <strong>88 hepatitis patients</strong> had developed <strong>severe interstitial pneumonitis</strong> after taking Sho-saiko-to. Tragically, <strong>10 of these patients died</strong> from acute respiratory failure. This incident became known as the <strong>"Sho-saiko-to Event"</strong> and prompted urgent action and information dissemination by Japanese health authorities.</p>
+                    
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg" role="alert">
+                        <h3 class="font-bold text-lg">⚠️ Official Contraindications</h3>
+                        <p class="mt-2">Following the crisis, Japanese pharmaceutical companies issued strict contraindications for Sho-saiko-to to ensure patient safety.</p>
+                        <ol class="list-decimal list-inside mt-2 space-y-1">
+                            <li><strong>Drug Interaction:</strong> Patients receiving treatment with <strong>interferon preparations</strong>.</li>
+                            <li><strong>High-Risk Patients:</strong> Patients with <strong>liver cirrhosis</strong> or <strong>hepatoma</strong>, as interstitial pneumonia may occur and lead to fatal outcomes.</li>
+                            <li><strong>Pre-existing Conditions:</strong> Patients with chronic hepatitis showing liver dysfunction and a <strong>platelet count of 100,000/mm³ or below</strong> (as liver cirrhosis is suspected).</li>
+                        </ol>
+                    </div>
+                </section>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-bold border-b-2 border-red-700 pb-2">The Diagnostic Nuance: Why Did It Happen?</h2>
+                    <p>The core issue was a fundamental mismatch in application. The formula was prescribed based on the Western diagnosis of "hepatitis," rather than the traditional Asian medicine framework of <strong>pattern differentiation</strong> (syndrome differentiation). Sho-saiko-to is not for <em>all</em> liver conditions; it is specifically for a <em>Ban Biao Ban Li</em> (半表半裏), or "half-exterior, half-interior," pattern.</p>
+                    
+                    <h3 class="text-xl font-semibold">Formulaic and Diagnostic Clues</h3>
+                    <p>Traditional texts offer specific clues for using this formula, which were largely overlooked during its widespread prescription:</p>
+                    <ul class="list-none space-y-3">
+                        <li class="flex items-start"><span class="font-bold text-red-700 mr-2">●</span><strong>Ginseng (Ren Shen):</strong> The original formula by Zhang Zhongjing used milder Chinese ginseng to harmonize the "Middle Jiao" (digestive center). Later modifications using stronger, warmer Korean ginseng may have contributed to heat-related issues.</li>
+                        <li class="flex items-start"><span class="font-bold text-red-700 mr-2">●</span><strong>Tongue Coating:</strong> The classic indication is a thin white tongue coating. However, a thin <em>yellow</em> coating can also be appropriate, as it indicates the pathogen is still in the "half-exterior, half-interior" stage.</li>
+                        <li class="flex items-start"><span class="font-bold text-red-700 mr-2">●</span><strong>Pulse:</strong> While not a rigid rule, the pulse can be rapid.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold">A Tale of Two Interpretations: Japan vs. China</h3>
+                    <p>The understanding and use of the formula differ significantly between Japan and China, which leads to different clinical approaches.</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-bold">China's Interpretation</h4>
+                            <p>They used the prescription following the traditional concepts of <em>Ban Biao Ban Li</em> or Harmonization. This led to an application focused on traditional pattern diagnosis.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-bold">Japan's Interpretation</h4>
+                            <p>They used the prescription following Western medical concepts like hepatitis, cirrhosis, or liver function recovery. This led to the neglect of the basic principles of TCM, <em>Li-Fa-Fang-Yao</em>.</p>
+                        </div>
+                    </div>
+                </section>
+                <footer class="text-center pt-4 border-t border-gray-300">
+                    <h2 class="text-xl font-bold">The Enduring Lesson</h2>
+                    <p class="mt-2 leading-relaxed">The Sho-saiko-to event is not an indictment of the formula itself, but a powerful reminder that <strong>traditional medicines require their corresponding traditional diagnostic systems</strong>. Their efficacy and safety are tied to precise pattern differentiation, not broad biomedical disease labels. While Sho-saiko-to holds significant therapeutic potential, this crisis underscores the critical importance of careful diagnosis and patient monitoring to ensure safety.</p>
+                </footer>
+            </article>
+        </div>
+
+        <!-- Korean Content -->
+        <div lang="ko">
+            <article class="space-y-8">
+                <header class="text-center space-y-2">
+                    <h1 class="text-3xl md:text-4xl font-bold text-red-800">소시호탕 사건</h1>
+                    <p class="text-lg text-gray-600">한약 사용에 대한 경고적 실화</p>
+                </header>
+
+                <p class="text-base leading-relaxed">소시호탕(Sho-saiko-to)의 이야기는 전통 한의학과 현대 의학의 교차점에서 중요한 교훈을 줍니다. 이 사건은 전통적인 진단 체계 없이 현대 생의학적 진단에만 의존하여 고대 처방을 적용할 경우, 심각하고 의도치 않은 결과를 초래할 수 있음을 명확히 보여줍니다.</p>
+                
+                <img src="xiaochaihu.png" alt="소시호탕 한약재" class="w-full rounded-lg shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/800x400/D1C7BD/374151?text=한약재';">
+
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-bold border-b-2 border-red-700 pb-2">유명 처방의 부상</h2>
+                    <p>일본 캄포 의학의 핵심 처방인 소시호탕은 아시아 전역에서 다양한 이름으로 알려져 있습니다.</p>
+                    <ul class="list-disc list-inside bg-stone-100 p-4 rounded-lg space-y-2">
+                        <li><strong>중국:</strong> <em>소시호탕</em> (小柴胡湯, Xiao-Chai-Hu-Tang)</li>
+                        <li><strong>한국:</strong> <em>소시호탕</em> (Sosihotang)</li>
+                        <li><strong>홍콩:</strong> <em>Siu-caai-wu-tong</em></li>
+                    </ul>
+                    <p>전통 캄포 의학이 의사에 의해서만 처방되는 일본에서 소시호탕은 상당한 주목을 받았습니다. 이러한 관심의 차이는 중국과 비교했을 때 학술 결과물에서 명확하게 드러납니다. 2025년 2월 기준 PubMed 검색 결과는 다음과 같습니다.</p>
+                    
+                    <div class="chart-container">
+                        <h3 class="chart-title">PubMed 검색 결과 (2025년 2월)</h3>
+                        <div class="chart">
+                            <div class="chart-group">
+                                <div class="chart-bars">
+                                    <div class="bar bar-japan" style="height: 116px;"><span class="value">116</span></div>
+                                    <div class="bar bar-china" style="height: 44px;"><span class="value">44</span></div>
+                                </div>
+                                <div class="chart-labels"><span>일본</span><span>중국</span></div>
+                                <p class="query-label">"shosaikoto" vs "xiaochaihutang"</p>
+                            </div>
+                            <div class="chart-group">
+                                <div class="chart-bars">
+                                    <div class="bar bar-japan" style="height: 167px;"><span class="value">167</span></div>
+                                    <div class="bar bar-china" style="height: 53px;"><span class="value">53</span></div>
+                                </div>
+                                <div class="chart-labels"><span>일본</span><span>중국</span></div>
+                                <p class="query-label">"sho saiko to" vs "xiao chai hu tang"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p>이러한 관심을 바탕으로 수많은 임상 시험에서 간경변 환자의 <strong>간세포암</strong> 발생을 예방하고 전반적인 간 기능을 개선하는 잠재력이 입증되었습니다. 이 유망한 연구를 바탕으로 <strong>1994년 일본 후생성</strong>은 간 건강 증진을 위해 소시호탕을 공식 승인하고 국가 처방집에 포함시켰습니다. 이로 인해 모든 유형의 간염 및 간경변 치료에 널리 사용되었습니다.</p>
+                    <p class="text-center font-bold text-xl text-red-700 bg-red-50 p-4 rounded-lg">최전성기에는 일본에서 약 150만 명의 간염 환자가 이 전통 처방으로 장기 치료를 받은 것으로 추정됩니다.</p>
+                </section>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-bold border-b-2 border-red-700 pb-2">1996년의 비극: "소시호탕 사건"</h2>
+                    <p>이 처방의 광범위하고 장기적인 사용은 곧 어두운 면을 드러냈습니다. 1996년 3월, 중대한 보건 위기가 발생했고 언론을 통해 빠르게 알려졌습니다.</p>
+                    <p>보도에 따르면 <strong>88명의 간염 환자</strong>가 소시호탕 복용 후 <strong>심각한 간질성 폐렴</strong>을 앓게 되었습니다. 비극적으로 이 중 <strong>10명의 환자가 급성 호흡 부전으로 사망</strong>했습니다. 이 사건은 <strong>"소시호탕 사건"</strong>으로 알려지게 되었고, 일본 보건 당국의 긴급 조치와 정보 전파를 촉발했습니다.</p>
+                    
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg" role="alert">
+                        <h3 class="font-bold text-lg">⚠️ 공식적인 금기사항</h3>
+                        <p class="mt-2">사건 이후, 일본 제약 회사들은 환자 안전을 위해 소시호탕에 대한 엄격한 금기사항을 발표했습니다.</p>
+                        <ol class="list-decimal list-inside mt-2 space-y-1">
+                            <li><strong>약물 상호작용:</strong> <strong>인터페론 제제</strong>로 치료받는 환자.</li>
+                            <li><strong>고위험 환자:</strong> <strong>간경변</strong> 또는 <strong>간암</strong> 환자 (간질성 폐렴이 발생하여 치명적인 결과를 초래할 수 있음).</li>
+                            <li><strong>기저 질환:</strong> 만성 간염으로 간 기능 장애가 있고 <strong>혈소판 수가 100,000/mm³ 이하</strong>인 환자 (간경변이 의심됨).</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-bold border-b-2 border-red-700 pb-2">진단의 미묘함: 왜 이런 일이 일어났을까?</h2>
+                    <p>핵심 문제는 근본적인 적용의 불일치였습니다. 이 처방은 전통적인 한의학의 <strong>변증(辨證)</strong> 체계가 아닌, "간염"이라는 서양 의학적 진단에 근거하여 처방되었습니다. 소시호탕은 <em>모든</em> 간 질환에 사용되는 것이 아니라, 구체적으로 <strong>반표반리(半表半裏)</strong>증이라는 특정 패턴에 사용됩니다.</p>
+                    
+                    <h3 class="text-xl font-semibold">처방 및 진단의 단서</h3>
+                    <p>전통 문헌은 이 처방을 사용할 때의 구체적인 단서를 제공하지만, 광범위한 처방 과정에서 대부분 간과되었습니다.</p>
+                    <ul class="list-none space-y-3">
+                        <li class="flex items-start"><span class="font-bold text-red-700 mr-2">●</span><strong>인삼:</strong> 장중경의 원방에서는 중초(소화 중심)를 조화시키기 위해 더 온화한 중국 인삼을 사용했습니다. 더 강하고 따뜻한 성질의 고려인삼을 사용한 후대 수정은 열 관련 문제를 유발했을 수 있습니다.</li>
+                        <li class="flex items-start"><span class="font-bold text-red-700 mr-2">●</span><strong>설태:</strong> 고전적인 지표는 얇은 백태입니다. 그러나 얇은 <em>황태</em> 또한 병사가 여전히 반표반리 단계에 있음을 나타내므로 적절할 수 있습니다.</li>
+                        <li class="flex items-start"><span class="font-bold text-red-700 mr-2">●</span><strong>맥박:</strong> 엄격한 규칙은 아니지만, 맥이 빠를 수 있습니다.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold">두 가지 해석: 일본 대 중국</h3>
+                    <p>처방에 대한 이해와 사용은 일본과 중국 간에 상당한 차이가 있으며, 이는 다른 임상 접근 방식으로 이어집니다.</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-bold">중국의 해석</h4>
+                            <p>전통적인 반표반리, 혹은 화해의 개념을 좇아 처방을 사용하였습니다. 이는 한방적인 패턴 진단에 중점을 둔 적용으로 이어졌습니다.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-bold">일본의 해석</h4>
+                            <p>간염, 간경화 혹은 간기능회복이라는 서양의학적 개념을 좇아 처방을 사용하였습니다. 이는 한방의 기본원리, 이법방약의 무시로 이어졌습니다.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="text-center pt-4 border-t border-gray-300">
+                    <h2 class="text-xl font-bold">지속되는 교훈</h2>
+                    <p class="mt-2 leading-relaxed">소시호탕 사건은 처방 자체에 대한 비난이 아니라, <strong>전통 의약품은 그에 상응하는 전통 진단 체계가 필요하다</strong>는 강력한 경고입니다. 그 효능과 안전성은 광범위한 생의학적 질병명이 아닌, 정밀한 변증에 달려 있습니다. 소시호탕은 상당한 치료 잠재력을 가지고 있지만, 이 비극은 안전을 보장하기 위한 신중한 진단과 환자 모니터링의 중요성을 강조합니다.</p>
+                </footer>
+            </article>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('lang-toggle-btn');
+            const body = document.body;
+
+            // Function to set the language based on a given lang code ('en' or 'ko')
+            function setLanguage(lang) {
+                if (lang === 'ko') {
+                    body.classList.remove('lang-en');
+                    body.classList.add('lang-ko');
+                    document.documentElement.lang = 'ko';
+                } else {
+                    body.classList.remove('lang-ko');
+                    body.classList.add('lang-en');
+                    document.documentElement.lang = 'en';
+                }
+            }
+
+            // Event listener for the toggle button
+            toggleButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                const isKorean = body.classList.contains('lang-ko');
+                const newLang = isKorean ? 'en' : 'ko';
+                setLanguage(newLang);
+            });
+
+            // Set the initial language based on the URL hash
+            const initialLang = window.location.hash.substring(1) === 'ko' ? 'ko' : 'en';
+            setLanguage(initialLang);
+        });
+    </script>
+</body>
+</html>
