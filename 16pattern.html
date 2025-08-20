@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive TCM Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+        /* Card flip animation */
+        .card-container {
+            perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-container.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertical centering */
+            align-items: center; /* Horizontal centering for front */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .card-front {
+            cursor: pointer;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            align-items: flex-start; /* Align content to the left */
+            text-align: left; /* Ensure text inside is left aligned */
+        }
+        
+        /* Font size for card back content */
+        .card-back > div {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+
+        /* Style for the "tape" reveal effect */
+        .tape-container {
+            position: relative;
+            display: inline-block;
+        }
+        .tape-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1f2937;
+            border-radius: 0.2em;
+            cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.5s ease-out; /* Slow fade out */
+        }
+        .tape-overlay.revealed {
+            opacity: 0;
+            pointer-events: none; /* Disable interaction after revealed */
+        }
+
+        /* Flip icon style */
+        .flip-icon {
+            position: absolute;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            width: 2rem;
+            height: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background-color: rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+        .flip-icon:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header id="page-header" class="w-full max-w-4xl mx-auto my-4 px-4 flex justify-between items-center">
+        <a href="#" id="header-link" class="text-lg font-semibold text-gray-700 no-underline">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4">
+        <!-- Main Title -->
+        <h1 id="main-title" class="text-3xl font-bold text-center mb-8 text-gray-800"></h1>
+
+        <!-- Case Study Section -->
+        <section id="case-study" class="mb-12 bg-white/70 p-6 rounded-xl shadow-sm">
+            <p id="case-content" class="text-base leading-relaxed mb-6"></p>
+            <div id="case-options" class="space-y-2"></div>
+        </section>
+        
+        <!-- Introduction Section -->
+        <section id="intro-section" class="mb-12 text-left sm:text-center">
+            <div id="intro-content" class="text-gray-600 leading-7 max-w-3xl mx-auto"></div>
+        </section>
+
+        <!-- Flashcard Grid -->
+        <div id="card-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        
+        <!-- Next Step Link -->
+        <div id="next-step" class="text-center mt-12"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let currentLanguage = 'ko'; // Global state for current language
+
+        const content = {
+            ko: {
+                headerLink: "index.html",
+                mainTitle: "꼭 기억해야할 16가지 변증",
+                caseContent: "38세 여성 환자가 내원하였다. 두 아이를 출산한 이후부터 쉽게 피로해지고, 얼굴빛이 <strong>누렇고 창백</strong>하다. 회사 업무와 가사일을 병행하면서 <strong>식욕이 없고</strong>, 음식을 먹으면 곧잘 더부룩하다고 호소한다. 대변은 묽고 하루 2~3회, 사지가 무겁고 힘이 없다. 최근 들어 하복부에 묵직하게 빠져내리는 듯한 느낌이 심해지고, 배변 시에 항문이 빠져나오는 탈항 증상이 생겨 외과 진료를 받았으나 수술적 치료보다는 생활 관리와 경과 관찰을 권유받은 상태다. 환자는 <strong>기력이 없고</strong>, 늘 몸이 아래로 처지는 느낌 때문에 일상생활의 활력이 떨어졌다고 한다.",
+                caseOptions: ["보중익기탕", "억간산", "청간명목탕", "청심연자탕"],
+                intro: `<p class="mb-4">정답은 보중익기탕입니다. 처방을 배우지 않았더라도 처방이름에 모두 장부 혹은 부위가 알려져 있습니다. 위의 증상들을 보고 비장의 문제이며, 기함, 기허의 병리를 알았다면 처방중에서 비장과 관련이 있고 기와 관련이 있는 처방으로 보중익기탕을 고를 수 있습니다. 보중의 중은 중초, 즉 비위를 의미하고, 익기의 기는 기를 뜻하기 때문입니다.</p>
+                        <p>이러한 증례문제는 보드시험을 볼 때 가장 중요합니다. 진단에도, 침구시험에도 나오고, 본초 방제 시험에서도 나오기 때문입니다. 이런 문제를 보고 어떤 장부의 문제인지, 어떤 병리인지를 알아야 침구혈위도, 진단도, 처방도 맞출수 있습니다. 다음은 이런 문제를 풀기위한 <strong class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">가장 기본적인 변증 16가지</strong>입니다. 먼저 변증 이름만 보고 내용을 생각해보시고, 카드를 뒤집어 확인하시기 바랍니다. 그리고, 빈칸을 채워보고 또 답을 확인하시면 됩니다. 가려진 부분은 먼저 생각해보고 클릭하거나 드래그하여 확인하세요. 반복해서 완전히 외워숙지해야 합니다.</p>`,
+                nextStep: "이 기본 변증을 모두 외웠다면 Organ Pattern Combination으로 가서 이어서 공부하시기 바랍니다.",
+                nextStepLink: "organpattern_comb.html",
+                cards: [
+                    { type: 'white', front: '한(寒)', back: '추위, *느림*→기체,혈어로 진행, 지맥, *맑은* 분비물(콧물, 소변, 가래), 설사, 득온즉감' },
+                    { type: 'white', front: '열(熱)', back: '더위, 번조, *삭*맥, *누런* 분비물, 변비, 득한즉감' },
+                    { type: 'white', front: '풍(風)', back: '*빠른* 병정(중풍, 감기), *떨림*, 근육 쥐나는 것, 경련(마비)' },
+                    { type: 'white', front: '습(濕)', back: '*무거움*, 양허에서 진행하거나, 외부 습사의 침입' },
+                    { type: 'white', front: '기허(氣虛)', back: '무력감 / 폐-*짧고 무력한* 호흡 / 비 - *식욕*' },
+                    { type: 'white', front: '기역(氣逆)', back: '구토, *기침*, 위산역류, 임신오저' },
+                    { type: 'white', front: '기함(氣陷)', back: '*장기 하수*, 위하수, 자궁하수, 탈항, 빠지는 느낌 + 기허증상' },
+                    { type: 'white', front: '기체(氣滯)', back: '*팽만감*, 통증 - 움직임, 실체없음' },
+                    { type: 'white', front: '혈어(血瘀)', back: '모든 *보라*색, 자통, 실체있음, 고정, *야간*심, *삽*맥' },
+                    { type: 'white', front: '혈허(血虛)', back: '창백, 손발참, *세*맥, *삽*맥' },
+                    { type: 'white', front: '정허(精虛)', back: '발육부진, *성기능*, 조기 노화' },
+                    { type: 'gray', front: '간(肝)', back: '정서, *월경*, 눈, 옆구리, 근육, *손톱*등의 문제' },
+                    { type: 'gray', front: '심(心)', back: '심박동(*동계*, 부정맥), 인지(*기억력*, 치매), 혀등의 문제' },
+                    { type: 'gray', front: '비(脾)', back: '*소화*, 대변, 무력감등의 문제' },
+                    { type: 'gray', front: '폐(肺)', back: '호흡, 면역기능, *피부*등의 문제' },
+                    { type: 'gray', front: '신(腎)', back: '비뇨기/*생식기*, 귀등의 문제' }
+                ]
+            },
+            en: {
+                headerLink: "index.html",
+                mainTitle: "16 Essential Patterns to Remember",
+                caseContent: "A 38-year-old female patient presents. Since giving birth to two children, she has become easily fatigued, and her complexion is <strong>sallow and pale</strong>. While juggling company work and household chores, she has <strong>no appetite</strong>, and complains of feeling bloated after eating. Her stools are loose, occurring 2-3 times a day, and her limbs feel heavy and weak. Recently, the heavy, sinking feeling in her lower abdomen has worsened, and she has developed symptoms of rectal prolapse during bowel movements. She received a surgical consultation but was advised to manage her lifestyle and monitor her condition rather than undergo surgery. The patient reports a <strong>lack of energy</strong> and feels that her vitality in daily life has decreased due to a constant sensation of her body sinking downwards.",
+                caseOptions: ["Bozhong Yiqi Tang", "Yigan San", "Qinggan Mingmu Tang", "Qingxin Lianzi Tang"],
+                intro: `<p class="mb-4">The correct answer is Bozhong Yiqi Tang. Even if you haven't learned the formulas, the names often indicate the related organ or area. From the symptoms, if you identified a Spleen issue with a pathology of Qi Sinking and Qi Deficiency, you could choose Bozhong Yiqi Tang. In 'Bozhong', 'Zhong' refers to the Middle Jiao (Spleen and Stomach), and in 'Yiqi', 'Qi' means Qi.</p>
+                        <p>Case studies like this are crucial for board exams as they appear in diagnostics, acupuncture, and herbology sections. You must identify the affected organ and pathology to determine the correct points, diagnosis, and formula. The following are <strong class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">16 basic patterns</strong> to solve such problems. First, look at the pattern name and think about its meaning, then flip the card to check. The taped parts should be considered first, then revealed by clicking or dragging. Repeat until you have fully memorized them.</p>`,
+                nextStep: "Once you have memorized all these basic patterns, please proceed to Organ Pattern Combination to continue your studies.",
+                nextStepLink: "organpattern_comb.html",
+                cards: [
+                    { type: 'white', front: 'Cold (寒)', back: 'Coldness, *slowness* → leads to Qi Stagnation, Blood Stasis, deep pulse, *clear* secretions (runny nose, urine, phlegm), diarrhea, relieved by warmth' },
+                    { type: 'white', front: 'Heat (熱)', back: 'Heat, restlessness, *rapid* pulse, *yellow* secretions, constipation, relieved by cold' },
+                    { type: 'white', front: 'Wind (風)', back: '*Rapid* disease progression (stroke, cold), *tremors*, muscle cramps, convulsions (paralysis)' },
+                    { type: 'white', front: 'Dampness (濕)', back: '*Heaviness*, develops from Yang deficiency or invasion of external dampness' },
+                    { type: 'white', front: 'Qi Deficiency (氣虛)', back: 'Weakness / Lung - *short, weak* breath / Spleen - *appetite*' },
+                    { type: 'white', front: 'Qi Rebellion (氣逆)', back: 'Vomiting, *coughing*, acid reflux, morning sickness' },
+                    { type: 'white', front: 'Qi Sinking (氣陷)', back: '*Organ prolapse*, gastroptosis, uterine prolapse, rectal prolapse, sinking sensation + Qi deficiency symptoms' },
+                    { type: 'white', front: 'Qi Stagnation (氣滯)', back: '*Distension*, pain - moving, no physical mass' },
+                    { type: 'white', front: 'Blood Stasis (血瘀)', back: 'All things *purple*, stabbing pain, has physical mass, fixed location, worse at *night*, *choppy* pulse' },
+                    { type: 'white', front: 'Blood Deficiency (血虛)', back: 'Paleness, cold hands and feet, *thready* pulse, *choppy* pulse' },
+                    { type: 'white', front: 'Essence Deficiency (精虛)', back: 'Developmental delay, *sexual function*, premature aging' },
+                    { type: 'gray', front: 'Liver (肝)', back: 'Emotions, *menstruation*, eyes, hypochondrium, muscles, *nails*, etc.' },
+                    { type: 'gray', front: 'Heart (心)', back: 'Heartbeat (*palpitations*, arrhythmia), cognition (*memory*, dementia), tongue, etc.' },
+                    { type: 'gray', front: 'Spleen (脾)', back: 'Issues with *digestion*, stool, weakness, etc.' },
+                    { type: 'gray', front: 'Lung (肺)', back: 'Respiration, immune function, *skin*, etc.' },
+                    { type: 'gray', front: 'Kidney (腎)', back: 'Urinary/*reproductive* system, ears, etc.' }
+                ]
+            }
+        };
+
+        function parseAndStyleText(text) {
+            return text.replace(/\*(.*?)\*/g, (match, p1) => {
+                return `<span class="tape-container"><span class="hidden-text">${p1}</span><span class="tape-overlay"></span></span>`;
+            });
+        }
+        
+        function renderContent(lang) {
+            const data = content[lang];
+            
+            document.documentElement.lang = lang;
+            document.getElementById('header-link').href = data.headerLink;
+            document.getElementById('main-title').innerText = data.mainTitle;
+            document.getElementById('case-content').innerHTML = data.caseContent;
+            
+            const optionsContainer = document.getElementById('case-options');
+            optionsContainer.innerHTML = '';
+            data.caseOptions.forEach((option, index) => {
+                const label = document.createElement('label');
+                label.className = "flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer";
+                label.innerHTML = `
+                    <input type="radio" name="case-option" class="form-radio h-5 w-5 text-teal-600 focus:ring-teal-500">
+                    <span class="ml-3 text-gray-700">${index + 1}. ${option}</span>
+                `;
+                optionsContainer.appendChild(label);
+            });
+
+            document.getElementById('intro-content').innerHTML = data.intro;
+
+            const grid = document.getElementById('card-grid');
+            grid.innerHTML = '';
+            data.cards.forEach(card => {
+                const cardColorClass = card.type === 'white' ? 'bg-white' : 'bg-gray-200';
+                const cardTextColorClass = card.type === 'white' ? 'text-gray-800' : 'text-gray-700';
+                const backColorClass = card.type === 'white' ? 'bg-stone-50' : 'bg-gray-100';
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card-container h-48 group';
+                
+                const flipIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M21 21v-5h-5"/></svg>`;
+
+                cardElement.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front ${cardColorClass} ${cardTextColorClass}">
+                            <h3 class="text-xl font-bold text-center">${card.front}</h3>
+                        </div>
+                        <div class="card-back ${backColorClass} ${cardTextColorClass}">
+                            <div>${parseAndStyleText(card.back)}</div>
+                            <div class="flip-icon">${flipIconSVG}</div>
+                        </div>
+                    </div>
+                `;
+                
+                const cardFront = cardElement.querySelector('.card-front');
+                const backFlipIcon = cardElement.querySelector('.card-back .flip-icon');
+
+                cardFront.addEventListener('click', () => {
+                    cardElement.classList.add('flipped');
+                });
+
+                backFlipIcon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    cardElement.classList.remove('flipped');
+                });
+
+                grid.appendChild(cardElement);
+            });
+            
+            const nextStepContainer = document.getElementById('next-step');
+            nextStepContainer.innerHTML = `
+                <p class="mb-4">${data.nextStep}</p>
+                <a href="${data.nextStepLink}" class="inline-block bg-teal-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-teal-800 transition-colors">
+                    Continue &rarr;
+                </a>
+            `;
+
+            initializeTapeReveals();
+        }
+        
+        function toggleLanguage(event) {
+            event.preventDefault();
+            // Switch the global language state
+            currentLanguage = currentLanguage === 'ko' ? 'en' : 'ko';
+            // Re-render the entire content with the new language
+            renderContent(currentLanguage);
+        }
+        
+        function initializeTapeReveals() {
+            const tapes = document.querySelectorAll('.tape-overlay');
+            tapes.forEach(tape => {
+                tape.addEventListener('mousedown', (e) => {
+                    e.stopPropagation(); // Prevent card from flipping
+                    tape.classList.add('revealed');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            currentLanguage = 'ko';
+            renderContent(currentLanguage);
+        });
+    </script>
+
+</body>
+</html>
