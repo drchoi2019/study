@@ -319,6 +319,15 @@
                 ]
             },
             {
+                mainPrescription: "Shao Yao Tang",
+                description: "For febrile dysentery with bleeding and diarrhea.",
+                herbs: ["Da Huang", "Huang Qin", "Huang Lian", "Gui Zhi", "Shao Yao", "Dang Gui", "Mu Xiang", "Bing Lang", "Gan Cao"],
+                subPrescriptions: [
+                    { name: "Gui Zhi Jia Shao Yao Tang", ingredients: ["Gui Zhi", "Shao Yao", "Gan Cao", "Da Zao", "Sheng Jiang"], notIncluded: ["Da Zao", "Sheng Jiang"], description: "Augments Gui Zhi Tang to address abdominal pain." },
+                    { name: "San Huang Xie Xin Tang", ingredients: ["Da Huang", "Huang Qin", "Huang Lian"], notIncluded: [], description: "Directly drains fire-heat from the Heart and Stomach." }
+                ]
+            },
+            {
                 mainPrescription: "Fang Feng Tong Sheng San",
                 description: "Cools both exterior and interior heat, widely used for skin diseases, obesity, and constipation.",
                 herbs: ["Fang Feng", "Jing Jie", "Bai Zhu", "Zhi Zi", "Ma Huang", "Bo He", "Da Huang", "Mang Xiao", "Lian Qiao", "Dang Gui", "Chuan Xiong", "Bai Shao", "Shi Gao", "Jie Geng", "Huang Qin", "Hua Shi", "Gan Cao"],
@@ -504,14 +513,19 @@
             gameContainer.classList.add('hidden');
             prescriptionList.innerHTML = '';
 
+            // Sort data alphabetically by mainPrescription name
+            quizData.sort((a, b) => a.mainPrescription.localeCompare(b.mainPrescription));
+
             quizData.forEach((quiz, index) => {
                 const btn = document.createElement('button');
                 btn.textContent = quiz.mainPrescription;
                 btn.className = 'prescription-list-btn w-full text-left p-4 bg-white rounded-lg shadow-sm hover:bg-gray-100 border';
+                // Find the original index before sorting to load the correct question
+                const originalIndex = quizData.findIndex(item => item.mainPrescription === quiz.mainPrescription);
                 btn.addEventListener('click', () => {
                     menuContainer.classList.add('hidden');
                     gameContainer.classList.remove('hidden');
-                    loadQuestion(index);
+                    loadQuestion(originalIndex);
                 });
                 prescriptionList.appendChild(btn);
             });
