@@ -43,6 +43,7 @@
         }
         .card-front {
             cursor: pointer;
+            text-align: center;
         }
         .card-back {
             transform: rotateY(180deg);
@@ -101,7 +102,6 @@
 </head>
 <body class="text-gray-800">
 
-    <!-- Header -->
     <header id="page-header" class="w-full max-w-4xl mx-auto my-4 px-4 flex justify-between items-center">
         <a href="#" id="header-link" class="text-lg font-semibold text-gray-700 no-underline">
             &larr; Interactive TCM
@@ -112,28 +112,22 @@
     </header>
 
     <main class="w-full max-w-4xl mx-auto p-4">
-        <!-- Main Title -->
         <h1 id="main-title" class="text-3xl font-bold text-center mb-8 text-gray-800"></h1>
 
-        <!-- Case Study Section -->
         <section id="case-study" class="mb-12 bg-white/70 p-6 rounded-xl shadow-sm">
             <p id="case-content" class="text-base leading-relaxed mb-6"></p>
             <div id="case-options" class="space-y-2"></div>
         </section>
         
-        <!-- Introduction Section -->
         <section id="intro-section" class="mb-12 text-left sm:text-center">
             <div id="intro-content" class="text-gray-600 leading-7 max-w-3xl mx-auto"></div>
         </section>
 
-        <!-- Flashcard Grid -->
         <div id="card-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
         
-        <!-- Next Step Link -->
         <div id="next-step" class="text-center mt-12"></div>
     </main>
 
-    <!-- Footer -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
@@ -158,7 +152,7 @@
                     { type: 'white', front: '습(濕)', back: '*무거움*, 양허에서 진행하거나, 외부 습사의 침입' },
                     { type: 'white', front: '기허(氣虛)', back: '무력감 / 폐-*짧고 무력한* 호흡 / 비 - *식욕*' },
                     { type: 'white', front: '음허(陰虛)', back: '*조열*, 식은땀, 수족장심열, *세삭*맥, 걵조설' },
-                    { type: 'white', front: '기역(氣逆)'\n'기함(氣陷)', back: '구토, *기침*, 위산역류, 임신오저'\n'*장기 하수*, 위하수, 자궁하수, 탈항, 빠지는 느낌 + 기허증상' },
+                    { type: 'white', front: '기역(氣逆)<br>기함(氣陷)', back: '구토, *기침*, 위산역류, 임신오저<br>*장기 하수*, 위하수, 자궁하수, 탈항, 빠지는 느낌 + 기허증상' },
                     { type: 'white', front: '기체(氣滯)', back: '*팽만감*, 통증 - 움직임, 실체없음' },
                     { type: 'white', front: '혈어(血瘀)', back: '모든 *보라*색, 자통, 실체있음, 고정, *야간*심, *삽*맥' },
                     { type: 'white', front: '혈허(血虛)', back: '창백, 손발참, *세*맥, *삽*맥' },
@@ -185,8 +179,8 @@
                     { type: 'white', front: 'Wind (風)', back: '*Rapid* disease progression (stroke, cold), *tremors*, muscle cramps, convulsions (paralysis)' },
                     { type: 'white', front: 'Dampness (濕)', back: '*Heaviness*, develops from Yang deficiency or invasion of external dampness' },
                     { type: 'white', front: 'Qi Deficiency (氣虛)', back: 'Weakness / Lung - *short, weak* breath / Spleen - *appetite*' },
-                    { type: 'white', front: 'Yin Deficiency (陰虛)', back: '*tidal* fever, *night* sweating, 5-palm heat, *find-rapid* pulse, dry tongue },
-                    { type: 'white', front: 'Qi Rebellion (氣逆)'\n'Qi Sinking (氣陷)', back: 'Vomiting, *coughing*, acid reflux, morning sickness'\n'Organ *prolapse*, gastroptosis, uterine prolapse, rectal prolapse, sinking sensation + Qi deficiency symptoms' },
+                    { type: 'white', front: 'Yin Deficiency (陰虛)', back: '*tidal* fever, *night* sweating, 5-palm heat, *find-rapid* pulse, dry tongue' },
+                    { type: 'white', front: 'Qi Rebellion (氣逆)<br>Qi Sinking (氣陷)', back: 'Vomiting, *coughing*, acid reflux, morning sickness<br>Organ *prolapse*, gastroptosis, uterine prolapse, rectal prolapse, sinking sensation + Qi deficiency symptoms' },
                     { type: 'white', front: 'Qi Stagnation (氣滯)', back: '*Distension*, pain - moving, no physical mass' },
                     { type: 'white', front: 'Blood Stasis (血瘀)', back: 'All things *purple*, stabbing pain, has physical mass, fixed location, worse at *night*, *choppy* pulse' },
                     { type: 'white', front: 'Blood Deficiency (血虛)', back: 'Paleness, cold hands and feet, *thready* pulse, *choppy* pulse' },
@@ -202,7 +196,7 @@
 
         function parseAndStyleText(text) {
             return text.replace(/\*(.*?)\*/g, (match, p1) => {
-                return `<span class="tape-container"><span class="hidden-text">${p1}</span><span class="tape-overlay"></span></span>`;
+                return `<span class="tape-container">${p1}<span class="tape-overlay"></span></span>`;
             });
         }
         
@@ -242,7 +236,7 @@
                 cardElement.innerHTML = `
                     <div class="card-inner">
                         <div class="card-front ${cardColorClass} ${cardTextColorClass}">
-                            <h3 class="text-xl font-bold text-center">${card.front}</h3>
+                            <h3 class="text-xl font-bold">${card.front}</h3>
                         </div>
                         <div class="card-back ${backColorClass} ${cardTextColorClass}">
                             <div>${parseAndStyleText(card.back)}</div>
@@ -277,7 +271,7 @@
             initializeTapeReveals();
         }
 
-         function getLanguageFromURL() {
+        function getLanguageFromURL() {
             const params = new URLSearchParams(window.location.search);
             const lang = params.get('lang');
             return (lang === 'en' || lang === 'ko') ? lang : 'ko'; // Default to Korean
@@ -287,6 +281,8 @@
             event.preventDefault();
             // Switch the global language state
             currentLanguage = currentLanguage === 'ko' ? 'en' : 'ko';
+            // Update URL without reloading the page
+            window.history.pushState({}, '', `?lang=${currentLanguage}`);
             // Re-render the entire content with the new language
             renderContent(currentLanguage);
         }
@@ -302,7 +298,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            currentLanguage = 'ko';
+            currentLanguage = getLanguageFromURL();
             renderContent(currentLanguage);
         });
     </script>
