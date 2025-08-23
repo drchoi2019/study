@@ -311,6 +311,35 @@
 
         let currentLang = 'ko';
 
+        // URL 파라미터에서 언어 설정 읽기
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            
+            if (langParam) {
+                // 다양한 언어 파라미터 형식 지원
+                const normalizedLang = langParam.toLowerCase();
+                if (normalizedLang === 'eng' || normalizedLang === 'en' || normalizedLang === 'english') {
+                    return 'en';
+                } else if (normalizedLang === 'kor' || normalizedLang === 'ko' || normalizedLang === 'korean') {
+                    return 'ko';
+                }
+            }
+            
+            // 기본값: 한국어
+            return 'ko';
+        }
+
+        // URL 파라미터 업데이트 (히스토리에 추가하지 않음)
+        function updateURLLanguage(lang) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = lang === 'en' ? 'eng' : 'kor';
+            urlParams.set('lang', langParam);
+            
+            const newUrl = window.location.pathname + '?' + urlParams.toString();
+            window.history.replaceState({}, '', newUrl);
+        }
+
         function applyTranslations() {
             const t = translations[currentLang];
             // Update HTML language attribute
@@ -393,6 +422,7 @@
         function toggleLanguage(event) {
             event.preventDefault();
             currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            updateURLLanguage(currentLang);
             applyTranslations();
             updateStackDisplays(); 
         }
@@ -524,201 +554,3 @@
                                el.style.animationDelay = '';
                             }, 1000); 
                         });
-                    }, 50);
-
-                    updateUI();
-                    break;
-                }
-            }
-        }
-
-        function checkGameEnd() {
-            if (gameState.marbleQueue.length === 0) {
-                winAnimation();
-                return;
-            }
-            const canPlaceAny = gameState.nextMarbles.some(marble => 
-                gameState.stacks.some((stack, stackIndex) => 
-                    canPlaceMarble(stackIndex, stack.length, marble.type) || (stack.length > 0 && canPlaceMarble(stackIndex, -1, marble.type))
-                )
-            );
-            
-            if (!canPlaceAny && gameState.stacks.some(s => s.length > 0)) {
-                const now = Tone.now();
-                const melody = ["G3", "F3", "E3", "D3"];
-                melody.forEach((note, i) => synth.triggerAttackRelease(note, "8n", now + i * 0.15));
-                document.getElementById('gameOver').style.display = 'block';
-            }
-        }
-        
-        function updateStackDisplays() {
-            const t = translations[currentLang];
-            gameState.stacks.forEach((stack, stackIndex) => {
-                const stackElement = document.getElementById(`stack${stackIndex}`);
-                stackElement.innerHTML = '';
-                
-                if (stack.length === 0) {
-                    const initialSlot = document.createElement('div');
-                    initialSlot.className = 'stack-slot';
-                    initialSlot.textContent = t.slotInitial;
-                    initialSlot.onclick = () => placeMarble(stackIndex, 0);
-                    stackElement.appendChild(initialSlot);
-                } else {
-                    const topSlot = document.createElement('div');
-                    topSlot.className = 'stack-slot';
-                    topSlot.textContent = t.slotUp;
-                    topSlot.onclick = () => placeMarble(stackIndex, stack.length);
-                    stackElement.appendChild(topSlot);
-                    
-                    for (let i = stack.length - 1; i >= 0; i--) {
-                        const marble = stack[i];
-                        const marbleElement = document.createElement('div');
-                        marbleElement.className = `marble ${marble.type}`;
-                        marbleElement.textContent = marble.emoji;
-                        marbleElement.dataset.marbleType = marble.type;
-                        marbleElement.dataset.marbleCategory = marble.category;
-                        const displayName = currentLang === 'ko' ? marble.name : getEnglishName(marble);
-                        const displayCategory = currentLang === 'ko' ? getCategoryName(marble.category) : getEnglishCategoryName(marble.category);
-                        marbleElement.title = `${displayName} (${displayCategory})`;
-                        stackElement.appendChild(marbleElement);
-                    }
-                    
-                    const bottomSlot = document.createElement('div');
-                    bottomSlot.className = 'stack-slot';
-                    bottomSlot.textContent = t.slotDown;
-                    bottomSlot.onclick = () => placeMarble(stackIndex, -1);
-                    stackElement.appendChild(bottomSlot);
-                }
-            });
-        }
-        
-        function updateNextMarbles() {
-            const container = document.getElementById('nextMarbles');
-            container.innerHTML = '';
-            gameState.nextMarbles = gameState.marbleQueue.slice(0, 3);
-            gameState.nextMarbles.forEach((marble, index) => {
-                const marbleDiv = document.createElement('div');
-                marbleDiv.className = `marble ${marble.type}`;
-                marbleDiv.dataset.index = index;
-                marbleDiv.dataset.marbleType = marble.type;
-                marbleDiv.dataset.marbleCategory = marble.category;
-                marbleDiv.onclick = () => selectNextMarble(index);
-                const displayName = currentLang === 'ko' ? marble.name : getEnglishName(marble);
-                const displayCategory = currentLang === 'ko' ? getCategoryName(marble.category) : getEnglishCategoryName(marble.category);
-                marbleDiv.title = `${displayName} (${displayCategory})`;
-                marbleDiv.textContent = marble.emoji;
-                container.appendChild(marbleDiv);
-            });
-        }
-        
-        function selectNextMarble(index) {
-            startAudio();
-            document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
-            const marbles = document.querySelectorAll('#nextMarbles .marble');
-            if (marbles[index]) {
-                marbles[index].classList.add('selected');
-                gameState.selectedMarble = gameState.nextMarbles[index];
-                gameState.selectedMarbleIndex = index;
-            }
-        }
-        
-        function updateUI() {
-            document.getElementById('score').textContent = gameState.score;
-            document.getElementById('remaining').textContent = gameState.marbleQueue.length;
-            document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
-        }
-
-        function showBonusEffect(stackIndex, position) {
-            const now = Tone.now();
-            synth.triggerAttackRelease("C5", "16n", now);
-            synth.triggerAttackRelease("G5", "16n", now + 0.1);
-            
-            const scoreEl = document.getElementById('score');
-            const bonusEl = document.getElementById('bonus-indicator');
-            scoreEl.classList.add('score-flash');
-            bonusEl.textContent = ' X2';
-
-            setTimeout(() => {
-                const stackEl = document.getElementById(`stack${stackIndex}`);
-                const placedIndex = position >= 0 ? 1 : stackEl.children.length - 2;
-                const adjacentIndex = position >= 0 ? 2 : stackEl.children.length - 3;
-                applySparkleEffect([stackEl.children[placedIndex], stackEl.children[adjacentIndex]]);
-            }, 50);
-
-            setTimeout(() => {
-                scoreEl.classList.remove('score-flash');
-                bonusEl.textContent = '';
-            }, 1000);
-        }
-
-        function applySparkleEffect(elements) {
-            elements.forEach(el => el && el.classList.add('sparkle'));
-            setTimeout(() => elements.forEach(el => el && el.classList.remove('sparkle')), 1600);
-        }
-
-        function winAnimation() {
-            const now = Tone.now();
-            const melody = ["C4", "E4", "G4", "C5", "G4", "E4", "C4"];
-            melody.forEach((note, i) => synth.triggerAttackRelease(note, "8n", now + i * 0.15));
-
-            showConfetti();
-            const placedMarbles = document.querySelectorAll('.play-area .marble');
-            placedMarbles.forEach((marble, i) => {
-                marble.classList.add('marble-bounce');
-                marble.style.animationDelay = `${i * 0.05}s`;
-            });
-            
-            setTimeout(showWinModal, 2000);
-        }
-
-        function showWinModal() {
-            document.getElementById('finalScore').textContent = gameState.score;
-            document.getElementById('winModal').style.display = 'flex';
-        }
-
-        function showBonusModal() {
-            const modal = document.getElementById('bonusModal');
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 2000);
-        }
-
-        function showConfetti() {
-            const confettiContainer = document.createElement('div');
-            confettiContainer.className = 'confetti';
-            document.body.appendChild(confettiContainer);
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b'];
-            for (let i = 0; i < 150; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.left = Math.random() * 100 + 'vw';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.animation = `confetti-fall ${2 + Math.random() * 3}s ease-out forwards`;
-                piece.style.animationDelay = Math.random() * 2 + 's';
-                confettiContainer.appendChild(piece);
-            }
-            setTimeout(() => {
-                if(document.body.contains(confettiContainer)) {
-                    document.body.removeChild(confettiContainer);
-                }
-            }, 5000);
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // Default to Korean language
-            currentLang = 'ko';
-            applyTranslations();
-            resetGame();
-        });
-    </script>
-</body>
-</html>
