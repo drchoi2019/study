@@ -275,7 +275,18 @@
             const fontSize = isBig ? 24 : 16; // 1.5x size
             ctx.font = `bold ${fontSize}px sans-serif`;
             const textWidth = ctx.measureText(displayText).width;
-            const xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
+            
+            // Calculate initial position (centered in lane)
+            let xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
+            
+            // Adjust position to prevent text from being cut off at screen edges
+            const padding = 5; // Small padding from edges
+            if (xPos < padding) {
+                xPos = padding;
+            } else if (xPos + textWidth > canvas.width - padding) {
+                xPos = canvas.width - textWidth - padding;
+            }
+            
             items.push({ 
                 x: xPos, y: -20, text: text, displayText: displayText, 
                 type: type, width: textWidth, height: fontSize, 
@@ -500,7 +511,16 @@
                 ctx.font = `bold ${fontSize}px sans-serif`;
                 const textWidth = ctx.measureText(item.displayText).width;
                 item.width = textWidth;
-                item.x = (laneWidth * item.lane) + (laneWidth / 2) - (textWidth / 2);
+                
+                // Recalculate position with boundary checking
+                let xPos = (laneWidth * item.lane) + (laneWidth / 2) - (textWidth / 2);
+                const padding = 5;
+                if (xPos < padding) {
+                    xPos = padding;
+                } else if (xPos + textWidth > canvas.width - padding) {
+                    xPos = canvas.width - textWidth - padding;
+                }
+                item.x = xPos;
             });
         }
 
