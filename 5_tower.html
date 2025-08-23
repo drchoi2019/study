@@ -235,13 +235,13 @@
             cursor: default; /* Not interactive */
         }
         .hint-marble .emoji {
-            font-size: 2.86rem; /* Increased emoji size by 30% */
+            font-size: 2.2rem; /* Matched to in-game marble emoji size */
             line-height: 1;
         }
         .hint-marble .name {
-            font-size: 0.65rem; /* Slightly smaller text */
+            font-size: 0.7rem;
             line-height: 1.2;
-            margin-top: 0; /* Removed top margin */
+            margin-top: 2px;
             font-weight: bold;
         }
         .hint-marble:hover {
@@ -360,7 +360,7 @@
                 rule3: "<strong>3. Marble Types:</strong> Based on the Five Elements (Wood, Fire, Earth, Metal, Water), there are 20 types of marbles across categories like nature, body, emotion, and color.",
                 rule4: "<strong>4. Scoring</strong><br>❌ Incorrect Placement: -2 Points<br>✅ Correct Placement: +10 Points<br>🌟 Consecutive Placement (Same Category): +20 Points<br>💯 Place all 5 of the Same Category: +100 Points",
                 rule5: "<strong>5. End Conditions:</strong> You win by placing all marbles correctly. The game is over when no more valid moves can be made.",
-                winTitle: "🎉 Congratulations! 🎉",
+                winTitle: "🎉 Congratulations! �",
                 finalScoreLabel: "Final Score",
                 playAgainBtn: "Play Again",
                 bonusText: "Bonus +100 Points!",
@@ -505,7 +505,7 @@
         const allMarbles = [
             { type: 'wood', emoji: '🌳', name: '목', category: 'element' },{ type: 'fire', emoji: '🔥', name: '화', category: 'element' },{ type: 'earth', emoji: '⛰️', name: '토', category: 'element' },{ type: 'metal', emoji: '🔧', name: '금', category: 'element' },{ type: 'water', emoji: '💧', name: '수', category: 'element' },
             { type: 'wood', emoji: '👀', name: '눈', category: 'sense' },{ type: 'fire', emoji: '👅', name: '혀', category: 'sense' },{ type: 'earth', emoji: '👄', name: '입술', category: 'sense' },{ type: 'metal', emoji: '👃', name: '코', category: 'sense' },{ type: 'water', emoji: '👂', name: '귀', category: 'sense' },
-            { type: 'wood', emoji: '😡', name: '분노', category: 'emotion' },{ type: 'fire', emoji: '😄', name: '웃음', category: 'emotion' },{ type: 'earth', emoji: '🤔', name: '생각', category: 'emotion' },{ type: 'metal', emoji: '😢', name: '슬픔', category: 'emotion' },{ type: 'water', emoji: '�', name: '공포', category: 'emotion' },
+            { type: 'wood', emoji: '😡', name: '분노', category: 'emotion' },{ type: 'fire', emoji: '😄', name: '웃음', category: 'emotion' },{ type: 'earth', emoji: '🤔', name: '생각', category: 'emotion' },{ type: 'metal', emoji: '😢', name: '슬픔', category: 'emotion' },{ type: 'water', emoji: '😱', name: '공포', category: 'emotion' },
             { type: 'wood', emoji: '🟢', name: '녹색', category: 'color' },{ type: 'fire', emoji: '🔴', name: '빨강', category: 'color' },{ type: 'earth', emoji: '🟡', name: '노랑', category: 'color' },{ type: 'metal', emoji: '⚪', name: '하양', category: 'color' },{ type: 'water', emoji: '⚫', name: '검정', category: 'color' }
         ];
         
