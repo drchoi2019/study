@@ -61,7 +61,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 2.2rem; /* Maximized emoji size */
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -235,13 +235,13 @@
             cursor: default; /* Not interactive */
         }
         .hint-marble .emoji {
-            font-size: 1.5rem;
+            font-size: 2.86rem; /* Increased emoji size by 30% */
             line-height: 1;
         }
         .hint-marble .name {
-            font-size: 0.7rem;
+            font-size: 0.65rem; /* Slightly smaller text */
             line-height: 1.2;
-            margin-top: 2px;
+            margin-top: 0; /* Removed top margin */
             font-weight: bold;
         }
         .hint-marble:hover {
@@ -395,12 +395,14 @@
 
         // URL 파라미터 업데이트 (히스토리에 추가하지 않음)
         function updateURLLanguage(lang) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const langParam = lang === 'en' ? 'eng' : 'kor';
-            urlParams.set('lang', langParam);
+            // The following code is commented out to prevent security errors in sandboxed environments.
+            // The language state is managed internally by the 'currentLang' variable.
+            // const urlParams = new URLSearchParams(window.location.search);
+            // const langParam = lang === 'en' ? 'eng' : 'kor';
+            // urlParams.set('lang', langParam);
             
-            const newUrl = window.location.pathname + '?' + urlParams.toString();
-            window.history.replaceState({}, '', newUrl);
+            // const newUrl = window.location.pathname + '?' + urlParams.toString();
+            // window.history.replaceState({}, '', newUrl);
         }
 
         function applyTranslations() {
@@ -503,7 +505,7 @@
         const allMarbles = [
             { type: 'wood', emoji: '🌳', name: '목', category: 'element' },{ type: 'fire', emoji: '🔥', name: '화', category: 'element' },{ type: 'earth', emoji: '⛰️', name: '토', category: 'element' },{ type: 'metal', emoji: '🔧', name: '금', category: 'element' },{ type: 'water', emoji: '💧', name: '수', category: 'element' },
             { type: 'wood', emoji: '👀', name: '눈', category: 'sense' },{ type: 'fire', emoji: '👅', name: '혀', category: 'sense' },{ type: 'earth', emoji: '👄', name: '입술', category: 'sense' },{ type: 'metal', emoji: '👃', name: '코', category: 'sense' },{ type: 'water', emoji: '👂', name: '귀', category: 'sense' },
-            { type: 'wood', emoji: '😡', name: '분노', category: 'emotion' },{ type: 'fire', emoji: '😄', name: '웃음', category: 'emotion' },{ type: 'earth', emoji: '🤔', name: '생각', category: 'emotion' },{ type: 'metal', emoji: '😢', name: '슬픔', category: 'emotion' },{ type: 'water', emoji: '😱', name: '공포', category: 'emotion' },
+            { type: 'wood', emoji: '😡', name: '분노', category: 'emotion' },{ type: 'fire', emoji: '😄', name: '웃음', category: 'emotion' },{ type: 'earth', emoji: '🤔', name: '생각', category: 'emotion' },{ type: 'metal', emoji: '😢', name: '슬픔', category: 'emotion' },{ type: 'water', emoji: '�', name: '공포', category: 'emotion' },
             { type: 'wood', emoji: '🟢', name: '녹색', category: 'color' },{ type: 'fire', emoji: '🔴', name: '빨강', category: 'color' },{ type: 'earth', emoji: '🟡', name: '노랑', category: 'color' },{ type: 'metal', emoji: '⚪', name: '하양', category: 'color' },{ type: 'water', emoji: '⚫', name: '검정', category: 'color' }
         ];
         
@@ -863,3 +865,4 @@
     </script>
 </body>
 </html>
+�
