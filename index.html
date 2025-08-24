@@ -46,15 +46,26 @@
             border-radius: 8px;
             background-color: #F7F3EF;
         }
+        .lang-button {
+            transition: all 0.3s ease;
+        }
+        .lang-button.active {
+            background-color: #4a5568;
+            color: white;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- Main Header -->
     <header id="main-header" class="text-center py-16 md:py-20 relative">
-        <div class="absolute top-4 right-4">
-            <button id="lang-toggle" onclick="toggleLanguage()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-                Kor / Eng
+        <div class="absolute top-4 right-4 flex gap-2">
+            <button id="lang-en" onclick="switchLanguage('en')" class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+                ENG
+            </button>
+            <button id="lang-ko" onclick="switchLanguage('ko')" class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+                한국어
             </button>
         </div>
         <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM" data-ko="한의학 공부">
@@ -70,7 +81,6 @@
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Theory" data-ko="이론">Theory</h2>
                 <ul class="space-y-2 pl-0">
-                    <!-- 기존 _k 방식 파일들 (점진적 전환 예정) -->
                     <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Organs Summary" data-ko="오장 생리">Five Organs Summary</a></li>
                     <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Pattern Diagnosis" data-ko="변증 기초">Pattern Basic</a></li>
                     <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
@@ -78,12 +88,11 @@
                     <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
                     <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
                     <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
-                                      <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>  
-                  <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                    <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>  
+                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
                     <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
                     <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>                    
-                      <li><a href="5_tower.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tower Stack" data-ko="오행 탑 쌓기">Five Element Tower</a></li>                    
-
+                    <li><a href="5_tower.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tower Stack" data-ko="오행 탑 쌓기">Five Element Tower</a></li>                    
                 </ul>
             </div>
          
@@ -91,21 +100,18 @@
             <div class="p-6">
                 <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Formula" data-ko="방제학">Formula</h2>
                 <ul class="space-y-2 pl-0">
-                    <!-- 기존 _k 방식 파일들 -->
                     <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
                     <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
                     <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
                     <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
                     <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
-                    
-                    <!-- 이미 파라미터 방식인 파일들 -->
                     <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
                     <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
                     <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
                     <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
-                  <li><a href="xiaochaihu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Xiao Chai Hu Tang Tragedy" data-ko="소시호탕 사고">Xiao Chai Hu Tang Tragedy</a></li>
-                  <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
-                     <li><a href="herbal_runner_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Runner Game" data-ko="약초 달리기">Herb Runner</a></li>
+                    <li><a href="xiaochaihu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Xiao Chai Hu Tang Tragedy" data-ko="소시호탕 사고">Xiao Chai Hu Tang Tragedy</a></li>
+                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
+                    <li><a href="herbal_runner_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Runner Game" data-ko="약초 달리기">Herb Runner</a></li>
                 </ul>
             </div>
 
@@ -151,6 +157,42 @@
         // Language & Page Management
         let currentLanguage = 'en';
 
+        // URL 파라미터에서 언어 정보 추출하는 함수
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            
+            // 지원되는 언어만 허용
+            if (langParam === 'ko' || langParam === 'kor' || langParam === 'korean') {
+                return 'ko';
+            } else if (langParam === 'en' || langParam === 'eng' || langParam === 'english') {
+                return 'en';
+            }
+            
+            // 기본값은 영어
+            return 'en';
+        }
+
+        // URL에 언어 파라미터 업데이트하는 함수
+        function updateURLLanguage(lang) {
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState(null, '', url.toString());
+        }
+
+        // 언어 버튼 상태 업데이트
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll('.lang-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeButton = document.getElementById(`lang-${lang}`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // 페이지 메시지 표시 함수
         function showPageMessage(message) {
             const existingModal = document.getElementById('page-message-modal');
             if (existingModal) return;
@@ -185,99 +227,113 @@
             };
         }
 
+        // 네비게이션 확인 및 이동 함수
         window.checkAndNavigate = async function(event) {
             event.preventDefault();
             const linkElement = event.currentTarget;
             const targetUrl = await determineTargetUrl(linkElement, currentLanguage);
 
-            // targetUrl이 결정되면, 해당 URL이 실제로 유효한지 최종 확인
             try {
                 const response = await fetch(targetUrl, { method: 'HEAD' });
                 if (response.ok) {
                     window.location.href = targetUrl;
                 } else {
-                    // determineTargetUrl에서 이미 검사를 거쳤지만, 만약의 경우에 대비한 방어 코드
-                    showPageMessage('Under Construction');
+                    showPageMessage(currentLanguage === 'ko' ? '준비 중입니다' : 'Under Construction');
                 }
             } catch (error) {
                 console.error('Navigation check failed:', error);
-                showPageMessage('Page cannot be opened.');
+                showPageMessage(currentLanguage === 'ko' ? '페이지를 열 수 없습니다.' : 'Page cannot be opened.');
             }
         }
 
-        // --- 🔄 [수정된 부분] 링크 타입에 따라 올바른 URL을 결정하는 함수 ---
+        // 타겟 URL 결정 함수
         async function determineTargetUrl(linkElement, lang) {
             const originalHref = linkElement.getAttribute('href').split('?')[0];
             const baseHref = originalHref.replace('.html', '');
 
-            // 1. 영어 모드일 경우, 간단하게 파라미터를 붙여서 반환
+            // 영어 모드일 경우
             if (lang !== 'ko') {
                 return `${originalHref}?lang=en`;
             }
 
-            // 2. 한글 모드일 경우, 우선순위에 따라 파일 존재 여부 확인
+            // 한국어 모드일 경우
             try {
-                // [우선순위 1] 전통적인 '_k.html' 파일이 있는지 먼저 확인합니다.
+                // 1. 전통적인 '_k.html' 파일 확인
                 const kVersionUrl = `${baseHref}_k.html`;
                 const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
 
                 if (kVersionResponse.ok) {
-                    // '_k.html' 파일이 존재하면, 해당 URL을 사용합니다.
                     return kVersionUrl;
                 }
                 
-                // [우선순위 2] '_k.html' 파일이 없다면, 새로운 파라미터 방식 페이지로 간주합니다.
-                // 원본 파일이 존재하는지 확인하여 안전하게 처리합니다.
+                // 2. 파라미터 방식 확인
                 const baseFileResponse = await fetch(originalHref, { method: 'HEAD' });
                 if (baseFileResponse.ok) {
                     return `${originalHref}?lang=ko`;
                 }
 
-                // [폴백] 두 방식 모두 해당하지 않으면, 원본 링크를 반환하여 404 메시지를 띄웁니다.
                 return originalHref;
 
             } catch (error) {
-                console.warn(`네트워크 오류로 파일 존재 여부 확인에 실패했습니다: ${originalHref}. 기본 링크로 이동합니다.`, error);
-                // 네트워크 에러 발생 시, 안전하게 원본 링크를 반환합니다.
+                console.warn(`네트워크 오류로 파일 존재 여부 확인에 실패했습니다: ${originalHref}`, error);
                 return originalHref;
             }
         }
 
-
+        // 언어 설정 함수
         function setLanguage(lang) {
             currentLanguage = lang;
+            
+            // HTML lang 속성 업데이트
+            document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+            
+            // 페이지 제목 업데이트
+            document.title = lang === 'ko' ? '한의학 공부' : 'Interactive TCM';
+            
+            // 텍스트 번역
             const elementsToTranslate = document.querySelectorAll('[data-en]');
             elementsToTranslate.forEach(el => {
-                el.textContent = el.dataset[currentLanguage];
+                const text = el.dataset[lang] || el.dataset.en;
+                el.textContent = text;
             });
 
-            // Update game iframe language
+            // 게임 iframe 언어 업데이트
             const gameFrame = document.getElementById('gameFrame');
             if (gameFrame) {
                 gameFrame.src = `food_runner.html?lang=${lang}`;
             }
+
+            // 버튼 상태 업데이트
+            updateLanguageButtons(lang);
+            
+            // URL 업데이트
+            updateURLLanguage(lang);
         }
 
-        window.toggleLanguage = function() {
-            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
-            setLanguage(newLang);
+        // 언어 전환 함수 (버튼 클릭용)
+        window.switchLanguage = function(lang) {
+            setLanguage(lang);
         }
 
-        // Listen for messages from game iframe
+        // iframe에서 언어 변경 메시지 수신
         window.addEventListener('message', (event) => {
             if (event.data.type === 'languageChange') {
                 setLanguage(event.data.language);
             }
         });
 
-        // Initialize everything
+        // 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const lang = params.get('lang');
-            if (lang === 'ko') {
-                setLanguage('ko');
-            } else {
-                setLanguage('en');
+            // URL에서 언어 파라미터 읽기
+            const urlLanguage = getLanguageFromURL();
+            setLanguage(urlLanguage);
+        });
+
+        // 뒤로가기/앞으로가기 시 언어 상태 동기화
+        window.addEventListener('popstate', function() {
+            const urlLanguage = getLanguageFromURL();
+            if (urlLanguage !== currentLanguage) {
+                setLanguage(urlLanguage);
             }
         });
     </script>
