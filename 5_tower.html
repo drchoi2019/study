@@ -1,21 +1,654 @@
-function checkFiveInARowBonus(stack, stackIndex) {
-            // Check all possible combinations of 5 consecutive marbles
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QC84KCE6C1');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오행 탑 쌓기 - 테스트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f5f5f4;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 1rem 0;
+            min-height: 100vh;
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            width: 95%;
+            margin: 1rem auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .marble {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            margin: 2px;
+            box-sizing: border-box;
+        }
+        
+        .marble:hover { transform: scale(1.1); box-shadow: 0 8px 16px rgba(0,0,0,0.3); }
+        .marble.selected { transform: scale(1.2); box-shadow: 0 0 20px #ffd700; border: 3px solid #ffd700; }
+        .wood, .fire, .earth, .metal, .water { background: linear-gradient(145deg, #ffffff, #e9e9e9); color: black; border: 1px solid #cccccc; }
+        
+        .game-area { display: flex; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        
+        .play-area {
+            flex: 4;
+            min-height: 500px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            overflow: visible;
+            min-width: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 50px;
+        }
+        
+        .right-panel {
+            flex: 6;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .next-marbles { background: #f8f9fa; border-radius: 10px; padding: 20px; min-width: 200px; }
+        
+        #nextMarbles {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .marble-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+        
+        .stack-slot {
+            width: 50px;
+            height: 50px;
+            border: 1px dashed #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1px;
+        }
+        
+        .stack-slot:hover { border-color: #a8a29e; background: rgba(214, 211, 209, 0.3); }
+        .controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        
+        button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #854d0e;
+            transition: color 0.2s ease;
+        }
+        button:hover {
+            color: #a16207;
+            text-decoration: underline;
+        }
+        
+        .lang-toggle-btn {
+            padding: 0.25rem 0.75rem;
+            background-color: #e7e5e4;
+            color: #57534e;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+        }
+        
+        .lang-toggle-btn:hover {
+            background-color: #d6d3d1;
+            text-decoration: none;
+        }
+        
+        .rules { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 10px; 
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .rules h3 { margin-top: 0; text-align: center; }
+        .rules p { margin: 10px 0; }
+        
+        .game-over { background: #ffebee; color: #c62828; padding: 15px; border-radius: 10px; margin: 20px 0; text-align: center; font-weight: bold; }
+
+        .score-flash { animation: score-flash 1s ease-in-out; }
+        @keyframes score-flash { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); color: #a16207; } }
+        #bonus-indicator { display: inline-block; color: #a16207; font-weight: bold; margin-left: 5px; }
+
+        .marble-bounce { animation: marble-bounce 0.8s ease-out; }
+        @keyframes marble-bounce { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
+
+        .sparkle { animation: sparkle 0.8s ease-in-out 2; }
+        @keyframes sparkle { 0%, 100% { box-shadow: 0 0 15px 3px rgba(255, 215, 0, 0.9); } 50% { box-shadow: 0 0 15px 3px rgba(72, 209, 204, 0.9); } }
+        
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2000; }
+        .confetti-piece { position: absolute; width: 10px; height: 10px; opacity: 0; }
+        @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 3000;
+        }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .bonus-modal-content { background: linear-gradient(45deg, #fbc2eb 0%, #a6c1ee 100%); color: white; padding: 20px 40px; border-radius: 50px; font-size: 1.5em; font-weight: bold; }
+        
+        #hint-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .hint-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .hint-marble {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            box-sizing: border-box;
+            padding: 5px;
+            text-align: center;
+            cursor: default;
+        }
+        .hint-marble .emoji {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+        .hint-marble .name {
+            font-size: 0.7rem;
+            line-height: 1.2;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+        .hint-marble:hover {
+            transform: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 테스트용 패널 스타일 */
+        .test-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            z-index: 9999;
+            max-width: 300px;
+            display: none; /* 기본적으로 숨김 */
+        }
+        .test-button {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .test-button:hover {
+            background: #555;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 테스트용 패널 -->
+    <div class="test-panel" id="testPanel">
+        <div style="margin-bottom: 10px; font-weight: bold;">🧪 테스트 패널 (Ctrl+T로 토글)</div>
+        <button class="test-button" onclick="toggleCheat()">치트 모드</button>
+        <button class="test-button" onclick="testEmotionStack()">감정 5개 테스트</button>
+        <button class="test-button" onclick="testColorStack()">색상 5개 테스트</button>
+        <button class="test-button" onclick="testElementStack()">원소 5개 테스트</button>
+        <button class="test-button" onclick="testSenseStack()">감각 5개 테스트</button>
+        <div style="margin: 5px 0; font-size: 10px;">
+            치트모드: <span id="cheatStatus">OFF</span><br>
+            콘솔에서도 함수 호출 가능
+        </div>
+    </div>
+
+    <header id="page-header" style="width: 100%; max-width: 1200px; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <button onclick="toggleLanguage(event)" class="lang-toggle-btn">
+            Kor / Eng
+        </button>
+    </header>
+
+    <div class="game-container">
+        <div class="header">
+            <h1 id="main-title"></h1>
+        </div>
+
+        <div class="score-board">
+            <div><span id="score-label"></span>: <span id="score">0</span><span id="bonus-indicator"></span></div>
+            <div><span id="remaining-label"></span>: <span id="remaining">20</span></div>
+            <div id="cheat-indicator" style="color: #dc2626; font-weight: bold; display: none;"></div>
+            <div class="controls">
+                <button id="hintBtn" onclick="showHintModal()"></button>
+                <button id="resetBtn" onclick="resetGame()"></button>
+            </div>
+        </div>
+        
+        <div id="gameOver" class="game-over" style="display: none;"></div>
+        
+        <div class="game-area">
+            <div class="play-area" id="playArea">
+                <div class="marble-stack" id="stack0" data-stack="0"></div>
+                <div class="marble-stack" id="stack1" data-stack="1"></div>
+                <div class="marble-stack" id="stack2" data-stack="2"></div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="next-marbles">
+                    <h3 id="nextMarblesTitle" style="text-align: center; margin-top: 0;"></h3>
+                    <div id="nextMarbles"></div>
+                </div>
+                <div id="rules-container" class="rules"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="winModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2 id="win-title"></h2>
+            <p><span id="final-score-label"></span>: <span id="finalScore">0</span></p>
+            <button id="play-again-btn" onclick="resetGame()"></button>
+        </div>
+    </div>
+    <div id="bonusModal" class="modal-overlay" style="display: none; background: transparent;">
+        <div class="bonus-modal-content" id="bonus-text"></div>
+    </div>
+    
+    <div id="hintModal" class="modal-overlay" style="display: none;" onclick="hideHintModal()">
+        <div class="modal-content" style="max-width: 550px; text-align: left;" onclick="event.stopPropagation()">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="hint-title" style="font-size: 1.5rem; font-weight: bold;"></h2>
+                <button onclick="hideHintModal()" style="font-size: 2rem; color: #555; line-height: 1; text-decoration: none;">&times;</button>
+            </div>
+            <div id="hint-content"></div>
+        </div>
+    </div>
+    
+    <script>
+        // --- Translations ---
+        const translations = {
+            ko: {
+                mainTitle: "🔮 오행 탑 쌓기 (테스트) 🔮",
+                scoreLabel: "점수",
+                remainingLabel: "남은 구슬",
+                resetBtn: "새 게임",
+                hintBtn: "힌트",
+                hintTitle: "오행 속성표",
+                gameOver: "게임 오버! 더 이상 놓을 수 있는 구슬이 없습니다.",
+                nextMarblesTitle: "배치할 구슬",
+                rulesTitle: "게임 규칙",
+                rule1: "<strong>1. 게임 시작:</strong> 오른쪽 '배치할 구슬'을 왼쪽 게임 판의 빈 곳에 임의로 3개까지 놓아 게임을 시작합니다.",
+                rule2: "<strong>2. 배치 규칙</strong><br>- <strong>위쪽 배치:</strong> 기존 구슬 위에는 오행상 자신을 생(生)하는 것만 붙일 수 있습니다.<br>- <strong>아래쪽 배치:</strong> 기존 구슬 아래에는 오행상 자신을 극(剋)하는 것만 붙일 수 있습니다.",
+                rule3: "<strong>3. 구슬 종류:</strong> 구슬은 오행(목·화·토·금·수)을 기반으로 하며, 자연, 신체, 감정, 색 총 20종류가 무작위로 등장합니다.",
+                rule4: "<strong>4. 점수 규칙</strong><br>❌ 잘못된 위치에 배치: -2점<br>✅ 올바른 배치: +10점<br>🌟 같은 계열(자연/신체/감정/색) 연속 배치: +20점<br>💯 같은 계열의 5개를 모두 배치: +100점",
+                rule5: "<strong>5. 종료 조건:</strong> 모든 구슬을 규칙에 맞게 배치하면 승리하며, 더 이상 놓을 수 없을 때 게임 오버됩니다.",
+                winTitle: "🎉 축하합니다! 🎉",
+                finalScoreLabel: "최종 점수",
+                playAgainBtn: "다시 시작",
+                bonusText: "보너스 +100점!",
+                alertSelectMarble: "먼저 구슬을 선택하세요!",
+                alertInvalidPlacement: "여기에는 이 구슬을 놓을 수 없습니다! (-2점)",
+                slotInitial: "첫 구슬 놓기",
+                slotUp: "위",
+                slotDown: "아래",
+                cheatModeOn: "🔓 치트 모드 ON",
+                cheatModeOff: "🔒 치트 모드 OFF"
+            },
+            en: {
+                mainTitle: "🔮 Five Elements Tower Stack (Test) 🔮",
+                scoreLabel: "Score",
+                remainingLabel: "Marbles Left",
+                resetBtn: "New Game",
+                hintBtn: "Hint",
+                hintTitle: "Five Elements Chart",
+                gameOver: "Game Over! No more moves available.",
+                nextMarblesTitle: "Marbles to Place",
+                rulesTitle: "Game Rules",
+                rule1: "<strong>1. Start Game:</strong> Place a marble from the right panel into an empty slot on the left board to begin.",
+                rule2: "<strong>2. Placement Rules</strong><br>- <strong>Place Above:</strong> You can only place a marble that is 'generated by' the existing one according to the Five Elements theory.<br>- <strong>Place Below:</strong> You can only place a marble that 'overcomes' the existing one.",
+                rule3: "<strong>3. Marble Types:</strong> Based on the Five Elements (Wood, Fire, Earth, Metal, Water), there are 20 types of marbles across categories like nature, body, emotion, and color.",
+                rule4: "<strong>4. Scoring</strong><br>❌ Incorrect Placement: -2 Points<br>✅ Correct Placement: +10 Points<br>🌟 Consecutive Placement (Same Category): +20 Points<br>💯 Place all 5 of the Same Category: +100 Points",
+                rule5: "<strong>5. End Conditions:</strong> You win by placing all marbles correctly. The game is over when no more valid moves can be made.",
+                winTitle: "🎉 Congratulations! 🎉",
+                finalScoreLabel: "Final Score",
+                playAgainBtn: "Play Again",
+                bonusText: "Bonus +100 Points!",
+                alertSelectMarble: "Please select a marble first!",
+                alertInvalidPlacement: "This marble cannot be placed here! (-2 points)",
+                slotInitial: "Place First Marble",
+                slotUp: "Up",
+                slotDown: "Down",
+                cheatModeOn: "🔓 CHEAT MODE ON",
+                cheatModeOff: "🔒 CHEAT MODE OFF"
+            }
+        };
+
+        let currentLang = 'ko';
+        let cheatMode = false;
+
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            
+            if (langParam) {
+                const normalizedLang = langParam.toLowerCase();
+                if (normalizedLang === 'eng' || normalizedLang === 'en' || normalizedLang === 'english') {
+                    return 'en';
+                } else if (normalizedLang === 'kor' || normalizedLang === 'ko' || normalizedLang === 'korean') {
+                    return 'ko';
+                }
+            }
+            
+            return 'ko';
+        }
+
+        function updateURLLanguage(lang) {
+            // URL 업데이트는 보안상 주석 처리
+        }
+
+        function applyTranslations() {
+            const t = translations[currentLang];
+            document.documentElement.lang = currentLang;
+            document.title = currentLang === 'ko' ? '오행 탑 쌓기 - 테스트' : 'Five Elements Tower Stack - Test';
+            document.getElementById('main-title').innerHTML = t.mainTitle;
+            document.getElementById('score-label').textContent = t.scoreLabel;
+            document.getElementById('remaining-label').textContent = t.remainingLabel;
+            document.getElementById('resetBtn').textContent = t.resetBtn;
+            document.getElementById('hintBtn').textContent = t.hintBtn;
+            document.getElementById('gameOver').textContent = t.gameOver;
+            document.getElementById('nextMarblesTitle').textContent = t.nextMarblesTitle;
+            document.getElementById('rules-container').innerHTML = `
+                <h3>${t.rulesTitle}</h3>
+                <p>${t.rule1}</p>
+                <p>${t.rule2}</p>
+                <p>${t.rule3}</p>
+                <p>${t.rule4}</p>
+                <p>${t.rule5}</p>
+            `;
+            document.getElementById('win-title').innerHTML = t.winTitle;
+            document.getElementById('final-score-label').textContent = t.finalScoreLabel;
+            document.getElementById('play-again-btn').textContent = t.playAgainBtn;
+            document.getElementById('bonus-text').textContent = t.bonusText;
+            document.getElementById('hint-title').textContent = t.hintTitle;
+            
+            if (typeof gameState !== 'undefined' && gameState.nextMarbles) {
+                updateMarbleTooltips();
+            }
+        }
+
+        function updateMarbleTooltips() {
+            const marbleElements = document.querySelectorAll('.marble[title]');
+            marbleElements.forEach(element => {
+                const marbleType = element.dataset.marbleType;
+                const marbleCategory = element.dataset.marbleCategory;
+                if (marbleType && marbleCategory) {
+                    const marble = allMarbles.find(m => m.type === marbleType && m.category === marbleCategory);
+                    if (marble) {
+                        const displayName = currentLang === 'ko' ? marble.name : getEnglishName(marble);
+                        const displayCategory = currentLang === 'ko' ? getCategoryName(marble.category) : getEnglishCategoryName(marble.category);
+                        element.title = `${displayName} (${displayCategory})`;
+                    }
+                }
+            });
+        }
+
+        function getCategoryName(category) {
+            const categoryNames = {
+                'element': '원소',
+                'sense': '감각',
+                'emotion': '감정',
+                'color': '색상'
+            };
+            return categoryNames[category] || category;
+        }
+
+        function getEnglishCategoryName(category) {
+            const categoryNames = {
+                'element': 'Element',
+                'sense': 'Sense',
+                'emotion': 'Emotion',
+                'color': 'Color'
+            };
+            return categoryNames[category] || category;
+        }
+
+        function getEnglishName(marble) {
+            const englishNames = {
+                '목': 'Wood', '화': 'Fire', '토': 'Earth', '금': 'Metal', '수': 'Water',
+                '눈': 'Eyes', '혀': 'Tongue', '입술': 'Lips', '코': 'Nose', '귀': 'Ears',
+                '분노': 'Anger', '웃음': 'Joy', '생각': 'Thought', '슬픔': 'Sadness', '공포': 'Fear',
+                '녹색': 'Green', '빨강': 'Red', '노랑': 'Yellow', '하양': 'White', '검정': 'Black'
+            };
+            return englishNames[marble.name] || marble.name;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            updateURLLanguage(currentLang);
+            applyTranslations();
+            updateStackDisplays(); 
+        }
+
+        // --- Sound Setup ---
+        let audioStarted = false;
+        const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+        const placeSound = new Tone.MembraneSynth({ octaves: 5, pitchDecay: 0.01 }).toDestination();
+        const errorSound = new Tone.Synth({ oscillator: { type: 'square' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.1 } }).toDestination();
+        function startAudio() { if (!audioStarted) { Tone.start(); audioStarted = true; } }
+        
+        // --- Game Data ---
+        const allMarbles = [
+            { type: 'wood', emoji: '🌳', name: '목', category: 'element' },{ type: 'fire', emoji: '🔥', name: '화', category: 'element' },{ type: 'earth', emoji: '⛰️', name: '토', category: 'element' },{ type: 'metal', emoji: '🔧', name: '금', category: 'element' },{ type: 'water', emoji: '💧', name: '수', category: 'element' },
+            { type: 'wood', emoji: '👀', name: '눈', category: 'sense' },{ type: 'fire', emoji: '👅', name: '혀', category: 'sense' },{ type: 'earth', emoji: '👄', name: '입술', category: 'sense' },{ type: 'metal', emoji: '👃', name: '코', category: 'sense' },{ type: 'water', emoji: '👂', name: '귀', category: 'sense' },
+            { type: 'wood', emoji: '😡', name: '분노', category: 'emotion' },{ type: 'fire', emoji: '😄', name: '웃음', category: 'emotion' },{ type: 'earth', emoji: '🤔', name: '생각', category: 'emotion' },{ type: 'metal', emoji: '😢', name: '슬픔', category: 'emotion' },{ type: 'water', emoji: '😱', name: '공포', category: 'emotion' },
+            { type: 'wood', emoji: '🟢', name: '녹색', category: 'color' },{ type: 'fire', emoji: '🔴', name: '빨강', category: 'color' },{ type: 'earth', emoji: '🟡', name: '노랑', category: 'color' },{ type: 'metal', emoji: '⚪', name: '하양', category: 'color' },{ type: 'water', emoji: '⚫', name: '검정', category: 'color' }
+        ];
+        
+        const wuxingRules = {
+            wood: { generates: 'fire', destroyedBy: 'metal' }, fire: { generates: 'earth', destroyedBy: 'water' }, earth: { generates: 'metal', destroyedBy: 'wood' }, metal: { generates: 'water', destroyedBy: 'fire' }, water: { generates: 'wood', destroyedBy: 'earth' }
+        };
+        
+        let gameState = {};
+
+        function resetGame() {
+            gameState = {
+                score: 0, selectedMarble: null, selectedMarbleIndex: -1,
+                stacks: [ [], [], [] ], marbleQueue: [], nextMarbles: [],
+                awardedBonuses: [] // 이미 보너스를 받은 5개 연속의 시작 인덱스를 기록
+            };
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('winModal').style.display = 'none';
+            document.getElementById('bonusModal').style.display = 'none';
+            document.getElementById('hintModal').style.display = 'none';
+            initGame();
+        }
+        
+        function initGame() {
+            gameState.marbleQueue = shuffleArray([...allMarbles]);
+            updateNextMarbles();
+            updateStackDisplays();
+            updateUI();
+        }
+
+        function placeMarble(stackIndex, position) {
+            startAudio();
+            const t = translations[currentLang];
+            if (!gameState.selectedMarble) { alert(t.alertSelectMarble); return; }
+            
+            const stack = gameState.stacks[stackIndex];
+            const isFirstPlacementInStack = stack.length === 0;
+
+            if (isFirstPlacementInStack) {
+                placeSound.triggerAttackRelease("C4", "8n");
+                stack.push(gameState.selectedMarble);
+            } else {
+                if (!canPlaceMarble(stackIndex, position, gameState.selectedMarble.type)) {
+                    errorSound.triggerAttackRelease("F#3", "8n");
+                    gameState.score -= 2;
+                    alert(t.alertInvalidPlacement);
+                    updateUI();
+                    return;
+                }
+                placeSound.triggerAttackRelease("C4", "8n");
+                
+                let pointsToAdd = 10;
+                const adjacentMarble = position >= 0 ? stack[stack.length - 1] : stack[0];
+                if (gameState.selectedMarble.category === adjacentMarble.category) {
+                    pointsToAdd = 20;
+                    showBonusEffect(stackIndex, position);
+                }
+
+                if (position >= 0) stack.push(gameState.selectedMarble);
+                else stack.unshift(gameState.selectedMarble);
+                
+                gameState.score += pointsToAdd;
+            }
+            
+            // Check for five-in-a-row bonus after placing the marble
+            checkFiveInARowBonus(stack, stackIndex);
+            
+            gameState.marbleQueue.splice(gameState.selectedMarbleIndex, 1);
+            gameState.selectedMarble = null;
+            updateNextMarbles();
+            updateStackDisplays();
+            updateUI();
+            checkGameEnd();
+        }
+
+        function canPlaceMarble(stackIndex, position, marbleType) {
+            if (cheatMode) return true; // 치트 모드에서는 모든 배치 허용
+            const stack = gameState.stacks[stackIndex];
+            if (stack.length === 0) return true; 
+            if (position >= 0) return wuxingRules[stack[stack.length - 1].type].generates === marbleType;
+            else return wuxingRules[marbleType].destroyedBy === stack[0].type;
+        }
+
+        function checkFiveInARowBonus(stack, stackIndex) {
+            // 스택별 보너스 기록이 없으면 초기화
+            if (!gameState.awardedBonuses[stackIndex]) {
+                gameState.awardedBonuses[stackIndex] = [];
+            }
+
+            // 5개 이상인 경우에만 체크
+            if (stack.length < 5) return;
+
+            // 모든 가능한 5개 연속 구간 체크
             for (let i = 0; i <= stack.length - 5; i++) {
+                // 이미 보너스를 받은 구간인지 확인
+                if (gameState.awardedBonuses[stackIndex].includes(i)) {
+                    continue;
+                }
+
                 const bonusSlice = stack.slice(i, i + 5);
                 const firstCategory = bonusSlice[0].category;
                 
-                // Check if all 5 marbles are the same category and haven't been awarded yet
-                const isBonus = bonusSlice.every(m => m.category === firstCategory && !m.bonusAwarded);
+                // 5개가 모두 같은 카테고리인지 확인
+                const isBonus = bonusSlice.every(m => m.category === firstCategory);
                 
                 if (isBonus) {
+                    // 보너스 지급
                     const now = Tone.now();
                     const melody = ["C5", "E5", "G5"];
                     melody.forEach((note, idx) => synth.triggerAttackRelease(note, "16n", now + idx * 0.15));
 
                     gameState.score += 100;
-                    bonusSlice.forEach(m => m.bonusAwarded = true);
+                    
+                    // 이 구간에 보너스를 지급했음을 기록
+                    gameState.awardedBonuses[stackIndex].push(i);
                     
                     showBonusModal();
+                    
+                    console.log(`🎉 5개 연속 보너스 발생! 스택: ${stackIndex}, 시작인덱스: ${i}, 카테고리: ${firstCategory}, 점수 +100`);
                     
                     setTimeout(() => {
                         const marbleElements = [];
@@ -44,7 +677,399 @@ function checkFiveInARowBonus(stack, stackIndex) {
                     }, 50);
 
                     updateUI();
+                    
+                    // 하나의 보너스만 처리하고 종료
                     break;
                 }
             }
         }
+
+        function checkGameEnd() {
+            if (gameState.marbleQueue.length === 0) {
+                winAnimation();
+                return;
+            }
+            const canPlaceAny = gameState.nextMarbles.some(marble => 
+                gameState.stacks.some((stack, stackIndex) => 
+                    canPlaceMarble(stackIndex, stack.length, marble.type) || (stack.length > 0 && canPlaceMarble(stackIndex, -1, marble.type))
+                )
+            );
+            
+            if (!canPlaceAny && gameState.stacks.some(s => s.length > 0)) {
+                const now = Tone.now();
+                const melody = ["G3", "F3", "E3", "D3"];
+                melody.forEach((note, i) => synth.triggerAttackRelease(note, "8n", now + i * 0.15));
+                document.getElementById('gameOver').style.display = 'block';
+            }
+        }
+        
+        function updateStackDisplays() {
+            const t = translations[currentLang];
+            gameState.stacks.forEach((stack, stackIndex) => {
+                const stackElement = document.getElementById(`stack${stackIndex}`);
+                stackElement.innerHTML = '';
+                
+                if (stack.length === 0) {
+                    const initialSlot = document.createElement('div');
+                    initialSlot.className = 'stack-slot';
+                    initialSlot.textContent = t.slotInitial;
+                    initialSlot.onclick = () => placeMarble(stackIndex, 0);
+                    stackElement.appendChild(initialSlot);
+                } else {
+                    const topSlot = document.createElement('div');
+                    topSlot.className = 'stack-slot';
+                    topSlot.textContent = t.slotUp;
+                    topSlot.onclick = () => placeMarble(stackIndex, stack.length);
+                    stackElement.appendChild(topSlot);
+                    
+                    for (let i = stack.length - 1; i >= 0; i--) {
+                        const marble = stack[i];
+                        const marbleElement = document.createElement('div');
+                        marbleElement.className = `marble ${marble.type}`;
+                        marbleElement.textContent = marble.emoji;
+                        marbleElement.dataset.marbleType = marble.type;
+                        marbleElement.dataset.marbleCategory = marble.category;
+                        const displayName = currentLang === 'ko' ? marble.name : getEnglishName(marble);
+                        const displayCategory = currentLang === 'ko' ? getCategoryName(marble.category) : getEnglishCategoryName(marble.category);
+                        marbleElement.title = `${displayName} (${displayCategory})`;
+                        stackElement.appendChild(marbleElement);
+                    }
+                    
+                    const bottomSlot = document.createElement('div');
+                    bottomSlot.className = 'stack-slot';
+                    bottomSlot.textContent = t.slotDown;
+                    bottomSlot.onclick = () => placeMarble(stackIndex, -1);
+                    stackElement.appendChild(bottomSlot);
+                }
+            });
+        }
+        
+        function updateNextMarbles() {
+            const container = document.getElementById('nextMarbles');
+            container.innerHTML = '';
+            gameState.nextMarbles = gameState.marbleQueue.slice(0, 3);
+            gameState.nextMarbles.forEach((marble, index) => {
+                const marbleDiv = document.createElement('div');
+                marbleDiv.className = `marble ${marble.type}`;
+                marbleDiv.dataset.index = index;
+                marbleDiv.dataset.marbleType = marble.type;
+                marbleDiv.dataset.marbleCategory = marble.category;
+                marbleDiv.onclick = () => selectNextMarble(index);
+                const displayName = currentLang === 'ko' ? marble.name : getEnglishName(marble);
+                const displayCategory = currentLang === 'ko' ? getCategoryName(marble.category) : getEnglishCategoryName(marble.category);
+                marbleDiv.title = `${displayName} (${displayCategory})`;
+                marbleDiv.textContent = marble.emoji;
+                container.appendChild(marbleDiv);
+            });
+        }
+        
+        function selectNextMarble(index) {
+            startAudio();
+            document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
+            const marbles = document.querySelectorAll('#nextMarbles .marble');
+            if (marbles[index]) {
+                marbles[index].classList.add('selected');
+                gameState.selectedMarble = gameState.nextMarbles[index];
+                gameState.selectedMarbleIndex = index;
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('remaining').textContent = gameState.marbleQueue.length;
+            document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
+            
+            // 치트 모드 표시 업데이트
+            const cheatIndicator = document.getElementById('cheat-indicator');
+            const cheatStatus = document.getElementById('cheatStatus');
+            if (cheatMode) {
+                const t = translations[currentLang];
+                cheatIndicator.textContent = t.cheatModeOn;
+                cheatIndicator.style.display = 'block';
+                cheatStatus.textContent = 'ON';
+                cheatStatus.style.color = '#dc2626';
+            } else {
+                cheatIndicator.style.display = 'none';
+                cheatStatus.textContent = 'OFF';
+                cheatStatus.style.color = '#6b7280';
+            }
+        }
+
+        function showBonusEffect(stackIndex, position) {
+            const now = Tone.now();
+            synth.triggerAttackRelease("C5", "16n", now);
+            synth.triggerAttackRelease("G5", "16n", now + 0.1);
+            
+            const scoreEl = document.getElementById('score');
+            const bonusEl = document.getElementById('bonus-indicator');
+            scoreEl.classList.add('score-flash');
+            bonusEl.textContent = ' X2';
+
+            setTimeout(() => {
+                const stackEl = document.getElementById(`stack${stackIndex}`);
+                const placedIndex = position >= 0 ? 1 : stackEl.children.length - 2;
+                const adjacentIndex = position >= 0 ? 2 : stackEl.children.length - 3;
+                applySparkleEffect([stackEl.children[placedIndex], stackEl.children[adjacentIndex]]);
+            }, 50);
+
+            setTimeout(() => {
+                scoreEl.classList.remove('score-flash');
+                bonusEl.textContent = '';
+            }, 1000);
+        }
+
+        function applySparkleEffect(elements) {
+            elements.forEach(el => el && el.classList.add('sparkle'));
+            setTimeout(() => elements.forEach(el => el && el.classList.remove('sparkle')), 1600);
+        }
+
+        function winAnimation() {
+            const now = Tone.now();
+            const melody = ["C4", "E4", "G4", "C5", "G4", "E4", "C4"];
+            melody.forEach((note, i) => synth.triggerAttackRelease(note, "8n", now + i * 0.15));
+
+            showConfetti();
+            const placedMarbles = document.querySelectorAll('.play-area .marble');
+            placedMarbles.forEach((marble, i) => {
+                marble.classList.add('marble-bounce');
+                marble.style.animationDelay = `${i * 0.05}s`;
+            });
+            
+            setTimeout(showWinModal, 2000);
+        }
+
+        function showWinModal() {
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('winModal').style.display = 'flex';
+        }
+
+        function showBonusModal() {
+            const modal = document.getElementById('bonusModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 2000);
+        }
+
+        function showHintModal() {
+            startAudio();
+            const modal = document.getElementById('hintModal');
+            const content = document.getElementById('hint-content');
+            content.innerHTML = '';
+
+            const elementOrder = ['wood', 'fire', 'earth', 'metal', 'water'];
+            const categories = ['element', 'sense', 'emotion', 'color'];
+
+            categories.forEach(category => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'hint-row';
+
+                const categoryMarbles = allMarbles
+                    .filter(m => m.category === category)
+                    .sort((a, b) => elementOrder.indexOf(a.type) - elementOrder.indexOf(b.type));
+
+                categoryMarbles.forEach(marble => {
+                    const marbleDiv = document.createElement('div');
+                    marbleDiv.className = `hint-marble ${marble.type}`;
+                    
+                    const emojiSpan = document.createElement('span');
+                    emojiSpan.className = 'emoji';
+                    emojiSpan.textContent = marble.emoji;
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'name';
+                    nameSpan.textContent = currentLang === 'ko' ? marble.name : getEnglishName(marble);
+                    
+                    marbleDiv.appendChild(emojiSpan);
+                    marbleDiv.appendChild(nameSpan);
+                    rowDiv.appendChild(marbleDiv);
+                });
+
+                content.appendChild(rowDiv);
+            });
+
+            modal.style.display = 'flex';
+        }
+
+        function hideHintModal() {
+            document.getElementById('hintModal').style.display = 'none';
+        }
+
+        function showConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            document.body.appendChild(confettiContainer);
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b'];
+            for (let i = 0; i < 150; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animation = `confetti-fall ${2 + Math.random() * 3}s ease-out forwards`;
+                piece.style.animationDelay = Math.random() * 2 + 's';
+                confettiContainer.appendChild(piece);
+            }
+            setTimeout(() => {
+                if(document.body.contains(confettiContainer)) {
+                    document.body.removeChild(confettiContainer);
+                }
+            }, 5000);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ===================
+        // 키보드 이벤트 처리
+        // ===================
+        document.addEventListener('keydown', function(event) {
+            // Ctrl + T로 테스트 패널 토글
+            if (event.ctrlKey && event.key === 't') {
+                event.preventDefault();
+                const testPanel = document.getElementById('testPanel');
+                if (testPanel.style.display === 'none' || testPanel.style.display === '') {
+                    testPanel.style.display = 'block';
+                } else {
+                    testPanel.style.display = 'none';
+                }
+            }
+        });
+
+        // ===================
+        // 테스트용 함수들
+        // ===================
+        
+        // 치트 모드 토글
+        window.toggleCheat = function() {
+            cheatMode = !cheatMode;
+            updateUI();
+            console.log(`치트 모드: ${cheatMode ? 'ON' : 'OFF'}`);
+            startAudio();
+            if (cheatMode) {
+                const now = Tone.now();
+                synth.triggerAttackRelease("G4", "8n", now);
+                synth.triggerAttackRelease("C5", "8n", now + 0.1);
+            } else {
+                const now = Tone.now();
+                synth.triggerAttackRelease("C5", "8n", now);
+                synth.triggerAttackRelease("G4", "8n", now + 0.1);
+            }
+        }
+
+        // 특정 카테고리 5개를 스택에 배치하는 테스트 함수
+        window.testCategoryStack = function(category, stackIndex = 1) {
+            if (!cheatMode) {
+                console.log('먼저 치트 모드를 활성화하세요: toggleCheat()');
+                return;
+            }
+
+            const categoryMarbles = allMarbles.filter(m => m.category === category);
+            gameState.stacks[stackIndex] = [...categoryMarbles];
+            
+            // 보너스 기록 초기화
+            if (!gameState.awardedBonuses[stackIndex]) {
+                gameState.awardedBonuses[stackIndex] = [];
+            }
+            
+            updateStackDisplays();
+            updateUI();
+            
+            console.log(`${category} 카테고리 5개를 스택 ${stackIndex}에 배치했습니다.`);
+            console.log('이제 아무 구슬이나 선택해서 위나 아래에 배치하면 100점 보너스가 발생합니다!');
+        }
+
+        // 감정 카테고리 테스트
+        window.testEmotionStack = function() {
+            testCategoryStack('emotion', 1);
+        }
+
+        // 색상 카테고리 테스트  
+        window.testColorStack = function() {
+            testCategoryStack('color', 1);
+        }
+
+        // 원소 카테고리 테스트
+        window.testElementStack = function() {
+            testCategoryStack('element', 1);
+        }
+
+        // 감각 카테고리 테스트
+        window.testSenseStack = function() {
+            testCategoryStack('sense', 1);
+        }
+
+        // 특정 구슬을 큐에 추가
+        window.addMarbleToQueue = function(type, category) {
+            const marble = allMarbles.find(m => m.type === type && m.category === category);
+            if (marble) {
+                gameState.marbleQueue.unshift(marble);
+                updateNextMarbles();
+                updateUI();
+                console.log(`${marble.name} (${marble.emoji}) 구슬을 큐에 추가했습니다.`);
+            } else {
+                console.log('해당 구슬을 찾을 수 없습니다.');
+            }
+        }
+
+        // 큐 초기화
+        window.clearQueue = function() {
+            gameState.marbleQueue = [];
+            updateNextMarbles();
+            updateUI();
+            console.log('구슬 큐를 비웠습니다.');
+        }
+
+        // 점수 조정
+        window.setScore = function(score) {
+            gameState.score = score;
+            updateUI();
+            console.log(`점수를 ${score}로 설정했습니다.`);
+        }
+
+        // 현재 게임 상태 출력
+        window.gameStatus = function() {
+            console.log('=== 게임 상태 ===');
+            console.log('점수:', gameState.score);
+            console.log('남은 구슬:', gameState.marbleQueue.length);
+            console.log('치트 모드:', cheatMode ? 'ON' : 'OFF');
+            console.log('스택 0:', gameState.stacks[0].map(m => `${m.emoji}${m.name}`));
+            console.log('스택 1:', gameState.stacks[1].map(m => `${m.emoji}${m.name}`));
+            console.log('스택 2:', gameState.stacks[2].map(m => `${m.emoji}${m.name}`));
+            console.log('다음 구슬:', gameState.nextMarbles.map(m => `${m.emoji}${m.name}`));
+            console.log('보너스 기록:', gameState.awardedBonuses);
+        }
+
+        // 도움말
+        window.testHelp = function() {
+            console.log('=== 테스트 함수 도움말 ===');
+            console.log('Ctrl+T - 테스트 패널 토글');
+            console.log('toggleCheat() - 치트 모드 토글');
+            console.log('testEmotionStack() - 감정 카테고리 5개 테스트');
+            console.log('testColorStack() - 색상 카테고리 5개 테스트');
+            console.log('testElementStack() - 원소 카테고리 5개 테스트');
+            console.log('testSenseStack() - 감각 카테고리 5개 테스트');
+            console.log('addMarbleToQueue(type, category) - 특정 구슬을 큐에 추가');
+            console.log('clearQueue() - 구슬 큐 초기화');
+            console.log('setScore(score) - 점수 설정');
+            console.log('gameStatus() - 현재 게임 상태 출력');
+            console.log('resetGame() - 게임 리셋');
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            currentLang = getLanguageFromURL();
+            applyTranslations();
+            resetGame();
+            
+            // 초기 테스트 안내
+            console.log('🧪 테스트 모드가 활성화되었습니다!');
+            console.log('Ctrl+T로 테스트 패널을 열 수 있습니다.');
+            console.log('testHelp() 함수를 실행하면 사용 가능한 테스트 함수 목록을 볼 수 있습니다.');
+        });
+    </script>
+</body>
+</html>
