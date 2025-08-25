@@ -26,7 +26,7 @@
             transition: transform 0.8s;
             transform-style: preserve-3d;
         }
-        /* 클릭 시 is-flipped 클래스가 추가되어 카드가 뒤집힘 */
+        /* is-flipped 클래스가 추가되어 카드가 뒤집힘 */
         .is-flipped .flip-card-inner {
             transform: rotateY(180deg);
         }
@@ -47,6 +47,7 @@
             font-size: 1.5rem; /* 텍스트 크기 증가 */
             font-weight: 700;
             padding: 1rem;
+            cursor: pointer; /* 클릭 가능함을 표시 */
         }
         .flip-card-back {
             background-color: #f9fafb;
@@ -71,6 +72,15 @@
         /* 복합 변증 그라데이션 */
         .gradient-gan-bi { background-image: linear-gradient(to right, #CFE8E4, #fef9c3); }
         .gradient-pye-sin { background-image: linear-gradient(to right, #f8fafc, #e5e7eb); }
+
+        /* 뒤집기 아이콘 스타일 */
+        .flip-icon {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -78,7 +88,7 @@
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900">주요 장부변증 학습 카드</h1>
-            <p class="text-gray-600 mt-2">카드를 클릭하면 상세 내용을 확인할 수 있습니다.</p>
+            <p class="text-gray-600 mt-2">카드를 클릭하면 뒷면을, 아이콘을 클릭하면 앞면을 볼 수 있습니다.</p>
         </header>
 
         <!-- 컨트롤 패널 -->
@@ -99,7 +109,7 @@
     </div>
 
     <script>
-        // 변증 데이터 (하이퍼링크 로직 제거)
+        // 변증 데이터
         const syndromes = [
             // 간(肝)
             {
@@ -344,6 +354,9 @@
                             <div class="flip-card-back">
                                 <h3 class="text-lg font-bold mb-2 text-blue-600">${syndrome.name}</h3>
                                 <p class="text-sm">${syndrome.description}</p>
+                                 <div class="flip-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 hover:text-gray-800 transition-colors"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.6A9 9 0 0 1 12 3a9 9 0 0 1 9 9.9"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.4A9 9 0 0 1 12 21a9 9 0 0 1-9-9.1"/></svg>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -352,9 +365,22 @@
             });
 
             // 생성된 카드에 클릭 이벤트 리스너 추가
-            document.querySelectorAll('.flip-card').forEach(card => {
-                card.addEventListener('click', () => {
-                   card.classList.toggle('is-flipped');
+            document.querySelectorAll('.flip-card-front').forEach(front => {
+                front.addEventListener('click', () => {
+                    const card = front.closest('.flip-card');
+                    if (card) {
+                        card.classList.add('is-flipped');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.flip-icon').forEach(icon => {
+                icon.addEventListener('click', (e) => {
+                   e.stopPropagation(); // 이벤트 버블링 방지
+                   const card = icon.closest('.flip-card');
+                   if(card) {
+                       card.classList.remove('is-flipped');
+                   }
                 });
             });
         }
