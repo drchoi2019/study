@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장부변증 학습 카드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        /* 카드 뒤집기 애니메이션을 위한 스타일 */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px; /* 3D 효과를 위한 원근감 */
+            aspect-ratio: 1 / 1; /* 카드를 정사각형으로 만듦 */
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        /* 클릭 시 is-flipped 클래스가 추가되어 카드가 뒤집힘 */
+        .is-flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .flip-card-front {
+            color: #1f2937; /* 글자색을 조금 더 진하게 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem; /* 텍스트 크기 증가 */
+            font-weight: 700;
+            padding: 1rem;
+        }
+        .flip-card-back {
+            background-color: #f9fafb;
+            color: #374151;
+            transform: rotateY(180deg);
+            padding: 1.5rem;
+            text-align: left;
+            overflow-y: auto;
+        }
+        .highlight {
+            font-weight: 700;
+            color: #ef4444; /* 강조를 위한 빨간색 계열 */
+        }
+        
+        /* 오행 색상 스타일 */
+        .color-gan { background-color: #CFE8E4; } /* 청(靑)/청녹색 - 간 */
+        .color-sim { background-color: #fee2e2; } /* 적(赤) - 심 */
+        .color-bi { background-color: #fef9c3; }  /* 황(黃) - 비 */
+        .color-pye { background-color: #f8fafc; } /* 백(白) - 폐 */
+        .color-sin { background-color: #e5e7eb; } /* 흑(黑) - 신 */
+
+        /* 복합 변증 그라데이션 */
+        .gradient-gan-bi { background-image: linear-gradient(to right, #CFE8E4, #fef9c3); }
+        .gradient-pye-sin { background-image: linear-gradient(to right, #f8fafc, #e5e7eb); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">주요 장부변증 학습 카드</h1>
+            <p class="text-gray-600 mt-2">카드를 클릭하면 상세 내용을 확인할 수 있습니다.</p>
+        </header>
+
+        <!-- 컨트롤 패널 -->
+        <div class="bg-white p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10">
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="searchInput" placeholder="변증명 검색..." class="flex-grow p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="flex gap-2 justify-center">
+                    <button id="flipAllBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors w-full md:w-auto">전체 뒤집기</button>
+                    <button id="resetAllBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition-colors w-full md:w-auto">전체 앞면</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 카드 그리드 -->
+        <div id="card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 카드는 JavaScript로 여기에 동적으로 생성됩니다. -->
+        </div>
+    </div>
+
+    <script>
+        // 변증 데이터 (하이퍼링크 로직 제거)
+        const syndromes = [
+            // 간(肝)
+            {
+                id: 'gan-gi-ul-gyeol',
+                category: '간',
+                name: '간기울결(肝氣鬱結)',
+                description: `주로 정서 문제와 관련이 있습니다. 화가 잘 나고 짜증이 나며, 가슴이 답답하고 옆구리가 아플 수 있습니다. 월경 전에는 긴장감이 심하고 생리통이나 생리 불순이 생이며, 상복부가 아프거나 복부가 팽만해지기도 합니다. 또한 목에 뭔가 걸린 듯한 느낌이 있습니다. 맥은 현맥, 특히 좌측에서 잘 잡힙니다. 중요한 것은 <span class="highlight">스트레스와 통증, 월경이 늦거나 안나오는 문제</span>입니다. 여기서 소화기 증상이 심하게 나타나면 복합변증 간비불화가 됩니다.`
+            },
+            {
+                id: 'gan-bi-bul-hwa',
+                category: '간',
+                name: '간비불화(肝脾不和)',
+                composite: ['간', '비'],
+                description: `간기울결, 간화 등이 비기를 손상시키는 상태입니다. 간의 증상과 비의 증상이 모두 나타납니다. 스트레스가 심하고, 불면증이 있고 짜증이 잘 납니다. 복부가 더부룩하고 아프며 가스가 차고 피로합니다. 변비와 설사가 번갈아 나타나며, 변이 작고 단단한 알갱이 모양일 때도 있고, 때로는 묽습니다. 맥은 좌측은 현맥, 우측은 허맥으로 잡히고 혀는 주위가 붉고 전체적으로 홍설이 됩니다.`
+            },
+            {
+                id: 'gan-hyeol-eo-stasis',
+                category: '간',
+                name: '간혈어(肝血瘀)',
+                description: `통증(주로 월경통)이 고정되고 찌르는 듯하며 밤에 더 심해집니다. 무월경이나 불규칙한 월경이 나타나고, 월경혈은 어둡고 덩어리 지며 응고됩니다. 복부에 덩어리가 만져질 수 있고, 손톱과 입술이 보랏빛을 띠며 피부가 건조해집니다. 심한 경우에는 자반처럼 보라색 반점이 생깁니다. 맥은 현하거나 삽맥이고 혀는 자설이 됩니다. 주로 실증 월경통의 병리입니다. <span class="highlight">간기울결의 기체통증과 혈어통증을 구별해야 합니다.</span> 혈어통증은 <span class="highlight">통처가 고정되고, 야간에 심하며 다른 어혈증상(자색설, 덩어리 등)이 동반</span>됩니다. 심혈어는 가슴통증, 간혈어는 월경통증이 특징이고, 모두 어혈통증(<span class="highlight">자통, 고정통, 야간심</span>)이 공통입니다.`
+            },
+            {
+                id: 'gan-hyeol-heo',
+                category: '간',
+                name: '간혈허(肝血虛)',
+                description: `현기증, 불면증, 창백하고 흐린 얼굴빛, 창백한 입술로 나타납니다. 눈이 잘 보이지 않고 날파리가 날아다니는 것 같은 비문증이 있으며, 손톱이 위축되고 잘 부서지며 머리카락과 피부가 건조합니다. 손발이 저리고 근육이 약해지며 쥐가 잘 납니다. 귀에서는 이명이 들립니다. 맥은 삽하고 세하며 혀는 창백하고 건조합니다. 혈허증상이 주로 간의 소속인 근육, 눈과 손톱으로 나타납니다. 현기증은 다른 간의 병리에서도 나타나나, 혈허에서 특히 심하고, 이명은 신허에서도 나타나니 감별에 주의해야 합니다.`
+            },
+            {
+                id: 'gan-yang-sang-hang',
+                category: '간',
+                name: '간양상항(肝陽上亢)',
+                description: `두통이 측두부에 잘 나타나고 현기증과 이명이 있으며, 눈이 건조하고 입과 목이 마릅니다. 불면증과 짜증이 있고, 쉽게 흥분하고 화를 내며 혈압이 오를 수 있습니다. 피부는 건조하고 맥은 현맥이나 세맥이며 혀는 붉습니다. 간양상항은 기본적으로 혈허가 기반된 병리입니다. 그래서, 간혈허의 현기증과 이명이 모두 나타납니다. 중요한 특징은 위로 올라가는 양기 때문에 머리에 나타나는 두통, 어지러움, 눈증상들입니다. <span class="highlight">혈허와 간화상염의 중간쯤</span>이라고 생각하세요. 간화상염과 공통증상(두통, 눈)이 많으니, 간양상항은 <span class="highlight">건조, 혈허증이 기반</span>, 간화상염은 <span class="highlight">실화로 인한 심한 열증, 출혈 등</span>이 차이점입니다.`
+            },
+            {
+                id: 'gan-hwa-sang-yeom',
+                category: '간',
+                name: '간화상염(肝火上炎)',
+                description: `간에 불이 치솟는 모습입니다. 측두부에 두통, 얼굴과 눈이 붉고 눈이 충혈되며 열감이 있습니다. 갈증이 심하고 입안이 쓰며, 불면증과 꿈이 많은 수면 장애가 나타납니다. 변비가 건조하고 소변은 짙은 노란색이며, 코피나 토혈, 객혈 같은 출혈 증상이 생길 수도 있습니다. 맥은 현삭하고 혀는 홍설에 황태가 끼게 됩니다. 간양상항에 비해 실증입니다. 간양상항과 공통증상(두통, 눈)이 많으니, 차이점을 기억하세요.`
+            },
+            {
+                id: 'gan-dam-seup-yeol',
+                category: '간',
+                name: '간담습열(肝膽濕熱)',
+                description: `협륵통, 즉 옆구리 통증이 특징적이며, 황달이나 간과 담의 염증이 잘 나타납니다. 입안에 쓴맛이 있고 식욕이 떨어지며 구역질과 구토, 복부 팽만이 있습니다. 소변량은 줄고 색이 어두우며 발열이 동반될 수 있습니다. 여성에서는 노랗고 냄새나는 대하와 외음부 가려움이 생길 수 있습니다. 맥은 현활삭하고 혀는 홍설에 황태가 낍니다. 염증은 주로 습열로 나타납니다. <span class="highlight">음부 황색 분비물과 황달</span>을 꼭 기억하세요.`
+            },
+            {
+                id: 'han-che-gan-maek',
+                category: '간',
+                name: '한체간맥(寒滯肝脈)',
+                description: `간 경맥에 한사가 정체된 경우입니다. 음낭과 고환으로 퍼지는 통증이 있고, 따뜻하게 해주면 통증이 완화됩니다. 맥은 현지침이고 혀에는 담태가 끼며 색은 희게 됩니다.`
+            },
+            // 심(心)
+            {
+                id: 'sim-gi-heo',
+                category: '심',
+                name: '심기허(心氣虛)',
+                description: `기허와 함께 나타나는 심계증상입니다. 심장이 두근거리고 쉽게 피로해지며 운동 시 숨이 차고 땀이 납니다. 얼굴빛이 창백하고 무기력하며 맥은 허맥으로 잡힙니다.`
+            },
+            {
+                id: 'sim-yang-heo',
+                category: '심',
+                name: '심양허(心陽虛)',
+                description: `심기허의 증상에 더해 양기가 부족한 상태입니다. 춥고 부종이 있으며 얼굴빛이 희고 창백합니다. 손발이 차갑고 무기력이 심해집니다. 맥은 허약맥으로 잡히고 혀는 부종되고 창백합니다.`
+            },
+            {
+                id: 'sim-yang-pok-tal',
+                category: '심',
+                name: '심양폭탈(心陽暴脫)',
+                description: `심양허가 극심해져서 응급 상황으로 발전한 경우입니다. 심장이 두근거리고 기력이 없으며 숨이 차고 창백합니다. 손발이 차고 입술이 청색으로 변합니다. 심한 경우 혼수 상태가 올 수 있습니다. 맥은 미세하고 끊어질 듯하며 혀는 자색을 띕니다.`
+            },
+            {
+                id: 'sim-hyeol-heo',
+                category: '심',
+                name: '심혈허(心血虛)',
+                description: `혈이 부족한 심장 상태입니다. <span class="highlight">심계와 함께 나타나는 혈허증상</span>이 포인트입니다. 심장이 두근거리고 불면증이 있으며 꿈이 많습니다. 현기증이 있고 기억력이 저하되며 얼굴빛은 흐리고 창백하고 입술도 창백합니다. 불안하고 쉽게 놀라며, 맥은 삽하고 세하며 혀는 창백하고 건조합니다.`
+            },
+            {
+                id: 'sim-eum-heo',
+                category: '심',
+                name: '심음허(心陰虛)',
+                description: `음액이 부족해 심장이 안정되지 못하는 상태입니다. 심계항진과 혈허증상에 <span class="highlight">허열증(조열, 식은땀, 오장심열)</span>이 나타납니다. 광대뼈 부위가 붉어지는 증상은 특히 심장에 관련됩니다. 저녁에 미열이 나며 야간에 땀이 나고 입이 마릅니다. 맥은 세하고 삭하며 혀는 붉고 태가 적습니다.`
+            },
+            {
+                id: 'sim-hyeol-eo',
+                category: '심',
+                name: '심혈어(心血瘀)',
+                description: `혈이 막혀 심장이 아픈 경우입니다. 심장이 두근거리고 가슴이 조이듯 아픕니다. 그 통증은 고정적이고 찌르는 듯하며 밤에 심해집니다. 입술과 손톱이 청색을 띠고 손이 차가우며 맥은 결대맥이고 혀는 자색입니다. <span class="highlight">심계와 함께 가슴통증이 주어지고, 어혈통증의 양상</span>이 있다면 심혈어로 진단합니다.`
+            },
+            {
+                id: 'sim-hwa-sang-yeom',
+                category: '심',
+                name: '심화상염(心火上炎)',
+                description: `심장에 불이 치솟은 경우입니다. 심장이 두근거리고 불안하며 초조합니다. 불면증이 있고 충동적이며 얼굴은 붉고 열이 나며 입안이 쓰고 혀나 입에 궤양이 생기기도 합니다. 소변은 어둡거나 피가 섞일 수 있고, 맥은 실삭하며 혀끝이 붉고 열문이 있습니다. 간화상염과 함께 상열감이 주로 나타나지만, 심화상염은 <span class="highlight">두통, 눈의 증상이 없고, 대신 심계와 함께 혀와 입의 궤양이 주로 나타납니다.</span>`
+            },
+             // 비(脾)
+            {
+                id: 'bi-gi-heo',
+                category: '비',
+                name: '비기허(脾氣虛)',
+                description: `식욕부진에 기허가 동반된 상태입니다. 얼굴빛이 창백하고 피로하며 무기력하고 사지가 약합니다. 식욕이 없고 음식을 먹은 뒤에는 배가 더부룩합니다. 변은 묽고 힘이 없으며, 맥은 허맥이고 혀는 창백합니다.`
+            },
+            {
+                id: 'bi-yang-heo',
+                category: '비',
+                name: '비양허(脾陽虛)',
+                description: `비기허에서 양기가 부족해진 경우입니다. 비기허에 비해 <span class="highlight">설사와 부종이 특징</span>입니다. 얼굴빛이 창백하고 피로하며 무기력합니다. 식욕이 없고 음식을 먹은 뒤 배가 불러옵니다. 변은 묽고 설사하며, 오한이 있고 손발이 차갑습니다. 사지가 약해지고 부종이 나타나기도 합니다. 맥은 약하고 지맥이며 혀는 부종되고 창백합니다.`
+            },
+            {
+                id: 'bi-gi-ha-ham',
+                category: '비',
+                name: '비기하함(脾氣下陷)',
+                description: `비기허의 증상이 심해져 기운이 가라앉은 상태입니다. 얼굴빛은 창백하고 피로하며 무기력합니다. 식후 복부 팽만이 있고 변은 묽습니다. 특징적으로 <span class="highlight">복부에 하수감이 있고 위나 자궁, 항문, 질이 탈출</span>하기도 합니다. 소변이 잦고 급하게 마려운 증상이 나타납니다. 맥은 허맥이고 혀는 창백합니다.`
+            },
+            {
+                id: 'bi-bul-tong-hyeol',
+                category: '비',
+                name: '비불통혈(脾不統血)',
+                description: `비기허로 인해 혈을 통제하지 못하여 출혈증상이 나타납니다. 얼굴빛은 창백하고 숨이 가쁘며 피로하고 무기력합니다. <span class="highlight">쉽게 멍이 들거나 피부 밑에 출혈반이 생기며, 월경이 과다하거나 부정자궁출혈</span>이 나타납니다. 맥은 세맥이고 혀는 창백합니다. 비기허로 인해 비혈허로 진행되는 상황입니다.`
+            },
+            {
+                id: 'sik-che-wi-wan',
+                category: '비',
+                name: '식체위완(食滯胃脘)',
+                description: `음식이 체해서 위에 정체된 경우입니다. 상복부 통증과 팽만이 있으며 구토를 하면 증상이 완화(실증)됩니다. 구역질, 구토가 있고 입에서는 달걀 썩는 냄새가 납니다. 신물이 올라오고 트림이 잦으며 식욕이 떨어집니다. 불면증이 생기기도 하고 맥은 실활맥이며 혀에는 니태가 있습니다. <span class="highlight">냄새나는 트림</span>이 식체위완의 특징적인 증상입니다.`
+            },
+            {
+                id: 'wi-hwa',
+                category: '비',
+                name: '위화(胃火)',
+                description: `위에 실열이 있는 경우입니다. 상복부가 화끈거리며 아프고 신물이 올라옵니다. 음식을 먹자마자 구역질과 구토가 생기며 입에서 냄새가 납니다. 갈증이 심하고 차가운 것을 마시고 싶어 합니다. 배고픔이 지속되고 잇몸에 염증과 통증이 있습니다. 변비가 나타나며, 맥은 실삭맥이고 혀는 건조하고 황태가 낍니다.`
+            },
+            {
+                id: 'wi-eum-heo',
+                category: '비',
+                name: '위음허(胃陰虛)',
+                description: `위의 음액이 부족한 경우입니다. 상복부에 통증이 있고 음식을 먹으면 쉽게 배가 불러옵니다. 신물이 올라오고 입과 목이 건조합니다. 오후에는 열감이 있고 미열이 나며 변이 건조합니다. 갈증이 있으나 많이 마시지 않고 조금씩만 마십니다. 맥은 세삭맥이고 혀는 붉고 태가 적습니다. 위의 실열(위화)는 물을 많이 마시나, 위음허는 갈증이 있어도 조금씩 마십니다. 더 중요한 것은 <span class="highlight">전반적인 허화와 실화를 구별</span>하는 것입니다.`
+            },
+             // 폐(肺)
+            {
+                id: 'pye-gi-heo',
+                category: '폐',
+                name: '폐기허(肺氣虛)',
+                description: `기침, 호흡곤란과 함께 나타나는 기허증입니다. 숨이 차고 기침이 있으며 가래가 물처럼 묽습니다. 목소리가 약하고 말하기 싫어하며 쉽게 피로합니다. 몸이 차고 감기에 자주 걸리며 주간에 땀이 납니다. 얼굴빛은 밝은 백색이고 맥은 허맥, 특히 우촌구에서 잡히는 경우가 많습니다. 비기허와 폐기허는 매우 유사합니다. 비기허에도 숨이 찰 수 있고, 폐기허에도 식욕부진이 나타날 수 있습니다. <span class="highlight">주로 나타나는 것이 호흡기냐, 소화기냐로 구분</span>해야 합니다. 둘이 함께 나타나는 경우도 매우 흔하며, 이를 비폐기허라고 합니다.`
+            },
+            {
+                id: 'pye-eum-heo',
+                category: '폐',
+                name: '폐음허(肺陰虛)',
+                description: `폐의 음액이 부족한 경우입니다. <span class="highlight">마른 기침이 있거나 약간 끈적한 가래에 피가 섞일 수 있습니다.</span> 입과 목이 건조하고 목소리가 쉬며 목이 가렵습니다. 오후나 저녁에 미열이 나고 광대뼈가 붉습니다. 야간에 땀이 나고 오심열이 있으며 불면증이 동반되기도 합니다. 맥은 세삭맥입니다. <span class="highlight">가래가 없는 마른 기침과 함께 나타나는 음허증상</span>이 포인트입니다.`
+            },
+            {
+                id: 'pung-han-beom-pye',
+                category: '폐',
+                name: '풍한범폐(風寒犯肺)',
+                description: `찬바람이 폐를 침범한 경우입니다. 기침이 있고 코가 막히며 맑고 묽은 콧물이 납니다. 재채기가 잦고 발열이 있어도 오한이 더 심합니다. 목이 간지럽고 뒷머리가 아프며 몸살이 납니다. 갈증은 없고 땀도 나지 않습니다. 맥은 부맥입니다. (풍열범폐와 비교: <span class="highlight">오한이 심하고 맑은 콧물</span>)`
+            },
+            {
+                id: 'pung-yeol-beom-pye',
+                category: '폐',
+                name: '풍열범폐(風熱犯肺)',
+                description: `열사가 폐를 침범한 경우입니다. 기침이 있고 발열이 있으며 오한보다 발열이 더 심합니다. 약간의 땀이 나고 갈증이 있습니다. 인후통과 편도 부종이 있으며 머리가 아프고 몸살이 납니다. 콧물이 노랗게 나오고 코가 막힙니다. 맥은 부삭맥입니다. (풍한범폐와 비교: <span class="highlight">발열이 심하고 인후통</span>)`
+            },
+            // 신(腎)
+            {
+                id: 'sin-jeong-heo',
+                category: '신',
+                name: '신정허(腎精虛)',
+                description: `신의 정이 부족한 상태입니다. 어린이에게는 뼈 발달이 늦고 천문이 늦게 닫히며 정신적 발달이 늦습니다. 성인에게는 뼈가 약하고 무릎과 다리가 힘이 없으며 기억력이 떨어집니다. 치아가 흔들리고 빠지며 탈모나 조기 백발이 생깁니다. 성기능이 약해지고 요통이 나타납니다. 맥은 세맥입니다. <span class="highlight">발달과 노화에 관련된 증상</span>이 주어집니다.`
+            },
+            {
+                id: 'sin-eum-heo',
+                category: '신',
+                name: '신음허(腎陰虛)',
+                description: `신의 음이 부족한 경우입니다. 요통이 있고 성기능이 저하되며 <span class="highlight">허열증(조열, 식은땀, 오장심열)</span>이 나타납니다. 다리에 힘이 없습니다. 현기증과 이명이 있으며 기억력이 떨어지고 청력이 약해집니다. 뼈에 통증이 있고 몽정이 생기며 밤에 땀이 나고 구강이 건조합니다. 변비가 생기고 소변량은 적고 어두운 색입니다. 맥은 세삭맥입니다.`
+            },
+            {
+                id: 'sin-yang-heo',
+                category: '신',
+                name: '신양허(腎陽虛)',
+                description: `신기허가 심화되어 부종과 추위가 나타난 상태입니다. 요통이 있고 성기능이 저하되며 하지에 힘이 없습니다. 추위를 잘 타고 얼굴빛이 희고 무기력합니다. 묽은 변을 자주 보고 관절에 냉감이 있습니다. 발기부전이나 조루, 불임이 나타나며 소변이 많고 맑습니다. 어떤 경우는 소변량이 적고 다리에 부종이 나타납니다. 맥은 침약맥이고 혀는 부종되고 창백합니다. <span class="highlight">추위와 부종</span>이 특징입니다. 비양허는 설사 등 소화기 증상이 주로, 신양허는 요통과 성기능이 주로 문제가 됩니다.`
+            },
+            {
+                id: 'sin-gi-heo',
+                category: '신',
+                name: '신기허(腎氣虛)',
+                description: `비뇨기, 성기능 관련 증상과 함께 나타나는 기허증입니다. 요통이 있고 성기능이 약하며 다리에 힘이 없습니다. <span class="highlight">소변이 자주 마렵고 맑으며, 소변 줄기가 약하고 소변을 본 후에도 방울방울 떨어집니다.</span> 요실금이나 야뇨증, 꿈꾸지 않고 몽정이 나오기도 하며 남성에게는 정액루가 생깁니다. 여성의 경우 자궁 탈출이나 만성 질 분비물이 생길 수 있습니다. 맥은 침약맥이고 혀는 창백합니다.`
+            },
+            {
+                id: 'pye-sin-gi-heo',
+                category: '신',
+                name: '폐신기허(肺腎氣虛)',
+                composite: ['폐', '신'],
+                description: `신장의 기가 허해서, 기를 충분히 하강시키지 못해 폐의 기운을 받아들이지 못하는 경우입니다. (신불납기) <span class="highlight">만성 기침과 함께 나타나는 신장의 증상(요통, 성기능 장애)</span>이 특징입니다. 운동하면 숨이 차고 호흡이 빠르며 약합니다. 기침과 천식이 생기고 숨 들이쉬기가 힘듭니다. 얼굴이 붓고 몸이 마르며 정신적으로 무기력합니다. 손발이 차고 땀을 흘린 뒤에는 더 차가워집니다. 천식 발작 시 맑은 소변이 나오고 요통이 동반되기도 합니다. 맥은 허맥입니다.`
+            },
+            {
+                id: 'pye-sin-eum-heo',
+                category: '신',
+                name: '폐신음허(肺腎陰虛)',
+                composite: ['폐', '신'],
+                description: `폐와 신의 음액이 부족한 상태입니다. <span class="highlight">오랜 마른 기침과 함께 신음허열증(요통, 조열, 식은땀, 오장심열)</span>이 나타납니다. 저녁에 심해지는 마른 기침이 있고 운동하면 숨이 가빠집니다. 요통과 사지 약화가 있으며 몽정이 나타납니다. 입이 마르고 몸은 마른 체형이며 오후에 열감이 있고 야간에 땀이 납니다. 맥은 세삭맥입니다.`
+            }
+        ];
+
+        const cardGrid = document.getElementById('card-grid');
+        const searchInput = document.getElementById('searchInput');
+        const flipAllBtn = document.getElementById('flipAllBtn');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+
+        // 카드 앞면 색상 클래스를 반환하는 함수
+        function getCardFrontClass(syndrome) {
+            if (syndrome.composite) {
+                if (syndrome.composite.includes('간') && syndrome.composite.includes('비')) {
+                    return 'gradient-gan-bi';
+                }
+                if (syndrome.composite.includes('폐') && syndrome.composite.includes('신')) {
+                    return 'gradient-pye-sin';
+                }
+            }
+            switch (syndrome.category) {
+                case '간': return 'color-gan';
+                case '심': return 'color-sim';
+                case '비': return 'color-bi';
+                case '폐': return 'color-pye';
+                case '신': return 'color-sin';
+                default: return 'bg-white';
+            }
+        }
+
+        // 카드 생성 함수
+        function createCards(filter = '') {
+            cardGrid.innerHTML = '';
+            const filteredSyndromes = syndromes.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
+
+            filteredSyndromes.forEach(syndrome => {
+                const frontColorClass = getCardFrontClass(syndrome);
+                const cardHtml = `
+                    <div class="flip-card" id="${syndrome.id}" data-name="${syndrome.name}">
+                        <div class="flip-card-inner shadow-lg">
+                            <div class="flip-card-front ${frontColorClass}">
+                                <p>${syndrome.name}</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="text-lg font-bold mb-2 text-blue-600">${syndrome.name}</h3>
+                                <p class="text-sm">${syndrome.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cardGrid.innerHTML += cardHtml;
+            });
+
+            // 생성된 카드에 클릭 이벤트 리스너 추가
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.addEventListener('click', () => {
+                   card.classList.toggle('is-flipped');
+                });
+            });
+        }
+        
+        // 검색 기능
+        searchInput.addEventListener('input', (e) => {
+            createCards(e.target.value);
+        });
+
+        // 전체 뒤집기 기능
+        flipAllBtn.addEventListener('click', () => {
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.classList.add('is-flipped');
+            });
+        });
+
+        // 전체 앞면으로 기능
+        resetAllBtn.addEventListener('click', () => {
+            document.querySelectorAll('.flip-card').forEach(card => {
+                card.classList.remove('is-flipped');
+            });
+        });
+
+        // 초기 카드 생성
+        createCards();
+    </script>
+
+</body>
+</html>
