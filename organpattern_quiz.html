@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive TCM Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #F7F3EF;
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-            transition: background-color 0.3s;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         .quiz-option {
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            background-color: #f3f4f6;
+            border-color: #9ca3af;
         }
         .correct {
             background-color: #22c55e !important;
@@ -30,271 +30,396 @@
         .explanation {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
-            border-color: transparent;
+            transition: max-height 0.3s ease;
         }
         .explanation.show {
-            max-height: 500px;
+            max-height: 200px;
             padding: 1rem;
-            border-color: #e5e7eb;
         }
+        .hidden { display: none !important; }
+        .visible { display: block !important; }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
-            &larr; Interactive TCM
+    <header class="w-full max-w-4xl mx-auto p-4 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-semibold text-gray-700 hover:text-gray-900">
+            ← Interactive TCM
         </a>
-        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+        <button onclick="toggleLanguage()" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300">
             Kor / Eng
-        </a>
+        </button>
     </header>
 
-    <main class="w-full max-w-3xl mx-auto p-4 md:p-6">
-        <div id="quiz-container" class="bg-white rounded-xl shadow-lg overflow-hidden" style="display: block;">
-            <div id="progress-bar" class="w-0 h-2 bg-green-500 transition-all duration-300"></div>
-            <div class="p-6 md:p-8">
-                <div id="quiz-header" class="flex justify-between items-center mb-4">
-                    <p id="question-counter" class="text-sm font-semibold text-gray-500"></p>
-                    <p id="difficulty-badge" class="px-3 py-1 text-xs font-bold rounded-full"></p>
+    <main class="w-full max-w-3xl mx-auto p-4">
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="bg-white rounded-xl shadow-lg overflow-hidden visible">
+            <div id="progress-bar" class="h-2 bg-green-500 transition-all duration-300" style="width: 0%"></div>
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <p id="question-counter" class="text-sm font-semibold text-gray-500">문제 1 / 8</p>
+                    <span id="difficulty-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800">하</span>
                 </div>
-                <h2 id="question-text" class="text-lg md:text-xl font-bold mb-6 min-h-[100px]"></h2>
-                <div id="options-container" class="space-y-3">
+                
+                <h2 id="question-text" class="text-xl font-bold mb-6 min-h-[60px]">문제를 불러오는 중...</h2>
+                
+                <div id="options-container" class="space-y-3 mb-6">
                     <!-- Options will be inserted here -->
                 </div>
-                <div id="feedback-container" class="mt-6">
-                    <div id="explanation-box" class="explanation bg-gray-50 border rounded-lg text-left">
-                        <h3 id="explanation-title" class="font-bold text-lg mb-2"></h3>
-                        <p id="explanation-text" class="text-gray-700"></p>
-                    </div>
+                
+                <div id="explanation" class="explanation bg-gray-50 border rounded-lg">
+                    <div id="explanation-content"></div>
                 </div>
-            </div>
-            <div id="quiz-footer" class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-                <button id="next-button" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50" style="display: none;"></button>
+                
+                <button id="next-button" onclick="nextQuestion()" class="w-full mt-4 bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 hidden">
+                    다음 문제
+                </button>
             </div>
         </div>
 
-        <!-- Result Screen -->
-        <div id="result-container" class="bg-white rounded-xl shadow-lg overflow-hidden" style="display: none;">
+        <!-- Result Container -->
+        <div id="result-container" class="bg-white rounded-xl shadow-lg overflow-hidden hidden">
             <div class="p-8 text-center">
-                <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
-                <p id="result-score" class="text-5xl font-bold text-green-600 mb-4"></p>
-                <p id="result-message" class="text-gray-600 mb-8"></p>
-                <button id="restart-button" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors"></button>
+                <h2 id="result-title" class="text-3xl font-bold mb-2">퀴즈 완료!</h2>
+                <p id="result-score" class="text-5xl font-bold text-green-600 mb-4">0 / 8</p>
+                <p id="result-message" class="text-gray-600 mb-8">수고하셨습니다! 다시 도전해보세요.</p>
+                <button onclick="startQuiz()" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700">
+                    다시 시작
+                </button>
             </div>
         </div>
     </main>
 
-    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
-        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    <footer class="text-center py-8 text-sm text-gray-500">
+        <p>© 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // --- DATA SOURCE ---
-        // 내장된 퀴즈 데이터
-        const sampleQuizData = {
+        // 전역 변수
+        let currentLang = 'ko';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questions = [];
+        let answerSelected = false;
+
+        // 퀴즈 데이터
+        const quizData = {
             ko: {
-                '하': [
+                easy: [
                     {
                         question: "한의학에서 기(氣)란 무엇을 의미하나요?",
-                        options: {
-                            "1": "생명의 근본 에너지",
-                            "2": "혈액의 구성 요소",
-                            "3": "근육의 움직임",
-                            "4": "뼈의 밀도"
-                        },
-                        answer: "1",
+                        options: ["생명의 근본 에너지", "혈액의 구성 요소", "근육의 움직임", "뼈의 밀도"],
+                        answer: 0,
                         explanation: "기(氣)는 한의학에서 생명활동을 유지하는 근본적인 에너지로 여겨집니다.",
                         difficulty: "하"
                     },
                     {
                         question: "오장육부에서 '오장'은 몇 개의 장기를 말하나요?",
-                        options: {
-                            "1": "4개",
-                            "2": "5개",
-                            "3": "6개",
-                            "4": "7개"
-                        },
-                        answer: "2",
+                        options: ["4개", "5개", "6개", "7개"],
+                        answer: 1,
                         explanation: "오장은 심(心), 간(肝), 비(脾), 폐(肺), 신(腎)의 5개 장기를 말합니다.",
                         difficulty: "하"
                     },
                     {
                         question: "한의학에서 혈(血)의 기능이 아닌 것은?",
-                        options: {
-                            "1": "영양 공급",
-                            "2": "정신 활동 지원",
-                            "3": "체온 조절",
-                            "4": "소화 작용"
-                        },
-                        answer: "4",
+                        options: ["영양 공급", "정신 활동 지원", "체온 조절", "소화 작용"],
+                        answer: 3,
                         explanation: "소화 작용은 비위(脾胃)의 주요 기능이며, 혈(血)은 영양 공급, 정신 활동 지원, 체온 조절 등의 기능을 합니다.",
                         difficulty: "하"
                     },
                     {
                         question: "한의학의 기본 이론 중 하나인 '음양론'에서 음(陰)에 해당하는 것은?",
-                        options: {
-                            "1": "낮",
-                            "2": "더위",
-                            "3": "밤",
-                            "4": "활동"
-                        },
-                        answer: "3",
+                        options: ["낮", "더위", "밤", "활동"],
+                        answer: 2,
                         explanation: "음(陰)은 밤, 추위, 정적, 하강 등의 특성을 가지며, 양(陽)은 낮, 더위, 활동, 상승 등의 특성을 가집니다.",
                         difficulty: "하"
                     },
                     {
                         question: "침술에서 사용하는 기본적인 자극 방법이 아닌 것은?",
-                        options: {
-                            "1": "자침",
-                            "2": "뜸",
-                            "3": "부항",
-                            "4": "수술"
-                        },
-                        answer: "4",
+                        options: ["자침", "뜸", "부항", "수술"],
+                        answer: 3,
                         explanation: "한의학의 기본적인 치료법은 자침, 뜸, 부항, 추나 등이며, 수술은 현대 의학의 치료법입니다.",
                         difficulty: "하"
                     }
                 ],
-                '중': [
+                medium: [
                     {
                         question: "음양이론에서 '양'의 특성이 아닌 것은?",
-                        options: {
-                            "1": "따뜻함",
-                            "2": "활동성",
-                            "3": "차가움",
-                            "4": "밝음"
-                        },
-                        answer: "3",
+                        options: ["따뜻함", "활동성", "차가움", "밝음"],
+                        answer: 2,
                         explanation: "차가움은 음(陰)의 특성입니다. 양(陽)은 따뜻함, 활동성, 밝음 등의 특성을 가집니다.",
                         difficulty: "중"
                     },
                     {
                         question: "오행론에서 '목(木)'에 해당하는 장기는?",
-                        options: {
-                            "1": "심(心)",
-                            "2": "간(肝)",
-                            "3": "비(脾)",
-                            "4": "폐(肺)"
-                        },
-                        answer: "2",
+                        options: ["심(心)", "간(肝)", "비(脾)", "폐(肺)"],
+                        answer: 1,
                         explanation: "오행론에서 간(肝)은 목(木)에 해당합니다. 심(心)은 화(火), 비(脾)는 토(土), 폐(肺)는 금(金)에 해당합니다.",
                         difficulty: "중"
                     }
                 ],
-                '상': [
+                hard: [
                     {
                         question: "사상체질의학을 창시한 한의학자는?",
-                        options: {
-                            "1": "허준",
-                            "2": "이제마",
-                            "3": "동의보감",
-                            "4": "황제내경"
-                        },
-                        answer: "2",
+                        options: ["허준", "이제마", "동의보감", "황제내경"],
+                        answer: 1,
                         explanation: "사상체질의학은 조선시대 말기 이제마가 창시한 한의학 이론입니다.",
-                        difficulty: "상"
-                    },
-                    {
-                        question: "'동의보감'을 저술한 인물은?",
-                        options: {
-                            "1": "이제마",
-                            "2": "허준",
-                            "3": "장중경",
-                            "4": "이시진"
-                        },
-                        answer: "2",
-                        explanation: "동의보감은 조선시대 허준이 저술한 대표적인 한의학 서적입니다.",
-                        difficulty: "상"
-                    },
-                    {
-                        question: "팔강변증에서 '팔강'에 포함되지 않는 것은?",
-                        options: {
-                            "1": "음양",
-                            "2": "표리",
-                            "3": "한열",
-                            "4": "오행"
-                        },
-                        answer: "4",
-                        explanation: "팔강변증의 팔강은 음양, 표리, 한열, 허실입니다. 오행은 별도의 이론 체계입니다.",
-                        difficulty: "상"
-                    },
-                    {
-                        question: "십이경맥 중 수양명대장경의 시작점은?",
-                        options: {
-                            "1": "엄지손가락",
-                            "2": "검지손가락",
-                            "3": "중지손가락",
-                            "4": "새끼손가락"
-                        },
-                        answer: "2",
-                        explanation: "수양명대장경은 검지손가락 끝(상양혈)에서 시작하여 코 옆(영향혈)에서 끝납니다.",
-                        difficulty: "상"
-                    },
-                    {
-                        question: "사상체질 중 '소양인'의 특징이 아닌 것은?",
-                        options: {
-                            "1": "비위가 약함",
-                            "2": "신기능이 강함",
-                            "3": "성격이 급함",
-                            "4": "폐기능이 약함"
-                        },
-                        answer: "4",
-                        explanation: "소양인은 비위가 약하고 신기능이 강하며 성격이 급한 특징이 있습니다. 폐기능이 약한 것은 소음인의 특징입니다.",
                         difficulty: "상"
                     }
                 ]
             },
             en: {
-                'Easy': [
+                easy: [
                     {
                         question: "What does Qi (氣) mean in Traditional Chinese Medicine?",
-                        options: {
-                            "1": "Fundamental energy of life",
-                            "2": "Component of blood",
-                            "3": "Muscle movement",
-                            "4": "Bone density"
-                        },
-                        answer: "1",
+                        options: ["Fundamental energy of life", "Component of blood", "Muscle movement", "Bone density"],
+                        answer: 0,
                         explanation: "Qi (氣) is considered the fundamental energy that maintains life activities in Traditional Chinese Medicine.",
                         difficulty: "Easy"
                     },
                     {
                         question: "How many organs does 'Wu Zang' (Five Organs) refer to?",
-                        options: {
-                            "1": "4 organs",
-                            "2": "5 organs",
-                            "3": "6 organs",
-                            "4": "7 organs"
-                        },
-                        answer: "2",
+                        options: ["4 organs", "5 organs", "6 organs", "7 organs"],
+                        answer: 1,
                         explanation: "Wu Zang refers to 5 organs: Heart, Liver, Spleen, Lung, and Kidney.",
                         difficulty: "Easy"
                     },
                     {
                         question: "What is NOT a function of Blood (血) in TCM?",
-                        options: {
-                            "1": "Nutrition supply",
-                            "2": "Mental activity support",
-                            "3": "Temperature regulation",
-                            "4": "Digestion"
-                        },
-                        answer: "4",
+                        options: ["Nutrition supply", "Mental activity support", "Temperature regulation", "Digestion"],
+                        answer: 3,
                         explanation: "Digestion is mainly the function of Spleen and Stomach. Blood functions include nutrition supply, mental activity support, and temperature regulation.",
                         difficulty: "Easy"
                     },
                     {
                         question: "Which corresponds to Yin (陰) in Yin-Yang theory?",
-                        options: {
-                            "1": "Day",
-                            "2": "Heat",
-                            "3": "Night",
-                            "4": "Activity"
-                        },
-                        answer: "3",
+                        options: ["Day", "Heat", "Night", "Activity"],
+                        answer: 2,
                         explanation: "Yin represents night, cold, stillness, and descent, while Yang represents day, heat, activity, and ascent.",
                         difficulty: "Easy"
                     },
                     {
-                        question: "Which is NOT a basic treatment metho
+                        question: "Which is NOT a basic treatment method in TCM?",
+                        options: ["Acupuncture", "Moxibustion", "Cupping", "Surgery"],
+                        answer: 3,
+                        explanation: "Basic TCM treatments include acupuncture, moxibustion, cupping, and tuina massage. Surgery is a modern medical treatment method.",
+                        difficulty: "Easy"
+                    }
+                ],
+                medium: [
+                    {
+                        question: "Which is NOT a characteristic of Yang in Yin-Yang theory?",
+                        options: ["Warmth", "Activity", "Coldness", "Brightness"],
+                        answer: 2,
+                        explanation: "Coldness is a characteristic of Yin. Yang is characterized by warmth, activity, brightness, etc.",
+                        difficulty: "Medium"
+                    },
+                    {
+                        question: "In Five Element theory, which organ corresponds to Wood (木)?",
+                        options: ["Heart", "Liver", "Spleen", "Lung"],
+                        answer: 1,
+                        explanation: "In Five Element theory, Liver corresponds to Wood. Heart corresponds to Fire, Spleen to Earth, and Lung to Metal.",
+                        difficulty: "Medium"
+                    }
+                ],
+                hard: [
+                    {
+                        question: "Who founded Sasang Constitutional Medicine?",
+                        options: ["Heo Jun", "Lee Je-ma", "Dongui Bogam", "Huangdi Neijing"],
+                        answer: 1,
+                        explanation: "Sasang Constitutional Medicine was founded by Lee Je-ma in the late Joseon Dynasty.",
+                        difficulty: "Hard"
+                    }
+                ]
+            }
+        };
+
+        // UI 텍스트
+        const uiTexts = {
+            ko: {
+                questionCounter: (current, total) => `문제 ${current} / ${total}`,
+                nextButton: "다음 문제",
+                resultTitle: "퀴즈 완료!",
+                resultMessage: "수고하셨습니다! 다시 도전해보세요.",
+                restartButton: "다시 시작",
+                explanation: "해설"
+            },
+            en: {
+                questionCounter: (current, total) => `Question ${current} / ${total}`,
+                nextButton: "Next Question",
+                resultTitle: "Quiz Complete!",
+                resultMessage: "Well done! Try again to improve your score.",
+                restartButton: "Restart Quiz",
+                explanation: "Explanation"
+            }
+        };
+
+        // 배열 섞기
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // 문제 선택
+        function selectQuestions() {
+            const data = quizData[currentLang];
+            const selected = [
+                ...shuffle(data.easy).slice(0, 5),
+                ...shuffle(data.medium).slice(0, 2),
+                ...shuffle(data.hard).slice(0, 1)
+            ];
+            return shuffle(selected);
+        }
+
+        // 문제 표시
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            const total = questions.length;
+            
+            // 프로그레스 바
+            document.getElementById('progress-bar').style.width = `${(currentQuestionIndex / total) * 100}%`;
+            
+            // 문제 정보
+            document.getElementById('question-counter').textContent = 
+                uiTexts[currentLang].questionCounter(currentQuestionIndex + 1, total);
+            
+            // 난이도 배지
+            const badge = document.getElementById('difficulty-badge');
+            badge.textContent = question.difficulty;
+            badge.className = `px-3 py-1 text-xs font-bold rounded-full ${getDifficultyColor(question.difficulty)}`;
+            
+            // 문제 텍스트
+            document.getElementById('question-text').textContent = question.question;
+            
+            // 선택지
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-lg';
+                button.innerHTML = `<span class="font-bold mr-2">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                button.onclick = () => selectAnswer(index);
+                container.appendChild(button);
+            });
+            
+            // 상태 초기화
+            answerSelected = false;
+            document.getElementById('explanation').classList.remove('show');
+            document.getElementById('next-button').classList.add('hidden');
+        }
+
+        // 답 선택
+        function selectAnswer(selectedIndex) {
+            if (answerSelected) return;
+            answerSelected = true;
+            
+            const question = questions[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.quiz-option');
+            const isCorrect = selectedIndex === question.answer;
+            
+            if (isCorrect) {
+                score++;
+                buttons[selectedIndex].classList.add('correct');
+            } else {
+                buttons[selectedIndex].classList.add('incorrect');
+                buttons[question.answer].classList.add('correct');
+            }
+            
+            // 모든 버튼 비활성화
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-gray-100', 'hover:border-gray-400');
+            });
+            
+            // 해설 표시
+            const explanationEl = document.getElementById('explanation');
+            document.getElementById('explanation-content').innerHTML = 
+                `<h3 class="font-bold mb-2">${uiTexts[currentLang].explanation}</h3><p>${question.explanation}</p>`;
+            explanationEl.classList.add('show');
+            
+            // 다음 버튼 표시
+            const nextBtn = document.getElementById('next-button');
+            nextBtn.textContent = uiTexts[currentLang].nextButton;
+            nextBtn.classList.remove('hidden');
+        }
+
+        // 다음 문제
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // 결과 표시
+        function showResults() {
+            document.getElementById('progress-bar').style.width = '100%';
+            
+            // 결과 정보 업데이트
+            document.getElementById('result-title').textContent = uiTexts[currentLang].resultTitle;
+            document.getElementById('result-score').textContent = `${score} / ${questions.length}`;
+            document.getElementById('result-message').textContent = uiTexts[currentLang].resultMessage;
+            
+            // 화면 전환
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('result-container').classList.remove('hidden');
+        }
+
+        // 난이도 색상
+        function getDifficultyColor(difficulty) {
+            const colors = {
+                '하': 'bg-blue-100 text-blue-800',
+                '중': 'bg-yellow-100 text-yellow-800', 
+                '상': 'bg-red-100 text-red-800',
+                'Easy': 'bg-blue-100 text-blue-800',
+                'Medium': 'bg-yellow-100 text-yellow-800',
+                'Hard': 'bg-red-100 text-red-800'
+            };
+            return colors[difficulty] || 'bg-gray-100 text-gray-800';
+        }
+
+        // 언어 전환
+        function toggleLanguage() {
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            const url = new URL(window.location);
+            url.searchParams.set('lang', currentLang);
+            window.location.href = url.toString();
+        }
+
+        // 퀴즈 시작
+        function startQuiz() {
+            // URL 파라미터에서 언어 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            currentLang = urlParams.get('lang') === 'en' ? 'en' : 'ko';
+            
+            // 상태 초기화
+            currentQuestionIndex = 0;
+            score = 0;
+            answerSelected = false;
+            
+            // 문제 선택
+            questions = selectQuestions();
+            
+            // 화면 상태 초기화
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('result-container').classList.add('hidden');
+            
+            // 첫 문제 표시
+            displayQuestion();
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            startQuiz();
+        });
+    </script>
+</body>
+</html>
