@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive TCM Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F7F3EF;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            transition: background-color 0.3s;
+        }
+        .quiz-option {
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .correct {
+            background-color: #22c55e !important;
+            color: white !important;
+            border-color: #16a34a !important;
+        }
+        .incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+        .explanation {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            border-color: transparent; /* Initially transparent border */
+        }
+        .explanation.show {
+            max-height: 500px; /* A large enough height */
+            padding: 1rem; /* Apply padding only when visible */
+            border-color: #e5e7eb; /* Show border when visible */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main id="quiz-container" class="w-full max-w-3xl mx-auto p-4 md:p-6">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div id="progress-bar" class="w-0 h-2 bg-green-500 transition-all duration-300"></div>
+            <div class="p-6 md:p-8">
+                <div id="quiz-header" class="flex justify-between items-center mb-4">
+                    <p id="question-counter" class="text-sm font-semibold text-gray-500"></p>
+                    <p id="difficulty-badge" class="px-3 py-1 text-xs font-bold rounded-full"></p>
+                </div>
+                <h2 id="question-text" class="text-xl md:text-2xl font-bold mb-6 min-h-[100px]"></h2>
+                <div id="options-container" class="space-y-3">
+                    <!-- Options will be inserted here -->
+                </div>
+                <div id="feedback-container" class="mt-6 text-center">
+                    <div id="explanation-box" class="explanation bg-gray-50 border rounded-lg">
+                        <h3 id="explanation-title" class="font-bold text-lg mb-2"></h3>
+                        <p id="explanation-text" class="text-gray-700"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="quiz-footer" class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <button id="next-button" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50" style="display: none;"></button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-container" class="text-center p-8 bg-white rounded-xl shadow-lg" style="display: none;">
+            <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
+            <p id="result-score" class="text-5xl font-bold text-green-600 mb-4"></p>
+            <p id="result-message" class="text-gray-600 mb-8"></p>
+            <button id="restart-button" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors"></button>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- DATA SOURCE ---
+        // 실전용: 외부 JSON 파일에서 데이터를 비동기적으로 불러옵니다.
+        // organpattern_quiz_k.dat 또는 organpattern_quiz_en.dat 파일을
+        // organpattern_quiz_k.json, organpattern_quiz_en.json 과 같이 json 형식으로 저장해야 합니다.
+        async function loadQuizData(lang) {
+           try {
+               // [수정] 파일 경로를 ./ 로 시작하여 현재 디렉토리임을 명시합니다.
+               const response = await fetch(`./organpattern_quiz_${lang}.json`); 
+               if (!response.ok) {
+                   throw new Error(`HTTP error! status: ${response.status}`);
+               }
+               const data = await response.json();
+               return data;
+           } catch (error) {
+               console.error("Could not load quiz data:", error);
+               // 데이터 로딩 실패 시 사용자에게 알림을 표시할 수 있습니다.
+               quizContainer.innerHTML = `<div class="p-8 text-center text-red-600">퀴즈 데이터를 불러오는 데 실패했습니다. 파일이 현재 폴더에 있는지, 이름이 올바른지 확인해주세요.</div>`;
+               return null;
+           }
+        }
+      
+        // --- 개발/테스트용 데이터 ---
+        // 외부 파일 로딩이 불가능한 환경을 위해 데이터를 주석 처리하여 남겨둡니다.
+        /*
+        const quizDataEN = {
+            // ... English data ...
+        };
+        const quizDataKO = {
+            // ... Korean data ...
+        };
+        */
+
+        // --- UI TEXTS ---
+        const uiTexts = {
+            ko: {
+                difficulty: { '하': '하', '중': '중', '상': '상' },
+                difficultyColors: { '하': 'bg-blue-100 text-blue-800', '중': 'bg-yellow-100 text-yellow-800', '상': 'bg-red-100 text-red-800' },
+                questionCounter: (current, total) => `문제 ${current} / ${total}`,
+                explanationTitle: "해설",
+                nextButton: "다음 문제",
+                resultTitle: "퀴즈 완료!",
+                resultScore: (score, total) => `${total}개 중 ${score}개 정답`,
+                resultMessage: "수고하셨습니다! 다시 도전해보세요.",
+                restartButton: "다시 시작"
+            },
+            en: {
+                difficulty: { 'Easy': 'Easy', 'Medium': 'Medium', 'Hard': 'Hard' },
+                difficultyColors: { 'Easy': 'bg-blue-100 text-blue-800', 'Medium': 'bg-yellow-100 text-yellow-800', 'Hard': 'bg-red-100 text-red-800' },
+                questionCounter: (current, total) => `Question ${current} / ${total}`,
+                explanationTitle: "Explanation",
+                nextButton: "Next Question",
+                resultTitle: "Quiz Complete!",
+                resultScore: (score, total) => `You got ${score} out of ${total} correct`,
+                resultMessage: "Well done! Try again to improve your score.",
+                restartButton: "Restart Quiz"
+            }
+        };
+
+        // --- QUIZ LOGIC ---
+        let currentLang = 'ko';
+        let currentQuizData;
+        let currentUiTexts;
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answerSelected = false;
+
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+        const questionCounterEl = document.getElementById('question-counter');
+        const difficultyBadgeEl = document.getElementById('difficulty-badge');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const explanationBoxEl = document.getElementById('explanation-box');
+        const explanationTitleEl = document.getElementById('explanation-title');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextButtonEl = document.getElementById('next-button');
+        const restartButtonEl = document.getElementById('restart-button');
+        const progressBarEl = document.getElementById('progress-bar');
+        
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            const url = new URL(window.location);
+            url.searchParams.set('lang', newLang);
+            window.location.href = url.toString();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function selectRandomQuestions(data, counts) {
+            let selected = [];
+            const difficulties = currentLang === 'ko' ? ['하', '중', '상'] : ['Easy', 'Medium', 'Hard'];
+            
+            const [easyKey, mediumKey, hardKey] = difficulties;
+
+            const easyQuestions = shuffleArray([...data[easyKey]]).slice(0, counts.easy);
+            const mediumQuestions = shuffleArray([...data[mediumKey]]).slice(0, counts.medium);
+            const hardQuestions = shuffleArray([...data[hardKey]]).slice(0, counts.hard);
+
+            selected = [...easyQuestions, ...mediumQuestions, ...hardQuestions];
+            return shuffleArray(selected);
+        }
+
+        function displayQuestion() {
+            answerSelected = false;
+            explanationBoxEl.classList.remove('show');
+            nextButtonEl.style.display = 'none';
+            
+            const question = quizQuestions[currentQuestionIndex];
+            const totalQuestions = quizQuestions.length;
+            
+            progressBarEl.style.width = `${((currentQuestionIndex) / totalQuestions) * 100}%`;
+
+            questionCounterEl.textContent = currentUiTexts.questionCounter(currentQuestionIndex + 1, totalQuestions);
+            
+            const difficultyKey = currentLang === 'ko' ? question.difficulty : Object.keys(uiTexts.en.difficulty).find(key => uiTexts.ko.difficulty[question.difficulty] === uiTexts.en.difficulty[key]) || 'Easy';
+            difficultyBadgeEl.textContent = currentUiTexts.difficulty[difficultyKey];
+            difficultyBadgeEl.className = `px-3 py-1 text-xs font-bold rounded-full ${currentUiTexts.difficultyColors[difficultyKey]}`;
+            
+            questionTextEl.innerHTML = question.question;
+            optionsContainerEl.innerHTML = '';
+
+            Object.entries(question.options).forEach(([key, value]) => {
+                const button = document.createElement('button');
+                button.className = 'quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-400';
+                button.innerHTML = `<span class="font-bold mr-2">${key}.</span> ${value}`;
+                button.dataset.answer = key;
+                button.onclick = (e) => selectAnswer(e.target.closest('button'));
+                optionsContainerEl.appendChild(button);
+            });
+        }
+
+        function selectAnswer(selectedButton) {
+            if (answerSelected) return;
+            answerSelected = true;
+
+            const selectedAnswer = selectedButton.dataset.answer;
+            const correctAnswer = quizQuestions[currentQuestionIndex].answer;
+            
+            if (selectedAnswer === correctAnswer) {
+                score++;
+                selectedButton.classList.add('correct');
+            } else {
+                selectedButton.classList.add('incorrect');
+                const correctButton = optionsContainerEl.querySelector(`[data-answer="${correctAnswer}"]`);
+                if(correctButton) correctButton.classList.add('correct');
+            }
+            
+            optionsContainerEl.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed');
+                btn.classList.remove('hover:bg-gray-100', 'hover:border-gray-400');
+            });
+
+            explanationTitleEl.textContent = currentUiTexts.explanationTitle;
+            explanationTextEl.innerHTML = quizQuestions[currentQuestionIndex].explanation;
+            explanationBoxEl.classList.add('show');
+
+            nextButtonEl.textContent = currentUiTexts.nextButton;
+            nextButtonEl.style.display = 'block';
+        }
+
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('result-title').textContent = currentUiTexts.resultTitle;
+            document.getElementById('result-score').textContent = score;
+            document.getElementById('result-message').textContent = currentUiTexts.resultScore(score, quizQuestions.length);
+            restartButtonEl.textContent = currentUiTexts.restartButton;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                displayQuestion();
+            } else {
+                progressBarEl.style.width = '100%';
+                setTimeout(showResults, 500);
+            }
+        }
+        
+        // startQuiz 함수를 async로 변경하여 await 사용
+        async function startQuiz() {
+            currentLang = getUrlParam('lang') === 'en' ? 'en' : 'ko';
+            currentUiTexts = uiTexts[currentLang];
+            
+            // 외부 파일에서 데이터를 불러옵니다.
+            currentQuizData = await loadQuizData(currentLang);
+            
+            // 데이터 로딩에 실패하면 퀴즈를 시작하지 않습니다.
+            if (!currentQuizData) return;
+
+            quizQuestions = selectRandomQuestions(currentQuizData, { easy: 4, medium: 1, hard: 5 });
+            currentQuestionIndex = 0;
+            score = 0;
+
+            resultContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            displayQuestion();
+        }
+
+        // Event Listeners
+        nextButtonEl.addEventListener('click', nextQuestion);
+        restartButtonEl.addEventListener('click', startQuiz);
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', startQuiz);
+    </script>
+</body>
+</html>
