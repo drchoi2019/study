@@ -43,7 +43,8 @@
 <body class="text-gray-800">
 
     <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="#" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+        <!-- [수정] href 속성을 "index.html"로 변경했습니다. -->
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
         <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
@@ -90,12 +91,8 @@
 
     <script>
         // --- DATA SOURCE ---
-        // 실전용: 외부 JSON 파일에서 데이터를 비동기적으로 불러옵니다.
-        // organpattern_quiz_k.dat 또는 organpattern_quiz_en.dat 파일을
-        // organpattern_quiz_k.json, organpattern_quiz_en.json 과 같이 json 형식으로 저장해야 합니다.
         async function loadQuizData(lang) {
            try {
-               // [수정] 파일 경로를 ./ 로 시작하여 현재 디렉토리임을 명시합니다.
                const response = await fetch(`./organpattern_quiz_${lang}.json`); 
                if (!response.ok) {
                    throw new Error(`HTTP error! status: ${response.status}`);
@@ -104,23 +101,11 @@
                return data;
            } catch (error) {
                console.error("Could not load quiz data:", error);
-               // 데이터 로딩 실패 시 사용자에게 알림을 표시할 수 있습니다.
                quizContainer.innerHTML = `<div class="p-8 text-center text-red-600">퀴즈 데이터를 불러오는 데 실패했습니다. 파일이 현재 폴더에 있는지, 이름이 올바른지 확인해주세요.</div>`;
                return null;
            }
         }
       
-        // --- 개발/테스트용 데이터 ---
-        // 외부 파일 로딩이 불가능한 환경을 위해 데이터를 주석 처리하여 남겨둡니다.
-        /*
-        const quizDataEN = {
-            // ... English data ...
-        };
-        const quizDataKO = {
-            // ... Korean data ...
-        };
-        */
-
         // --- UI TEXTS ---
         const uiTexts = {
             ko: {
@@ -130,7 +115,7 @@
                 explanationTitle: "해설",
                 nextButton: "다음 문제",
                 resultTitle: "퀴즈 완료!",
-                resultScore: (score, total) => `${score} / ${total}`,
+                resultScore: (score, total) => `${total}개 중 ${score}개 정답`,
                 resultMessage: "수고하셨습니다! 다시 도전해보세요.",
                 restartButton: "다시 시작"
             },
@@ -141,7 +126,7 @@
                 explanationTitle: "Explanation",
                 nextButton: "Next Question",
                 resultTitle: "Quiz Complete!",
-                resultScore: (score, total) => `${score} / ${total}`,
+                resultScore: (score, total) => `${score} out of ${total} correct`,
                 resultMessage: "Well done! Try again to improve your score.",
                 restartButton: "Restart Quiz"
             }
@@ -223,11 +208,21 @@
             questionTextEl.innerHTML = question.question;
             optionsContainerEl.innerHTML = '';
 
-            Object.entries(question.options).forEach(([key, value]) => {
+            // [추가] 문제의 보기를 랜덤으로 섞는 로직
+            const optionsArray = Object.entries(question.options);
+            shuffleArray(optionsArray);
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            optionsArray.forEach(([originalKey, value], index) => {
                 const button = document.createElement('button');
                 button.className = 'quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-400';
-                button.innerHTML = `<span class="font-bold mr-2">${key}.</span> ${value}`;
-                button.dataset.answer = key;
+                
+                const newLabel = optionLabels[index];
+                button.innerHTML = `<span class="font-bold mr-2">${newLabel}.</span> ${value}`;
+                
+                // 데이터 속성에는 정답 확인을 위한 원래 키(A, B, C, D)를 저장합니다.
+                button.dataset.answer = originalKey; 
+                
                 button.onclick = (e) => selectAnswer(e.target.closest('button'));
                 optionsContainerEl.appendChild(button);
             });
@@ -268,9 +263,7 @@
             resultContainer.style.display = 'block';
             
             document.getElementById('result-title').textContent = currentUiTexts.resultTitle;
-            // [수정] 점수를 큰 글씨로 표시합니다.
             document.getElementById('result-score').textContent = currentUiTexts.resultScore(score, quizQuestions.length);
-            // [수정] 격려 메시지를 작은 글씨로 표시합니다.
             document.getElementById('result-message').textContent = currentUiTexts.resultMessage;
             restartButtonEl.textContent = currentUiTexts.restartButton;
         }
@@ -285,15 +278,12 @@
             }
         }
         
-        // startQuiz 함수를 async로 변경하여 await 사용
         async function startQuiz() {
             currentLang = getUrlParam('lang') === 'en' ? 'en' : 'ko';
             currentUiTexts = uiTexts[currentLang];
             
-            // 외부 파일에서 데이터를 불러옵니다.
             currentQuizData = await loadQuizData(currentLang);
             
-            // 데이터 로딩에 실패하면 퀴즈를 시작하지 않습니다.
             if (!currentQuizData) return;
 
             quizQuestions = selectRandomQuestions(currentQuizData, { easy: 4, medium: 1, hard: 5 });
