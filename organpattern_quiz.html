@@ -43,7 +43,6 @@
 <body class="text-gray-800">
 
     <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <!-- [수정] href 속성을 "index.html"로 변경했습니다. -->
         <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
@@ -115,7 +114,6 @@
                 explanationTitle: "해설",
                 nextButton: "다음 문제",
                 resultTitle: "퀴즈 완료!",
-                resultScore: (score, total) => `${total}개 중 ${score}개 정답`,
                 resultMessage: "수고하셨습니다! 다시 도전해보세요.",
                 restartButton: "다시 시작"
             },
@@ -126,7 +124,6 @@
                 explanationTitle: "Explanation",
                 nextButton: "Next Question",
                 resultTitle: "Quiz Complete!",
-                resultScore: (score, total) => `${score} out of ${total} correct`,
                 resultMessage: "Well done! Try again to improve your score.",
                 restartButton: "Restart Quiz"
             }
@@ -208,7 +205,6 @@
             questionTextEl.innerHTML = question.question;
             optionsContainerEl.innerHTML = '';
 
-            // [추가] 문제의 보기를 랜덤으로 섞는 로직
             const optionsArray = Object.entries(question.options);
             shuffleArray(optionsArray);
 
@@ -220,7 +216,6 @@
                 const newLabel = optionLabels[index];
                 button.innerHTML = `<span class="font-bold mr-2">${newLabel}.</span> ${value}`;
                 
-                // 데이터 속성에는 정답 확인을 위한 원래 키(A, B, C, D)를 저장합니다.
                 button.dataset.answer = originalKey; 
                 
                 button.onclick = (e) => selectAnswer(e.target.closest('button'));
@@ -262,8 +257,13 @@
             quizContainer.style.display = 'none';
             resultContainer.style.display = 'block';
             
+            const totalQuestions = quizQuestions.length;
+            const resultScoreText = currentLang === 'ko' 
+                ? `${totalQuestions}개 중 ${score}개 정답` 
+                : `${score} out of ${totalQuestions} correct`;
+
             document.getElementById('result-title').textContent = currentUiTexts.resultTitle;
-            document.getElementById('result-score').textContent = currentUiTexts.resultScore(score, quizQuestions.length);
+            document.getElementById('result-score').textContent = resultScoreText;
             document.getElementById('result-message').textContent = currentUiTexts.resultMessage;
             restartButtonEl.textContent = currentUiTexts.restartButton;
         }
@@ -274,7 +274,8 @@
                 displayQuestion();
             } else {
                 progressBarEl.style.width = '100%';
-                setTimeout(showResults, 500);
+                // [수정] setTimeout을 제거하고 직접 호출하여 안정성을 높였습니다.
+                showResults();
             }
         }
         
