@@ -203,15 +203,28 @@
             return array;
         }
 
+        // [추가] JSON 데이터의 키가 대소문자가 달라도 값을 찾을 수 있는 헬퍼 함수
+        function getPropertyCaseInsensitive(obj, key) {
+            if (!obj || !key) return undefined;
+            const lowerKey = key.toLowerCase();
+            const objKey = Object.keys(obj).find(k => k.toLowerCase() === lowerKey);
+            return obj[objKey];
+        }
+
         function selectRandomQuestions(data, counts) {
             let selected = [];
             const difficulties = currentLang === 'ko' ? ['하', '중', '상'] : ['Easy', 'Medium', 'Hard'];
             
             const [easyKey, mediumKey, hardKey] = difficulties;
 
-            const easyQuestions = data[easyKey] ? shuffleArray([...data[easyKey]]).slice(0, counts.easy) : [];
-            const mediumQuestions = data[mediumKey] ? shuffleArray([...data[mediumKey]]).slice(0, counts.medium) : [];
-            const hardQuestions = data[hardKey] ? shuffleArray([...data[hardKey]]).slice(0, counts.hard) : [];
+            // [수정] 대소문자 구분 없이 데이터를 찾도록 getPropertyCaseInsensitive 함수 사용
+            const easyData = getPropertyCaseInsensitive(data, easyKey);
+            const mediumData = getPropertyCaseInsensitive(data, mediumKey);
+            const hardData = getPropertyCaseInsensitive(data, hardKey);
+
+            const easyQuestions = easyData ? shuffleArray([...easyData]).slice(0, counts.easy) : [];
+            const mediumQuestions = mediumData ? shuffleArray([...mediumData]).slice(0, counts.medium) : [];
+            const hardQuestions = hardData ? shuffleArray([...hardData]).slice(0, counts.hard) : [];
 
             selected = [...easyQuestions, ...mediumQuestions, ...hardQuestions];
             return shuffleArray(selected);
@@ -319,7 +332,6 @@
             } else if (stage === 1) {
                 questionCounts = { easy: 7, medium: 0, hard: 0 };
             } else {
-                // [수정] 2단계 문제 구성을 변경했습니다.
                 questionCounts = { easy: 2, medium: 2, hard: 6 };
             }
             
