@@ -203,7 +203,6 @@
             return array;
         }
 
-        // [추가] JSON 데이터의 키가 대소문자가 달라도 값을 찾을 수 있는 헬퍼 함수
         function getPropertyCaseInsensitive(obj, key) {
             if (!obj || !key) return undefined;
             const lowerKey = key.toLowerCase();
@@ -217,7 +216,6 @@
             
             const [easyKey, mediumKey, hardKey] = difficulties;
 
-            // [수정] 대소문자 구분 없이 데이터를 찾도록 getPropertyCaseInsensitive 함수 사용
             const easyData = getPropertyCaseInsensitive(data, easyKey);
             const mediumData = getPropertyCaseInsensitive(data, mediumKey);
             const hardData = getPropertyCaseInsensitive(data, hardKey);
@@ -242,7 +240,8 @@
 
             questionCounterEl.textContent = currentUiTexts.questionCounter(currentQuestionIndex + 1, totalQuestions);
             
-            const difficultyKey = currentLang === 'ko' ? question.difficulty : Object.keys(uiTexts.en.difficulty).find(key => uiTexts.ko.difficulty[question.difficulty] === uiTexts.en.difficulty[key]) || 'Easy';
+            // [수정] 난이도 키를 직접 사용하도록 로직을 단순화했습니다.
+            const difficultyKey = question.difficulty;
             difficultyBadgeEl.textContent = currentUiTexts.difficulty[difficultyKey];
             difficultyBadgeEl.className = `px-3 py-1 text-xs font-bold rounded-full ${currentUiTexts.difficultyColors[difficultyKey]}`;
             
