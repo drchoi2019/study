@@ -1,0 +1,1113 @@
+{
+  "Easy": [
+    {
+      "id": 1,
+      "difficulty": "Easy",
+      "question": "A 35-year-old female patient complains of increased anger and irritability after a stressful event, along with a stuffy and painful sensation in her chest and hypochondriac regions. She experiences severe premenstrual tension, has an irregular menstrual cycle, and feels as if something is stuck in her throat. Her pulse is notably wiry on the left side. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Qi Stagnation",
+        "B": "Liver-Spleen Disharmony",
+        "C": "Liver Blood Stasis",
+        "D": "Liver Yang Rising"
+      },
+      "answer": "A",
+      "explanation": "Emotional issues (anger, irritability), symptoms of Qi stagnation (stuffiness and pain in the chest and hypochondrium), menstrual irregularities, and a sensation of something stuck in the throat (Plum-Pit Qi) are classic signs of Liver Qi Stagnation, which is a dysfunction of the Liver's dredging and regulating function. The wiry pulse also supports this diagnosis."
+    },
+    {
+      "id": 2,
+      "difficulty": "Easy",
+      "question": "A male patient in his 40s presents with stress-induced headaches, insomnia, and easily provoked anger. Concurrently, he experiences abdominal bloating and pain, severe fatigue, and alternating bouts of constipation and diarrhea. His pulse is wiry on the left and deficient on the right. His tongue is red on the sides and reddish overall. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Qi Stagnation",
+        "B": "Liver-Spleen Disharmony",
+        "C": "Liver Fire Blazing Upwards",
+        "D": "Damp-Heat in the Liver and Gallbladder"
+      },
+      "answer": "B",
+      "explanation": "Liver-related symptoms (stress, anger, insomnia) and Spleen/Stomach symptoms (abdominal bloating, fatigue, alternating constipation/diarrhea) are present together. A wiry pulse on the left and a deficient pulse on the right, along with a red tongue, are characteristic of Liver-Spleen Disharmony, indicating both Liver stagnation and weakened Spleen/Stomach function."
+    },
+    {
+      "id": 3,
+      "difficulty": "Easy",
+      "question": "A 25-year-old female patient presents with severe dysmenorrhea. The pain is fixed, stabbing in nature, and worsens at night. Her menstrual blood is dark with many clots, and her nails have a purplish hue. The pulse is wiry and choppy. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Qi Stagnation",
+        "B": "Liver Blood Stasis",
+        "C": "Liver Blood Deficiency",
+        "D": "Cold Stagnation in the Liver Channel"
+      },
+      "answer": "B",
+      "explanation": "Fixed, stabbing pain, aggravation at night, dark menstrual blood with clots, and purplish nails are all signs of Blood Stasis. Since the Liver channel is primarily responsible for menstrual pain, this is differentiated as Liver Blood Stasis."
+    },
+    {
+      "id": 4,
+      "difficulty": "Easy",
+      "question": "A female patient in her 50s complains of dizziness, insomnia, and blurry vision with floaters. Her face and lips are pale, she experiences numbness in her hands and feet, and is prone to muscle cramps. Her pulse is thready and choppy, and her tongue is pale and dry. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Blood Stasis",
+        "B": "Liver Blood Deficiency",
+        "C": "Liver Yang Rising",
+        "D": "Liver Fire Blazing Upwards"
+      },
+      "answer": "B",
+      "explanation": "Dizziness, insomnia, floaters, paleness, numbness, and muscle cramps are representative symptoms of Liver Blood Deficiency, where the blood stored by the Liver is insufficient to properly nourish the sinews, nails, and eyes."
+    },
+    {
+      "id": 5,
+      "difficulty": "Easy",
+      "question": "A 55-year-old male patient presents with temporal headaches, dizziness, and tinnitus. He has dry eyes and a dry mouth, and has a quick-tempered and easily agitated personality. His skin is dry, the pulse is wiry, and the tongue is reddish. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Blood Deficiency",
+        "B": "Liver Yang Rising",
+        "C": "Liver Fire Blazing Upwards",
+        "D": "Damp-Heat in the Liver and Gallbladder"
+      },
+      "answer": "B",
+      "explanation": "Symptoms in the Upper Jiao (headache, dizziness, tinnitus, dry eyes, dry mouth) are prominent. This is a pattern of deficiency at the root and excess at the branch, caused by a deficiency of Liver Yin or Liver Blood, which fails to anchor the Liver Yang, causing it to rise upwards. The heat signs are less intense than in Liver Fire Blazing Upwards."
+    },
+    {
+      "id": 6,
+      "difficulty": "Easy",
+      "question": "A 45-year-old male patient presents with a sudden, throbbing temporal headache, and a red face and eyes accompanied by a sensation of heat. He has a very dry mouth with a desire for cold drinks, a bitter taste in his mouth, and hard stools. His urine is dark yellow. The pulse is wiry and rapid. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Yang Rising",
+        "B": "Liver Fire Blazing Upwards",
+        "C": "Damp-Heat in the Liver and Gallbladder",
+        "D": "Cold Stagnation in the Liver Channel"
+      },
+      "answer": "B",
+      "explanation": "Along with Upper Jiao symptoms like headache and red eyes, there are clear signs of excess fire, such as intense thirst, dry mouth, bitter taste, constipation, and a wiry-rapid pulse. This is a pure excess pattern with much stronger heat signs than Liver Yang Rising."
+    },
+    {
+      "id": 7,
+      "difficulty": "Easy",
+      "question": "A 38-year-old female patient's main complaints are pain and a sensation of heat in the right hypochondriac region and a bitter taste in her mouth. She has scanty, dark yellow urine and a yellow, foul-smelling vaginal discharge. Her pulse is wiry, slippery, and rapid. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver-Spleen Disharmony",
+        "B": "Liver Blood Stasis",
+        "C": "Damp-Heat in the Liver and Gallbladder",
+        "D": "Cold Stagnation in the Liver Channel"
+      },
+      "answer": "C",
+      "explanation": "Hypochondriac pain (area of the Liver and Gallbladder channels), a bitter taste (due to Gallbladder dysfunction), and scanty urine with yellow vaginal discharge (caused by Damp-Heat flowing downwards to the Lower Jiao) are the three major syndromes of Damp-Heat in the Liver and Gallbladder."
+    },
+    {
+      "id": 8,
+      "difficulty": "Easy",
+      "question": "A male patient in his 60s complains of pain that radiates to his scrotum and groin. The pain worsens with cold food or cold weather and is alleviated by warmth. His pulse is wiry and slow. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Blood Stasis",
+        "B": "Liver Yang Rising",
+        "C": "Damp-Heat in the Liver and Gallbladder",
+        "D": "Cold Stagnation in the Liver Channel"
+      },
+      "answer": "D",
+      "explanation": "Pain in the genital area, through which the Liver channel passes, that is aggravated by cold and relieved by heat is a classic symptom of Cold Stagnation, where a pathogenic cold factor obstructs the channel."
+    },
+    {
+      "id": 9,
+      "difficulty": "Easy",
+      "question": "A 60-year-old male patient presents complaining that his body is generally cold, especially his hands and feet. He tires easily, occasionally experiences palpitations and shortness of breath. He has edema in his face and legs in the morning, and his urine is clear and copious. His face is pale, and his pulse is very weak.",
+      "options": {
+        "A": "Heart Qi Deficiency",
+        "B": "Heart Yang Deficiency",
+        "C": "Heart Blood Deficiency",
+        "D": "Heart Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "In addition to Heart Qi Deficiency symptoms like palpitations, fatigue, and shortness of breath, there are accompanying signs of Yang deficiency such as cold limbs, edema, and clear, copious urine. The weak pulse and pale face also support a diagnosis of Yang deficiency."
+    },
+    {
+      "id": 10,
+      "difficulty": "Easy",
+      "question": "A female patient in her 40s presents with insomnia and anxiety. She has palpitations, and her sleep is unrefreshing and filled with dreams. She often feels dizzy, has experienced memory decline, has a pale complexion, cold hands and feet, and dry lips. Her nails are brittle, and she has significant hair loss.",
+      "options": {
+        "A": "Heart Qi Deficiency",
+        "B": "Heart Yang Deficiency",
+        "C": "Heart Blood Deficiency",
+        "D": "Heart Yin Deficiency"
+      },
+      "answer": "C",
+      "explanation": "Alongside psycho-emotional symptoms like palpitations, insomnia, and anxiety, there are prominent signs of blood deficiency such as dizziness, memory decline, pale face, dry lips, and brittle nails. These are classic symptoms of insufficient Heart Blood failing to nourish the Mind (Shen)."
+    },
+    {
+      "id": 11,
+      "difficulty": "Easy",
+      "question": "A male patient in his 50s presents with chest pain as his chief complaint. The pain is stabbing, fixed in location, and worsens at night. His lips and nails appear purplish, and his hands are cold. The pulse is choppy and deep.",
+      "options": {
+        "A": "Heart Blood Stasis",
+        "B": "Heart Fire Blazing Upwards",
+        "C": "Sudden Collapse of Heart Yang",
+        "D": "Heart Yin Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Fixed, stabbing chest pain that worsens at night is a classic feature of pain due to blood stasis. Cyanosis of the lips and nails, cold hands, and a choppy pulse are supporting signs for a diagnosis of Heart Blood Stasis."
+    },
+    {
+      "id": 12,
+      "difficulty": "Easy",
+      "question": "A female patient in her 30s presents with palpitations and anxiety. She has a sensation of heat in her palms and soles and experiences a low-grade fever in the afternoon. She has night sweats and a dry mouth, and sometimes develops tongue ulcers. Her cheekbones are flushed red.",
+      "options": {
+        "A": "Heart Yin Deficiency",
+        "B": "Heart Fire Blazing Upwards",
+        "C": "Heart Blood Deficiency",
+        "D": "Heart Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "In addition to palpitations and anxiety, there are accompanying symptoms of Yin deficiency with internal heat, such as tidal fever in the afternoon, five-palm heat, night sweats, and a dry mouth. Flushed cheekbones are a characteristic sign of Heart Yin Deficiency."
+    },
+    {
+      "id": 13,
+      "difficulty": "Easy",
+      "question": "A 55-year-old female patient is brought to the emergency room in a state of clouded consciousness. Her face is pale, her lips are cyanotic, and her limbs are extremely cold. Her pulse is so faint it is almost imperceptible.",
+      "options": {
+        "A": "Sudden Collapse of Heart Yang",
+        "B": "Heart Blood Stasis",
+        "C": "Heart Fire Blazing Upwards",
+        "D": "Heart Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Clouded consciousness, pale face, cyanotic lips, cold limbs, and an imperceptible pulse are signs of a critical situation where Yang Qi suddenly collapses. This corresponds to a Sudden Collapse of Heart Yang."
+    },
+    {
+      "id": 14,
+      "difficulty": "Easy",
+      "question": "A 45-year-old female patient presents with almost no appetite and feels bloated immediately after eating. Her complexion is pale, and she is constantly tired and lacks energy, preferring to sit all day. She feels even more lethargic in the afternoon, making it difficult to concentrate at work. Her stools are loose and lack force, and she may have 2-3 bowel movements a day. She reports that her lower abdomen becomes distended and bloated after meals. Her tongue is pale, and her pulse is deficient.",
+      "options": {
+        "A": "Spleen Qi Deficiency",
+        "B": "Spleen Yang Deficiency",
+        "C": "Spleen Qi Sinking",
+        "D": "Spleen Not Controlling Blood"
+      },
+      "answer": "A",
+      "explanation": "The patient's main symptoms—poor appetite, post-meal bloating, loose stools, and lethargy—correspond to Spleen Qi Deficiency. A pale complexion, fatigue, and weak limbs are also signs of Qi deficiency. Since there are no Yang deficiency symptoms like aversion to cold, cold limbs, or edema, Spleen Yang Deficiency is not the diagnosis. There are no signs of a bearing-down sensation in the abdomen or organ prolapse, ruling out Spleen Qi Sinking, and no bleeding signs, ruling out Spleen Not Controlling Blood."
+    },
+    {
+      "id": 15,
+      "difficulty": "Easy",
+      "question": "A 60-year-old male patient presents complaining that he has cold hands and feet and is very sensitive to cold. Recently, his appetite has decreased, and he experiences abdominal bloating and frequent loose diarrhea after eating. He wakes up with a swollen face, and also has edema in his legs. His limbs feel heavy, and he tires easily. His tongue is pale and swollen, and his pulse is weak and slow.",
+      "options": {
+        "A": "Spleen Qi Deficiency",
+        "B": "Spleen Yang Deficiency",
+        "C": "Spleen Qi Sinking",
+        "D": "Stomach Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "When symptoms of Spleen Qi Deficiency are accompanied by aversion to cold, cold limbs, edema, and watery diarrhea, it indicates a deficiency of Yang Qi. Therefore, the pattern is differentiated as Spleen Yang Deficiency."
+    },
+    {
+      "id": 16,
+      "difficulty": "Easy",
+      "question": "A 38-year-old female patient presents with severe fatigue and a lack of energy, making it difficult to stand since giving birth. She easily feels bloated after eating and has loose stools. Recently, she has felt a heavy, pulling sensation in her lower abdomen, which worsens when standing for long periods. A gynecological exam revealed a slight uterine prolapse. She also has frequent and urgent urination. Her complexion is pale, her pulse is deficient, and her tongue is pale.",
+      "options": {
+        "A": "Spleen Qi Deficiency",
+        "B": "Spleen Yang Deficiency",
+        "C": "Spleen Qi Sinking",
+        "D": "Spleen Not Controlling Blood"
+      },
+      "answer": "C",
+      "explanation": "This is a state where severe Spleen Qi Deficiency has weakened the organ-supporting function, characterized by prolapse symptoms like uterine prolapse, stomach prolapse, or rectal prolapse. The key distinguishing feature from simple Spleen Qi or Spleen Yang Deficiency is the presence of organ prolapse and a bearing-down sensation."
+    },
+    {
+      "id": 17,
+      "difficulty": "Easy",
+      "question": "A 42-year-old female patient presents. She tires easily, lacks energy, and has a pale complexion. She bruises easily without any specific trauma, has heavy menstrual periods, and occasionally experiences uterine bleeding between periods. Small purpuric spots are also visible on her skin. She is short of breath and lethargic. Her tongue is pale, and her pulse is thready.",
+      "options": {
+        "A": "Spleen Qi Deficiency",
+        "B": "Spleen Not Controlling Blood",
+        "C": "Spleen Yang Deficiency",
+        "D": "Stomach Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "This pattern is characterized by bleeding that occurs because Spleen Qi deficiency has led to a failure to control blood. Easy bruising, menorrhagia, or metrorrhagia are typical symptoms. When bleeding accompanies signs of Spleen Qi deficiency, the diagnosis is Spleen Not Controlling Blood."
+    },
+    {
+      "id": 18,
+      "difficulty": "Easy",
+      "question": "A 27-year-old male presents with epigastric pain and a feeling of fullness that began after frequently eating late-night snacks and overeating. He experienced nausea and vomiting, with some relief after vomiting. He has foul-smelling breath like rotten eggs, frequent belching, and acid regurgitation. He has no appetite and has also developed insomnia. His tongue has a thick, sticky, greasy coating, and his pulse is slippery and full.",
+      "options": {
+        "A": "Stomach Fire",
+        "B": "Food Stagnation in the Stomach",
+        "C": "Stomach Yin Deficiency",
+        "D": "Spleen Yang Deficiency"
+      },
+      "answer": "B",
+      "explanation": "Epigastric pain and fullness, relief after vomiting, foul-smelling belching, and a greasy tongue coating are classic signs of Food Stagnation in the Stomach. Stomach Fire would present with more pronounced signs of excess heat, while Stomach Yin Deficiency would be accompanied by deficiency heat."
+    },
+    {
+      "id": 19,
+      "difficulty": "Easy",
+      "question": "A 35-year-old male presents complaining of a burning pain in the epigastrium and frequent acid regurgitation after overindulging in spicy and greasy foods. He experiences nausea and vomiting just after eating, and has severe bad breath. He is very thirsty and wants to drink a lot of cold water, and his gums are swollen and painful. He is also constipated. His tongue is red with a yellow coating, and his pulse is slippery and rapid.",
+      "options": {
+        "A": "Stomach Fire",
+        "B": "Food Stagnation in the Stomach",
+        "C": "Stomach Yin Deficiency",
+        "D": "Spleen Not Controlling Blood"
+      },
+      "answer": "A",
+      "explanation": "This is a case of excess heat accumulating in the stomach, characterized by a burning pain in the epigastrium, intense thirst, gum inflammation, constipation, a yellow tongue coating, and a full-rapid pulse. Food Stagnation is more characterized by foul belching, while Stomach Yin Deficiency involves thirst but an inability to drink much."
+    },
+    {
+      "id": 20,
+      "difficulty": "Easy",
+      "question": "A 52-year-old female patient presents. She gets hungry easily even after eating, has epigastric pain, and her mouth and throat are often dry. She experiences a sensation of heat and a low-grade fever in the afternoon, and her stools are dry and difficult to pass. She wants to drink water but can only sip small amounts at a time. Her tongue is red with little coating, and her pulse is thready and rapid.",
+      "options": {
+        "A": "Stomach Yin Deficiency",
+        "B": "Stomach Fire",
+        "C": "Spleen Yang Deficiency",
+        "D": "Food Stagnation in the Stomach"
+      },
+      "answer": "A",
+      "explanation": "This is a case of deficiency heat arising from insufficient stomach yin fluid, characterized by afternoon fever, dry mouth and throat, dry stools, a red tongue with little coating, and a thready-rapid pulse. The key difference from Stomach Fire is that with Stomach Fire (excess heat), the patient wants to drink large amounts of water, whereas with Stomach Yin Deficiency, they only sip small amounts."
+    },
+    {
+      "id": 21,
+      "difficulty": "Easy",
+      "question": "A 60-year-old male presents. He complains of tiring easily, shortness of breath, and a frequent cough. The sputum is watery and thin, and his voice is weak, making him reluctant to speak. He has cold hands and feet, catches colds often, and sometimes experiences spontaneous daytime sweating. His complexion is bright white, his pulse is deficient, and this is especially noticeable in the right cun position. His appetite is also slightly reduced.",
+      "options": {
+        "A": "Lung Qi Deficiency",
+        "B": "Lung Yin Deficiency",
+        "C": "Wind-Cold Invading the Lungs",
+        "D": "Wind-Heat Invading the Lungs"
+      },
+      "answer": "A",
+      "explanation": "Cough, dyspnea, thin watery sputum, weak voice, fatigue, a predisposition to catching colds, and a generally cold constitution are classic signs of Lung Qi Deficiency. Although there may be a slight loss of appetite, the primary focus is on the respiratory symptoms."
+    },
+    {
+      "id": 22,
+      "difficulty": "Easy",
+      "question": "A 50-year-old woman presents with a dry cough with little to no sputum, which is sometimes blood-streaked. Her mouth and throat are dry, her voice is hoarse, and her throat feels itchy. She has a low-grade fever in the afternoon or evening, flushed cheekbones, night sweats, and a sensation of heat in the five centers (palms, soles, chest). She also has insomnia. Her pulse is thready and rapid.",
+      "options": {
+        "A": "Lung Qi Deficiency",
+        "B": "Lung Yin Deficiency",
+        "C": "Wind-Cold Invading the Lungs",
+        "D": "Wind-Heat Invading the Lungs"
+      },
+      "answer": "B",
+      "explanation": "The key features are signs of Yin deficiency: a dry cough with little sputum, afternoon/evening low-grade fever, flushed cheekbones, and night sweats. Dryness of the mouth and throat and insomnia also point to Yin deficiency. This is distinguished from Wind-Heat Invading the Lungs, which is an excess heat pattern, whereas this is a deficiency pattern."
+    },
+    {
+      "id": 23,
+      "difficulty": "Easy",
+      "question": "A 35-year-old male presents. After being exposed to cold wind recently, he developed a cough, nasal congestion, and a clear, watery runny nose. He sneezes frequently, and though he has a fever, the chills are more severe. His throat is itchy, his neck is stiff, and he has body aches. He is not thirsty and is not sweating. His pulse is floating.",
+      "options": {
+        "A": "Lung Qi Deficiency",
+        "B": "Lung Yin Deficiency",
+        "C": "Wind-Cold Invading the Lungs",
+        "D": "Wind-Heat Invading the Lungs"
+      },
+      "answer": "C",
+      "explanation": "These are common cold symptoms caused by an invasion of cold wind affecting the Lungs. The characteristic features are chills being more severe than fever, a clear runny nose, sneezing, body aches, and an absence of sweat."
+    },
+    {
+      "id": 24,
+      "difficulty": "Easy",
+      "question": "A 28-year-old woman presents with recent cold symptoms, including a cough and fever. The fever is more severe than the chills, she has slight sweating, and is thirsty. This is accompanied by a sore throat, swollen tonsils, and head and body aches. Her nasal discharge is yellow and thick, and her nose is congested. Her pulse is floating and rapid.",
+      "options": {
+        "A": "Lung Qi Deficiency",
+        "B": "Lung Yin Deficiency",
+        "C": "Wind-Cold Invading the Lungs",
+        "D": "Wind-Heat Invading the Lungs"
+      },
+      "answer": "D",
+      "explanation": "This condition is caused by a pathogenic heat factor invading the Lungs. It is characterized by signs of excess heat, such as fever being more severe than chills, a sore throat, swollen tonsils, yellow nasal discharge, and a floating-rapid pulse."
+    },
+    {
+      "id": 25,
+      "difficulty": "Easy",
+      "question": "A 55-year-old male presents. He has been very tired recently, is short of breath, coughs frequently, and produces thin sputum. His voice is weak, and he is reluctant to speak. He has cold hands and feet and catches colds often. His appetite has also decreased, and his complexion is pale. His pulse is deficient.",
+      "options": {
+        "A": "Lung Qi Deficiency",
+        "B": "Lung Yin Deficiency",
+        "C": "Wind-Cold Invading the Lungs",
+        "D": "Spleen and Lung Qi Deficiency"
+      },
+      "answer": "D",
+      "explanation": "This is a case where Lung Qi Deficiency and Spleen Qi Deficiency occur simultaneously. Both respiratory symptoms (cough, shortness of breath, thin sputum) and digestive symptoms (poor appetite, fatigue, pale complexion) are present. Spleen and Lung Qi Deficiency is a state where the functions of both organs are weak."
+    },
+    {
+      "id": 26,
+      "difficulty": "Easy",
+      "question": "A 6-year-old boy is brought in by his parents, who are concerned that he is shorter than his peers and his bone development is delayed. His fontanelle closed late, and his speech and cognitive development are also slow. His teeth are weak and have fallen out, his hair is sparse, and he has some premature gray hairs. His knees and legs lack strength, and his memory is poor. In adulthood, this may manifest as sexual dysfunction and low back pain. His pulse is thready.",
+      "options": {
+        "A": "Kidney Essence Deficiency",
+        "B": "Kidney Yin Deficiency",
+        "C": "Kidney Yang Deficiency",
+        "D": "Kidney Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "The core symptoms are related to development and aging, such as delayed growth, delayed bone development, premature graying, and dental problems. Low back pain, sexual dysfunction, and signs of deficiency heat have not yet appeared, so the diagnosis is Kidney Essence Deficiency."
+    },
+    {
+      "id": 27,
+      "difficulty": "Easy",
+      "question": "A 50-year-old male presents with low back pain, weak legs, and sexual dysfunction. He experiences tidal fever in the evening or afternoon, night sweats, and a sensation of heat in the five centers (palms, soles, chest). He has dizziness and tinnitus, and his memory and hearing have weakened. He also experiences bone pain, nocturnal emissions, and a dry mouth. He is constipated, and his urine is scanty and dark. His pulse is thready and rapid.",
+      "options": {
+        "A": "Kidney Essence Deficiency",
+        "B": "Kidney Yin Deficiency",
+        "C": "Kidney Yang Deficiency",
+        "D": "Kidney Qi Deficiency"
+      },
+      "answer": "B",
+      "explanation": "The key features are low back pain, leg weakness, deficiency heat, dry mouth, night sweats, constipation, and scanty urine. Symptoms of Yin deficiency are central, accompanied by sexual dysfunction and general physical weakness."
+    },
+    {
+      "id": 28,
+      "difficulty": "Easy",
+      "question": "A 60-year-old male presents with low back pain, sexual dysfunction, and weakness in his lower limbs. He generally feels cold, has a bright-white complexion, and is lethargic. He has frequent loose stools, and his joints are cold. He suffers from impotence or premature ejaculation, and infertility, and his urine is copious and clear. Some patients may also have leg edema. His pulse is deep and weak, and his tongue is pale and swollen.",
+      "options": {
+        "A": "Kidney Essence Deficiency",
+        "B": "Kidney Yin Deficiency",
+        "C": "Kidney Yang Deficiency",
+        "D": "Kidney Qi Deficiency"
+      },
+      "answer": "C",
+      "explanation": "This is a state where Kidney Qi Deficiency has worsened, leading to edema and cold symptoms. Low back pain and sexual dysfunction are central, while edema, a feeling of cold, and clear urine indicate Kidney Yang Deficiency. This is distinguished from Spleen Yang Deficiency, which primarily involves digestive symptoms like diarrhea."
+    },
+    {
+      "id": 29,
+      "difficulty": "Easy",
+      "question": "A 55-year-old male presents with low back pain, sexual dysfunction, and weakness in his legs. He has frequent, clear urination with a weak stream, and dribbling after urination. He may have urinary incontinence or nocturia, and in men, spermatorrhea. In women, there may be uterine prolapse or chronic vaginal discharge. His pulse is deep and weak, and his tongue is pale.",
+      "options": {
+        "A": "Kidney Essence Deficiency",
+        "B": "Kidney Yin Deficiency",
+        "C": "Kidney Yang Deficiency",
+        "D": "Kidney Qi Deficiency"
+      },
+      "answer": "D",
+      "explanation": "This is a weakness of kidney function centered on Qi deficiency, presenting with symptoms like low back pain, sexual dysfunction, urinary problems, and leg weakness. It is characterized more by urinary and sexual function-related symptoms than digestive symptoms."
+    },
+    {
+      "id": 30,
+      "difficulty": "Easy",
+      "question": "A 65-year-old male presents with a chronic cough and shortness of breath, with rapid and weak breathing upon exertion. This is accompanied by low back pain and sexual dysfunction. His face is swollen, his body is thin, and he is mentally lethargic. His hands and feet are cold, becoming even colder after sweating. During asthma attacks, he may have clear urine and concurrent low back pain. His pulse is deficient.",
+      "options": {
+        "A": "Kidney Qi Deficiency",
+        "B": "Lung and Kidney Qi Deficiency",
+        "C": "Lung and Kidney Yin Deficiency",
+        "D": "Kidney Yang Deficiency"
+      },
+      "answer": "B",
+      "explanation": "This is a condition where Kidney Qi deficiency prevents it from sufficiently grasping the Lung Qi and pulling it downwards. It is characterized by chronic cough, asthma, low back pain, sexual dysfunction, and dyspnea and fatigue upon exertion."
+    },
+    {
+      "id": 31,
+      "difficulty": "Easy",
+      "question": "A 60-year-old woman presents with a long-standing dry cough that worsens in the evening. She becomes short of breath with exertion, has weak legs, low back pain, and nocturnal emissions. Her mouth and body are dry, she has a sensation of heat in the afternoon, and experiences night sweats. Her body is thin, and her pulse is thready and rapid.",
+      "options": {
+        "A": "Lung and Kidney Qi Deficiency",
+        "B": "Lung and Kidney Yin Deficiency",
+        "C": "Kidney Yin Deficiency",
+        "D": "Lung Qi Deficiency"
+      },
+      "answer": "B",
+      "explanation": "This is a state of deficient yin fluid in both the Lungs and Kidneys, characterized by a dry cough, Kidney Yin deficiency heat, low back pain, afternoon deficiency heat, and night sweats. Dyspnea on exertion and leg weakness are also present."
+    }
+  ],
+  "Medium": [
+    {
+      "id": 32,
+      "difficulty": "Medium",
+      "question": "A 27-year-old female patient reports a 5-year history of irregular menstruation, along with depression, a feeling of fullness and pain in the hypochondriac region, premenstrual breast distension, and frequent sighing. Her tongue coating is thin and white, and her pulse is wiry. What is the most appropriate pattern differentiation?",
+      "options": {
+        "A": "Liver Blood Deficiency",
+        "B": "Liver Yin Deficiency",
+        "C": "Liver Qi Stagnation",
+        "D": "Liver-Spleen Disharmony"
+      },
+      "answer": "C",
+      "explanation": "Depression, hypochondriac fullness and pain, premenstrual breast distension, and frequent sighing are classic symptoms of Liver Qi Stagnation. The irregular menstruation can be seen as a result of Liver Qi Stagnation affecting blood circulation. A thin, white tongue coating is relatively normal, and a wiry pulse is a typical pulse presentation for Liver Qi Stagnation. Liver Blood or Yin Deficiency would be accompanied by symptoms like dizziness, blurry vision, and dryness, while Liver-Spleen Disharmony would feature more prominent digestive symptoms."
+    },
+    {
+      "id": 33,
+      "difficulty": "Medium",
+      "question": "A 40-year-old thin female patient complains of fatigue, spontaneous sweating, a low and soft voice, poor appetite, and frequently catching colds. What is the most appropriate diagnosis?",
+      "options": {
+        "A": "Spleen and Lung Qi Deficiency",
+        "B": "Blood Deficiency",
+        "C": "Yin Deficiency",
+        "D": "Spleen and Kidney Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Fatigue, poor appetite, and a low, soft voice are typical symptoms of Spleen Qi Deficiency. Spontaneous sweating and a tendency to catch colds are classic signs of Lung Qi Deficiency. The Lungs and Spleen both belong to the Taiyin channel and are closely related. Spleen and Lung Qi Deficiency is a syndrome where these symptoms appear together. Blood or Yin Deficiency would present with different symptoms like a pale complexion or five-palm heat, respectively, while Spleen and Kidney Qi Deficiency would be accompanied by Kidney deficiency signs like sore lower back and nocturia."
+    },
+    {
+      "id": 34,
+      "difficulty": "Medium",
+      "question": "A 35-year-old thin female patient presents. Her chief complaints are a dull abdominal pain that is relieved by warmth and pressure, poor appetite, and easily fatigued limbs with a sensation of cold. Her tongue is pale and slightly swollen. Her pulse is weak and deep. What is the appropriate treatment pattern?",
+      "options": {
+        "A": "Spleen Yang Deficiency",
+        "B": "Spleen Qi Deficiency",
+        "C": "Spleen Not Controlling Blood",
+        "D": "Liver-Spleen Disharmony"
+      },
+      "answer": "A",
+      "explanation": "A dull abdominal pain relieved by warmth and pressure is a characteristic feature of deficiency-cold seen in Spleen Yang Deficiency. Poor appetite and limb weakness are symptoms of Spleen Qi deficiency. Feeling cold and having a weak, deep pulse indicate a lack of Yang Qi. A pale and swollen tongue suggests water-damp retention due to Spleen Yang Deficiency. Therefore, treatment aimed at tonifying and warming the Spleen Yang is most appropriate."
+    },
+    {
+      "id": 35,
+      "difficulty": "Medium",
+      "question": "A 69-year-old male patient presents with chief complaints of extreme fatigue and poor appetite. He reports indigestion and bloating but denies any pain such as abdominal pain or vomiting. On tongue examination, the tongue body is normal, but the surface appears slightly dry. He reports dry stools and tenesmus. His pulse is wiry. What is the most appropriate pattern differentiation for this patient?",
+      "options": {
+        "A": "Liver-Spleen Disharmony",
+        "B": "Spleen Qi Deficiency",
+        "C": "Liver Qi Stagnation",
+        "D": "Lung Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "A wiry pulse is a sign of a Liver pattern. It can be inferred that long-standing stagnant Liver Qi has transformed into Fire (Liver Fire), affecting the Stomach and Intestines (constipation, tenesmus). While Liver Qi Stagnation could be considered, the clear presence of Spleen/Stomach symptoms like poor appetite makes the diagnosis of Liver-Spleen Disharmony, where the functions of the Liver and Spleen/Stomach are uncoordinated, more fitting. Spleen or Lung Qi Deficiency would present with a weak pulse, and there are no lung symptoms like spontaneous sweating or shortness of breath."
+    },
+    {
+      "id": 36,
+      "difficulty": "Medium",
+      "question": "A 42-year-old female patient presents with epigastric pain. The pain sometimes radiates to the lower abdomen, and she reports persistent bloating, a sensation of gas, belching, and nausea. Her bowel movements are infrequent, about once every 2-3 days, with a tendency for hard, pellet-like stools (goat-like stools). The patient reveals that she has felt persistently depressed and stressed since her divorce 9 years ago. The tongue body shows no specific abnormalities, and the pulse is slightly wiry. What is the most appropriate pattern differentiation for this patient?",
+      "options": {
+        "A": "Liver-Spleen Disharmony",
+        "B": "Spleen Qi Deficiency",
+        "C": "Liver Qi Stagnation",
+        "D": "Lung Qi Deficiency"
+      },
+      "answer": "C",
+      "explanation": "The combination of emotional factors (divorce, depression) and a wiry pulse is conclusive evidence of Liver Qi Stagnation. Epigastric pain, bloating, belching, and nausea are all symptoms arising from the impaired circulation of Qi. Goat-like stools are a very typical feature of constipation due to Qi stagnation; it is caused not by a weak intestinal propulsion but by the obstruction of Qi flow, leading to stool retention and excessive water absorption. While similar to Liver-Spleen Disharmony, in this case, the pain, bloating, and emotional issues are more prominent than digestive weakness, making the root cause, Liver Qi Stagnation, the primary pattern differentiation. Spleen Qi Deficiency would primarily involve fatigue and weakness with a weak pulse, and Lung Qi Deficiency would be dominated by respiratory symptoms."
+    },
+    {
+      "id": 37,
+      "difficulty": "Medium",
+      "question": "A 35-year-old female patient presents with dysmenorrhea. She has had persistent menstrual difficulties since menarche, with severe pain during her period. The menstrual blood is dark red, and her cycle tends to be early. She usually has a yellow, sticky, and foul-smelling vaginal discharge accompanied by vulvar itching. She also feels a slight sensation of heat in her body, and her stools are rough and have a foul odor. On tongue examination, the tongue body is purplish, and the coating is yellow and greasy. Her pulse is choppy, wiry, and slippery. What is the most appropriate pattern differentiation for this patient?",
+      "options": {
+        "A": "Damp-Heat in the Liver and Gallbladder + Heart Blood Stasis",
+        "B": "Liver Blood Stasis + Damp-Heat in the Liver and Gallbladder",
+        "C": "Liver Qi Stagnation + Liver Blood Stasis",
+        "D": "Kidney Yin Deficiency + Damp-Heat in the Liver and Gallbladder"
+      },
+      "answer": "B",
+      "explanation": "This is a complex syndrome combining a group of Damp-Heat symptoms (yellow sticky vaginal discharge, vulvar itching, yellow greasy tongue coating, slippery pulse) and a group of Blood Stasis symptoms (dysmenorrhea, dark-colored blood, choppy pulse). Since the Liver and Gallbladder channels circulate through the genital area, Damp-Heat in the Lower Jiao is associated with the Liver and Gallbladder."
+    },
+    {
+      "id": 38,
+      "difficulty": "Medium",
+      "question": "A 39-year-old male patient presents with tinnitus. The tinnitus started gradually 4 years ago and has been progressing, with the sound described as a low-pitched hum. Accompanying symptoms include low back pain, dizziness, general weakness, waking frequently during sleep, a dry throat, and a sensation of heat in the palms, soles, and chest in the afternoon or evening (five-palm heat). On tongue examination, the tongue body was red with no coating, and the chi pulse was weak and rapid. What is the most appropriate pattern differentiation for this patient?",
+      "options": {
+        "A": "Damp-Heat in the Liver and Gallbladder",
+        "B": "Liver Blood Stasis",
+        "C": "Liver Qi Stagnation",
+        "D": "Kidney Yin Deficiency"
+      },
+      "answer": "D",
+      "explanation": "Gradually progressing tinnitus, low back pain, and a weak chi pulse are the three major signs of Kidney Yin Deficiency. The Kidneys supply essence to the ears and lower back. When Kidney Yin is deficient, deficiency fire arises, causing a red tongue body, dry mouth, and five-palm heat. When Yin is deficient, Yang becomes relatively hyperactive, leading to frequent waking during sleep."
+    },
+    {
+      "id": 39,
+      "difficulty": "Medium",
+      "question": "A 50-year-old female patient presents with chest oppression and joint pain. She was diagnosed with angina pectoris 3 years ago. She is obese, is very sensitive to cold, and feels a severe sense of coldness. Her blood pressure is high at 180/100 mmHg. She has painful edema in both knees, as well as swelling and pain in her lower back, ankles, and wrist joints. On tongue examination, the tongue body is pale and swollen, with a thick white coating. Her pulse is deep, and the chi pulse is particularly weak. What is the most appropriate pattern differentiation for this patient?",
+      "options": {
+        "A": "Heart Yang Deficiency",
+        "B": "Kidney Yang Deficiency",
+        "C": "Spleen Yang Deficiency",
+        "D": "Kidney Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "Severe cold sensation, lower back/knee pain, systemic edema, and a weak chi pulse form a typical symptom cluster of Kidney Yang Deficiency. The Kidneys are the source of original Yang (Yuan Yang), govern the bones and lower back, and regulate fluid metabolism. The pale and swollen tongue body is also due to the lack of Yang Qi to warm and transform the body. The obesity and thick white coating indicate the generation of phlegm-damp due to water-damp retention. The history of angina and hypertension can be interpreted as 'Water Qi insulting the Heart' resulting from Kidney Yang Deficiency. Heart Yang Deficiency would focus on chest symptoms, Spleen Yang Deficiency would be dominated by digestive symptoms, and Kidney Yin Deficiency would present with deficiency-heat symptoms."
+    }
+  ],
+  "Hard": [
+    {
+      "id": 40,
+      "difficulty": "Hard",
+      "question": "A male patient in his 40s presents. He reports that various symptoms appeared after a junior colleague was promoted ahead of him, causing him extreme stress. He gets explosively angry over minor things and finds it hard to control his irritation. He hears a cicada-like sound in his ears (tinnitus), feels dizzy, and has a severe headache, especially in the temporal region. His face and eyes are often bloodshot, his mouth is bitter and dry, and at night, his sleep is disturbed by many dreams. His stools are hard and dry, and his urine is dark yellow. He has recently had nosebleeds and sometimes finds blood in his phlegm. His tongue is red overall, especially redder on the sides, with a yellow, dry coating. His pulse is wiry, rapid, and forceful.",
+      "options": {
+        "A": "Heart Fire",
+        "B": "Stomach Fire",
+        "C": "Gallbladder Fire",
+        "D": "Liver Fire"
+      },
+      "answer": "D",
+      "explanation": "The patient's symptoms started after a clear stressful event ('a junior's promotion'). This is a classic case where feelings of injustice and anger (stress) have caused Liver Qi to stagnate, which then transformed into fire, resulting in Liver Fire. Explosive anger, temporal headache, bloodshot eyes, and a wiry-rapid pulse are all representative signs of Liver Fire."
+    },
+    {
+      "id": 41,
+      "difficulty": "Hard",
+      "question": "A 42-year-old female patient presents with chief complaints of dizziness and numbness in her limbs. She reports constant dizziness, a dull and numb sensation in her hands and feet. She has difficulty falling asleep at night (insomnia), her vision is blurry, and she sometimes sees flower-like shapes before her eyes (floaters). Her menstrual flow has noticeably decreased in recent months. People often tell her that her face lacks color and is dusky and pale, and her lips are also pale. She feels a general lack of strength (muscle weakness) and frequently experiences leg cramps at night. Her nails are lusterless and brittle. Her tongue is pale overall, especially paler and drier on the sides. Her pulse is thready and choppy. This corresponds to which pattern?",
+      "options": {
+        "A": "Kidney Yin Deficiency",
+        "B": "Liver-Spleen Disharmony",
+        "C": "Liver Blood Deficiency",
+        "D": "Liver Blood Stasis"
+      },
+      "answer": "C",
+      "explanation": "The patient's symptoms—dizziness, limb numbness, insomnia, decreased menstrual flow, pale complexion and tongue, and a thready-choppy pulse—are typical findings of Blood Deficiency, specifically Liver Blood Deficiency."
+    },
+    {
+      "id": 42,
+      "difficulty": "Hard",
+      "question": "A male patient in his 50s presents with a sudden onset of fever. His urine has turned dark brown and decreased in volume, and he has a feeling of fullness and pain in his chest and hypochondriac region. A few days ago, jaundice, a yellowing of the eyes and skin, appeared. He has a bitter taste in his mouth, feels nauseous, and has vomited. He has completely lost his appetite, and his abdomen is severely distended. His tongue is red with a thick, sticky yellow coating, and his pulse is wiry, slippery, and rapid. What are the location and pathology of this patient's condition?",
+      "options": {
+        "A": "Damp-Heat in the Kidney and Bladder",
+        "B": "Damp-Heat in the Liver and Gallbladder",
+        "C": "Damp-Heat in the Spleen and Stomach",
+        "D": "Damp-Heat in the Upper Jiao"
+      },
+      "answer": "B",
+      "explanation": "Jaundice, fullness and pain in the chest and hypochondrium, a bitter taste in the mouth, nausea, a red tongue with a yellow greasy coating, and a wiry-slippery-rapid pulse are the most characteristic signs of Damp-Heat accumulating in the Liver and Gallbladder. Jaundice occurs when the Liver and Gallbladder's dredging and discharging functions are impaired, and bile extravasates. The chest and hypochondriac pain results from Damp-Heat obstructing the channels."
+    },
+    {
+      "id": 43,
+      "difficulty": "Hard",
+      "question": "A 33-year-old male patient presents with asthma, which he has had since he was one year old. He was asymptomatic during adolescence, but it started to worsen again after he turned twenty. Exposure to house dust or cat dander triggers attacks of shortness of breath and wheezing, for which he must use a Ventolin inhaler to find relief. He has almost no other symptoms, but he always wakes up once at night to urinate. His tongue is generally close to normal but slightly pale and swollen, with a wide, shallow crack along the centerline.",
+      "options": {
+        "A": "Heart and Kidney Yin Deficiency",
+        "B": "Liver and Kidney Yin Deficiency",
+        "C": "Spleen and Stomach Qi Deficiency",
+        "D": "Lung and Kidney Qi Deficiency"
+      },
+      "answer": "D",
+      "explanation": "The patient has a long-standing history of asthma (a Lung issue) combined with nocturia (a Kidney issue). This can be seen as a state of Lung and Kidney Qi Deficiency, where both the descending function of the Lung and the Qi-grasping function of the Kidney are weak. The Kidney, as the root of respiration, fails to receive the Lung Qi, leading to chronic shortness of breath."
+    },
+    {
+      "id": 44,
+      "difficulty": "Hard",
+      "question": "A 62-year-old woman seeks treatment for Parkinson’s Disease, diagnosed 4 years ago. She has a noticeable tremor in her arm, shuffles her feet slightly when walking, and her handwriting becomes progressively smaller (micrographia). She has suffered from constipation her entire life and relies on a daily herbal laxative (Ma Zi Ren Wan). Other complaints include low back pain, dizziness, tinnitus, night sweats, and shallow sleep. At night, her mouth and throat become particularly dry, wanting to hold water, and she often feels hot flashes. Her tongue is red, redder on the sides, with a very dry, blackish-yellow coating. Her pulse is thready and rapid, with an occasional slippery quality.",
+      "options": {
+        "A": "Kidney Yin Deficiency, Liver Wind",
+        "B": "Kidney Yang Deficiency, Liver Wind",
+        "C": "Liver Yang transforming into Wind",
+        "D": "Extreme Heat generating Wind"
+      },
+      "answer": "A",
+      "explanation": "The patient's tremor and gait disturbance are symptoms of Liver Wind. The low back pain, dizziness, tinnitus, night sweats, and dry mouth with a red tongue are typical findings of Kidney Yin Deficiency. Additionally, the chronic constipation, slippery pulse, and dry, blackish-yellow coating suggest Phlegm-Fire (Phlegm combined with Heat). Therefore, this can be diagnosed as a complex pattern where Kidney Yin Deficiency is the root cause, leading to blazing Liver Fire, which combines with Phlegm to stir up Liver Wind."
+    },
+    {
+      "id": 45,
+      "difficulty": "Hard",
+      "question": "A patient presents with chills, shivering, and diffuse body aches that started a few days ago. There is no fever or only a slight fever, and a complete absence of sweating. The back of the neck and shoulders are stiff and painful, accompanied by a slight cough, clear nasal discharge, and sneezing. In the early stages, there are no particular changes to the tongue. The pulse is felt superficially but is tense and tight.",
+      "options": {
+        "A": "Liver and Kidney Yin Deficiency + Qi Stagnation",
+        "B": "Wind-Cold Invading the Lungs",
+        "C": "Spleen Deficiency with Damp-Phlegm",
+        "D": "Wind-Heat Invading the Lungs"
+      },
+      "answer": "B",
+      "explanation": "The patient's symptoms correspond to a Taiyang stage pattern of Shang Han Bing (Cold Damage Disease), specifically Wind-Cold invading the exterior, or Wind-Cold Invading the Lungs. The treatment goal is to release the exterior and disperse Wind-Cold. Acupoints such as Lieque (LU-7), Hegu (LI-4), Fengmen (BL-12), Fengchi (GB-20), Fengfu (GV-16), and Feishu (BL-13) are key points for expelling pathogenic wind and regulating Lung function."
+    },
+    {
+      "id": 46,
+      "difficulty": "Hard",
+      "question": "A 30-year-old female patient presents with palpitations and inability to sleep well at night (insomnia). She has many dreams, making her feel unrefreshed upon waking, is easily startled by small noises, and has recently become very forgetful. She feels constantly anxious and restless, and especially in the afternoon, her cheeks become flushed and she feels a low-grade fever. She experiences night sweats, and her mouth and throat are often dry. Her tongue is red with almost no coating, and the tip is even redder and swollen with red points. A deep crack is observed in the center of the tongue reaching the tip. Her pulse is thready and rapid.",
+      "options": {
+        "A": "Gui Pi Tang - Spleen Qi Deficiency + Heart Blood Deficiency",
+        "B": "Tian Wang Bu Xin Dan - Heart Yin Deficiency, Heart-Kidney Disharmony",
+        "C": "Suan Zao Ren Tang - Liver Blood Deficiency",
+        "D": "Gan Mai Da Zao Tang - Qi and Blood Deficiency"
+      },
+      "answer": "B",
+      "explanation": "Heart Yin Deficiency, Heart-Kidney Disharmony. The patient exhibits clear signs of Yin deficiency-induced deficiency heat (flushed cheeks, five-palm heat, night sweats, dry mouth, red tongue with no coating, thready-rapid pulse) along with Heart-related problems (palpitations, insomnia, dream-disturbed sleep, forgetfulness). This indicates a state of Heart and Kidney Yin Deficiency, where the yin fluids of both the Heart and Kidneys are insufficient. Tian Wang Bu Xin Dan, which nourishes both Heart and Kidney Yin while calming the Shen (Mind), is the most appropriate formula."
+    },
+    {
+      "id": 47,
+      "difficulty": "Hard",
+      "question": "A 58-year-old male patient presents with chronic diarrhea and lethargy. He feels physically drained and mentally weary, dislikes speaking, and just wants to lie down. He has no appetite, feels bloated, is very sensitive to cold, and has cold hands and feet. His urine is clear and copious, and especially around dawn, he experiences borborygmus followed by watery diarrhea. He has edema in his abdomen and legs, and his lower back feels sore and cold. His tongue is pale and swollen, and his pulse is deep, slow, and weak.",
+      "options": {
+        "A": "Heart Yang Deficiency",
+        "B": "Spleen Yang Deficiency",
+        "C": "Kidney Yang Deficiency",
+        "D": "Collapse of Yang"
+      },
+      "answer": "B",
+      "explanation": "The patient's symptoms are a combination of Spleen Qi Deficiency (poor appetite, bloating, diarrhea, lethargy) and cold signs (aversion to cold, cold limbs). This is a classic presentation of Spleen Yang Deficiency, where the Spleen's Yang Qi is insufficient, leading to impairment of both its transformation and transportation functions and its warming function. While 'cock's crow diarrhea' (diarrhea at dawn) can be seen in Kidney Yang Deficiency, the patient's primary symptoms are digestive, making Spleen Yang Deficiency the more appropriate diagnosis. Kidney Yang Deficiency would feature low back pain and nocturia as more prominent symptoms."
+    },
+    {
+      "id": 48,
+      "difficulty": "Hard",
+      "question": "A male patient in his 40s presents with chief complaints of dizziness and tinnitus. He has a sore and weak lower back, experiences night sweats, and has a dry mouth. He is constantly tired and exhausted, with a dusky and haggard complexion. His hair is lusterless and dry, and recently he has felt a lack of motivation and a weakened willpower. He reports often feeling dissatisfied and apathetic. His tongue is red with very little coating, and his pulse is thready and rapid.",
+      "options": {
+        "A": "Tian Wang Bu Xin Dan - Heart Yin Deficiency",
+        "B": "Liu Wei Di Huang Wan - Kidney Yin Deficiency, Liver and Kidney Yin Deficiency",
+        "C": "Gan Mai Da Zao Tang - Qi and Blood Deficiency",
+        "D": "Suan Zao Ren Tang - Liver Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "The symptoms of dizziness, tinnitus, sore lower back, night sweats, dry mouth, red tongue with little coating, and a thready-rapid pulse are all classic findings of Kidney Yin Deficiency. Liu Wei Di Huang Wan is the representative formula for tonifying Kidney Yin and is used to treat the various symptoms arising from this deficiency. Tian Wang Bu Xin Dan is for Heart and Kidney Yin Deficiency, Gan Mai Da Zao Tang for Zang Zao (Restless Organ Syndrome), and Suan Zao Ren Tang primarily for insomnia due to Liver Blood Deficiency."
+    },
+    {
+      "id": 49,
+      "difficulty": "Hard",
+      "question": "A 32-year-old woman presents with irregular uterine bleeding. Her menstrual cycle tends to be earlier than expected, and at the beginning of her period, the bleeding is suddenly very heavy (menorrhagia), then seems to stop, but is followed by a prolonged period of light spotting that continues after menstruation should have ended (metrorrhagia). The color of the blood is thin and pale. She has a pale complexion and tires easily. This is accompanied by slight dizziness, poor appetite, and loose stools. Her tongue is pale with teeth marks on the edges, and her pulse is weak.",
+      "options": {
+        "A": "Kidney Qi Deficiency",
+        "B": "Damp-Heat in the Liver and Gallbladder",
+        "C": "Spleen Qi Sinking",
+        "D": "Spleen Not Controlling Blood"
+      },
+      "answer": "D",
+      "explanation": "The patient exhibits symptoms of both Spleen Qi Deficiency (leading to Qi sinking) and Heart Blood Deficiency (dizziness). The Spleen has the function of 'governing' the blood, keeping it within the vessels. When Spleen Qi is deficient, this function weakens, leading to bleeding disorders such as menorrhagia and metrorrhagia. Gui Pi Tang is the recommended formula."
+    },
+    {
+      "id": 50,
+      "difficulty": "Hard",
+      "question": "A 35-year-old woman presents with premenstrual syndrome. A few days before her period begins, she experiences painful distension in her lower abdomen and breasts, chest oppression, and feels irritable and angry. She often feels depressed and lacks motivation, and sometimes has a binding pain in her hypochondriac region. Strangely, she reports that her hands and feet feel cold. The sides of her tongue are red, and her left pulse is wiry.",
+      "options": {
+        "A": "Blood Deficiency",
+        "B": "Qi Stagnation",
+        "C": "Blood Stasis",
+        "D": "Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "Premenstrual breast distension, abdominal pain, irritability, depression, and hypochondriac pain are all classic symptoms of Qi Stagnation due to constrained Liver Qi (Liver Qi Stagnation). When the Liver's dredging and regulating function is impaired by stress or emotional issues, the flow of Qi becomes blocked, leading to pain and emotional fluctuations that follow the menstrual cycle. The red tongue sides and wiry pulse are also supporting signs of Liver Qi Stagnation."
+    },
+    {
+      "id": 51,
+      "difficulty": "Hard",
+      "question": "A 50-year-old male patient presents with a severe headache. The pain is primarily located on the sides of the head, in the temples, and around the eyes. Along with the headache, he experiences dizziness, tinnitus, and hearing loss. His mouth and throat are dry, his skin is dry, his stools are dry, and he has difficulty sleeping at night, feeling restless and anxious. He states that the symptoms worsen when he gets angry, and he may even shout. His tongue is red, especially redder on the sides, and his pulse is wiry.",
+      "options": {
+        "A": "Liver Yang Rising",
+        "B": "Liver Blood Deficiency",
+        "C": "Liver Fire Blazing Upwards",
+        "D": "Liver Qi Stagnation"
+      },
+      "answer": "A",
+      "explanation": "Temporal headache, dizziness, and tinnitus suggest a problem with the Liver. This patient exhibits some symptoms of both Liver Qi Stagnation (worsens with anger) and Liver Fire (dry mouth, restlessness), but the predominant feature is the 'rising' of heat and Qi to the upper body. Liver Yang Rising is a pathology that occurs when Liver Yin is deficient and fails to control Liver Yang, causing Yang Qi to float upwards, with headache, dizziness, and tinnitus as the main symptoms. Liver Fire presents with more intense fire symptoms and a rapid pulse, Liver Blood Deficiency is primarily a deficiency pattern, and Liver Qi Stagnation is characterized mainly by distending pain."
+    },
+    {
+      "id": 52,
+      "difficulty": "Hard",
+      "question": "A male patient in his 30s complains of sleep disturbances that developed after experiencing a lot of work-related stress. He particularly finds it hard to fall back asleep after waking up early in the morning, and when he does sleep, it is not deep and is filled with dreams (dream-disturbed sleep, easily startled). He has a timid and fearful personality, lacks decisiveness, and tends to be indecisive when facing important decisions. He frequently experiences palpitations, and tires easily. His tongue is pale, with a crack in the center in the area corresponding to the Heart. His pulse is weak.",
+      "options": {
+        "A": "Spleen Deficiency",
+        "B": "Kidney Deficiency",
+        "C": "Gallbladder Deficiency",
+        "D": "Liver Deficiency"
+      },
+      "answer": "C",
+      "explanation": "The patient is presenting with Heart-related symptoms (insomnia, dream-disturbed sleep, easily startled, palpitations) along with a psychological issue of being timid and unable to make decisions. This is a characteristic presentation of Gallbladder Deficiency, where the Gallbladder's function of 'making decisions' is weakened. When the Gallbladder is deficient, one becomes easily frightened, anxious, and indecisive, which in turn affects sleep. The pale tongue and weak pulse indicate a concurrent Qi deficiency."
+    },
+    {
+      "id": 53,
+      "difficulty": "Hard",
+      "question": "A 14-year-old girl has been experiencing menorrhagia since her first period at age 11. Her menstrual cycle is irregular, ranging from 15 to 35 days, and the bleeding lasts for at least 8 days with a very heavy flow. The menstrual blood is dark with clots, and the pain is severe. The pain manifests more as a debilitating lower back and sacral pain, as if her back is breaking, rather than typical abdominal cramping. The patient feels hot, is thirsty, and dislikes warm compresses on the painful areas. She curls up when in pain. She has been diagnosed with endometriosis and has a history of asthma and allergic rhinitis. She also complains of dizziness and slight tinnitus. Her pulse is weak, and her tongue is pale red with red spots on the sides. Which of the following is NOT a correct pattern differentiation for this patient?",
+      "options": {
+        "A": "Kidney Deficiency",
+        "B": "Blood Stasis",
+        "C": "Complex of Cold and Heat",
+        "D": "Complex of Deficiency and Excess"
+      },
+      "answer": "C",
+      "explanation": "This patient shows Kidney Deficiency (lower back pain, tinnitus, irregular cycle), Blood Stasis (dark blood, clots, pain, red spots on the tongue), a Deficiency pattern (dizziness from blood loss, weak pulse), and an Excess pattern (pain from stasis), making it a complex of deficiency and excess. However, she only exhibits signs of Heat (feeling hot, thirsty, dislikes warm compresses) and no signs of Cold. Therefore, it is difficult to diagnose it as a complex of cold and heat."
+    },
+    {
+      "id": 54,
+      "difficulty": "Hard",
+      "question": "A female patient in her 40s complains of a sallow complexion and various menopausal symptoms. She has tinnitus, headaches at the vertex, dry eyes, a dry throat, and vaginal dryness, and has been diagnosed with infertility. She has difficulty falling asleep at night (insomnia), her vision is blurry, and she gets angry easily over minor things. She also has dizziness, night sweats, dry stools, and a very scanty menstrual flow. Her tongue has almost no coating, and her pulse is floating and deficient (felt with light pressure but lacks strength). This belongs to which Kidney Zang-fu pattern?",
+      "options": {
+        "A": "Kidney Deficiency",
+        "B": "Heart-Kidney Disharmony",
+        "C": "Kidney Yin Deficiency with Dryness-Heat",
+        "D": "Liver and Kidney Yin Deficiency"
+      },
+      "answer": "D",
+      "explanation": "The patient exhibits symptoms of Kidney Yin Deficiency (tinnitus, night sweats, dry stools, no tongue coating) along with signs of Liver Blood Deficiency and Liver Yang Rising (sallow complexion, vertex headache, dry eyes, blurry vision, irritability). This corresponds to Liver and Kidney Yin Deficiency, where the yin fluids of both the Liver and Kidneys are depleted. According to the theory that 'Liver and Kidney share the same source,' a deficiency of Kidney Water fails to nourish Liver Wood, leading to the simultaneous appearance of various symptoms."
+    },
+    {
+      "id": 55,
+      "difficulty": "Hard",
+      "question": "A male patient in his 40s presents with chronic fatigue. He has a poor appetite, loose stools, a weak voice, and becomes short of breath with minimal exertion. His complexion is pale, and he sweats easily after activity. His tongue is pale, and his pulse is deficient. This belongs to which Spleen Zang-fu pattern?",
+      "options": {
+        "A": "Spleen and Lung Qi Deficiency",
+        "B": "Spleen Qi Deficiency",
+        "C": "Liver and Spleen Blood Deficiency",
+        "D": "Spleen Yang Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Poor appetite, loose stools, pale complexion, and a deficient pulse are signs of Spleen Qi Deficiency. A weak voice, shortness of breath, and easy sweating upon exertion are signs of Lung Qi Deficiency. According to the principle of Earth generating Metal, a deficiency of Spleen (Earth) Qi can fail to generate Lung (Metal) Qi, often leading to the simultaneous appearance of Qi deficiency symptoms in both organs. Therefore, diagnosing it as Spleen and Lung Qi Deficiency is the most accurate."
+    },
+    {
+      "id": 56,
+      "difficulty": "Hard",
+      "question": "A 49-year-old man had his left kidney removed 3 years ago due to complications from kidney stones. For the past two months, he has had severe pain in his right lumbar region, and an X-ray revealed a small stone in his remaining kidney. He has a constant, painful distension in his lower abdomen and reports that urine continues to dribble after urination. Strenuous activity induces pain in the kidney area. His appetite has recently decreased, and his stools are loose. His tongue is pale red, and his pulse is weak. How would you diagnose this?",
+      "options": {
+        "A": "Kidney Yang Deficiency",
+        "B": "Damp-Heat in the Lower Jiao",
+        "C": "Spleen and Kidney Qi Deficiency",
+        "D": "Qi and Blood Deficiency"
+      },
+      "answer": "C",
+      "explanation": "The patient shows signs of Kidney Qi Deficiency (history of kidney removal, lumbar pain, post-urination dribbling). At the same time, he clearly exhibits symptoms of Spleen Qi Deficiency (decreased appetite, loose stools). This can be diagnosed as a state of Spleen and Kidney Qi Deficiency, where the functions of both the Kidneys (the root of pre-heaven essence) and the Spleen (the root of post-heaven essence) are weakened."
+    },
+    {
+      "id": 57,
+      "difficulty": "Hard",
+      "question": "The patient's face is sallow and yellowish. What pattern can be suspected?",
+      "options": {
+        "A": "Spleen Deficiency",
+        "B": "Kidney Deficiency",
+        "C": "Lung Deficiency",
+        "D": "Heart Deficiency"
+      },
+      "answer": "A",
+      "explanation": "In Five Elements theory, the color yellow corresponds to the Earth element, which is associated with the Spleen. Therefore, a yellow complexion often indicates a problem with the Spleen's function. A yellow complexion can appear when Spleen Qi is deficient, leading to insufficient production of Qi and Blood, or when the Spleen's transportation and transformation functions are impaired, leading to the retention of Dampness."
+    },
+    {
+      "id": 58,
+      "difficulty": "Hard",
+      "question": "A male patient in his 50s presents with a severe cough. The cough sounds like a dog's bark, and he produces a large amount of thick, sticky, yellow phlegm. He is short of breath (wheezing), has shallow breathing, and feels a sense of oppression in his chest. He is very thirsty, cannot sleep well at night, and is restless. This is accompanied by dizziness. His tongue is red and swollen with a sticky yellow coating. His pulse is slippery and rapid. This belongs to which Lung Zang-fu pattern?",
+      "options": {
+        "A": "Phlegm-Heat Obstructing the Lungs",
+        "B": "Damp-Phlegm Obstructing the Lungs",
+        "C": "Wind-Dampness Invading the Lungs",
+        "D": "Phlegm-Fluid Obstructing the Lungs"
+      },
+      "answer": "A",
+      "explanation": "A barking cough, large amounts of yellow viscous phlegm, wheezing, chest oppression, thirst, restlessness, red tongue, sticky yellow coating, and a slippery-rapid pulse are all classic signs of Phlegm-Heat Obstructing the Lungs, where Phlegm and Heat bind in the Lungs, obstructing the Lung's function of descending and dispersing. This is distinguished from Damp-Phlegm, which features mainly white phlegm, and Phlegm-Fluid, which is characterized by clear, thin phlegm."
+    },
+    {
+      "id": 59,
+      "difficulty": "Hard",
+      "question": "A female patient in her 40s presents with severe palpitations and insomnia. Her sleep quality is poor due to excessive dreaming, she is very forgetful, and feels mentally restless. Especially in the evening, her cheeks become flushed and hot, she experiences night sweats, and her mouth becomes dry. Her tongue is red and peeled, with cracks observed at the tip. Her pulse is floating and deficient (felt with light pressure but lacks strength). This belongs to which Heart Zang-fu pattern?",
+      "options": {
+        "A": "Heart Yin Deficiency",
+        "B": "Phlegm-Fire Harassing the Heart",
+        "C": "Heart Fire Blazing Upwards",
+        "D": "Phlegm Misting the Mind"
+      },
+      "answer": "A",
+      "explanation": "The patient exhibits clear signs of deficiency heat arising from Yin deficiency (flushed cheeks, evening feverish sensation, night sweats, dry mouth, red peeled tongue) along with Heart-related symptoms (palpitations, insomnia, dream-disturbed sleep, forgetfulness). This is a classic presentation of Heart Yin Deficiency, where a deficiency of Heart Yin fluid gives rise to deficiency heat."
+    },
+    {
+      "id": 60,
+      "difficulty": "Hard",
+      "question": "A female patient in her 30s presents with palpitations, anxiety, restlessness, and insomnia. She has dizziness, feels a low-grade fever in the afternoon, and hears a ringing in her ears (tinnitus). Her tongue is red with a slight coating, and her pulse is thready and rapid. This belongs to which pattern?",
+      "options": {
+        "A": "Liver Fire Blazing Upwards",
+        "B": "Yin Deficiency with Tidal Fever",
+        "C": "Heart Blood Deficiency",
+        "D": "Heart Fire Blazing Upwards"
+      },
+      "answer": "B",
+      "explanation": "While symptoms like palpitations, anxiety, insomnia, dizziness, and tinnitus can appear in various Zang-fu patterns, the afternoon feverish sensation, red tongue, and thready-rapid pulse are characteristic findings of deficiency heat arising from a lack of Yin fluids. Therefore, rather than pinpointing a specific organ, differentiating it as a general state of Yin Deficiency giving rise to deficiency heat is the most comprehensive and appropriate diagnosis."
+    },
+    {
+      "id": 61,
+      "difficulty": "Hard",
+      "question": "A 35-year-old man, diagnosed with pulmonary tuberculosis, seeks herbal treatment. He reports that when he coughs, he brings up frothy sputum streaked with bright red blood. He has a low-grade fever in the afternoon, experiences night sweats, and has flushed cheeks. His tongue is red with no coating, and his pulse is thready and rapid. How would you diagnose this?",
+      "options": {
+        "A": "Lung Yin Deficiency with Tidal Fever",
+        "B": "Blood Heat",
+        "C": "Heat in the Blood and Lungs",
+        "D": "Liver and Kidney Yin Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Cough and hemoptysis indicate a pathology of the Lungs. The afternoon low-grade fever, night sweats, flushed cheeks, red tongue with no coating, and thready-rapid pulse are all classic symptoms of deficiency heat arising from Yin deficiency. Therefore, the most accurate diagnosis is 'Lung Yin Deficiency with deficiency heat,' where the deficiency heat damages the Lung collaterals, causing bleeding."
+    },
+    {
+      "id": 62,
+      "difficulty": "Hard",
+      "question": "A 35-year-old woman presents with premenstrual syndrome (PMS). She reports severe irritability and depression before her period, along with a feeling of fullness and distension in her chest and abdomen. During this time, she loses self-confidence and feels as if she has lost direction in life. She finds it difficult to concentrate and make decisions, and feels afraid of making changes in her life. Other symptoms include insomnia, blurry vision, dizziness, and leg numbness. Her pulse is thready, slightly wiry on the left, and choppy on the right. The sides of her tongue are pale. What is the root cause of the fear she is experiencing?",
+      "options": {
+        "A": "Liver Qi Stagnation",
+        "B": "Kidney Yin Deficiency",
+        "C": "Heart Blood Deficiency",
+        "D": "Liver Blood Deficiency"
+      },
+      "answer": "D",
+      "explanation": "While the patient exhibits symptoms of Liver Qi Stagnation (irritability, depression, distension) due to PMS, the question asks for the root cause. The insomnia, poor memory, blurry vision, dizziness, leg numbness, thready pulse, and pale tongue sides are all representative signs of Liver Blood Deficiency. When Liver Blood is deficient, it fails to nourish the Hun (Ethereal Soul), leading to mental instability and feelings of fear. It can be seen that an underlying Liver Blood Deficiency makes her prone to Liver Qi Stagnation."
+    },
+    {
+      "id": 63,
+      "difficulty": "Hard",
+      "question": "A female patient in her 50s presents with a chief complaint of a dry cough. She reports that there is little to no phlegm when she coughs, or if there is, it is a small amount of sticky phlegm that is difficult to expectorate. She is short of breath (wheezing), feels like there is phlegm stuck in her throat, and her throat and pharynx are dry. She has chest oppression, shallow breathing, and her whole body feels heavy. Her complexion is sallow and lusterless, like dry dough. Her tongue is swollen, with a dry, sticky coating, and her pulse is slippery and thready. This belongs to which Lung Zang-fu pattern?",
+      "options": {
+        "A": "Dry-Phlegm in the Lungs",
+        "B": "Lung Dryness",
+        "C": "Wind-Heat Invading the Lungs",
+        "D": "Lung Yin Deficiency"
+      },
+      "answer": "A",
+      "explanation": "This patient simultaneously presents with symptoms of Phlegm (sticky phlegm, sensation of a foreign body in the throat, feeling of heaviness, swollen tongue, slippery pulse) and symptoms of Dryness (dry cough, difficult-to-expectorate phlegm, dry throat, dry tongue coating). This is a state of Dry-Phlegm retention in the Lungs, where a deficiency of body fluids has caused the phlegm to become dry and viscous. It can be diagnosed as Dry-Phlegm Obstructing the Lungs. The difference from simple Lung Dryness or Lung Yin Deficiency lies in the presence of 'Phlegm'."
+    },
+    {
+      "id": 64,
+      "difficulty": "Hard",
+      "question": "A male patient in his 40s presents with chronic indigestion and headaches. He has frequent acid reflux and belching, is constantly fatigued, and has dry skin. His hair is lusterless and dry. He suffers from chronic pulsating headaches and blurry vision. This belongs to which pattern?",
+      "options": {
+        "A": "Liver Qi Counterflow, Liver Fire Blazing Upwards",
+        "B": "Liver Yang Rising, Liver Blood Deficiency",
+        "C": "Liver Blood Deficiency, Liver Qi Counterflow, Liver Fire Blazing Upwards",
+        "D": "Liver Yang Rising, Liver Blood Deficiency, Stomach Qi Counterflow"
+      },
+      "answer": "D",
+      "explanation": "This patient presents with a very complex set of symptoms. The pulsating headache and blurry vision suggest Liver Yang Rising and Liver Blood Deficiency. The dry skin and hair support the diagnosis of Blood Deficiency. The acid reflux and belching correspond to Stomach Qi Counterflow, where the Stomach Qi fails to descend and instead rebels upwards. Since impaired Liver dredging function can affect the Stomach's descending function, it is most reasonable to view this as a complex of these three patterns."
+    },
+    {
+      "id": 65,
+      "difficulty": "Hard",
+      "question": "A 70-year-old male patient presents with frequent urination at night. The urine is clear and copious, which consistently disturbs his sleep. He becomes short of breath after walking only a short distance and complains of low back pain, dizziness, forgetfulness, and tinnitus. According to Five Elements theory, this can be seen as a problem in which relationship?",
+      "options": {
+        "A": "Water overacting on Fire - Heart-Kidney Disharmony",
+        "B": "Metal failing to generate Water - Lung and Kidney Yin Deficiency",
+        "C": "Water failing to nourish Wood - Liver and Kidney Yin Deficiency",
+        "D": "Water insulting Earth - Spleen and Kidney Yang Deficiency"
+      },
+      "answer": "C",
+      "explanation": "The patient's symptoms are based on Kidney Deficiency (Water) - nocturia, low back pain, tinnitus, forgetfulness - and are accompanied by shortness of breath (related to the Lungs) and dizziness (related to the Liver). 'Water failing to nourish Wood' refers to a state where deficient Kidney Water fails to nourish Liver Wood. This can lead to Liver Yang Rising, causing symptoms like dizziness. In other words, this is a case where a problem with Water (Kidney) has affected Wood (Liver)."
+    },
+    {
+      "id": 66,
+      "difficulty": "Hard",
+      "question": "A male patient in his 60s presents with chest pain. He feels a stabbing pain in the heart region and a constricting sensation in his chest. His lips and nails have a purplish tint, and his hands are ice-cold. Examination of his tongue reveals an overall purplish color, and his pulse is knotted (skips beats at irregular intervals). This belongs to which Heart Zang-fu pattern?",
+      "options": {
+        "A": "Heart Blood Stasis",
+        "B": "Heart Qi Deficiency",
+        "C": "Sudden Collapse of Heart Yang",
+        "D": "Heart Yang Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Fixed, stabbing pain, cyanotic lips and nails, a purplish tongue, and a knotted pulse are all the most characteristic signs of Blood Stasis. Since the pain is in the heart region, this can be diagnosed as Heart Blood Stasis, where the blood vessels of the heart are obstructed by static blood."
+    },
+    {
+      "id": 67,
+      "difficulty": "Hard",
+      "question": "A 55-year-old male patient presents with cough, asthma, and shortness of breath. He has a feeling of oppression in his chest and hypochondrium, and produces yellow, sticky phlegm. He has a headache, dizziness, a red face, thirst, and a bitter taste in his mouth. His urine is dark, and he has a tendency towards constipation. His tongue is red with a yellow coating, and it is particularly redder on the sides. His pulse is wiry. This belongs to which Liver Zang-fu pattern?",
+      "options": {
+        "A": "Liver Yang Rising",
+        "B": "Liver Fire Invading the Stomach (Wood overacting on Earth)",
+        "C": "Liver Fire Blazing Upwards",
+        "D": "Liver Fire Invading the Lungs (Wood insulting Metal)"
+      },
+      "answer": "D",
+      "explanation": "The patient clearly exhibits signs of Liver Fire (red face, thirst, bitter taste, constipation, red tongue, wiry pulse). Simultaneously, there are Lung system symptoms (cough, asthma, shortness of breath, yellow phlegm). This is a state of 'Liver Fire insulting the Lungs' or 'Wood Fire insulting Metal,' where Liver Fire, following the Five Elements controlling cycle, attacks the Lungs (Metal), impairing the Lung's function of descending and dispersing."
+    },
+    {
+      "id": 68,
+      "difficulty": "Hard",
+      "question": "A 45-year-old male patient presents with poor appetite and nausea. He reports having a dry mouth but no desire to drink water, and his epigastrium always feels bloated and full. He is irritable and anxious, has a feeling of oppression in his chest and hypochondrium, and a bitter taste in his mouth. He has recently shown signs of jaundice. His body and head feel heavy, and his tongue has a thick, sticky, yellow coating. His pulse is slippery and wiry. This belongs to which Spleen Zang-fu pattern?",
+      "options": {
+        "A": "Spleen Dampness and Liver Qi Stagnation",
+        "B": "Blood Deficiency of the Spleen and Liver",
+        "C": "Damp-Heat Invading the Spleen",
+        "D": "Spleen Yang Deficiency"
+      },
+      "answer": "A",
+      "explanation": "The patient exhibits symptoms of Dampness retention in the Spleen (poor appetite, epigastric fullness, feeling of heaviness, yellow greasy coating, slippery pulse) as well as symptoms of Liver Qi Stagnation (irritability, chest and hypochondriac oppression, bitter taste, wiry pulse). When the Liver's dredging and regulating function is blocked, it can affect the Spleen's transformation and transportation function (Wood overacting on Earth), making it easy for Dampness to form. Therefore, this can be seen as a combined pathology of Liver Qi Stagnation and Spleen Deficiency with Damp retention."
+    },
+    {
+      "id": 69,
+      "difficulty": "Hard",
+      "question": "A 27-year-old female patient presents with a sweating problem. She sweats so profusely from her hands and feet that water drips from them, and the symptoms worsen during her menstrual period or when she is excited. Other symptoms include palpitations, thirst with a desire for cold drinks, and irritability. The patient appears healthy and energetic on the outside and does not complain of fatigue. Her tongue is red, and her pulse is rapid.",
+      "options": {
+        "A": "Liver Qi Stagnation Transforming into Fire",
+        "B": "Heart Fire",
+        "C": "Heart-Kidney Disharmony",
+        "D": "Heart Yin Deficiency"
+      },
+      "answer": "B",
+      "explanation": "The Heart governs sweat. Palpitations, thirst, irritability, a red tongue, and a rapid pulse are all signs of exuberant Fire in the Heart (Heart Fire). The Heart Fire forces the body fluids outwards, causing excessive sweating. The fact that the patient does not feel tired and appears energetic suggests an excess pattern rather than a deficiency pattern."
+    },
+    {
+      "id": 70,
+      "difficulty": "Hard",
+      "question": "A male patient in his 30s presents with a sudden onset of edema. The edema started on his eyelids and face and has gradually spread to his entire body. His urine output has decreased, and the urine is clear. He has an aversion to wind, fever, cough, and dyspnea. His tongue has a sticky white coating, and his pulse is floating and slippery. This belongs to which Lung Zang-fu pattern?",
+      "options": {
+        "A": "Phlegm-Fluid Obstructing the Lungs",
+        "B": "Phlegm-Heat Obstructing the Lungs",
+        "C": "Wind-Dampness Invading the Lungs",
+        "D": "Damp-Phlegm Obstructing the Lungs"
+      },
+      "answer": "C",
+      "explanation": "Edema that starts on the face and is accompanied by exterior symptoms like aversion to wind, fever, and cough is characteristic of edema caused by an external pathogen. This corresponds to 'Wind-Water Overflowing,' where pathogenic Wind, accompanied by water-dampness, obstructs the Lung's function of regulating the water passages. In other words, the Lungs have been invaded by Wind-Dampness."
+    },
+    {
+      "id": 71,
+      "difficulty": "Hard",
+      "question": "A male patient in his 40s complains of severe constipation, having a bowel movement every 3-5 days. He has to strain very hard during defecation, is extremely thirsty, and has bad breath. His tongue has a thick, dry yellow coating, and his pulse is slippery and forceful. This belongs to which pattern?",
+      "options": {
+        "A": "Kidney Yin Deficiency",
+        "B": "Spleen Deficiency with Damp-Phlegm",
+        "C": "Liver Qi Stagnation",
+        "D": "Stomach Heat, Fluid Damage"
+      },
+      "answer": "D",
+      "explanation": "Severe thirst, bad breath, a dry yellow coating, and a slippery, forceful pulse are all characteristic features of heat-bind constipation, where heat has accumulated in the Stomach and Intestines. The heat in the Stomach and Intestines has dried up the body fluids, making the stool dry, and the turbid qi rises, causing bad breath. Constipation due to Yin fluid deficiency is more common in the elderly and presents with a deficiency pattern: a red tongue with little coating and a thready pulse."
+    },
+    {
+      "id": 72,
+      "difficulty": "Hard",
+      "question": "A 79-year-old patient presents with shortness of breath (wheezing), rapid breathing, chills, and fever. The tongue has a white coating, and the pulse is floating and tight. This belongs to which pattern?",
+      "options": {
+        "A": "Wind-Cold",
+        "B": "Phlegm with Exterior Cold",
+        "C": "Lung and Kidney Qi Deficiency",
+        "D": "Wei Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Chills, fever, and a floating-tight pulse are classic findings of an exterior pattern of an externally-contracted Wind-Cold. Even in an elderly patient, if these exterior signs are clear along with asthma and dyspnea, treating the external Wind-Cold pathogen is the priority."
+    },
+    {
+      "id": 73,
+      "difficulty": "Hard",
+      "question": "A 48-year-old obese man has been experiencing chest pain for 2 years. The pain began as a dull, oppressive sensation, triggered by fatigue or emotional stress. It has now changed to a stabbing nature, with symptoms including palpitations, a cough with thick white phlegm, and shortness of breath. Symptoms worsen with exercise, and his complexion is murky and dull. His head feels heavy as if wrapped in a bag, and he has a poor appetite and loose stools. He sweats easily after exercise. His tongue is dark red with purplish spots and a greasy white coating. His pulse is thin, choppy, and soft. How would you diagnose this?",
+      "options": {
+        "A": "Damp-Phlegm, Heart Blood Stasis, Qi Deficiency",
+        "B": "Phlegm-Fire Harassing the Heart, Heart Blood Stasis",
+        "C": "Heart Yang Deficiency, Heart Blood Stasis",
+        "D": "Phlegm Misting the Mind, Heart Qi Deficiency"
+      },
+      "answer": "A",
+      "explanation": "The patient has Blood Stasis, as indicated by the stabbing chest pain and the purplish spots on his tongue. The thick white phlegm, heavy head, and greasy white coating suggest the presence of Phlegm. The worsening of symptoms with exercise, poor appetite, loose stools, easy sweating, and a choppy, soft pulse indicate Qi Deficiency. Therefore, this patient can be diagnosed with a complex pattern where Phlegm and Blood Stasis are obstructing the heart vessels, based on an underlying Qi Deficiency."
+    },
+    {
+      "id": 74,
+      "difficulty": "Hard",
+      "question": "A female patient in her 40s complains of a cough with slight dyspnea and chest pain. She is easily angered, often has a red face, feels hot, and is very thirsty. Her tongue is red with a yellow coating, and her pulse is large and rapid. This belongs to which Lung pattern?",
+      "options": {
+        "A": "Wind-Dampness Invading the Lungs",
+        "B": "Phlegm-Heat Obstructing the Lungs",
+        "C": "Wind-Heat Invading the Lungs",
+        "D": "Lung Heat"
+      },
+      "answer": "D",
+      "explanation": "Cough, dyspnea, and chest pain indicate a Lung problem. The red face, sensation of heat, thirst, red tongue with a yellow coating, and a large, rapid pulse are all signs of exuberant Heat. Since there is no mention of phlegm, it is most appropriate to diagnose this as a Lung Heat syndrome, where a pathogenic heat factor has directly invaded the Lungs and impaired their function, rather than Phlegm-Heat."
+    },
+    {
+      "id": 75,
+      "difficulty": "Hard",
+      "question": "A male patient in his 40s presents with palpitations and shortness of breath on exertion. He is constantly tired and feels a sense of oppression and discomfort in his chest. He is very sensitive to cold, has cold hands, and his face is bright-white without luster. His tongue is pale and moist, and his pulse is deep and weak. This belongs to which Heart Zang-fu pattern?",
+      "options": {
+        "A": "Heart Qi Deficiency",
+        "B": "Heart Blood Deficiency",
+        "C": "Heart Yang Deficiency",
+        "D": "Collapse of Heart Yang"
+      },
+      "answer": "C",
+      "explanation": "The patient has symptoms of Heart Qi Deficiency (palpitations, shortness of breath on exertion, fatigue, pale face) along with cold symptoms (aversion to cold, cold hands). This indicates that the condition has progressed beyond Qi Deficiency to a deficiency of Yang Qi, which warms the body, signifying a state of Heart Yang Deficiency. The pale, moist tongue and the deep, weak pulse are also findings of Yang deficiency."
+    },
+    {
+      "id": 76,
+      "difficulty": "Hard",
+      "question": "A male patient in his 50s presents after being diagnosed with optic nerve atrophy. His other symptoms include dry eyes, blurry vision, tinnitus, dizziness, and nocturnal emissions. His tongue is red with a slight coating, and his pulse is thready and weak. This belongs to which pattern?",
+      "options": {
+        "A": "Liver and Heart Blood Deficiency",
+        "B": "Liver and Kidney Yin Deficiency",
+        "C": "Kidney Essence Deficiency",
+        "D": "Heart-Kidney Disharmony"
+      },
+      "answer": "B",
+      "explanation": "Optic nerve atrophy, dry eyes, and blurry vision indicate a Liver problem (The Liver opens into the eyes). Tinnitus, dizziness, and nocturnal emissions suggest a Kidney problem (The Kidneys govern the bones and produce marrow; The Kidneys store essence). The red tongue and thready, weak pulse indicate Yin Deficiency. Therefore, this can be diagnosed as Liver and Kidney Yin Deficiency, where the yin fluids of both the Liver and Kidneys are depleted."
+    },
+    {
+      "id": 77,
+      "difficulty": "Hard",
+      "question": "A 45-year-old male patient complains of poor appetite and nausea. He has a dry mouth but no desire to drink, and his epigastrium always feels bloated and full. He is irritable and anxious, has a feeling of oppression in his chest and hypochondrium, and a bitter taste in his mouth. He has recently shown signs of jaundice. His body and head feel heavy, and his tongue has a thick, sticky yellow coating. His pulse is slippery and wiry. This belongs to which Spleen Zang-fu pattern?",
+      "options": {
+        "A": "Spleen-Stomach Damp-Heat, Liver Qi Stagnation",
+        "B": "Liver Blood Deficiency, Spleen Not Controlling Blood",
+        "C": "Food Stagnation, Liver Fire Blazing Upwards",
+        "D": "Spleen Yang Deficiency"
+      },
+      "answer": "A",
+      "explanation": "The patient exhibits symptoms of Damp-Heat retention in the Spleen (poor appetite, epigastric fullness, feeling of heaviness, jaundice, yellow greasy coating, slippery pulse) as well as symptoms of Liver Qi Stagnation (anxiety, chest and hypochondriac oppression, bitter taste, wiry pulse). This can be seen as a combined pathology of Liver Qi Stagnation and Spleen-Stomach Damp-Heat."
+    },
+    {
+      "id": 78,
+      "difficulty": "Hard",
+      "question": "A female patient in her 50s presents with a pale face. She has wheezing and gasps for breath, and her breathing is short and rapid. Her voice is weak, she has a cough, and she sweats all over her body with even slight activity. Her tongue is pale, and her pulse is weak. This belongs to which pattern?",
+      "options": {
+        "A": "Kidney Failing to Grasp Qi",
+        "B": "Lung Qi Deficiency",
+        "C": "Liver Fire Invading the Lungs",
+        "D": "Qi and Blood Deficiency"
+      },
+      "answer": "B",
+      "explanation": "Wheezing, short and rapid breathing, a weak voice, cough, sweating with activity, a pale tongue, and a weak pulse are all classic symptoms of Lung Qi Deficiency. Since the Lungs govern respiration and the skin and hair, a deficiency of Lung Qi leads to respiratory symptoms and an inability to control the pores, resulting in easy sweating."
+    },
+    {
+      "id": 79,
+      "difficulty": "Hard",
+      "question": "A female patient in her 30s complains of difficulty falling asleep, dream-disturbed sleep, palpitations, and severe forgetfulness. She has almost no appetite (anorexia) and a pale complexion. Her tongue was pale with a white coating, and her pulse was thready and weak. This belongs to which pattern?",
+      "options": {
+        "A": "Heart-Kidney Disharmony",
+        "B": "Heart and Spleen Qi Deficiency",
+        "C": "Liver Yang Rising",
+        "D": "Gallbladder Deficiency"
+      },
+      "answer": "B",
+      "explanation": "The patient exhibits symptoms of deficient Heart Blood (insomnia, dream-disturbed sleep, palpitations, forgetfulness) along with symptoms of weak Spleen Qi failing to generate Qi and Blood (anorexia, pale complexion, pale tongue, weak pulse). This corresponds to Heart and Spleen Deficiency, often caused by excessive thinking and worry damaging both the Heart and the Spleen. This is a classic Gui Pi Tang pattern."
+    },
+    {
+      "id": 80,
+      "difficulty": "Hard",
+      "question": "A 65-year-old female patient complains of dizziness, tinnitus, and forgetfulness. She is constantly tired and depressed, and her mouth is particularly dry at night. She has a sore lower back and an aching pain in her bones, along with thirst, constipation, and dark, scanty urine. Her tongue is cracked with no coating, and her pulse is floating and deficient (felt with light pressure but lacks strength). This belongs to which Kidney Zang-fu pattern?",
+      "options": {
+        "A": "Liver and Kidney Yin Deficiency",
+        "B": "Kidney Qi and Yin Deficiency",
+        "C": "Kidney Yin Deficiency",
+        "D": "Heart-Kidney Disharmony"
+      },
+      "answer": "C",
+      "explanation": "Dizziness, tinnitus, forgetfulness, low back pain, bone pain, dry mouth at night, thirst, constipation, scanty dark urine, a cracked tongue with no coating, and a deficient pulse are all classic symptoms of Kidney Yin Deficiency, where a lack of Kidney yin fluid gives rise to deficiency heat."
+    },
+    {
+      "id": 81,
+      "difficulty": "Hard",
+      "question": "A male patient in his 30s presents with a sudden onset of edema. The edema started on his eyelids and face and has gradually spread to his entire body. His urine output has decreased, and the urine is clear. He has an aversion to wind, fever, cough, and dyspnea. His tongue has a sticky white coating, and his pulse is floating and slippery. Which pathology does this correspond to?",
+      "options": {
+        "A": "Kidney Qi Deficiency",
+        "B": "Spleen and Kidney Yang Deficiency",
+        "C": "Cold-Damp in the Bladder",
+        "D": "Wind and Water invading the Wei-Qi"
+      },
+      "answer": "D",
+      "explanation": "Edema that starts on the face and is accompanied by external signs like aversion to wind, fever, and a floating pulse suggests that a pathogenic Wind is the cause. The pathogenic Wind, accompanied by water-qi, has attacked the body's defensive Wei Qi system and paralyzed the Lung's function of regulating water passages, causing edema."
+    },
+    {
+      "id": 82,
+      "difficulty": "Hard",
+      "question": "A 45-year-old man complains of erectile dysfunction. The problem started when he fainted and lost consciousness during intercourse with his wife. He suffers from depression, palpitations, insomnia with dream-disturbed sleep, has a dark complexion, and complains of frequent urination. His tongue was pale, and his pulse was wiry, thin, and deep. What is the diagnosis?",
+      "options": {
+        "A": "Kidney Qi Deficiency, Heart Qi Deficiency, Liver Qi Stagnation",
+        "B": "Decline of Ming Men Fire, Blood Deficiency",
+        "C": "Heart-Kidney Disharmony, Damp-Heat Pouring Downward",
+        "D": "Qi and Blood Deficiency"
+      },
+      "answer": "A",
+      "explanation": "Erectile dysfunction and frequent urination indicate Kidney Qi Deficiency. Palpitations, insomnia, and dream-disturbed sleep point to Heart Qi or Heart Blood Deficiency. The traumatic event of fainting during intercourse, along with depression and a wiry pulse, suggests Liver Qi Stagnation due to extreme stress. Therefore, this can be diagnosed as a complex condition involving all three organs, a mix of deficiency and excess."
+    },
+    {
+      "id": 83,
+      "difficulty": "Hard",
+      "question": "A 39-year-old man presents with tinnitus which he has had for 11 years. It started slowly in the left ear and sounds like an airplane engine. Other symptoms include dizziness, some hearing loss, low back pain, erectile dysfunction, and a mucous discharge from the genitals. He has had occasional loose stools mixed with mucus since he was a teenager. He is thirsty, and wakes frequently at night, unable to sleep well. His tongue is slightly red and swollen, with a crack in the Heart area, and the coating is rootless and peeled in patches. The pulse is thready on the right, and slippery and full on the left.",
+      "options": {
+        "A": "Liver Fire Blazing Upwards, Heart Blood Stasis, Heart Fire",
+        "B": "Kidney Yin Deficiency, Spleen and Lung Qi Deficiency",
+        "C": "Kidney Essence Deficiency, Liver Blood Stasis, Heart Blood Stasis",
+        "D": "Kidney Yin Deficiency, Spleen Deficiency producing Phlegm, Heart Fire"
+      },
+      "answer": "D",
+      "explanation": "The patient shows Kidney Yin Deficiency (tinnitus, low back pain, erectile dysfunction, peeled tongue coating), Spleen Deficiency producing Phlegm (loose stools, mucous discharge, swollen tongue, slippery pulse), and Heart Fire or deficiency heat (insomnia, tongue crack in Heart area). Therefore, a comprehensive treatment approach is needed: tonify the Spleen to eliminate the source of Phlegm, nourish Kidney Yin and clear deficiency heat, and calm the spirit to treat the ear."
+    },
+    {
+      "id": 84,
+      "difficulty": "Hard",
+      "question": "A 45-year-old woman presents with a headache she has had for the past 4 years. The pain is mainly in the forehead but sometimes at the vertex, and it is worse during the day. When she has a headache, her head feels heavy, but there is no dizziness. Other symptoms include sinusitis, low back pain, frequent urination, and low energy. She is currently constipated, but in the past, her stools were sometimes loose. The patient is averse to cold. Her tongue is swollen and pale with a glossy yellow coating. Her pulse on the right side was deep, deficient, and slippery. Which of the following is the appropriate pattern differentiation?",
+      "options": {
+        "A": "Spleen Deficiency with Damp-Phlegm, Kidney Yin Deficiency",
+        "B": "Spleen Qi Deficiency, Cold-Damp",
+        "C": "Qi and Blood Deficiency, Phlegm",
+        "D": "Spleen and Kidney Yang Deficiency, Dampness"
+      },
+      "answer": "D",
+      "explanation": "The patient shows Kidney Yang Deficiency (low back pain, frequent urination, aversion to cold, deep pulse) and Spleen Yang Deficiency (low energy, history of loose stools, swollen tongue). The feeling of a heavy head, slippery pulse, and glossy coating indicate the presence of Dampness."
+    },
+    {
+      "id": 85,
+      "difficulty": "Hard",
+      "question": "A 35-year-old woman has suffered from wheezing since the birth of her first child 6 years ago. The patient has chest oppression and feels tired often. She has a large amount of phlegm. Other symptoms include low back pain, tinnitus, and frequent urination. Her tongue is pale and swollen, and her pulse is deep and slow, and occasionally slippery. Which of the following is the appropriate treatment plan?",
+      "options": {
+        "A": "Nourish Liver and Kidney Yin, Nourish Lung Yin",
+        "B": "Tonify Spleen, Tonify Kidney Qi, Tonify Lung Qi",
+        "C": "Expel Phlegm, Descend Rebellious Lung Qi",
+        "D": "Tonify Kidney Yang, Tonify Lung Qi, Expel Phlegm"
+      },
+      "answer": "D",
+      "explanation": "The patient exhibits symptoms of Kidney Deficiency (wheezing after childbirth, low back pain, tinnitus, frequent urination, deep pulse). The weak pulse and pale tongue suggest it is closer to Yang Deficiency. The presence of phlegm indicates that the Spleen is deficient, leading to the production of phlegm. Therefore, treatment should simultaneously tonify Kidney Yang to strengthen the root of respiration, descend Lung Qi to alleviate the wheezing, and tonify the Spleen to prevent the formation of phlegm."
+    }
+  ]
+}
