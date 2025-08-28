@@ -1,358 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-QC84KCE6C1');
-</script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive TCM</title>
+    <title>Interactive TCM Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
             background-color: #F7F3EF;
-            color: #333;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            touch-action: manipulation;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            transition: background-color 0.3s;
         }
-        h1, h2, .font-serif {
-            font-family: 'Cormorant Garamond', serif;
+        .quiz-option {
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
         }
-        .nav-link {
-            display: block;
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            transition: background-color 0.3s, color 0.3s;
-            color: #5a5a5a;
+        .correct {
+            background-color: #22c55e !important;
+            color: white !important;
+            border-color: #16a34a !important;
         }
-        .nav-link:hover {
-            background-color: #EAE8E1;
-            color: #000;
+        .incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+            border-color: #dc2626 !important;
         }
-        #gameFrame {
-            border: none;
-            border-radius: 8px;
-            background-color: #F7F3EF;
+        .explanation {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            border-color: transparent; /* Initially transparent border */
         }
-        .lang-button {
-            transition: all 0.3s ease;
-        }
-        .lang-button.active {
-            background-color: #4a5568;
-            color: white;
-            transform: scale(1.05);
+        .explanation.show {
+            max-height: 500px; /* A large enough height */
+            padding: 1rem; /* Apply padding only when visible */
+            border-color: #e5e7eb; /* Show border when visible */
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Main Header -->
-    <header id="main-header" class="text-center py-16 md:py-20 relative">
-        <div class="absolute top-4 right-4 flex gap-2">
-            <button id="lang-en" onclick="switchLanguage('en')" class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-                ENG
-            </button>
-            <button id="lang-ko" onclick="switchLanguage('ko')" class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
-                한국어
-            </button>
-        </div>
-        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM" data-ko="한의학 공부">
-            Interactive TCM
-        </h1>
-        <p id="author" class="text-gray-500 mt-2 text-lg" data-en="Hyungsuk Choi" data-ko="최형석">Hyungsuk Choi</p>
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
     </header>
 
-    <!-- Main Navigation Menu -->
-    <nav id="main-nav" class="max-w-6xl mx-auto px-10 pb-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <!-- Theory -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Theory" data-ko="이론">Theory</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Organs Summary" data-ko="오장 생리">Five Organs Summary</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Pattern Diagnosis" data-ko="변증 기초">Pattern Basic</a></li>
-                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
-                    <li><a href="organpattern_comb.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Pattern Combination" data-ko="장부변증 조합">Organ Pattern Combination</a></li>
-                    <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
-                    <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
-                   <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Pattern's Tongue and Pulse" data-ko="기본 변증 맥과 설">Basic Pattern Tongue and Pulse</a></li>
-                  <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
-                    <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>  
-                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
-                    <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
-                </ul>
-            </div>
-         
-            <!-- Formula -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Formula" data-ko="방제학">Formula</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
-                    <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
-                    <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
-                    <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
-                    <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
-                    <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
-                    <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
-                    <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
-                    <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
-                    <li><a href="xiaochaihu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Xiao Chai Hu Tang Tragedy" data-ko="소시호탕 사고">Xiao Chai Hu Tang Tragedy</a></li>
-                </ul>
-            </div>
-
-            <!-- Acupuncture -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Acupuncture" data-ko="침구학">Acupuncture</h2>
-                <ul class="space-y-2 pl-0">
-                   <li><a href="acu_process.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Acupuncture Process" data-ko="침구과정">Acupuncture Process</a></li>
-                    <li><a href="acu_organ_injury.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Injury" data-ko="장부손상">Organ Injury</a></li>
-                </ul>
-            </div>
-
-            <!-- History -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="History" data-ko="한의학사">History</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Brief History of TCM" data-ko="한의학사 요약">Brief History of TCM</a></li>                                        
-                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
-                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
-                </ul>
-            </div>
-
-            <!-- Games -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Games" data-ko="게임">Games</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>                    
-                    <li><a href="5_tower.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tower Stack" data-ko="오행 탑 쌓기">Five Element Tower</a></li>
-                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
-                    <li><a href="herbal_runner_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Runner Game" data-ko="약초 달리기">Herb Runner</a></li>
-                </ul>
-            </div>
-
-            <!-- Misc -->
-            <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Misc" data-ko="기타">Misc</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><span class="nav-link text-gray-400 cursor-not-allowed" data-en="Coming Soon..." data-ko="준비중...">Coming Soon...</span></li>
-                </ul>
+    <main class="w-full max-w-3xl mx-auto p-4 md:p-6">
+        <!-- 단계 선택 화면 -->
+        <div id="stage-selection-container" class="text-center p-8 bg-white rounded-xl shadow-lg">
+            <h2 id="stage-title" class="text-3xl font-bold mb-6">단계를 선택하세요</h2>
+            <div class="space-y-4">
+                <button id="stage-1-button" class="w-full max-w-xs mx-auto bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors">1단계</button>
+                <button id="stage-2-button" class="w-full max-w-xs mx-auto bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition-colors">2단계</button>
             </div>
         </div>
-    </nav>
 
-    <!-- Food Runner Game Section -->
-    <section class="max-w-4xl mx-auto px-4 pb-16 flex flex-col items-center">
-        <iframe 
-            id="gameFrame" 
-            src="food_runner.html?lang=en" 
-            width="820" 
-            height="170"
-            title="Food Runner Game">
-        </iframe>
-    </section>
+        <div id="quiz-container" style="display: none;">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div id="progress-bar" class="w-0 h-2 bg-green-500 transition-all duration-300"></div>
+                <div class="p-6 md:p-8">
+                    <div id="quiz-header" class="flex justify-between items-center mb-4">
+                        <p id="question-counter" class="text-sm font-semibold text-gray-500"></p>
+                        <p id="difficulty-badge" class="px-3 py-1 text-xs font-bold rounded-full"></p>
+                    </div>
+                    <h2 id="question-text" class="text-lg md:text-xl font-bold mb-6 min-h-[100px]"></h2>
+                    <div id="options-container" class="space-y-3">
+                        <!-- Options will be inserted here -->
+                    </div>
+                    <div id="feedback-container" class="mt-6">
+                        <div id="explanation-box" class="explanation bg-gray-50 border rounded-lg text-left">
+                            <h3 id="explanation-title" class="font-bold text-lg mb-2"></h3>
+                            <p id="explanation-text" class="text-gray-700"></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="quiz-footer" class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                    <button id="next-button" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50" style="display: none;"></button>
+                </div>
+            </div>
+        </div>
 
-    <!-- Main Footer -->
-    <footer class="text-center py-4 mt-8 text-sm text-gray-500">
+        <!-- Result Screen -->
+        <div id="result-container" class="text-center p-8 bg-white rounded-xl shadow-lg" style="display: none;">
+            <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
+            <p id="result-score" class="text-5xl font-bold text-green-600 mb-4"></p>
+            <p id="result-message" class="text-gray-600 mb-8"></p>
+            <button id="restart-button" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors"></button>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
     </footer>
 
     <script>
-        // Language & Page Management
-        let currentLanguage = 'en';
+        // --- FALLBACK DATA ---
+        const fallbackData = {
+            ko: {
+                "하": [{ "id": 998, "difficulty": "하", "question": "예제 문제 1 (하): 30대 여성이 가슴이 두근거리고 불안하며 손바닥에 열감이 있다고 호소합니다. 밤에 식은땀이 나고 입이 마릅니다. 이 경우 가장 적절한 변증은?", "options": { "A": "심음허", "B": "심기허", "C": "심혈허", "D": "심양허" }, "answer": "A", "explanation": "심계와 불안에 더해 오후조열, 오심번열, 야간 도한, 구건 등 음허 내열 증상이 동반되어 심음허로 변증합니다." }],
+                "중": [],
+                "상": [{ "id": 999, "difficulty": "상", "question": "예제 문제 2 (상): 40대 남성이 후배의 승진 후 스트레스로 화를 잘 내고 관자놀이 두통과 이명을 호소합니다. 혀는 붉고 맥이 현삭합니다. 이 경우 가장 적절한 변증은?", "options": { "A": "위화", "B": "간화", "C": "심화", "D": "담화" }, "answer": "B", "explanation": "명확한 스트레스 사건 이후 발생한 급조이노, 측두통, 현삭맥 등은 간화의 대표적인 증상입니다." }]
+            },
+            en: {
+                "Easy": [{ "id": 998, "difficulty": "Easy", "question": "Example 1 (Easy): A 30-year-old woman complains of palpitations, anxiety, and heat in her palms. She has night sweats and a dry mouth. What is the most likely pattern?", "options": { "A": "Heart Yin Deficiency", "B": "Heart Qi Deficiency", "C": "Heart Blood Deficiency", "D": "Heart Yang Deficiency" }, "answer": "A", "explanation": "Along with palpitations and anxiety, symptoms of yin deficiency heat such as afternoon fever, five-palm heat, night sweats, and dry mouth point towards Heart Yin Deficiency." }],
+                "Medium": [],
+                "Hard": [{ "id": 999, "difficulty": "Hard", "question": "Example 2 (Hard): A 40-year-old man, after stress from a colleague's promotion, has anger, temporal headaches, and tinnitus. His tongue is red and the pulse is wiry and rapid. What is the most likely pattern?", "options": { "A": "Stomach Fire", "B": "Liver Fire", "C": "Heart Fire", "D": "Gallbladder Fire" }, "answer": "B", "explanation": "Irascibility, temporal headaches, and a wiry/rapid pulse following a clear stress event are classic signs of Liver Fire." }]
+            }
+        };
 
-        // URL 파라미터에서 언어 정보 추출하는 함수
-        function getLanguageFromURL() {
+        // --- DATA SOURCE ---
+        async function loadQuizData(lang) {
+           try {
+               const response = await fetch(`./organpattern_quiz_${lang}.json`); 
+               if (!response.ok) {
+                   throw new Error(`HTTP error! status: ${response.status}`);
+               }
+               const data = await response.json();
+               return { data: data, isFallback: false };
+           } catch (error) {
+               console.warn("Could not load quiz data from file. Using fallback data.", error);
+               return { data: fallbackData[lang], isFallback: true };
+           }
+        }
+      
+        // --- UI TEXTS ---
+        const uiTexts = {
+            ko: {
+                stageTitle: "단계를 선택하세요",
+                stage1: "1단계",
+                stage2: "2단계",
+                difficulty: { '하': '하', '중': '중', '상': '상' },
+                difficultyColors: { '하': 'bg-blue-100 text-blue-800', '중': 'bg-yellow-100 text-yellow-800', '상': 'bg-red-100 text-red-800' },
+                questionCounter: (current, total) => `문제 ${current} / ${total}`,
+                explanationTitle: "해설",
+                nextButton: "다음 문제",
+                resultTitle: "퀴즈 완료!",
+                resultMessage: "수고하셨습니다! 다시 도전해보세요.",
+                restartButton: "단계 선택으로"
+            },
+            en: {
+                stageTitle: "Select a Stage",
+                stage1: "Stage 1",
+                stage2: "Stage 2",
+                difficulty: { 'Easy': 'Easy', 'Medium': 'Medium', 'Hard': 'Hard' },
+                difficultyColors: { 'Easy': 'bg-blue-100 text-blue-800', 'Medium': 'bg-yellow-100 text-yellow-800', 'Hard': 'bg-red-100 text-red-800' },
+                questionCounter: (current, total) => `Question ${current} / ${total}`,
+                explanationTitle: "Explanation",
+                nextButton: "Next Question",
+                resultTitle: "Quiz Complete!",
+                resultMessage: "Well done! Try again to improve your score.",
+                restartButton: "Back to Stages"
+            }
+        };
+
+        // --- QUIZ LOGIC ---
+        let currentLang = 'ko';
+        let currentUiTexts;
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answerSelected = false;
+
+        const stageSelectionContainer = document.getElementById('stage-selection-container');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+        
+        const questionCounterEl = document.getElementById('question-counter');
+        const difficultyBadgeEl = document.getElementById('difficulty-badge');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const explanationBoxEl = document.getElementById('explanation-box');
+        const explanationTitleEl = document.getElementById('explanation-title');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextButtonEl = document.getElementById('next-button');
+        const restartButtonEl = document.getElementById('restart-button');
+        const progressBarEl = document.getElementById('progress-bar');
+        
+        function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
-            const langParam = urlParams.get('lang');
-            
-            // 지원되는 언어만 허용
-            if (langParam === 'ko' || langParam === 'kor' || langParam === 'korean') {
-                return 'ko';
-            } else if (langParam === 'en' || langParam === 'eng' || langParam === 'english') {
-                return 'en';
-            }
-            
-            // 기본값은 영어
-            return 'en';
+            return urlParams.get(param);
         }
 
-        // URL에 언어 파라미터 업데이트하는 함수
-        function updateURLLanguage(lang) {
-            const url = new URL(window.location);
-            url.searchParams.set('lang', lang);
-            window.history.replaceState(null, '', url.toString());
-        }
-
-        // 언어 버튼 상태 업데이트
-        function updateLanguageButtons(lang) {
-            document.querySelectorAll('.lang-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const activeButton = document.getElementById(`lang-${lang}`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-        }
-
-        // 페이지 메시지 표시 함수
-        function showPageMessage(message) {
-            const existingModal = document.getElementById('page-message-modal');
-            if (existingModal) return;
-
-            const modalOverlay = document.createElement('div');
-            modalOverlay.id = 'page-message-modal';
-            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4';
-            
-            const modalContent = document.createElement('div');
-            modalContent.className = 'bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full';
-            modalContent.innerHTML = `<p class="mb-4 text-gray-800">${message}</p>`;
-            
-            const closeButton = document.createElement('button');
-            closeButton.className = 'px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors';
-            closeButton.textContent = 'OK';
-            
-            modalContent.appendChild(closeButton);
-            modalOverlay.appendChild(modalContent);
-            document.body.appendChild(modalOverlay);
-            
-            const closeModal = () => {
-                if(document.body.contains(modalOverlay)){
-                    document.body.removeChild(modalOverlay);
-                }
-            };
-
-            closeButton.onclick = closeModal;
-            modalOverlay.onclick = (e) => {
-                if (e.target === modalOverlay) {
-                    closeModal();
-                }
-            };
-        }
-
-        // 네비게이션 확인 및 이동 함수
-        window.checkAndNavigate = async function(event) {
+        function toggleLanguage(event) {
             event.preventDefault();
-            const linkElement = event.currentTarget;
-            const targetUrl = await determineTargetUrl(linkElement, currentLanguage);
-
-            try {
-                const response = await fetch(targetUrl, { method: 'HEAD' });
-                if (response.ok) {
-                    window.location.href = targetUrl;
-                } else {
-                    showPageMessage(currentLanguage === 'ko' ? '준비 중입니다' : 'Under Construction');
-                }
-            } catch (error) {
-                console.error('Navigation check failed:', error);
-                showPageMessage(currentLanguage === 'ko' ? '페이지를 열 수 없습니다.' : 'Page cannot be opened.');
-            }
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            const url = new URL(window.location);
+            url.searchParams.set('lang', newLang);
+            window.location.href = url.toString();
         }
 
-        // 타겟 URL 결정 함수
-        async function determineTargetUrl(linkElement, lang) {
-            const originalHref = linkElement.getAttribute('href').split('?')[0];
-            const baseHref = originalHref.replace('.html', '');
-
-            // 영어 모드일 경우
-            if (lang !== 'ko') {
-                return `${originalHref}?lang=en`;
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
+            return array;
+        }
 
-            // 한국어 모드일 경우
-            try {
-                // 1. 전통적인 '_k.html' 파일 확인
-                const kVersionUrl = `${baseHref}_k.html`;
-                const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
+        function selectRandomQuestions(data, counts) {
+            let selected = [];
+            const difficulties = currentLang === 'ko' ? ['하', '중', '상'] : ['Easy', 'Medium', 'Hard'];
+            
+            const [easyKey, mediumKey, hardKey] = difficulties;
 
-                if (kVersionResponse.ok) {
-                    return kVersionUrl;
-                }
+            const easyQuestions = data[easyKey] ? shuffleArray([...data[easyKey]]).slice(0, counts.easy) : [];
+            const mediumQuestions = data[mediumKey] ? shuffleArray([...data[mediumKey]]).slice(0, counts.medium) : [];
+            const hardQuestions = data[hardKey] ? shuffleArray([...data[hardKey]]).slice(0, counts.hard) : [];
+
+            selected = [...easyQuestions, ...mediumQuestions, ...hardQuestions];
+            return shuffleArray(selected);
+        }
+
+        function displayQuestion() {
+            answerSelected = false;
+            explanationBoxEl.classList.remove('show');
+            nextButtonEl.style.display = 'none';
+            
+            const question = quizQuestions[currentQuestionIndex];
+            const totalQuestions = quizQuestions.length;
+            
+            progressBarEl.style.width = `${((currentQuestionIndex) / totalQuestions) * 100}%`;
+
+            questionCounterEl.textContent = currentUiTexts.questionCounter(currentQuestionIndex + 1, totalQuestions);
+            
+            const difficultyKey = currentLang === 'ko' ? question.difficulty : Object.keys(uiTexts.en.difficulty).find(key => uiTexts.ko.difficulty[question.difficulty] === uiTexts.en.difficulty[key]) || 'Easy';
+            difficultyBadgeEl.textContent = currentUiTexts.difficulty[difficultyKey];
+            difficultyBadgeEl.className = `px-3 py-1 text-xs font-bold rounded-full ${currentUiTexts.difficultyColors[difficultyKey]}`;
+            
+            questionTextEl.innerHTML = question.question;
+            optionsContainerEl.innerHTML = '';
+
+            const optionsArray = Object.entries(question.options);
+            shuffleArray(optionsArray);
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            optionsArray.forEach(([originalKey, value], index) => {
+                const button = document.createElement('button');
+                button.className = 'quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-400';
                 
-                // 2. 파라미터 방식 확인
-                const baseFileResponse = await fetch(originalHref, { method: 'HEAD' });
-                if (baseFileResponse.ok) {
-                    return `${originalHref}?lang=ko`;
-                }
-
-                return originalHref;
-
-            } catch (error) {
-                console.warn(`네트워크 오류로 파일 존재 여부 확인에 실패했습니다: ${originalHref}`, error);
-                return originalHref;
-            }
+                const newLabel = optionLabels[index];
+                button.innerHTML = `<span class="font-bold mr-2">${newLabel}.</span> ${value}`;
+                
+                button.dataset.answer = originalKey; 
+                
+                button.onclick = (e) => selectAnswer(e.target.closest('button'));
+                optionsContainerEl.appendChild(button);
+            });
         }
 
-        // 언어 설정 함수
-        function setLanguage(lang) {
-            currentLanguage = lang;
+        function selectAnswer(selectedButton) {
+            if (answerSelected) return;
+            answerSelected = true;
+
+            const selectedAnswer = selectedButton.dataset.answer;
+            const correctAnswer = quizQuestions[currentQuestionIndex].answer;
             
-            // HTML lang 속성 업데이트
-            document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+            if (selectedAnswer === correctAnswer) {
+                score++;
+                selectedButton.classList.add('correct');
+            } else {
+                selectedButton.classList.add('incorrect');
+                const correctButton = optionsContainerEl.querySelector(`[data-answer="${correctAnswer}"]`);
+                if(correctButton) correctButton.classList.add('correct');
+            }
             
-            // 페이지 제목 업데이트
-            document.title = lang === 'ko' ? '한의학 공부' : 'Interactive TCM';
-            
-            // 텍스트 번역
-            const elementsToTranslate = document.querySelectorAll('[data-en]');
-            elementsToTranslate.forEach(el => {
-                const text = el.dataset[lang] || el.dataset.en;
-                el.textContent = text;
+            optionsContainerEl.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed');
+                btn.classList.remove('hover:bg-gray-100', 'hover:border-gray-400');
             });
 
-            // 게임 iframe 언어 업데이트
-            const gameFrame = document.getElementById('gameFrame');
-            if (gameFrame) {
-                gameFrame.src = `food_runner.html?lang=${lang}`;
-            }
+            explanationTitleEl.textContent = currentUiTexts.explanationTitle;
+            explanationTextEl.innerHTML = quizQuestions[currentQuestionIndex].explanation;
+            explanationBoxEl.classList.add('show');
 
-            // 버튼 상태 업데이트
-            updateLanguageButtons(lang);
+            nextButtonEl.textContent = currentUiTexts.nextButton;
+            nextButtonEl.style.display = 'block';
+        }
+
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
             
-            // URL 업데이트
-            updateURLLanguage(lang);
+            const totalQuestions = quizQuestions.length;
+            const resultScoreText = currentLang === 'ko' 
+                ? `${totalQuestions}개 중 ${score}개 정답` 
+                : `${score} out of ${totalQuestions} correct`;
+
+            document.getElementById('result-title').textContent = currentUiTexts.resultTitle;
+            document.getElementById('result-score').textContent = resultScoreText;
+            document.getElementById('result-message').textContent = currentUiTexts.resultMessage;
+            restartButtonEl.textContent = currentUiTexts.restartButton;
         }
 
-        // 언어 전환 함수 (버튼 클릭용)
-        window.switchLanguage = function(lang) {
-            setLanguage(lang);
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                displayQuestion();
+            } else {
+                progressBarEl.style.width = '100%';
+                showResults();
+            }
+        }
+        
+        async function startQuiz(stage) {
+            const { data, isFallback } = await loadQuizData(currentLang);
+            if (!data) return;
+
+            let questionCounts;
+            if (isFallback) {
+                questionCounts = { easy: 1, medium: 0, hard: 1 };
+            } else if (stage === 1) {
+                questionCounts = { easy: 7, medium: 0, hard: 0 };
+            } else {
+                // [수정] 2단계 문제 구성을 변경했습니다.
+                questionCounts = { easy: 2, medium: 2, hard: 6 };
+            }
+            
+            quizQuestions = selectRandomQuestions(data, questionCounts);
+            
+            if (quizQuestions.length === 0) {
+                 quizContainer.innerHTML = `<div class="p-8 text-center text-gray-600">출제할 문제가 없습니다. 데이터 파일을 확인해주세요.</div>`;
+                 return;
+            }
+
+            currentQuestionIndex = 0;
+            score = 0;
+
+            stageSelectionContainer.style.display = 'none';
+            resultContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            displayQuestion();
         }
 
-        // iframe에서 언어 변경 메시지 수신
-        window.addEventListener('message', (event) => {
-            if (event.data.type === 'languageChange') {
-                setLanguage(event.data.language);
-            }
-        });
+        function showStageSelection() {
+            currentLang = getUrlParam('lang') === 'en' ? 'en' : 'ko';
+            currentUiTexts = uiTexts[currentLang];
 
-        // 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            // URL에서 언어 파라미터 읽기
-            const urlLanguage = getLanguageFromURL();
-            setLanguage(urlLanguage);
-        });
+            document.getElementById('stage-title').textContent = currentUiTexts.stageTitle;
+            document.getElementById('stage-1-button').textContent = currentUiTexts.stage1;
+            document.getElementById('stage-2-button').textContent = currentUiTexts.stage2;
 
-        // 뒤로가기/앞으로가기 시 언어 상태 동기화
-        window.addEventListener('popstate', function() {
-            const urlLanguage = getLanguageFromURL();
-            if (urlLanguage !== currentLanguage) {
-                setLanguage(urlLanguage);
-            }
-        });
+            quizContainer.style.display = 'none';
+            resultContainer.style.display = 'none';
+            stageSelectionContainer.style.display = 'block';
+        }
+
+        // Event Listeners
+        document.getElementById('stage-1-button').addEventListener('click', () => startQuiz(1));
+        document.getElementById('stage-2-button').addEventListener('click', () => startQuiz(2));
+        nextButtonEl.addEventListener('click', nextQuestion);
+        restartButtonEl.addEventListener('click', showStageSelection);
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', showStageSelection);
     </script>
-
 </body>
 </html>
