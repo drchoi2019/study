@@ -253,7 +253,6 @@
             border-radius: 10px;
             font-size: 12px;
             z-index: 9999;
-            max-width: 300px;
             display: none; /* 기본적으로 숨김 */
         }
         .test-button {
@@ -307,6 +306,8 @@
             <div><span id="remaining-label"></span>: <span id="remaining">20</span></div>
             <div id="cheat-indicator" style="color: #dc2626; font-weight: bold; display: none;"></div>
             <div class="controls">
+                <button id="easyModeBtn" onclick="resetGame('easy')"></button>
+                <button id="hardModeBtn" onclick="resetGame('hard')"></button>
                 <button id="hintBtn" onclick="showHintModal()"></button>
                 <button id="resetBtn" onclick="resetGame()"></button>
             </div>
@@ -357,20 +358,29 @@
         // --- Translations ---
         const translations = {
             ko: {
-                mainTitle: "🔮 오행 탑 쌓기 🔮",
+                mainTitle: "🔮 오행 탑 쌓기 �",
                 scoreLabel: "점수",
                 remainingLabel: "남은 구슬",
                 resetBtn: "새 게임",
                 hintBtn: "힌트",
+                easyModeBtn: "기본",
+                hardModeBtn: "상급",
                 hintTitle: "오행 속성표",
                 gameOver: "게임 오버! 더 이상 놓을 수 있는 구슬이 없습니다.",
                 nextMarblesTitle: "배치할 구슬",
                 rulesTitle: "게임 규칙",
-                rule1: "<strong>1. 게임 시작:</strong> 오른쪽 '배치할 구슬'을 왼쪽 게임 판의 빈 곳에 임의로 3개까지 놓아 게임을 시작합니다.",
-                rule2: "<strong>2. 배치 규칙</strong><br>- <strong>위쪽 배치:</strong> 기존 구슬 위에는 기존 구슬이 생(生)하는 것만 붙일 수 있습니다.<br>- <strong>아래쪽 배치:</strong> 기존 구슬이 극(剋)하는 것만 붙일 수 있습니다.",
-                rule3: "<strong>3. 구슬 종류:</strong> 구슬은 오행(목·화·토·금·수)을 기반으로 하며, 자연, 신체, 감정, 색 총 20종류가 무작위로 등장합니다.",
-                rule4: "<strong>4. 점수 규칙</strong><br>❌ 잘못된 위치에 배치: -2점<br>✅ 올바른 배치: +10점<br>🌟 같은 계열(자연/신체/감정/색) 연속 배치: +20점<br>💯 같은 계열의 5개를 모두 배치: +100점",
-                rule5: "<strong>5. 종료 조건:</strong> 모든 구슬을 규칙에 맞게 배치하면 승리하며, 더 이상 놓을 수 없을 때 게임 오버됩니다.",
+                // Hard Mode Rules
+                rule1_hard: "<strong>1. 게임 시작:</strong> 오른쪽 '배치할 구슬'을 왼쪽 게임 판의 빈 곳에 임의로 3개까지 놓아 게임을 시작합니다.",
+                rule2_hard: "<strong>2. 배치 규칙 (상급)</strong><br>- <strong>위쪽 배치:</strong> 기존 구슬 위에는 기존 구슬이 <strong>생(生)</strong>하는 것만 붙일 수 있습니다.<br>- <strong>아래쪽 배치:</strong> 기존 구슬 아래에는 기존 구슬을 <strong>극(剋)</strong>하는 것만 붙일 수 있습니다.",
+                rule3_hard: "<strong>3. 구슬 종류:</strong> 구슬은 오행(목·화·토·금·수)을 기반으로 하며, 자연, 신체, 감정, 색 총 20종류가 무작위로 등장합니다.",
+                rule4_hard: "<strong>4. 점수 규칙</strong><br>❌ 잘못된 위치에 배치: -2점<br>✅ 올바른 배치: +10점<br>🌟 같은 계열(자연/신체/감정/색) 연속 배치: +20점<br>💯 같은 계열의 5개를 모두 배치: +100점",
+                rule5_hard: "<strong>5. 종료 조건:</strong> 모든 구슬을 규칙에 맞게 배치하면 승리하며, 더 이상 놓을 수 없을 때 게임 오버됩니다.",
+                // Easy Mode Rules
+                rule1_easy: "<strong>1. 게임 시작:</strong> 오른쪽 '배치할 구슬'을 왼쪽 게임 판의 빈 곳에 임의로 3개까지 놓아 게임을 시작합니다.",
+                rule2_easy: "<strong>2. 배치 규칙 (기본)</strong><br>- <strong>위쪽 배치:</strong> 기존 구슬 위에는 기존 구슬이 <strong>생(生)</strong>하는 것을 놓습니다. (예: 나무 위에 불)<br>- <strong>아래쪽 배치:</strong> 기존 구슬 아래에는 기존 구슬을 <strong>생(生)</strong>하는 것을 놓습니다. (예: 나무 아래에 물)",
+                rule3_easy: "<strong>3. 구슬 종류:</strong> 구슬은 오행(목·화·토·금·수)을 기반으로 하며, 자연, 신체, 감정, 색 총 20종류가 무작위로 등장합니다.",
+                rule4_easy: "<strong>4. 점수 규칙</strong><br>❌ 잘못된 위치에 배치: -2점<br>✅ 올바른 배치: +10점<br>🌟 같은 계열(자연/신체/감정/색) 연속 배치: +20점<br>💯 같은 계열의 5개를 모두 배치: +100점",
+                rule5_easy: "<strong>5. 종료 조건:</strong> 모든 구슬을 규칙에 맞게 배치하면 승리하며, 더 이상 놓을 수 없을 때 게임 오버됩니다.",
                 winTitle: "🎉 축하합니다! 🎉",
                 finalScoreLabel: "최종 점수",
                 playAgainBtn: "다시 시작",
@@ -389,15 +399,24 @@
                 remainingLabel: "Marbles Left",
                 resetBtn: "New Game",
                 hintBtn: "Hint",
+                easyModeBtn: "Default",
+                hardModeBtn: "Advanced",
                 hintTitle: "Five Elements Chart",
                 gameOver: "Game Over! No more moves available.",
                 nextMarblesTitle: "Marbles to Place",
                 rulesTitle: "Game Rules",
-                rule1: "<strong>1. Start Game:</strong> Place a marble from the right panel into an empty slot on the left board to begin.",
-                rule2: "<strong>2. Placement Rules</strong><br>- <strong>Place Above:</strong> The existing marble generates <br>- <strong>Place Below:</strong> The existing marble overcomes.",
-                rule3: "<strong>3. Marble Types:</strong> Based on the Five Elements (Wood, Fire, Earth, Metal, Water), there are 20 types of marbles across categories like nature, body, emotion, and color.",
-                rule4: "<strong>4. Scoring</strong><br>❌ Incorrect Placement: -2 Points<br>✅ Correct Placement: +10 Points<br>🌟 Consecutive Placement (Same Category): +20 Points<br>💯 Place all 5 of the Same Category: +100 Points",
-                rule5: "<strong>5. End Conditions:</strong> You win by placing all marbles correctly. The game is over when no more valid moves can be made.",
+                // Hard Mode Rules
+                rule1_hard: "<strong>1. Start Game:</strong> Place a marble from the right panel into an empty slot on the left board to begin.",
+                rule2_hard: "<strong>2. Placement Rules (Advanced)</strong><br>- <strong>Place Above:</strong> The new marble is <strong>generated by</strong> the existing one.<br>- <strong>Place Below:</strong> The new marble <strong>overcomes</strong> the existing one.",
+                rule3_hard: "<strong>3. Marble Types:</strong> Based on the Five Elements (Wood, Fire, Earth, Metal, Water), there are 20 types of marbles across categories like nature, body, emotion, and color.",
+                rule4_hard: "<strong>4. Scoring</strong><br>❌ Incorrect Placement: -2 Points<br>✅ Correct Placement: +10 Points<br>🌟 Consecutive Placement (Same Category): +20 Points<br>💯 Place all 5 of the Same Category: +100 Points",
+                rule5_hard: "<strong>5. End Conditions:</strong> You win by placing all marbles correctly. The game is over when no more valid moves can be made.",
+                // Easy Mode Rules
+                rule1_easy: "<strong>1. Start Game:</strong> Place a marble from the right panel into an empty slot on the left board to begin.",
+                rule2_easy: "<strong>2. Placement Rules (Default)</strong><br>- <strong>Place Above:</strong> The new marble is <strong>generated by</strong> the existing one. (e.g., Fire above Wood)<br>- <strong>Place Below:</strong> The new marble <strong>generates</strong> the existing one. (e.g., Water below Wood)",
+                rule3_easy: "<strong>3. Marble Types:</strong> Based on the Five Elements (Wood, Fire, Earth, Metal, Water), there are 20 types of marbles across categories like nature, body, emotion, and color.",
+                rule4_easy: "<strong>4. Scoring</strong><br>❌ Incorrect Placement: -2 Points<br>✅ Correct Placement: +10 Points<br>🌟 Consecutive Placement (Same Category): +20 Points<br>💯 Place all 5 of the Same Category: +100 Points",
+                rule5_easy: "<strong>5. End Conditions:</strong> You win by placing all marbles correctly. The game is over when no more valid moves can be made.",
                 winTitle: "🎉 Congratulations! 🎉",
                 finalScoreLabel: "Final Score",
                 playAgainBtn: "Play Again",
@@ -438,21 +457,32 @@
         function applyTranslations() {
             const t = translations[currentLang];
             document.documentElement.lang = currentLang;
-            document.title = currentLang === 'ko' ? '오행 탑 쌓기 - 테스트' : 'Five Elements Tower Stack - Test';
+            document.title = currentLang === 'ko' ? '오행 탑 쌓기' : 'Five Elements Tower Stack';
             document.getElementById('main-title').innerHTML = t.mainTitle;
             document.getElementById('score-label').textContent = t.scoreLabel;
             document.getElementById('remaining-label').textContent = t.remainingLabel;
             document.getElementById('resetBtn').textContent = t.resetBtn;
             document.getElementById('hintBtn').textContent = t.hintBtn;
+            document.getElementById('easyModeBtn').textContent = t.easyModeBtn;
+            document.getElementById('hardModeBtn').textContent = t.hardModeBtn;
             document.getElementById('gameOver').textContent = t.gameOver;
             document.getElementById('nextMarblesTitle').textContent = t.nextMarblesTitle;
+
+            // Update rules based on game mode
+            const mode = gameState.gameMode || 'easy'; // Default to easy if not set
+            const rule1 = t[`rule1_${mode}`] || t[`rule1_easy`];
+            const rule2 = t[`rule2_${mode}`] || t[`rule2_easy`];
+            const rule3 = t[`rule3_${mode}`] || t[`rule3_easy`];
+            const rule4 = t[`rule4_${mode}`] || t[`rule4_easy`];
+            const rule5 = t[`rule5_${mode}`] || t[`rule5_easy`];
+
             document.getElementById('rules-container').innerHTML = `
-                <h3>${t.rulesTitle}</h3>
-                <p>${t.rule1}</p>
-                <p>${t.rule2}</p>
-                <p>${t.rule3}</p>
-                <p>${t.rule4}</p>
-                <p>${t.rule5}</p>
+                <h3>${t.rulesTitle} (${mode === 'easy' ? (currentLang === 'ko' ? '기본' : 'Default') : (currentLang === 'ko' ? '상급' : 'Advanced')})</h3>
+                <p>${rule1}</p>
+                <p>${rule2}</p>
+                <p>${rule3}</p>
+                <p>${rule4}</p>
+                <p>${rule5}</p>
             `;
             document.getElementById('win-title').innerHTML = t.winTitle;
             document.getElementById('final-score-label').textContent = t.finalScoreLabel;
@@ -483,20 +513,14 @@
 
         function getCategoryName(category) {
             const categoryNames = {
-                'element': '원소',
-                'sense': '감각',
-                'emotion': '감정',
-                'color': '색상'
+                'element': '원소', 'sense': '감각', 'emotion': '감정', 'color': '색상'
             };
             return categoryNames[category] || category;
         }
 
         function getEnglishCategoryName(category) {
             const categoryNames = {
-                'element': 'Element',
-                'sense': 'Sense',
-                'emotion': 'Emotion',
-                'color': 'Color'
+                'element': 'Element', 'sense': 'Sense', 'emotion': 'Emotion', 'color': 'Color'
             };
             return categoryNames[category] || category;
         }
@@ -535,16 +559,25 @@
         ];
         
         const wuxingRules = {
-            wood: { generates: 'fire', destroyedBy: 'metal' }, fire: { generates: 'earth', destroyedBy: 'water' }, earth: { generates: 'metal', destroyedBy: 'wood' }, metal: { generates: 'water', destroyedBy: 'fire' }, water: { generates: 'wood', destroyedBy: 'earth' }
+            wood: { generates: 'fire', generatedBy: 'water', overcomes: 'earth', overcomeBy: 'metal' },
+            fire: { generates: 'earth', generatedBy: 'wood', overcomes: 'metal', overcomeBy: 'water' },
+            earth: { generates: 'metal', generatedBy: 'fire', overcomes: 'water', overcomeBy: 'wood' },
+            metal: { generates: 'water', generatedBy: 'earth', overcomes: 'wood', overcomeBy: 'fire' },
+            water: { generates: 'wood', generatedBy: 'metal', overcomes: 'fire', overcomeBy: 'earth' }
         };
         
         let gameState = {};
 
-        function resetGame() {
+        function resetGame(mode) {
+            // If no mode is specified, restart with the current mode.
+            // If no game has started, default to 'easy'.
+            const newMode = mode || gameState.gameMode || 'easy';
+
             gameState = {
                 score: 0, selectedMarble: null, selectedMarbleIndex: -1,
                 stacks: [ [], [], [] ], marbleQueue: [], nextMarbles: [],
-                awardedBonuses: [] // 이미 보너스를 받은 5개 연속의 시작 인덱스를 기록
+                awardedBonuses: [],
+                gameMode: newMode // Set the game mode
             };
             document.getElementById('gameOver').style.display = 'none';
             document.getElementById('winModal').style.display = 'none';
@@ -558,6 +591,7 @@
             updateNextMarbles();
             updateStackDisplays();
             updateUI();
+            applyTranslations(); // Apply translations to show correct rules
         }
 
         function placeMarble(stackIndex, position) {
@@ -594,7 +628,6 @@
                 gameState.score += pointsToAdd;
             }
             
-            // Check for five-in-a-row bonus after placing the marble
             checkFiveInARowBonus(stack, stackIndex);
             
             gameState.marbleQueue.splice(gameState.selectedMarbleIndex, 1);
@@ -609,53 +642,54 @@
             if (cheatMode) return true; // 치트 모드에서는 모든 배치 허용
             const stack = gameState.stacks[stackIndex];
             if (stack.length === 0) return true; 
-            if (position >= 0) return wuxingRules[stack[stack.length - 1].type].generates === marbleType;
-            else return wuxingRules[marbleType].destroyedBy === stack[0].type;
+
+            const topMarbleType = stack[stack.length - 1].type;
+            const bottomMarbleType = stack[0].type;
+
+            if (gameState.gameMode === 'hard') {
+                // Hard Mode Logic (Generating on top, Overcoming below)
+                if (position >= 0) { // Place above
+                    return wuxingRules[topMarbleType].generates === marbleType;
+                } else { // Place below
+                    return wuxingRules[bottomMarbleType].overcomeBy === marbleType;
+                }
+            } else {
+                // Easy Mode Logic (Generating cycle only)
+                if (position >= 0) { // Place above
+                    return wuxingRules[topMarbleType].generates === marbleType;
+                } else { // Place below
+                    return wuxingRules[bottomMarbleType].generatedBy === marbleType;
+                }
+            }
         }
 
         function checkFiveInARowBonus(stack, stackIndex) {
-            // 스택별 보너스 기록이 없으면 초기화
             if (!gameState.awardedBonuses[stackIndex]) {
                 gameState.awardedBonuses[stackIndex] = [];
             }
-
-            // 5개 이상인 경우에만 체크
             if (stack.length < 5) return;
 
-            // 모든 가능한 5개 연속 구간 체크
             for (let i = 0; i <= stack.length - 5; i++) {
-                // 이미 보너스를 받은 구간인지 확인
                 if (gameState.awardedBonuses[stackIndex].includes(i)) {
                     continue;
                 }
-
                 const bonusSlice = stack.slice(i, i + 5);
                 const firstCategory = bonusSlice[0].category;
-                
-                // 5개가 모두 같은 카테고리인지 확인
                 const isBonus = bonusSlice.every(m => m.category === firstCategory);
                 
                 if (isBonus) {
-                    // 보너스 지급
                     const now = Tone.now();
                     const melody = ["C5", "E5", "G5"];
                     melody.forEach((note, idx) => synth.triggerAttackRelease(note, "16n", now + idx * 0.15));
-
                     gameState.score += 100;
-                    
-                    // 이 구간에 보너스를 지급했음을 기록
                     gameState.awardedBonuses[stackIndex].push(i);
-                    
                     showBonusModal();
-                    
                     console.log(`🎉 5개 연속 보너스 발생! 스택: ${stackIndex}, 시작인덱스: ${i}, 카테고리: ${firstCategory}, 점수 +100`);
                     
                     setTimeout(() => {
                         const marbleElements = [];
                         const stackEl = document.getElementById(`stack${stackIndex}`);
                         const allMarbleElsInStack = stackEl.querySelectorAll('.marble');
-
-                        // Calculate DOM indices (marbles are displayed in reverse order)
                         const startIndexInDOM = stack.length - 1 - (i + 4);
                         const endIndexInDOM = stack.length - 1 - i;
 
@@ -677,8 +711,6 @@
                     }, 50);
 
                     updateUI();
-                    
-                    // 하나의 보너스만 처리하고 종료
                     break;
                 }
             }
@@ -690,12 +722,13 @@
                 return;
             }
             const canPlaceAny = gameState.nextMarbles.some(marble => 
-                gameState.stacks.some((stack, stackIndex) => 
-                    canPlaceMarble(stackIndex, stack.length, marble.type) || (stack.length > 0 && canPlaceMarble(stackIndex, -1, marble.type))
-                )
+                gameState.stacks.some((stack, stackIndex) => {
+                    if (stack.length === 0) return true;
+                    return canPlaceMarble(stackIndex, stack.length, marble.type) || canPlaceMarble(stackIndex, -1, marble.type);
+                })
             );
             
-            if (!canPlaceAny && gameState.stacks.some(s => s.length > 0)) {
+            if (!canPlaceAny) {
                 const now = Tone.now();
                 const melody = ["G3", "F3", "E3", "D3"];
                 melody.forEach((note, i) => synth.triggerAttackRelease(note, "8n", now + i * 0.15));
@@ -779,7 +812,10 @@
             document.getElementById('remaining').textContent = gameState.marbleQueue.length;
             document.querySelectorAll('.marble.selected').forEach(m => m.classList.remove('selected'));
             
-            // 치트 모드 표시 업데이트
+            // Highlight active mode button
+            document.getElementById('easyModeBtn').style.textDecoration = gameState.gameMode === 'easy' ? 'underline' : 'none';
+            document.getElementById('hardModeBtn').style.textDecoration = gameState.gameMode === 'hard' ? 'underline' : 'none';
+
             const cheatIndicator = document.getElementById('cheat-indicator');
             const cheatStatus = document.getElementById('cheatStatus');
             if (cheatMode) {
@@ -928,7 +964,6 @@
         // 키보드 이벤트 처리
         // ===================
         document.addEventListener('keydown', function(event) {
-            // Ctrl + T로 테스트 패널 토글
             if (event.ctrlKey && event.key === 't') {
                 event.preventDefault();
                 const testPanel = document.getElementById('testPanel');
@@ -944,7 +979,6 @@
         // 테스트용 함수들
         // ===================
         
-        // 치트 모드 토글
         window.toggleCheat = function() {
             cheatMode = !cheatMode;
             updateUI();
@@ -960,50 +994,25 @@
                 synth.triggerAttackRelease("G4", "8n", now + 0.1);
             }
         }
-
-        // 특정 카테고리 5개를 스택에 배치하는 테스트 함수
         window.testCategoryStack = function(category, stackIndex = 1) {
             if (!cheatMode) {
                 console.log('먼저 치트 모드를 활성화하세요: toggleCheat()');
                 return;
             }
-
             const categoryMarbles = allMarbles.filter(m => m.category === category);
             gameState.stacks[stackIndex] = [...categoryMarbles];
-            
-            // 보너스 기록 초기화
             if (!gameState.awardedBonuses[stackIndex]) {
                 gameState.awardedBonuses[stackIndex] = [];
             }
-            
             updateStackDisplays();
             updateUI();
-            
             console.log(`${category} 카테고리 5개를 스택 ${stackIndex}에 배치했습니다.`);
             console.log('이제 아무 구슬이나 선택해서 위나 아래에 배치하면 100점 보너스가 발생합니다!');
         }
-
-        // 감정 카테고리 테스트
-        window.testEmotionStack = function() {
-            testCategoryStack('emotion', 1);
-        }
-
-        // 색상 카테고리 테스트  
-        window.testColorStack = function() {
-            testCategoryStack('color', 1);
-        }
-
-        // 원소 카테고리 테스트
-        window.testElementStack = function() {
-            testCategoryStack('element', 1);
-        }
-
-        // 감각 카테고리 테스트
-        window.testSenseStack = function() {
-            testCategoryStack('sense', 1);
-        }
-
-        // 특정 구슬을 큐에 추가
+        window.testEmotionStack = function() { testCategoryStack('emotion', 1); }
+        window.testColorStack = function() { testCategoryStack('color', 1); }
+        window.testElementStack = function() { testCategoryStack('element', 1); }
+        window.testSenseStack = function() { testCategoryStack('sense', 1); }
         window.addMarbleToQueue = function(type, category) {
             const marble = allMarbles.find(m => m.type === type && m.category === category);
             if (marble) {
@@ -1015,25 +1024,20 @@
                 console.log('해당 구슬을 찾을 수 없습니다.');
             }
         }
-
-        // 큐 초기화
         window.clearQueue = function() {
             gameState.marbleQueue = [];
             updateNextMarbles();
             updateUI();
             console.log('구슬 큐를 비웠습니다.');
         }
-
-        // 점수 조정
         window.setScore = function(score) {
             gameState.score = score;
             updateUI();
             console.log(`점수를 ${score}로 설정했습니다.`);
         }
-
-        // 현재 게임 상태 출력
         window.gameStatus = function() {
             console.log('=== 게임 상태 ===');
+            console.log('게임 모드:', gameState.gameMode);
             console.log('점수:', gameState.score);
             console.log('남은 구슬:', gameState.marbleQueue.length);
             console.log('치트 모드:', cheatMode ? 'ON' : 'OFF');
@@ -1043,8 +1047,6 @@
             console.log('다음 구슬:', gameState.nextMarbles.map(m => `${m.emoji}${m.name}`));
             console.log('보너스 기록:', gameState.awardedBonuses);
         }
-
-        // 도움말
         window.testHelp = function() {
             console.log('=== 테스트 함수 도움말 ===');
             console.log('Ctrl+T - 테스트 패널 토글');
@@ -1057,15 +1059,13 @@
             console.log('clearQueue() - 구슬 큐 초기화');
             console.log('setScore(score) - 점수 설정');
             console.log('gameStatus() - 현재 게임 상태 출력');
-            console.log('resetGame() - 게임 리셋');
+            console.log('resetGame(mode) - 게임 리셋 (mode: "easy" or "hard")');
         }
         
         document.addEventListener('DOMContentLoaded', () => {
             currentLang = getLanguageFromURL();
-            applyTranslations();
-            resetGame();
+            resetGame('easy'); // Start with easy mode by default
             
-            // 초기 테스트 안내
             console.log('🧪 테스트 모드가 활성화되었습니다!');
             console.log('Ctrl+T로 테스트 패널을 열 수 있습니다.');
             console.log('testHelp() 함수를 실행하면 사용 가능한 테스트 함수 목록을 볼 수 있습니다.');
@@ -1073,3 +1073,4 @@
     </script>
 </body>
 </html>
+�
