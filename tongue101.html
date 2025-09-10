@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>설진 기초</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #334155;
+        }
+        .info-card {
+            background-color: #FFFCF9;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #F3EAE2;
+        }
+        .info-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e2d3b;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #E5D9D0;
+        }
+        .contrast-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .contrast-item {
+            background-color: rgba(255,255,255,0.5);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .contrast-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: #4A4540;
+            margin-bottom: 0.75rem;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #F3EAE2;
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .syndrome-tag {
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+        .analysis-card {
+            background-color: #F5FAF8;
+        }
+        .analysis-step {
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border-left: 3px solid;
+            background-color: rgba(255,255,255,0.3);
+        }
+        .analysis-btn {
+            cursor: pointer;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            border: 1px solid;
+        }
+        .analysis-result {
+            margin-top: 0.5rem;
+            padding-left: 1rem;
+        }
+        /* Tooltip styles */
+        #tooltip {
+            position: fixed;
+            background-color: #1e293b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            transform: translateY(10px);
+            z-index: 100;
+            max-width: 250px;
+        }
+    </style>
+</head>
+<body>
+    
+    <header id="page-header" style="width: 100%; max-width: 1400px; margin: 1rem auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" id="lang-toggle" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div id="tooltip" class="hidden"></div>
+
+    <main class="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8">
+        <div class="px-4">
+            <h1 class="text-3xl font-bold text-slate-800 border-b-2 border-stone-300 pb-2 mb-8">
+                <span class="ko">설진 기초</span>
+                <span class="en hidden">Basics of Tongue Diagnosis</span>
+            </h1>
+        </div>
+        
+        <!-- 설체 -->
+        <section class="info-card">
+            <h2 class="info-title">
+                <span class="ko">설체 (혀의 몸체)</span><span class="en hidden">Tongue Body</span>
+            </h2>
+            <div class="contrast-grid">
+                <!-- 한열 대비 -->
+                <div class="contrast-item">
+                    <h3 class="contrast-title"><span class="ko">한열 대비</span><span class="en hidden">Cold-Heat Contrast</span></h3>
+                    <div class="detail-item"><span><span class="ko">창백</span><span class="en hidden">Pale</span></span> <span class="syndrome-tag bg-blue-100 text-blue-800"><span class="ko">한</span><span class="en hidden">Cold</span></span></div>
+                    <div class="detail-item"><span><span class="ko">빨강</span><span class="en hidden">Red</span></span> <span class="syndrome-tag bg-red-100 text-red-800"><span class="ko">열</span><span class="en hidden">Heat</span></span></div>
+                </div>
+                <!-- 습조 대비 -->
+                <div class="contrast-item">
+                    <h3 class="contrast-title"><span class="ko">습조 대비</span><span class="en hidden">Damp-Dry Contrast</span></h3>
+                    <div class="detail-item"><span><span class="ko">반대설 (부은)</span><span class="en hidden">Swollen</span></span> <span class="syndrome-tag bg-orange-100 text-orange-800"><span class="ko">습</span><span class="en hidden">Damp</span></span></div>
+                    <div class="detail-item"><span><span class="ko">수척설 (가는)</span><span class="en hidden">Thin</span></span> <span class="syndrome-tag bg-yellow-100 text-yellow-800"><span class="ko">조</span><span class="en hidden">Dry</span></span></div>
+                </div>
+                 <!-- 기타 -->
+                <div class="contrast-item col-span-2">
+                    <h3 class="contrast-title"><span class="ko">기타</span><span class="en hidden">Others</span></h3>
+                    <div class="detail-item"><span><span class="ko">보라색</span><span class="en hidden">Purple</span></span> <span class="syndrome-tag bg-purple-100 text-purple-800"><span class="ko">어혈</span><span class="en hidden">Blood Stasis</span></span></div>
+                    <div class="detail-item"><span><span class="ko">치우침, 떨림, 마비</span><span class="en hidden">Deviated, Trembling, Numb</span></span> <span class="syndrome-tag bg-green-100 text-green-800"><span class="ko">풍</span><span class="en hidden">Wind</span></span></div>
+                    <div class="detail-item">
+                        <span class="tooltip-trigger" 
+                              data-ko-tooltip="습으로 혀가 부어서 반대설 심해지면 발생. 몸이 무겁고 림프 순환이 잘 되지 않는 증상과 함게 나타남."
+                              data-en-tooltip="Occurs when a swollen tongue from dampness becomes more severe. Associated with heaviness and poor lymphatic circulation.">
+                            <span class="ko">치흔설 (이빨자국)</span>
+                            <span class="en hidden">Scalloped Tongue</span>
+                        </span> 
+                        <span class="syndrome-tag bg-blue-100 text-blue-800">
+                            <span class="ko">양허, 습</span>
+                            <span class="en hidden">Yang Def, Damp</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 설태 -->
+        <section class="info-card">
+            <h2 class="info-title">
+                <span class="ko">설태 (혀의 이끼)</span><span class="en hidden">Tongue Coating</span>
+            </h2>
+            <div class="contrast-grid">
+                <!-- 한열 대비 -->
+                <div class="contrast-item">
+                    <h3 class="contrast-title"><span class="ko">한열 대비</span><span class="en hidden">Cold-Heat Contrast</span></h3>
+                    <div class="detail-item"><span><span class="ko">백태</span><span class="en hidden">White Coat</span></span> <span class="syndrome-tag bg-blue-100 text-blue-800"><span class="ko">한</span><span class="en hidden">Cold</span></span></div>
+                    <div class="detail-item"><span><span class="ko">황태</span><span class="en hidden">Yellow Coat</span></span> <span class="syndrome-tag bg-red-100 text-red-800"><span class="ko">열</span><span class="en hidden">Heat</span></span></div>
+                </div>
+                <!-- 습조 대비 -->
+                <div class="contrast-item">
+                    <h3 class="contrast-title"><span class="ko">습조 대비</span><span class="en hidden">Damp-Dry Contrast</span></h3>
+                    <div class="detail-item"><span><span class="ko">두꺼운 태</span><span class="en hidden">Thick Coat</span></span> <span class="syndrome-tag bg-orange-100 text-orange-800"><span class="ko">습</span><span class="en hidden">Damp</span></span></div>
+                    <div class="detail-item"><span><span class="ko">건조한 태</span><span class="en hidden">Dry Coat</span></span> <span class="syndrome-tag bg-yellow-100 text-yellow-800"><span class="ko">조</span><span class="en hidden">Dry</span></span></div>
+                </div>
+                 <!-- 위치 -->
+                <div class="contrast-item col-span-2">
+                    <h3 class="contrast-title"><span class="ko">위치</span><span class="en hidden">Location</span></h3>
+                    <div class="detail-item"><span><span class="ko">양 사이드</span><span class="en hidden">Sides</span></span> <span class="syndrome-tag bg-indigo-100 text-indigo-800"><span class="ko">간</span><span class="en hidden">Liver</span></span></div>
+                    <div class="detail-item"><span><span class="ko">혀 끝</span><span class="en hidden">Tip</span></span> <span class="syndrome-tag bg-pink-100 text-pink-800"><span class="ko">심</span><span class="en hidden">Heart</span></span></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 복합분석 -->
+        <section class="info-card analysis-card">
+            <h2 class="info-title">
+                <span class="ko">복합 분석</span><span class="en hidden">Complex Analysis</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 양허 -->
+                <div class="bg-white/50 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg text-blue-800 mb-3"><span class="ko">양허</span><span class="en hidden">Yang Deficiency</span></h3>
+                    
+                    <div class="analysis-step border-blue-200">
+                        <h4 class="font-semibold"><span class="ko">한증</span><span class="en hidden">Cold Pattern</span></h4>
+                        <div class="mt-2 space-x-2">
+                            <button class="analysis-btn border-blue-300 text-blue-700 hover:bg-blue-100" data-target="yang-cold-body"><span class="ko">설</span><span class="en hidden">Body</span></button>
+                            <button class="analysis-btn border-blue-300 text-blue-700 hover:bg-blue-100" data-target="yang-cold-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                        <p id="yang-cold-body" class="analysis-result hidden"><span class="ko"><strong>창백</strong></span><span class="en hidden"><strong>Pale</strong></span></p>
+                        <p id="yang-cold-coat" class="analysis-result hidden"><span class="ko"><strong>백태</strong></span><span class="en hidden"><strong>White Coat</strong></span></p>
+                    </div>
+
+                    <div class="analysis-step border-blue-200">
+                        <h4 class="font-semibold"><span class="ko">이차적 습 유발</span><span class="en hidden">Secondary Dampness Induced</span></h4>
+                        <div class="mt-2 space-x-2">
+                            <button class="analysis-btn border-blue-300 text-blue-700 hover:bg-blue-100" data-target="yang-damp-body"><span class="ko">설</span><span class="en hidden">Body</span></button>
+                            <button class="analysis-btn border-blue-300 text-blue-700 hover:bg-blue-100" data-target="yang-damp-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                        <p id="yang-damp-body" class="analysis-result hidden"><span class="ko"><strong>반대설 (부은), 치흔설</strong></span><span class="en hidden"><strong>Swollen, Scalloped</strong></span></p>
+                        <p id="yang-damp-coat" class="analysis-result hidden"><span class="ko"><strong>두껍고 끈적</strong></span><span class="en hidden"><strong>Thick & Sticky</strong></span></p>
+                    </div>
+                    
+                    <div class="my-4">
+                        <img src="t_yang.jpg" alt="양허 설 사진" class="w-full h-auto object-cover rounded-lg shadow-sm">
+                    </div>
+
+                    <p class="mt-4 pt-3 border-t border-blue-200"><strong><span class="ko">종합:</span><span class="en hidden">Summary:</span></strong><span class="ko"> 창백한 반대설에 희고 두터운 태 (종종 치흔 동반)</span><span class="en hidden"> Pale, swollen tongue with a thick, white, and sticky coating (often with teeth marks).</span></p>
+                </div>
+
+                <!-- 습열 -->
+                <div class="bg-white/50 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg text-orange-800 mb-3"><span class="ko">습열</span><span class="en hidden">Damp-Heat</span></h3>
+                     <div class="analysis-step border-orange-200">
+                        <h4 class="font-semibold"><span class="ko">열증</span><span class="en hidden">Heat Pattern</span></h4>
+                        <div class="mt-2 space-x-2">
+                            <button class="analysis-btn border-orange-300 text-orange-700 hover:bg-orange-100" data-target="damp-heat-body"><span class="ko">설</span><span class="en hidden">Body</span></button>
+                            <button class="analysis-btn border-orange-300 text-orange-700 hover:bg-orange-100" data-target="damp-heat-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                        <p id="damp-heat-body" class="analysis-result hidden"><span class="ko"><strong>빨강</strong></span><span class="en hidden"><strong>Red</strong></span></p>
+                        <p id="damp-heat-coat" class="analysis-result hidden"><span class="ko"><strong>황색 태</strong></span><span class="en hidden"><strong>Yellow Coat</strong></span></p>
+                    </div>
+                     <div class="analysis-step border-orange-200">
+                        <h4 class="font-semibold"><span class="ko">습</span><span class="en hidden">Dampness</span></h4>
+                        <div class="mt-2 space-x-2">
+                             <button class="analysis-btn border-orange-300 text-orange-700 hover:bg-orange-100" data-target="damp-damp-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                        <p id="damp-damp-coat" class="analysis-result hidden"><span class="ko"><strong>두꺼움</strong></span><span class="en hidden"><strong>Thick</strong></span></p>
+                    </div>
+
+                    <div class="my-4">
+                        <img src="t_dampheat.jpg" alt="습열 설 사진" class="w-full h-auto object-cover rounded-lg shadow-sm">
+                    </div>
+
+                    <p class="mt-4 pt-3 border-t border-orange-200"><strong><span class="ko">종합:</span><span class="en hidden">Summary:</span></strong><span class="ko"> 붉은 색이 심하고 누렇고 두터운 태</span><span class="en hidden"> Deep red tongue with a thick, yellow coating.</span></p>
+                </div>
+                
+                <!-- 열로인한 진액손상 -->
+                <div class="bg-white/50 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg text-red-800 mb-3"><span class="ko">열로 인한 진액손상</span><span class="en hidden">Heat Injuring Fluids</span></h3>
+                     <div class="analysis-step border-red-200">
+                        <h4 class="font-semibold"><span class="ko">열증</span><span class="en hidden">Heat Pattern</span></h4>
+                        <div class="mt-2 space-x-2">
+                             <button class="analysis-btn border-red-300 text-red-700 hover:bg-red-100" data-target="heat-injury-heat-body"><span class="ko">설</span><span class="en hidden">Body</span></button>
+                             <button class="analysis-btn border-red-300 text-red-700 hover:bg-red-100" data-target="heat-injury-heat-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                         <p id="heat-injury-heat-body" class="analysis-result hidden"><span class="ko"><strong>붉고</strong></span><span class="en hidden"><strong>Red</strong></span></p>
+                         <p id="heat-injury-heat-coat" class="analysis-result hidden"><span class="ko"><strong>누렇고</strong></span><span class="en hidden"><strong>Yellow</strong></span></p>
+                    </div>
+                     <div class="analysis-step border-red-200">
+                        <h4 class="font-semibold"><span class="ko">진액손상</span><span class="en hidden">Fluid Injury</span></h4>
+                        <div class="mt-2 space-x-2">
+                            <button class="analysis-btn border-red-300 text-red-700 hover:bg-red-100" data-target="heat-injury-fluid-body"><span class="ko">설</span><span class="en hidden">Body</span></button>
+                            <button class="analysis-btn border-red-300 text-red-700 hover:bg-red-100" data-target="heat-injury-fluid-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                        <p id="heat-injury-fluid-body" class="analysis-result hidden"><span class="ko"><strong>수척하고 갈라짐</strong></span><span class="en hidden"><strong>Thin and Cracked</strong></span></p>
+                        <p id="heat-injury-fluid-coat" class="analysis-result hidden"><span class="ko"><strong>없거나 적고 마름</strong></span><span class="en hidden"><strong>Scant, Absent, or Dry</strong></span></p>
+                    </div>
+
+                    <div class="my-4">
+                        <img src="t_heatfluid.jpg" alt="열로 인한 진액손상 설 사진" class="w-full h-auto object-cover rounded-lg shadow-sm">
+                    </div>
+
+                    <p class="mt-4 pt-3 border-t border-red-200"><strong><span class="ko">종합:</span><span class="en hidden">Summary:</span></strong><span class="ko"> 혀는 붉고 표면은 갈라지며, 태는 누렇게 말라 거의 없음</span><span class="en hidden"> Red, cracked tongue with a scant or absent dry, yellow coating.</span></p>
+                </div>
+
+                <!-- 음허 -->
+                <div class="bg-white/50 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg text-purple-800 mb-3"><span class="ko">음허로 인한 허열</span><span class="en hidden">Yin Deficiency with Deficiency Heat</span></h3>
+                     <div class="analysis-step border-purple-200">
+                        <h4 class="font-semibold"><span class="ko">허열</span><span class="en hidden">Deficiency Heat</span></h4>
+                        <div class="mt-2 space-x-2">
+                            <button class="analysis-btn border-purple-300 text-purple-700 hover:bg-purple-100" data-target="yin-def-heat-body"><span class="ko">설</span><span class="en hidden">Body</span></button>
+                        </div>
+                         <p id="yin-def-heat-body" class="analysis-result hidden"><span class="ko"><strong>붉음</strong></span><span class="en hidden"><strong>Red</strong></span></p>
+                    </div>
+                     <div class="analysis-step border-purple-200">
+                        <h4 class="font-semibold"><span class="ko">음허</span><span class="en hidden">Yin Deficiency</span></h4>
+                        <div class="mt-2 space-x-2">
+                             <button class="analysis-btn border-purple-300 text-purple-700 hover:bg-purple-100" data-target="yin-def-yin-coat"><span class="ko">태</span><span class="en hidden">Coat</span></button>
+                        </div>
+                        <p id="yin-def-yin-coat" class="analysis-result hidden"><span class="ko"><strong>태가 없거나 건조함</strong></span><span class="en hidden"><strong>Absent or Dry coating</strong></span></p>
+                    </div>
+
+                    <div class="my-4">
+                        <img src="t_yinheat.jpg" alt="음허로 인한 허열 설 사진" class="w-full h-auto object-cover rounded-lg shadow-sm">
+                    </div>
+
+                    <p class="mt-4 pt-3 border-t border-purple-200"><strong><span class="ko">종합:</span><span class="en hidden">Summary:</span></strong><span class="ko"> 붉고 건조하며 태가 없거나 적음</span><span class="en hidden"> Red and dry tongue with a scant or absent coating.</span></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentLang = 'ko';
+            const langToggleBtn = document.getElementById('lang-toggle');
+            const tooltip = document.getElementById('tooltip');
+
+            function setLanguage(lang) {
+                currentLang = lang;
+                document.documentElement.lang = lang;
+                
+                const elementsToToggle = document.querySelectorAll('.ko, .en');
+                elementsToToggle.forEach(el => {
+                    if (el.classList.contains(currentLang)) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                });
+            }
+
+            langToggleBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                const newLang = currentLang === 'ko' ? 'en' : 'ko';
+                setLanguage(newLang);
+            });
+
+            const analysisButtons = document.querySelectorAll('.analysis-btn');
+            analysisButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                    }
+                });
+            });
+
+            const tooltipTriggers = document.querySelectorAll('.tooltip-trigger');
+            tooltipTriggers.forEach(trigger => {
+                trigger.addEventListener('mouseenter', (e) => {
+                    const tooltipText = currentLang === 'ko' ? e.currentTarget.dataset.koTooltip : e.currentTarget.dataset.enTooltip;
+                    tooltip.innerHTML = tooltipText;
+                    tooltip.classList.remove('hidden');
+                });
+                trigger.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = `${e.clientX + 15}px`;
+                    tooltip.style.top = `${e.clientY + 15}px`;
+                });
+                trigger.addEventListener('mouseleave', () => {
+                    tooltip.classList.add('hidden');
+                });
+            });
+
+             // Set initial language state
+            setLanguage('ko');
+        });
+    </script>
+</body>
+</html>
+
