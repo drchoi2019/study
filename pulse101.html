@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인터랙티브 맥진 정보</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #334155; /* slate-700 */
+        }
+
+        .main-container, .secondary-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 2rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .secondary-container {
+            grid-template-columns: 1fr; /* Make secondary container single column */
+        }
+
+        .category-card, .info-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .category-title, .info-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700;
+            color: #1e2d3b; /* slate-800 */
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .pulse-group-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500;
+            color: #475569; /* slate-600 */
+            margin-bottom: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .pulse-group-title:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        .pulse-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* 각 맥 항목 사이의 간격 */
+            padding-left: 0.5rem;
+        }
+
+        .pulse-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .pulse-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #0284c7; /* sky-600 */
+        }
+
+        .syndrome-tag {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px; /* rounded-full */
+        }
+        
+        .quiz-card {
+            background-color: #f0fdfa; /* teal-50 */
+        }
+        
+        .quiz-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+             gap: 2rem; /* Increased gap for better separation */
+        }
+
+        .quiz-question {
+            font-weight: 500;
+            color: #115e59; /* teal-800 */
+            margin-bottom: 1rem;
+        }
+
+        .quiz-answer-container {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            border: 1px solid #ccfbf1; /* teal-100 */
+        }
+        
+        .answer-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        .answer-label {
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            color: #134e4a; /* teal-900 */
+        }
+         .answer-label:hover {
+            color: #14b8a6; /* teal-500 */
+         }
+        .answer-value {
+            color: #0f766e; /* teal-700 */
+        }
+    </style>
+</head>
+<body>
+    
+    <header id="page-header" style="width: 100%; max-width: 1400px; margin: 1rem auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" id="lang-toggle" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div class="main-container">
+        <!-- 빠르기 -->
+        <div class="category-card bg-cyan-50">
+            <h2 class="category-title">
+                <span class="ko">빠르기 (한열)</span>
+                <span class="en hidden">Speed (Hot/Cold)</span>
+            </h2>
+            <div>
+                <h3 class="pulse-group-title">
+                    <span class="ko">빠른 것</span>
+                    <span class="en hidden">Fast</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">삭맥</span>
+                            <span class="en hidden">Rapid</span>
+                        </span>
+                        <span class="syndrome-tag bg-red-100 text-red-700">
+                             <span class="ko">열</span>
+                             <span class="en hidden">Heat</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">느린 것</span>
+                     <span class="en hidden">Slow</span>
+                </h3>
+                <div class="pulse-list hidden">
+                     <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">지맥</span>
+                            <span class="en hidden">Slow</span>
+                        </span>
+                        <span class="syndrome-tag bg-blue-100 text-blue-700">
+                             <span class="ko">한</span>
+                             <span class="en hidden">Cold</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 세기 -->
+        <div class="category-card bg-lime-50">
+            <h2 class="category-title">
+                <span class="ko">세기 (허실)</span>
+                <span class="en hidden">Strength (Deficiency/Excess)</span>
+            </h2>
+            <div>
+                <h3 class="pulse-group-title">
+                    <span class="ko">강한 것</span>
+                    <span class="en hidden">Strong</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">실맥</span>
+                            <span class="en hidden">Excess</span>
+                        </span>
+                        <span class="syndrome-tag bg-yellow-100 text-yellow-800">
+                            <span class="ko">사기실</span>
+                            <span class="en hidden">Excess Pathogen</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">약한 것</span>
+                     <span class="en hidden">Weak</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">허맥</span>
+                            <span class="en hidden">Deficient</span>
+                        </span>
+                        <span class="syndrome-tag bg-green-100 text-green-800">
+                             <span class="ko">기허</span>
+                             <span class="en hidden">Qi Deficiency</span>
+                        </span>
+                    </div>
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">약맥</span>
+                            <span class="en hidden">Weak</span>
+                        </span>
+                        <span class="syndrome-tag bg-green-100 text-green-800">
+                             <span class="ko">기허, 혈허</span>
+                             <span class="en hidden">Qi & Blood Deficiency</span>
+                        </span>
+                    </div>
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                             <span class="ko">세맥</span>
+                             <span class="en hidden">Thready</span>
+                        </span>
+                        <span class="syndrome-tag bg-pink-100 text-pink-800">
+                             <span class="ko">혈허</span>
+                             <span class="en hidden">Blood Deficiency</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 단담함 -->
+        <div class="category-card bg-stone-100">
+            <h2 class="category-title">
+                 <span class="ko">단담함 (습과 긴장도)</span>
+                 <span class="en hidden">Hardness (Dampness & Tension)</span>
+            </h2>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">부드러운 것</span>
+                     <span class="en hidden">Soft</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                             <span class="ko">유맥</span>
+                             <span class="en hidden">Soggy</span>
+                        </span>
+                        <span class="syndrome-tag bg-orange-100 text-orange-800">
+                            <span class="ko">습</span>
+                            <span class="en hidden">Dampness</span>
+                        </span>
+                    </div>
+                     <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">활맥</span>
+                            <span class="en hidden">Slippery</span>
+                        </span>
+                        <span class="syndrome-tag bg-amber-100 text-amber-800">
+                            <span class="ko">담</span>
+                            <span class="en hidden">Phlegm</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">긴장된 것</span>
+                     <span class="en hidden">Tense</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">긴맥</span>
+                            <span class="en hidden">Tense</span>
+                        </span>
+                        <span class="syndrome-tag bg-gray-200 text-gray-800">
+                             <span class="ko">실한</span>
+                             <span class="en hidden">Excess Cold</span>
+                        </span>
+                    </div>
+                     <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">현맥</span>
+                            <span class="en hidden">Wiry</span>
+                        </span>
+                        <span class="syndrome-tag bg-indigo-100 text-indigo-800">
+                            <span class="ko">간</span>
+                            <span class="en hidden">Liver</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 깊이 -->
+        <div class="category-card bg-slate-100">
+            <h2 class="category-title">
+                 <span class="ko">깊이 (표리)</span>
+                 <span class="en hidden">Depth (Exterior/Interior)</span>
+            </h2>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">얕은 것</span>
+                     <span class="en hidden">Superficial</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">부맥</span>
+                            <span class="en hidden">Floating</span>
+                        </span>
+                        <span class="syndrome-tag bg-gray-200 text-gray-700">
+                             <span class="ko">표</span>
+                             <span class="en hidden">Exterior</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">깊은 것</span>
+                     <span class="en hidden">Deep</span>
+                </h3>
+                <div class="pulse-list hidden">
+                     <div class="pulse-entry">
+                        <span class="pulse-name">
+                             <span class="ko">침맥</span>
+                             <span class="en hidden">Deep</span>
+                        </span>
+                        <span class="syndrome-tag bg-gray-700 text-gray-100">
+                            <span class="ko">리</span>
+                            <span class="en hidden">Interior</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리듬 -->
+        <div class="category-card bg-orange-100">
+            <h2 class="category-title">
+                 <span class="ko">리듬 (혈액 순환)</span>
+                 <span class="en hidden">Rhythm (Blood Circulation)</span>
+            </h2>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">매끄러운 것</span>
+                     <span class="en hidden">Smooth</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">활맥</span>
+                            <span class="en hidden">Slippery</span>
+                        </span>
+                        <span class="syndrome-tag bg-amber-100 text-amber-800">
+                            <span class="ko">담</span>
+                            <span class="en hidden">Phlegm</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="pulse-group-title">
+                     <span class="ko">매끄럽지 않은 것</span>
+                     <span class="en hidden">Choppy</span>
+                </h3>
+                <div class="pulse-list hidden">
+                    <div class="pulse-entry">
+                        <span class="pulse-name">
+                            <span class="ko">삽맥</span>
+                            <span class="en hidden">Choppy</span>
+                        </span>
+                        <span class="syndrome-tag bg-purple-100 text-purple-800">
+                            <span class="ko">어혈</span>
+                            <span class="en hidden">Blood Stasis</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 심화 학습 섹션 -->
+    <div class="secondary-container">
+        <div class="info-card bg-white col-span-full">
+            <div class="text-gray-600 space-y-2">
+                 <p>
+                     <span class="ko">실맥의 일종인 홍대맥이나, 삽맥의 일종인 결대촉맥은 지금은 생각하지 말고 5가지 맥의 축에 집중하세요.</span>
+                     <span class="en hidden">For now, focus on the five main pulse axes, not subtypes like Hong-dae (a type of Excess pulse) or Gyeol-dae-chok (types of Choppy pulse).</span>
+                 </p>
+                 <p>
+                     <strong>
+                         <span class="ko">세삽맥:</span>
+                         <span class="en hidden">Fine and Choppy Pulse:</span>
+                     </strong>
+                     <span class="ko"> 세맥과 삽맥은 혈허와 어혈이 동반될 때 자주 조합됩니다. (예: 어혈, 혈허)</span>
+                     <span class="en hidden"> The Thready (fine) and Choppy pulses often appear together when Blood Deficiency and Blood Stasis are concurrent.</span>
+                 </p>
+                 <p>
+                     <strong>
+                         <span class="ko">유맥과 활맥:</span>
+                         <span class="en hidden">Soggy and Slippery Pulses:</span>
+                     </strong>
+                     <span class="ko"> 담(痰)은 습(濕)에 기원하므로, 유맥과 활맥은 습과 담 양쪽에 모두 사용될 수 있습니다.</span>
+                     <span class="en hidden"> Since Phlegm originates from Dampness, the Soggy and Slippery pulses can indicate both conditions.</span>
+                 </p>
+            </div>
+        </div>
+
+        <div class="info-card bg-rose-50 col-span-full">
+            <h3 class="info-title">
+                 <span class="ko">1단계: 병리 과정과 맥상 조합</span>
+                 <span class="en hidden">Stage 1: Pathological Processes & Pulse Combinations</span>
+            </h3>
+            <div class="space-y-8">
+                <!-- 기허 병리 -->
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-3 text-lg">
+                         <span class="ko">기허(氣虛)에서 비롯되는 병리 과정</span>
+                         <span class="en hidden">Pathological Process from Qi Deficiency</span>
+                    </h4>
+                    <p class="mb-4 text-gray-600">
+                        <span class="ko">기허해서 양허가 생기고 양허해서 습까지 생긴 병리의 맥상을 생각해 볼까요? 보통 양허맥은 침지라고 하는데, 실제 이렇게 다양하게 맥상이 나타날 수 있지요.</span>
+                        <span class="en hidden">Let's consider the pulse pattern when Qi Deficiency leads to Yang Deficiency, which in turn creates Dampness. A typical Yang Deficiency pulse is Deep and Slow, but it can manifest in more varied ways.</span>
+                    </p>
+                    <div class="bg-white/60 p-4 rounded-xl">
+                        <div class="flex flex-col md:flex-row items-stretch justify-around text-center space-y-4 md:space-y-0 md:space-x-2">
+                            <!-- Step 1: 기허 -->
+                            <div class="flex flex-col items-center justify-center flex-1">
+                                <div class="font-bold text-xl text-slate-800">
+                                    <span class="ko">기허</span>
+                                    <span class="en hidden">Qi Deficiency</span>
+                                </div>
+                                <div class="text-sm text-gray-500 italic my-1 h-5">
+                                    <span class="ko">"기가 허하니"</span>
+                                    <span class="en hidden">"Qi is deficient"</span>
+                                </div>
+                                <div class="text-2xl text-slate-400">↓</div>
+                                <div class="px-3 py-1 bg-green-100 text-green-800 rounded-full font-semibold">
+                                     <span class="ko">허맥</span>
+                                     <span class="en hidden">Deficient</span>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-light text-slate-400 self-center hidden md:block mx-2">&rarr;</div>
+                            <!-- Step 2: 양허 -->
+                            <div class="flex flex-col items-center justify-center flex-1">
+                                <div class="font-bold text-xl text-slate-800">
+                                     <span class="ko">양허</span>
+                                     <span class="en hidden">Yang Deficiency</span>
+                                </div>
+                                <div class="text-sm text-gray-500 italic my-1 h-5">
+                                    <span class="ko">"양허하고 차갑고, 리증이니"</span>
+                                    <span class="en hidden">"Yang deficient, cold, interior syndrome"</span>
+                                </div>
+                                <div class="text-2xl text-slate-400">↓</div>
+                                <div class="flex space-x-2">
+                                    <div class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-semibold">
+                                        <span class="ko">지맥</span>
+                                        <span class="en hidden">Slow</span>
+                                    </div>
+                                    <div class="px-3 py-1 bg-gray-700 text-gray-100 rounded-full font-semibold">
+                                         <span class="ko">침맥</span>
+                                         <span class="en hidden">Deep</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-light text-slate-400 self-center hidden md:block mx-2">&rarr;</div>
+                             <!-- Step 3: 습 -->
+                            <div class="flex flex-col items-center justify-center flex-1">
+                                <div class="font-bold text-xl text-slate-800">
+                                     <span class="ko">습</span>
+                                     <span class="en hidden">Dampness</span>
+                                </div>
+                                <div class="text-sm text-gray-500 italic my-1 h-5">
+                                    <span class="ko">"습이 생기니"</span>
+                                    <span class="en hidden">"Dampness forms"</span>
+                                </div>
+                                <div class="text-2xl text-slate-400">↓</div>
+                                <div class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full font-semibold">
+                                    <span class="ko">유맥</span>
+                                    <span class="en hidden">Soggy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                 <!-- 음허 병리 -->
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-3 text-lg">
+                         <span class="ko">음허(陰虛)의 병리 과정</span>
+                         <span class="en hidden">Pathological Process of Yin Deficiency</span>
+                    </h4>
+                    <p class="mb-4 text-gray-600">
+                        <span class="ko">음허 맥은 어떨까요? 음허는 혈허에 기반합니다. 혈이 허하니 세맥, 열이 오르니 삭맥이 되어 세삭맥이 음허맥입니다.</span>
+                        <span class="en hidden">What about a Yin Deficiency pulse? Yin Deficiency is based on Blood Deficiency. Deficient blood causes a Thready pulse, and the resulting heat causes a Rapid pulse. Together they form the Fine and Rapid pulse.</span>
+                    </p>
+                    <div class="bg-white/60 p-4 rounded-xl">
+                        <div class="flex flex-col md:flex-row items-stretch justify-around text-center space-y-4 md:space-y-0 md:space-x-4">
+                            <!-- Step 1: 혈허/진액부족 -->
+                            <div class="flex flex-col items-center justify-center flex-1">
+                                <div class="font-bold text-xl text-slate-800">
+                                     <span class="ko">혈허, 진액부족</span>
+                                     <span class="en hidden">Blood/Fluid Deficiency</span>
+                                </div>
+                                <div class="text-sm text-gray-500 italic my-1 h-5">
+                                    <span class="ko">"혈허, 진액 부족하니"</span>
+                                    <span class="en hidden">"Blood/fluid is deficient"</span>
+                                </div>
+                                <div class="text-2xl text-slate-400">↓</div>
+                                <div class="px-3 py-1 bg-pink-100 text-pink-800 rounded-full font-semibold">
+                                    <span class="ko">세맥</span>
+                                    <span class="en hidden">Thready</span>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-light text-slate-400 self-center hidden md:block mx-4">&rarr;</div>
+                            <!-- Step 2: 음허/허열 -->
+                            <div class="flex flex-col items-center justify-center flex-1">
+                                <div class="font-bold text-xl text-slate-800">
+                                     <span class="ko">음허 → 허열</span>
+                                     <span class="en hidden">Yin Deficiency → Deficiency Heat</span>
+                                </div>
+                                <div class="text-sm text-gray-500 italic my-1 h-5">
+                                    <span class="ko">"음허로 허열이 나니"</span>
+                                    <span class="en hidden">"Yin deficiency causes deficiency heat"</span>
+                                </div>
+                                <div class="text-2xl text-slate-400">↓</div>
+                                <div class="px-3 py-1 bg-red-100 text-red-800 rounded-full font-semibold">
+                                    <span class="ko">삭맥</span>
+                                    <span class="en hidden">Rapid</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card quiz-card col-span-full">
+             <h3 class="info-title">
+                  <span class="ko">2단계 심화 문제: 증상으로 맥상 추리하기</span>
+                  <span class="en hidden">Stage 2 Advanced Quiz: Deducing Pulse from Symptoms</span>
+             </h3>
+             <div class="quiz-grid">
+                <!-- 문제 1 -->
+                <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 1:</span><span class="en hidden">Case 1:</span></strong>
+                        <span class="ko"> 발열심, 오한, 두통</span>
+                        <span class="en hidden"> High fever, chills, headache</span>
+                    </p>
+                    <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">풍열</span><span class="en hidden">Wind-Heat</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">삭, 긴, 부</span><span class="en hidden">Rapid, Tense, Floating</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">폐</span><span class="en hidden">Lung</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">풍열범폐</span><span class="en hidden">Wind-Heat Invading the Lungs</span></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 문제 2 -->
+                <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 2:</span><span class="en hidden">Case 2:</span></strong>
+                        <span class="ko"> 배아프고, 설사, 부종, 추워요</span>
+                        <span class="en hidden"> Abdominal pain, diarrhea, edema, feeling cold</span>
+                    </p>
+                    <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">양허</span><span class="en hidden">Yang Deficiency</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">지, 침, 유, 허</span><span class="en hidden">Slow, Deep, Soggy, Deficient</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">비</span><span class="en hidden">Spleen</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">비양허, 습</span><span class="en hidden">Spleen Yang Deficiency, Dampness</span></span>
+                        </div>
+                    </div>
+                </div>
+                 <!-- 문제 3 -->
+                <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 3:</span><span class="en hidden">Case 3:</span></strong>
+                        <span class="ko"> 과식후 어지럽고, 토할 것 같고, 속이 답답</span>
+                        <span class="en hidden"> Dizziness, nausea, stuffiness after overeating</span>
+                    </p>
+                     <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">담</span><span class="en hidden">Phlegm</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span lang="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">긴, 활</span><span class="en hidden">Tense, Slippery</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span lang="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">비위</span><span class="en hidden">Spleen/Stomach</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">식체위완, 담</span><span class="en hidden">Food Stagnation, Phlegm</span></span>
+                        </div>
+                    </div>
+                </div>
+                 <!-- 문제 4 -->
+                 <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 4:</span><span class="en hidden">Case 4:</span></strong>
+                        <span class="ko"> 어지럽고, 생리가 안나오고, 손톱이 부스러지고</span>
+                        <span class="en hidden"> Dizziness, amenorrhea, brittle nails</span>
+                    </p>
+                    <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">혈허</span><span class="en hidden">Blood Deficiency</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span lang="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">현, 세</span><span class="en hidden">Wiry, Thready</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span lang="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">간</span><span class="en hidden">Liver</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">간혈허</span><span class="en hidden">Liver Blood Deficiency</span></span>
+                        </div>
+                    </div>
+                </div>
+                 <!-- 문제 5 -->
+                 <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 5:</span><span class="en hidden">Case 5:</span></strong>
+                        <span class="ko"> 측두통, 눈 충혈, 분노, 고혈압, 늘 열감</span>
+                        <span class="en hidden"> Temporal headache, red eyes, anger, hypertension, constant heat</span>
+                    </p>
+                    <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">간화</span><span class="en hidden">Liver Fire</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">현, 삭, 실</span><span class="en hidden">Wiry, Rapid, Excess</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">간</span><span class="en hidden">Liver</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">간화상염</span><span class="en hidden">Liver Fire Blazing Upwards</span></span>
+                        </div>
+                    </div>
+                </div>
+                 <!-- 문제 6 -->
+                 <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 6:</span><span class="en hidden">Case 6:</span></strong>
+                        <span class="ko"> 요통, 식은 땀(야간), 소변이상, 조열</span>
+                        <span class="en hidden"> Lower back pain, night sweats, urinary issues, tidal fever</span>
+                    </p>
+                    <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">허열</span><span class="en hidden">Deficiency Heat</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">세, 삭 (부, 허, 대)</span><span class="en hidden">Thready, Rapid (Floating, Deficient, Large)</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">신</span><span class="en hidden">Kidney</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">신음허</span><span class="en hidden">Kidney Yin Deficiency</span></span>
+                        </div>
+                    </div>
+                </div>
+                  <!-- 문제 7 -->
+                 <div>
+                    <p class="quiz-question">
+                        <strong><span class="ko">사례 7:</span><span class="en hidden">Case 7:</span></strong>
+                        <span class="ko"> 가슴이 두근거리고, 불면, 가슴 통증(찌름)</span>
+                        <span class="en hidden"> Palpitations, insomnia, stabbing chest pain</span>
+                    </p>
+                     <div class="quiz-answer-container">
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 병리:</span><span class="en hidden">Pathology:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">어혈</span><span class="en hidden">Blood Stasis</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">예상 맥상:</span><span class="en hidden">Pulse:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">삽</span><span class="en hidden">Choppy</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">관련 장부:</span><span class="en hidden">Organ:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">심</span><span class="en hidden">Heart</span></span>
+                        </div>
+                        <div class="answer-row">
+                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <span class="answer-value hidden"><span class="ko">심혈어</span><span class="en hidden">Heart Blood Stasis</span></span>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentLang = 'ko';
+            const langToggleBtn = document.getElementById('lang-toggle');
+
+            function setLanguage(lang) {
+                currentLang = lang;
+                document.documentElement.lang = lang;
+                
+                const elementsToToggle = document.querySelectorAll('.ko, .en');
+                elementsToToggle.forEach(el => {
+                    if (el.classList.contains(currentLang)) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                });
+            }
+
+            langToggleBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                const newLang = currentLang === 'ko' ? 'en' : 'ko';
+                setLanguage(newLang);
+            });
+
+            // --- Pulse Category Toggles ---
+            const toggles = document.querySelectorAll('.pulse-group-title');
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', (event) => {
+                    const content = event.currentTarget.nextElementSibling;
+                    if (content && content.classList.contains('pulse-list')) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+
+            // --- Clickable Label to Reveal Answer ---
+            const answerLabels = document.querySelectorAll('.answer-label');
+            answerLabels.forEach(label => {
+                label.addEventListener('click', (event) => {
+                    const valueSpan = event.currentTarget.nextElementSibling;
+                    if (valueSpan && valueSpan.classList.contains('answer-value')) {
+                        valueSpan.classList.toggle('hidden');
+                    }
+                });
+            });
+
+             // Set initial language state
+            setLanguage('ko');
+        });
+    </script>
+</body>
+</html>
+
