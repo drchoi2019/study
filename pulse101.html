@@ -144,6 +144,13 @@
         </a>
     </header>
 
+    <div class="px-8 max-w-[1400px] mx-auto mt-8">
+        <h1 class="text-3xl font-bold text-slate-800 border-b-2 border-stone-300 pb-2 mb-8">
+            <span class="ko">맥진 (맥 진단)</span>
+            <span class="en hidden">Pulse Diagnosis</span>
+        </h1>
+    </div>
+
     <div class="main-container">
         <!-- 빠르기 -->
         <div class="category-card bg-cyan-50">
@@ -641,7 +648,7 @@
                             <span class="answer-value hidden"><span class="ko">비위</span><span class="en hidden">Spleen/Stomach</span></span>
                         </div>
                         <div class="answer-row">
-                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <strong class="answer-label"><span lang="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
                             <span class="answer-value hidden"><span class="ko">식체위완, 담</span><span class="en hidden">Food Stagnation, Phlegm</span></span>
                         </div>
                     </div>
@@ -667,7 +674,7 @@
                             <span class="answer-value hidden"><span class="ko">간</span><span class="en hidden">Liver</span></span>
                         </div>
                         <div class="answer-row">
-                            <strong class="answer-label"><span class="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
+                            <strong class="answer-label"><span lang="ko">최종 변증:</span><span class="en hidden">Diagnosis:</span></strong>
                             <span class="answer-value hidden"><span class="ko">간혈허</span><span class="en hidden">Liver Blood Deficiency</span></span>
                         </div>
                     </div>
@@ -763,14 +770,19 @@
                 currentLang = lang;
                 document.documentElement.lang = lang;
                 
-                const elementsToToggle = document.querySelectorAll('.ko, .en');
-                elementsToToggle.forEach(el => {
+                document.querySelectorAll('.ko, .en').forEach(el => {
                     if (el.classList.contains(currentLang)) {
                         el.classList.remove('hidden');
                     } else {
                         el.classList.add('hidden');
                     }
                 });
+            }
+            
+            function initializeLanguage() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const langParam = urlParams.get('lang');
+                setLanguage(langParam === 'en' ? 'en' : 'ko');
             }
 
             langToggleBtn.addEventListener('click', (event) => {
@@ -802,7 +814,7 @@
             });
 
              // Set initial language state
-            setLanguage('ko');
+            initializeLanguage();
         });
     </script>
 </body>
