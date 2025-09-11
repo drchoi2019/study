@@ -309,16 +309,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            let currentLang = 'ko';
+            let currentLang = 'ko'; // Set default language
             const langToggleBtn = document.getElementById('lang-toggle');
             const tooltip = document.getElementById('tooltip');
 
+            // Function to set the language based on the provided lang code ('ko' or 'en')
             function setLanguage(lang) {
                 currentLang = lang;
                 document.documentElement.lang = lang;
                 
-                const elementsToToggle = document.querySelectorAll('.ko, .en');
-                elementsToToggle.forEach(el => {
+                document.querySelectorAll('.ko, .en').forEach(el => {
                     if (el.classList.contains(currentLang)) {
                         el.classList.remove('hidden');
                     } else {
@@ -327,12 +327,21 @@
                 });
             }
 
+            // Function to initialize language based on URL parameter or default to Korean
+            function initializeLanguage() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const langParam = urlParams.get('lang');
+                setLanguage(langParam === 'en' ? 'en' : 'ko');
+            }
+
+            // Event listener for the language toggle button
             langToggleBtn.addEventListener('click', (event) => {
                 event.preventDefault();
                 const newLang = currentLang === 'ko' ? 'en' : 'ko';
                 setLanguage(newLang);
             });
 
+            // Event listener for analysis buttons
             const analysisButtons = document.querySelectorAll('.analysis-btn');
             analysisButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -344,6 +353,7 @@
                 });
             });
 
+            // Event listeners for tooltip triggers
             const tooltipTriggers = document.querySelectorAll('.tooltip-trigger');
             tooltipTriggers.forEach(trigger => {
                 trigger.addEventListener('mouseenter', (e) => {
@@ -360,8 +370,8 @@
                 });
             });
 
-             // Set initial language state
-            setLanguage('ko');
+             // Initialize the language when the page loads
+            initializeLanguage();
         });
     </script>
 </body>
