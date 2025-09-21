@@ -218,8 +218,6 @@
                 questionWrapper.appendChild(optionsWrapper);
                 container.appendChild(questionWrapper);
             });
-
-            updateLanguageUI();
         }
 
         function handleOptionClick(e) {
@@ -270,14 +268,12 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const lang = urlParams.get('lang');
-            if (lang === 'en') {
-                currentLanguage = 'en';
-            }
+            currentLanguage = urlParams.get('lang') === 'en' ? 'en' : 'ko';
 
             updateHeaderLink();
             parseData();
             renderQuiz();
+            updateLanguageUI(); // Update all text elements after rendering
             document.getElementById('quiz-container').addEventListener('click', handleOptionClick);
         });
 
