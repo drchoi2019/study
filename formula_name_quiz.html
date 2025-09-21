@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Formula Names (처방 이름 퀴즈)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .btn-option:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .correct {
+            background-color: #dcfce7 !important; /* green-100 */
+            border-color: #22c55e !important; /* green-500 */
+            color: #166534; /* green-800 */
+        }
+        .incorrect {
+            background-color: #fee2e2 !important; /* red-100 */
+            border-color: #ef4444 !important; /* red-500 */
+            color: #991b1b; /* red-800 */
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            <span data-ko="&larr; Interactive TCM" data-en="&larr; Interactive TCM"></span>
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div class="text-center my-6 px-4">
+        <h1 class="text-3xl font-bold text-stone-800" data-ko="처방 이름 퀴즈" data-en="Hacking Formula Names"></h1>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-2 text-center text-stone-600 text-sm md:text-base">
+        <p data-ko="먼저 처방이름을 잘 보고 그 효고를 유추해보세요. 암기가 아니라 처방 이름의 규칙을 잘 생각해보시기 바랍니다." data-en="First, look carefully at the formula name and try to infer its effect. Instead of memorizing, try to think about the rules in the formula's name."></p>
+    </div>
+
+    <main id="quiz-container" class="max-w-4xl mx-auto p-4 md:p-8 space-y-3">
+        <!-- Questions will be dynamically inserted here -->
+    </main>
+
+    <script>
+        const rawData = `
+계지탕 | Gui Zhi Tang - 풍한|Wind-Cold / 풍열|Wind-Heat
+마황탕 | Ma Huang Tang - 해표|Release Exterior / 청열|Clear Heat / 거담|Expel Phlegm / 거습|Eliminate Dampness
+갈근탕 | Ge Gen Tang - 해표|Release Exterior / 청열|Clear Heat / 거담|Expel Phlegm / 거습|Eliminate Dampness
+상국음 | Sang Ju Yin - 해표,기침,눈병|Release Exterior, Cough, Eye Disease / 해표, 두통,피부병|Release Exterior, Headache, Skin Disease / 청열,눈병|Clear Heat, Eye Disease
+시갈해기탕 | Chai Ge Jie Ji Tang - 해기+청열|Release Muscle Layer + Clear Heat / 거담+청열|Expel Phlegm + Clear Heat / 해기+온리|Release Muscle Layer + Warm Interior / 거담+온리|Expel Phlegm + Warm Interior
+승마갈근탕 | Sheng Ma Ge Gen Tang - 해표+거풍|Release Exterior + Expel Wind / 해표+청열|Release Exterior + Clear Heat / 해표+거담|Release Exterior + Expel Phlegm / 해표+온리|Release Exterior + Warm Interior
+마행석감탕 | Ma Xing Shi Gan Tang - 기침|Cough / 두통|Headache / 설사|Diarrhea / 수족냉증|Cold Hands and Feet
+죽엽석고탕 | Zhu Ye Shi Gao Tang - 청열+진액보충|Clear Heat + Supplement Fluids / 청열+거습|Clear Heat + Eliminate Dampness / 청열+거담|Clear Heat + Expel Phlegm / 해표+청열|Release Exterior + Clear Heat
+백두옹탕 | Bai Tou Weng Tang - 이질설사|Dysenteric Diarrhea / 두통|Headache / 콧물|Runny Nose / 감기|Common Cold
+작약탕 | Shao Yao Tang - 복통설사|Abdominal Pain & Diarrhea / 두통|Headache / 콧물|Runny Nose / 감기|Common Cold
+청호별갑탕 | Qing Hao Bie Jia Tang - 허열|Deficiency Heat / 실열|Excess Heat / 허한|Deficiency Cold / 실한|Excess Cold
+소시호탕 | Xiao Chai Hu Tang - 반표반리|Half-Exterior, Half-Interior / 태양병|Taiyang Disease / 열병|Febrile Disease / 설사|Diarrhea
+반하백출천마탕 | Ban Xia Bai Zhu Tian Ma Tang - 담|Phlegm / 풍|Wind / 한|Cold / 열|Heat
+패모과루산 | Bei Mu Gua Lou San - 담+폐|Phlegm + Lung / 담+두통|Phlegm + Headache / 기침+해표|Cough + Release Exterior / 기침+청열|Cough + Clear Heat
+인진호탕 | Yin Chen Hao Tang - 간담|Liver & Gallbladder / 심소장|Heart & Small Intestine / 폐대장|Lung & Large Intestine / 비위|Spleen & Stomach
+저령탕 | Zhu Ling Tang - 이뇨|Promote Urination / 거담|Expel Phlegm / 거습|Eliminate Dampness / 거풍|Expel Wind
+마자인환 | Ma Zi Ren Wan - 사하+윤장|Purge + Moisten Intestines / 사하+거습|Purge + Eliminate Dampness / 청열+해표|Clear Heat + Release Exterior / 청열+활혈|Clear Heat + Invigorate Blood
+맥문동탕 | Mai Men Dong Tang - 윤조+폐|Moisten Dryness + Lung / 윤조+대장|Moisten Dryness + Large Intestine / 보음+위|Tonify Yin + Stomach / 보음+대장|Tonify Yin + Large Intestine
+괴화산 | Huai Hua San - 지혈|Stop Bleeding / 활혈|Invigorate Blood / 지통|Stop Pain / 거풍|Expel Wind
+교애탕 | Jiao Ai Tang - 온리+부인병|Warm Interior + Gynecology / 온리+비위허약|Warm Interior + Spleen/Stomach Deficiency / 청열+부인병|Clear Heat + Gynecology / 청열+폐옹|Clear Heat + Lung Abscess
+귤피죽여탕 | Ju Pi Zhu Ru Tang - 임신오저|Morning Sickness / 설사|Diarrhea / 두통|Headache / 감모|Common Cold
+반하후박탕 | Ban Xia Hou Po Tang - 담+인후|Phlegm + Throat / 담+두통|Phlegm + Headache / 설사|Diarrhea / 복통|Abdominal Pain
+삼부탕 | Shen Fu Tang - 온리|Warm the Interior / 청열|Clear Heat
+오수유탕 | Wu Zhu Yu Tang - 온리+강기|Warm Interior + Direct Qi Down / 온리+승양|Warm Interior + Raise Yang / 청열+강기|Clear Heat + Direct Qi Down / 청열+승양|Clear Heat + Raise Yang
+창이자산 | Cang Er Zi San - 콧물|Runny Nose / 기침|Cough / 설사|Diarrhea / 두통|Headache
+천궁다조산 | Chuan Xiong Cha Tiao San - 두통|Headache / 콧물|Runny Nose / 기침|Cough / 설사|Diarrhea
+천마구등음 | Tian Ma Gou Teng Yin - 두통|Headache / 콧물|Runny Nose / 기침|Cough / 설사|Diarrhea
+황연해독탕 | Huang Lian Jie Du Tang - 찬약|Cold Property Herb / 더운약|Warm Property Herb
+인삼패독산 | Ren Shen Bai Du San - 부정+해표|Tonify Righteous Qi + Release Exterior / 부정+거담|Tonify Righteous Qi + Expel Phlegm / 청열+해표|Clear Heat + Release Exterior / 청열+거습|Clear Heat + Eliminate Dampness
+용담사간탕 | Long Dan Xie Gan Tang - 청열+간|Clear Heat + Liver / 청열+심|Clear Heat + Heart / 온리+간|Warm Interior + Liver / 온리+비위|Warm Interior + Spleen & Stomach
+소자강기탕 | Su Zi Jiang Qi Tang - 강기+폐|Direct Qi Down + Lung / 강기+심|Direct Qi Down + Heart / 승양+심|Raise Yang + Heart / 승양+중초|Raise Yang + Middle Jiao
+시호소간산 | Chai Hu Shu Gan San - 간실증|Liver Excess Pattern / 간허증|Liver Deficiency Pattern
+삼령백출산 | Shen Ling Bai Zhu San - 비허증|Spleen Deficiency Pattern / 비실증|Spleen Excess Pattern
+작약감초탕 | Shao Yao Gan Cao Tang - 복통|Abdominal Pain / 두통|Headache / 치통|Toothache / 생리통|Menstrual Pain
+백합고금탕 | Bai He Gu Jin Tang - 폐|Lung / 간|Liver / 심|Heart / 비|Spleen / 신|Kidney
+황연아교탕 | Huang Lian E Jiao Tang - 청열+보음|Clear Heat + Tonify Yin / 청열+거습|Clear Heat + Eliminate Dampness / 청열+간|Clear Heat + Liver / 보음+거풍|Tonify Yin + Expel Wind
+산조인탕 | Suan Zao Ren Tang - 불면|Insomnia / 두통|Headache / 복통|Abdominal Pain / 설사|Diarrhea
+모려산 | Mu Li San - 다한|Profuse Sweating / 복통|Abdominal Pain / 설사|Diarrhea / 두통|Headache
+상표초산 | Sang Piao Xiao San - 속쓰림|Heartburn / 두통|Headache / 설사|Diarrhea
+온경탕 | Wen Jing Tang - 생리+온리|Menstruation + Warm Interior / 생리+청열|Menstruation + Clear Heat / 복통+온리|Abdominal Pain + Warm Interior / 복통+청열|Abdominal Pain + Clear Heat
+사심탕 | Xie Xin Tang - 실증+심|Excess Pattern + Heart / 실증+간|Excess Pattern + Liver / 허증+심|Deficiency Pattern + Heart / 허증+간|Deficiency Pattern + Liver
+도적산 | Dao Chi San - 심|Heart / 간|Liver / 비|Spleen / 폐|Lung
+사백산 | Xie Bai San - 폐|Lung / 간|Liver / 심|Heart / 비|Spleen
+양격산 | Liang Ge San - 흉격+실증|Chest/Diaphragm + Excess Pattern / 흉격+허증|Chest/Diaphragm + Deficiency Pattern / 하초+실증|Lower Jiao + Excess Pattern / 하초+허증|Lower Jiao + Deficiency Pattern
+청위산 | Qing Wei San - 청열+위|Clear Heat + Stomach / 청열+간|Clear Heat + Liver / 청열+대장|Clear Heat + Large Intestine
+사황산 | Xie Huang San - 실증+위|Excess Pattern + Stomach / 실증+간|Excess Pattern + Liver / 실증+폐|Excess Pattern + Lung / 실증+심|Excess Pattern + Heart
+옥녀전 | Yu Nu Jian - 보음|Tonify Yin / 거습|Eliminate Dampness / 청열|Clear Heat / 거풍|Expel Wind
+보제소독음 | Pu Ji Xiao Du Yin - 청열+전염병|Clear Heat + Epidemic Disease / 거담+전염병|Expel Phlegm + Epidemic Disease / 청열+사하|Clear Heat + Purge
+청온배독음 | Qing Wen Bai Du Yin - 청열+전염병|Clear Heat + Epidemic Disease / 거담+전염병|Expel Phlegm + Epidemic Disease / 청열+사하|Clear Heat + Purge
+청영탕 | Qing Ying Tang - 영분열|Heat in Nutritive Level / 기분열|Heat in Qi Level / 소양열|Shaoyang Heat / 양명열|Yangming Heat
+청골산 | Qing Gu San - 표열|Exterior Heat / 리열|Interior Heat
+소요산 | Xiao Yao San - 마음병|Emotional Disorder / 신체병|Physical Disorder
+사역산/사역탕/당귀사역탕 | Si Ni San/Si Ni Tang/Dang Gui Si Ni Tang - 수족냉|Cold Hands and Feet / 두통|Headache / 복통|Abdominal Pain / 생리|Menstruation
+통사요방 | Tong Xie Yao Fang - 통증+설사|Pain + Diarrhea / 통증+구토|Pain + Vomiting / 설사+두통|Diarrhea + Headache
+온담탕 | Wen Dan Tang - 마음병|Emotional Disorder / 신체병|Physical Disorder
+청기화담환 | Qing Qi Hua Tan Wan - 담+폐+열|Phlegm + Lung + Heat / 담+심+열|Phlegm + Heart + Heat / 담+폐+한|Phlegm + Lung + Cold / 담+폐+풍|Phlegm + Lung + Wind
+지수산 | Zhi Sou San - 기침|Cough / 설사|Diarrhea / 복통|Abdominal Pain / 두통|Headache
+평위산 | Ping Wei San - 설사|Diarrhea / 기침|Cough / 두통|Headache / 감모|Common Cold
+오피산 | Wu Pi San - 피부부종|Skin Edema / 복부부종|Abdominal Edema
+비해분청음 | Bi Xie Fen Qing Yin - 혼탁뇨|Turbid Urine / 혈뇨|Bloody Urine / 통림|Painful Urination
+윤장환 | Run Chang Wan - 변비|Constipation / 설사|Diarrhea / 기침|Cough / 복통|Abdominal Pain
+청조구폐탕 | Qing Zao Jiu Fei Tang - 윤조+폐|Moisten Dryness + Lung / 윤장|Moisten Intestines / 청열+심|Clear Heat + Heart
+증액탕 | Zeng Ye Tang - 윤조|Moisten Dryness / 청열|Clear Heat / 거풍|Expel Wind / 해표|Release Exterior
+축어탕 | Zhu Yu Tang - 어혈|Blood Stasis / 담|Phlegm / 습|Dampness / 풍|Wind
+정천탕 | Ding Chuan Tang - 기침|Cough / 설사|Diarrhea / 복통|Abdominal Pain / 두통|Headache
+난간전 | Nuan Gan Jian - 보간|Tonify Liver / 보심|Tonify Heart / 사간|Drain Liver / 사심|Drain Heart
+보중익기탕 | Bu Zhong Yi Qi Tang - 보비위|Tonify Spleen & Stomach / 보간|Tonify Liver / 사비위|Drain Spleen & Stomach / 사간|Drain Liver
+옥병풍산 | Yu Ping Feng San - 다한|Profuse Sweating / 설사|Diarrhea / 변비|Constipation / 두통|Headache
+이중환 | Li Zhong Wan - 비위허증|Spleen & Stomach Deficiency Pattern / 비위실증|Spleen & Stomach Excess Pattern
+소건중탕/대건중탕 | Xiao Jian Zhong Tang/Da Jian Zhong Tang - 비위허증|Spleen & Stomach Deficiency Pattern / 비위실증|Spleen & Stomach Excess Pattern
+대보음환 | Da Bu Yin Wan - 보음|Tonify Yin / 보양|Tonify Yang
+천왕보심단 | Tian Wang Bu Xin Dan - 청열+심+보음|Clear Heat + Heart + Tonify Yin / 청열+간+보기|Clear Heat + Liver + Tonify Qi / 청열+심+사화|Clear Heat + Heart + Drain Fire
+고경환 | Gu Jing Wan - 생리과다|Excessive Menstruation / 대하|Vaginal Discharge / 복통|Abdominal Pain / 두통|Headache
+고정환 | Gu Chong Tang - 유정|Seminal Emission / 대하|Vaginal Discharge / 복통|Abdominal Pain / 두통|Headache / 무월경|Amenorrhea
+완대탕 | Wan Dai Tang - 대하|Vaginal Discharge / 복통|Abdominal Pain / 두통|Headache / 무월경|Amenorrhea
+수태환 | Shou Tai Wan - 안태|Calm the Fetus / 복통|Abdominal Pain / 두통|Headache / 무월경|Amenorrhea
+소풍산 | Xiao Feng San - 피부병|Skin Disease / 설사|Diarrhea / 생리병|Menstrual Disorder / 흉격열증|Chest Heat Pattern
+진간식풍탕 | Zhen Gan Xi Feng Tang - 간풍|Liver Wind / 외풍|External Wind / 간화상염|Liver Fire Blazing Up / 간기울결|Liver Qi Stagnation
+오미소독음 | Wu Wei Xiao Du Yin - 염증|Inflammation / 보비위|Tonify Spleen & Stomach / 온리|Warm Interior / 두통|Headache
+소활락단 | Xiao Huo Luo Dan - 통증(활락, 어혈)|Pain (Activate Collaterals, Blood Stasis) / 거풍|Expel Wind / 청열|Clear Heat
+`;
+
+        let questions = [];
+        let currentLanguage = 'ko';
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex > 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function parseData() {
+            const lines = rawData.trim().split('\n');
+            questions = lines.map((line, index) => {
+                if (!line.includes(' - ')) return null;
+                const [namePart, optionsPart] = line.split(' - ');
+                if (!namePart.includes(' | ')) return null;
+                const [nameKo, nameEn] = namePart.split(' | ').map(s => s.trim());
+                
+                const optionsPairs = optionsPart.split(' / ').map(pair => {
+                    const parts = pair.split('|');
+                    const ko = parts[0] ? parts[0].trim() : '';
+                    const en = parts[1] ? parts[1].trim() : ko;
+                    return { ko, en };
+                });
+
+                if (optionsPairs.length === 0 || !optionsPairs[0].ko) return null;
+
+                return {
+                    id: `q-${index}`,
+                    name_ko: nameKo,
+                    name_en: nameEn,
+                    correctAnswer: optionsPairs[0],
+                    options: optionsPairs,
+                };
+            }).filter(Boolean);
+        }
+        
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            questions.forEach(q => {
+                const questionWrapper = document.createElement('div');
+                questionWrapper.className = 'question-card bg-white p-4 border border-stone-200 rounded-lg shadow-sm';
+                questionWrapper.id = q.id;
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'font-bold text-lg mb-3 text-stone-700';
+                nameEl.innerHTML = `<span data-ko="${q.name_ko}" data-en="${q.name_en}"></span>`;
+                
+                const optionsWrapper = document.createElement('div');
+                optionsWrapper.className = 'options-wrapper flex flex-wrap gap-2';
+
+                const shuffledOptions = shuffle([...q.options]);
+
+                shuffledOptions.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'btn-option flex-grow text-sm text-left px-3 py-2 border border-stone-300 rounded-md hover:bg-stone-100 hover:border-stone-400 transition-all focus:outline-none focus:ring-2 focus:ring-sky-400';
+                    
+                    button.dataset.ko = option.ko;
+                    button.dataset.en = option.en;
+                    button.dataset.correct = (option.ko === q.correctAnswer.ko);
+                    
+                    optionsWrapper.appendChild(button);
+                });
+                
+                questionWrapper.appendChild(nameEl);
+                questionWrapper.appendChild(optionsWrapper);
+                container.appendChild(questionWrapper);
+            });
+
+            updateLanguageUI();
+        }
+
+        function handleOptionClick(e) {
+            if (!e.target.classList.contains('btn-option')) return;
+
+            const clickedButton = e.target;
+            const questionCard = clickedButton.closest('.question-card');
+            if (!questionCard) return;
+
+            const allOptions = questionCard.querySelectorAll('.btn-option');
+            let isCorrect = clickedButton.dataset.correct === 'true';
+
+            allOptions.forEach(button => {
+                button.disabled = true;
+                if (button.dataset.correct === 'true') {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (!isCorrect) {
+                clickedButton.classList.add('incorrect');
+            }
+        }
+
+        function updateLanguageUI() {
+            document.querySelectorAll('[data-ko]').forEach(el => {
+                const text = currentLanguage === 'ko' ? el.dataset.ko : (el.dataset.en || el.dataset.ko);
+                if (text) {
+                  el.innerHTML = text;
+                }
+            });
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            currentLanguage = (currentLanguage === 'ko') ? 'en' : 'ko';
+            updateLanguageUI();
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            parseData();
+            renderQuiz();
+            document.getElementById('quiz-container').addEventListener('click', handleOptionClick);
+        });
+
+    </script>
+</body>
+</html>
+
+
+
+
