@@ -40,7 +40,7 @@
 <body class="bg-stone-50 text-stone-800">
 
     <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="#" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             <span data-ko="&larr; Interactive TCM" data-en="&larr; Interactive TCM"></span>
         </a>
         <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
@@ -244,6 +244,13 @@
             }
         }
 
+        function updateHeaderLink() {
+            const headerLink = document.getElementById('header-link');
+            if (headerLink) {
+                headerLink.href = `index.html?lang=${currentLanguage}`;
+            }
+        }
+
         function updateLanguageUI() {
             document.querySelectorAll('[data-ko]').forEach(el => {
                 const text = currentLanguage === 'ko' ? el.dataset.ko : (el.dataset.en || el.dataset.ko);
@@ -256,11 +263,19 @@
         function toggleLanguage(event) {
             event.preventDefault();
             currentLanguage = (currentLanguage === 'ko') ? 'en' : 'ko';
+            updateHeaderLink();
             updateLanguageUI();
         }
 
 
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang');
+            if (lang === 'en') {
+                currentLanguage = 'en';
+            }
+
+            updateHeaderLink();
             parseData();
             renderQuiz();
             document.getElementById('quiz-container').addEventListener('click', handleOptionClick);
@@ -269,7 +284,4 @@
     </script>
 </body>
 </html>
-
-
-
 
