@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -163,13 +162,17 @@
             // html 태그 언어 설정
             document.documentElement.lang = currentLang;
 
-            // 헤더 링크(`header-link`) 요소를 찾아 언어에 따라 폰트를 명조체(Noto Serif)로 변경
+            // 헤더 링크(`header-link`) 요소를 찾아 언어에 따라 폰트 및 링크 수정
             const headerLink = document.getElementById('header-link');
+            // ### MODIFICATION START ###
             if (currentLang === 'ko') {
                 headerLink.style.fontFamily = "'Noto Serif KR', serif";
+                headerLink.href = 'index.html?lang=ko'; // 한국어일 때 링크 설정
             } else {
                 headerLink.style.fontFamily = "'Noto Serif', serif";
+                headerLink.href = 'index.html'; // 영어일 때 링크 설정
             }
+            // ### MODIFICATION END ###
 
             // 언어 전환 버튼 링크 설정
             const toggleButton = document.getElementById('lang-toggle-btn');
