@@ -238,6 +238,12 @@
             const langData = data[currentLang];
             document.documentElement.lang = currentLang;
             
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+            
             headerLink.style.fontFamily = langData.ui.headerLinkFont;
             mainTitle.textContent = langData.ui.mainTitle;
 
@@ -350,3 +356,4 @@
     </script>
 </body>
 </html>
+
