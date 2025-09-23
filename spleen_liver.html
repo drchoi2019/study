@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -375,11 +374,15 @@
             document.documentElement.lang = currentLang;
 
             const headerLink = document.getElementById('header-link');
+            // ### MODIFICATION START ###
             if (currentLang === 'ko') {
                 headerLink.style.fontFamily = "'Noto Serif KR', serif";
+                headerLink.href = 'index.html?lang=ko'; // Set href for Korean
             } else {
                 headerLink.style.fontFamily = "'Noto Serif', serif";
+                headerLink.href = 'index.html'; // Set href for English
             }
+            // ### MODIFICATION END ###
 
             const toggleButton = document.getElementById('lang-toggle-btn');
             const newLang = (currentLang === 'en') ? 'ko' : 'en';
