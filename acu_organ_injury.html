@@ -216,10 +216,10 @@
                                 <div>
                                      <p class="font-semibold text-slate-800 mt-3 mb-2">주요 증상:</p>
                                      <ul class="list-disc list-inside space-y-1 text-slate-600">
-                                        <li>심한 복통 및 구토 (혈액 섞임)</li>
-                                        <li>복부 압통 및 근육 강직</li>
-                                        <li>장 연동 운동 정지 및 쇼크</li>
-                                    </ul>
+                                         <li>심한 복통 및 구토 (혈액 섞임)</li>
+                                         <li>복부 압통 및 근육 강직</li>
+                                         <li>장 연동 운동 정지 및 쇼크</li>
+                                     </ul>
                                 </div>
                             </div>
                             <div class="mt-4 border-t pt-4">
@@ -334,10 +334,10 @@
                                 <div>
                                      <p class="font-semibold text-slate-800 mt-3 mb-2">Main Symptoms:</p>
                                      <ul class="list-disc list-inside space-y-1 text-slate-600">
-                                        <li>Severe abdominal pain and vomiting (with blood)</li>
-                                        <li>Abdominal tenderness and muscle rigidity</li>
-                                        <li>Cessation of intestinal peristalsis and shock</li>
-                                    </ul>
+                                         <li>Severe abdominal pain and vomiting (with blood)</li>
+                                         <li>Abdominal tenderness and muscle rigidity</li>
+                                         <li>Cessation of intestinal peristalsis and shock</li>
+                                     </ul>
                                 </div>
                             </div>
                             <div class="mt-4 border-t pt-4">
@@ -382,6 +382,13 @@
             document.title = data.pageTitle;
             document.getElementById('main-title').innerText = data.mainTitle;
             document.getElementById('main-subtitle').innerText = data.mainSubtitle;
+            
+            const headerLink = document.getElementById('header-link');
+            if (lang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
             
             hotspotsConfig.forEach(cfg => {
                 const button = document.getElementById(cfg.id);
