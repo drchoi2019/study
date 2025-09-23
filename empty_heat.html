@@ -177,11 +177,14 @@
 <body>
 
     <div class="container">
-        <header class="header">
-            <a href="index.html">
-                &larr; Interactive TCM
-            </a>
-        </header>
+<header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+        &larr; Interactive TCM
+    </a>
+    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+        Kor / Eng
+    </a>
+</header>
 
         <main class="main-content">
             <h1>The Five Characteristics of Yin Deficiency Heat</h1>
@@ -306,6 +309,65 @@
             <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
         </footer>
     </div>
+<script>
+    // 현재 페이지의 언어 상태를 저장하는 변수
+    let currentLang = 'ko';
 
+    /**
+     * 언어를 설정하고 그에 따라 UI를 업데이트하는 함수
+     * @param {string} lang - 'ko' 또는 'en'
+     */
+    function setLanguage(lang) {
+        currentLang = lang;
+        const headerLink = document.getElementById('header-link');
+
+        // 'Interactive TCM' 링크의 주소를 언어에 맞게 변경
+        if (headerLink) {
+            if (lang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+        }
+        
+        // 만약 이 페이지에 다른 번역 텍스트가 필요하다면 여기에 추가로 작성할 수 있습니다.
+        // 예: const title = document.getElementById('page-title');
+        // if (title) {
+        //    title.textContent = (lang === 'ko') ? '한국어 제목' : 'English Title';
+        // }
+    }
+
+    /**
+     * 언어 변경 버튼을 클릭했을 때 호출되는 함수
+     */
+    function toggleLanguage(event) {
+        event.preventDefault(); // 링크의 기본 동작 방지
+        const newLang = (currentLang === 'ko') ? 'en' : 'ko';
+        
+        // 페이지 URL의 언어 파라미터를 업데이트 (새로고침 없이)
+        const url = new URL(window.location);
+        if (newLang === 'en') {
+            url.searchParams.set('lang', 'en');
+        } else {
+            // 한국어가 기본값이므로 'lang' 파라미터를 삭제
+            url.searchParams.delete('lang');
+        }
+        // 주소창의 URL을 업데이트
+        window.history.pushState({}, '', url);
+        
+        // 언어 설정 함수 호출
+        setLanguage(newLang);
+    }
+
+    // 페이지가 처음 로드될 때 실행되는 코드
+    window.addEventListener('load', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang');
+        
+        // URL에 'lang=en' 파라미터가 있으면 영어로, 없으면 한국어로 초기 설정
+        const initialLang = (langParam === 'en') ? 'en' : 'ko';
+        setLanguage(initialLang);
+    });
+</script>
 </body>
 </html>
