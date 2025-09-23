@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -105,10 +104,7 @@
         }
     </style>
 </head>
-<body class="lang-en"> <!-- Start with English as default -->
-
-    <!-- Header -->
-    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+<body class="lang-en"> <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
         <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
@@ -117,10 +113,8 @@
         </a>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-3xl mx-auto p-4 md:p-6">
         
-        <!-- English Content -->
         <div lang="en">
             <article class="space-y-8">
                 <header class="text-center space-y-2">
@@ -214,7 +208,6 @@
             </article>
         </div>
 
-        <!-- Korean Content -->
         <div lang="ko">
             <article class="space-y-8">
                 <header class="text-center space-y-2">
@@ -311,7 +304,6 @@
         </div>
     </main>
     
-    <!-- Footer -->
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
@@ -320,17 +312,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             const toggleButton = document.getElementById('lang-toggle-btn');
             const body = document.body;
+            const headerLink = document.getElementById('header-link'); // Get the header link
 
-            // Function to set the language based on a given lang code ('en' or 'ko')
+            // Function to set the language and update the header link
             function setLanguage(lang) {
                 if (lang === 'ko') {
                     body.classList.remove('lang-en');
                     body.classList.add('lang-ko');
                     document.documentElement.lang = 'ko';
+                    headerLink.href = 'index.html?lang=ko'; // ### Set href for Korean
                 } else {
                     body.classList.remove('lang-ko');
                     body.classList.add('lang-en');
                     document.documentElement.lang = 'en';
+                    headerLink.href = 'index.html'; // ### Set href for English
                 }
             }
 
@@ -342,9 +337,18 @@
                 setLanguage(newLang);
             });
 
-            // Set the initial language based on the URL hash
-            const initialLang = window.location.hash.substring(1) === 'ko' ? 'ko' : 'en';
-            setLanguage(initialLang);
+            // Set the initial language based on URL parameter, falling back to hash
+            function initializeLanguage() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const langParam = urlParams.get('lang');
+                const hashLang = window.location.hash.substring(1);
+                
+                // Prioritize URL parameter, then hash, default to 'en'
+                const initialLang = (langParam === 'ko' || (langParam !== 'en' && hashLang === 'ko')) ? 'ko' : 'en';
+                setLanguage(initialLang);
+            }
+
+            initializeLanguage();
         });
     </script>
 </body>
