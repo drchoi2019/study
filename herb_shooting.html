@@ -51,6 +51,13 @@
     </style>
 </head>
 <body class="bg-[#F7F3EF] flex flex-col items-center justify-center min-h-screen">
+    
+    <!-- Header -->
+    <header style="width: 100%; max-width: 24rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: flex-start; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
 
     <section id="mini-game-section" class="max-w-sm mx-auto px-4 py-8 flex flex-col items-center">
         
@@ -121,6 +128,7 @@
         const ctx = canvas.getContext('2d');
         
         // UI Elements
+        const headerLink = document.getElementById('header-link');
         const scoreEl = document.getElementById('score');
         const livesEl = document.getElementById('lives');
         const levelEl = document.getElementById('level');
@@ -496,9 +504,11 @@
             if (currentLanguage === 'en') {
                 currentLanguage = 'ko';
                 langToggleButton.textContent = 'Eng';
+                headerLink.href = 'index.html?lang=ko';
             } else {
                 currentLanguage = 'en';
                 langToggleButton.textContent = 'Kor';
+                headerLink.href = 'index.html';
             }
             updateGameLanguage();
         }
@@ -526,6 +536,9 @@
 
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', function() {
+            // Set initial header link
+            headerLink.href = currentLanguage === 'ko' ? 'index.html?lang=ko' : 'index.html';
+            
             // Setup game listeners
             if(startButton) startButton.addEventListener('click', startGame);
             if(restartButton) restartButton.addEventListener('click', initGame);
