@@ -127,171 +127,176 @@
         }
     </style>
 </head>
-<body class="bg-[#F7F3EF] flex flex-col items-center justify-center min-h-screen p-4">
+<body class="bg-[#F7F3EF] flex flex-col items-center justify-start min-h-screen p-4">
     
+    <header style="width: 100%; max-width: 48rem; margin-bottom: 1rem; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
 
+    <main class="w-full flex-grow flex items-center justify-center">
+        <div class="w-full max-w-md mx-auto">
+            <!-- Desktop Layout -->
+            <div class="desktop-layout">
+                <!-- Main Game Area -->
+                <div class="w-full max-w-sm">
+                    <div id="game-container" class="relative w-full aspect-[5/8]">
+                        <canvas id="gameCanvas"></canvas>
+                        
+                        <!-- Touch Areas for Mobile -->
+                        <div class="touch-areas-container absolute inset-0 hidden">
+                            <!-- Left area for move left -->
+                            <div id="leftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
+                            <!-- Right area for move right -->
+                            <div id="rightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
+                        </div>
+                        
+                        <div id="pauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
+                            <h2 class="text-5xl font-bold text-stone-500" data-translate="paused">Paused</h2>
+                        </div>
 
-    <div class="w-full max-w-md mx-auto">
-        
-        <!-- Desktop Layout -->
-        <div class="desktop-layout">
-            <!-- Main Game Area -->
-            <div class="w-full max-w-sm">
-                <div id="game-container" class="relative w-full aspect-[5/8]">
-                    <canvas id="gameCanvas"></canvas>
-                    
-                    <!-- Touch Areas for Mobile -->
-                    <div class="touch-areas-container absolute inset-0 hidden">
-                        <!-- Left area for move left -->
-                        <div id="leftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
-                        <!-- Right area for move right -->
-                        <div id="rightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
-                    </div>
-                    
-                    <div id="pauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-5xl font-bold text-stone-500" data-translate="paused">Paused</h2>
-                    </div>
+                        <div id="helpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
+                            <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
+                                <h3 class="text-2xl font-bold mb-4 text-center" data-translate="how_to_play">How to Play</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start"><span class="mr-2">1.</span><span data-translate="help_move">Touch left/right side to move the block.</span></li>
+                                    <li class="flex items-start"><span class="mr-2">2.</span><span data-translate="help_drop">Two-finger touch anywhere for fast drop.</span></li>
+                                    <li class="flex items-start"><span class="mr-2">3.</span><span data-translate="help_match">Match 3+ adjacent blocks of the same element to clear them.</span></li>
+                                    <li class="flex items-start"><span class="mr-2">4.</span><span data-translate="help_bonus">Clearing 4+ blocks at once gives double points.</span></li>
+                                </ul>
+                                <button id="closeHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition" data-translate="close">Close</button>
+                            </div>
+                        </div>
 
-                    <div id="helpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
-                        <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
-                            <h3 class="text-2xl font-bold mb-4 text-center" data-translate="how_to_play">How to Play</h3>
-                            <ul class="space-y-2 text-sm">
-                                <li class="flex items-start"><span class="mr-2">1.</span><span data-translate="help_move">Touch left/right side to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span data-translate="help_drop">Two-finger touch anywhere for fast drop.</span></li>
-                                <li class="flex items-start"><span class="mr-2">3.</span><span data-translate="help_match">Match 3+ adjacent blocks of the same element to clear them.</span></li>
-                                <li class="flex items-start"><span class="mr-2">4.</span><span data-translate="help_bonus">Clearing 4+ blocks at once gives double points.</span></li>
-                            </ul>
-                            <button id="closeHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition" data-translate="close">Close</button>
+                        <div id="levelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                            <h2 id="levelUpTitle" class="text-4xl font-bold text-stone-500" data-translate="level_up">Level Up!</h2>
+                            <p id="levelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
+                            <button id="continueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="continue">
+                                Continue
+                            </button>
+                        </div>
+
+                        <div id="gameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                            <h2 class="text-4xl font-bold text-stone-500" data-translate="game_over">Game Over</h2>
+                            <p class="text-lg mt-2 text-stone-600"><span data-translate="score">Score</span>: <span id="finalScore">0</span></p>
+                            <button id="restartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="restart">
+                                Restart
+                            </button>
                         </div>
                     </div>
-
-                    <div id="levelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 id="levelUpTitle" class="text-4xl font-bold text-stone-500" data-translate="level_up">Level Up!</h2>
-                        <p id="levelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
-                        <button id="continueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="continue">
-                            Continue
-                        </button>
-                    </div>
-
-                    <div id="gameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-4xl font-bold text-stone-500" data-translate="game_over">Game Over</h2>
-                        <p class="text-lg mt-2 text-stone-600"><span data-translate="score">Score</span>: <span id="finalScore">0</span></p>
-                        <button id="restartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="restart">
-                            Restart
-                        </button>
-                    </div>
                 </div>
-            </div>
 
-            <!-- Desktop Sidebar -->
-            <div class="w-24 flex-shrink-0 pt-2">
-                <div class="text-left text-stone-600">
-                    <canvas id="nextBlockCanvas" class="rounded-lg"></canvas>
-                    <div class="mt-4">
-                        <div class="text-base font-bold" data-translate="score">Score</div>
-                        <div id="score" class="text-lg">0</div>
-                        <div class="text-base font-bold mt-2" data-translate="level">Level</div>
-                        <div id="level" class="text-lg">1</div>
-                        <div id="help-button" class="text-base font-bold mt-2 cursor-pointer hover:text-stone-800" data-translate="help">
+                <!-- Desktop Sidebar -->
+                <div class="w-24 flex-shrink-0 pt-2">
+                    <div class="text-left text-stone-600">
+                        <canvas id="nextBlockCanvas" class="rounded-lg"></canvas>
+                        <div class="mt-4">
+                            <div class="text-base font-bold" data-translate="score">Score</div>
+                            <div id="score" class="text-lg">0</div>
+                            <div class="text-base font-bold mt-2" data-translate="level">Level</div>
+                            <div id="level" class="text-lg">1</div>
+                            <div id="help-button" class="text-base font-bold mt-2 cursor-pointer hover:text-stone-800" data-translate="help">
                                 Help
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2">
+                            <canvas id="pixelPersonCanvas"></canvas>
+                            <div id="language-toggle" class="text-base font-bold cursor-pointer language-toggle text-stone-600">
+                                Kor
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center gap-2">
-                        <canvas id="pixelPersonCanvas"></canvas>
-                        <div id="language-toggle" class="text-base font-bold cursor-pointer language-toggle text-stone-600">
-                            Kor
+                </div>
+            </div>
+            
+            <!-- Mobile Layout -->
+            <div class="mobile-layout">
+                <!-- Mobile Controls at Top -->
+                <div class="mobile-controls">
+                    <div class="mobile-next-block">
+                        <div class="text-xs font-bold text-stone-600" data-translate="next">Next</div>
+                        <canvas id="mobileNextBlockCanvas" class="rounded"></canvas>
+                    </div>
+                    
+                    <div class="mobile-stats">
+                        <div class="mobile-stat">
+                            <div class="text-xs font-bold text-stone-600" data-translate="score">Score</div>
+                            <div id="mobileScore" class="text-lg font-bold text-stone-700">0</div>
+                        </div>
+                        <div class="mobile-stat">
+                            <div class="text-xs font-bold text-stone-600" data-translate="level">Level</div>
+                            <div id="mobileLevel" class="text-lg font-bold text-stone-700">1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mobile-actions">
+                        <div class="flex items-center gap-1">
+                            <canvas id="mobilePixelPersonCanvas"></canvas>
+                            <div id="mobile-language-toggle" class="text-xs font-bold text-stone-600 cursor-pointer language-toggle">
+                                Kor
+                            </div>
+                        </div>
+                        <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800" data-translate="help">
+                            Help
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Game Area -->
+                <div class="mobile-game-area">
+                    <div id="mobile-game-container" class="relative w-full aspect-[5/8] max-w-sm">
+                        <canvas id="mobileGameCanvas"></canvas>
+                        
+                        <!-- Touch Areas for Mobile -->
+                        <div class="touch-areas-container absolute inset-0">
+                            <!-- Left area for move left -->
+                            <div id="mobileLeftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
+                            <!-- Right area for move right -->
+                            <div id="mobileRightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
+                        </div>
+                        
+                        <!-- Mobile versions of all overlays with same structure as desktop but prefixed with mobile -->
+                        <div id="mobilePauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
+                            <h2 class="text-4xl font-bold text-stone-500" data-translate="paused">Paused</h2>
+                        </div>
+
+                        <div id="mobileHelpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
+                            <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
+                                <h3 class="text-2xl font-bold mb-4 text-center" data-translate="how_to_play">How to Play</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start"><span class="mr-2">1.</span><span data-translate="help_move">Touch left/right side to move the block.</span></li>
+                                    <li class="flex items-start"><span class="mr-2">2.</span><span data-translate="help_drop">Two-finger touch anywhere for fast drop.</span></li>
+                                    <li class="flex items-start"><span class="mr-2">3.</span><span data-translate="help_match">Match 3+ adjacent blocks of the same element to clear them.</span></li>
+                                    <li class="flex items-start"><span class="mr-2">4.</span><span data-translate="help_bonus">Clearing 4+ blocks at once gives double points.</span></li>
+                                </ul>
+                                <button id="mobileCloseHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition" data-translate="close">Close</button>
+                            </div>
+                        </div>
+
+                        <div id="mobileLevelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                            <h2 id="mobileLevelUpTitle" class="text-4xl font-bold text-stone-500" data-translate="level_up">Level Up!</h2>
+                            <p id="mobileLevelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
+                            <button id="mobileContinueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="continue">
+                                Continue
+                            </button>
+                        </div>
+
+                        <div id="mobileGameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
+                            <h2 class="text-4xl font-bold text-stone-500" data-translate="game_over">Game Over</h2>
+                            <p class="text-lg mt-2 text-stone-600"><span data-translate="score">Score</span>: <span id="mobileFinalScore">0</span></p>
+                            <button id="mobileRestartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="restart">
+                                Restart
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Mobile Layout -->
-        <div class="mobile-layout">
-            <!-- Mobile Controls at Top -->
-            <div class="mobile-controls">
-                <div class="mobile-next-block">
-                    <div class="text-xs font-bold text-stone-600" data-translate="next">Next</div>
-                    <canvas id="mobileNextBlockCanvas" class="rounded"></canvas>
-                </div>
-                
-                <div class="mobile-stats">
-                    <div class="mobile-stat">
-                        <div class="text-xs font-bold text-stone-600" data-translate="score">Score</div>
-                        <div id="mobileScore" class="text-lg font-bold text-stone-700">0</div>
-                    </div>
-                    <div class="mobile-stat">
-                        <div class="text-xs font-bold text-stone-600" data-translate="level">Level</div>
-                        <div id="mobileLevel" class="text-lg font-bold text-stone-700">1</div>
-                    </div>
-                </div>
-                
-                <div class="mobile-actions">
-                    <div class="flex items-center gap-1">
-                        <canvas id="mobilePixelPersonCanvas"></canvas>
-                        <div id="mobile-language-toggle" class="text-xs font-bold text-stone-600 cursor-pointer language-toggle">
-                            Kor
-                        </div>
-                    </div>
-                    <div id="mobile-help-button" class="text-xs font-bold text-stone-600 cursor-pointer hover:text-stone-800" data-translate="help">
-                        Help
-                    </div>
-                </div>
-            </div>
+    </main>
 
-            <!-- Mobile Game Area -->
-            <div class="mobile-game-area">
-                <div id="mobile-game-container" class="relative w-full aspect-[5/8] max-w-sm">
-                    <canvas id="mobileGameCanvas"></canvas>
-                    
-                    <!-- Touch Areas for Mobile -->
-                    <div class="touch-areas-container absolute inset-0">
-                        <!-- Left area for move left -->
-                        <div id="mobileLeftTouchArea" class="touch-area" style="top: 25%; left: 0; width: 50%; height: 75%;"></div>
-                        <!-- Right area for move right -->
-                        <div id="mobileRightTouchArea" class="touch-area" style="top: 25%; right: 0; width: 50%; height: 75%;"></div>
-                    </div>
-                    
-                    <!-- Mobile versions of all overlays with same structure as desktop but prefixed with mobile -->
-                    <div id="mobilePauseScreen" class="absolute inset-0 bg-[#F7F3EF]/80 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-4xl font-bold text-stone-500" data-translate="paused">Paused</h2>
-                    </div>
-
-                    <div id="mobileHelpModal" class="absolute inset-0 flex-col items-center justify-center rounded-lg hidden">
-                        <div class="bg-[#F7F3EF] p-6 rounded-lg shadow-lg text-stone-700 max-w-xs mx-4 border-2 border-stone-300">
-                            <h3 class="text-2xl font-bold mb-4 text-center" data-translate="how_to_play">How to Play</h3>
-                            <ul class="space-y-2 text-sm">
-                                <li class="flex items-start"><span class="mr-2">1.</span><span data-translate="help_move">Touch left/right side to move the block.</span></li>
-                                <li class="flex items-start"><span class="mr-2">2.</span><span data-translate="help_drop">Two-finger touch anywhere for fast drop.</span></li>
-                                <li class="flex items-start"><span class="mr-2">3.</span><span data-translate="help_match">Match 3+ adjacent blocks of the same element to clear them.</span></li>
-                                <li class="flex items-start"><span class="mr-2">4.</span><span data-translate="help_bonus">Clearing 4+ blocks at once gives double points.</span></li>
-                            </ul>
-                            <button id="mobileCloseHelpButton" class="mt-6 w-full px-6 py-2 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-lg transition" data-translate="close">Close</button>
-                        </div>
-                    </div>
-
-                    <div id="mobileLevelUpScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 id="mobileLevelUpTitle" class="text-4xl font-bold text-stone-500" data-translate="level_up">Level Up!</h2>
-                        <p id="mobileLevelUpSubtitle" class="text-lg mt-2 text-stone-600">Stage 2 Start</p>
-                        <button id="mobileContinueButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="continue">
-                            Continue
-                        </button>
-                    </div>
-
-                    <div id="mobileGameOverScreen" class="absolute inset-0 bg-[#F7F3EF]/90 flex-col items-center justify-center rounded-lg hidden">
-                        <h2 class="text-4xl font-bold text-stone-500" data-translate="game_over">Game Over</h2>
-                        <p class="text-lg mt-2 text-stone-600"><span data-translate="score">Score</span>: <span id="mobileFinalScore">0</span></p>
-                        <button id="mobileRestartButton" class="mt-6 px-6 py-3 bg-stone-400 hover:bg-stone-500 text-white rounded-lg font-bold text-xl transition-transform transform hover:scale-105" data-translate="restart">
-                            Restart
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="text-center py-8 mt-12 text-sm text-gray-500 desktop-layout">
-        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    <footer class="text-center py-8 text-sm text-gray-500 desktop-layout">
+        <p>© 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
@@ -411,6 +416,15 @@
 
         function setLanguage(lang) {
             currentLanguage = lang;
+            
+            const headerLink = document.getElementById('header-link');
+            if (headerLink) {
+                if (currentLanguage === 'ko') {
+                    headerLink.href = 'index.html?lang=ko';
+                } else {
+                    headerLink.href = 'index.html';
+                }
+            }
             
             // Update URL parameter (only if not in iframe/restricted environment)
             try {
@@ -539,23 +553,23 @@
         let personFrame = 0;
         const personFrames = [
              [ // Frame 1
-                "  BB  ",
-                "  BB  ",
-                "   G   ",
-                " GGG  ",
-                "G G G ",
-                " G G  ",
-                " G G  ",
-            ],
-            [ // Frame 2
-                "  BB  ",
-                "  BB  ",
-                "   G   ",
-                " GGG  ",
-                "G G G ",
-                " G G  ",
-                "G   G ",
-            ]
+                 "  BB  ",
+                 "  BB  ",
+                 "   G   ",
+                 " GGG  ",
+                 "G G G ",
+                 " G G  ",
+                 " G G  ",
+             ],
+             [ // Frame 2
+                 "  BB  ",
+                 "  BB  ",
+                 "   G   ",
+                 " GGG  ",
+                 "G G G ",
+                 " G G  ",
+                 "G   G ",
+             ]
         ];
 
         function drawPixelPerson() {
