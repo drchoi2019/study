@@ -162,7 +162,7 @@
         const NUM_LANES = 4;
         let laneWidth, player, items, bullets, score, lives, playerState, gameOver, itemSpawnInterval, stateChangeInterval, level, gameWon, baseItemSpeed, paused, gameStarted;
         const PIXEL_SIZE = 6;
-        let currentLanguage = 'en'; // Default language for the game
+        let currentLanguage = 'en'; // Default language
 
         // --- Sound Definitions ---
         const successSound = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.2 } }).toDestination();
@@ -284,11 +284,9 @@
             ctx.font = `bold ${fontSize}px sans-serif`;
             const textWidth = ctx.measureText(displayText).width;
             
-            // Calculate initial position (centered in lane)
             let xPos = (laneWidth * lane) + (laneWidth / 2) - (textWidth / 2);
             
-            // Adjust position to prevent text from being cut off at screen edges
-            const padding = 5; // Small padding from edges
+            const padding = 5;
             if (xPos < padding) {
                 xPos = padding;
             } else if (xPos + textWidth > canvas.width - padding) {
@@ -322,12 +320,12 @@
 
         function drawItems() { 
             items.forEach(item => {
-                ctx.fillStyle = item.isLifeUp ? '#e53e3e' : '#333'; // Set color to red for life-up items
+                ctx.fillStyle = item.isLifeUp ? '#e53e3e' : '#333';
                 const fontSize = item.isBig ? 24 : 16;
                 ctx.font = `bold ${fontSize}px sans-serif`;
                 ctx.fillText(item.displayText, item.x, item.y);
             });
-            ctx.fillStyle = '#333'; // Reset to default
+            ctx.fillStyle = '#333';
         }
         function drawBullets() { bullets.forEach(bullet => { ctx.fillStyle = 'orange'; ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height); }); }
 
@@ -414,7 +412,7 @@
         }
 
         function checkLevelUp() {
-            if (level === 1 && score >= 100) { // Level up score changed to 100
+            if (level === 1 && score >= 100) {
                 level = 2; baseItemSpeed = 1.5;
                 groupA = groupA.concat(groupA_level2);
                 groupA_ko = groupA_ko.concat(groupA_level2_ko);
@@ -451,28 +449,25 @@
             if (gameOver || !gameStarted) return;
 
             if (paused) {
-                // Draw a small box for the pause message
                 const boxWidth = 150;
                 const boxHeight = 70;
                 const boxX = (canvas.width - boxWidth) / 2;
                 const boxY = (canvas.height - boxHeight) / 2;
 
-                ctx.fillStyle = 'rgba(247, 243, 239, 0.95)'; // Opaque version of background
+                ctx.fillStyle = 'rgba(247, 243, 239, 0.95)';
                 ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
                 ctx.strokeStyle = '#B9A38D';
                 ctx.lineWidth = 2;
                 ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
-                // Draw the text
                 ctx.fillStyle = '#333';
                 ctx.font = 'bold 24px "Cormorant Garamond", serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('Paused', canvas.width / 2, canvas.height / 2 + 8);
-                ctx.textAlign = 'left'; // Reset alignment
-                return; // Stop the loop
+                ctx.textAlign = 'left';
+                return;
             }
 
-            // Normal game loop execution
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             updateGame();
             drawPixelArtPlayer();
@@ -500,17 +495,21 @@
             }
         }
         
-        function toggleLanguage() {
-            if (currentLanguage === 'en') {
-                currentLanguage = 'ko';
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            if (lang === 'ko') {
                 langToggleButton.textContent = 'Eng';
                 headerLink.href = 'index.html?lang=ko';
             } else {
-                currentLanguage = 'en';
                 langToggleButton.textContent = 'Kor';
-                headerLink.href = 'index.html';
+                headerLink.href = 'index.html'; // English is the default
             }
             updateGameLanguage();
+        }
+
+        function toggleLanguage() {
+            const newLang = currentLanguage === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
         }
 
         function updateGameLanguage() {
@@ -522,7 +521,6 @@
                 const textWidth = ctx.measureText(item.displayText).width;
                 item.width = textWidth;
                 
-                // Recalculate position with boundary checking
                 let xPos = (laneWidth * item.lane) + (laneWidth / 2) - (textWidth / 2);
                 const padding = 5;
                 if (xPos < padding) {
@@ -536,8 +534,12 @@
 
         // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', function() {
-            // Set initial header link
-            headerLink.href = currentLanguage === 'ko' ? 'index.html?lang=ko' : 'index.html';
+            // Check for language parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialLang = urlParams.get('lang');
+            
+            // Set language based on parameter
+            setLanguage(initialLang === 'ko' ? 'ko' : 'en');
             
             // Setup game listeners
             if(startButton) startButton.addEventListener('click', startGame);
@@ -557,16 +559,13 @@
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
                     
-                    // Divide screen into three horizontal zones
                     const leftZone = canvas.width * 0.33;
                     const rightZone = canvas.width * 0.67;
-                    const topZone = canvas.height * 0.5; // Top half for shooting
+                    const topZone = canvas.height * 0.5;
                     
                     if (y < topZone) {
-                        // Top half - shoot
                         shoot();
                     } else {
-                        // Bottom half - move left or right
                         if (x < leftZone) {
                             movePlayer('left');
                         } else if (x > rightZone) {
