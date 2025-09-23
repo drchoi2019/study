@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -148,6 +148,7 @@
             const patternList = document.getElementById('pattern-list');
             const resultDisplay = document.getElementById('result-display');
             const resetLink = document.getElementById('reset-link');
+            const headerLink = document.getElementById('header-link');
 
             let selectedOrgan = null;
             let selectedPattern = null;
@@ -219,14 +220,14 @@
             };
 
             const processDescription = (description, lang) => {
-                 const baseSyndromeName = lang === 'ko' ? '비기허 증상' : 'SP-Qi deficiency';
+                const baseSyndromeName = lang === 'ko' ? '비기허 증상' : 'SP-Qi deficiency';
                 if (description.startsWith(baseSyndromeName)) {
-                   const baseSyndrome = TCM_DATA.syndromes.find(s => s.name === 'Spleen Qi Deficiency');
-                   if (baseSyndrome) {
-                       const baseDesc = lang === 'ko' ? baseSyndrome.description_ko : baseSyndrome.description;
-                       const addition = description.substring(baseSyndromeName.length + 3); // " + "
-                       return `(${baseDesc}) + ${addition}`;
-                   }
+                    const baseSyndrome = TCM_DATA.syndromes.find(s => s.name === 'Spleen Qi Deficiency');
+                    if (baseSyndrome) {
+                        const baseDesc = lang === 'ko' ? baseSyndrome.description_ko : baseSyndrome.description;
+                        const addition = description.substring(baseSyndromeName.length + 3); // " + "
+                        return `(${baseDesc}) + ${addition}`;
+                    }
                 }
                 return description;
             };
@@ -275,6 +276,11 @@
             };
             
             const updateLanguageUI = () => {
+                if (currentLanguage === 'ko') {
+                    headerLink.href = 'index.html?lang=ko';
+                } else {
+                    headerLink.href = 'index.html';
+                }
                 document.documentElement.lang = currentLanguage;
                 document.querySelectorAll('[data-en]').forEach(el => {
                     if (el.dataset[currentLanguage]) {
@@ -322,3 +328,4 @@
     </script>
 </body>
 </html>
+
