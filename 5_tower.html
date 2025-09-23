@@ -273,7 +273,6 @@
     </style>
 </head>
 <body>
-    <!-- 테스트용 패널 -->
     <div class="test-panel" id="testPanel">
         <div style="margin-bottom: 10px; font-weight: bold;">🧪 테스트 패널 (Ctrl+T로 토글)</div>
         <button class="test-button" onclick="toggleCheat()">치트 모드</button>
@@ -332,7 +331,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
     <div id="winModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <h2 id="win-title"></h2>
@@ -358,7 +356,7 @@
         // --- Translations ---
         const translations = {
             ko: {
-                mainTitle: "🔮 오행 탑 쌓기 �",
+                mainTitle: "🔮 오행 탑 쌓기 🔮",
                 scoreLabel: "점수",
                 remainingLabel: "남은 구슬",
                 resetBtn: "새 게임",
@@ -457,6 +455,16 @@
         function applyTranslations() {
             const t = translations[currentLang];
             document.documentElement.lang = currentLang;
+
+            // ### MODIFICATION START ###
+            const headerLink = document.getElementById('header-link');
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+            // ### MODIFICATION END ###
+
             document.title = currentLang === 'ko' ? '오행 탑 쌓기' : 'Five Elements Tower Stack';
             document.getElementById('main-title').innerHTML = t.mainTitle;
             document.getElementById('score-label').textContent = t.scoreLabel;
@@ -1073,4 +1081,3 @@
     </script>
 </body>
 </html>
-�
