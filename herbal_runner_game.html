@@ -20,9 +20,18 @@
             background-color: #F7F3EF;
             font-family: 'Noto Sans KR', sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Changed for header/footer */
+            justify-content: flex-start; /* Changed for header/footer */
             align-items: center;
             min-height: 100vh;
+            padding: 1rem 0;
+        }
+        main {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
         }
         #game-container {
             position: relative;
@@ -121,36 +130,48 @@
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="gameCanvas" width="800" height="150"></canvas>
-        <div style="position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.25rem; z-index: 10;">
-            <button id="langBtn" class="ui-button">한</button>
-            <button id="helpBtn" class="ui-button">?</button>
-        </div>
-        <div id="gameOverScreen">
-            <button id="restartButton">RESTART</button>
-        </div>
-    </div>
-    
-    <div id="helpModal" class="hidden">
-        <div class="modal-content">
-            <div id="help-content-en" class="help-content">
-                <ul class="help-list">
-                    <li>Running long or taking warm herb makes you Overheated (faster).</li>
-                    <li>Take 3 cold herbs while Overheated to return to normal.</li>
-                    <li>Game Over: Cold herb in Normal or warm herb while Overheated</li>
-                </ul>
+    <header style="width: 100%; max-width: 800px; margin: 0 auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+    </header>
+
+    <main>
+        <div id="game-container">
+            <canvas id="gameCanvas" width="800" height="150"></canvas>
+            <div style="position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.25rem; z-index: 10;">
+                <button id="langBtn" class="ui-button">한</button>
+                <button id="helpBtn" class="ui-button">?</button>
             </div>
-            <div id="help-content-ko" class="help-content">
-                <ul class="help-list">
-                    <li>장애물을 점프해서 달리세요.</li>
-                    <li>일정기간 달리거나, 더운 약을 먹으면 열뜬 상태가되어 속도가 빨라집니다.</li>
-                    <li>열뜬 상태에서 차가운 약을 먹으면 정상으로 돌아됩니다.</li>
-                    <li>보통상태에서 차가운 약을 먹거나, 열뜬 상태애서 더운 약을 먹으면 게임오버</li>
-                </ul>
+            <div id="gameOverScreen">
+                <button id="restartButton">RESTART</button>
             </div>
         </div>
-    </div>
+        
+        <div id="helpModal" class="hidden">
+            <div class="modal-content">
+                <div id="help-content-en" class="help-content">
+                    <ul class="help-list">
+                        <li>Running long or taking warm herb makes you Overheated (faster).</li>
+                        <li>Take 3 cold herbs while Overheated to return to normal.</li>
+                        <li>Game Over: Cold herb in Normal or warm herb while Overheated</li>
+                    </ul>
+                </div>
+                <div id="help-content-ko" class="help-content">
+                    <ul class="help-list">
+                        <li>장애물을 점프해서 달리세요.</li>
+                        <li>일정기간 달리거나, 더운 약을 먹으면 열뜬 상태가되어 속도가 빨라집니다.</li>
+                        <li>열뜬 상태에서 차가운 약을 먹으면 정상으로 돌아됩니다.</li>
+                        <li>보통상태에서 차가운 약을 먹거나, 열뜬 상태애서 더운 약을 먹으면 게임오버</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-4 text-xs text-gray-500">
+        <p>© 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
 
     <script>
         // Language Management
@@ -226,6 +247,13 @@
         }
 
         function updateGameLanguage() {
+            const headerLink = document.getElementById('header-link');
+            if (currentLanguage === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+
             document.getElementById('langBtn').textContent = (currentLanguage === 'ko') ? 'En' : '한';
             document.getElementById('restartButton').textContent = textData[currentLanguage].restart;
         }
