@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
     <script>
@@ -11,24 +11,89 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Construction</title> <script src="https://cdn.tailwindcss.com"></script>
+    <title>TCM Syndrome Flashcards | 장부변증 학습 카드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 기본 폰트 및 배경색 설정 */
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
             background-color: #F7F3EF;
-            color: #374151; /* gray-700 */
         }
-        /* 추가적인 공통 스타일이 필요하면 여기에 정의 */
+        /* Style for the card flip animation */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            aspect-ratio: 1 / 1;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .is-flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .flip-card-front {
+            color: #1f2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 1rem;
+            cursor: pointer;
+        }
+        .flip-card-back {
+            background-color: #f9fafb;
+            color: #374151;
+            transform: rotateY(180deg);
+            padding: 1.5rem;
+            text-align: left;
+            overflow-y: auto;
+        }
+        .highlight {
+            font-weight: 700;
+            color: #ef4444;
+        }
+        
+        /* Wu Xing color styles */
+        .color-gan { background-color: #CFE8E4; } /* Blue/Green - Liver */
+        .color-sim { background-color: #fee2e2; } /* Red - Heart */
+        .color-bi { background-color: #fef9c3; }  /* Yellow - Spleen */
+        .color-pye { background-color: #f8fafc; } /* White - Lung */
+        .color-sin { background-color: #e5e7eb; } /* Black - Kidney */
+
+        /* Gradients for composite syndromes */
+        .gradient-gan-bi { background-image: linear-gradient(to right, #CFE8E4, #fef9c3); }
+        .gradient-pye-sin { background-image: linear-gradient(to right, #f8fafc, #e5e7eb); }
+
+        /* Flip icon style */
+        .flip-icon {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-
+<body class="text-gray-800">
     <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
         <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
@@ -36,91 +101,247 @@
         </a>
     </header>
 
-    <main class="w-full max-w-4xl mx-auto p-4 flex-grow flex items-center justify-center">
-        <div class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm text-center">
-            <img src="https://i.ibb.co/L5Q2j8R/pixel-fart.png" alt="Under Construction" class="mx-auto mb-4" style="max-width: 250px;">
-            <h2 id="construction-title" class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2"></h2>
-            <p id="construction-message" class="text-lg text-gray-600">Please check back soon!</p>
-        </div>
-    </main>
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-gray-900"></h1>
+            <p id="sub-title" class="text-gray-600 mt-2"></p>
+        </header>
 
+        <div class="bg-white p-4 rounded-lg shadow-md mb-8 sticky top-4 z-10">
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="searchInput" class="flex-grow p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="flex gap-2 justify-center">
+                    <button id="flipAllBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors w-full md:w-auto"></button>
+                    <button id="resetAllBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition-colors w-full md:w-auto"></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards will be dynamically generated here -->
+        </div>
+    </div>
+    
     <footer class="text-center py-8 mt-12 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // --- 언어 데이터 ---
-        const languageData = {
-            en: {
-                headerLink: "&larr; Interactive TCM",
-                pageTitle: "Under Construction",
-                constructionTitle: "Under Construction",
-                constructionMessage: "Please check back soon!"
-            },
+        // --- Language Data ---
+        const uiText = {
             ko: {
-                headerLink: "&larr; Interactive TCM",
-                pageTitle: "페이지 준비 중",
-                constructionTitle: "페이지 준비 중",
-                constructionMessage: "곧 새로운 모습으로 찾아뵙겠습니다!"
+                mainTitle: "주요 장부변증 학습 카드",
+                subTitle: "카드를 클릭하면 뒷면을, 아이콘을 클릭하면 앞면을 볼 수 있습니다.",
+                searchPlaceholder: "변증명 검색...",
+                flipAll: "전체 뒤집기",
+                resetAll: "전체 앞면"
+            },
+            en: {
+                mainTitle: "Major Zang-Fu Syndrome Flashcards",
+                subTitle: "Click the card to see the back, click the icon to see the front.",
+                searchPlaceholder: "Search for a syndrome...",
+                flipAll: "Flip All",
+                resetAll: "Reset All"
             }
         };
+        
+        const syndromes_ko = [
+            // 간(肝)
+            { id: 'gan-gi-ul-gyeol', category: '간', name: '간기울결(肝氣鬱結)', description: `주로 정서 문제와 관련이 있습니다. 화가 잘 나고 짜증이 나며, 가슴이 답답하고 옆구리가 아플 수 있습니다. 월경 전에는 긴장감이 심하고 생리통이나 생리 불순이 생이며, 상복부가 아프거나 복부가 팽만해지기도 합니다. 또한 목에 뭔가 걸린 듯한 느낌이 있습니다. 맥은 현맥, 특히 좌측에서 잘 잡힙니다. 중요한 것은 <span class="highlight">스트레스와 통증, 월경이 늦거나 안나오는 문제</span>입니다. 여기서 소화기 증상이 심하게 나타나면 복합변증 <strong>간비불화</strong>가 됩니다.` },
+            { id: 'gan-bi-bul-hwa', category: '간', name: '간비불화(肝脾不和)', composite: ['간', '비'], description: `<strong>간기울결</strong>, <strong>간화</strong> 등이 비기를 손상시키는 상태입니다. 간의 증상과 비의 증상이 모두 나타납니다. 스트레스가 심하고, 불면증이 있고 짜증이 잘 납니다. 복부가 더부룩하고 아프며 가스가 차고 피로합니다. 변비와 설사가 번갈아 나타나며, 변이 작고 단단한 알갱이 모양일 때도 있고, 때로는 묽습니다. 맥은 좌측은 현맥, 우측은 허맥으로 잡히고 혀는 주위가 붉고 전체적으로 홍설이 됩니다.` },
+            { id: 'gan-hyeol-eo-stasis', category: '간', name: '간혈어(肝血瘀)', description: `통증(주로 월경통)이 고정되고 찌르는 듯하며 밤에 더 심해집니다. 무월경이나 불규칙한 월경이 나타나고, 월경혈은 어둡고 덩어리 지며 응고됩니다. 복부에 덩어리가 만져질 수 있고, 손톱과 입술이 보랏빛을 띠며 피부가 건조해집니다. 맥은 현 혹 삽맥이고 혀는 자설이 됩니다. 주로 실증 월경통의 병리입니다. <span class="highlight"><strong>간기울결</strong>의 기체통증과 혈어통증을 구별해야 합니다.</span> 혈어통증은 <span class="highlight">통처가 고정되고, 야간에 심하며 다른 어혈증상(자색설, 덩어리 등)이 동반</span>됩니다. <strong>심혈어</strong>는 가슴통증, 간혈어는 월경통증이 특징입니다.` },
+            { id: 'gan-hyeol-heo', category: '간', name: '간혈허(肝血虛)', description: `현기증, 불면증, 창백하고 흐린 얼굴빛, 창백한 입술로 나타납니다. 눈이 잘 보이지 않고 날파리가 날아다니는 것 같은 비문증이 있으며, 손톱이 위축되고 잘 부서지며 머리카락과 피부가 건조합니다. 손발이 저리고 근육이 약해지며 쥐가 잘 납니다. 귀에서는 이명이 들립니다. 생리양이 적어지거나 안나옵니다. 맥은 삽하고 세하며 혀는 창백하고 건조합니다. 혈허증상이 주로 간의 소속인 근육, 눈과 손톱으로 나타납니다. 현기증은 다른 간의 병리에서도 나타나나, 혈허에서 특히 심하고, 이명은 <strong>신허</strong>에서도 나타나니 감별에 주의해야 합니다.` },
+            { id: 'gan-yang-sang-hang', category: '간', name: '간양상항(肝陽上亢)', description: `두통이 측두부에 잘 나타나고 현기증과 이명, 짜증 분노등이 있으며, 눈이 건조하고 입과 목이 마릅니다. 피부는 건조하고 맥은 현맥, 세맥, 혀는 붉습니다. <strong>간양상항</strong>은 기본적으로 <strong>혈허</strong>가 기반된 병리입니다. 중요한 특징은 위로 올라가는 양기 때문에 머리에 나타나는 두통, 어지러움, 눈증상들입니다. <strong>간양상항</strong>은 <span class="highlight">건조, 혈허증이 기반</span>, <strong>간화상염</strong>은 <span class="highlight">실화로 인한 심한 열증, 출혈 등</span>이 차이점입니다.` },
+            { id: 'gan-hwa-sang-yeom', category: '간', name: '간화상염(肝火上炎)', description: `간에 불이 치솟는 모습입니다. 측두부에 두통, 얼굴과 눈이 붉고 눈이 충혈되며 열감이 있습니다. 갈증이 심하고 입안이 쓰며, 불면증과 꿈이 많은 수면 장애가 나타납니다. 변비가 건조하고 소변은 짙은 노란색이며, 코피나 토혈, 객혈 같은 출혈 증상이 생길 수도 있습니다. 맥은 현삭하고 혀는 홍설에 황태가 끼게 됩니다. <strong>간양상항</strong>에 비해 실증입니다. <strong>간양상항</strong>과 공통증상(두통, 눈)이 많으니, 차이점을 기억하세요.` },
+            { id: 'gan-dam-seup-yeol', category: '간', name: '간담습열(肝膽濕熱)', description: `협륵통, 즉 옆구리 통증이 특징적이며, 황달이나 간과 담의 염증이 잘 나타납니다. 입안에 쓴맛이 있고 식욕이 떨어지며 구역질과 구토, 복부 팽만이 있습니다. 소변량은 줄고 색이 어두우며 발열이 동반될 수 있습니다. 여성에서는 노랗고 냄새나는 대하와 외음부 가려움이 생길 수 있습니다. 맥은 현활삭하고 혀는 홍설에 황태가 낍니다. 염증은 주로 습열로 나타납니다. <span class="highlight">음부 황색 분비물과 황달</span>을 꼭 기억하세요.` },
+            { id: 'han-che-gan-maek', category: '간', name: '한체간맥(寒滯肝脈)', description: `간 경맥에 한사가 정체된 경우입니다. 음낭과 고환으로 퍼지는 통증이 있고, 따뜻하게 해주면 통증이 완화됩니다. 맥은 현지침이고 혀에는 담태가 끼며 색은 희게 됩니다.` },
+            // 심(心)
+            { id: 'sim-gi-heo', category: '심', name: '심기허(心氣虛)', description: `기허와 함께 나타나는 심계증상입니다. 심장이 두근거리고 쉽게 피로해지며 운동 시 숨이 차고 땀이 납니다. 얼굴빛이 창백하고 무기력하며 맥은 허맥으로 잡힙니다.` },
+            { id: 'sim-yang-heo', category: '심', name: '심양허(心陽虛)', description: `<strong>심기허</strong>의 증상에 더해 양기가 부족한 상태입니다. 춥고 부종이 있으며 얼굴빛이 희고 창백합니다. 손발이 차갑고 무기력이 심해집니다. 맥은 허약맥으로 잡히고 혀는 부종되고 창백합니다.` },
+            { id: 'sim-yang-pok-tal', category: '심', name: '심양폭탈(心陽暴脫)', description: `<strong>심양허</strong>가 극심해져서 응급 상황으로 발전한 경우입니다. 심장이 두근거리고 기력이 없으며 숨이 차고 창백합니다. 손발이 차고 입술이 청색으로 변합니다. 심한 경우 혼수 상태가 올 수 있습니다. 맥은 미세하고 끊어질 듯하며 혀는 자색을 띕니다.` },
+            { id: 'sim-hyeol-heo', category: '심', name: '심혈허(心血虛)', description: `혈이 부족한 심장 상태입니다. <span class="highlight">심계와 함께 나타나는 혈허증상</span>이 포인트입니다. 심장이 두근거리고 불면증이 있으며 꿈이 많습니다. 현기증이 있고 기억력이 저하되며 얼굴빛은 흐리고 창백하고 입술도 창백합니다. 불안하고 쉽게 놀라며, 맥은 삽하고 세하며 혀는 창백하고 건조합니다.` },
+            { id: 'sim-eum-heo', category: '심', name: '심음허(心陰虛)', description: `음액이 부족해 심장이 안정되지 못하는 상태입니다. 심계항진과 혈허증상에 <span class="highlight">허열증(조열, 식은땀, 오장심열)</span>이 나타납니다. 광대뼈 부위가 붉어지는 증상은 특히 심장에 관련됩니다. 저녁에 미열이 나며 야간에 땀이 나고 입이 마릅니다. 맥은 세하고 삭하며 혀는 붉고 태가 적습니다.` },
+            { id: 'sim-hyeol-eo', category: '심', name: '심혈어(心血瘀)', description: `혈이 막혀 심장이 아픈 경우입니다. 심장이 두근거리고 가슴이 조이듯 아픕니다. 그 통증은 고정적이고 찌르는 듯하며 밤에 심해집니다. 입술과 손톱이 청색을 띠고 손이 차가우며 맥은 결대맥이고 혀는 자색입니다. <span class="highlight">심계와 함께 가슴통증이 주어지고, 어혈통증의 양상</span>이 있다면 심혈어로 진단합니다.` },
+            { id: 'sim-hwa-sang-yeom', category: '심', name: '심화상염(心火上炎)', description: `심장에 불이 치솟은 경우입니다. 심장이 두근거리고 불안하며 초조합니다. 불면증이 있고 충동적이며 얼굴은 붉고 열이 나며 입안이 쓰고 혀나 입에 궤양이 생기기도 합니다. 소변은 어둡거나 피가 섞일 수 있고, 맥은 실삭하며 혀끝이 붉고 열문이 있습니다. <strong>간화상염</strong>과 함께 상열감이 주로 나타나지만, <strong>심화상염</strong>은 <span class="highlight">두통, 눈의 증상이 없고, 대신 심계와 함께 혀와 입의 궤양이 주로 나타납니다.</span>` },
+            // 비(脾)
+            { id: 'bi-gi-heo', category: '비', name: '비기허(脾氣虛)', description: `식욕부진에 기허가 동반된 상태입니다. 얼굴빛이 창백하고 피로하며 무기력하고 사지가 약합니다. 식욕이 없고 음식을 먹은 뒤에는 배가 더부룩합니다. 변은 묽고 힘이 없으며, 맥은 허맥이고 혀는 창백합니다.` },
+            { id: 'bi-yang-heo', category: '비', name: '비양허(脾陽虛)', description: `<strong>비기허</strong>에서 양기가 부족해진 경우입니다. <strong>비기허</strong>에 비해 <span class="highlight">설사와 부종이 특징</span>입니다. 얼굴빛이 창백하고 피로하며 무기력합니다. 식욕이 없고 음식을 먹은 뒤 배가 불러옵니다. 변은 묽고 설사하며, 오한이 있고 손발이 차갑습니다. 사지가 약해지고 부종이 나타나기도 합니다. 맥은 약하고 지맥이며 혀는 부종되고 창백합니다.` },
+            { id: 'bi-gi-ha-ham', category: '비', name: '비기하함(脾氣下陷)', description: `<strong>비기허</strong>의 증상이 심해져 기운이 가라앉은 상태입니다. 얼굴빛은 창백하고 피로하며 무기력합니다. 식후 복부 팽만이 있고 변은 묽습니다. 특징적으로 <span class="highlight">복부에 하수감이 있고 위나 자궁, 항문, 질이 탈출</span>하기도 합니다. 소변이 잦고 급하게 마려운 증상이 나타납니다. 맥은 허맥이고 혀는 창백합니다.` },
+            { id: 'bi-bul-tong-hyeol', category: '비', name: '비불통혈(脾不統血)', description: `<strong>비기허</strong>로 인해 혈을 통제하지 못하여 출혈증상이 나타납니다. 얼굴빛은 창백하고 숨이 가쁘며 피로하고 무기력합니다. <span class="highlight">쉽게 멍이 들거나 피부 밑에 출혈반이 생기며, 월경이 과다하거나 부정자궁출혈</span>이 나타납니다. 맥은 세맥이고 혀는 창백합니다. <strong>비기허</strong>로 인해 <strong>비혈허</strong>로 진행되는 상황입니다.` },
+            { id: 'sik-che-wi-wan', category: '비', name: '식체위완(食滯胃脘)', description: `음식이 체해서 위에 정체된 경우입니다. 상복부 통증과 팽만이 있으며 구토를 하면 증상이 완화(실증)됩니다. 구역질, 구토가 있고 입에서는 달걀 썩는 냄새가 납니다. 신물이 올라오고 트림이 잦으며 식욕이 떨어집니다. 불면증이 생기기도 하고 맥은 실활맥이며 혀에는 니태가 있습니다. <span class="highlight">냄새나는 트림</span>이 식체위완의 특징적인 증상입니다.` },
+            { id: 'wi-hwa', category: '비', name: '위화(胃火)', description: `위에 실열이 있는 경우입니다. 상복부가 화끈거리며 아프고 신물이 올라옵니다. 음식을 먹자마자 구역질과 구토가 생기며 입에서 냄새가 납니다. 갈증이 심하고 차가운 것을 마시고 싶어 합니다. 배고픔이 지속되고 잇몸에 염증과 통증이 있습니다. 변비가 나타나며, 맥은 실삭맥이고 혀는 건조하고 황태가 낍니다.` },
+            { id: 'wi-eum-heo', category: '비', name: '위음허(胃陰虛)', description: `위의 음액이 부족한 경우입니다. 상복부에 통증이 있고 음식을 먹으면 쉽게 배가 불러옵니다. 신물이 올라오고 입과 목이 건조합니다. 오후에는 열감이 있고 미열이 나며 변이 건조합니다. 갈증이 있으나 많이 마시지 않고 조금씩만 마십니다. 맥은 세삭맥이고 혀는 붉고 태가 적습니다. 위의 실열(<strong>위화</strong>)는 물을 많이 마시나, <strong>위음허</strong>는 갈증이 있어도 조금씩 마십니다. 더 중요한 것은 <span class="highlight">전반적인 허화와 실화를 구별</span>하는 것입니다.` },
+            // 폐(肺)
+            { id: 'pye-gi-heo', category: '폐', name: '폐기허(肺氣虛)', description: `기침, 호흡곤란과 함께 나타나는 기허증입니다. 숨이 차고 기침이 있으며 가래가 물처럼 묽습니다. 목소리가 약하고 말하기 싫어하며 쉽게 피로합니다. 몸이 차고 감기에 자주 걸리며 주간에 땀이 납니다. 얼굴빛은 밝은 백색이고 맥은 허맥, 특히 우촌구에서 잡히는 경우가 많습니다. <strong>비기허</strong>와 <strong>폐기허</strong>는 매우 유사합니다. <strong>비기허</strong>에도 숨이 찰 수 있고, <strong>폐기허</strong>에도 식욕부진이 나타날 수 있습니다. <span class="highlight">주로 나타나는 것이 호흡기냐, 소화기냐로 구분</span>해야 합니다. 둘이 함께 나타나는 경우도 매우 흔하며, 이를 <strong>비폐기허</strong>라고 합니다.` },
+            { id: 'pye-eum-heo', category: '폐', name: '폐음허(肺陰虛)', description: `폐의 음액이 부족한 경우입니다. <span class="highlight">마른 기침이 있거나 약간 끈적한 가래에 피가 섞일 수 있습니다.</span> 입과 목이 건조하고 목소리가 쉬며 목이 가렵습니다. 오후나 저녁에 미열이 나고 광대뼈가 붉습니다. 야간에 땀이 나고 오심열이 있으며 불면증이 동반되기도 합니다. 맥은 세삭맥입니다. <span class="highlight">가래가 없는 마른 기침과 함께 나타나는 음허증상</span>이 포인트입니다.` },
+            { id: 'pung-han-beom-pye', category: '폐', name: '풍한범폐(風寒犯肺)', description: `찬바람이 폐를 침범한 경우입니다. 기침이 있고 코가 막히며 맑고 묽은 콧물이 납니다. 재채기가 잦고 발열이 있어도 오한이 더 심합니다. 목이 간지럽고 뒷머리가 아프며 몸살이 납니다. 갈증은 없고 땀도 나지 않습니다. 맥은 부맥입니다. (<strong>풍열범폐</strong>와 비교: <span class="highlight">오한이 심하고 맑은 콧물</span>)` },
+            { id: 'pung-yeol-beom-pye', category: '폐', name: '풍열범폐(風熱犯肺)', description: `열사가 폐를 침범한 경우입니다. 기침이 있고 발열이 있으며 오한보다 발열이 더 심합니다. 약간의 땀이 나고 갈증이 있습니다. 인후통과 편도 부종이 있으며 머리가 아프고 몸살이 납니다. 콧물이 노랗게 나오고 코가 막힙니다. 맥은 부삭맥입니다. (<strong>풍한범폐</strong>와 비교: <span class="highlight">발열이 심하고 누런 콧물, 인후통</span>)` },
+            // 신(腎)
+            { id: 'sin-jeong-heo', category: '신', name: '신정허(腎精虛)', description: `신의 정이 부족한 상태입니다. 어린이에게는 뼈 발달이 늦고 천문이 늦게 닫히며 정신적 발달이 늦습니다. 성인에게는 뼈가 약하고 무릎과 다리가 힘이 없으며 기억력이 떨어집니다. 치아가 흔들리고 빠지며 탈모나 조기 백발이 생깁니다. 성기능이 약해지고 요통이 나타납니다. 맥은 세맥입니다. <span class="highlight">발달과 노화에 관련된 증상</span>이 주어집니다.` },
+            { id: 'sin-eum-heo', category: '신', name: '신음허(腎陰虛)', description: `신의 음이 부족한 경우입니다. 요통이 있고 성기능이 저하되며 <span class="highlight">허열증(조열, 식은땀, 오장심열)</span>이 나타납니다. 다리에 힘이 없습니다. 현기증과 이명이 있으며 기억력이 떨어지고 청력이 약해집니다. 뼈에 통증이 있고 몽정이 생기며 밤에 땀이 나고 구강이 건조합니다. 변비가 생기고 소변량은 적고 어두운 색입니다. 맥은 세삭맥입니다.` },
+            { id: 'sin-yang-heo', category: '신', name: '신양허(腎陽虛)', description: `<strong>신기허</strong>가 심화되어 부종과 추위가 나타난 상태입니다. 요통이 있고 성기능이 저하되며 하지에 힘이 없습니다. 추위를 잘 타고 얼굴빛이 희고 무기력합니다. 묽은 변을 자주 보고 관절에 냉감이 있습니다. 발기부전이나 조루, 불임이 나타나며 소변이 많고 맑습니다. 어떤 경우는 소변량이 적고 다리에 부종이 나타납니다. 맥은 침약맥이고 혀는 부종되고 창백합니다. <span class="highlight">추위와 부종</span>이 특징입니다. <strong>비양허</strong>는 설사 등 소화기 증상이 주로, <strong>신양허</strong>는 요통과 성기능이 주로 문제가 됩니다.` },
+            { id: 'sin-gi-heo', category: '신', name: '신기허(腎氣虛)', description: `비뇨기, 성기능 관련 증상과 함께 나타나는 기허증입니다. 요통이 있고 성기능이 약하며 다리에 힘이 없습니다. <span class="highlight">소변이 자주 마렵고 맑으며, 소변 줄기가 약하고 소변을 본 후에도 방울방울 떨어집니다.</span> 요실금이나 야뇨증, 꿈꾸지 않고 몽정이 나오기도 하며 남성에게는 정액루가 생깁니다. 여성의 경우 자궁 탈출이나 만성 질 분비물이 생길 수 있습니다. 맥은 침약맥이고 혀는 창백합니다.` },
+            { id: 'pye-sin-gi-heo', category: '신', name: '폐신기허(肺腎氣虛)', composite: ['폐', '신'], description: `신장의 기가 허해서, 기를 충분히 하강시키지 못해 폐의 기운을 받아들이지 못하는 경우입니다. (신불납기) <span class="highlight">만성 기침과 함께 나타나는 신장의 증상(요통, 성기능 장애)</span>이 특징입니다. 운동하면 숨이 차고 호흡이 빠르며 약합니다. 기침과 천식이 생기고 숨 들이쉬기가 힘듭니다. 얼굴이 붓고 몸이 마르며 정신적으로 무기력합니다. 손발이 차고 땀을 흘린 뒤에는 더 차가워집니다. 천식 발작 시 맑은 소변이 나오고 요통이 동반되기도 합니다. 맥은 허맥입니다.` },
+            { id: 'pye-sin-eum-heo', category: '신', name: '폐신음허(肺腎陰虛)', composite: ['폐', '신'], description: `폐와 신의 음액이 부족한 상태입니다. <span class="highlight">오랜 마른 기침과 함께 신음허열증(요통, 조열, 식은땀, 오장심열)</span>이 나타납니다. 저녁에 심해지는 마른 기침이 있고 운동하면 숨이 가빠집니다. 요통과 사지 약화가 있으며 몽정이 나타납니다. 입이 마르고 몸은 마른 체형이며 오후에 열감이 있고 야간에 땀이 납니다. 맥은 세삭맥입니다.` }
+        ];
 
-        // --- 전역 상태 ---
-        let currentLang;
-        let uiStrings;
+        const syndromes_en = [
+            // Liver
+            { id: 'gan-gi-ul-gyeol', category: '간', name: 'Liver Qi Stagnation', description: `Mainly related to emotional issues. anger, and hypochodriac pain. Premenstrual tension, dysmenorrhea. a sensation of something stuck in the throat. Key points are <span class="highlight">Wiry pulse, stress, pain, and dysmenorrhea</span>. If digestive symptoms are severe, it becomes <strong>Liver-Spleen Disharmony</strong>.` },
+            { id: 'gan-bi-bul-hwa', category: '간', name: 'Liver-Spleen Disharmony', composite: ['간', '비'], description: `A condition where <strong>Liver Qi Stagnation</strong> or <strong>Liver Fire</strong> damages the Spleen's function. Both Liver and Spleen symptoms appear. There is high stress, insomnia, and irritability. Bloating, distension and fatigue. Constipation and diarrhea alternate; stools can be small, hard pellets or loose. The pulse is wiry on the left and deficient on the right.` },
+            { id: 'gan-hyeol-eo-stasis', category: '간', name: 'Liver Blood Stasis', description: `Pain (especially menstrual) is fixed, stabbing, and worse at night. Amenorrhea or irregular menstruation occurs, and menstrual blood is dark with clots. Abdominal masses may be palpable. A purplish hue, and the skin is dry. Wiry or choppy pulse, and the tongue is purple. It's important to differentiate the Qi stagnation pain of <strong>Liver Qi Stagnation</strong> from blood stasis pain. Blood stasis pain is <span class="highlight">fixed, worse at night, and accompanied by other signs of stasis (purple tongue, clots)</span>. <strong>Heart Blood Stasis</strong> features chest pain, while Liver Blood Stasis features menstrual pain.` },
+            { id: 'gan-hyeol-heo', category: '간', name: 'Liver Blood Deficiency', description: `Symptoms include dizziness, insomnia, a pale and lackluster complexion, and pale lips. Vision may be blurred with floaters. Nails are brittle and atrophied, and hair and skin are dry. There is numbness in the limbs, muscle weakness, and frequent cramps. Tinnitus may occur. Scanty menstruation or amenorrhea is common. The pulse is choppy and fine, and the tongue is pale and dry. Blood deficiency symptoms mainly manifest in the muscles, eyes, and nails, which are governed by the Liver. While dizziness can occur in other Liver pathologies, it is particularly severe in blood deficiency. Tinnitus also occurs in <strong>Kidney Deficiency</strong>, so careful differentiation is needed.` },
+            { id: 'gan-yang-sang-hang', category: '간', name: 'Liver Yang Rising', description: `Headaches, often on the temples, are common, along with dizziness, tinnitus, irritability, and anger. Eyes, mouth, and throat are dry. The skin is also dry. The pulse is wiry or fine, and the tongue is red. <strong>Liver Yang Rising</strong> is fundamentally based on an underlying <strong>Blood Deficiency</strong>. Key features are symptoms in the head like headache, dizziness, and eye issues due to Yang rising upwards. The main difference is that <strong>Liver Yang Rising</strong> is based on <span class="highlight">dryness and blood deficiency</span>, whereas <strong>Liver Fire Blazing Upwards</strong> involves <span class="highlight">severe heat signs from excess fire, including bleeding</span>.` },
+            { id: 'gan-hwa-sang-yeom', category: '간', name: 'Liver Fire Blazing Upwards', description: `Represents a blazing fire in the Liver. Symptoms include temporal headaches, red face and eyes, bloodshot eyes, and a sensation of heat. There is intense thirst, a bitter taste in the mouth, insomnia, and sleep disturbed by dreams. Stools are dry, and urine is dark yellow. Bleeding, such as nosebleeds, vomiting blood, or coughing up blood, may occur. The pulse is wiry and rapid, and the tongue is red with a yellow coat. This is an excess condition compared to <strong>Liver Yang Rising</strong>. Remember the differences, although they share common symptoms (headache, eye issues).` },
+            { id: 'gan-dam-seup-yeol', category: '간', name: 'Damp-Heat in the Liver & Gallbladder', description: `Characterized by hypochondriac pain. Jaundice or inflammation of the liver and gallbladder is common. There is a bitter taste in the mouth, poor appetite, nausea, vomiting, and abdominal fullness. Urine is scanty and dark, and fever may be present. In women, there may be yellow, foul-smelling vaginal discharge and genital itching. The pulse is wiry, slippery, and rapid, and the tongue is red with a yellow, greasy coat. Remember <span class="highlight">yellow genital discharge and jaundice</span>.` },
+            { id: 'han-che-gan-maek', category: '간', name: 'Cold Stagnation in the Liver Channel', description: `This is a case of Cold stagnating in the Liver channel. There is pain that radiates to the scrotum and testicles, which is alleviated by warmth. The pulse is wiry, deep, and slow, and the tongue has a white, moist coat.` },
+            // Heart
+            { id: 'sim-gi-heo', category: '심', name: 'Heart Qi Deficiency', description: `Palpitations accompanied by general Qi deficiency symptoms. The heart pounds, and one tires easily, becoming short of breath and sweating with exertion. The complexion is pale, and there is a lack of energy. The pulse is deficient.` },
+            { id: 'sim-yang-heo', category: '심', name: 'Heart Yang Deficiency', description: `Adds symptoms of Yang deficiency to <strong>Heart Qi Deficiency</strong>. There is a feeling of cold, edema, and a bright, pale complexion. Hands and feet are cold, and lethargy is severe. The pulse is deficient and weak, and the tongue is swollen and pale.` },
+            { id: 'sim-yang-pok-tal', category: '심', name: 'Heart Yang Collapse', description: `A critical emergency where <strong>Heart Yang Deficiency</strong> becomes extreme. The heart pounds, there is no energy, shortness of breath, and a pale complexion. Hands and feet are cold, and lips turn cyanotic. In severe cases, it can lead to a coma. The pulse is minute and on the verge of disappearing, and the tongue is purplish.` },
+            { id: 'sim-hyeol-heo', category: '심', name: 'Heart Blood Deficiency', description: `A state of the Heart lacking Blood. The key is <span class="highlight">palpitations with blood deficiency symptoms</span>. There are palpitations, insomnia, and dream-disturbed sleep. Dizziness, poor memory, a lackluster, pale complexion, and pale lips are present. Anxiety and being easily startled are common. The pulse is choppy and fine, and the tongue is pale and dry.` },
+            { id: 'sim-eum-heo', category: '심', name: 'Heart Yin Deficiency', description: `A state where Yin fluids are insufficient, causing the Heart to be unsettled. In addition to palpitations and blood deficiency symptoms, there are <span class="highlight">heat signs from deficiency (tidal fever, night sweats, five-palm heat)</span>. Redness of the malar region is particularly related to the Heart. There is a low-grade fever in the evening, night sweats, and a dry mouth. The pulse is fine and rapid, and the tongue is red with little or no coat.` },
+            { id: 'sim-hyeol-eo', category: '심', name: 'Heart Blood Stasis', description: `The Heart hurts due to blocked blood flow. There are palpitations and a constricting pain in the chest. The pain is fixed, stabbing, and worse at night. Lips and nails are cyanotic, hands are cold. The pulse is knotted or intermittent, and the tongue is purple. Diagnosis is made if <span class="highlight">palpitations and chest pain present with the characteristics of blood stasis pain</span>.` },
+            { id: 'sim-hwa-sang-yeom', category: '심', name: 'Heart Fire Blazing Upwards', description: `A case of fire flaring up in the Heart. There are palpitations, anxiety, and agitation. Insomnia, impulsivity, a red face, a feeling of heat, and a bitter taste are present. Tongue ulcer. Urine may be dark or contain blood. The pulse is full and rapid, and the tip of the tongue is red with cracks.` },
+            // Spleen
+            { id: 'bi-gi-heo', category: '비', name: 'Spleen Qi Deficiency', description: `Poor appetite accompanied by Qi deficiency. The complexion is pale, with fatigue, lethargy, and weak limbs. There is no appetite, and the abdomen feels bloated after eating. Stools are loose. The pulse is deficient, and the tongue is pale.` },
+            { id: 'bi-yang-heo', category: '비', name: 'Spleen Yang Deficiency', description: `A case where Yang deficiency is added to <strong>Spleen Qi Deficiency</strong>. Compared to <strong>Spleen Qi Deficiency</strong>, <span class="highlight">diarrhea and edema are characteristic</span>. The complexion is pale with fatigue and lethargy. There is no appetite, and the abdomen feels full after eating. Stools are loose or watery, with a feeling of cold and cold limbs. Limbs are weak, and edema may appear. The pulse is weak and slow, and the tongue is swollen and pale.` },
+            { id: 'bi-gi-ha-ham', category: '비', name: 'Spleen Qi Sinking', description: `A state where <strong>Spleen Qi Deficiency</strong> has worsened, and Qi is sinking. The complexion is pale with fatigue and lethargy. There is post-meal abdominal fullness and loose stools. Characteristically, there is a <span class="highlight">bearing-down sensation in the abdomen, and prolapse of the stomach, uterus, anus, or vagina</span> may occur. Frequent and urgent urination is also a symptom. The pulse is deficient, and the tongue is pale.` },
+            { id: 'bi-bul-tong-hyeol', category: '비', name: 'Spleen Not Controlling Blood', description: `Bleeding symptoms appear because <strong>Spleen Qi Deficiency</strong> leads to an inability to control blood. The complexion is pale, with shortness of breath, fatigue, and lethargy. There is <span class="highlight">easy bruising, subcutaneous bleeding spots, heavy menstruation, or uterine bleeding</span>. The pulse is fine, and the tongue is pale. This is a situation where <strong>Spleen Qi Deficiency</strong> progresses to Spleen Blood Deficiency.` },
+            { id: 'sik-che-wi-wan', category: '비', name: 'Food Stagnation in the Stomach', description: `Food has stagnated in the stomach due to indigestion. There is pain and fullness in the upper abdomen, which is relieved by vomiting (an excess sign). Nausea and vomiting occur, and the breath smells of rotten eggs. Acid reflux and frequent belching are present, with a loss of appetite. Insomnia may occur. The pulse is full and slippery, and the tongue has a thick, greasy coat. <span class="highlight">Foul-smelling belching</span> is a characteristic symptom.` },
+            { id: 'wi-hwa', category: '비', name: 'Stomach Fire', description: `There is excess heat in the stomach. The upper abdomen feels hot and painful, with acid reflux. Nausea and vomiting occur immediately after eating, and there is bad breath. There is intense thirst with a desire for cold drinks. Constant hunger, gum inflammation, and pain are present. Constipation occurs. The pulse is full and rapid, and the tongue is dry with a yellow coat.` },
+            { id: 'wi-eum-heo', category: '비', name: 'Stomach Yin Deficiency', description: `Stomach's Yin fluids are deficient. There is pain in the upper abdomen, and one feels full easily after eating. Acid reflux and a dry mouth and throat are present. There is a sensation of heat in the afternoon with a low-grade fever, and stools are dry. There is thirst, but one drinks in small sips rather than large amounts. The pulse is fine and rapid, and the tongue is red with little coat. With Stomach Fire, one drinks a lot of water, but with Stomach Yin Deficiency, one drinks little despite the thirst. It is more important to distinguish between <span class="highlight">overall deficiency heat and excess heat</span>.` },
+            // Lung
+            { id: 'pye-gi-heo', category: '폐', name: 'Lung Qi Deficiency', description: `Cough and shortness of breath with general Qi deficiency symptoms. There is shortness of breath, a cough with thin, watery sputum, a weak voice, and a reluctance to speak. One tires easily, feels cold, catches colds frequently, and sweats during the day. The complexion is bright white. The pulse is deficient, especially in the right cun position. <strong>Spleen Qi Deficiency</strong> and <strong>Lung Qi Deficiency</strong> are very similar. Shortness of breath can occur in <strong>Spleen Qi Deficiency</strong>, and poor appetite can occur in <strong>Lung Qi Deficiency</strong>. One must distinguish based on whether the primary symptoms are respiratory or digestive. They often occur together, which is called Spleen-Lung Qi Deficiency.` },
+            { id: 'pye-eum-heo', category: '폐', name: 'Lung Yin Deficiency', description: `The Lung's Yin fluids are deficient. There may be a <span class="highlight">dry cough or scanty, sticky sputum, possibly with streaks of blood</span>. The mouth and throat are dry, the voice is hoarse, and the throat is itchy. There is a low-grade fever in the afternoon or evening, and the malar region is red. Night sweats, five-palm heat, and insomnia may also be present. The pulse is fine and rapid. The key is a <span class="highlight">dry cough with Yin deficiency symptoms</span>.` },
+            { id: 'pung-han-beom-pye', category: '폐', name: 'Wind-Cold Invading the Lungs', description: `Cold wind has invaded the Lungs. There is a cough, nasal congestion, and clear, watery nasal discharge. Frequent sneezing occurs, and chills are more severe than fever. The throat is itchy, the back of the head aches, and there are body aches. There is no thirst and no sweating. The pulse is floating. (Compare with <strong>Wind-Heat Invading the Lungs</strong>: <span class="highlight">severe chills and clear mucus</span>).` },
+            { id: 'pung-yeol-beom-pye', category: '폐', name: 'Wind-Heat Invading the Lungs', description: `Pathogenic heat has invaded the Lungs. There is a cough and fever, which is more severe than the chills. There may be slight sweating and thirst. A sore throat and swollen tonsils are present, along with a headache and body aches. Nasal discharge is yellow, and the nose is congested. The pulse is floating and rapid. (Compare with <strong>Wind-Cold Invading the Lungs</strong>: <span class="highlight">fever, yellow mucus, and sore throat</span>).` },
+            // Kidney
+            { id: 'sin-jeong-heo', category: '신', name: 'Kidney Essence Deficiency', description: `The Kidney's Essence is insufficient. In children, this manifests as slow bone development, delayed closure of the fontanelle, and slow mental development. In adults, bones are weak, knees and legs are weak, and memory is poor. Teeth become loose and fall out, and there is hair loss or premature graying. Sexual function is weak, and there is lower back pain. The pulse is fine. Symptoms are related to <span class="highlight">development and aging</span>.` },
+            { id: 'sin-eum-heo', category: '신', name: 'Kidney Yin Deficiency', description: `The Kidney's Yin is deficient. There is lower back pain, decreased sexual function, and <span class="highlight">deficiency heat signs (tidal fever, night sweats, five-palm heat)</span>. The legs are weak. Dizziness, tinnitus, poor memory, and hearing loss are present. There is pain in the bones, nocturnal emissions, night sweats, and a dry mouth. Constipation occurs, and urine is scanty and dark. The pulse is fine and rapid.` },
+            { id: 'sin-yang-heo', category: '신', name: 'Kidney Yang Deficiency', description: `A worsening of <strong>Kidney Qi Deficiency</strong> with edema and coldness. There is lower back pain, decreased sexual function, and weakness in the lower limbs. One feels cold easily, the complexion is white and listless. There are frequent loose stools and a cold sensation in the joints. Impotence, premature ejaculation, or infertility may occur, and urine is copious and clear. In some cases, urine is scanty with edema in the legs. The pulse is deep and weak, and the tongue is swollen and pale. <span class="highlight">Coldness and edema</span> are characteristic. <strong>Spleen Yang Deficiency</strong> primarily involves digestive symptoms like diarrhea, while <strong>Kidney Yang Deficiency</strong> primarily involves lower back pain and sexual function.` },
+            { id: 'sin-gi-heo', category: '신', name: 'Kidney Qi Deficiency', description: `Qi deficiency symptoms related to the urinary and reproductive systems. There is lower back pain, weak sexual function, and weakness in the legs. <span class="highlight">Urine is frequent and clear, the stream is weak, dribbling after urination. Incontinence, enuresis, or seminal emission</span>. In men, there can be spermatorrhea. In women, uterine prolapse or chronic vaginal discharge may occur. The pulse is deep and weak, and the tongue is pale.` },
+            { id: 'pye-sin-gi-heo', category: '신', name: 'Lung & Kidney Qi Deficiency', composite: ['폐', '신'], description: `The Kidney Qi is deficient and fails to grasp the Qi, so it cannot receive the Lung's Qi. (Also known as "Kidney Failing to Grasp Qi"). Characterized by <span class="highlight">chronic cough with Kidney deficiency symptoms (lower back pain, sexual dysfunction)</span>. Exertion causes shortness of breath, and breathing is rapid and weak. Cough and asthma occur, with difficulty inhaling. The face is swollen, the body is thin, and there is mental lethargy. Hands and feet are cold and become colder after sweating. During an asthma attack, clear urine may be passed, accompanied by lower back pain. The pulse is deficient.` },
+            { id: 'pye-sin-eum-heo', category: '신', name: 'Lung & Kidney Yin Deficiency', composite: ['폐', '신'], description: `The Yin fluids of the Lungs and Kidneys are deficient. There is a <span class="highlight">chronic dry cough with Kidney Yin deficiency heat signs (lower back pain, tidal fever, night sweats, five-palm heat)</span>. The dry cough worsens in the evening, and exertion causes shortness of breath. There is lower back pain, weakness of the limbs, and nocturnal emissions. The mouth is dry, the body is thin, and there is a sensation of heat in the afternoon with night sweats. The pulse is fine and rapid.` }
+        ];
 
-        // --- 언어 관련 함수 ---
-        function getLanguage() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        let currentLanguage = 'ko';
+        
+        const cardGrid = document.getElementById('card-grid');
+        const searchInput = document.getElementById('searchInput');
+        const flipAllBtn = document.getElementById('flipAllBtn');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+        const mainTitle = document.getElementById('main-title');
+        const subTitle = document.getElementById('sub-title');
+        const headerLink = document.getElementById('header-link'); // Added for link modification
+
+        function getCardFrontClass(syndrome) {
+            if (syndrome.composite) {
+                if (syndrome.composite.includes('간') && syndrome.composite.includes('비')) return 'gradient-gan-bi';
+                if (syndrome.composite.includes('폐') && syndrome.composite.includes('신')) return 'gradient-pye-sin';
+            }
+            switch (syndrome.category) {
+                case '간': return 'color-gan';
+                case '심': return 'color-sim';
+                case '비': return 'color-bi';
+                case '폐': return 'color-pye';
+                case '신': return 'color-sin';
+                default: return 'bg-white';
+            }
         }
 
+        function createCards(filter = '') {
+            const syndromes = currentLanguage === 'ko' ? syndromes_ko : syndromes_en;
+            cardGrid.innerHTML = '';
+            const filteredSyndromes = syndromes.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
+
+            filteredSyndromes.forEach(syndrome => {
+                const frontColorClass = getCardFrontClass(syndrome);
+                const cardHtml = `
+                    <div class="flip-card" id="${syndrome.id}" data-name="${syndrome.name}">
+                        <div class="flip-card-inner shadow-lg">
+                            <div class="flip-card-front ${frontColorClass}">
+                                <p>${syndrome.name}</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="text-lg font-bold mb-2 text-blue-600">${syndrome.name}</h3>
+                                <p class="text-sm">${syndrome.description}</p>
+                                 <div class="flip-icon">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 hover:text-gray-800 transition-colors"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.6A9 9 0 0 1 12 3a9 9 0 0 1 9 9.9"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.4A9 9 0 0 1 12 21a9 9 0 0 1-9-9.1"/></svg>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cardGrid.innerHTML += cardHtml;
+            });
+
+            addEventListeners();
+        }
+
+        function addEventListeners() {
+            document.querySelectorAll('.flip-card-front').forEach(front => {
+                front.addEventListener('click', () => {
+                    const card = front.closest('.flip-card');
+                    if (card) card.classList.add('is-flipped');
+                });
+            });
+
+            document.querySelectorAll('.flip-icon').forEach(icon => {
+                icon.addEventListener('click', (e) => {
+                   e.stopPropagation();
+                    const card = icon.closest('.flip-card');
+                    if(card) card.classList.remove('is-flipped');
+                });
+            });
+        }
+        
         function setLanguage(lang) {
-            currentLang = lang;
-            uiStrings = languageData[currentLang];
-            document.documentElement.lang = currentLang;
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            
+            // --- MODIFIED: Update header link based on language ---
+            if (lang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html'; // Default for English
+            }
+
+            const texts = uiText[lang];
+            mainTitle.textContent = texts.mainTitle;
+            subTitle.textContent = texts.subTitle;
+            searchInput.placeholder = texts.searchPlaceholder;
+            flipAllBtn.textContent = texts.flipAll;
+            resetAllBtn.textContent = texts.resetAll;
+
+            createCards(searchInput.value);
+            
+            // This changes the URL in the address bar without reloading the page.
+            // It is wrapped in a try-catch block to prevent errors in sandboxed
+            // environments (like blob: URLs) that don't allow history manipulation.
+            try {
+                const url = new URL(window.location);
+                url.searchParams.set('lang', lang);
+                window.history.pushState({}, '', url);
+            } catch (error) {
+                console.warn("Could not update URL with pushState due to security restrictions:", error);
+            }
         }
 
         function toggleLanguage(event) {
             event.preventDefault();
-            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            const newLang = currentLanguage === 'ko' ? 'en' : 'ko';
             setLanguage(newLang);
-            applyTranslations();
-            // 이 페이지는 정적이므로 별도의 콘텐츠 렌더링 함수는 필요 없습니다.
         }
 
-        function applyTranslations() {
-            document.title = uiStrings.pageTitle;
-            const headerLink = document.getElementById('header-link');
-            headerLink.innerHTML = uiStrings.headerLink;
+        searchInput.addEventListener('input', (e) => createCards(e.target.value));
+        flipAllBtn.addEventListener('click', () => document.querySelectorAll('.flip-card').forEach(card => card.classList.add('is-flipped')));
+        resetAllBtn.addEventListener('click', () => document.querySelectorAll('.flip-card').forEach(card => card.classList.remove('is-flipped')));
 
-            // *** START: 요청하신 기능 ***
-            // 언어가 한국어일 경우 index.html 링크에 lang=ko 파라미터를 추가합니다.
-            if (currentLang === 'ko') {
-                headerLink.href = 'index.html?lang=ko';
-            } else {
-                headerLink.href = 'index.html';
-            }
-            // *** END: 요청하신 기능 ***
-
-            document.getElementById('construction-title').textContent = uiStrings.constructionTitle;
-            document.getElementById('construction-message').textContent = uiStrings.constructionMessage;
-        }
-        
-        // ==================================================
-        // 여기에 새 앱의 기능(JavaScript)이 들어갑니다
-        // ==================================================
-        // 이 페이지는 특별한 동적 기능이 없으므로 추가 JavaScript는 없습니다.
-
-
-        // --- 초기화 ---
-        function initializeApp() {
-            setLanguage(getLanguage());
-            applyTranslations();
-        }
-
-        // 앱 실행
-        initializeApp();
+        // Initial Load: Reads the 'lang' parameter from the URL (e.g., ?lang=en)
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialLang = urlParams.get('lang') === 'en' ? 'en' : 'ko';
+        setLanguage(initialLang);
     </script>
 </body>
 </html>
