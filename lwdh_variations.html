@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-QC84KCE6C1');
-</script>
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liu Wei Di Huang Wan Variations</title>
@@ -260,13 +259,27 @@
 
         function toggleLanguage(event) {
             event.preventDefault();
-            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            
+            // Update URL without reloading
+            const url = new URL(window.location);
+            if (newLang === 'en') {
+                url.searchParams.set('lang', 'en');
+            } else {
+                url.searchParams.delete('lang');
+            }
+            window.history.pushState({}, '', url);
+
+            currentLang = newLang;
             renderPage();
         }
 
         function renderPage() {
             const langData = data[currentLang];
             document.documentElement.lang = currentLang;
+            
+            // Update header link based on language
+            headerLink.href = (currentLang === 'ko') ? 'index.html?lang=ko' : 'index.html';
             
             headerLink.style.fontFamily = langData.ui.headerLinkFont;
             mainTitle.textContent = langData.ui.mainTitle;
@@ -373,71 +386,21 @@
             modalCloseX.addEventListener('click', hideModal);
             modalContent.addEventListener('click', (e) => e.stopPropagation());
 
+            // Also update URL on initial load to be consistent
+            const url = new URL(window.location);
+            if (currentLang === 'en') {
+                 url.searchParams.set('lang', 'en');
+            } else {
+                 url.searchParams.delete('lang');
+            }
+            window.history.replaceState({}, '', url);
+
+
             renderPage();
         }
 
         window.addEventListener('resize', updateDisplay);
         initialize();
     </script>
-    <script>
-    // 현재 페이지의 언어 상태를 저장하는 변수
-    let currentLang = 'ko';
-
-    /**
-     * 언어를 설정하고 그에 따라 UI를 업데이트하는 함수
-     * @param {string} lang - 'ko' 또는 'en'
-     */
-    function setLanguage(lang) {
-        currentLang = lang;
-        const headerLink = document.getElementById('header-link');
-
-        // 'Interactive TCM' 링크의 주소를 언어에 맞게 변경
-        if (headerLink) {
-            if (lang === 'ko') {
-                headerLink.href = 'index.html?lang=ko';
-            } else {
-                headerLink.href = 'index.html';
-            }
-        }
-        
-        // 만약 이 페이지에 다른 번역 텍스트가 필요하다면 여기에 추가로 작성할 수 있습니다.
-        // 예: const title = document.getElementById('page-title');
-        // if (title) {
-        //    title.textContent = (lang === 'ko') ? '한국어 제목' : 'English Title';
-        // }
-    }
-
-    /**
-     * 언어 변경 버튼을 클릭했을 때 호출되는 함수
-     */
-    function toggleLanguage(event) {
-        event.preventDefault(); // 링크의 기본 동작 방지
-        const newLang = (currentLang === 'ko') ? 'en' : 'ko';
-        
-        // 페이지 URL의 언어 파라미터를 업데이트 (새로고침 없이)
-        const url = new URL(window.location);
-        if (newLang === 'en') {
-            url.searchParams.set('lang', 'en');
-        } else {
-            // 한국어가 기본값이므로 'lang' 파라미터를 삭제
-            url.searchParams.delete('lang');
-        }
-        // 주소창의 URL을 업데이트
-        window.history.pushState({}, '', url);
-        
-        // 언어 설정 함수 호출
-        setLanguage(newLang);
-    }
-
-    // 페이지가 처음 로드될 때 실행되는 코드
-    window.addEventListener('load', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const langParam = urlParams.get('lang');
-        
-        // URL에 'lang=en' 파라미터가 있으면 영어로, 없으면 한국어로 초기 설정
-        const initialLang = (langParam === 'en') ? 'en' : 'ko';
-        setLanguage(initialLang);
-    });
-</script>
 </body>
 </html>
