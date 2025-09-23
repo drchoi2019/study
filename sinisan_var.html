@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -236,6 +235,15 @@
             const langData = data[currentLang];
             document.documentElement.lang = currentLang;
             
+            // ### MODIFICATION START ###
+            // Update the header link based on the current language
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+            // ### MODIFICATION END ###
+
             headerLink.style.fontFamily = langData.ui.headerLinkFont;
             mainTitle.textContent = langData.ui.mainTitle;
 
