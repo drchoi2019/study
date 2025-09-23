@@ -212,7 +212,14 @@
             const data = content[lang];
             
             document.documentElement.lang = lang;
-            document.getElementById('header-link').href = data.headerLink;
+            
+            // Set header link with language parameter if it's Korean
+            if (lang === 'ko') {
+                document.getElementById('header-link').href = `${data.headerLink}?lang=ko`;
+            } else {
+                document.getElementById('header-link').href = data.headerLink;
+            }
+
             document.getElementById('main-title').innerText = data.mainTitle;
             document.getElementById('case-content').innerHTML = data.caseContent;
             
