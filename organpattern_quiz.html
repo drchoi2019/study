@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-QC84KCE6C1');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive TCM Quiz</title>
@@ -117,18 +126,18 @@
         // --- DATA SOURCE ---
         async function loadQuizData(lang) {
            try {
-               const response = await fetch(`./organpattern_quiz_${lang}.json`); 
-               if (!response.ok) {
-                   throw new Error(`HTTP error! status: ${response.status}`);
-               }
-               const data = await response.json();
-               return { data: data, isFallback: false };
+                const response = await fetch(`./organpattern_quiz_${lang}.json`); 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return { data: data, isFallback: false };
            } catch (error) {
-               console.warn("Could not load quiz data from file. Using fallback data.", error);
-               return { data: fallbackData[lang], isFallback: true };
+                console.warn("Could not load quiz data from file. Using fallback data.", error);
+                return { data: fallbackData[lang], isFallback: true };
            }
         }
-      
+        
         // --- UI TEXTS ---
         const uiTexts = {
             ko: {
@@ -355,6 +364,13 @@
             currentLang = getUrlParam('lang') === 'en' ? 'en' : 'ko';
             currentUiTexts = uiTexts[currentLang];
 
+            const headerLink = document.getElementById('header-link');
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+
             document.getElementById('stage-title').textContent = currentUiTexts.stageTitle;
             document.getElementById('stage-1-button').textContent = currentUiTexts.stage1;
             document.getElementById('stage-2-button').textContent = currentUiTexts.stage2;
@@ -375,3 +391,4 @@
     </script>
 </body>
 </html>
+
