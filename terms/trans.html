@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family of 'Trans': An Interactive Etymology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Merriweather&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.15) translate(-43%, -43%) !important;
+            z-index: 20;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+            background-color: white;
+            border: 1px solid #dee2e6;
+        }
+        .mobile-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .mobile-card.active .mobile-card-body {
+            max-height: 500px; /* Increased max-height for longer content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .mobile-card.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .speaker-icon {
+            color: #6c757d;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .speaker-icon:hover {
+            color: #0275d8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800">The Family of 'Trans'</h2>
+                <p class="mt-8 text-lg text-gray-700 max-w-3xl mx-auto">
+                    The Latin prefix <span class="font-lora italic">'Trans-'</span> means 'across', 'beyond', or 'on the other side'. It signifies movement and change. Explore the dynamic family of words it creates by clicking on a word.
+                </p>
+            </div>
+
+            <!-- Desktop Radial Diagram -->
+            <div class="hidden md:flex justify-center items-center min-h-[70vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl cursor-pointer">
+                    <!-- Word nodes are injected here by JS -->
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80 rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90">
+                        <!-- Content is injected here by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile List View -->
+            <div id="mobile-list-view" class="md:hidden space-y-3">
+                <!-- Mobile cards are injected here by JS -->
+            </div>
+        </section>
+    </main>
+    <footer class="text-center pb-8">
+        <p class="text-base text-slate-500">© 2025 Etymology Explorer. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordData = [
+                { word: 'Transfer', prefix: 'Trans-', root: 'ferre', rootMeaning: 'to carry', meaning: 'To move something from one place to another.', example: 'I need to transfer some money to my savings account.', angle: 0, icon: '🔄' },
+                { word: 'Transplant', prefix: 'Trans-', root: 'plant', rootMeaning: 'to plant', meaning: 'To move a living thing to a new location to grow.', example: 'The patient is waiting for a heart transplant.', angle: 45, icon: '🌱' },
+                { word: 'Transfusion', prefix: 'Trans-', root: 'fundere', rootMeaning: 'to pour', meaning: 'The medical process of transferring blood from one person to another.', example: 'He received a blood transfusion after the accident.', angle: 90, icon: '🩸' },
+                { word: 'Transdermal', prefix: 'Trans-', root: 'derma', rootMeaning: 'skin', meaning: 'Describes something, like medicine, passing through the skin.', example: 'The medication is delivered through a transdermal patch.', angle: 135, icon: '🩹' },
+                { word: 'Transform', prefix: 'Trans-', root: 'forma', rootMeaning: 'form', meaning: 'To completely change the shape or appearance of something.', example: 'The new movie can transform a struggling actor into a superstar.', angle: 180, icon: '🦋' },
+                { word: 'Transport', prefix: 'Trans-', root: 'portare', rootMeaning: 'to carry', meaning: 'To move people or goods over a distance.', example: 'The goods will be transported by rail.', angle: 225, icon: '🚚' },
+                { word: 'Transparent', prefix: 'Trans-', root: 'parere', rootMeaning: 'to appear', meaning: 'Allowing light to pass through so objects behind can be clearly seen.', example: 'We need to make the decision-making process more transparent.', angle: 270, icon: '💎' },
+                { word: 'Transaction', prefix: 'Trans-', root: 'agere', rootMeaning: 'to do/act', meaning: 'A business deal or an exchange between people.', example: 'All financial transactions are recorded in this book.', angle: 315, icon: '💳' }
+            ];
+
+            const defaultContentHTML = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl text-gray-800">trans</p>
+                    <p class="text-lg text-gray-600 opacity-90">(across, beyond)</p>
+                </div>
+            `;
+
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
+
+            function updateCenterDisplay(content) {
+                const centerDisplay = document.getElementById('center-display');
+                if (!centerDisplay) return;
+                centerDisplay.style.opacity = '0';
+                centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+                setTimeout(() => {
+                    centerDisplay.innerHTML = content;
+                    centerDisplay.style.opacity = '1';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 300);
+            }
+
+            function getBreakdownHtml(item) {
+                return `
+                    <p class="mt-2 text-md text-gray-600">
+                        <span class="font-semibold" style="color: #d9534f;">${item.prefix}</span> (<em>across, beyond</em>) + 
+                        <span class="font-semibold" style="color: #0275d8;">${item.root}</span> (<em>${item.rootMeaning}</em>)
+                    </p>
+                    <p class="mt-3 text-gray-800 text-sm leading-relaxed">${item.meaning}</p>
+                     <blockquote class="mt-3 border-l-4 border-gray-200 pl-3">
+                         <p class="text-gray-600 italic text-sm">"${item.example}"</p>
+                     </blockquote>
+                `;
+            }
+            
+            function setupDesktopView() {
+                const diagramContainer = document.getElementById('word-diagram-container');
+                if (!diagramContainer) return;
+
+                const nodes = [];
+                
+                updateCenterDisplay(defaultContentHTML);
+
+                diagramContainer.addEventListener('click', (e) => {
+                    if (e.target === diagramContainer) {
+                        updateCenterDisplay(defaultContentHTML);
+                    }
+                });
+
+                wordData.forEach(item => {
+                    const node = document.createElement('div');
+                    node.className = 'word-node absolute py-2 px-4 bg-white rounded-lg shadow-sm cursor-pointer border border-gray-300 flex items-center';
+                    node.innerHTML = `<span class="text-2xl mr-3 pointer-events-none">${item.icon}</span><span class="font-bold text-lg pointer-events-none text-gray-800">${item.word}</span>`;
+                    
+                    diagramContainer.appendChild(node);
+                    nodes.push(node);
+
+                    node.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const content = `
+                            <div>
+                                <div class="flex items-center justify-center">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 font-lora">${item.word}</h3>
+                                    <span class="speaker-icon ml-3 text-2xl" data-word="${item.word}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                    </span>
+                                </div>
+                                ${getBreakdownHtml(item)}
+                            </div>
+                        `;
+                        updateCenterDisplay(content);
+                    });
+                });
+
+                function positionNodes() {
+                    const containerWidth = diagramContainer.offsetWidth;
+                    if (containerWidth === 0) {
+                        requestAnimationFrame(positionNodes);
+                        return;
+                    }
+                    const radius = containerWidth * 0.42;
+
+                    nodes.forEach((node, index) => {
+                        const item = wordData[index];
+                        const angleRad = (item.angle - 90) * (Math.PI / 180);
+                        
+                        const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                        const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                        node.style.left = `${x}%`;
+                        node.style.top = `${y}%`;
+                        node.style.transform = 'translate(-50%, -50%)';
+                    });
+                }
+
+                positionNodes();
+                window.addEventListener('resize', positionNodes);
+            }
+
+            function setupMobileView() {
+                const mobileContainer = document.getElementById('mobile-list-view');
+                if (!mobileContainer) return;
+
+                wordData.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'mobile-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200';
+                    
+                    const header = document.createElement('div');
+                    header.className = 'p-4 flex justify-between items-center cursor-pointer';
+                    header.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-4">${item.icon}</span>
+                            <h3 class="font-bold text-lg text-gray-800">${item.word}</h3>
+                             <span class="speaker-icon ml-3 text-xl" data-word="${item.word}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                             </span>
+                        </div>
+                        <span class="arrow-icon text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    `;
+
+                    const body = document.createElement('div');
+                    body.className = 'mobile-card-body px-4 text-gray-700 border-t border-gray-200';
+                    body.innerHTML = getBreakdownHtml(item);
+
+                    card.appendChild(header);
+                    card.appendChild(body);
+                    mobileContainer.appendChild(card);
+
+                    header.addEventListener('click', (e) => {
+                        if (!e.target.closest('.speaker-icon')) {
+                            document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
+                                if (activeCard !== card) {
+                                    activeCard.classList.remove('active');
+                                }
+                            });
+                            card.classList.toggle('active');
+                        }
+                    });
+                });
+            }
+
+            document.body.addEventListener('click', function(e) {
+                const speakerIcon = e.target.closest('.speaker-icon');
+                if (speakerIcon) {
+                    e.stopPropagation();
+                    const wordToSpeak = speakerIcon.dataset.word;
+                    if (wordToSpeak) {
+                        speak(wordToSpeak);
+                    }
+                }
+            });
+
+            setupDesktopView();
+            setupMobileView();
+        });
+    </script>
+</body>
+</html>
+
