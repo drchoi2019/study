@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 제목</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 배경색 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        /* Tailwind Prose 스타일 커스텀 */
+        .prose {
+            color: #374151;
+        }
+        .prose h2 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb; /* gray-200 */
+        }
+        .prose h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .prose p {
+            line-height: 1.75;
+            margin-bottom: 1.25rem;
+        }
+        .prose blockquote {
+            margin-left: 0;
+            margin-right: 0;
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            border-left: 4px solid #d6d3d1; /* stone-300 */
+            background-color: #f5f5f4; /* stone-100 */
+        }
+        .prose blockquote p {
+            margin-bottom: 0.5rem;
+        }
+        .prose blockquote p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- Korean Content -->
+        <div id="content-ko" class="prose max-w-none">
+            <h2>계지의 3가지 핵심 작용</h2>
+
+            <!-- Visualization Section -->
+            <div class="my-8 p-6 bg-stone-50 rounded-lg border border-stone-200">
+                <h3 class="text-center text-xl md:text-2xl font-semibold mb-6 text-gray-800" style="margin-top: 0; border-bottom: none;">한눈에 보는 계지의 3가지 작용</h3>
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <!-- Action 1: 해표 -->
+                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path d="M 5,8 C 10,2, 14,2, 19,8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M 5,12 C 10,6, 14,6, 19,12" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M 5,16 C 10,10, 14,10, 19,16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <h4 class="text-lg font-bold mt-3 text-gray-900">해표 (解表)</h4>
+                        <p class="text-sm text-gray-600 mt-1 px-2">외부의 찬 기운을 몰아내고 땀을 내어 병을 풀어냅니다.</p>
+                    </div>
+                    <!-- Action 2: 온리 -->
+                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <h4 class="text-lg font-bold mt-3 text-gray-900">온리 (溫裏)</h4>
+                        <p class="text-sm text-gray-600 mt-1 px-2">인체 내부를 따뜻하게 하고 수분 대사를 원활하게 합니다.</p>
+                    </div>
+                    <!-- Action 3: 활혈 -->
+                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h3l2-3 3 6 2-3h4"></path>
+                        </svg>
+                        <h4 class="text-lg font-bold mt-3 text-gray-900">활혈 (活血)</h4>
+                        <p class="text-sm text-gray-600 mt-1 px-2">어혈을 풀어주고 혈액 순환을 강력하게 촉진합니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p>계지의 여러 작용은 하나의 본질에서 비롯되며, 각 처방에서 다른 약재와 조합되어 다른 목적으로 사용될 뿐입니다. 예를 들어, 떡볶이에 넣는 고추장, 된장찌개에 넣는 고추장, 양념장에 넣는 고추장은 각기 다른 맛을 내지만 고추장 자체의 역할이나 본질이 변하는 것은 아닙니다. 소고기뭇국 속 무는 국물을 시원하게 하지만, 메밀국수에 곁들이는 무는 매콤한 맛을 더하는 것과 같습니다. 계지도 이와 마찬가지입니다. 장중경(張仲景) 선생은 상한론(傷寒論)에서 이러한 원리를 바탕으로 감기약, 관절통약, 생리통약, 복통약 등 수많은 처방에 계지를 적재적소에 활용했습니다.</p>
+            
+            <h3>1. 해표(解表) 작용: 외부의 병사를 풀어내는 계지</h3>
+            <p>계지는 외부의 찬 기운을 몰아내고 땀을 내어 병을 풀어주는 '해표' 작용을 합니다.</p>
+            <blockquote>
+                <p><strong>계지탕(桂枝湯):</strong> 계지, 작약, 생강, 감초, 대조</p>
+                <p><strong>오령산(五苓散):</strong> 계지, 백출, 복령, 택사, 저령</p>
+            </blockquote>
+            <p>계지탕은 따뜻한 약들로 구성되어 있지만, 계지의 해표 작용을 통해 감기 발열을 효과적으로 치료합니다. 오령산 역시 마찬가지입니다. 상한론 조문에 "표증이 풀리지 않아 발열이 있고 소변이 시원하지 않을 때 오령산을 쓴다(表證不解, 熱而小便不利, 用五苓散)"고 기록되어 있습니다. 여기서 발열을 치료하는 핵심은 택사나 저령 차가운 약재가 아니라, 계지탕과 마찬가지로 계지의 해표 작용에 있습니다.</p>
+            <p>교과서에서는 오령산을 표증(表證)이 있을 때 사용한다고 가르치지만, 실제 임상에서는 표증이 없더라도 소변 배출을 돕기 위해 많이 사용합니다. 이때 계지의 역할은 해표 작용보다는 방광의 기화(氣化) 기능을 따뜻하게 돕는 '온리(溫裏)' 작용에 가깝게 활용됩니다. 그러니, 어떻게 계지를 딱잘라서 해표한다 온리한다 할수 있겠어요. 한가지 약이 한가지 처방속에서 환자, 병증 에 따라 다르게 작용하는 것, 한방 처방에서 꼭 이해해야할 신비한 원리에요.</p>
+            
+            <h3>2. 온리(溫裏) 작용: 내부를 따뜻하게 하는 계지</h3>
+            <p>계지는 다른 약재와 조합하여 인체의 내부, 특히 중초(中焦)를 따뜻하게 하고 수분 대사를 원활하게 하는 '온리' 작용을 합니다.</p>
+            <blockquote>
+                <p><strong>영계출감탕(苓桂朮甘湯):</strong> 계지, 백출, 복령, 감초</p>
+                <p><strong>소건중탕(小建中湯):</strong> 계지, 작약, 생강, 감초, 대조, 이당(飴糖)</p>
+            </blockquote>
+            <p>영계출감탕의 계지는 해표보다는 내부의 수습(水濕)을 따뜻하게 변화시키는 '온화수습(溫化水濕)'을 목적으로 사용됩니다. 소건중탕의 계지 역시 허약해진 중초를 따뜻하게 보하는 '온리'를 위해 들어갑니다.</p>
+            <p>그렇다면 계지탕의 계지는 온리 작용이 없을까요? 그렇지 않습니다. 해표 작용을 주로 하지만 온리하는 성질도 함께 가지고 있습니다. 이처럼 계지는 처방의 목적에 따라 주된 작용이 달라질 뿐, 본질적인 성질이 변하는 것은 아닙니다.</p>
+
+            <h3>3. 활혈(活血) 작용: 혈액 순환을 촉진하는 계지</h3>
+            <p>계지는 어혈(瘀血)을 풀어주고 혈액 순환을 강력하게 촉진하는 '활혈' 작용을 합니다.</p>
+            <blockquote>
+                <p><strong>계지복령환(桂枝茯苓丸):</strong> 도인, 계지, 작약, 목단피, 복령</p>
+                <p><strong>도핵승기탕(桃核承氣湯):</strong> 도인, 계지, 대황, 망초, 감초</p>
+            </blockquote>
+            <p>계지복령환이나 도핵승기탕에서 계지는 도인(桃仁)과 함께 작용하여 어혈을 제거하는 핵심적인 역할을 합니다. 계지, 작약의 조합은 계지탕의 느낌을, 계지, 복령의 조합은 영계출감탕의 느낌을 주지만, 이 처방들의 핵심 목표는 '활혈'입니다.</p>
+            <p><strong>주의사항:</strong> 중의학 교과서에서는 잘 다루지 않지만, 계지에는 쿠마린(Coumarin) 성분이 함유되어 있어 강력한 활혈 및 파어혈(破瘀血) 작용을 합니다. 실제로 계지를 복용하며 항응고제를 함께 먹다가 응급 상황이 발생한 사례가 논문으로 보고된 바 있습니다.</p>
+            
+            <h3>참고: 계지(桂枝)와 육계(肉桂)의 구분</h3>
+            <p>현대 중의학 관점에서는 해표에는 계지를, 온리에는 육계를 쓰는 것이 더 명확하다고 생각할 수 있으며, 이는 타당한 견해입니다. 하지만 장중경 시대에는 둘을 구분하지 않고 모두 '계지'를 사용했습니다. 일본의 고방(古方) 의학에서도 여전히 둘을 나누지 않고 계피로 통일하여 사용합니다.</p>
+            <p>실제로 약재를 맛보면 구분이 가능합니다. 잔가지인 계지는 매운맛이 강해 해표 작용에 적합하고, 굵은 가지나 나무껍질인 육계는 단맛이 강해 온리하고 보양(補陽)하는 데 더 적합합니다. 옛사람들이 경험적으로 둘의 쓰임새를 나눈 것 역시 이러한 기미(氣味)의 차이에 근거한 것입니다.</p>
+            <p>따라서 둘을 반드시 나눠야 하는 것도, 나눴다고 틀린 것도 아닙니다. 잔가지도 단맛이 강하면 소건중탕에 쓸것이고, 육계도 매운 맛이 강하면 감기약에 써도 되는거에요. 중요한 것은 처방의 목적에 맞춰 약의 성질을 이해하고 활용하는 원리입니다. 이 원리를 이해한다면 영계출감탕이나 소건중탕, 신기환(腎氣丸)에 육계를 쓰는 것이 더 적절하다는 것을 자연스럽게 알 수 있습니다.</p>
+        </div>
+
+        <!-- English Content -->
+        <div id="content-en" class="prose max-w-none">
+            <h2>The Three Core Actions of Gui Zhi</h2>
+
+            <!-- Visualization Section -->
+            <div class="my-8 p-6 bg-stone-50 rounded-lg border border-stone-200">
+                <h3 class="text-center text-xl md:text-2xl font-semibold mb-6 text-gray-800" style="margin-top: 0; border-bottom: none;">Gui Zhi's 3 Actions at a Glance</h3>
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <!-- Action 1: Release the Exterior -->
+                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path d="M 5,8 C 10,2, 14,2, 19,8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M 5,12 C 10,6, 14,6, 19,12" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M 5,16 C 10,10, 14,10, 19,16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <h4 class="text-lg font-bold mt-3 text-gray-900">Release the Exterior</h4>
+                        <p class="text-sm text-gray-600 mt-1 px-2">Expels external cold pathogens and resolves illness by inducing sweat.</p>
+                    </div>
+                    <!-- Action 2: Warm the Interior -->
+                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <h4 class="text-lg font-bold mt-3 text-gray-900">Warm the Interior</h4>
+                        <p class="text-sm text-gray-600 mt-1 px-2">Warms the body's interior and facilitates water metabolism.</p>
+                    </div>
+                    <!-- Action 3: Activate Blood -->
+                    <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h3l2-3 3 6 2-3h4"></path>
+                        </svg>
+                        <h4 class="text-lg font-bold mt-3 text-gray-900">Activate Blood</h4>
+                        <p class="text-sm text-gray-600 mt-1 px-2">Resolves blood stasis and powerfully promotes circulation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p>The various actions of Gui Zhi originate from a single essence; it is only used for different purposes depending on its combination with other herbs in each formula. For example, think about milk. When added to coffee, its role is to modify an existing beverage—softening its bitterness and enriching its flavor. However, when used to make cookie dough, its role is as a foundational component, binding dry ingredients to create an entirely new structure. The milk's function transforms from a flavor modifier to a structural component depending on the recipe. Gui Zhi is the same. Based on this principle, Zhang Zhongjing in his Shang Han Lun appropriately used Gui Zhi in countless formulas for colds, joint pain, menstrual pain, and abdominal pain.</p>
+            
+            <h3>1. Action to Release the Exterior: Gui Zhi that resolves external pathogens</h3>
+            <p>Gui Zhi has a 'release exterior' action that expels external cold qi and induces sweat to resolve illness.</p>
+            <blockquote>
+                <p><strong>Gui Zhi Tang:</strong> Gui Zhi, Shao Yao, Sheng Jiang, Gan Cao, Da Zao</p>
+                <p><strong>Wu Ling San:</strong> Gui Zhi, Bai Zhu, Fu Ling, Ze Xie, Zhu Ling</p>
+            </blockquote>
+            <p>Gui Zhi Tang is composed of warm herbs, but it effectively treats fever from a cold through Gui Zhi's action to release the exterior. Wu Ling San is also the same. In a clause from the Shang Han Lun, it is recorded, "When the exterior pattern is not resolved, there is fever, and urination is difficult, use Wu Ling San." The key to treating the fever here lies not in cold herbs like Ze Xie or Zhu Ling, but in Gui Zhi's action to release the exterior, just as in Gui Zhi Tang.</p>
+            <p>Textbooks teach that Wu Ling San is used when there is an exterior pattern, but in actual clinical practice, it is often used to help promote urination even without an exterior pattern. In this case, Gui Zhi's role is utilized more for its 'warming the interior' action that warms and assists the Qi transformation function of the bladder, rather than its action to release the exterior. So, how can one definitively say Gui Zhi only releases the exterior or only warms the interior? That a single herb can act differently within a single formula depending on the patient and the pattern is a mysterious principle that must be understood in acupuncture and herbal medicine formulas.</p>
+
+            <h3>2. Action to Warm the Interior: Gui Zhi that warms the inside</h3>
+            <p>In combination with other herbs, Gui Zhi has a 'warming the interior' action that warms the inside of the human body, especially the Middle Jiao, and facilitates water metabolism.</p>
+            <blockquote>
+                <p><strong>Ling Gui Zhu Gan Tang:</strong> Gui Zhi, Bai Zhu, Fu Ling, Gan Cao</p>
+                <p><strong>Xiao Jian Zhong Tang:</strong> Gui Zhi, Shao Yao, Sheng Jiang, Gan Cao, Da Zao, Yi Tang</p>
+            </blockquote>
+            <p>The Gui Zhi in Ling Gui Zhu Gan Tang is used for the purpose of 'warming and transforming dampness' inside, rather than releasing the exterior. The Gui Zhi in Xiao Jian Zhong Tang is also included to warm and tonify a deficient and weak Middle Jiao.</p>
+            <p>If so, does the Gui Zhi in Gui Zhi Tang not have an action to warm the interior? That is not the case. While it mainly acts to release the exterior, it also possesses the property of warming the interior. As such, only the primary action of Gui Zhi changes according to the purpose of the formula; its fundamental nature does not change.</p>
+
+            <h3>3. Action to Activate Blood: Gui Zhi that promotes blood circulation</h3>
+            <p>Gui Zhi has an 'activating blood' action that resolves blood stasis and powerfully promotes blood circulation.</p>
+            <blockquote>
+                <p><strong>Gui Zhi Fu Ling Wan:</strong> Tao Ren, Gui Zhi, Shao Yao, Mu Dan Pi, Fu Ling</p>
+                <p><strong>Tao He Cheng Qi Tang:</strong> Tao Ren, Gui Zhi, Da Huang, Mang Xiao, Gan Cao</p>
+            </blockquote>
+            <p>In formulas like Gui Zhi Fu Ling Wan or Tao He Cheng Qi Tang, Gui Zhi works together with Tao Ren to play a key role in removing blood stasis. The combination of Gui Zhi and Shao Yao may evoke the feeling of Gui Zhi Tang, and the combination of Gui Zhi and Fu Ling may evoke the feeling of Ling Gui Zhu Gan Tang, but the core objective of these formulas is to 'activate blood.'</p>
+            <p><strong>Caution:</strong> While not often covered in Traditional Chinese Medicine textbooks, Gui Zhi contains the component coumarin, which gives it a powerful action to activate blood and break blood stasis. There have been cases reported in papers where an emergency situation occurred when a person taking Gui Zhi also took anticoagulants.</p>
+
+            <h3>The Distinction between Gui Zhi and Rou Gui</h3>
+            <p>From a modern Chinese medicine perspective, one might think it is clearer to use Gui Zhi for releasing the exterior and Rou Gui for warming the interior, and this is a valid view. However, in the era of Zhang Zhongjing, the two were not distinguished, and 'Gui Zhi' was used for both. In Japan's Kampo medicine, they are still not divided and are uniformly used as cinnamon.</p>
+            <p>In practice, a distinction can be made by taste. The twigs, Gui Zhi, are strongly pungent and suitable for releasing the exterior, while the thicker branches or bark, Rou Gui, are strongly sweet and more suitable for warming the interior and tonifying Yang. The fact that people in the past empirically distinguished their uses is also based on this difference in Qi and taste.</p>
+            <p>Therefore, it is not necessary to always divide them, nor is it wrong to have divided them. If a twig is strongly sweet, it can be used in Xiao Jian Zhong Tang, and if a piece of bark is strongly pungent, it can be used in a formula for the common cold. The important thing is the principle of understanding and utilizing the properties of the herb according to the purpose of the formula. If one understands this principle, one can naturally see that using Rou Gui is more appropriate for formulas like Ling Gui Zhu Gan Tang, Xiao Jian Zhong Tang, or Shen Qi Wan.</p>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "The Three Core Actions of Gui Zhi"
+            },
+            ko: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "계지의 3가지 핵심 작용"
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+
+        // --- 언어 관련 함수 ---
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+            
+            // ==================================================
+            // 여기에 새 앱의 기능(JavaScript)이 들어갑니다
+            // ==================================================
+            // 언어에 따라 콘텐츠 표시/숨김 처리
+            const contentKo = document.getElementById('content-ko');
+            const contentEn = document.getElementById('content-en');
+
+            if (currentLang === 'ko') {
+                contentKo.style.display = 'block';
+                contentEn.style.display = 'none';
+            } else {
+                contentKo.style.display = 'none';
+                contentEn.style.display = 'block';
+            }
+        }
+        
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguage());
+            applyTranslations();
+        }
+
+        // 앱 실행
+        initializeApp();
+    </script>
+</body>
+</html>
+
