@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 제목</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Lora:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 배경색 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        /* 영어일 때 Serif 폰트 적용 */
+        html[lang="en"] body {
+            font-family: 'Lora', serif;
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+        main p, main li {
+            line-height: 1.8;
+        }
+        /* 추가적인 공통 스타일 */
+        .content-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #D6C7B1;
+        }
+        .content-section p, .content-section ul, .content-section blockquote, .content-section .table-container, .content-section .diagram-container, .content-section .error-process-container, .content-section .highlight-box {
+            margin-bottom: 1.5rem;
+        }
+        .content-section ul {
+            list-style-position: inside;
+            padding-left: 1rem;
+        }
+         .content-section li::marker {
+            font-weight: bold;
+        }
+        blockquote {
+            background-color: #EAE3D9;
+            border-left: 4px solid #B0A08A;
+            padding: 1rem;
+            font-style: italic;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .diagram-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+        .diagram-step {
+            background-color: #FFFCF9;
+            border: 1px solid #D6C7B1;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            flex-grow: 1;
+            flex-basis: 150px;
+        }
+        .diagram-step-title {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #856d4b;
+        }
+        .diagram-arrow {
+            font-size: 2rem;
+            color: #B0A08A;
+            font-weight: bold;
+        }
+        .error-process-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        .error-step {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            background-color: #FFFCF9;
+            border: 1px solid #D6C7B1;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .error-step .step-number {
+            flex-shrink: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            background-color: #856d4b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+        .error-step .step-content {
+            text-align: left;
+        }
+        .error-step .step-content b {
+            color: #856d4b;
+        }
+        .error-result {
+            margin-top: -0.5rem; 
+            width: 100%;
+            background-color: #f9e5e5;
+            border: 1px solid #eab3b3;
+            color: #9b2c2c;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #D6C7B1;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #EAE3D9;
+            font-weight: 500;
+        }
+        td {
+             background-color: #FFFCF9;
+        }
+        .highlight-box {
+            background-color: #EAE3D9;
+            border: 2px solid #B0A08A;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        .highlight-box p {
+            margin-bottom: 0 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" class="w-full max-w-4xl mx-auto my-4 px-4 flex justify-between items-center">
+        <a href="index.html" id="header-link" class="text-lg font-semibold text-gray-700 no-underline hover:text-gray-900" style="font-family: serif;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main id="main-content" class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- 콘텐츠가 여기에 동적으로 삽입됩니다. -->
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                pageTitle: "The True Nature of Gui Pi Tang | Interactive TCM",
+                headerLink: "&larr; Interactive TCM",
+                mainTitle: "The True Nature of Gui Pi Tang (歸脾湯): Correcting All Misceptions",
+                sections: [
+                    {
+                        type: 'section',
+                        title: 'Indications & Core Identity',
+                        content: [
+                            { type: 'list', title: 'Actions', items: ['Strengthens the Spleen and controls bleeding', 'Tonifies qi and nourishes the blood'] },
+                            { type: 'list', title: 'Indications', items: ['Bleeding from Spleen deficiency: hematochezia, uterine bleeding, early or prolonged menstruation, etc.', 'Symptoms from stress/mental exertion: palpitations, forgetfulness, insomnia, night sweats, low appetite, fatigue.', 'Tongue/Pulse: pale tongue with thin, white coating; fine, weak pulse.'] },
+                            { type: 'paragraph', text: `The name "Gui Pi Tang (歸脾湯)" itself explains its purpose. "Gui (歸)" means "to return," and "Pi (脾)" means "Spleen." Therefore, it means "to restore the function of a damaged Spleen." This refers to the pathology of "Spleen Failing to Govern the Blood" due to Spleen Qi Deficiency. When the Spleen's Qi is weak, it can no longer control the blood, leading to chronic bleeding and Blood Deficiency. Gui Pi Tang treats this exact progression:` },
+                            { type: 'diagram', diagramType: 'pathogenesis', steps: ['Spleen Qi<br>Deficiency', 'Spleen not controlling<br>Blood', 'Blood<br>Deficiency'] },
+                        ]
+                    },
+                    {
+                        type: 'section',
+                        title: 'The Essence: A Qi Tonic, Not a Blood Tonic',
+                        content: [
+                            { type: 'paragraph', text: `For this reason, Gui Pi Tang is based on Si Jun Zi Tang (Four-Gentlemen Decoction). It takes the Qi-tonifying action of Si Jun Zi Tang as its foundation and adds Huang Qi, Dang Gui, which nourishes the Blood, is added to treat Blood Deficiency. Herbs like Suan Zao Ren (Sour Jujube Seed), Long Yan Rou and Yuan Zhi play the role of treating the spirit restlessness that arises from Qi and Blood Deficiency.` },
+                            { type: 'paragraph', text: `Textbooks often classify Gui Pi Tang as a Blood-nourishing formula, but this is the result of misunderstanding its core function. The core function of Gui Pi Tang is not to nourish the Blood, but to tonify Qi, especially to tonify the Spleen Qi. That is why not all components of Si Jun Zi Tang are included. The most common misconception is to associate the "Gui (歸)" in "Gui Pi Tang" with the 'Gui' in the Blood-nourishing herb Dang Gui (當歸). However, the "Gui (歸)" of Gui Pi Tang has nothing to do with Dang Gui. This fact becomes clear when tracing the history of the formula. The origin of "Gui Pi Tang" dates back to the Song Dynasty, and the original formula from this period did not contain Dang Gui (Ji Sheng Fang, 1267 AD). Later, through the Yuan Dynasty in the Dan Xi Xin Fa and the Ming Dynasty in the Yi Xue Zheng Chuan (1515 AD), Dang Gui was still not included. It was not until the Ming Dynasty, in the Yi Xue Ru Men (1572 AD), that Dang Gui was first included in Gui Pi Tang. Usually, in such cases, it would be called Jia Wei Gui Pi Tang (Modified Gui Pi Tang), but in this unique case, the modified formula replaced the original. From the Ming Dynasty onward, Gui Pi Tang has consistently included Dang Gui. This history proves that the primary function of Gui Pi Tang is to tonify Qi (based on Si Jun Zi Tang), and nourishing the Blood (with Dang Gui) is a secondary effect.` },
+                            { type: 'paragraph', text: `To understand a formula, one must know what pathology it treats, not just what disease it treats in the Western medical sense. Gui Pi Tang is a formula that treats Spleen Failing to Govern the Blood caused by Qi deficiency, along with the resulting mental symptoms and Blood deficiency.` },
+                        ]
+                    },
+                    {
+                        type: 'section',
+                        title: "The 'Comedy' of Modern Textbooks: The Secret of an Absurd Dosage",
+                        content: [
+                            { type: 'paragraph', text: `In the process of this formula's evolution, a laughable and pathetic event occurred. If you look at the dosage of Gui Pi Tang in modern textbooks, you will notice that Dang Gui and Yuan Zhi are included at only 1/10th the amount of the other main herbs. This is a very unusual dosage ratio. For example, in Ba Zhen Tang (Eight-Treasure Decoction), which tonifies both Qi and Blood, Dang Gui and Ren Shen are included in equal amounts. So, is this hard-to-understand dosage ratio intentional? Not at all.` },
+                            { type: 'paragraph', text: `The root of this problem is that when Dang Gui and Yuan Zhi were added during the Ming Dynasty, the system of measurement had changed. As a result, dosages began to be recorded in different units.` },
+                            { type: 'blockquote', title: 'The Original Gui Pi Tang (Song Dynasty, Ji Sheng Fang)', text: `For treating overthinking, exhaustion of the Heart and Spleen, forgetfulness, and palpitations. Bai Zhu, Fu Shen, Huang Qi, Long Yan Rou, Suan Zao Ren - 1 liang each. Ren Shen, Mu Xiang - 0.5 liang each. Gan Cao - 2.5 qian...` },
+                            { type: 'paragraph', text: `The ratios here are important. In the Ji Sheng Fang, the first text to list Gui Pi Tang, the ratio of Long Yan Rou, Huang Qi, and Bai Zhu is 1:1:1. In the Yi Xue Ru Men, the first text to add Dang Gui and Yuan Zhi, the ratio of Long Yan Rou, Huang Qi, Bai Zhu, Dang Gui, and Yuan Zhi is also 1:1:1:1:1. In other words, practitioners in the past used herbs like Dang Gui, Huang Qi, and Bai Zhu in similar ratios.` },
+                            { type: 'diagram', diagramType: 'errorProcess', title: 'Ignoring this historical context, the compilers attempted the following mechanical merger:', steps: [
+                                { title: 'Step 1: Adopt the Song Dynasty Framework', text: `They took the original formula from the Song Dynasty's <em>Ji Sheng Fang</em> as the basic framework. The unit for major herbs like Ren Shen and Huang Qi is the '<b>liang</b>' (approx. 30-37g).`},
+                                { title: 'Step 2: Add Ming Dynasty Herbs & Units', text: `To this, they added Dang Gui and Yuan Zhi from the Ming Dynasty's <em>Yi Xue Ru Men</em>. However, they directly copied the dosage unit written there, which was the '<b>qian</b>' (approx. 3-3.7g).`},
+                            ], result: `<b>Result:</b> An irrational formula was created in which 1 <em>liang</em> of Ren Shen and 1 <em>qian</em> of Dang Gui coexist, resulting in an approximate <b>10:1 ratio</b>.`},
+                            { type: 'paragraph', text: `This is how modern textbooks came to list Dang Gui at 1/10th the dosage of Ren Shen. It is truly a pity that people who learn Chinese medicine only from modern textbooks believe they must use this strange ratio as if it were the original dosage.` },
+                        ]
+                    },
+                    { type: 'table' },
+                    {
+                        type: 'section',
+                        title: "Conclusion: The Essence of a Formula Lies in Flexibility",
+                        content: [
+                            { type: 'paragraph', text: `Please take a look at the table above and consider it further. The historical evolution of the formula shows what an illusion the idea of an 'absolute ratio' is.` },
+                            { type: 'paragraph', text: `<b>The Ratio of Ren Shen:</b> In the Song Dynasty's Ji Sheng Fang, the ratio of Ren Shen to Huang Qi was 1:2, but in the Qing Dynasty's Yi Fang Ji Jie (1682), it was reversed to 2:1.5 (4:3). In the Ji Sheng Fang, the amount of Ren Shen was half that of Long Yan Rou; in the Ming Dynasty's Yi Xue Ru Men, it was equal to Long Yan Rou; and in the Jing Yue Quan Shu, it was actually double the amount of Long Yan Rou. This shows that physicians continuously adjusted the ratios of key herbs based on the patient's condition and their own clinical judgment. This historical evolution demonstrates that the ratios in a formula are not absolute. There are people who believe that even if dosages differ, the ratios must remain absolute, but this is another misunderstanding.` },
+                            { type: 'paragraph', text: `<b>Fu Shen and Fu Ling:</b> Some texts use Fu Shen, while others use Fu Ling. They are not different herbs that need to be clearly distinguished as in modern textbooks. The two herbs share the same origin and many of the same effects, so the fact that they were used interchangeably in different texts is further evidence of flexibility in formula application.` },
+                            { type: 'paragraph', text: `Ultimately, the essence of Gui Pi Tang lies not in a fixed set of herbs and dosages, but in understanding and treating the core pathology of 'Spleen Qi Deficiency.' Only when we understand the history of a formula and the logic contained within it can we move beyond the errors of textbooks and provide true treatment tailored to the individual patient.`, highlight: true },
+                        ]
+                    }
+                ],
+                tableData: [
+                    ["Dynasty", "Year", "Source text", "Dang Gui", "Long Yan", "Shan Zao", "Yuan Zhi", "Ren Shen", "Huang Qi", "Bai Zhu", "Fu Shen", "Mu Xiang", "Gan Cao"],
+                    ["Song", "1267", "濟生方", "-", "1 Liang", "1 Liang", "-", "0.5 Liang", "1 Liang", "1 Liang", "Fu ling 1 Liang", "0.5 Liang", "2.5 Qian"],
+                    ["Yuan", "1482", "丹溪心法", "-", "1 Liang", "1 Liang", "-", "0.5 Liang", "1 Liang", "1 Liang", "1 Liang", "0.5 Liang", "2.5 Qian"],
+                    ["Ming", "1515", "醫學正傳", "-", "1 Qian", "1 Qian", "-", "0.5 Qian", "1 Qian", "1 Qian", "1 Qian", "0.5 Qian", "0.25 Qian"],
+                    ["", "1575", "醫學入門", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "0.5 Qian", "0.3 Qian"],
+                    ["", "1624", "景岳全書", "1 Qian", "7 pieces", "2 Qian", "1 Qian", "2 Qian", "2 Qian", "2 Qian", "Fu ling 2 Qian", "0.5 Qian", "0.5 Qian"],
+                    ["", "1631", "外科正宗", "-", "1 Qian", "1 Qian", "-", "0.5 Qian", "1 Qian", "1 Qian", "1 Qian", "0.5 Qian", "0.5 Qian"],
+                    ["Qing", "1682", "醫方集解", "1 Qian", "2 Qian", "2 Qian", "1 Qian", "2 Qian", "1.5 Qian", "2 Qian", "2 Qian", "0.5 Qian", "0.5 Qian"],
+                    ["Josun (Korea)", "1613", "동의보감", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "0.5 Qian", "0.3 Qian"],
+                    ["", "1790", "광제비급", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "Fu ling 1 Qian", "0.5 Qian", "0.5 Qian"],
+                    ["", "1885", "방약합편", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "1 Qian", "0.5 Qian", "0.3 Qian"]
+                ],
+                noteText: `<b>Note: Historical Weights and Measures</b><br>Qian = 3.75g (modern equivalent 3g), Liang = 37.5g (modern equivalent 30g). Chinese units varied by dynasty: one liang in the Tang Dynasty was 15.65 grams, in the Song Dynasty it was 31.4 grams, and in the Qing Dynasty it was 37.31 grams.`
+            },
+            ko: {
+                pageTitle: "귀비탕의 진실 | Interactive TCM",
+                headerLink: "&larr; Interactive TCM",
+                mainTitle: "귀비탕(歸脾湯)의 진실: 모든 오해를 바로잡다",
+                sections: [
+                    {
+                        type: 'section',
+                        title: '효능 및 주치',
+                        content: [
+                            { type: 'paragraph', text: `이름 자체가 처방의 목적을 설명합니다. "귀(歸)"는 "돌아온다", "비(脾)"는 "비장"을 뜻하여, 손상된 비장의 기능을 "회복시켜 되돌린다"는 뜻입니다. 여기서 비장의 문제는 비기허증(脾氣虛證)으로 인한 비불통혈(脾不統血)의 병리, 즉 비장의 기운이 허약해져 혈액을 제대로 통제하지 못하게 되고, 이로 인해 만성적인 출혈과 혈허가 발생하는 것을 의미합니다. 귀비탕은 바로 이 복합적인 병리를 치료하는 처방입니다.` },
+                            { type: 'diagram', diagramType: 'pathogenesis', steps: ['비기허<br>(Spleen Qi Deficiency)', '비불통혈<br>(Spleen not controlling Blood)', '혈허<br>(Blood Deficiency)'] },
+                        ]
+                    },
+                    {
+                        type: 'section',
+                        title: '귀비탕의 본질: 보혈제(補血劑)가 아닌 보기제(補氣劑)다',
+                        content: [
+                            { type: 'paragraph', text: `그렇기에 귀비탕은 사군자탕(四君子湯)이 기본이 됩니다. 사군자탕의 보기(補氣) 작용을 기본으로 황기가 추가되었고, 보혈(補血)하는 당귀를 추가하여 혈허를 치료합니다. 산조인, 용안육, 원지 등은 기혈허로 발생한 정신불안을 치료하는 역할을 합니다.` },
+                            { type: 'paragraph', text: `흔히 교과서에서 귀비탕을 보혈제로 구분하는데, 이는 핵심 기능을 잘못 이해한 결과입니다. 핵심 기능은 보혈이 아니라 보기(補氣), 특히 보비기(補脾氣)입니다. 가장 흔한 오해는 "귀비탕"의 "귀(歸)"를 당귀(當歸)의 '귀'와 연관 짓는 것이지만, 둘은 아무런 상관이 없습니다. 역사를 추적하면 명백해집니다. 송대(宋代) 최초의 처방(『제생방』, 1267 AD)에는 당귀가 없었고, 명대(明代)에 이르러서야(『의학입문』, 1572 AD) 처음 포함되었습니다. 이는 주요 기능이 보기이며, 보혈은 부가적인 효과라는 사실을 증명합니다.` },
+                            { type: 'paragraph', text: `처방을 이해할 때는 어떤 병을 치료하는지가 아니라, 어떤 병리를 치료하는지 알아야 합니다. 귀비탕은 기허로 비불통혈이 생기고, 이로 인한 정신증상과 혈허 증상을 치료하는 처방입니다.` }
+                        ]
+                    },
+                    {
+                        type: 'section',
+                        title: "현대 교과서의 '코미디': 웃지 못할 용량의 비밀",
+                        content: [
+                            { type: 'paragraph', text: `이런 변화 과정에서 웃지 못할 일이 생깁니다. 현대의 귀비탕 교과서 용량을 보면 당귀와 원지는 다른 약들의 1/10밖에 안 들어갑니다. 이는 팔진탕에서 당귀와 인삼이 같은 양으로 들어가는 것과 비교하면 매우 특이한 비율입니다. 의도된 것일까요? 전혀 아닙니다.` },
+                            { type: 'paragraph', text: `문제의 근원은 명대에 당귀가 추가될 때 계량형이 달라졌기 때문입니다. 그래서 다른 단위로 용량이 기재되기 시작했습니다.` },
+                            { type: 'blockquote', title: '최초의 귀비탕 (송대 『제생방』)', text: `治思虑过度，劳伤心脾，健忘怔忡。 백출(白术), 복신(茯神), 황기(黃芪), 용안육(龍眼肉), 산조인(酸棗仁) 각 1냥(各一兩), 인삼(人参), 목향(木香) 각 반 냥(各半兩), 감초(甘草) 2돈 반(二錢半)...` },
+                            { type: 'paragraph', text: `여기서 비율이 중요합니다. 송대 『제생방』은 주요 약재 비율이 1:1:1에 가깝고, 당귀가 추가된 명대 『의학입문』 역시 주요 약재 비율이 1:1:1:1:1입니다. 즉, 옛날 사람들은 비슷한 비율로 약재들을 사용했습니다.` },
+                            { type: 'diagram', diagramType: 'errorProcess', title: '이 역사적 맥락을 무시한 채, 편찬자들은 다음과 같은 기계적인 병합을 시도했습니다.', steps: [
+                                { title: '1단계: 송나라 처방의 골격 차용', text: `송대 『제생방』의 원방을 기본 골격으로 삼습니다. 이 책의 주요 약재 단위는 '<b>양(兩)</b>' (약 30~37g)입니다.`},
+                                { title: '2단계: 명나라 약재와 단위 추가', text: `여기에 명대 『의학입문』에서 추가된 당귀, 원지를 가져옵니다. 그런데 『의학입문』에 적힌 단위인 '<b>전(錢)</b>' (약 3~3.7g)을 그대로 붙여넣습니다.`},
+                            ], result: `<b>결과:</b> 인삼 1양과 당귀 1전이 한 처방 안에 공존하는, 약 <b>10:1 비율</b>의 비상식적인 처방이 탄생한 것입니다.`},
+                            { type: 'paragraph', text: `그러다 보니 현대 교과서에는 당귀를 인삼의 1/10 용량으로 기재하게 된 것입니다. 역사를 모르고 교과서로만 배운 사람들은 이 이상한 비율을 원래 용량으로 알고 있으니 참으로 안타까운 일입니다.` },
+                        ]
+                    },
+                    { type: 'table' },
+                    {
+                        type: 'section',
+                        title: "결론: 처방의 본질은 유연성에 있다",
+                        content: [
+                            { type: 'paragraph', text: `위의 표를 한번 보시고 더 생각해 보시기 바랍니다. 처방의 역사적 변화는 '절대적인 비율'이라는 것이 얼마나 허상인지를 보여줍니다.` },
+                            { type: 'paragraph', text: `<b>인삼의 비율:</b> 송대 『제생방』에서 인삼 대 황기의 비율은 1:2였지만, 청대 『의방집해』에서는 2:1.5 (4:3)로 역전됩니다. 인삼은 용안육 대비 용량도 시대별 문헌마다 달랐습니다. 이는 의가(醫家)들이 환자의 상태와 판단에 따라 핵심 약재 비율을 끊임없이 조절했음을 보여줍니다.` },
+                            { type: 'paragraph', text: `<b>복신과 복령:</b> 어떤 책은 복신을, 어떤 책은 복령을 사용합니다. 현대 교과서처럼 명확하게 구분해야 하는 다른 약재가 아닙니다. 두 약재는 기원이 같고 효능을 공유하므로, 문헌에 따라 혼용된 사례는 처방 운용의 유연성을 보여주는 또 다른 증거입니다.` },
+                            { type: 'paragraph', text: `결국 귀비탕의 본질은 고정된 약재와 용량에 있는 것이 아니라, '비기허'라는 핵심 병리를 이해하고 그것을 다스리는 데 있습니다. 처방의 역사와 논리를 이해할 때 비로소 우리는 교과서의 오류를 넘어 환자에게 맞는 진정한 치료를 할 수 있을 것입니다.`, highlight: true },
+                            { type: 'paragraph', text: `여기서 흥미로운 점은, 조선의 『동의보감』(1613)이 채택한 귀비탕은 이러한 오류가 없다는 것입니다. 그 원전인 『의학입문』의 처방을 따라 '전(錢)'이라는 통일된 단위와 균형잡힌 비율을 사용합니다. 그러나 현대 한국의 교과서는 중의학책을 배껴 1/10비율을 사용하고 있습니다.` }
+                        ]
+                    }
+                ],
+                tableData: [ 
+                    ["왕조", "연도", "출전", "당귀", "용안육", "산조인", "원지", "인삼", "황기", "백출", "복신", "목향", "감초"],
+                    ["송", "1267", "濟生方", "-", "1兩", "1兩", "-", "半兩", "1兩", "1兩", "복령 1兩", "半兩", "2.5錢"],
+                    ["원", "1482", "丹溪心法", "-", "1兩", "1兩", "-", "半兩", "1兩", "1兩", "1兩", "반兩", "2.5錢"],
+                    ["명", "1515", "醫學正傳", "-", "1錢", "1錢", "-", "0.5錢", "1錢", "1錢", "1錢", "0.5錢", "0.25錢"],
+                    ["", "1575", "醫學入門", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "0.5錢", "0.3錢"],
+                    ["", "1624", "景岳全書", "1錢", "7枚", "2錢", "1錢", "2錢", "2錢", "2錢", "복령 2錢", "0.5錢", "0.5錢"],
+                    ["", "1631", "外科正宗", "-", "1錢", "1錢", "-", "0.5錢", "1錢", "1錢", "1錢", "0.5錢", "0.5錢"],
+                    ["청", "1682", "醫方集解", "1錢", "2錢", "2錢", "1錢", "2錢", "1.5錢", "2錢", "2錢", "0.5錢", "0.5錢"],
+                    ["조선", "1613", "동의보감", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "0.5錢", "0.3錢"],
+                    ["", "1790", "광제비급", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "복령 1錢", "0.5錢", "0.5錢"],
+                    ["", "1885", "방약합편", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "1錢", "0.5錢", "0.3錢"]
+                ],
+                noteText: `<b>참고: 시대별 도량형</b><br>錢 = 3.75g (현대 통용 3g), 兩 = 37.5g (현대 통용 30g). 중국의 단위는 왕조마다 달랐습니다. 당대의 1냥은 15.65그램, 송대는 31.4그램, 청대는 37.31그램이었습니다.`
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+
+        // --- 언어 관련 함수 ---
+        function getLanguageFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            
+            setLanguage(newLang);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            headerLink.href = currentLang === 'ko' ? 'index.html?lang=ko' : 'index.html';
+            
+            renderContent();
+        }
+        
+        // ==================================================
+        // 새 앱의 기능(JavaScript)
+        // ==================================================
+        function renderContent() {
+            const main = document.getElementById('main-content');
+            main.innerHTML = ''; // 기존 콘텐츠 초기화
+
+            // 제목 렌더링
+            const title = document.createElement('h1');
+            title.className = 'text-4xl font-bold mb-8 text-gray-800';
+            title.innerHTML = uiStrings.mainTitle;
+            main.appendChild(title);
+
+            // 섹션 렌더링
+            uiStrings.sections.forEach(sectionData => {
+                if (sectionData.type === 'table') {
+                    main.appendChild(renderTable());
+                    return;
+                }
+                
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'content-section mb-10';
+
+                const sectionTitle = document.createElement('h2');
+                sectionTitle.innerHTML = sectionData.title;
+                sectionEl.appendChild(sectionTitle);
+
+                sectionData.content.forEach(item => {
+                    let el;
+                    switch (item.type) {
+                        case 'paragraph':
+                            el = document.createElement('p');
+                            el.innerHTML = item.text;
+                            if (item.highlight) {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'highlight-box';
+                                wrapper.appendChild(el);
+                                el = wrapper;
+                            }
+                            break;
+                        case 'list':
+                            el = document.createElement('div');
+                            if (item.title) {
+                                const listTitle = document.createElement('h3');
+                                listTitle.className = 'font-semibold text-lg mb-2';
+                                listTitle.innerHTML = item.title;
+                                el.appendChild(listTitle);
+                            }
+                            const ul = document.createElement('ul');
+                            ul.className = 'space-y-2';
+                            item.items.forEach(liText => {
+                                const li = document.createElement('li');
+                                li.innerHTML = liText;
+                                ul.appendChild(li);
+                            });
+                            el.appendChild(ul);
+                            break;
+                        case 'diagram':
+                             el = renderDiagram(item);
+                             break;
+                        case 'blockquote':
+                             el = document.createElement('blockquote');
+                             if(item.title) {
+                                const bqTitle = document.createElement('h3');
+                                bqTitle.className = 'font-semibold text-lg mb-2 not-italic';
+                                bqTitle.innerHTML = item.title;
+                                el.appendChild(bqTitle);
+                             }
+                             const bqText = document.createElement('p');
+                             bqText.className = 'mb-0';
+                             bqText.innerHTML = item.text;
+                             el.appendChild(bqText);
+                             break;
+                    }
+                    if (el) sectionEl.appendChild(el);
+                });
+                main.appendChild(sectionEl);
+            });
+        }
+
+        function renderDiagram(item) {
+            const container = document.createElement('div');
+            
+            if (item.diagramType === 'pathogenesis') {
+                container.className = 'diagram-container';
+                item.steps.forEach((step, index) => {
+                    const stepEl = document.createElement('div');
+                    stepEl.className = 'diagram-step';
+                    stepEl.innerHTML = step;
+                    container.appendChild(stepEl);
+
+                    if (index < item.steps.length - 1) {
+                        const arrowEl = document.createElement('div');
+                        arrowEl.className = 'diagram-arrow';
+                        arrowEl.innerHTML = '→';
+                        container.appendChild(arrowEl);
+                    }
+                });
+            } else if (item.diagramType === 'errorProcess') {
+                container.className = 'error-process-container';
+                if(item.title) {
+                    const titleEl = document.createElement('h3');
+                    titleEl.className = 'font-semibold text-lg mb-2 text-center';
+                    titleEl.innerHTML = item.title;
+                    container.appendChild(titleEl);
+                }
+                item.steps.forEach((step, index) => {
+                    const stepEl = document.createElement('div');
+                    stepEl.className = 'error-step';
+                    stepEl.innerHTML = `
+                        <div class="step-number">${index + 1}</div>
+                        <div class="step-content">
+                            <h4 class="font-bold text-md mb-1">${step.title}</h4>
+                            <p class="text-gray-600 text-sm">${step.text}</p>
+                        </div>
+                    `;
+                    container.appendChild(stepEl);
+                    if(index < item.steps.length -1){
+                        const arrowEl = document.createElement('div');
+                        arrowEl.className = 'diagram-arrow text-2xl';
+                        arrowEl.innerHTML = '↓';
+                        container.appendChild(arrowEl);
+                    }
+                });
+                
+                const preResultArrow = document.createElement('div');
+                preResultArrow.className = 'diagram-arrow text-2xl';
+                preResultArrow.innerHTML = '↓';
+                container.appendChild(preResultArrow);
+
+                const resultEl = document.createElement('div');
+                resultEl.className = 'error-result';
+                resultEl.innerHTML = item.result;
+                container.appendChild(resultEl);
+            }
+
+            return container;
+        }
+
+        function renderTable() {
+            const container = document.createElement('div');
+            container.className = 'table-container mb-10';
+            
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+            
+            // Header
+            const headerRow = document.createElement('tr');
+            const tableData = languageData[currentLang].tableData; // Use correct language data
+            tableData[0].forEach(headerText => {
+                const th = document.createElement('th');
+                th.innerHTML = headerText;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            
+            // Body
+            tableData.slice(1).forEach(rowData => {
+                const row = document.createElement('tr');
+                rowData.forEach(cellData => {
+                    const td = document.createElement('td');
+                    td.innerHTML = cellData;
+                    row.appendChild(td);
+                });
+                tbody.appendChild(row);
+            });
+            
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            container.appendChild(table);
+
+            const note = document.createElement('p');
+            note.className = 'text-sm text-gray-600 mt-4';
+            note.innerHTML = languageData[currentLang].noteText; // Use correct language data
+            container.appendChild(note);
+
+            return container;
+        }
+
+
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguageFromURL());
+            applyTranslations();
+        }
+
+        // 앱 실행
+        initializeApp();
+        
+        window.addEventListener('popstate', initializeApp);
+
+    </script>
+</body>
+</html>
+
