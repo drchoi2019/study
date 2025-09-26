@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 제목</title> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 배경색 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        /* 콘텐츠 스타일 */
+        .content-section h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1f2937; /* gray-800 */
+            text-align: center;
+        }
+        .content-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 2px solid #d1d5db; /* gray-300 */
+            padding-bottom: 0.5rem;
+        }
+         .content-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #111827; /* gray-900 */
+        }
+        .content-section p, .content-section li {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .content-section blockquote {
+            background-color: #f3f4f6; /* gray-100 */
+            border-left: 4px solid #9ca3af; /* gray-400 */
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #4b5563; /* gray-600 */
+        }
+        .content-section ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- Korean Content -->
+        <div id="content-ko" class="content-section">
+            <h1>계지탕 (桂枝湯)</h1>
+            
+            <!-- Core Principles Visualization -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white/50 p-6 rounded-lg shadow-md border border-gray-200">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-8 h-8 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.C14 5 16.09 5.777 17.657 7.343A8 8 0 0118 18c-5 .5-9 .5-12 0A8 8 0 0117.657 18.657z"></path></svg>
+                        <h3 class="text-lg font-bold m-0">핵심 원리 1: 땀으로 사기를 몰아낸다</h3>
+                    </div>
+                    <p class="text-gray-600">맵고 따뜻한 성질(辛溫)로 몸을 덥혀 땀을 내고, 이를 통해 외부에서 침입한 나쁜 기운(風寒邪)을 몰아냅니다.</p>
+                </div>
+                <div class="bg-white/50 p-6 rounded-lg shadow-md border border-gray-200">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-8 h-8 text-sky-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11.3V5.6a2 2 0 012-2h2a2 2 0 012 2v5.7M9 11.3l-1.6 1.6a2 2 0 000 2.8l4.2 4.2a2 2 0 002.8 0l4.2-4.2a2 2 0 000-2.8L15 11.3M9 11.3l6 0"></path></svg>
+                         <h3 class="text-lg font-bold m-0">핵심 원리 2: 온기로 통증을 잡는다</h3>
+                    </div>
+                    <p class="text-gray-600">차가움으로 인해 뭉친 기혈을 따뜻하게 소통시키고, 경직된 근육을 부드럽게 풀어 통증을 완화합니다.</p>
+                </div>
+            </div>
+
+            <p>계지탕(桂枝湯)은 한의학 처방의 근간을 이루는 중요한 처방입니다. 단순히 감기약으로 알려진 것을 넘어, 인체의 양기(陽氣)를 북돋우고 기혈의 순환을 조화롭게 하여 다양한 질병을 치료하는 데 폭넓게 응용될 수 있습니다. 계지탕의 본질을 이해하는 것은 수많은 한방 처방을 꿰뚫어 보는 지혜의 시작이 될 것입니다.</p>
+            <p>계지탕은 계지, 작약, 생강, 대추, 감초라는 아주 기본적인 약재로 이루어진 한방 처방입니다. 그중 핵심 약재인 계지는 한의학뿐만 아니라 전 세계적으로 가장 많이 활용된 생약 중 하나로, 기원전 3-4천 년 전 부터, 이집트, 메소포타미아 문명에서도 사용 기록이 남아 있을 만큼 치료 효과가 확실한 약입니다. 이처럼 계지탕은 태양병으로 인한 감기뿐만 아니라 여러 증상과 질병에 응용될 수 있어 그 자체만으로도 여러 의미를 지닙니다. 모든 처방의 출발점으로 여겨지기에 계지탕이 지닌 한의학적 의미를 알아두면 다른 처방들을 보다 쉽게 이해하고 응용할 수 있습니다.</p>
+            
+            <!-- ... (rest of Korean content) ... -->
+            <h2>처방의 구성과 약재의 효능</h2>
+            <p>계지탕에서 군약(君藥), 즉 가장 중요한 역할을 하는 것은 계지입니다. 각 약재는 다음과 같은 효능을 지니며 서로 조화를 이룹니다.</p>
+            <ul>
+                <li><strong>계지(桂枝):</strong> 따뜻하게 하는 해표하여 표부에 침범한 풍한사(風寒邪)를 땀과 함께 발산합니다.</li>
+                <li><strong>작약(芍藥):</strong> 혈(血)을 보하고 간(肝)을 부드럽게 하여 뭉친 것을 풀어주며 통증을 완화합니다(緩中止痛).</li>
+                <li><strong>생강(生薑):</strong> 성질이 따뜻하고 맛이 매워 계지의 발한해기 효능을 보조합니다.</li>
+                <li><strong>대추(大棗):</strong> 기와 진액을 보충하고 위장 기능을 보강합니다.</li>
+                <li><strong>감초(甘草):</strong> 작약의 완중지통 효능을 도와 몸살을 치료하고, 모든 약재의 조화를 이룹니다.</li>
+            </ul>
+
+            <h2>상한론과 금궤요략 속 계지탕의 활용</h2>
+            <h3>『상한론』 태양병상편(太陽病上篇)</h3>
+            <blockquote>“태양중풍(太陽中風)에 양맥(陽脈)은 부(浮)하고 음맥(陰脈)은 약(弱)하다. 양이 부하다는 것은 열이 저절로 나는 것이고, 음이 약하다는 것은 땀이 저절로 나는 것이다. 오슬오슬 춥고, 선들선들 바람이 싫으며, 후끈후끈 열이 나고, 코가 울리고 헛구역질이 나는 경우 계지탕으로 주치한다.” (太陽中風, 陽浮而陰弱, 陽浮者, 熱自發, 陰弱者, 汗自出. 嗇嗇惡寒, 淅淅惡風, 翕翕發熱, 鼻鳴乾嘔者, 桂枝湯主之.)</blockquote>
+            <blockquote>“태양병으로 두통, 발열, 땀이 나고, 바람을 싫어하면 계지탕으로 주치한다.” (太陽病, 頭痛, 發熱, 汗出, 惡風, 桂枝湯主之.)</blockquote>
+            <h3>『상한론』 태양병중편(太陽病中篇)</h3>
+            <blockquote>“태양병에 외증(外證)이 아직 풀리지 않고 맥이 부약(浮弱)한 자는 마땅히 땀을 내어 풀어야 하니, 계지탕이 적합하다.” (太陽病, 外證未解, 脈浮弱者, 當以汗解, 宜桂枝湯.)</blockquote>
+            <h3>『상한론』 양명병편(陽明病篇) & 태음병편(太陰病篇)</h3>
+            <blockquote>“양명병에 맥이 지(遲)하고 땀이 많이 나며 약간 오한이 있는 자는 표(表)가 아직 풀리지 않은 것이니, 발한시킬 수 있으며 계지탕이 적합하다.” (陽明病, 脈遲, 汗出多, 微惡寒者, 表未解也, 可發汗, 宜桂枝湯.)</blockquote>
+            <blockquote>"태음병에 맥이 부(浮)한 자는 발한을 시킬 수 있으며, 계지탕을 주는 것이 마땅하다." (太陰病, 脈浮者, 可發汗, 宜桂枝湯.)</blockquote>
+            <h3>『금궤요략』 부인산후병편(婦人産後病篇)</h3>
+            <blockquote>“산후에 중풍(中風)하여 수십 일이 지나도 낫지 않고, 머리가 약간 아프고 오한이 있으며, 때때로 열이 나고, 명치 아래가 답답하며, 헛구역질과 땀이 나는 증상에 사용한다.” (産後中風, 續之數十日不解, 頭微痛, 惡寒, 時時有熱, 心下悶, 乾嘔汗出.)</blockquote>
+            
+            <h2>핵심 원리 1: 땀을 내어 사기(邪氣)를 몰아낸다</h2>
+            <p>계지탕의 가장 본질적인 작용은 몸을 덥혀 땀을 내는 것입니다. 이는 흔히 신온해표(辛溫解表)라고 표현하는데, 맵고 따뜻한 성질로 외부에서 들어온 사기(邪氣)를 몰아내는 효과를 의미합니다. 계지는 혈관을 확장시키고 몸을 따뜻하게 하여 땀을 내게 하는 발한 작용을 합니다. 이는 본질적으로 고춧가루와 유사한 한의학적 기(氣)의 작용이라 할 수 있습니다. 생강 또한 매콤한 맛으로 속을 따뜻하게 하여 땀을 내는 역할을 보조합니다.</p>
+            <p>『상한론』에 “계지탕을 먹고 따뜻한 죽을 먹어 땀을 내라”는 내용이 나오는 이유도 여기에 있습니다. 계지 자체의 발한 작용이 크지 않으므로, 따뜻한 죽의 기운을 빌려 약효를 돕는 것입니다.</p>
+            <blockquote>계지탕을 복용한 뒤 따뜻한 죽 한 되 남짓을 마셔 약 기운을 돕고, 따뜻하게 덮어 한 시진(一時辰) 가량 지나 온몸에 촉촉이 땀이 나는 듯하면 가장 좋다. 물 흐르듯 줄줄 흘리게 해서는 안 되니, 병이 반드시 낫지 않는다. 만약 한 번 복용으로 땀이 나고 병이 나았으면, 남은 약은 복용을 중지하고 다 먹을 필요가 없다. (중략) 생것, 찬 것, 끈적하고 미끄러운 것, 고기, 밀가루, 오신채, 술, 유제품, 비린 것 등은 금한다. <br>(桂枝湯方 服已, 須臾歠熱稀粥一升餘, 以助藥力, 溫覆令一時許, 遍身 漐漐微似有汗者益佳, 不可令如水流漓, 病必不除. 若 一服汗出病差, 停後服, 不必盡劑. (중략) 禁生冷粘滑肉麪五辛酒酪臭惡等物.)</blockquote>
+            <p>이러한 기록들은 계지탕이 땀을 억제하는 약이 아니라, 땀을 내게 하는 약임을 명확히 보여줍니다. 혹자는 작약의 수렴하는 작용을 들어 계지탕이 땀을 줄인다고 해석하기도 하지만, 이는 본질을 보지 못한 어리석은 생각입니다. 이미 땀구멍이 열려 있는 상태, 즉 표허증(表虛證)에 마황처럼 강한 발한제를 쓰지 않고 계지탕으로 부드럽게 땀을 내어 사기를 몰아내는 것이 핵심입니다. 지난 2000년간 계지탕에 대한 수많은 해석이 난무했지만, 이러한 이상한 해석에 얽매이지 말고 본질을 보아야 합니다.</p>
+
+            <h2>핵심 원리 2: 따뜻하게 하고 부드럽게 풀어 통증을 잡는다</h2>
+            <p>계지탕의 또 다른 핵심은 ‘차가움으로 인한 통증’을 치료하는 것입니다. 우리 몸은 추우면 한응기체(寒凝氣滯), 즉 차가운 기운이 뭉쳐 기의 흐름을 막습니다. 기가 막히면 혈(血)도 통하지 않아(氣不通血) 통증이 발생합니다. 혈관과 근육이 수축하며 뭉치고 통증을 유발하는 것입니다.</p>
+            <p>이때 계지가 몸을 따뜻하게 하여 뭉친 기운을 소통시키고, 작약이 뭉치고 아픈 것을 말랑말랑하게 풀어주는 효과를 발휘합니다. 작약은 통증 치료에 가장 많이 사용되는 약재 중 하나로, 유명한 작약감초탕의 핵심이기도 합니다. 따라서 계지탕은 풍한(風寒)으로 인해 뒷목이 뻣뻣하고 아프며 근육통이 생기는 증상을 치료하는 데 효과적입니다.</p>
+            <p>이 원리를 이해하면 계지탕을 감기뿐만 아니라, 근육이 꼬이듯 아픈 복통(내장도 근육), 시리고 차가우면서 아픈 좌골 신경통 등 다양한 통증 질환에 응용할 수 있습니다. 통증에 가장 많이 쓰는 처방 중 하나인 오적산(五積散)에 계지탕이 포함되는 이유도 바로 이 때문입니다.</p>
+
+            <h2>따뜻한 약으로 발열을 치료하는 원리</h2>
+            <p>많은 사람들이 계지탕은 따뜻한 약이므로 발열에는 쓰면 안 된다고 오해합니다. 하지만 『상한론』을 보면 계지탕과 마황탕 모두 발열에 사용되었습니다. 이는 현대 한의학에서 풍한(風寒) 감기와 풍열(風熱) 감기를 도식적으로 구분하면서 생긴 오해입니다.</p>
+            <p>계지나 마황 같은 약은 땀을 내어 열을 내리는 방식으로 발열을 치료합니다. 이는 대황(大黃)이 설사를 통해 열을 내리는 것과 같은 이치입니다. 약의 차고 더운 성질의 차원이 아닌, 병의 원인을 제거하는 방식의 차이인 것입니다.</p>
+            <p>물론 장중경 선생도 해표제(解表劑)에 석고(石膏)를 더해 열을 직접적으로 끄는 방법을 사용했습니다. 대표적인 처방이 마행감석탕(麻杏甘石湯)입니다. 하지만 그는 기본적으로 땀을 내는 해표(解表)의 방법으로 열병을 다스렸습니다. 실제로 고방(古方)을 주로 사용하는 일본에서는 열이 나면 은교산(銀翹散)이나 상국음(桑菊飮) 대신 계지탕, 마행감석탕 등으로 치료하는 경우가 많습니다. 계지가 들어가는 오령산(五苓散) 역시 해표 작용을 통해 열을 다스립니다. 따라서 계지탕이 발열을 치료한다는 점을 반드시 기억해야 합니다.</p>
+            
+            <h2>계지탕의 응용</h2>
+            <p>계지탕의 원리를 종합하면, 이 처방은 감기를 넘어 훨씬 폭넓은 질환에 사용될 수 있습니다.</p>
+            <h3>차가움으로 인한 통증 질환</h3>
+            <p>현대 한의학에서는 계지탕을 동상, 고환통, 좌골 신경통 등 차가워서 생긴 통증에 다양하게 활용합니다. 골반저 증후군(pelvic floor syndrome)과 같이 차가움으로 인해 발생하는 통증에도 쓸 수 있는 처방입니다. 『상한론』에서 감기에 계지탕을 썼다고 해서 감기에만 국한된다고 생각해서는 절대 안 됩니다. 『상한론』은 일반론이 아닌 케이스의 합이기 때문입니다.</p>
+            <h3>양기(陽氣) 부족과 관련된 질환</h3>
+            <p>계지탕의 핵심은 양기(陽氣)를 만들어 순환시키는 것입니다. 양기가 부족하면 인체는 따뜻한 기운이 적고 생리 기능이 저하됩니다. 이런 사람들은 날씨가 추워지면 면역력이 떨어지고 혈액순환이 안 되어 손발이 차가워집니다. 나이가 들면서 등이 시리거나 손발이 찬 경우도 여기에 해당합니다. 계지탕은 이러한 양기 부족으로 인한 증상을 개선합니다.</p>
+            <h3>풍한사(風寒邪) 침범으로 인한 제반 증상</h3>
+            <p>계지탕이 치료하는 태양병(太陽病)은 단순히 감기가 아니라, ‘표(表)에 풍한사가 침범한 모든 질병’을 의미합니다. 이는 인체에 바람이 드는 현상으로 확대할 수 있습니다. 즉, 표에 찬 기운이 들어와 바람을 싫어하게 되고, 전에는 나지 않던 허한(虛汗) 땀이 나는 증상에 사용할 수 있습니다. 구체적인 사례는 다음과 같습니다.</p>
+            <ul>
+                <li><strong>산후풍(産後風):</strong> 출산 과정이나 산후조리 중에 찬 바람이 인체에 들어와 손발이나 다리가 시린 증상.</li>
+                <li><strong>수술 후유증:</strong> 골절 등으로 수술받은 부위로 찬 바람이 들어와 겨울만 되면 시리다고 호소하는 경우.</li>
+                <li><strong>국소 부위의 시림과 통증:</strong> 특정 부위에 찬 바람을 지속적으로 쐬어 그 부위가 시리고 아픈 경우.</li>
+            </ul>
+            
+            <h2>계지탕을 이해하는 올바른 관점</h2>
+            <p>계지탕을 이해할 때 ‘계지로 따뜻하게 하고, 작약으로 말랑말랑하게 한다’는 느낌을 기억하는 것이 중요합니다. 이 두 약재는 대약(對藥)으로도 많이 사용됩니다.</p>
+            <p>이렇게 계지탕을 염두에 두면 쌍화탕, 소건중탕, 오적산 등 다른 복잡한 처방들 속에서 계지탕의 구조를 발견할 수 있습니다. 그때마다 ‘따뜻하게 하고 부드럽게 하여 통증을 치료한다’는 개념을 떠올린다면, 계지탕이 단순한 감기약이라는 편견을 넘어 수많은 병증에 응용할 수 있는 지혜를 얻게 될 것입니다.</p>
+        </div>
+        
+        <!-- English Content -->
+        <div id="content-en" class="content-section hidden">
+            <h1>Gui Zhi Tang (桂枝湯)</h1>
+
+            <!-- Core Principles Visualization -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white/50 p-6 rounded-lg shadow-md border border-gray-200">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-8 h-8 text-orange-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.C14 5 16.09 5.777 17.657 7.343A8 8 0 0118 18c-5 .5-9 .5-12 0A8 8 0 0117.657 18.657z"></path></svg>
+                        <h3 class="text-lg font-bold m-0">Core Principle 1: Expel Pathogens via Sweat</h3>
+                    </div>
+                    <p class="text-gray-600">Utilizes acrid and warm herbs to warm the body, induce perspiration, and thereby expel external pathogenic Wind-Cold.</p>
+                </div>
+                <div class="bg-white/50 p-6 rounded-lg shadow-md border border-gray-200">
+                    <div class="flex items-center mb-3">
+                         <svg class="w-8 h-8 text-sky-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11.3V5.6a2 2 0 012-2h2a2 2 0 012 2v5.7M9 11.3l-1.6 1.6a2 2 0 000 2.8l4.2 4.2a2 2 0 002.8 0l4.2-4.2a2 2 0 000-2.8L15 11.3M9 11.3l6 0"></path></svg>
+                         <h3 class="text-lg font-bold m-0">Core Principle 2: Alleviate Pain with Warmth</h3>
+                    </div>
+                    <p class="text-gray-600">Warms and circulates Qi and Blood that have stagnated due to cold, and softens stiff muscles to relieve pain.</p>
+                </div>
+            </div>
+
+            <p>Gui Zhi Tang is a pivotal formula that forms the bedrock of Traditional Korean Medicine. Known as more than just a remedy for the common cold, it can be broadly applied to treat a wide range of illnesses by boosting the body's Yang Qi (陽氣) and harmonizing the circulation of Qi and Blood. Understanding the essence of Gui Zhi Tang is the first step toward the wisdom of seeing through countless other herbal formulas.</p>
+            <p>Gui Zhi Tang is a fundamental herbal formula composed of very basic ingredients: Gui Zhi, Bai Shao Sheng Jiang, Da Zao and Gan Cao. Its key ingredient, Gui Zhi, is one of the most widely used medicinal herbs not only in Traditional Korean Medicine but across the globe, with records of its use in Egyptian and Mesopotamian civilizations dating back to 3000-4000 B.C., proving its reliable therapeutic effects. As such, Gui Zhi Tang holds multiple layers of meaning, as it can be applied not only to colds from Taiyang disease but also to various other symptoms and illnesses. Because it is regarded as the starting point for all formulas, knowing the significance of Gui Zhi Tang allows for an easier understanding and application of other prescriptions.</p>
+
+            <!-- ... (rest of English content) ... -->
+            <h2>Formula composition</h2>
+            <ul>
+                <li><strong>Gui Zhi (桂枝):</strong> Its most important property is its warming nature. It induces sweating to release exterior, expelling pathogenic Wind-Cold (風寒邪)</li>
+                <li><strong>Bai Shao (芍藥):</strong> It nourishes the Blood (血), softens the Liver, releases tension, and alleviates pain (緩中止痛).</li>
+                <li><strong>Sheng Jiang (生薑):</strong> With its warm nature and pungent taste, it assists Gui Zhi's function of inducing sweat and releasing the muscle layer.</li>
+                <li><strong>Da Zao:</strong> It supplements Qi and fluids and strengthens the function of the stomach and spleen.</li>
+                <li><strong>Gan Cao:</strong> It supports Bai Shao's pain-relieving effects to treat body aches, and harmonizes all the herbs in the formula.</li>
+            </ul>
+
+            <h2>Applications of Gui Zhi Tang in the Shang Han Lun and Jin Gui Yao Lue</h2>
+            <h3>From the Shang Han Lun, Taiyang Disease</h3>
+            <blockquote>"In Taiyang wind-strike (太陽中風), the Yang pulse (陽脈) is floating (浮) and the Yin pulse (陰脈) is weak (弱). A floating Yang indicates spontaneous fever, while a weak Yin indicates spontaneous sweating. For aversion to cold, aversion to wind, effulgent fever, nasal congestion, and dry heaves, Gui Zhi Tang is the governing formula." (太陽中風, 陽浮而陰弱, 陽浮者, 熱自發, 陰弱者, 汗自出. 嗇嗇惡寒, 淅淅惡風, 翕翕發熱, 鼻鳴乾嘔者, 桂枝湯主之.)</blockquote>
+            <blockquote>"For Taiyang disease with headache, fever, sweating, and aversion to wind, Gui Zhi Tang is the governing formula." (太陽病, 頭痛, 發熱, 汗出, 惡風, 桂枝湯主之.)</blockquote>
+            <blockquote>"In Taiyang disease, when the exterior condition (外證) has not yet been resolved and the pulse is floating and weak (浮弱), one should resolve it by inducing sweating; Gui Zhi Tang is appropriate." (太陽病, 外證未解, 脈浮弱者, 當以汗解, 宜桂枝湯.)</blockquote>
+            <h3>From the Shang Han Lun, Yangming & Taiyin Disease Chapters</h3>
+            <blockquote>"In Yangming disease, if the pulse is slow (遲), there is profuse sweating, and a slight aversion to cold, the exterior (表) has not yet been resolved. One can induce sweating; Gui Zhi Tang is appropriate." (陽明病, 脈遲, 汗出多, 微惡寒者, 表未解也, 可發汗, 宜桂枝湯.)</blockquote>
+            <blockquote>"In Taiyin disease, if the pulse is floating (浮), one can induce sweating; Gui Zhi Tang is appropriate." (太陰病, 脈浮者, 可發汗, 宜桂枝湯.)</blockquote>
+            <h3>From the Jin Gui Yao Lue, Postpartum Diseases Chapter (婦人産後病篇)</h3>
+            <blockquote>"It is used for postpartum wind-strike (中風) that has not resolved for several tens of days, with slight headache, aversion to cold, intermittent fever, stuffiness below the heart, dry heaves, and sweating." (産後中風, 續之數十日不解, 頭微痛, 惡寒, 時時有熱, 心下悶, 乾嘔汗出.)</blockquote>
+            
+            <h2>Core Principle 1: Expelling Pathogenic Qi (邪氣) by Inducing Sweat</h2>
+            <p>The most essential action of Gui Zhi Tang is to warm the body and induce sweat. This is often described as "releasing the exterior with acrid and warm herbs" (辛溫解表), which refers to the effect of driving out external pathogenic Qi (邪氣) with herbs that are pungent in taste and warm in nature. Gui Zhi dilates blood vessels, warms the body, and thereby induces perspiration. This is, in essence, an action of Qi (氣) similar to that of chili powder in traditional medicine. Sheng Jiang, with its spicy flavor, also assists by warming the interior and promoting sweat.</p>
+            <p>This is why the Shang Han Lun states, "After taking Gui Zhi Tang, consume warm porridge to induce sweat." Since Gui Zhi's diaphoretic action is not overwhelmingly strong on its own, the warmth of the porridge is borrowed to assist the medicine's effect.</p>
+            <blockquote>After taking Gui Zhi Tang, sip over a sheng of hot, thin porridge to aid the medicine's strength. Cover yourself warmly for about two hours (一時辰). It is best if a light, glistening sweat covers the entire body. Do not let it flow like water, as the illness will surely not be resolved. If one dose induces sweat and the illness is cured, stop taking the remainder; it is not necessary to finish the formula. (Abridged) Prohibited foods include raw, cold, sticky, and slippery items, meat, flour, the five pungent spices, alcohol, dairy, and foul-smelling foods. <br>(桂枝湯方 服已, 須臾歠熱稀粥一升餘, 以助藥力, 溫覆令一時許, 遍身 漐漐微似有汗者益佳, 不可令如水流漓, 病必不除. 若 一服汗出病差, 停後服, 不必盡劑. (중략) 禁生冷粘滑肉麪五辛酒酪臭惡等物.)</blockquote>
+            <p>These records clearly show that Gui Zhi Tang is a formula that induces perspiration, not one that stops it. Some interpret Bai Shao's astringent property to mean that Gui Zhi Tang reduces sweating, but this is a foolish notion that misses the essence. The core principle is to use Gui Zhi Tang to gently induce sweat and expel pathogens in a state of exterior-deficiency pattern (表虛證), where the pores are already open, rather than using a strong diaphoretic like Ma Huang (Ephedra). Over the last 2,000 years, countless interpretations of Gui Zhi Tang have emerged, but one must see its true nature without getting entangled in such strange analyses.</p>
+
+            <h2>Core Principle 2: Alleviating Pain by Warming and Softening</h2>
+            <p>Another core principle of Gui Zhi Tang is its ability to treat "pain caused by cold." When our body is cold, it leads to a state of "cold congelation and Qi stagnation" (寒凝氣滯), where cold energy congeals and obstructs the flow of Qi. When Qi is blocked, Blood (血) cannot circulate (氣不通血), resulting in pain. Blood vessels and muscles contract, causing tension and pain.</p>
+            <p>In this situation, Gui Zhi warms the body to circulate the stagnant energy, while Bai Shao works to soften and release tense and painful areas. Bai Shao is one of the most frequently used herbs for pain and is also the key ingredient in the famous formula Shao Yao Gan Cao Tang. Therefore, Gui Zhi Tang is effective for treating symptoms caused by Wind-Cold (風寒), such as a stiff and painful neck and muscle aches.</p>
+            <p>Understanding this principle allows Gui Zhi Tang to be applied not only to colds but also to various pain disorders, such as abdominal pain from muscle cramping (internal organs are also muscles) and sciatica that feels cold and achy. This is precisely why Gui Zhi Tang is included in Wu Ji San (五積散), one of the most commonly used formulas for pain.</p>
+
+            <h2>The Principle of Treating Fever with a Warming Formula</h2>
+            <p>Many people mistakenly believe that because Gui Zhi Tang is a warming formula, it should not be used for fever. However, the Shang Han Lun shows that both Gui Zhi Tang and Ma Huang Tang were used to treat fever. This misunderstanding arose from the modern, schematic division between Wind-Cold (風寒) and Wind-Heat (風熱) colds.</p>
+            <p>Herbs like Gui Zhi and Ma Huang treat fever by inducing sweat to release heat from the body. This is the same principle by which Da Huang (大黃, Rhubarb) clears heat through purgation. It is not a matter of the herb's temperature but of the method used to eliminate the cause of the disease.</p>
+            <p>Of course, the author Zhang Zhongjing also used the method of directly clearing heat by adding Shi Gao (石膏, Gypsum) to exterior-releasing formulas (解表劑). A representative example is Ma Xing Shi Gan Tang (麻杏石甘湯). However, his fundamental approach to febrile diseases was to release the exterior (解表) by inducing sweat. In fact, in Japan, where classical formulas (koho) are primarily used, fever is often treated with Gui Zhi Tang or Ma Xing Shi Gan Tang instead of formulas like Yin Qiao San or Sang Ju Yin. The formula Wu Ling San (五苓散), which also contains Gui Zhi, treats fever through a similar exterior-releasing action. Therefore, it is crucial to remember that Gui Zhi Tang can treat fever.</p>
+            
+            <h2>Applications of Gui Zhi Tang</h2>
+            <p>By synthesizing its principles, we can see that this formula's use extends far beyond the common cold to a much broader range of conditions.</p>
+            <h3>Pain Disorders Caused by Cold</h3>
+            <p>In modern practice, Gui Zhi Tang is used for various conditions where pain is caused by cold, such as frostbite, testicular pain, and sciatica. It can also be applied to conditions like pelvic floor syndrome, where pain arises from coldness. One must never think that because the Shang Han Lun used Gui Zhi Tang for colds, its use is limited to them. The Shang Han Lun is a compilation of case studies, not a generalized theory.</p>
+            <h3>Disorders Related to Yang Qi (陽氣) Deficiency</h3>
+            <p>The core function of Gui Zhi Tang is to generate and circulate Yang Qi. A deficiency of Yang Qi means the body lacks warmth and its physiological functions are diminished. People with this condition experience a drop in immunity, poor blood circulation, and cold hands and feet when the weather turns cold. It can also apply to cases where a person develops a chilly back or cold extremities with age. Gui Zhi Tang improves these symptoms stemming from Yang Qi deficiency.</p>
+            <h3>Various Symptoms from Invasion of Pathogenic Wind-Cold (風寒邪)</h3>
+            <p>The Taiyang disease (太陽病) that Gui Zhi Tang treats is not just a simple cold but refers to "any illness where pathogenic Wind-Cold has invaded the exterior (表)." This can be expanded to mean any phenomenon where wind enters the body. In other words, it can be used when cold energy enters the exterior, causing an aversion to wind and the onset of a slight, deficiency-type sweat (虛汗) that was not present before. Specific examples include:</p>
+            <ul>
+                <li><strong>Postpartum Wind-Chill (産後風):</strong> Symptoms like cold hands, feet, or legs caused by exposure to cold wind during or after childbirth.</li>
+                <li><strong>Post-Surgical Sequelae:</strong> Cases where patients complain of coldness in a limb that underwent surgery for a fracture, especially during winter, as if cold wind has entered the area.</li>
+                <li><strong>Localized Chills and Pain:</strong> Pain and coldness in a specific area that has been continuously exposed to cold drafts.</li>
+            </ul>
+             <p>The famous Shanghai physician Zhang Yao-Qing, cited in Contemporary Explanations of Classical Formulas, sums up the many uses of this formula under twelve headings:</p>
+            <ol class="list-decimal pl-5">
+                <li>Harmonization of nutritive and protective qi</li>
+                <li>Releasing the muscle layer to promote sweating</li>
+                <li>Yang deficiency with spontaneous sweating</li>
+                <li>Insufficiency of Stomach yang</li>
+                <li>Running piglet qi with wheezing</li>
+                <li>Deficiency cold pain in the lower abdomen, causing cramping pains</li>
+                <li>Wind-dampness painful obstruction</li>
+                <li>Deficiency wheezing</li>
+                <li>Chronic Spleen wind in children</li>
+                <li>Enriching yin and harmonizing yang</li>
+                <li>Frostbite</li>
+                <li>Yin-type patterns in external medicine</li>
+            </ol>
+            
+            <h2>Summary</h2>
+            <p>When understanding Gui Zhi Tang, it is vital to remember the feeling of "warming with Gui Zhi and softening with Bai Shao." These two herbs are often used together as a medicinal pair. Keeping this in mind, you will discover the structure of Gui Zhi Tang within other complex formulas like Ssanghwa-tang, Xiao Jian Zhong Tang, and Wu Ji San. Each time, recalling the concept of "warming and softening to treat pain" will allow you to transcend the prejudice of Gui Zhi Tang as a mere cold remedy and gain the wisdom to apply it to a multitude of diseases.</p>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                pageTitle: "Interactive TCM - Gui Zhi Tang",
+                headerLink: "&larr; Interactive TCM",
+            },
+            ko: {
+                pageTitle: "Interactive TCM - 계지탕",
+                headerLink: "&larr; Interactive TCM",
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+
+        // --- 언어 관련 함수 ---
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+            updateContentVisibility();
+        }
+
+        function updateContentVisibility() {
+            const contentKo = document.getElementById('content-ko');
+            const contentEn = document.getElementById('content-en');
+            if (!contentKo || !contentEn) return;
+
+            if (currentLang === 'ko') {
+                contentKo.classList.remove('hidden');
+                contentEn.classList.add('hidden');
+            } else {
+                contentKo.classList.add('hidden');
+                contentEn.classList.remove('hidden');
+            }
+        }
+        
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguage());
+            applyTranslations();
+        }
+
+        // 앱 실행
+        initializeApp();
+    </script>
+</body>
+</html>
+
+
