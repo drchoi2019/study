@@ -140,6 +140,7 @@
         let uiStrings;
         let currentAudio = null;
         let activeBtn = null;
+        const audioPromiseCache = new Map(); // 오디오 프라미스 캐시
 
         // --- 언어 관련 함수 ---
         function getLanguage() {
@@ -157,27 +158,31 @@
             event.preventDefault();
             const newLang = currentLang === 'en' ? 'ko' : 'en';
             
-            // URL 업데이트 (페이지 새로고침 없음)
             const url = new URL(window.location);
             url.searchParams.set('lang', newLang);
             window.history.pushState({}, '', url);
 
             setLanguage(newLang);
             applyTranslations();
+            // 변경된 언어의 오디오를 미리 로딩합니다.
+            prefetchAllAudio();
         }
 
         function applyTranslations() {
             document.title = uiStrings.pageTitle;
             const headerLink = document.getElementById('header-link');
             headerLink.innerHTML = uiStrings.headerLink;
+            const contentKo = document.getElementById('content-ko');
+            const contentEn = document.getElementById('content-en');
+
             if (currentLang === 'ko') {
                 headerLink.href = 'index.html?lang=ko';
-                document.getElementById('content-ko').classList.remove('hidden');
-                document.getElementById('content-en').classList.add('hidden');
+                contentKo.classList.remove('hidden');
+                contentEn.classList.add('hidden');
             } else {
                 headerLink.href = 'index.html';
-                document.getElementById('content-en').classList.remove('hidden');
-                document.getElementById('content-ko').classList.add('hidden');
+                contentEn.classList.remove('hidden');
+                contentKo.classList.add('hidden');
             }
         }
         
@@ -186,7 +191,7 @@
         // ==================================================
         const apiKey = ""; // API 키는 비워두세요. 실행 환경에서 자동으로 제공됩니다.
 
-        // Base64를 ArrayBuffer로 변환
+        // --- WAV 변환 헬퍼 함수 ---
         function base64ToArrayBuffer(base64) {
             const binaryString = window.atob(base64);
             const len = binaryString.length;
@@ -197,7 +202,6 @@
             return bytes.buffer;
         }
 
-        // PCM 데이터를 WAV 형식으로 변환
         function pcmToWav(pcmData, sampleRate) {
             const pcm16 = new Int16Array(pcmData);
             const numChannels = 1;
@@ -208,24 +212,20 @@
             const buffer = new ArrayBuffer(44 + dataSize);
             const view = new DataView(buffer);
 
-            // RIFF 청크
             writeString(view, 0, 'RIFF');
             view.setUint32(4, 36 + dataSize, true);
             writeString(view, 8, 'WAVE');
-            // "fmt " 서브 청크
             writeString(view, 12, 'fmt ');
             view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true); // 오디오 포맷 (1 = PCM)
+            view.setUint16(20, 1, true);
             view.setUint16(22, numChannels, true);
             view.setUint32(24, sampleRate, true);
             view.setUint32(28, byteRate, true);
             view.setUint16(32, blockAlign, true);
             view.setUint16(34, bitsPerSample, true);
-            // "data" 서브 청크
             writeString(view, 36, 'data');
             view.setUint32(40, dataSize, true);
 
-            // PCM 데이터 쓰기
             for (let i = 0; i < pcm16.length; i++) {
                 view.setInt16(44 + i * 2, pcm16[i], true);
             }
@@ -239,88 +239,132 @@
             }
         }
 
-        async function speakText(text, lang, btn) {
-            // 다른 오디오가 재생 중이면 중지
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-             if (activeBtn) {
-                activeBtn.classList.remove('loading');
+        // --- 핵심 오디오 생성 및 캐싱 함수 ---
+        function getAudioUrl(text, lang) {
+            const cacheKey = `${lang}::${text}`;
+            if (audioPromiseCache.has(cacheKey)) {
+                return audioPromiseCache.get(cacheKey);
             }
 
-            activeBtn = btn;
-            btn.classList.add('loading');
-            
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{
-                    parts: [{ text: text }]
-                }],
-                generationConfig: {
-                    responseModalities: ["AUDIO"],
-                    speechConfig: {
-                         voiceConfig: {
-                            prebuiltVoiceConfig: { voiceName: lang === 'ko' ? "Kore" : "Puck" }
+            const audioPromise = new Promise(async (resolve, reject) => {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: text }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: lang === 'ko' ? "Kore" : "Puck" }
+                            }
                         }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) throw new Error(`API call failed: ${response.status}`);
+
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType;
+
+                    if (audioData && mimeType?.startsWith("audio/")) {
+                        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const wavBlob = pcmToWav(pcmData, sampleRate);
+                        const audioUrl = URL.createObjectURL(wavBlob);
+                        resolve(audioUrl);
+                    } else {
+                        reject(new Error("No audio data in API response."));
                     }
-                },
-                model: "gemini-2.5-flash-preview-tts"
-            };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API call failed with status: ${response.status}`);
+                } catch (error) {
+                    console.error('TTS Generation Error:', error);
+                    audioPromiseCache.delete(cacheKey); // 실패 시 캐시에서 제거하여 재시도 가능하게 함
+                    reject(error);
                 }
+            });
 
-                const result = await response.json();
-                const part = result?.candidates?.[0]?.content?.parts?.[0];
-                const audioData = part?.inlineData?.data;
-                const mimeType = part?.inlineData?.mimeType;
-
-                if (audioData && mimeType && mimeType.startsWith("audio/")) {
-                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
-                    const pcmData = base64ToArrayBuffer(audioData);
-                    const wavBlob = pcmToWav(pcmData, sampleRate);
-                    const audioUrl = URL.createObjectURL(wavBlob);
-                    
-                    currentAudio = new Audio(audioUrl);
-                    currentAudio.play();
-                    
-                    currentAudio.onended = () => {
-                        btn.classList.remove('loading');
-                        currentAudio = null;
-                        activeBtn = null;
-                    };
-                } else {
-                    console.error("No audio data found in API response.");
-                    btn.classList.remove('loading');
-                }
-            } catch (error) {
-                console.error('Error during TTS generation:', error);
-                btn.classList.remove('loading');
-            }
+            audioPromiseCache.set(cacheKey, audioPromise);
+            return audioPromise;
         }
-        
+
+        // --- 오디오 미리 로딩 ---
+        function prefetchAllAudio() {
+            const contentId = `content-${currentLang}`;
+            const visibleContent = document.getElementById(contentId);
+            if (!visibleContent) return;
+
+            visibleContent.querySelectorAll('.speak-btn').forEach(btn => {
+                const paragraph = btn.parentElement;
+                const textToSpeak = paragraph.cloneNode(true);
+                textToSpeak.querySelector('.speak-btn').remove();
+                const cleanText = textToSpeak.textContent.trim();
+                
+                if (cleanText) {
+                    getAudioUrl(cleanText, currentLang).catch(() => {}); // 오류는 getAudioUrl 내부에서 처리되므로 여기서 무시
+                }
+            });
+        }
+
+        // --- 오디오 재생 및 UI 처리 ---
+        function playAudio(audioUrl, btn) {
+            currentAudio = new Audio(audioUrl);
+            
+            currentAudio.onplaying = () => {
+                btn.classList.remove('loading');
+            };
+            
+            currentAudio.onended = () => {
+                currentAudio = null;
+                if (activeBtn === btn) activeBtn = null;
+            };
+            
+            currentAudio.onerror = () => {
+                btn.classList.remove('loading');
+                console.error("Audio playback error.");
+            };
+            
+            currentAudio.play();
+        }
+
+        // --- 이벤트 리스너 설정 ---
         function setupSpeakButtons() {
-            const buttons = document.querySelectorAll('.speak-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', (event) => {
+            document.querySelectorAll('.speak-btn').forEach(btn => {
+                btn.addEventListener('click', async (event) => {
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                    }
+                    if (activeBtn) {
+                        activeBtn.classList.remove('loading');
+                    }
+
+                    activeBtn = btn;
+                    btn.classList.add('loading');
+
                     const paragraph = event.currentTarget.parentElement;
-                    // 버튼 자체를 제외한 순수 텍스트만 추출
                     const textToSpeak = paragraph.cloneNode(true);
                     textToSpeak.querySelector('.speak-btn').remove();
                     const cleanText = textToSpeak.textContent.trim();
                     
                     if (cleanText) {
-                       speakText(cleanText, currentLang, btn);
+                        try {
+                            const audioUrl = await getAudioUrl(cleanText, currentLang);
+                            playAudio(audioUrl, btn);
+                        } catch (error) {
+                            btn.classList.remove('loading');
+                            activeBtn = null;
+                        }
+                    } else {
+                        btn.classList.remove('loading');
+                        activeBtn = null;
                     }
                 });
             });
@@ -331,6 +375,8 @@
             setLanguage(getLanguage());
             applyTranslations();
             setupSpeakButtons();
+            // 페이지 초기 렌더링을 막지 않도록 잠시 후 미리 로딩 시작
+            setTimeout(prefetchAllAudio, 100);
         }
 
         // 앱 실행
@@ -338,3 +384,4 @@
     </script>
 </body>
 </html>
+
