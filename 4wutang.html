@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 제목</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        .speak-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 8px;
+            vertical-align: middle;
+            transition: transform 0.2s;
+        }
+        .speak-btn:hover {
+            transform: scale(1.1);
+        }
+        .speak-btn.loading .speaker-icon {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        p, li {
+            line-height: 1.8;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 2rem;
+            space-y: 0.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- English Content -->
+        <div id="content-en" class="space-y-6 hidden">
+            <h1 class="text-3xl font-bold text-center text-gray-800">Si Wu Tang (四物湯)</h1>
+            
+            <p>Si Wu Tang (四物湯) consists of Dang Gui (當歸), Chuan Xiong (川芎), Shu Di Huang (熟地黃), and Bai Shao Yao (白芍藥). Si Wu Tang, like Si Jun Zi Tang and Liu Wei Di Huang Wan, is a Song Dynasty (宋代) formula.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>Si Wu Tang is a blood-tonifying formula, centered around Dang Gui, the most important herb for tonifying blood, and treats various blood deficiency. Shu Di Huang is also used for blood deficiency syndromes, but primarily tonifies yin and essence(Jing) to support the fundamental basis of blood generation. Chuan Xiong treats blood stasis caused by blood deficiency. This is a formula that simultaneously addresses the concurrent pathologies of yin deficiency, blood deficiency and blood stasis.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>Dang Gui, Bai Shao - Blood deficiency (primary issue)
+                <br>Shu Di Huang - Yin/Jing deficiency (root cause of primary issue)
+                <br>Chuan Xiong - Blood stasis (secondary result due to primary issue)
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>Chuan Xiong treats blood stasis that accompanies blood deficiency, which represents drainage within tonification (blood stasis vs blood deficiency). This serves a draining function similar to Fu Ling in Si Jun Zi Tang. If Dang Gui and Bai Shao are the main instruments playing the same melody, Chuan Xiong plays a different tune. Shu Di Huang can be compared to an instrument that is almost the same as Dang Gui and Bai Shao but provides the underlying foundation.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>In Si Wu Tang, Dang Gui serves as the king herb, while Shu Di Huang is used as king herb in formulas like Liu Wei Di Huang Wan (六味地黃丸), focusing primarily on nourishing yin. Si Wun Tang and Dang Gui more tonifies blood, white Liu Wei Di Huang Wan and Shu Di Huang tonify Yin more.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+
+            <h2>Shu Di Huang or Sheng Di Huang?</h2>
+            <p>The origin of Si Wu Tang (Song Dynasty, 960-1276 AD) is Jiao Ai Tang (膠艾湯) from the Han Dynasty (Han Dynasty, 202 BC~220 AD). Si Wu Tang can be viewed as a derivative formula of Jiao Ai Tang with E Jiao (阿膠) and Ai Ye (艾葉) removed. While Jiao Ai Tang combines blood tonification and regulation(blood stasis), Si Wu Tang focuses more on blood tonification. Alternatively, Jiao Ai Tang can be viewed as Si Wu Tang with the addition of Ai Ye and E Jiao. However, chronologically, Jiao Ai Tang preceded it by 1000 years.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>The major difference between Jiao Ai Tang and Si Wu Tang also lies in the difference between Sheng Di Huang and Shu Di Huang. Since Shu Di Huang became predominant after the Song Dynasty, the Han Dynasty formula Jiao Ai Tang used Sheng Di Huang instead of Shu Di Huang. However, in actual clinical practice now when using Jiao Ai Tang, Shu Di Huang is more commonly used. This follows the same case with Shen Qi Wan (腎氣丸). Jin Gui Yao Lue (金匱要略) simply used Sheng Di Huang in Shen Qi Wan, because Shu Di Huang was not available in Han dynasty Although Sheng Di Huang was used in Shen Qi Wan in original text, Jin Gui Yao Lue, modern clinical practice uses Shu Di Huang instead of Sheng Di Huang mostly.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>In traditional medicine classics, Shu Di Huang and Sheng Di Huang are sometimes used interchangeably in Si Wu Tang depending on the context. Thus, the use of Shu Di Huang and Sheng Di Huang is not absolutely fixed. Furen Daquan Liangfang (婦人大全良方, 1237, China) used Sheng Di Huang. Zheng Lei Ben Cao (證類本草, 1083, China) recommended Shu Di Huang for male and Sheng Di Huang for female. Hyangyak Jipsungbang (향약집성방, 1433, Korea) used Sheng Di Huang in Si Wu Tang instead of Shu Di Huang when the boils on the head are red and purple.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            
+            <h2>What is a King herb of Si Wu Tang?</h2>
+            <p>The King herb can be differed based on its perspectives.
+                <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <ul>
+                <li>Shu Di Huang is the king herb in Si Wu Tang. - Modern textbook
+                    <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+                </li>
+                <li>Dang Gui is the king herb in Si Wu Tang. - Ancient doctors used Dang Gui as a chief herb in Si Wu Tang, Shao Yao as deputy, and Di Huang as assistance. 《Ben Cao Gang Mu》 要之, 血藥不容舍當歸, 故古方四物湯以爲君, 芍藥爲臣, 地黃爲佐, 芎藭爲使也.
+                    <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+                </li>
+                <li>It depends on the seasons. - Zhu Danxi says the king herb of Si Wu Tang should be different by the seasons. 通用隨時四物湯, 春, 川芎爲君, 加防風, 夏, 芍藥爲君, 加黃芩, 秋, 地黃爲君, 加天門冬, 冬, 當歸爲君, 加桂枝. Si Wu Tang based on seasons; Spring: Chuan Xiong as the chief herb, add Fang Feng. Summer: Shao Yao as the chief herb, add Huang Qin. Autumn: Di Huang as the chief herb, add Tian Men Dong. Winter: Dang Gui as the chief herb, add Gui Zhi. 《Danxi Xinfa》
+                    <button class="speak-btn" aria-label="Read text aloud"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Korean Content -->
+        <div id="content-ko" class="space-y-6 hidden">
+            <h1 class="text-3xl font-bold text-center text-gray-800">사물탕 (四物湯)</h1>
+            
+            <p>사물탕(四物湯)은 당귀(當歸), 천궁(川芎), 숙지황(熟地黃), 백작약(白芍藥)으로 구성된다. 사물탕은 사군자탕, 육미지황환과 마찬가지로 송대(宋代) 처방이다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>사물탕은 보혈 처방으로, 혈을 보하는 가장 중요한 약재인 당귀가 중심이 되어 다양한 혈허증을 치료한다. 숙지황 또한 혈허증에 쓰이지만, 주로 음과 정(精)을 보하여 혈생성의 근본을 돕는다. 천궁은 혈허로 인한 어혈을 치료한다. 이는 음허, 혈허, 어혈이라는 동반 병리를 동시에 다루는 처방이다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>당귀, 백작약 - 혈허 (주요 문제)
+                <br>숙지황 - 음/정허 (주요 문제의 근본 원인)
+                <br>천궁 - 어혈 (주요 문제로 인한 이차적 결과)
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>천궁은 혈허에 동반된 어혈을 치료하는데, 이는 보중에 사가 있는 것이다(어혈 vs 혈허). 이는 사군자탕에서 복령과 마찬가지로 사하는 기능을 한다. 당귀와 백작약이 같은 멜로디를 연주하는 메인 악기라면, 천궁은 다른 곡조를 연주한다. 숙지황은 당귀, 백작약과 거의 같으면서도 바탕을 깔아주는 악기라고 비유할 수 있다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>사물탕에서 당귀가 군약 역할을 하는 반면, 숙지황은 육미지황환(六味地黃丸) 같은 처방에서 군약이 되어 주로 음을 보하는 데 중점을 둔다. 사물탕과 당귀는 더 혈을 보하고, 육미지황환과 숙지황은 더 음을 보한다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+
+            <h2>숙지황인가 생지황인가?</h2>
+            <p>사물탕의 기원(송대, 960-1276년)은 한대의 교애탕(膠艾湯, 한대, 기원전 202년~기원후 202년)이다. 사물탕은 교애탕에서 아교(阿膠)와 애엽(艾葉)을 뺀 파생 처방으로 볼 수 있다. 교애탕은 보혈과 조절(어혈)을 겸하지만, 사물탕은 보혈에 더 중점을 둔다. 또는 교애탕을 사물탕에 애엽과 아교를 더한 처방으로 볼 수도 있다. 그러나 시대적으로는 교애탕이 1000년을 앞선다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>교애탕과 사물탕의 주요 차이점은 생지황과 숙지황의 차이에도 있다. 숙지황이 송대 이후 주로 사용되었으므로, 한대 처방인 교애탕에는 숙지황 대신 생지황이 사용되었다. 그러나 현재 교애탕을 실제 임상에서 사용할 때는 숙지황이 더 보편적으로 사용된다. 이는 신기환(腎氣丸)과 같은 경우다. 금궤요략(金匱要略)은 단지 한대에 숙지황이 없었기 때문에 신기환에 생지황을 사용했을 뿐이다. 원전인 금궤요략에서는 신기환에 생지황이 사용되었지만, 현대 임상에서는 대부분 생지황 대신 숙지황을 사용한다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <p>전통의학 고전에서는 문맥에 따라 사물탕에서 숙지황과 생지황이 혼용되기도 한다. 따라서 숙지황과 생지황의 사용은 절대적으로 정해진 것이 아니다. 부인대전양방(婦人大全良方, 1237, 중국)은 생지황을 사용했다. 증류본초(證類本草, 1083, 중국)는 남성에게는 숙지황을, 여성에게는 생지황을 권했다. 향약집성방(향약집성방, 1433, 한국)은 머리의 종기가 붉고 자주색일 때 사물탕에서 숙지황 대신 생지황을 사용했다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            
+            <h2>군약 (King Herb of Si Wu Tang)</h2>
+            <p>사물탕의 군약은 시각에 따라 달라진다. 현대 교과서에서는 숙지황이 군약이라고 가르치지만, 이는 방제를 제대로 이해하지 못한 결과이다. 무엇이 군약인지는 전적으로 학자의 개인적인 의견일 뿐이고, 맞는 것은 없다. 여기서 중요한 것이 숙지황의 역할을 어떻게 보느가 하는 점이다. 숙지황을 보음제로 보면 당귀를 보조하는 신약이되고, 숙지황을 보혈제로 보면 군약이 될 뿐이다. 이 역시 문헌마다 다르게 기재되어 있다.
+                <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+            </p>
+            <ul>
+                <li>숙지황이 군약 - 현대 교과서의 일반적 견해
+                    <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+                </li>
+                <li>당귀가 군약 - 고대 의가들은 당귀를 군, 작약을 신, 지황을 좌, 천궁을 사로 배치하였다. 《본초강목》 “혈약은 당귀를 빼놓을 수 없으므로, 고방 사물탕에서 당귀를 군으로 삼고, 작약을 신, 지황을 좌, 천궁을 사로 삼았다.”
+                    <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+                </li>
+                <li>계절에 따라 군약이 달라짐 - 주단계(朱丹溪): 계절별로 사물탕의 군약이 달라야 한다고 주장 《단계심법(丹溪心法)》에 따른 계절별 군약 변화 봄: 천궁 → 군, 방풍 가미 여름: 작약 → 군, 황금 가미 가을: 지황 → 군, 천문동 가미 겨울: 당귀 → 군, 계지 가미
+                    <button class="speak-btn" aria-label="본문 읽어주기"><svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg></button>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "Si Wu Tang | Interactive TCM"
+            },
+            ko: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "사물탕 | Interactive TCM"
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+        let currentAudio = null;
+        let activeBtn = null;
+        const audioPromiseCache = new Map(); // 오디오 프라미스 캐시
+
+        // --- 언어 관련 함수 ---
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            
+            const url = new URL(window.location);
+            url.searchParams.set('lang', newLang);
+            window.history.pushState({}, '', url);
+
+            setLanguage(newLang);
+            applyTranslations();
+            // 변경된 언어의 오디오를 미리 로딩합니다.
+            prefetchAllAudio();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            const contentKo = document.getElementById('content-ko');
+            const contentEn = document.getElementById('content-en');
+
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+                contentKo.classList.remove('hidden');
+                contentEn.classList.add('hidden');
+            } else {
+                headerLink.href = 'index.html';
+                contentEn.classList.remove('hidden');
+                contentKo.classList.add('hidden');
+            }
+        }
+        
+        // ==================================================
+        // TTS (Text-to-Speech) 기능
+        // ==================================================
+        const apiKey = ""; // API 키는 비워두세요. 실행 환경에서 자동으로 제공됩니다.
+
+        // --- WAV 변환 헬퍼 함수 ---
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcmData, sampleRate) {
+            const pcm16 = new Int16Array(pcmData);
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+            const blockAlign = numChannels * bitsPerSample / 8;
+            const dataSize = pcm16.length * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(44 + i * 2, pcm16[i], true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+        
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        // --- 핵심 오디오 생성 및 캐싱 함수 ---
+        function getAudioUrl(text, lang) {
+            const cacheKey = `${lang}::${text}`;
+            if (audioPromiseCache.has(cacheKey)) {
+                return audioPromiseCache.get(cacheKey);
+            }
+
+            const audioPromise = new Promise(async (resolve, reject) => {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: text }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: lang === 'ko' ? "Kore" : "Puck" }
+                            }
+                        }
+                    }
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) throw new Error(`API call failed: ${response.status}`);
+
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType;
+
+                    if (audioData && mimeType?.startsWith("audio/")) {
+                        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const wavBlob = pcmToWav(pcmData, sampleRate);
+                        const audioUrl = URL.createObjectURL(wavBlob);
+                        resolve(audioUrl);
+                    } else {
+                        reject(new Error("No audio data in API response."));
+                    }
+                } catch (error) {
+                    console.error('TTS Generation Error:', error);
+                    audioPromiseCache.delete(cacheKey); // 실패 시 캐시에서 제거하여 재시도 가능하게 함
+                    reject(error);
+                }
+            });
+
+            audioPromiseCache.set(cacheKey, audioPromise);
+            return audioPromise;
+        }
+
+        // --- 오디오 미리 로딩 ---
+        function prefetchAllAudio() {
+            const contentId = `content-${currentLang}`;
+            const visibleContent = document.getElementById(contentId);
+            if (!visibleContent) return;
+
+            visibleContent.querySelectorAll('.speak-btn').forEach(btn => {
+                const parentElement = btn.parentElement;
+                const textToSpeak = parentElement.cloneNode(true);
+                textToSpeak.querySelector('.speak-btn').remove();
+                const cleanText = textToSpeak.textContent.trim();
+                
+                if (cleanText) {
+                    getAudioUrl(cleanText, currentLang).catch(() => {}); // 오류는 getAudioUrl 내부에서 처리되므로 여기서 무시
+                }
+            });
+        }
+
+        // --- 오디오 재생 및 UI 처리 ---
+        function playAudio(audioUrl, btn) {
+            currentAudio = new Audio(audioUrl);
+            
+            currentAudio.onplaying = () => {
+                btn.classList.remove('loading');
+            };
+            
+            currentAudio.onended = () => {
+                currentAudio = null;
+                if (activeBtn === btn) activeBtn = null;
+            };
+            
+            currentAudio.onerror = () => {
+                btn.classList.remove('loading');
+                console.error("Audio playback error.");
+            };
+            
+            currentAudio.play();
+        }
+
+        // --- 이벤트 리스너 설정 ---
+        function setupSpeakButtons() {
+            document.querySelectorAll('.speak-btn').forEach(btn => {
+                btn.addEventListener('click', async (event) => {
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                    }
+                    if (activeBtn) {
+                        activeBtn.classList.remove('loading');
+                    }
+
+                    activeBtn = btn;
+                    btn.classList.add('loading');
+
+                    const parentElement = event.currentTarget.parentElement;
+                    const textToSpeak = parentElement.cloneNode(true);
+                    textToSpeak.querySelector('.speak-btn').remove();
+                    const cleanText = textToSpeak.textContent.trim();
+                    
+                    if (cleanText) {
+                        try {
+                            const audioUrl = await getAudioUrl(cleanText, currentLang);
+                            playAudio(audioUrl, btn);
+                        } catch (error) {
+                            btn.classList.remove('loading');
+                            activeBtn = null;
+                        }
+                    } else {
+                        btn.classList.remove('loading');
+                        activeBtn = null;
+                    }
+                });
+            });
+        }
+        
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguage());
+            applyTranslations();
+            setupSpeakButtons();
+            // 페이지 초기 렌더링을 막지 않도록 잠시 후 미리 로딩 시작
+            setTimeout(prefetchAllAudio, 100);
+        }
+
+        // 앱 실행
+        initializeApp();
+    </script>
+</body>
+</html>
+
