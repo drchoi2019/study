@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 제목</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        .speak-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 8px;
+            vertical-align: middle;
+            transition: transform 0.2s;
+        }
+        .speak-btn:hover {
+            transform: scale(1.1);
+        }
+        .speak-btn.loading .speaker-icon {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        p {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- English Content -->
+        <div id="content-en" class="space-y-6 hidden">
+            <h1 class="text-3xl font-bold text-center text-gray-800">Si Jun Zi Tang (四君子湯)</h1>
+            <img src="4gentle_band.jpg" alt="A conceptual image representing the four herbs of Si Jun Zi Tang as a band" class="rounded-lg shadow-md mx-auto w-full max-w-lg">
+
+            <p>Si Jun Zi Tang (四君子湯) consists of Ren Shen (人蔘), Bai Zhu (白朮), Fu Ling (茯苓), and Gan Cao (甘草), making it a fundamental formula for tonifying qi. This prescription was first recorded in Hejiju Fang (和劑局方) during the Song Dynasty. Like most formulas systematized during the Song Dynasty, it is based on the Shanghan Lun (傷寒論). Si Wu Tang (四物湯) is based on Jiao Ai Tang (膠艾湯), Liu Wei Di Huang Wan (六味地黃丸) is based on Shen Qi Wan (腎氣丸), and this Si Jun Zi Tang is based on Li Zhong Wan (理中丸), also called Ren Shen Tang (人蔘湯). As the name Li Zhong Wan or Ren Shen Tang suggests, it is a formula that acts on the middle jiao (中焦), with Ren Shen as the central herb. Its composition includes Ren Shen, Bai Zhu, Gan Jiang (乾薑), and Gan Cao. When Gan Jiang is removed from Li Zhong Wan and Fu Ling is added, it becomes Si Jun Zi Tang. This reduces Li Zhong Wan's function of warming the middle jiao and instead creates Si Jun Zi Tang, a formula that treats dampness due to spleen qi deficiency.
+                <button class="speak-btn" aria-label="Read text aloud">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+            <p>Ren Shen and Bai Zhu are key herbs in Si Jun Zi Tang for strongly tonifying spleen qi, addressing the primary issue of spleen qi deficiency. Ren Shen replenishes yuan qi (元氣), and Bai Zhu strengthens spleen qi. No herb is used more frequently than Bai Zhu for supplementing spleen qi. Ren Shen differs from Bai Zhu in that it tonifies not specifically spleen qi, but rather the qi of the spleen and lungs, and more universally replenishes yuan qi.
+                <button class="speak-btn" aria-label="Read text aloud">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+            <p>When the spleen is weak, dampness may accumulate, a secondary problem resolved by Fu Ling, which also supports the tonifying effects of Ren Shen and Bai Zhu.
+                <button class="speak-btn" aria-label="Read text aloud">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+            <p>To compare this to a band, Ren Shen and Bai Zhu play roles like the vocalist or keyboard that perform the main melody. They are the members who lead the entire music. Fu Ling plays a different melody from these. It is an herb that performs a draining function within Si Jun Zi Tang, a tonifying formula. Gan Cao is like the drums. The entire melody is harmoniously performed through Gan Cao as the mediator.
+                <button class="speak-btn" aria-label="Read text aloud">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+        </div>
+
+        <!-- Korean Content -->
+        <div id="content-ko" class="space-y-6 hidden">
+            <h1 class="text-3xl font-bold text-center text-gray-800">사군자탕 (四君子湯)</h1>
+            <img src="4gentle_band.jpg" alt="사군자탕의 네 가지 약재를 밴드로 형상화한 이미지" class="rounded-lg shadow-md mx-auto w-full max-w-lg">
+            
+            <p>사군자탕은 인삼, 백출, 복령, 감초로 구성되어 있어 기를 보하는 기본 처방이다. 송나라때 화제국방에 처음 기제된 처방이다. 대두분의 송대 정리된 처방들과 마찬가지로 상한론에 기반한 처방이다. 사물탕은 교애탕에, 육미지황탕은 신기환에 기반한 처방이며, 본 사군자탕은 이중환 (혹은 인삼탕이라고 불리는)에 기반한 처방이다. 이중환, 인삼탕의 이름에서 보듯 중초에 작용하는 처방이며, 인삼이 중심이 된 처방이다. 구성은 인삼, 백출, 건강, 감초로 이루어져 있다. 이 이중환에서 건강을 빼고 복령을 추가하면 사군자탕이 된다. 이중환의 중초를 따뜻하게 하는 역할을 감소하고, 대신 비기허로 인한 습을 치료하는 처방이 사군자탕이다.
+                <button class="speak-btn" aria-label="본문 읽어주기">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+            <p>인삼(人蔘)과 백출(白朮)은 사군자탕에서 비기(脾氣)를 강하게 보하는 핵심 약재로, 비기허증이라는 주된 문제를 해결한다. 인삼은 원기를 보충하고, 백출은 비기를 강화한다. 비기를 보충하는데 백출만큼 많이 사용하는 약재는 없다. 인삼은 특정하게 비기라기 보다는 비폐의 기운, 더 보편적인 원기를 보충하는 약재로 백출과 차이점이 있다.
+                <button class="speak-btn" aria-label="본문 읽어주기">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+            <p>비(脾)가 허약할 때 습(濕)이 축적될 수 있는데, 이는 복령(茯苓)이 해결하는 이차적 문제이며, 복령은 또한 인삼과 백출의 보기 효과를 지원한다.
+                <button class="speak-btn" aria-label="본문 읽어주기">
+                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+            <p>이를 밴드에 비유하면 인삼과 백출은 메인 멜로디를 연주하는 보컬이나 키보드와 같은 역할을 한다. 전체 음악을 이끌어나가는 멤버들이다. 복령은 이들과는 다른 멜로디를 연주한다. 사군자탕이라는 보제에 사하는 역할을 하는 약제다. 감초는 드럼과 같다. 전체 멜로디가 감초라는 중개자에 의해 조화롭게 음악을 연주한다.
+                <button class="speak-btn" aria-label="본문 읽어주기">
+                   <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+                </button>
+            </p>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "Si Jun Zi Tang | Interactive TCM"
+            },
+            ko: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "사군자탕 | Interactive TCM"
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+        let currentAudio = null;
+        let activeBtn = null;
+
+        // --- 언어 관련 함수 ---
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            
+            // URL 업데이트 (페이지 새로고침 없음)
+            const url = new URL(window.location);
+            url.searchParams.set('lang', newLang);
+            window.history.pushState({}, '', url);
+
+            setLanguage(newLang);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+                document.getElementById('content-ko').classList.remove('hidden');
+                document.getElementById('content-en').classList.add('hidden');
+            } else {
+                headerLink.href = 'index.html';
+                document.getElementById('content-en').classList.remove('hidden');
+                document.getElementById('content-ko').classList.add('hidden');
+            }
+        }
+        
+        // ==================================================
+        // TTS (Text-to-Speech) 기능
+        // ==================================================
+        const apiKey = ""; // API 키는 비워두세요. 실행 환경에서 자동으로 제공됩니다.
+
+        // Base64를 ArrayBuffer로 변환
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // PCM 데이터를 WAV 형식으로 변환
+        function pcmToWav(pcmData, sampleRate) {
+            const pcm16 = new Int16Array(pcmData);
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+            const blockAlign = numChannels * bitsPerSample / 8;
+            const dataSize = pcm16.length * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            // RIFF 청크
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(view, 8, 'WAVE');
+            // "fmt " 서브 청크
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // 오디오 포맷 (1 = PCM)
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+            // "data" 서브 청크
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            // PCM 데이터 쓰기
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(44 + i * 2, pcm16[i], true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+        
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        async function speakText(text, lang, btn) {
+            // 다른 오디오가 재생 중이면 중지
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+             if (activeBtn) {
+                activeBtn.classList.remove('loading');
+            }
+
+            activeBtn = btn;
+            btn.classList.add('loading');
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{
+                    parts: [{ text: text }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                         voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: lang === 'ko' ? "Kore" : "Puck" }
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const wavBlob = pcmToWav(pcmData, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+                    
+                    currentAudio = new Audio(audioUrl);
+                    currentAudio.play();
+                    
+                    currentAudio.onended = () => {
+                        btn.classList.remove('loading');
+                        currentAudio = null;
+                        activeBtn = null;
+                    };
+                } else {
+                    console.error("No audio data found in API response.");
+                    btn.classList.remove('loading');
+                }
+            } catch (error) {
+                console.error('Error during TTS generation:', error);
+                btn.classList.remove('loading');
+            }
+        }
+        
+        function setupSpeakButtons() {
+            const buttons = document.querySelectorAll('.speak-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (event) => {
+                    const paragraph = event.currentTarget.parentElement;
+                    // 버튼 자체를 제외한 순수 텍스트만 추출
+                    const textToSpeak = paragraph.cloneNode(true);
+                    textToSpeak.querySelector('.speak-btn').remove();
+                    const cleanText = textToSpeak.textContent.trim();
+                    
+                    if (cleanText) {
+                       speakText(cleanText, currentLang, btn);
+                    }
+                });
+            });
+        }
+        
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguage());
+            applyTranslations();
+            setupSpeakButtons();
+        }
+
+        // 앱 실행
+        initializeApp();
+    </script>
+</body>
+</html>
