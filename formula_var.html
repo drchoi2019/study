@@ -153,13 +153,12 @@
             const koreanPage = target.dataset.koreanPage; // 'data-korean-page' 속성 값 가져오기
             let newUrl;
             
-            // 언어가 한국어이고, 별도의 한글 페이지가 지정된 경우
+            // 언어가 한국어이고, 별도의 한글 페이지가 지정된 경우에만 한글 페이지로 이동
             if (currentLang === 'ko' && koreanPage) {
                 newUrl = koreanPage;
             } else {
-                // 그 외의 경우, 기본 링크에 언어 파라미터를 추가
-                const langParam = currentLang === 'ko' ? '?lang=ko' : '?lang=en';
-                newUrl = baseHref + langParam;
+                // 그 외의 모든 경우 (영문 상태이거나, 한글 상태지만 별도 한글 페이지가 없는 경우)에는 기본 영문 페이지로 이동
+                newUrl = baseHref;
             }
             
             window.location.href = newUrl;
