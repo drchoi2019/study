@@ -58,9 +58,9 @@
                 <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)">Gui Zhi Tang variations</a></li>
                 <li><a href="fourgentle_v.html" class="nav-link" onclick="checkAndNavigate(event)">Si Jun Zi Tang variations</a></li>
                 <li><a href="erchentang_v.html" class="nav-link" onclick="checkAndNavigate(event)">Er Chen Tang variations</a></li>
-                <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="lwdh_variations_k.html">Liu Wei Di Huang Wan variations</a></li>
-                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="pws_var_k.html">Ping Wei San Variations</a></li>
-                <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="sinisan_var_k.html">Si Ni San Variations</a></li>
+                <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)">Liu Wei Di Huang Wan variations</a></li>
+                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)">Ping Wei San Variations</a></li>
+                <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)">Si Ni San Variations</a></li>
             </ul>
         </div>
 
@@ -71,9 +71,9 @@
                 <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)">계지탕 변방 구성</a></li>
                 <li><a href="fourgentle_v.html" class="nav-link" onclick="checkAndNavigate(event)">사군자탕 변방</a></li>
                 <li><a href="erchentang_v.html" class="nav-link" onclick="checkAndNavigate(event)">이진탕 변방</a></li>
-                <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="lwdh_variations_k.html">육미지황탕 변방</a></li>
-                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="pws_var_k.html">평위산 변방</a></li>
-                <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="sinisan_var_k.html">사역산 변방</a></li>
+                <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)">육미지황탕 변방</a></li>
+                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)">평위산 변방</a></li>
+                <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)">사역산 변방</a></li>
             </ul>
         </div>
     </main>
@@ -150,19 +150,33 @@
             event.preventDefault(); // 기본 링크 동작 방지
             const target = event.currentTarget;
             const baseHref = target.getAttribute('href');
-            const koreanPage = target.dataset.koreanPage; // 'data-korean-page' 속성 값 가져오기
             let newUrl;
-            
-            // 언어가 한국어이고, 별도의 한글 페이지가 지정된 경우에만 한글 페이지로 이동
-            if (currentLang === 'ko' && koreanPage) {
-                newUrl = koreanPage;
-            } else {
-                // 그 외의 모든 경우 (영문 상태이거나, 한글 상태지만 별도 한글 페이지가 없는 경우)에는 기본 영문 페이지로 이동
-                newUrl = baseHref;
+
+            // '_k.html'로 연결될 한글 페이지 목록
+            const specialKoreanPages = [
+                'guizhi_v.html',
+                'fourgentle_v.html',
+                'erchentang_v.html'
+            ];
+
+            if (currentLang === 'ko') {
+                if (specialKoreanPages.includes(baseHref)) {
+                    // 특별 목록에 포함된 경우, 파일명에 '_k'를 추가
+                    const filename = baseHref.substring(0, baseHref.lastIndexOf('.'));
+                    const extension = baseHref.substring(baseHref.lastIndexOf('.'));
+                    newUrl = `${filename}_k${extension}`;
+                } else {
+                    // 그 외에는 언어 파라미터를 추가
+                    newUrl = `${baseHref}?lang=ko`;
+                }
+            } else { // currentLang === 'en'
+                // 영어일 때는 항상 언어 파라미터를 추가
+                newUrl = `${baseHref}?lang=en`;
             }
             
             window.location.href = newUrl;
         }
+
 
         // --- 초기화 ---
         function initializeApp() {
