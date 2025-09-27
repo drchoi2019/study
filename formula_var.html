@@ -55,11 +55,11 @@
         <div id="content-en">
             <h1 class="text-3xl font-bold mb-6 text-gray-800">Formulas from Basic Formulas</h1>
             <ul class="space-y-3">
-                <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)">Gui Zhi Tang variations</a></li>
+                <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="guizhi_v_k.html">Gui Zhi Tang variations</a></li>
                 <li><a href="fourgentle_v.html" class="nav-link" onclick="checkAndNavigate(event)">Si Jun Zi Tang variations</a></li>
                 <li><a href="erchentang_v.html" class="nav-link" onclick="checkAndNavigate(event)">Er Chen Tang variations</a></li>
                 <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)">Liu Wei Di Huang Wan variations</a></li>
-                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)">Ping Wei San Variations</a></li>
+                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="pws_var_k.html">Ping Wei San Variations</a></li>
                 <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)">Si Ni San Variations</a></li>
             </ul>
         </div>
@@ -68,11 +68,11 @@
         <div id="content-ko" style="display: none;">
             <h1 class="text-3xl font-bold mb-6 text-gray-800">기본 처방에서 파생된 처방들</h1>
             <ul class="space-y-3">
-                <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)">계지탕 변방 구성</a></li>
+                <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="guizhi_v_k.html">계지탕 변방 구성</a></li>
                 <li><a href="fourgentle_v.html" class="nav-link" onclick="checkAndNavigate(event)">사군자탕 변방</a></li>
                 <li><a href="erchentang_v.html" class="nav-link" onclick="checkAndNavigate(event)">이진탕 변방</a></li>
                 <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)">육미지황탕 변방</a></li>
-                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)">평위산 변방</a></li>
+                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-korean-page="pws_var_k.html">평위산 변방</a></li>
                 <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)">사역산 변방</a></li>
             </ul>
         </div>
@@ -149,14 +149,17 @@
         function checkAndNavigate(event) {
             event.preventDefault(); // 기본 링크 동작 방지
             const target = event.currentTarget;
-            const destination = target.getAttribute('href');
+            const baseHref = target.getAttribute('href');
+            const koreanPage = target.dataset.koreanPage; // 'data-korean-page' 속성 값 가져오기
             let newUrl;
             
-            // 현재 언어에 따라 lang 파라미터를 명시적으로 추가
-            if (currentLang === 'ko') {
-                newUrl = destination + '?lang=ko';
+            // 언어가 한국어이고, 별도의 한글 페이지가 지정된 경우
+            if (currentLang === 'ko' && koreanPage) {
+                newUrl = koreanPage;
             } else {
-                newUrl = destination + '?lang=en';
+                // 그 외의 경우, 기본 링크에 언어 파라미터를 추가
+                const langParam = currentLang === 'ko' ? '?lang=ko' : '?lang=en';
+                newUrl = baseHref + langParam;
             }
             
             window.location.href = newUrl;
