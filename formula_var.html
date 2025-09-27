@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulas from Basic Formulas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 배경색 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: #374151;
+        }
+        .nav-link:hover {
+            background-color: #f9fafb; /* gray-50 */
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- English Content -->
+        <div id="content-en">
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">Formulas from Basic Formulas</h1>
+            <ul class="space-y-3">
+                <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)">Gui Zhi Tang variations</a></li>
+                <li><a href="fourgentle_v.html" class="nav-link" onclick="checkAndNavigate(event)">Si Jun Zi Tang variations</a></li>
+                <li><a href="erchentang_v.html" class="nav-link" onclick="checkAndNavigate(event)">Er Chen Tang variations</a></li>
+                <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)">Liu Wei Di Huang Wan variations</a></li>
+                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)">Ping Wei San Variations</a></li>
+                <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)">Si Ni San Variations</a></li>
+            </ul>
+        </div>
+
+        <!-- Korean Content -->
+        <div id="content-ko" style="display: none;">
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">기본 처방에서 파생된 처방들</h1>
+            <ul class="space-y-3">
+                <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)">계지탕 변방 구성</a></li>
+                <li><a href="fourgentle_v.html" class="nav-link" onclick="checkAndNavigate(event)">사군자탕 변방</a></li>
+                <li><a href="erchentang_v.html" class="nav-link" onclick="checkAndNavigate(event)">이진탕 변방</a></li>
+                <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)">육미지황탕 변방</a></li>
+                <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)">평위산 변방</a></li>
+                <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)">사역산 변방</a></li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                pageTitle: "Formulas from Basic Formulas",
+                headerLink: "&larr; Interactive TCM",
+            },
+            ko: {
+                pageTitle: "기본 처방에서 파생된 처방들",
+                headerLink: "&larr; Interactive TCM",
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+
+        // --- 언어 관련 함수 ---
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+
+            // 언어에 따라 콘텐츠 표시/숨김
+            const contentEn = document.getElementById('content-en');
+            const contentKo = document.getElementById('content-ko');
+
+            if (currentLang === 'en') {
+                contentEn.style.display = 'block';
+                contentKo.style.display = 'none';
+            } else {
+                contentEn.style.display = 'none';
+                contentKo.style.display = 'block';
+            }
+        }
+        
+        // ==================================================
+        // 새 앱의 기능(JavaScript)
+        // ==================================================
+        function checkAndNavigate(event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+            const target = event.currentTarget;
+            const destination = target.getAttribute('href');
+            let newUrl = destination;
+            
+            // 한국어일 경우에만 lang 파라미터 추가
+            if (currentLang === 'ko') {
+                newUrl += '?lang=ko';
+            }
+            
+            window.location.href = newUrl;
+        }
+
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguage());
+            applyTranslations();
+        }
+
+        // 앱 실행
+        initializeApp();
+    </script>
+</body>
+</html>
