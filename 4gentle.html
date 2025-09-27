@@ -21,34 +21,49 @@
             background-color: #F7F3EF;
             color: #374151; /* gray-700 */
         }
-        .speak-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            margin-left: 8px;
-            vertical-align: middle;
-            transition: transform 0.2s;
-        }
-        .speak-btn:hover {
-            transform: scale(1.1);
-        }
-        .speak-btn.loading .speaker-icon {
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-        p {
+        p, li {
             line-height: 1.8;
         }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .herb-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        .herb-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .herb-role {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4b5563;
+            margin-top: 0.25rem;
+        }
+        .formula-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .formula-card ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            space-y: 0.5rem;
+        }
+        .text-red-500 { color: #ef4444; }
+        .text-blue-500 { color: #3b82f6; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -64,57 +79,115 @@
 
     <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
         <!-- English Content -->
-        <div id="content-en" class="space-y-6 hidden">
+        <div id="content-en" class="space-y-8 hidden">
             <h1 class="text-3xl font-bold text-center text-gray-800">Si Jun Zi Tang (四君子湯)</h1>
             <img src="4gentle_band.jpg" alt="A conceptual image representing the four herbs of Si Jun Zi Tang as a band" class="rounded-lg shadow-md mx-auto w-full max-w-lg">
 
-            <p>Si Jun Zi Tang (四君子湯) consists of Ren Shen (人蔘), Bai Zhu (白朮), Fu Ling (茯苓), and Gan Cao (甘草), making it a fundamental formula for tonifying qi. This prescription was first recorded in Hejiju Fang (和劑局方) during the Song Dynasty. Like most formulas systematized during the Song Dynasty, it is based on the Shanghan Lun (傷寒論). Si Wu Tang (四物湯) is based on Jiao Ai Tang (膠艾湯), Liu Wei Di Huang Wan (六味地黃丸) is based on Shen Qi Wan (腎氣丸), and this Si Jun Zi Tang is based on Li Zhong Wan (理中丸), also called Ren Shen Tang (人蔘湯). As the name Li Zhong Wan or Ren Shen Tang suggests, it is a formula that acts on the middle jiao (中焦), with Ren Shen as the central herb. Its composition includes Ren Shen, Bai Zhu, Gan Jiang (乾薑), and Gan Cao. When Gan Jiang is removed from Li Zhong Wan and Fu Ling is added, it becomes Si Jun Zi Tang. This reduces Li Zhong Wan's function of warming the middle jiao and instead creates Si Jun Zi Tang, a formula that treats dampness due to spleen qi deficiency.
-                <button class="speak-btn" aria-label="Read text aloud">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
-            <p>Ren Shen and Bai Zhu are key herbs in Si Jun Zi Tang for strongly tonifying spleen qi, addressing the primary issue of spleen qi deficiency. Ren Shen replenishes yuan qi (元氣), and Bai Zhu strengthens spleen qi. No herb is used more frequently than Bai Zhu for supplementing spleen qi. Ren Shen differs from Bai Zhu in that it tonifies not specifically spleen qi, but rather the qi of the spleen and lungs, and more universally replenishes yuan qi.
-                <button class="speak-btn" aria-label="Read text aloud">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
-            <p>When the spleen is weak, dampness may accumulate, a secondary problem resolved by Fu Ling, which also supports the tonifying effects of Ren Shen and Bai Zhu.
-                <button class="speak-btn" aria-label="Read text aloud">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
-            <p>To compare this to a band, Ren Shen and Bai Zhu play roles like the vocalist or keyboard that perform the main melody. They are the members who lead the entire music. Fu Ling plays a different melody from these. It is an herb that performs a draining function within Si Jun Zi Tang, a tonifying formula. Gan Cao is like the drums. The entire melody is harmoniously performed through Gan Cao as the mediator.
-                <button class="speak-btn" aria-label="Read text aloud">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
+            <p>Si Jun Zi Tang is a fundamental formula for tonifying Qi, originating from the Song Dynasty. It is based on Li Zhong Wan from the Shanghan Lun, modified to treat dampness due to Spleen Qi deficiency.</p>
+
+            <div class="mt-8">
+                <div class="flex items-center justify-center space-x-2 md:space-x-4">
+                    <div class="formula-card flex-1">
+                        <h3 class="font-bold">Li Zhong Wan</h3>
+                        <ul>
+                            <li>Ren Shen</li>
+                            <li>Bai Zhu</li>
+                            <li class="font-bold text-red-500">- Gan Jiang</li>
+                            <li>Gan Cao</li>
+                        </ul>
+                    </div>
+                    <div class="text-2xl font-bold text-gray-500">&rarr;</div>
+                    <div class="formula-card flex-1">
+                        <h3 class="font-bold">Si Jun Zi Tang</h3>
+                         <ul>
+                            <li>Ren Shen</li>
+                            <li>Bai Zhu</li>
+                            <li class="font-bold text-blue-500">+ Fu Ling</li>
+                            <li>Gan Cao</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                 <h2 class="text-center text-xl font-semibold text-gray-700 mb-6">The Four Gentlemen: A Band Analogy</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div class="herb-card">
+                         <h3 class="herb-title">Ren Shen (人蔘) & Bai Zhu (白朮) 🎤🎹</h3>
+                         <p class="herb-role">Function: Tonify Spleen Qi (Vocals & Keyboard)</p>
+                         <p class="mt-2 text-gray-600">Like the lead vocalist and keyboard, these herbs perform the main function: strongly tonifying the Spleen Qi.</p>
+                     </div>
+                     <div class="herb-card">
+                         <h3 class="herb-title">Fu Ling (茯苓) 🎸</h3>
+                         <p class="herb-role">Function: Drain Dampness (Bass Guitar)</p>
+                         <p class="mt-2 text-gray-600">Playing the low-end rhythm, this herb resolves the secondary problem of dampness that accumulates when the Spleen is weak.</p>
+                     </div>
+                     <div class="herb-card col-span-1 md:col-span-2">
+                         <h3 class="herb-title">Gan Cao (甘草) 🥁</h3>
+                         <p class="herb-role">Function: Harmonization (Drums)</p>
+                         <p class="mt-2 text-gray-600">Like the drums setting the rhythm, Gan Cao mediates and harmonizes all the herbs, ensuring the entire formula works together smoothly.</p>
+                     </div>
+                 </div>
+            </div>
+            
+            <h2>Origins and Composition</h2>
+            <p>Si Jun Zi Tang (四君子湯) consists of Ren Shen (人蔘), Bai Zhu (白朮), Fu Ling (茯苓), and Gan Cao (甘草). It is derived from Li Zhong Wan (理中丸). The substitution of Gan Jiang with Fu Ling reduces the warming action and enhances the ability to resolve dampness arising from spleen deficiency.</p>
         </div>
 
         <!-- Korean Content -->
-        <div id="content-ko" class="space-y-6 hidden">
+        <div id="content-ko" class="space-y-8 hidden">
             <h1 class="text-3xl font-bold text-center text-gray-800">사군자탕 (四君子湯)</h1>
             <img src="4gentle_band.jpg" alt="사군자탕의 네 가지 약재를 밴드로 형상화한 이미지" class="rounded-lg shadow-md mx-auto w-full max-w-lg">
             
-            <p>사군자탕은 인삼, 백출, 복령, 감초로 구성되어 있어 기를 보하는 기본 처방이다. 송나라때 화제국방에 처음 기제된 처방이다. 대두분의 송대 정리된 처방들과 마찬가지로 상한론에 기반한 처방이다. 사물탕은 교애탕에, 육미지황탕은 신기환에 기반한 처방이며, 본 사군자탕은 이중환 (혹은 인삼탕이라고 불리는)에 기반한 처방이다. 이중환, 인삼탕의 이름에서 보듯 중초에 작용하는 처방이며, 인삼이 중심이 된 처방이다. 구성은 인삼, 백출, 건강, 감초로 이루어져 있다. 이 이중환에서 건강을 빼고 복령을 추가하면 사군자탕이 된다. 이중환의 중초를 따뜻하게 하는 역할을 감소하고, 대신 비기허로 인한 습을 치료하는 처방이 사군자탕이다.
-                <button class="speak-btn" aria-label="본문 읽어주기">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
-            <p>인삼(人蔘)과 백출(白朮)은 사군자탕에서 비기(脾氣)를 강하게 보하는 핵심 약재로, 비기허증이라는 주된 문제를 해결한다. 인삼은 원기를 보충하고, 백출은 비기를 강화한다. 비기를 보충하는데 백출만큼 많이 사용하는 약재는 없다. 인삼은 특정하게 비기라기 보다는 비폐의 기운, 더 보편적인 원기를 보충하는 약재로 백출과 차이점이 있다.
-                <button class="speak-btn" aria-label="본문 읽어주기">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
-            <p>비(脾)가 허약할 때 습(濕)이 축적될 수 있는데, 이는 복령(茯苓)이 해결하는 이차적 문제이며, 복령은 또한 인삼과 백출의 보기 효과를 지원한다.
-                <button class="speak-btn" aria-label="본문 읽어주기">
-                    <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
-            <p>이를 밴드에 비유하면 인삼과 백출은 메인 멜로디를 연주하는 보컬이나 키보드와 같은 역할을 한다. 전체 음악을 이끌어나가는 멤버들이다. 복령은 이들과는 다른 멜로디를 연주한다. 사군자탕이라는 보제에 사하는 역할을 하는 약제다. 감초는 드럼과 같다. 전체 멜로디가 감초라는 중개자에 의해 조화롭게 음악을 연주한다.
-                <button class="speak-btn" aria-label="본문 읽어주기">
-                   <svg class="speaker-icon w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
-                </button>
-            </p>
+            <p>사군자탕은 기(Qi)를 보하는 대표적인 처방으로, 상한론의 이중환(理中丸)에 기반을 두고 있습니다. 비기허(脾氣虛)로 인해 발생하는 습(濕)을 치료하는 데 중점을 둔 처방입니다.</p>
+
+            <div class="mt-8">
+                <div class="flex items-center justify-center space-x-2 md:space-x-4">
+                    <div class="formula-card flex-1">
+                        <h3 class="font-bold">이중환 (理中丸)</h3>
+                        <ul>
+                            <li>인삼</li>
+                            <li>백출</li>
+                            <li class="font-bold text-red-500">- 건강</li>
+                            <li>감초</li>
+                        </ul>
+                    </div>
+                    <div class="text-2xl font-bold text-gray-500">&rarr;</div>
+                    <div class="formula-card flex-1">
+                        <h3 class="font-bold">사군자탕 (四君子湯)</h3>
+                         <ul>
+                            <li>인삼</li>
+                            <li>백출</li>
+                            <li class="font-bold text-blue-500">+ 복령</li>
+                            <li>감초</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                 <h2 class="text-center text-xl font-semibold text-gray-700 mb-6">네 명의 군자: 밴드 비유</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div class="herb-card">
+                         <h3 class="herb-title">인삼 (人蔘) & 백출 (白朮) 🎤🎹</h3>
+                         <p class="herb-role">기능: 비기 보충 (보컬 & 키보드)</p>
+                         <p class="mt-2 text-gray-600">마치 밴드의 보컬과 키보드처럼, 처방의 핵심 기능인 비기(脾氣) 보충을 강력하게 수행합니다.</p>
+                     </div>
+                     <div class="herb-card">
+                         <h3 class="herb-title">복령 (茯苓) 🎸</h3>
+                         <p class="herb-role">기능: 습기 제거 (베이스 기타)</p>
+                         <p class="mt-2 text-gray-600">낮은 음으로 리듬을 잡는 베이스처럼, 비장이 허약할 때 부수적으로 쌓이는 습기(濕)를 제거하는 역할을 합니다.</p>
+                     </div>
+                     <div class="herb-card col-span-1 md:col-span-2">
+                         <h3 class="herb-title">감초 (甘草) 🥁</h3>
+                         <p class="herb-role">기능: 조화 (드럼)</p>
+                         <p class="mt-2 text-gray-600">드럼이 전체 음악의 박자를 맞추듯, 감초는 모든 약재의 효능을 조화롭게 중재하여 처방 전체가 원활하게 작용하도록 돕습니다.</p>
+                     </div>
+                 </div>
+            </div>
+
+            <h2>유래와 구성</h2>
+            <p>사군자탕(四君子湯)은 인삼(人蔘), 백출(白朮), 복령(茯苓), 감초(甘草)로 구성되어 있습니다. 이중환(理中丸)에서 건강(乾薑) 대신 복령을 사용하여, 처방의 성질이 따뜻함보다는 습기를 제거하는 쪽으로 조절되었습니다.</p>
         </div>
     </main>
 
@@ -138,9 +211,6 @@
         // --- 전역 상태 ---
         let currentLang;
         let uiStrings;
-        let currentAudio = null;
-        let activeBtn = null;
-        const audioPromiseCache = new Map(); // 오디오 프라미스 캐시
 
         // --- 언어 관련 함수 ---
         function getLanguage() {
@@ -151,7 +221,7 @@
         function setLanguage(lang) {
             currentLang = lang;
             uiStrings = languageData[currentLang];
-            document.documentElement.lang = currentLang;
+            document.documentElement.lang = lang;
         }
 
         function toggleLanguage(event) {
@@ -160,12 +230,7 @@
             
             const url = new URL(window.location);
             url.searchParams.set('lang', newLang);
-            window.history.pushState({}, '', url);
-
-            setLanguage(newLang);
-            applyTranslations();
-            // 변경된 언어의 오디오를 미리 로딩합니다.
-            prefetchAllAudio();
+            window.location.href = url.href; // Reload page to apply language
         }
 
         function applyTranslations() {
@@ -186,197 +251,10 @@
             }
         }
         
-        // ==================================================
-        // TTS (Text-to-Speech) 기능
-        // ==================================================
-        const apiKey = ""; // API 키는 비워두세요. 실행 환경에서 자동으로 제공됩니다.
-
-        // --- WAV 변환 헬퍼 함수 ---
-        function base64ToArrayBuffer(base64) {
-            const binaryString = window.atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return bytes.buffer;
-        }
-
-        function pcmToWav(pcmData, sampleRate) {
-            const pcm16 = new Int16Array(pcmData);
-            const numChannels = 1;
-            const bitsPerSample = 16;
-            const byteRate = sampleRate * numChannels * bitsPerSample / 8;
-            const blockAlign = numChannels * bitsPerSample / 8;
-            const dataSize = pcm16.length * 2;
-            const buffer = new ArrayBuffer(44 + dataSize);
-            const view = new DataView(buffer);
-
-            writeString(view, 0, 'RIFF');
-            view.setUint32(4, 36 + dataSize, true);
-            writeString(view, 8, 'WAVE');
-            writeString(view, 12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, numChannels, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, byteRate, true);
-            view.setUint16(32, blockAlign, true);
-            view.setUint16(34, bitsPerSample, true);
-            writeString(view, 36, 'data');
-            view.setUint32(40, dataSize, true);
-
-            for (let i = 0; i < pcm16.length; i++) {
-                view.setInt16(44 + i * 2, pcm16[i], true);
-            }
-
-            return new Blob([view], { type: 'audio/wav' });
-        }
-        
-        function writeString(view, offset, string) {
-            for (let i = 0; i < string.length; i++) {
-                view.setUint8(offset + i, string.charCodeAt(i));
-            }
-        }
-
-        // --- 핵심 오디오 생성 및 캐싱 함수 ---
-        function getAudioUrl(text, lang) {
-            const cacheKey = `${lang}::${text}`;
-            if (audioPromiseCache.has(cacheKey)) {
-                return audioPromiseCache.get(cacheKey);
-            }
-
-            const audioPromise = new Promise(async (resolve, reject) => {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-                const payload = {
-                    contents: [{ parts: [{ text: text }] }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: {
-                            voiceConfig: {
-                                prebuiltVoiceConfig: { voiceName: lang === 'ko' ? "Kore" : "Puck" }
-                            }
-                        }
-                    },
-                    model: "gemini-2.5-flash-preview-tts"
-                };
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!response.ok) throw new Error(`API call failed: ${response.status}`);
-
-                    const result = await response.json();
-                    const part = result?.candidates?.[0]?.content?.parts?.[0];
-                    const audioData = part?.inlineData?.data;
-                    const mimeType = part?.inlineData?.mimeType;
-
-                    if (audioData && mimeType?.startsWith("audio/")) {
-                        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
-                        const pcmData = base64ToArrayBuffer(audioData);
-                        const wavBlob = pcmToWav(pcmData, sampleRate);
-                        const audioUrl = URL.createObjectURL(wavBlob);
-                        resolve(audioUrl);
-                    } else {
-                        reject(new Error("No audio data in API response."));
-                    }
-                } catch (error) {
-                    console.error('TTS Generation Error:', error);
-                    audioPromiseCache.delete(cacheKey); // 실패 시 캐시에서 제거하여 재시도 가능하게 함
-                    reject(error);
-                }
-            });
-
-            audioPromiseCache.set(cacheKey, audioPromise);
-            return audioPromise;
-        }
-
-        // --- 오디오 미리 로딩 ---
-        function prefetchAllAudio() {
-            const contentId = `content-${currentLang}`;
-            const visibleContent = document.getElementById(contentId);
-            if (!visibleContent) return;
-
-            visibleContent.querySelectorAll('.speak-btn').forEach(btn => {
-                const paragraph = btn.parentElement;
-                const textToSpeak = paragraph.cloneNode(true);
-                textToSpeak.querySelector('.speak-btn').remove();
-                const cleanText = textToSpeak.textContent.trim();
-                
-                if (cleanText) {
-                    getAudioUrl(cleanText, currentLang).catch(() => {}); // 오류는 getAudioUrl 내부에서 처리되므로 여기서 무시
-                }
-            });
-        }
-
-        // --- 오디오 재생 및 UI 처리 ---
-        function playAudio(audioUrl, btn) {
-            currentAudio = new Audio(audioUrl);
-            
-            currentAudio.onplaying = () => {
-                btn.classList.remove('loading');
-            };
-            
-            currentAudio.onended = () => {
-                currentAudio = null;
-                if (activeBtn === btn) activeBtn = null;
-            };
-            
-            currentAudio.onerror = () => {
-                btn.classList.remove('loading');
-                console.error("Audio playback error.");
-            };
-            
-            currentAudio.play();
-        }
-
-        // --- 이벤트 리스너 설정 ---
-        function setupSpeakButtons() {
-            document.querySelectorAll('.speak-btn').forEach(btn => {
-                btn.addEventListener('click', async (event) => {
-                    if (currentAudio) {
-                        currentAudio.pause();
-                        currentAudio.currentTime = 0;
-                    }
-                    if (activeBtn) {
-                        activeBtn.classList.remove('loading');
-                    }
-
-                    activeBtn = btn;
-                    btn.classList.add('loading');
-
-                    const paragraph = event.currentTarget.parentElement;
-                    const textToSpeak = paragraph.cloneNode(true);
-                    textToSpeak.querySelector('.speak-btn').remove();
-                    const cleanText = textToSpeak.textContent.trim();
-                    
-                    if (cleanText) {
-                        try {
-                            const audioUrl = await getAudioUrl(cleanText, currentLang);
-                            playAudio(audioUrl, btn);
-                        } catch (error) {
-                            btn.classList.remove('loading');
-                            activeBtn = null;
-                        }
-                    } else {
-                        btn.classList.remove('loading');
-                        activeBtn = null;
-                    }
-                });
-            });
-        }
-        
         // --- 초기화 ---
         function initializeApp() {
             setLanguage(getLanguage());
             applyTranslations();
-            setupSpeakButtons();
-            // 페이지 초기 렌더링을 막지 않도록 잠시 후 미리 로딩 시작
-            setTimeout(prefetchAllAudio, 100);
         }
 
         // 앱 실행
