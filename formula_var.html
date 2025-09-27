@@ -122,10 +122,12 @@
             document.title = uiStrings.pageTitle;
             const headerLink = document.getElementById('header-link');
             headerLink.innerHTML = uiStrings.headerLink;
+            
+            // 헤더 링크에도 언어 파라미터를 명시적으로 추가
             if (currentLang === 'ko') {
                 headerLink.href = 'index.html?lang=ko';
             } else {
-                headerLink.href = 'index.html';
+                headerLink.href = 'index.html?lang=en';
             }
 
             // 언어에 따라 콘텐츠 표시/숨김
@@ -148,11 +150,13 @@
             event.preventDefault(); // 기본 링크 동작 방지
             const target = event.currentTarget;
             const destination = target.getAttribute('href');
-            let newUrl = destination;
+            let newUrl;
             
-            // 한국어일 경우에만 lang 파라미터 추가
+            // 현재 언어에 따라 lang 파라미터를 명시적으로 추가
             if (currentLang === 'ko') {
-                newUrl += '?lang=ko';
+                newUrl = destination + '?lang=ko';
+            } else {
+                newUrl = destination + '?lang=en';
             }
             
             window.location.href = newUrl;
@@ -169,3 +173,4 @@
     </script>
 </body>
 </html>
+
