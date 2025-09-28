@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js/id=G-QC84KCE6C1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QC84KCE6C1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지 제목</title> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 및 배경색 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
+            color: #374151; /* gray-700 */
+        }
+
+        /* 제목 & 본문 폰트 구분 */
+        h1, h2, h3 {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* 페이지 전체 제목 */
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+            color: #111827; /* gray-900 */
+        }
+        @media (min-width: 768px) {
+            .page-title {
+                font-size: 3.5rem;
+            }
+        }
+        
+        /* 콘텐츠 블록 스타일 */
+        .topic-block {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+        }
+        @media (min-width: 768px) {
+            .topic-block {
+                padding: 2.5rem;
+            }
+        }
+        
+        /* 비교 카드 컨테이너 (수정) */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 항상 좌우 2단으로 고정 */
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        @media (min-width: 768px) {
+            .comparison-container {
+                gap: 2rem;
+            }
+        }
+
+        /* 비교 카드 스타일 */
+        .comparison-card {
+            padding: 2rem;
+            border-radius: 1rem;
+            background-color: #FFFFFF;
+            border: 1px solid #F3F4F6;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .comparison-card h3 {
+            margin-top: 0;
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #111827;
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .comparison-card ul {
+            list-style-type: none;
+            padding-left: 0;
+            color: #4B5563; /* gray-600 */
+        }
+        .comparison-card li {
+            padding-left: 1.75rem;
+            position: relative;
+        }
+        .comparison-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #8B5CF6; /* violet-500 */
+            font-weight: bold;
+        }
+        
+        /* 진혈 유형 특별 블록 스타일 */
+        .types-block {
+            background-color: #FEFCE8; /* yellow-50 */
+            border-left: 5px solid #FACC15; /* yellow-400 */
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .types-block h3 {
+            margin-top: 0;
+            color: #854D0E; /* yellow-800 */
+            font-size: 1.5rem;
+            border-bottom: none;
+        }
+        .types-block ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 1.5rem;
+            columns: 2;
+            gap: 1rem;
+        }
+        .types-block li {
+            padding-left: 1.75rem;
+            position: relative;
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            break-inside: avoid-column;
+        }
+        .types-block li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            top: 1px;
+            color: #FACC15; /* yellow-400 */
+            font-weight: bold;
+        }
+
+        /* 기본 텍스트 스타일 */
+        h2 { 
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E5E7EB; /* gray-200 */
+            color: #1F2937; /* gray-800 */
+        }
+        .topic-block h2:first-of-type {
+            margin-top: 0;
+        }
+
+        p, li { 
+            line-height: 1.8;
+            margin-bottom: 1em;
+            font-size: 1.05rem;
+        }
+        
+        blockquote {
+            border-left: 5px solid #8B5CF6; /* violet-500 */
+            background-color: #F5F3FF; /* violet-50 */
+            padding: 1.5rem;
+            padding-left: 2rem;
+            margin: 0; /* blockquote is now a standalone element */
+            color: #4B5563; /* gray-600 */
+            border-radius: 0.5rem;
+            position: relative;
+            margin-bottom: 2.5rem; /* Add margin to separate from next block */
+        }
+        blockquote p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto p-4 flex-grow">
+        <!-- Korean Content -->
+        <div id="content-ko">
+            <h1 class="page-title">진혈(True Point)</h1>
+
+            <div class="topic-block">
+                <h2>정의와 개념</h2>
+                <p>진혈(True Point)은 환자의 현재 상태를 실시간으로 반영하는 "살아있는" 활성화된 경혈을 의미합니다. 이 개념은 정밀한 측정과 표준화된 경혈도를 중시하는 현대 중의학과는 근본적으로 다릅니다. 이는 의사의 감각과 촉진을 통해 진정한 혈자리를 찾는 전통 중의학의 핵심 원리입니다. 활성혈(Active points), 생혈(live points), 그리고 진혈(true points)은 모두 개인의 상태에 따라 달라지는 역동적이고 반응적인 치료 지점이라는 동일한 개념을 나타냅니다.</p>
+            </div>
+            <blockquote><p>"又以肌肉文理, 節解縫會, 宛陷之中, 及以手按之, 病者快然, 如此子細安詳用心者, 乃得眞穴耳. 《千金》"<br>살 위의 금과 뼈짬, 자개미, 마디, 우묵한 곳, 환자가 시원해 하는 곳들이 있으므로 이런 곳들을 자세하고도 세밀하게 살펴야 진짜혈을 바로잡을 수 있다[천금].</p></blockquote>
+
+            <div class="topic-block">
+                <h2>측정과 촉진의 대비</h2>
+                <h3>측정 (현대)</h3>
+                <p>현대 침술 교육은 측정 기반의 혈자리 탐색에 크게 의존하며, 시술자들은 표준화된 해부학적 기준을 사용하여 혈자리를 식별하는 법을 배웁니다. 이 측정 접근법은 고정된 해부학적 지표를 기준점으로 사용하여 일관성과 표준화를 제공합니다.</p>
+                <h3>촉진 (전통)</h3>
+                <p>진혈을 찾는 전통적 방법론은 촉진 기반의 식별법을 사용하며, 시술자는 환자의 피부에 직접 접촉하여 얻는 촉각을 통해 살아있는 혈자리를 찾아냅니다. 이 접근법은 시술자의 감각적 인식을 우선시하며, 최적의 치료 위치가 교과서적인 위치와 다를 수 있음을 인정합니다.</p>
+            </div>
+             <blockquote><p>"自古用手之法이 非不詳盡이로대 後人이 未達其意하고 徒務量穴之分寸하며 不曉動脉之應手하고"<br><br>옛 의사들이 손으로 느끼는 법을 상세히 설명했음에도 불구하고, 근래의 의사들은 단지 측정에 근거하여 혈자리를 찾는 것이 안타깝다.<br>- 허임, 『침구경험방』</p></blockquote>
+
+            <div class="comparison-container">
+                <div class="comparison-card">
+                    <h3>🔬 측정 (현대)</h3>
+                    <ul>
+                        <li>표준화된 해부학적 기준</li>
+                        <li>고정된 지표 사용</li>
+                        <li>일관성과 재현성 강조</li>
+                        <li>정적인 관점</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>🖐️ 촉진 (전통)</h3>
+                    <ul>
+                        <li>숙련된 촉각과 감각</li>
+                        <li>환자 상태에 따른 변화 감지</li>
+                        <li>개별성과 특수성 강조</li>
+                        <li>역동적인 '살아있는' 관점</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="topic-block">
+                <h2>진혈의 식별과 특징</h2>
+                <p>진혈은 치료 시작 전 수행되는 세심한 촉진을 통해 식별됩니다. 시술자는 검지 손톱 옆 모서리를 사용하여 조직의 질감, 온도, 습도, 또는 접촉과 압력에 대한 반응성의 변화를 포함한 피부 수준의 미묘한 변화를 감지합니다. 이 혈자리들은 촉각에 대한 반응성으로 특징지어지며, 종종 주변 조직과 다르게 느껴지는 부위로 나타납니다.</p>
+            </div>
+            
+            <div class="topic-block">
+                <h2>역동적 성질과 개인적 차이</h2>
+                <p>환자의 상태와 관계없이 고정된 위치를 유지하는 표준화된 경혈과 달리, 진혈은 환자의 현재 상태에 따라 변화하는 역동적인 특성을 보입니다. 이 혈자리들은 개인의 즉각적인 생리적, 에너지적 요구에 따라 위치, 민감도, 치료 잠재력이 변동한다는 의미에서 진정으로 "살아있습니다."</p>
+            </div>
+            
+            <div class="types-block">
+                <h3>진혈(True Point)의 유형</h3>
+                <ul>
+                    <li>움푹한 점(Hollow Points)</li>
+                    <li>주변부위 촉진상 연한곳</li>
+                    <li>질감이 다른 곳</li>
+                    <li>긴장된 부위 / 결절</li>
+                    <li>통증 유발 지점</li>
+                    <li>환자가 시원해 하는 곳</li>
+                    <li>뼈와 뼈 사이</li>
+                    <li>근육사이 움푹한곳</li>
+                    <li>생리적 변화가 있는 곳</li>
+                </ul>
+            </div>
+
+            <div class="topic-block">
+                <h2>결론</h2>
+                <p>진혈 접근법은 경혈이 정적인 존재가 아닌 동적인 존재라고 제안합니다. 오늘날 흔히 사용되는 정밀한 경혈도와 신체 측정법은 현대 중의학의 산물이며, 이는 진혈을 찾는 전통적 접근법과는 다릅니다. 전통 시대의 경혈도는 단지 대략적인 위치만을 제시하는 개략도에 가까웠으며, 실제 치료점인 진혈은 반드시 환자의 즉각적인 상태에 대한 직접적인 촉진과 평가를 통해 결정되어야 했습니다. 궁극적으로 진혈 방법론은 전통 침구학의 지혜를 존중하면서 근본적인 촉진 기술로의 회귀를 의미합니다.</p>
+            </div>
+        </div>
+
+        <!-- English Content -->
+        <div id="content-en">
+            <h1 class="page-title">True Point (진혈)</h1>
+
+            <div class="topic-block">
+                <h2>Definition and Concept</h2>
+                <p>True Point refers to "living" activated acupoints that reflect the patient's current state in real-time. This concept is fundamentally different from modern Traditional Chinese Medicine (TCM), which emphasizes precise measurements and standardized acupoint charts. It represents the core principle of traditional Chinese medicine - finding genuine acupoints through the physician's sensory perception and palpation. Active points, live points, and true points all represent the same concept of dynamic and responsive treatment points that vary according to individual conditions.</p>
+            </div>
+            <blockquote><p>"又以肌肉文理, 節解縫會, 宛陷之中, 及以手按之, 病者快然, 如此子細安詳用心者, 乃得眞穴耳. 《千金》"<br><br>"There are muscle patterns, bone joints, seams, nodes, and depressed areas on the flesh, as well as places where patients feel relief when pressed. By examining these areas carefully and in detail, one can properly identify true points."<br>- Sun Simiao, "Qian Jin Yao Fang"</p></blockquote>
+            
+            <div class="topic-block">
+                <h2>Measurement and Palpation</h2>
+                 <h3>Measurement (Modern)</h3>
+                <p>Modern acupuncture education heavily relies on measurement-based acupoint location, where practitioners learn to identify points using standardized anatomical landmarks. This measurement approach provides consistency and standardization across practitioners and patients.</p>
+                <h3>Palpation (Traditional)</h3>
+                <p>The traditional methodology for finding true points uses palpation-based identification, where practitioners locate living acupoints through tactile sensations. This approach prioritizes the practitioner's sensory perception over predetermined measurements, acknowledging that optimal treatment locations may differ from textbook positions.</p>
+            </div>
+             <blockquote><p>"自古用手之法이 非不詳盡이로대 後人이 未達其意하고 徒務量穴之分寸하며 不曉動脉之應手하고"<br><br>"Although ancient physicians explained hand techniques in detail, it is regrettable that recent physicians only seek acupoints based on measurements."<br>- Heo Im, "Acupuncture and Moxibustion Experience Prescriptions"</p></blockquote>
+
+            <div class="comparison-container">
+                <div class="comparison-card">
+                    <h3>🔬 Measurement (Modern)</h3>
+                    <ul>
+                        <li>Standardized anatomical landmarks</li>
+                        <li>Use of fixed reference points</li>
+                        <li>Emphasis on consistency & reproducibility</li>
+                        <li>A static perspective</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>🖐️ Palpation (Traditional)</h3>
+                    <ul>
+                        <li>Skilled touch and perception</li>
+                        <li>Detecting changes based on patient's state</li>
+                        <li>Emphasis on individuality & specificity</li>
+                        <li>A dynamic, "living" perspective</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="topic-block">
+                <h2>Identification and Characteristics</h2>
+                <p>True points are identified through careful palpation performed before treatment begins. Practitioners use the edge of their index fingernail to detect subtle changes at the skin level, including variations in tissue texture, temperature, moisture, or responsiveness to contact and pressure. These points are characterized by their responsiveness to touch, often appearing as areas that feel different from surrounding tissues.</p>
+            </div>
+            
+            <div class="topic-block">
+                <h2>Dynamic Nature and Individual Differences</h2>
+                <p>Unlike standardized acupoints that maintain fixed locations regardless of patient condition, true points exhibit dynamic characteristics that change according to the patient's current state. These points are truly "alive" in the sense that their location, sensitivity, and therapeutic potential fluctuate according to individual immediate physiological and energetic needs.</p>
+            </div>
+            
+            <div class="types-block">
+                <h3>Types of True Points</h3>
+                <ul>
+                    <li>Hollow Points</li>
+                    <li>Soft Spots</li>
+                    <li>Textural Anomalies</li>
+                    <li>Tense Areas / Nodules</li>
+                    <li>Trigger Points</li>
+                    <li>Points of Relief</li>
+                    <li>Inter-osseous Spaces</li>
+                    <li>Muscular Depressions</li>
+                    <li>Physiological Changes</li>
+                </ul>
+            </div>
+
+            <div class="topic-block">
+                <h2>Conclusion</h2>
+                <p>The true point approach suggests that acupoints are dynamic rather than static entities. The precise acupoint charts and body measurement methods commonly used today are products of modern TCM, which differs from the traditional approach to finding true points. Acupoint charts from traditional times were closer to rough sketches that only indicated approximate locations, and actual therapeutic points - true points - had to be determined through direct palpation and assessment of the patient's immediate condition. Ultimately, the true point methodology signifies a return to fundamental palpation techniques while respecting the wisdom of traditional acupuncture and moxibustion.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 mt-12 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 언어 데이터 ---
+        const languageData = {
+            en: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "True Point (진혈)",
+            },
+            ko: {
+                headerLink: "&larr; Interactive TCM",
+                pageTitle: "진혈 (True Point)",
+            }
+        };
+
+        // --- 전역 상태 ---
+        let currentLang;
+        let uiStrings;
+
+        // --- 언어 관련 함수 ---
+        function getLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('lang') === 'ko' ? 'ko' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            uiStrings = languageData[currentLang];
+            document.documentElement.lang = currentLang;
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'en' ? 'ko' : 'en';
+            setLanguage(newLang);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            document.title = uiStrings.pageTitle;
+            const headerLink = document.getElementById('header-link');
+            headerLink.innerHTML = uiStrings.headerLink;
+            if (currentLang === 'ko') {
+                headerLink.href = 'index.html?lang=ko';
+            } else {
+                headerLink.href = 'index.html';
+            }
+            renderContent();
+        }
+        
+        // ==================================================
+        // 새 앱 기능
+        // ==================================================
+        function renderContent() {
+            const contentKo = document.getElementById('content-ko');
+            const contentEn = document.getElementById('content-en');
+
+            if (currentLang === 'ko') {
+                contentKo.style.display = 'block';
+                contentEn.style.display = 'none';
+            } else {
+                contentKo.style.display = 'none';
+                contentEn.style.display = 'block';
+            }
+        }
+
+        // --- 초기화 ---
+        function initializeApp() {
+            setLanguage(getLanguage());
+            applyTranslations();
+            renderContent(); 
+        }
+
+        // 앱 실행
+        initializeApp();
+    </script>
+</body>
+</html>
+
