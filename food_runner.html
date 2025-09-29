@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,7 +70,7 @@
             height: 28px;
             border: none;
             background-color: transparent;
-            color: #555555; /* MODIFIED: Toned down color */
+            color: #555555;
             border-radius: 0.5rem;
             font-size: 0.9rem;
             font-weight: bold;
@@ -153,23 +152,25 @@
     <div id="helpModal" class="hidden">
         <div class="modal-content">
              <div id="help-content-en">
-                <ul class="help-list">
-                    <li><b>Normal State</b>: Eating COLD food is GAME OVER. Eat HOT food to enter Overheated state.</li>
-                    <li><b>Overheated State</b>: You run faster. Eating HOT food is GAME OVER. Eat 1 COLD food to return to normal.</li>
-                </ul>
-            </div>
-            <div id="help-content-ko" style="display: none;">
-                <ul class="help-list">
-                    <li><b>보통 상태</b>: COLD 음식 섭취 시 게임오버. HOT 음식을 먹으면 과열 상태가 됩니다.</li>
-                    <li><b>과열 상태</b>: 더 빨리 달립니다. HOT 음식 섭취 시 게임오버. COLD 음식 1개로 보통 상태로 돌아갑니다.</li>
-                </ul>
-            </div>
+                 <ul class="help-list">
+                    <li><b>Normal State (Gray Hat)</b>: Eat HOT food for a RED hat, or COLD food for a BLUE hat.</li>
+                    <li><b>Hot State (Red Hat)</b>: You run faster. Eating another HOT food is GAME OVER. Eat COLD food to return to normal.</li>
+                    <li><b>Cold State (Blue Hat)</b>: Eating another COLD food is GAME OVER. Eat HOT food to return to normal.</li>
+                 </ul>
+             </div>
+             <div id="help-content-ko" style="display: none;">
+                 <ul class="help-list">
+                    <li><b>평상시 (회색 모자)</b>: 더운(HOT) 음식을 먹으면 빨간 모자, 찬(COLD) 음식을 먹으면 파란 모자가 됩니다.</li>
+                    <li><b>과열 상태 (빨간 모자)</b>: 더 빨리 달립니다. 더운 음식을 또 먹으면 게임오버. 찬 음식을 먹어 평상시로 돌아가세요.</li>
+                    <li><b>냉각 상태 (파란 모자)</b>: 찬 음식을 또 먹으면 게임오버. 더운 음식을 먹어 평상시로 돌아가세요.</li>
+                 </ul>
+             </div>
         </div>
     </div>
 
     <script>
         // --- PRE-EXISTING SETUP (Language, Food Data, etc.) ---
-        let currentLanguage = 'en'; // Default language is now English
+        let currentLanguage = 'en';
         const textData = {
             ko: { restart: "다시 시작", paused: "일시정지" },
             en: { restart: "RESTART", paused: "PAUSED" }
@@ -181,12 +182,9 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         let gameState = 'pregame'; // 'pregame', 'playing', 'gameover'
-        let playerState = 'neutral';
+        let playerState = 'neutral'; // 'neutral', 'heated', 'cooled'
         let score = 0;
         let scoreTimer = 0;
-        let coolingHerbCounter = 0;
-        let neutralStateTimer = 0;
-        let distanceSinceLastFood = 0;
         let isInvincible = false; 
         let invincibilityTimer = 0; 
         let overheatDuration = 0;
@@ -211,27 +209,21 @@
         const tutorialTextData = {
             en: {
                 jump: "Use [Space] or a Click to JUMP over food.",
-                colors: "Red foods are HOT, making you faster but overheated.",
-                gameOverNormal: "RULE: Eating COLD food while normal is an instant GAME OVER.",
-                gameOverHeated: "RULE: Eating HOT food while overheated is also an instant GAME OVER.",
-                autoOverheat: "Running for a while will cause you to Overheat (red hat).",
-                foodOverheat: "Eating a HOT food will also make you Overheat.",
-                coolDown: "When Overheated, eat a COLD food to cool down.",
-                normalGameOverIngame: "Remember: In Normal State, eating a COLD food is an instant GAME OVER.",
-                heatedWarning: "OVERHEATED! Eat 1 COLD food to cool down.",
+                intro: "Eat HOT food (red) for a RED hat, and COLD food (blue) for a BLUE hat.",
+                redRule: "With a RED hat, eating another HOT food is GAME OVER.",
+                blueRule: "With a BLUE hat, eating another COLD food is GAME OVER.",
+                heatedWarning: "RED HAT! Avoid HOT food.",
+                cooledWarning: "BLUE HAT! Avoid COLD food.",
                 colorBlindWarning: "The colors are fading! Remember which foods are hot and cold.",
                 keepRunning: "Trust your instincts and survive as long as you can!"
             },
             ko: {
                 jump: "[Space] 또는 클릭으로 음식을 뛰어넘으세요.",
-                colors: "붉은 음식은 HOT, 속도가 빨라지지만 과열됩니다.",
-                gameOverNormal: "규칙: 평소에 COLD 음식을 먹으면 즉시 게임오버입니다.",
-                gameOverHeated: "규칙: 과열 상태에서 HOT 음식을 먹어도 즉시 게임오버입니다.",
-                autoOverheat: "일정시간 달리면 과열상태(빨간 모자)가 됩니다.",
-                foodOverheat: "열성의 음식을 먹어도 과열상태가 됩니다.",
-                coolDown: "과열상태가 되면 찬 음식을 먹어서 열을 식히세요.",
-                normalGameOverIngame: "기억하세요: 보통 상태에서 찬 음식을 먹으면 바로 게임오버입니다.",
-                heatedWarning: "과열 상태! COLD 음식 1개로 열을 식히세요.",
+                intro: "HOT 음식(빨강)은 빨간 모자, COLD 음식(파랑)은 파란 모자가 됩니다.",
+                redRule: "빨간 모자 상태에서 HOT 음식을 또 먹으면 게임오버입니다.",
+                blueRule: "파란 모자 상태에서 COLD 음식을 또 먹으면 게임오버입니다.",
+                heatedWarning: "빨간 모자! 더운 음식을 피하세요.",
+                cooledWarning: "파란 모자! 찬 음식을 피하세요.",
                 colorBlindWarning: "색이 사라집니다! 어떤 음식이 뜨겁고 차가운지 기억하세요.",
                 keepRunning: "당신의 직감을 믿고 최대한 오래 달려보세요!"
             }
@@ -240,11 +232,9 @@
         let currentTutorialMessage = null;
         let tutorialTimer = 0;
         let tutorialAlpha = 0;
-        let tutorialFlags = { heatedMessageShown: false, score90MessageShown: false };
+        let tutorialFlags = { redHatWarningShown: false, blueHatWarningShown: false, score90MessageShown: false };
         
-        const pregameTutorials = [ { key: "jump", duration: 300 }, { key: "colors", duration: 330 }, { key: "gameOverNormal", duration: 360 }, { key: "gameOverHeated", duration: 360 } ];
-        const ingameTutorials = [ { key: "autoOverheat", duration: 360 }, { key: "foodOverheat", duration: 360 }, { key: "coolDown", duration: 360 }, { key: "normalGameOverIngame", duration: 360 } ];
-        
+        const pregameTutorials = [ { key: "jump", duration: 300 }, { key: "intro", duration: 330 }, { key: "redRule", duration: 360 }, { key: "blueRule", duration: 360 } ];
         
         // --- PIXEL TEXT ART ---
         const pixelArtFont = {
@@ -263,7 +253,15 @@
 
         // --- DRAW FUNCTIONS ---
         function drawPixelArtPlayer() {
-            let faceColor = (playerState === 'heated') ? '#d32f2f' : '#808080';
+            let faceColor;
+            if (playerState === 'heated') {
+                faceColor = '#d32f2f'; // Red
+            } else if (playerState === 'cooled') {
+                faceColor = '#1976d2'; // Blue
+            } else { // neutral
+                faceColor = '#808080'; // Gray
+            }
+            
             const clothesColor = '#555555';
             const currentArt = playerArt[Math.floor(player.animationFrame / 10) % playerArt.length];
             ctx.save();
@@ -305,7 +303,7 @@
             }
         }
         function drawScore() {
-            ctx.fillStyle = '#555555'; // MODIFIED: Toned down color
+            ctx.fillStyle = '#555555';
             ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText(`${score}m`, player.x + player.width / 2, player.y - 10);
@@ -323,7 +321,7 @@
                 const messageText = tutorialTextData[currentLanguage][currentTutorialMessage.key];
                 ctx.save();
                 ctx.globalAlpha = tutorialAlpha;
-                ctx.fillStyle = '#555555'; // MODIFIED: Toned down color
+                ctx.fillStyle = '#555555';
                 ctx.font = 'bold 16px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText(messageText, canvas.width / 2, 40);
@@ -334,7 +332,7 @@
             ctx.fillStyle = color;
             let currentX = startX;
             const textWidth = (text.length * 6 - 1) * pixelSize;
-            currentX = startX - textWidth / 2; // Center the text
+            currentX = startX - textWidth / 2;
 
             for (let char of text) {
                 const matrix = pixelArtFont[char];
@@ -346,7 +344,7 @@
                         }
                     }
                 }
-                currentX += matrix[0].length * pixelSize + pixelSize; // Add spacing
+                currentX += matrix[0].length * pixelSize + pixelSize;
             }
             startTextBounds.x = startX - textWidth / 2;
             startTextBounds.y = startY;
@@ -395,12 +393,13 @@
             const herbData = group[Math.floor(Math.random() * group.length)];
             const lastHerbX = herbs.length > 0 ? herbs[herbs.length - 1].x : 0;
             const spawnX = Math.max(canvas.width, lastHerbX + 400 + Math.random() * 400);
-            herbs.push({ x: spawnX, y: GROUND_Y + player.height - 10, name: herbData, group: isGroupA ? 'A' : 'B', awardedJumpPoints: false });
+            herbs.push({ x: spawnX, y: GROUND_Y + player.height - 10, name: herbData, group: isGroupA ? 'A' : 'B' });
         }
         function jump() {
             if (!player.isJumping && (gameState === 'playing' || gameState === 'pregame') && !isPaused) {
                 player.isJumping = true;
                 player.vy = JUMP_STRENGTH;
+                playSound('jump');
             }
         }
 
@@ -432,6 +431,17 @@
                     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
                     oscillator.start(audioContext.currentTime);
                     oscillator.stop(audioContext.currentTime + 0.5);
+                } else if (type === 'jump') {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.15);
                 }
             } catch (error) {
                 console.log('Audio not supported');
@@ -445,9 +455,6 @@
             playerState = 'neutral';
             score = 0;
             scoreTimer = 0;
-            coolingHerbCounter = 0;
-            neutralStateTimer = 0;
-            distanceSinceLastFood = 0;
             isInvincible = false;
             invincibilityTimer = 0;
             overheatDuration = 0;
@@ -455,9 +462,7 @@
             herbs = [];
             tutorialMessages = [];
             currentTutorialMessage = null;
-            tutorialFlags = { heatedMessageShown: false, score90MessageShown: false };
-            
-            showTutorialMessages([...ingameTutorials]);
+            tutorialFlags = { redHatWarningShown: false, blueHatWarningShown: false, score90MessageShown: false };
             
             spawnHerb();
         }
@@ -504,26 +509,18 @@
                     scoreTimer++;
                     if (scoreTimer >= 20) {
                         score++;
-                        if (playerState === 'neutral') {
-                            distanceSinceLastFood++;
-                        }
                         scoreTimer = 0;
-                    }
-
-                    if (score >= 100 && playerState === 'neutral' && distanceSinceLastFood >= 50) {
-                        playerState = 'heated';
-                        overheatDuration = 0;
-                        distanceSinceLastFood = 0;
-                        isInvincible = true;
-                        invincibilityTimer = 60; // 60 frames = 1 second
                     }
 
                     let speedMultiplier = 1.0;
                     if (playerState === 'heated') {
                         overheatDuration++;
-                        const gradualBoost = overheatDuration / 1000; // Gradually increases speed
+                        const gradualBoost = overheatDuration / 1000;
                         speedMultiplier *= 1.4 + gradualBoost; 
+                    } else {
+                        overheatDuration = 0; // Reset duration if not heated
                     }
+
                     if (score >= 100) {
                         const distanceIncrements = Math.floor((score - 100) / 50);
                         speedMultiplier *= Math.pow(1.2, distanceIncrements); 
@@ -535,10 +532,6 @@
                     if (herbs.length > 0 && herbs[0].x < -100) herbs.shift();
                     if (herbs.length < 3) spawnHerb();
                     
-                    if (playerState === 'heated' && !tutorialFlags.heatedMessageShown) {
-                        tutorialFlags.heatedMessageShown = true;
-                        showTutorialMessages([{ key: "heatedWarning", duration: 360 }]);
-                    }
                     if (score >= 200 && !tutorialFlags.score90MessageShown) {
                         tutorialFlags.score90MessageShown = true;
                         showTutorialMessages([{ key: "colorBlindWarning", duration: 360 }, { key: "keepRunning", duration: 270 }]);
@@ -546,26 +539,44 @@
                     
                     herbs.forEach((herb, index) => {
                         if (!isInvincible && player.x < herb.x + ctx.measureText(herb.name[currentLanguage]).width && player.x + player.width > herb.x && player.y + player.height > herb.y - 20 && !player.isJumping) {
-                            distanceSinceLastFood = 0;
+                            
+                            let previousState = playerState;
+
                             if (playerState === 'neutral') {
-                                if (herb.group === 'A') { 
-                                    playerState = 'heated'; 
-                                    overheatDuration = 0;
-                                    herbs.splice(index, 1); 
-                                    playSound('positive');
-                                    isInvincible = true;
-                                    invincibilityTimer = 60;
-                                } else { 
-                                    endGame(); 
+                                if (herb.group === 'A') { // Hot food
+                                    playerState = 'heated';
+                                } else { // Cold food
+                                    playerState = 'cooled';
                                 }
-                            } else { // playerState is 'heated'
-                                if (herb.group === 'B') { 
+                            } else if (playerState === 'heated') {
+                                if (herb.group === 'A') { // Hot food again
+                                    endGame();
+                                } else { // Cold food
                                     playerState = 'neutral';
-                                    overheatDuration = 0;
-                                    herbs.splice(index, 1); 
-                                    playSound('positive');
-                                } else { 
-                                    endGame(); 
+                                }
+                            } else if (playerState === 'cooled') {
+                                if (herb.group === 'B') { // Cold food again
+                                    endGame();
+                                } else { // Hot food
+                                    playerState = 'neutral';
+                                }
+                            }
+
+                            if (gameState !== 'gameover') {
+                                playSound('positive');
+                                herbs.splice(index, 1); 
+                                isInvincible = true;
+                                invincibilityTimer = 60;
+
+                                // Show tutorial only on state change
+                                if (previousState !== playerState) {
+                                    if (playerState === 'heated' && !tutorialFlags.redHatWarningShown) {
+                                        showTutorialMessages([{ key: "heatedWarning", duration: 300 }]);
+                                        tutorialFlags.redHatWarningShown = true;
+                                    } else if (playerState === 'cooled' && !tutorialFlags.blueHatWarningShown) {
+                                         showTutorialMessages([{ key: "cooledWarning", duration: 300 }]);
+                                        tutorialFlags.blueHatWarningShown = true;
+                                    }
                                 }
                             }
                         }
@@ -590,7 +601,7 @@
             drawPixelArtPlayer();
             drawTutorialMessage();
             if (gameState === 'pregame') {
-                drawPixelText('START', canvas.width / 2, canvas.height - 40, 4, '#555555'); // MODIFIED: Toned down color
+                drawPixelText('START', canvas.width / 2, canvas.height - 40, 4, '#555555');
             }
             
             animationFrameId = requestAnimationFrame(gameLoop);
@@ -635,7 +646,7 @@
         
         function initialize() {
             document.getElementById('helpModal').classList.add('hidden');
-            setLanguage('en'); // Set default to English
+            setLanguage('en');
             player.y = GROUND_Y;
             showTutorialMessages([...pregameTutorials]);
             gameLoop();
@@ -645,3 +656,4 @@
     </script>
 </body>
 </html>
+
