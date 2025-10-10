@@ -5,18 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한의학 효능 퀴즈</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap');
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Noto Sans KR', 'Poppins', sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Added for header */
+            justify-content: flex-start; /* Aligned to start for header */
             align-items: center;
             min-height: 100vh;
             background-color: #f0f2f5;
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Adjusted padding */
             box-sizing: border-box;
         }
+        #page-header {
+            width: 100%;
+            max-width: 48rem;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #header-link {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: rgb(55, 65, 81);
+            text-decoration: none;
+        }
+        .lang-toggle-btn {
+            background-color: #F7F3EF;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: bold;
+            color: #4A4A4A; /* text-stone-700 */
+            border-radius: 0.375rem; /* rounded-md */
+            transition-property: background-color, border-color, color, fill, stroke; /* transition-colors */
+            transition-duration: 150ms; /* duration-150 */
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* ease-in-out */
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lang-toggle-btn:hover {
+            background-color: #e2dcd7; /* hover:bg-stone-300 */
+        }
+
         .container {
             background-color: white;
             padding: 30px;
@@ -25,6 +62,7 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
+            margin-top: 20px; /* Adjusted margin-top */
         }
         h1 {
             color: #333;
@@ -44,6 +82,11 @@
             background-color: #fdf2f2;
             padding: 5px 12px;
             border-radius: 20px;
+        }
+        .quiz-header #timer::before {
+            content: var(--timer-prefix); /* Use CSS variable for prefix */
+            font-weight: normal;
+            color: #555;
         }
         #question-container {
             margin-bottom: 20px;
@@ -105,18 +148,26 @@
     </style>
 </head>
 <body>
+    <header id="page-header">
+        <a href="index.html" id="header-link">
+            &larr; <span data-key="interactiveTCM">Interactive TCM</span>
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="lang-toggle-btn" id="lang-toggle-button">
+            Kor / Eng
+        </a>
+    </header>
 
     <div class="container">
         <div id="start-screen">
-            <h1>한의학 효능 퀴즈</h1>
-            <p>24개의 문항 중 무작위로 5문제가 출제됩니다.<br></p>
-            <button id="start-btn" class="start-btn">퀴즈 시작</button>
+            <h1 data-key="quizTitle">한의학 효능 퀴즈</h1>
+            <p data-key="quizDescription">24개의 문항 중 무작위로 7문제가 출제됩니다.<br>각 문제의 제한 시간은 15초입니다.</p>
+            <button id="start-btn" class="start-btn" data-key="startQuiz">퀴즈 시작</button>
         </div>
 
         <div id="quiz-screen" class="hide">
             <div class="quiz-header">
                 <div id="question-counter"></div>
-                <div id="timer">10</div>
+                <div id="timer">15</div>
             </div>
             <div id="question-container">
                 <div id="question-text">Question</div>
@@ -125,38 +176,65 @@
         </div>
         
         <div id="result-screen" class="hide">
-            <h1>퀴즈 결과</h1>
-            <p id="score-text">5 문제 중 0 문제를 맞혔습니다!</p>
-            <button id="restart-btn" class="start-btn">다시하기</button>
+            <h1 data-key="quizResultTitle">퀴즈 결과</h1>
+            <p id="score-text"></p>
+            <button id="restart-btn" class="start-btn" data-key="restartQuiz">다시하기</button>
         </div>
     </div>
 
     <script>
         const allQuestions = [
-            { question: "다음 중 **계지(육계)**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "발한해표, 온경지통", "보기익기, 승양고표", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구"], answer: "발한해표, 온경지통" },
-            { question: "다음 중 **생강(건강)**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 이수삼습", "온중산한, 해표지한", "청열사화, 해독소종", "자음윤폐, 생진지갈", "활혈조경, 지통산결", "화담지해, 강역지구"], answer: "온중산한, 해표지한" },
-            { question: "다음 중 **황기**의 주요 효능으로 가장 알맞은 것은?", options: ["보기익기, 승양고표", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "보기익기, 승양고표" },
-            { question: "다음 중 **인삼**의 주요 효능으로 가장 알맞은 것은?", options: ["보기익기, 생진안신", "청열사화, 제습소종", "보혈조경, 활혈지통", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보기익기, 생진안신" },
-            { question: "다음 중 **백출(창출)**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 조습이수", "청열사화, 해독소종", "보혈조경, 윤조활혈", "자음윤폐, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보기건비, 조습이수" },
-            { question: "다음 중 **복령**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 이수삼습", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보기건비, 이수삼습" },
-            { question: "다음 중 **숙지황**의 주요 효능으로 가장 알맞은 것은?", options: ["보혈자음, 익정전수", "보기익기, 고표지한", "청열사화, 해독소종", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보혈자음, 익정전수" },
-            { question: "다음 중 **당귀**의 주요 효능으로 가장 알맞은 것은?", options: ["보혈조경, 활혈지통", "청열조습, 제습소종", "보기익기, 건비이수", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보혈조경, 활혈지통" },
-            { question: "다음 중 **백작약(적작약)**의 주요 효능으로 가장 알맞은 것은?", options: ["양혈유간, 완급지통", "보기건비, 이수삼습", "청열해독, 사화소종", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "양혈유간, 완급지통" },
-            { question: "다음 중 **천궁**의 주요 효능으로 가장 알맞은 것은?", options: ["활혈행기, 거풍지통", "보기익기, 승양고표", "청열해독, 제습소종", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "활혈행기, 거풍지통" },
-            { question: "다음 중 **황금**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열조습, 사화해독" },
-            { question: "다음 중 **황연**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "보기건비, 이수삼습", "보혈조경, 윤조활혈", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열조습, 사화해독" },
-            { question: "다음 중 **금은화**의 주요 효능으로 가장 알맞은 것은?", options: ["청열해독, 소종산결", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열해독, 소종산결" },
-            { question: "다음 중 **연교**의 주요 효능으로 가장 알맞은 것은?", options: ["청열해독, 소종산결", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "청열해독, 소종산결" },
-            { question: "다음 중 **석고**의 주요 효능으로 가장 알맞은 것은?", options: ["청열사화, 생진지갈", "보기건비, 이수삼습", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열사화, 생진지갈" },
-            { question: "다음 중 **생지황**의 주요 효능으로 가장 알맞은 것은?", options: ["청열량혈, 자음생진", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "청열량혈, 자음생진" },
-            { question: "다음 중 **오미자**의 주요 효능으로 가장 알맞은 것은?", options: ["렴폐지해, 생진지갈", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "렴폐지해, 생진지갈" },
-            { question: "다음 중 **맥문동**의 주요 효능으로 가장 알맞은 것은?", options: ["자음윤폐, 생진지갈", "보기익기, 승양고표", "청열조습, 사화해독", "보혈조경, 활혈거어", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "자음윤폐, 생진지갈" },
-            { question: "다음 중 **갈근**의 주요 효능으로 가장 알맞은 것은?", options: ["해기생진, 승양지사", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "온리거한, 회양구역"], answer: "해기생진, 승양지사" },
-            { question: "다음 중 **반하**의 주요 효능으로 가장 알맞은 것은?", options: ["조습화담, 강역지구", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "온리거한, 회양구역"], answer: "조습화담, 강역지구" },
-            { question: "다음 중 **시호**의 주요 효능으로 가장 알맞은 것은?", options: ["소간해울, 승양거함", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "소간해울, 승양거함" },
-            { question: "다음 중 **대황**의 주요 효능으로 가장 알맞은 것은?", options: ["사하통변, 청열해독", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "사하통변, 청열해독" },
-            { question: "다음 중 **부자**의 주요 효능으로 가장 알맞은 것은?", options: ["회양구역, 보화산한", "보기익기, 승양고표", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구"], answer: "회양구역, 보화산한" }
+            { ko: { question: "다음 중 **계지(육계)**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "발한해표, 온경지통", "보기익기, 승양고표", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구"], answer: "발한해표, 온경지통" }, en: { question: "Which of the following is the most appropriate main efficacy of **Cinnamon Twig (Ramulus Cinnamomi)**?", options: ["Clears heat and dries dampness, purges fire and detoxifies", "Induces sweating to release the exterior, warms meridians to relieve pain", "Tonifies Qi and invigorates the spleen, lifts Yang and secures the exterior", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting"], answer: "Induces sweating to release the exterior, warms meridians to relieve pain" } },
+            { ko: { question: "다음 중 **생강(건강)**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 이수삼습", "온중산한, 해표지한", "청열사화, 해독소종", "자음윤폐, 생진지갈", "활혈조경, 지통산결", "화담지해, 강역지구"], answer: "온중산한, 해표지한" }, en: { question: "Which of the following is the most appropriate main efficacy of **Ginger (dried)**?", options: ["Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness", "Warms the middle and dispels cold, releases the exterior to relieve pain", "Clears heat and purges fire, detoxifies and reduces swelling", "Nourishes Yin and moistens the lungs, generates fluids to quench thirst", "Invigorates blood to regulate menstruation, relieves pain and dissipates nodules", "Transforms phlegm and stops cough, descends Qi to relieve vomiting"], answer: "Warms the middle and dispels cold, releases the exterior to relieve pain" } },
+            { ko: { question: "다음 중 **황기**의 주요 효능으로 가장 알맞은 것은?", options: ["보기익기, 승양고표", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "보기익기, 승양고표" }, en: { question: "Which of the following is the most appropriate main efficacy of **Astragalus Root**?", options: ["Tonifies Qi and invigorates Qi, lifts Yang and secures the exterior", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Purges and unblocks bowels, moistens dryness and softens hardness"], answer: "Tonifies Qi and invigorates Qi, lifts Yang and secures the exterior" } },
+            { ko: { question: "다음 중 **인삼**의 주요 효능으로 가장 알맞은 것은?", options: ["보기익기, 생진안신", "청열사화, 제습소종", "보혈조경, 활혈지통", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보기익기, 생진안신" }, en: { question: "Which of the following is the most appropriate main efficacy of **Ginseng**?", options: ["Tonifies Qi and invigorates Qi, generates fluids and calms the spirit", "Clears heat and purges fire, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood and relieves pain", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Tonifies Qi and invigorates Qi, generates fluids and calms the spirit" } },
+            { ko: { question: "다음 중 **백출(창출)**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 조습이수", "청열사화, 해독소종", "보혈조경, 윤조활혈", "자음윤폐, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보기건비, 조습이수" }, en: { question: "Which of the following is the most appropriate main efficacy of **White Atractylodes Root (Cang Zhu)**?", options: ["Tonifies Qi and strengthens the spleen, dries dampness and promotes urination", "Clears heat and purges fire, detoxifies and reduces swelling", "Nourishes blood to regulate menstruation, moistens dryness and invigorates blood", "Nourishes Yin and moistens the lungs, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Tonifies Qi and strengthens the spleen, dries dampness and promotes urination" } },
+            { ko: { question: "다음 중 **복령**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 이수삼습", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보기건비, 이수삼습" }, en: { question: "Which of the following is the most appropriate main efficacy of **Poria**?", options: ["Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness" } },
+            { ko: { question: "다음 중 **숙지황**의 주요 효능으로 가장 알맞은 것은?", options: ["보혈자음, 익정전수", "보기익기, 고표지한", "청열사화, 해독소종", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보혈자음, 익정전수" }, en: { question: "Which of the following is the most appropriate main efficacy of **Processed Rehmannia Root**?", options: ["Nourishes blood and Yin, benefits essence and marrow", "Tonifies Qi and invigorates Qi, stabilizes the exterior and stops sweating", "Clears heat and purges fire, detoxifies and reduces swelling", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Nourishes blood and Yin, benefits essence and marrow" } },
+            { ko: { question: "다음 중 **당귀**의 주요 효능으로 가장 알맞은 것은?", options: ["보혈조경, 활혈지통", "청열조습, 제습소종", "보기익기, 건비이수", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "보혈조경, 활혈지통" }, en: { question: "Which of the following is the most appropriate main efficacy of **Angelica Sinensis Root**?", options: ["Nourishes blood to regulate menstruation, invigorates blood to relieve pain", "Clears heat and dries dampness, resolves dampness and reduces swelling", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Nourishes blood to regulate menstruation, invigorates blood to relieve pain" } },
+            { ko: { question: "다음 중 **백작약(적작약)**의 주요 효능으로 가장 알맞은 것은?", options: ["양혈유간, 완급지통", "보기건비, 이수삼습", "청열해독, 사화소종", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "양혈유간, 완급지통" }, en: { question: "Which of the following is the most appropriate main efficacy of **White Peony Root (Red Peony Root)**?", options: ["Nourishes blood and soothes the liver, alleviates spasms and pain", "Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness", "Clears heat and detoxifies, purges fire and reduces swelling", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Nourishes blood and soothes the liver, alleviates spasms and pain" } },
+            { ko: { question: "다음 중 **천궁**의 주요 효능으로 가장 알맞은 것은?", options: ["활혈행기, 거풍지통", "보기익기, 승양고표", "청열해독, 제습소종", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "활혈행기, 거풍지통" }, en: { question: "Which of the following is the most appropriate main efficacy of **Chuan Xiong Rhizome**?", options: ["Invigorates blood and moves Qi, dispels wind and relieves pain", "Tonifies Qi and invigorates Qi, lifts Yang and secures the exterior", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Purges and unblocks bowels, moistens dryness and softens hardness"], answer: "Invigorates blood and moves Qi, dispels wind and relieves pain" } },
+            { ko: { question: "다음 중 **황금**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열조습, 사화해독" }, en: { question: "Which of the following is the most appropriate main efficacy of **Scutellaria Root**?", options: ["Clears heat and dries dampness, purges fire and detoxifies", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Clears heat and dries dampness, purges fire and detoxifies" } },
+            { ko: { question: "다음 중 **황연**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "보기건비, 이수삼습", "보혈조경, 윤조활혈", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열조습, 사화해독" }, en: { question: "Which of the following is the most appropriate main efficacy of **Coptis Rhizome**?", options: ["Clears heat and dries dampness, purges fire and detoxifies", "Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness", "Nourishes blood to regulate menstruation, moistens dryness and invigorates blood", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Clears heat and dries dampness, purges fire and detoxifies" } },
+            { ko: { question: "다음 중 **금은화**의 주요 효능으로 가장 알맞은 것은?", options: ["청열해독, 소종산결", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열해독, 소종산결" }, en: { question: "Which of the following is the most appropriate main efficacy of **Honeysuckle Flower**?", options: ["Clears heat and detoxifies, reduces swelling and dissipates nodules", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Clears heat and detoxifies, reduces swelling and dissipates nodules" } },
+            { ko: { question: "다음 중 **연교**의 주요 효능으로 가장 알맞은 것은?", options: ["청열해독, 소종산결", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "청열해독, 소종산결" }, en: { question: "Which of the following is the most appropriate main efficacy of **Forsythia Fruit**?", options: ["Clears heat and detoxifies, reduces swelling and dissipates nodules", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Purges and unblocks bowels, moistens dryness and softens hardness"], answer: "Clears heat and detoxifies, reduces swelling and dissipates nodules" } },
+            { ko: { question: "다음 중 **석고**의 주요 효능으로 가장 알맞은 것은?", options: ["청열사화, 생진지갈", "보기건비, 이수삼습", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "청열사화, 생진지갈" }, en: { question: "Which of the following is the most appropriate main efficacy of **Gypsum Fibrosum**?", options: ["Clears heat and purges fire, generates fluids to quench thirst", "Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Clears heat and purges fire, generates fluids to quench thirst" } },
+            { ko: { question: "다음 중 **생지황**의 주요 효능으로 가장 알맞은 것은?", options: ["청열량혈, 자음생진", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "사하통변, 윤조연견"], answer: "청열량혈, 자음생진" }, en: { question: "Which of the following is the most appropriate main efficacy of **Fresh Rehmannia Root**?", options: ["Clears heat and cools blood, nourishes Yin and generates fluids", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Purges and unblocks bowels, moistens dryness and softens hardness"], answer: "Clears heat and cools blood, nourishes Yin and generates fluids" } },
+            { ko: { question: "다음 중 **오미자**의 주요 효능으로 가장 알맞은 것은?", options: ["렴폐지해, 생진지갈", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "렴폐지해, 생진지갈" }, en: { question: "Which of the following is the most appropriate main efficacy of **Schisandra Fruit**?", options: ["Restrains lung Qi and stops cough, generates fluids to quench thirst", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Restrains lung Qi and stops cough, generates fluids to quench thirst" } },
+            { ko: { question: "다음 중 **맥문동**의 주요 효능으로 가장 알맞은 것은?", options: ["자음윤폐, 생진지갈", "보기익기, 승양고표", "청열조습, 사화해독", "보혈조경, 활혈거어", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "자음윤폐, 생진지갈" }, en: { question: "Which of the following is the most appropriate main efficacy of **Ophiopogon Root**?", options: ["Nourishes Yin and moistens the lungs, generates fluids to quench thirst", "Tonifies Qi and invigorates Qi, lifts Yang and secures the exterior", "Clears heat and dries dampness, purges fire and detoxifies", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Nourishes Yin and moistens the lungs, generates fluids to quench thirst" } },
+            { ko: { question: "다음 중 **갈근**의 주요 효능으로 가장 알맞은 것은?", options: ["해기생진, 승양지사", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "온리거한, 회양구역"], answer: "해기생진, 승양지사" }, en: { question: "Which of the following is the most appropriate main efficacy of **Pueraria Root**?", options: ["Releases the exterior and generates fluids, lifts Yang and stops diarrhea", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Releases the exterior and generates fluids, lifts Yang and stops diarrhea" } },
+            { ko: { question: "다음 중 **반하**의 주요 효능으로 가장 알맞은 것은?", options: ["조습화담, 강역지구", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "온리거한, 회양구역"], answer: "조습화담, 강역지구" }, en: { question: "Which of the following is the most appropriate main efficacy of **Pinellia Tuber**?", options: ["Dries dampness and transforms phlegm, descends rebellious Qi to stop vomiting", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Dries dampness and transforms phlegm, descends rebellious Qi to stop vomiting" } },
+            { ko: { question: "다음 중 **시호**의 주요 효능으로 가장 알맞은 것은?", options: ["소간해울, 승양거함", "보기익기, 건비이수", "청열해독, 제습소종", "보혈조경, 활혈거어", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "소간해울, 승양거함" }, en: { question: "Which of the following is the most appropriate main efficacy of **Bupleurum Root**?", options: ["Spreads liver Qi and resolves stagnation, lifts Yang and raises what has sunken", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Spreads liver Qi and resolves stagnation, lifts Yang and raises what has sunken" } },
+            { ko: { question: "다음 중 **대황**의 주요 효능으로 가장 알맞은 것은?", options: ["사하통변, 청열해독", "보기익기, 건비이수", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구", "온리거한, 회양구역"], answer: "사하통변, 청열해독" }, en: { question: "Which of the following is the most appropriate main efficacy of **Rhubarb Root**?", options: ["Purges and unblocks bowels, clears heat and detoxifies", "Tonifies Qi and invigorates Qi, strengthens the spleen and promotes urination", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting", "Warms the interior to dispel cold, restores Yang and rescues from collapse"], answer: "Purges and unblocks bowels, clears heat and detoxifies" } },
+            { ko: { question: "다음 중 **부자**의 주요 효능으로 가장 알맞은 것은?", options: ["회양구역, 보화산한", "보기익기, 승양고표", "청열해독, 제습소종", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구"], answer: "회양구역, 보화산한" }, en: { question: "Which of the following is the most appropriate main efficacy of **Aconite Root**?", options: ["Restores Yang and rescues from collapse, tonifies fire and disperses cold", "Tonifies Qi and invigorates Qi, lifts Yang and secures the exterior", "Clears heat and detoxifies, resolves dampness and reduces swelling", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting"], answer: "Restores Yang and rescues from collapse, tonifies fire and disperses cold" } }
         ];
+
+        const translations = {
+            ko: {
+                interactiveTCM: "Interactive TCM",
+                quizTitle: "한의학 효능 퀴즈",
+                quizDescription: "24개의 문항 중 무작위로 7문제가 출제됩니다.<br>각 문제의 제한 시간은 15초입니다.",
+                startQuiz: "퀴즈 시작",
+                quizResultTitle: "퀴즈 결과",
+                questionsCorrect: (correct, total) => `${total} 문제 중 ${correct} 문제를 맞혔습니다!`,
+                restartQuiz: "다시하기",
+                question: "문제",
+                of: "/",
+                timeLeft: "남은 시간: "
+            },
+            en: {
+                interactiveTCM: "Interactive TCM",
+                quizTitle: "TCM Efficacy Quiz",
+                quizDescription: "7 random questions will be selected from 24.<br>Each question has a time limit of 15 seconds.",
+                startQuiz: "Start Quiz",
+                quizResultTitle: "Quiz Results",
+                questionsCorrect: (correct, total) => `You got ${correct} out of ${total} questions correct!`,
+                restartQuiz: "Restart Quiz",
+                question: "Question",
+                of: "of",
+                timeLeft: "Time Left: "
+            }
+        };
 
         const startButton = document.getElementById('start-btn');
         const restartButton = document.getElementById('restart-btn');
@@ -168,12 +246,69 @@
         const answerButtons = document.getElementById('answer-buttons');
         const timerElement = document.getElementById('timer');
         const scoreText = document.getElementById('score-text');
+        const langToggleButton = document.getElementById('lang-toggle-button');
 
         let shuffledQuestions, currentQuestionIndex, score, timerInterval, timeLeft;
-        const QUIZ_LENGTH = 5;
-        const TIME_LIMIT = 20;
-        
-        const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
+        const QUIZ_LENGTH = 7; // 문제 수 7개로 변경
+        const TIME_LIMIT = 15; // 제한 시간 15초
+
+        let currentLanguage = 'ko'; // Default language
+
+        // Function to update all text elements based on currentLanguage
+        function updateTextContent() {
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[currentLanguage][key]) {
+                    if (key === 'quizDescription') {
+                         element.innerHTML = translations[currentLanguage][key];
+                    } else {
+                        element.innerText = translations[currentLanguage][key];
+                    }
+                }
+            });
+            // Update score text if result screen is visible
+            if (!resultScreen.classList.contains('hide')) {
+                scoreText.innerText = translations[currentLanguage].questionsCorrect(score, QUIZ_LENGTH);
+            }
+            // Update header link text
+            const headerLinkSpan = document.querySelector('#header-link span');
+            if (headerLinkSpan) {
+                headerLinkSpan.innerText = translations[currentLanguage].interactiveTCM;
+            }
+            // Update timer prefix
+            document.documentElement.style.setProperty('--timer-prefix', `"${translations[currentLanguage].timeLeft}"`);
+        }
+
+        // Language toggle handler
+        function toggleLanguage(event) {
+            event.preventDefault(); // Prevent default link behavior
+            currentLanguage = (currentLanguage === 'ko') ? 'en' : 'ko';
+            updateUrlParameter('lang', currentLanguage); // Update URL without reloading
+            updateTextContent();
+            if (!quizScreen.classList.contains('hide')) { // If quiz is active, re-render current question
+                clearInterval(timerInterval); // Stop current timer
+                showQuestion(shuffledQuestions[currentQuestionIndex]); // Re-render question with new language
+                startTimer(); // Start new timer
+            }
+        }
+
+        // Update URL parameter without reloading
+        function updateUrlParameter(key, value) {
+            const url = new URL(window.location);
+            url.searchParams.set(key, value);
+            window.history.pushState({}, '', url);
+        }
+
+        // Get language from URL parameter
+        function getLanguageFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam && (langParam === 'en' || langParam === 'ko')) {
+                currentLanguage = langParam;
+            } else {
+                currentLanguage = 'ko'; // Default to Korean if no valid parameter
+            }
+        }
 
         startButton.addEventListener('click', startQuiz);
         restartButton.addEventListener('click', startQuiz);
@@ -192,7 +327,7 @@
         function setNextQuestion() {
             resetState();
             if (currentQuestionIndex < QUIZ_LENGTH) {
-                questionCounter.innerText = `문제 ${currentQuestionIndex + 1} / ${QUIZ_LENGTH}`;
+                questionCounter.innerText = `${translations[currentLanguage].question} ${currentQuestionIndex + 1} ${translations[currentLanguage].of} ${QUIZ_LENGTH}`;
                 showQuestion(shuffledQuestions[currentQuestionIndex]);
                 startTimer();
             } else {
@@ -224,13 +359,15 @@
             }, 1500);
         }
 
-        function showQuestion(question) {
-            questionText.innerHTML = question.question.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            question.options.forEach((option, index) => {
+        function showQuestion(questionData) {
+            resetAnswerButtons(); // Clear existing buttons before showing new ones
+            const questionLang = questionData[currentLanguage];
+            questionText.innerHTML = questionLang.question.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            questionLang.options.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.innerText = `${OPTION_LABELS[index]}. ${option}`;
                 button.classList.add('btn');
-                if (option === question.answer) {
+                if (option === questionLang.answer) {
                     button.dataset.correct = true;
                 }
                 button.addEventListener('click', selectAnswer);
@@ -240,6 +377,10 @@
 
         function resetState() {
             clearInterval(timerInterval);
+            resetAnswerButtons();
+        }
+
+        function resetAnswerButtons() {
             while (answerButtons.firstChild) {
                 answerButtons.removeChild(answerButtons.firstChild);
             }
@@ -270,6 +411,7 @@
         }
 
         function setStatusClass(element, correct) {
+            element.classList.remove('correct', 'wrong'); // Clear previous status
             if (correct) {
                 element.classList.add('correct');
             } else {
@@ -280,8 +422,16 @@
         function showResults() {
             quizScreen.classList.add('hide');
             resultScreen.classList.remove('hide');
-            scoreText.innerText = `${QUIZ_LENGTH} 문제 중 ${score} 문제를 맞혔습니다!`;
+            scoreText.innerText = translations[currentLanguage].questionsCorrect(score, QUIZ_LENGTH);
         }
+
+        // Initial setup on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            getLanguageFromUrl();
+            updateTextContent();
+        });
+
+        const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     </script>
 </body>
