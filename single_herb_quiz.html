@@ -183,6 +183,14 @@
     </div>
 
     <script>
+        // Array shuffle function
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         const allQuestions = [
             { ko: { question: "다음 중 **Guizhi (육계)**의 주요 효능으로 가장 알맞은 것은?", options: ["청열조습, 사화해독", "발한해표, 온경지통", "보기익기, 승양고표", "보혈조경, 활혈거어", "자음윤조, 생진지갈", "화담지해, 강역지구"], answer: "발한해표, 온경지통" }, en: { question: "Which of the following is the most appropriate main efficacy of **Guizhi (Ramulus Cinnamomi)**?", options: ["Clears heat and dries dampness, purges fire and detoxifies", "Induces sweating to release the exterior, warms meridians to relieve pain", "Tonifies Qi and invigorates the spleen, lifts Yang and secures the exterior", "Nourishes blood to regulate menstruation, invigorates blood to remove stasis", "Nourishes Yin and moistens dryness, generates fluids to quench thirst", "Transforms phlegm and stops cough, descends Qi to relieve vomiting"], answer: "Induces sweating to release the exterior, warms meridians to relieve pain" } },
             { ko: { question: "다음 중 **Shengjiang (건강)**의 주요 효능으로 가장 알맞은 것은?", options: ["보기건비, 이수삼습", "온중산한, 해표지한", "청열사화, 해독소종", "자음윤폐, 생진지갈", "활혈조경, 지통산결", "화담지해, 강역지구"], answer: "온중산한, 해표지한" }, en: { question: "Which of the following is the most appropriate main efficacy of **Shengjiang (dried)**?", options: ["Tonifies Qi and strengthens the spleen, promotes urination and resolves dampness", "Warms the middle and dispels cold, releases the exterior to relieve pain", "Clears heat and purges fire, detoxifies and reduces swelling", "Nourishes Yin and moistens the lungs, generates fluids to quench thirst", "Invigorates blood to regulate menstruation, relieves pain and dissipates nodules", "Transforms phlegm and stops cough, descends Qi to relieve vomiting"], answer: "Warms the middle and dispels cold, releases the exterior to relieve pain" } },
@@ -249,7 +257,7 @@
         const langToggleButton = document.getElementById('lang-toggle-button');
 
         let shuffledQuestions, currentQuestionIndex, score, timerInterval, timeLeft;
-        const QUIZ_LENGTH = 7; // 문제 수 7개로 변경
+        const QUIZ_LENGTH = 7; // 문제 수 7개
         const TIME_LIMIT = 15; // 제한 시간 15초
 
         let currentLanguage = 'ko'; // Default language
@@ -363,7 +371,12 @@
             resetAnswerButtons(); // Clear existing buttons before showing new ones
             const questionLang = questionData[currentLanguage];
             questionText.innerHTML = questionLang.question.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            questionLang.options.forEach((option, index) => {
+            
+            // Shuffle options for the current question
+            const shuffledOptions = [...questionLang.options];
+            shuffleArray(shuffledOptions); // Use the new shuffleArray function
+
+            shuffledOptions.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.innerText = `${OPTION_LABELS[index]}. ${option}`;
                 button.classList.add('btn');
