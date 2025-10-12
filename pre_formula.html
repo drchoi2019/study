@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive TCM Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background-color: #FDFBF8;
+            color: #333;
+            padding-bottom: 5rem; /* Footer height */
+        }
+        /* Custom class for hot herbs (red) */
+        .hot-herb {
+            color: #E53E3E; /* red-600 */
+        }
+        /* Custom class for cold herbs (blue) */
+        .cold-herb {
+            color: #3B82F6; /* blue-500 */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #F0EBE5;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            border-bottom: 2px solid #D1C4B5;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        /* Styles for Quiz Mode */
+        body.quiz-mode .card {
+            cursor: pointer;
+        }
+        body.quiz-mode .card h3 {
+            visibility: hidden;
+        }
+        body.quiz-mode .card.revealed h3 {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header id="page-header" class="w-full max-w-4xl mx-auto my-4 px-4 flex justify-between items-center">
+        <a href="#" id="header-link" class="text-lg font-semibold text-gray-700 no-underline" data-ko="&larr; Interactive TCM" data-en="&larr; Interactive TCM">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-200 transition-colors" style="background-color: #F7F3EF;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl mx-auto p-4">
+
+        <!-- Section 1: Single Herbs -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold section-title" data-ko="단일 약재" data-en="Single Herbs">단일 약재</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Herb Cards will be placed here -->
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="계피*" data-en="Gui Zhi*">계피*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="온리 < 해표 / 온경통락" data-en="warms interior < releases exterior / warms channels and unblocks collaterals">온리 < 해표 / 온경통락</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="육계*" data-en="Rou Gui*">육계*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="온리 > 해표 / 온경통락" data-en="warms interior > releases exterior / warms channels and unblocks collaterals">온리 > 해표 / 온경통락</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="생강*" data-en="Sheng Jiang*">생강*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="온리 < 해표 / 강기(중초)" data-en="warms interior < releases exterior / descends qi (middle jiao)">온리 < 해표 / 강기(중초)</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="건강*" data-en="Gan Jiang*">건강*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="온리 > 해표 / 강기(중초)" data-en="warms interior > releases exterior / descends qi (middle jiao)">온리 > 해표 / 강기(중초)</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="박하^" data-en="Bo He^">박하^</h3>
+                    <p class="text-gray-600 mt-1" data-ko="해표" data-en="releases exterior">해표</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="갈근" data-en="Ge Gen">갈근</h3>
+                    <p class="text-gray-600 mt-1" data-ko="해기 / 생진" data-en="releases muscle layer / generates fluids">해기 / 생진</p>
+                </div>
+                 <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="반하*" data-en="Ban Xia*">반하*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="온 담" data-en="release phlegm">온 담</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="복령" data-en="Fu Ling">복령</h3>
+                    <p class="text-gray-600 mt-1" data-ko="이수 >> 건비" data-en="promote urination >> strengthens spleen">이수 >> 건비</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="백출" data-en="Bai Zhu">백출</h3>
+                    <p class="text-gray-600 mt-1" data-ko="건비 > 삼습" data-en="strengthens spleen > transforms dampness">건비 > 삼습</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="창출" data-en="Cang Zhu">창출</h3>
+                    <p class="text-gray-600 mt-1" data-ko="건비 < 화습" data-en="strengthens spleen < transforms dampness">건비 < 화습</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="백작" data-en="Bai Shao">백작</h3>
+                    <p class="text-gray-600 mt-1" data-ko="보간혈하여 소간, 말랑말랑하게" data-en="nourishes liver blood to soften liver, soften hardness">보간혈하여 소간, 말랑말랑하게</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="당귀*" data-en="Dang Gui*">당귀*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="보혈의 왕" data-en="king of blood tonification">보혈의 왕</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="천궁" data-en="Chuan Xiong">천궁</h3>
+                    <p class="text-gray-600 mt-1" data-ko="보혈 < 활혈 / 가볍다, 두통" data-en="tonifies blood < invigorates blood / light, headaches">보혈 < 활혈 / 가볍다, 두통</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="숙지황" data-en="Shu Di Huang">숙지황</h3>
+                    <p class="text-gray-600 mt-1" data-ko="음의 왕, 보음정혈" data-en="king of yin, nourishes yin and essence">음의 왕, 보음정혈</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="인삼*" data-en="Ren Shen*">인삼*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="보기의 왕, 원기, 곡기, 천기" data-en="king of qi tonification, original qi, grain qi, heavenly qi">보기의 왕, 원기, 곡기, 천기</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="황기*" data-en="Huang Qi*">황기*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="보기, 위기, 생기, 지한" data-en="tonifies qi, wei qi, generates qi, stops sweating">보기, 위기, 생기, 지한</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="우슬" data-en="Niu Xi">우슬</h3>
+                    <p class="text-gray-600 mt-1" data-ko="하부 인경, 강근골, 활혈지통" data-en="directs to lower body, strengthens sinews and bones, invigorates blood and stops pain">하부 인경, 강근골, 활혈지통</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="대황^" data-en="Da Huang^">대황^</h3>
+                    <p class="text-gray-600 mt-1" data-ko="사하, 습열, 활혈. 대장" data-en="purges, damp-heat, invigorates blood. large intestine">사하, 습열, 활혈. 대장</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="부자*" data-en="Fu Zi*">부자*</h3>
+                    <p class="text-gray-600 mt-1" data-ko="온리의 최강" data-en="king warming interior, heart">온리의 최강</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg herb-name" data-ko="시호^" data-en="Chai Hu^">시호^</h3>
+                    <p class="text-gray-600 mt-1" data-ko="간, 청열과 해표의 중간, 소양" data-en="liver, between clearing heat and releasing exterior, shaoyang">간, 청열과 해표의 중간, 소양</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Combined Herbs -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold section-title" data-ko="다용 조합(2-3개 약재)" data-en="Commonly Combined Herbs (2-3 herbs)">다용 조합(2-3개 약재)</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="황금, 황연" data-en="Huang Qin, Huang Lian">황금, 황연</h3>
+                    <p class="text-gray-600 mt-1" data-ko="청열 / 건조" data-en="clear heat / drying">청열 / 건조</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="금은화, 연교" data-en="Jin Yin Hua, Lian Qiao">금은화, 연교</h3>
+                    <p class="text-gray-600 mt-1" data-ko="청열해독" data-en="clear heat and resolve toxins">청열해독</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="석고, 생지황" data-en="Shi Gao, Sheng Di Huang">석고, 생지황</h3>
+                    <p class="text-gray-600 mt-1" data-ko="청열 촉촉" data-en="clear heat, moist">청열 촉촉</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="지모, 황백" data-en="Zhi Mu, Huang Bai">지모, 황백</h3>
+                    <p class="text-gray-600 mt-1" data-ko="청열 허열" data-en="clear heat, deficiency heat">청열 허열</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="형개, 방풍" data-en="Jing Jie, Fang Feng">형개, 방풍</h3>
+                    <p class="text-gray-600 mt-1" data-ko="해표" data-en="release exterior">해표</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="강활, 독활" data-en="Qiang Huo, Du Huo">강활, 독활</h3>
+                    <p class="text-gray-600 mt-1" data-ko="해표 + 거습, 관절 통증" data-en="release exterior + dispel dampness, joint pain">해표 + 거습, 관절 통증</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="두충, 속단" data-en="Du Zhong, Xu Duan">두충, 속단</h3>
+                    <p class="text-gray-600 mt-1" data-ko="강근골, 통증" data-en="strengthen sinews and bones, pain">강근골, 통증</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="석고, 지모" data-en="Shi Gao, Zhi Mu">석고, 지모</h3>
+                    <p class="text-gray-600 mt-1" data-ko="위열증" data-en="stomach heat pattern">위열증</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="목향, 사인" data-en="Mu Xiang, Sha Ren">목향, 사인</h3>
+                    <p class="text-gray-600 mt-1" data-ko="향사, 행기(중초)" data-en="regulate qi (middle jiao)">향사, 행기(중초)</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="산사, 신곡, 맥아" data-en="Shan Zha, Shen Qu, Mai Ya">산사, 신곡, 맥아</h3>
+                    <p class="text-gray-600 mt-1" data-ko="식체" data-en="food stagnation">식체</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="도인, 홍화" data-en="Tao Ren, Hong Hua">도인, 홍화</h3>
+                    <p class="text-gray-600 mt-1" data-ko="어혈" data-en="blood stasis">어혈</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="우슬, 유향, 몰약" data-en="Niu Xi, Ru Xiang, Mo Yao">우슬, 유향, 몰약</h3>
+                    <p class="text-gray-600 mt-1" data-ko="어혈, 통증" data-en="blood stasis with pain">어혈, 통증</p>
+                </div>
+                 <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="지유, 궤화" data-en="Di Yu, Huai Hua">지유, 궤화</h3>
+                    <p class="text-gray-600 mt-1" data-ko="지혈" data-en="stop bleeding">지혈</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Basic Formulas -->
+        <section>
+            <h2 class="text-2xl font-bold section-title" data-ko="기본 처방(4-6개 약재)" data-en="Basic Formulas (4-6 herbs)">기본 처방(4-6개 약재)</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="계지탕" data-en="Gui Zhi Tang">계지탕</h3>
+                    <p class="text-gray-600 mt-1" data-ko="계지, 생강, 작약, 감초" data-en="Gui Zhi, Sheng Jiang, Bai Shao, Gan Cao">계지, 생강, 작약, 감초</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="사군자탕" data-en="Si Jun Zi Tang">사군자탕</h3>
+                    <p class="text-gray-600 mt-1" data-ko="인삼, 백출, 복령, 감초" data-en="Ren Shen, Bai Zhu, Fu Ling, Gan Cao">인삼, 백출, 복령, 감초</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="사물탕" data-en="Si Wu Tang">사물탕</h3>
+                    <p class="text-gray-600 mt-1" data-ko="당귀, 백작, 천궁, 지황" data-en="Dang Gui, Bai Shao, Chuan Xiong, Di Huang">당귀, 백작, 천궁, 지황</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="이진탕" data-en="Er Chen Tang">이진탕</h3>
+                    <p class="text-gray-600 mt-1" data-ko="반하, 진피, 복령, 감초" data-en="Ban Xia, Chen Pi, Fu Ling, Gan Cao">반하, 진피, 복령, 감초</p>
+                </div>
+                 <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="평위산" data-en="Ping Wei San">평위산</h3>
+                    <p class="text-gray-600 mt-1" data-ko="창출, 진피, 후박, 감초" data-en="Cang Zhu, Chen Pi, Hou Po, Gan Cao">창출, 진피, 후박, 감초</p>
+                </div>
+                <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="육미지황환" data-en="Liu Wei Di Huang Wan">육미지황환</h3>
+                    <p class="text-gray-600 mt-1" data-ko="지황, 산수유, 산약, 목단피, 택사, 복령" data-en="Di Huang, Shan Zhu Yu, Shan Yao, Mu Dan Pi, Ze Xie, Fu Ling">지황, 산수유, 산약, 목단피, 택사, 복령</p>
+                </div>
+                 <div class="card p-4 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg" data-ko="황연해독탕" data-en="Huang Lian Jie Du Tang">황연해독탕</h3>
+                    <p class="text-gray-600 mt-1" data-ko="황연 ,황금, 황백, 치자" data-en="Huang Lian, Huang Qin, Huang Bai, Zhi Zi">황연 ,황금, 황백, 치자</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm p-4 flex justify-center border-t border-stone-200">
+        <button id="quiz-mode-toggle"
+                class="px-6 py-2 bg-stone-700 text-white font-bold rounded-full shadow-lg hover:bg-stone-800 transition-colors"
+                data-ko="퀴즈 모드"
+                data-en="Quiz Mode">
+            퀴즈 모드
+        </button>
+    </footer>
+    
+    <script>
+        let isQuizMode = false;
+
+        // Function to set the language of the page
+        function setLanguage(lang) {
+            // Set the lang attribute on the HTML element for accessibility and CSS
+            document.documentElement.lang = lang;
+            
+            // Find all elements with translation data attributes
+            const translatableElements = document.querySelectorAll('[data-ko]');
+            
+            translatableElements.forEach(element => {
+                const text = element.dataset[lang];
+                // Use innerHTML for the header link to render the arrow correctly
+                if (element.id === 'header-link') {
+                    element.innerHTML = text;
+                } else {
+                    element.textContent = text;
+                }
+            });
+
+            // Update URL without reloading the page
+            try {
+                const url = new URL(window.location);
+                url.searchParams.set('lang', lang);
+                // history.pushState({}, '', url); // This line causes errors in sandboxed environments
+            } catch (e) {
+                console.error("Could not update URL:", e);
+            }
+        }
+
+        // Function to toggle the language
+        function toggleLanguage(event) {
+            event.preventDefault(); // Prevent the link from navigating
+            const currentLang = document.documentElement.lang;
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        // This function runs when the page content has fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Style herbs based on their properties (* for hot, ^ for cold)
+            const herbNames = document.querySelectorAll('.herb-name');
+            herbNames.forEach(nameElement => {
+                let text = nameElement.textContent;
+                if (text.includes('*')) {
+                    nameElement.classList.add('hot-herb');
+                    // Update data attributes to remove the symbol
+                    nameElement.dataset.ko = nameElement.dataset.ko.replace('*', '').trim();
+                    nameElement.dataset.en = nameElement.dataset.en.replace('*', '').trim();
+                } else if (text.includes('^')) {
+                    nameElement.classList.add('cold-herb');
+                    // Update data attributes to remove the symbol
+                    nameElement.dataset.ko = nameElement.dataset.ko.replace('^', '').trim();
+                    nameElement.dataset.en = nameElement.dataset.en.replace('^', '').trim();
+                }
+            });
+
+            // Quiz Mode Logic
+            const quizToggleBtn = document.getElementById('quiz-mode-toggle');
+            const allCards = document.querySelectorAll('.card');
+            
+            quizToggleBtn.addEventListener('click', () => {
+                isQuizMode = !isQuizMode;
+                document.body.classList.toggle('quiz-mode');
+                
+                if (isQuizMode) {
+                    quizToggleBtn.dataset.ko = '퀴즈 모드 종료';
+                    quizToggleBtn.dataset.en = 'Exit Quiz Mode';
+                } else {
+                    // When exiting quiz mode, reset cards and button text
+                    allCards.forEach(card => card.classList.remove('revealed'));
+                    quizToggleBtn.dataset.ko = '퀴즈 모드';
+                    quizToggleBtn.dataset.en = 'Quiz Mode';
+                }
+                
+                // Update button text by re-running setLanguage
+                setLanguage(document.documentElement.lang);
+            });
+
+            allCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    if (isQuizMode) {
+                        card.classList.add('revealed');
+                    }
+                });
+            });
+
+
+            // Check for language parameter in URL on page load
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialLang = urlParams.get('lang') || 'ko'; // Default to Korean
+            
+            // Set initial language and apply styles
+            setLanguage(initialLang);
+        });
+    </script>
+</body>
+</html>
+
