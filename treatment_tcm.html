@@ -190,7 +190,8 @@
             currentLang = currentLang === 'en' ? 'ko' : 'en';
             const url = new URL(window.location);
             url.searchParams.set('lang', currentLang);
-            window.history.pushState({}, '', url);
+            // The following line was causing a security error in the sandboxed environment and has been removed.
+            // window.history.pushState({}, '', url);
             updateText(currentLang);
         }
 
