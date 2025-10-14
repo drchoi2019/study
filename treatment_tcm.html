@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Flow: The Concept of Healing in AHM Zhi(治)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the page and visualization */
+        body {
+            background-color: #FDFCFB;
+            color: #374151;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Styling for the new Zhi concept visualization */
+        .concept-item svg {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto;
+            stroke: #92400e; /* amber-800 */
+            transition: all 0.3s ease-in-out;
+        }
+        .concept-item:hover svg {
+            transform: scale(1.1);
+            stroke: #b45309; /* amber-700 */
+        }
+        .concept-item.active {
+            background-color: #fef3c7; /* amber-100 */
+        }
+        .concept-item.active svg {
+            stroke: #b45309; /* amber-700 */
+            transform: scale(1.1);
+        }
+        
+        /* Language-specific font styles */
+        .lang-ko {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .lang-en {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header provided by the user -->
+    <header id="page-header" class="w-full max-w-2xl mx-auto my-4 px-4 flex justify-between items-center">
+        <a href="#" id="header-link" class="text-lg font-semibold text-gray-700 no-underline">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-2xl mx-auto p-4 leading-relaxed">
+        
+        <h1 id="main-title" class="text-3xl font-bold text-gray-800 mb-6"></h1>
+        
+        <p id="p1" class="mb-4"></p>
+        <p id="p2" class="mb-4"></p>
+        
+        <h2 id="h2-1" class="text-2xl font-bold text-gray-800 mt-8 mb-4"></h2>
+
+        <!-- New Visualization for Zhi -->
+        <div class="my-8 p-6 bg-amber-50 rounded-lg border border-amber-200 text-center">
+            <div class="text-8xl" style="font-family: 'Noto Sans KR', serif;">治</div>
+            <div class="flex justify-center gap-4 md:gap-8 my-4">
+                <!-- Concept 1: Water -->
+                <div id="concept-water" class="concept-item cursor-pointer p-3 rounded-lg transition-all hover:bg-amber-100 w-1/3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wave-sine" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M21 12h-2c-.89 -4.28 -2.63 -7 -5 -7s-4.11 2.72 -5 7h-4" /> <path d="M3 12h2c.89 4.28 2.63 7 5 7s4.11 -2.72 5 -7h4" /> </svg>
+                    <p id="concept-water-label" class="mt-2 text-sm font-semibold text-amber-900"></p>
+                </div>
+                <!-- Concept 2: Govern -->
+                <div id="concept-govern" class="concept-item cursor-pointer p-3 rounded-lg transition-all hover:bg-amber-100 w-1/3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-scale" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M7 20l10 0" /> <path d="M6 6l6 -4l6 4" /> <path d="M12 3l0 17" /> <path d="M9 12l-3 0l-2 4l7 0" /> <path d="M15 12l3 0l2 4l-7 0" /> </svg>
+                    <p id="concept-govern-label" class="mt-2 text-sm font-semibold text-amber-900"></p>
+                </div>
+                <!-- Concept 3: Heal -->
+                <div id="concept-heal" class="concept-item cursor-pointer p-3 rounded-lg transition-all hover:bg-amber-100 w-1/3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-heart" width="48" height="48" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /> <path d="M6 21v-2a4 4 0 0 1 4 -4h1" /> <path d="M18 22l3.35 -3.284a2.143 2.143 0 0 0 .005 -3.071a2.242 2.242 0 0 0 -3.129 -.006l-.224 .22l-.223 -.22a2.242 2.242 0 0 0 -3.128 -.006a2.143 2.143 0 0 0 -.006 3.071l3.355 3.284z" /> </svg>
+                    <p id="concept-heal-label" class="mt-2 text-sm font-semibold text-amber-900"></p>
+                </div>
+            </div>
+            <p id="zhi-desc" class="text-amber-800 h-12 flex items-center justify-center transition-opacity duration-300"></p>
+        </div>
+
+        <p id="p3" class="mb-4"></p>
+        <p id="p4" class="mb-4"></p>
+        
+        <h2 id="h2-2" class="text-2xl font-bold text-gray-800 mt-8 mb-4"></h2>
+        <p id="p5" class="mb-4"></p>
+        <p id="p6" class="mb-4"></p>
+        <p id="p7" class="mb-4"></p>
+    </main>
+    
+    <footer class="text-center text-sm text-stone-500 py-8">
+        <p>&copy; 2025 Interactive TCM Concepts</p>
+    </footer>
+
+    <script>
+        // Store all text content for easy language switching
+        const content = {
+            en: {
+                headerLink: '&larr; Interactive TCM',
+                mainTitle: 'The Flow: The Concept of Healing in AHM Zhi(治)',
+                p1: "In acupuncture and herbal medicine, healing is often expressed through the character zhi (治), which combines a water radical on the left with a phonetic component on the right. Ancient Chinese philosophy drew a parallel between the human body and a river system of qi and blood. Rather than viewing healing as the elimination of disease, the foundational belief held that properly guiding this natural flow of qi and blood was the key to overcoming illness.",
+                p2: "To understand why ancient healers chose this particular character, we must look to the origins of Chinese civilization itself. China's early development was inextricably linked to managing the unpredictable Yellow River. By constructing dams, canals, and reservoirs to regulate the Yellow River, the Chinese built a magnificent civilization. They applied the principles of controlling this immense force of nature to the human body, hypothesizing the existence of channels and believing that controlling this flow could eliminate disease. In this metaphor, dams and reservoirs correspond to acupoints, rivers correspond to channels, and all healing becomes a process of restoring natural flow to rebalance yin and yang. Just as water is redirected from flooded regions to drought-stricken areas to restore natural balance, qi and blood are guided to restore equilibrium.",
+                h2_1: 'Zhi (治): To correct the flow → To govern',
+                conceptWaterLabel: 'Manage Water',
+                conceptGovernLabel: 'Govern Nation',
+                conceptHealLabel: 'Heal Body',
+                zhiDescDefault: 'Click an icon to see its meaning.',
+                zhiDescWater: 'Regulating the flow of rivers to prevent disaster and create harmony.',
+                zhiDescGovern: 'Ruling a country by understanding and facilitating its natural order.',
+                zhiDescHeal: "Restoring the body's natural flow of Qi and Blood to overcome illness.",
+                p3: "The Yellow River region was devastated by massive floods lasting 22 years during the reign of Emperor Yao around 2000 BCE. Buildings and farmland were submerged, and people suffered tremendously. Emperor Yao appointed Gun as the water control official. Gun spent 9 years attempting to manage the floods by building dams. According to legend, he even stole the heavenly treasure of xirang, a magical soil said to grow endlessly. However, despite Gun's efforts and mythical resources, his plan failed. Every spring, the dams proved insufficient to control the disaster.",
+                p4: "When Emperor Shun succeeded Emperor Yao, he witnessed Gun's failure and appointed Gun's son, Yu, as the new water control official. Yu learned from his father's failure and adopted a different approach. Rather than stubbornly building higher dikes and relying on mysterious power, Yu traveled across the land, directly surveying rivers and terrain to find new solutions. The principle Yu discovered was straightforward: rather than simply blocking water with dikes, the key was to facilitate the natural flow of rivers. Yu's water management philosophy was this—water management must accord with the nature of water. Water naturally flows downward toward the sea. One must clear blockages and control overflow to create natural flow. Yu guided and facilitated the river's path so water could flow naturally.",
+                h2_2: 'From Water Management to Healing',
+                p5: "Gun and Yu's methods differed in two fundamental ways. First, Gun relied on supernatural power, while Yu solved the problem through direct survey and measurement, representing a shift from mythological thinking to a scientific perspective. Second, Gun attempted to conquer nature's laws, while Yu solved the problem by accommodating them. Yu's approach became the foundational principle of Chinese hydraulic engineering for millennia to come. His approach worked. Once the Yellow River flowed properly, floods were no longer a national catastrophe. Yu completed his water management project over 13 years and gained tremendous respect. Emperor Shun eventually regarded Yu as his successor, and Yu became the next emperor. From this point forward, the concept of managing water also came to mean ruling a country.",
+                p6: "The character zhi (治) in acupuncture and herbal medicine carries a meaning quite different from the modern medical understanding of \"treatment\" or \"cure.\" The character originally means \"to manage water\" and \"to rule a country,\" and it is also used to mean treating disease. Zhang Zhongjing, in his classical text Treatise on Cold Damage, wrote phrases such as \"Guizhi Tang governs taiyang disease.\" Why use \"governs\" instead of \"cures\"? This choice is not arbitrary. For ancient Chinese thinkers, treating disease was fundamentally the same concept as managing water and governing a country. Therefore, instead of using words meaning \"fix\" or \"cure,\" they employed zhi or zhu, characters meaning \"to restore flow\" or \"to manage.\"",
+                p7: "This perspective distinguishes acupuncture and herbal medicine from modern approaches. Rather than directly eliminating pathogens or bacteria, acupuncture and herbal medicine aim to help patients overcome their condition and maintain balance. The underlying belief is that if patients live in harmony with nature and maintain equilibrium, illness can naturally be overcome. Acupuncture and herbal medicine prioritizes managing the infrastructure of the human system—the flow of qi and blood through channels, the balance of yin and yang. This is an indirect approach to disease. To truly understand acupuncture and herbal medicine, one must grasp that healing means regulating the natural flow of the body's vital systems, much like a wise ruler maintains order not through constant intervention, but by understanding and facilitating natural processes. This is the essence of zhi (治): restoring the natural flow."
+            },
+            ko: {
+                headerLink: '&larr; 대화형 한의학',
+                mainTitle: '흐름: 한의학의 치유 개념, 치(治)',
+                p1: "침술과 한약에서 치유는 종종 '치(治)'라는 한자로 표현됩니다. 이 글자는 왼쪽의 물 수(水) 부수와 오른쪽의 소리를 나타내는 부분으로 이루어져 있습니다. 고대 중국 철학은 인체를 기(氣)와 혈(血)이 흐르는 강물 시스템에 비유했습니다. 치유를 질병의 제거로 보기보다는, 기와 혈의 자연스러운 흐름을 올바르게 이끌어주는 것이 질병을 극복하는 열쇠라는 근본적인 믿음이 있었습니다.",
+                p2: "고대 의학자들이 왜 이 특별한 글자를 선택했는지 이해하려면, 중국 문명 자체의 기원을 살펴봐야 합니다. 중국의 초기 발전은 예측 불가능한 황하를 다스리는 것과 불가분의 관계에 있었습니다. 댐, 운하, 저수지를 건설하여 황하를 조절함으로써 중국인들은 웅장한 문명을 건설했습니다. 그들은 이 거대한 자연의 힘을 통제하는 원리를 인체에 적용하여, 경락의 존재를 가정하고 이 흐름을 통제하면 질병을 없앨 수 있다고 믿었습니다. 이 비유에서 댐과 저수지는 경혈에, 강은 경락에 해당하며, 모든 치유는 음양의 균형을 다시 맞추기 위해 자연스러운 흐름을 회복하는 과정이 됩니다. 홍수가 난 지역에서 가뭄이 든 지역으로 물의 방향을 돌려 자연의 균형을 회복하는 것처럼, 기와 혈을 이끌어 균형을 회복하는 것입니다.",
+                h2_1: '치(治): 흐름을 바로잡다 → 다스리다',
+                conceptWaterLabel: '치수 (治水)',
+                conceptGovernLabel: '치국 (治國)',
+                conceptHealLabel: '치병 (治病)',
+                zhiDescDefault: '아이콘을 클릭하여 의미를 확인하세요.',
+                zhiDescWater: '재해를 막고 조화를 이루기 위해 강의 흐름을 조절하는 것.',
+                zhiDescGovern: '자연스러운 질서를 이해하고 촉진하여 나라를 다스리는 것.',
+                zhiDescHeal: '질병을 극복하기 위해 신체의 기혈 흐름을 회복시키는 것.',
+                p3: "기원전 2000년경 요 임금 시대에 황하 지역은 22년간 지속된 대홍수로 황폐해졌습니다. 건물과 농경지가 물에 잠기고 사람들은 엄청난 고통을 겪었습니다. 요 임금은 곤(鯀)을 치수 관리로 임명했습니다. 곤은 9년 동안 댐을 쌓아 홍수를 막으려 했습니다. 전설에 따르면, 그는 끝없이 자란다는 마법의 흙인 '식양(息壤)'이라는 하늘의 보물을 훔치기까지 했습니다. 그러나 곤의 노력과 신화적인 자원에도 불구하고 그의 계획은 실패했습니다. 매년 봄, 댐은 재앙을 막기에는 역부족이었습니다.",
+                p4: "순 임금이 요 임금의 뒤를 잇자, 그는 곤의 실패를 목격하고 곤의 아들인 우(禹)를 새로운 치수 관리로 임명했습니다. 우는 아버지의 실패로부터 교훈을 얻어 다른 접근법을 채택했습니다. 완고하게 더 높은 둑을 쌓고 신비한 힘에 의존하는 대신, 우는 땅을 직접 돌아다니며 강과 지형을 조사하여 새로운 해결책을 찾았습니다. 우가 발견한 원리는 간단했습니다. 단순히 둑으로 물을 막는 것이 아니라, 강의 자연스러운 흐름을 원활하게 하는 것이 핵심이었습니다. 우의 치수 철학은 '물의 본성에 따라야 한다'는 것이었습니다. 물은 자연스럽게 아래로, 바다를 향해 흐릅니다. 막힌 곳을 뚫고 넘치는 것을 조절하여 자연스러운 흐름을 만들어야 합니다. 우는 물이 자연스럽게 흐를 수 있도록 강의 길을 안내하고 원활하게 했습니다.",
+                h2_2: '치수(治水)에서 치유(治癒)로',
+                p5: "곤과 우의 방법은 두 가지 근본적인 면에서 달랐습니다. 첫째, 곤은 초자연적인 힘에 의존했지만, 우는 직접적인 조사와 측량을 통해 문제를 해결하여 신화적 사고에서 과학적 관점으로의 전환을 보여주었습니다. 둘째, 곤은 자연의 법칙을 정복하려 했지만, 우는 그 법칙에 순응하여 문제를 해결했습니다. 우의 접근법은 수천 년 동안 중국 수리 공학의 기본 원리가 되었습니다. 그의 접근법은 효과가 있었습니다. 황하가 제대로 흐르자 홍수는 더 이상 국가적 재앙이 아니었습니다. 우는 13년에 걸쳐 치수 사업을 완수하고 엄청난 존경을 받았습니다. 순 임금은 결국 우를 후계자로 여겼고, 우는 다음 황제가 되었습니다. 이때부터 물을 다스린다는 개념은 나라를 다스린다는 의미도 갖게 되었습니다.",
+                p6: "'치(治)'라는 글자는 침술과 한약에서 현대 의학의 '치료'나 '치유'와는 사뭇 다른 의미를 지닙니다. 이 글자는 원래 '물을 다스리다'와 '나라를 다스리다'를 의미하며, 질병을 치료한다는 의미로도 사용됩니다. 장중경은 그의 고전인 『상한론』에서 '계지탕은 태양병을 주관한다'와 같은 구절을 썼습니다. 왜 '치유한다' 대신 '다스린다' 또는 '주관한다'를 사용했을까요? 이 선택은 임의적인 것이 아닙니다. 고대 중국 사상가들에게 질병을 치료하는 것은 근본적으로 물을 다스리고 나라를 다스리는 것과 같은 개념이었습니다. 따라서 '고치다'나 '낫게 하다'는 의미의 단어 대신, '흐름을 회복시키다'나 '관리하다'는 의미의 '치(治)'나 '주(主)'와 같은 글자를 사용했습니다.",
+                p7: "이러한 관점은 침술과 한약을 현대적 접근법과 구별 짓습니다. 병원균이나 박테리아를 직접 제거하기보다는, 환자가 자신의 상태를 극복하고 균형을 유지하도록 돕는 것을 목표로 합니다. 환자가 자연과 조화롭게 살고 평형을 유지하면 질병은 자연스럽게 극복될 수 있다는 믿음이 깔려 있습니다. 침술과 한약은 인체 시스템의 기반 시설, 즉 경락을 통한 기와 혈의 흐름, 음양의 균형을 관리하는 것을 우선시합니다. 이것은 질병에 대한 간접적인 접근법입니다. 침술과 한약을 진정으로 이해하려면, 치유란 현명한 통치자가 끊임없는 개입이 아니라 자연스러운 과정을 이해하고 촉진함으로써 질서를 유지하는 것처럼, 신체의 필수적인 시스템의 자연스러운 흐름을 조절하는 것을 의미한다는 점을 파악해야 합니다. 이것이 바로 '치(治)', 즉 자연스러운 흐름을 회복하는 것의 본질입니다."
+            }
+        };
+
+        let currentLang = 'en'; // Default language
+
+        // Function to update all text elements on the page
+        function updateText(lang) {
+            document.body.style.opacity = 0;
+            setTimeout(() => {
+                const langContent = content[lang];
+                // Update language-specific class for font styling
+                document.documentElement.lang = lang;
+
+                // Manually update elements that don't follow the ID pattern
+                document.getElementById('header-link').innerHTML = langContent.headerLink;
+                document.getElementById('main-title').textContent = langContent.mainTitle;
+                document.getElementById('p1').textContent = langContent.p1;
+                document.getElementById('p2').textContent = langContent.p2;
+                document.getElementById('h2-1').textContent = langContent.h2_1;
+                document.getElementById('concept-water-label').textContent = langContent.conceptWaterLabel;
+                document.getElementById('concept-govern-label').textContent = langContent.conceptGovernLabel;
+                document.getElementById('concept-heal-label').textContent = langContent.conceptHealLabel;
+                document.getElementById('p3').textContent = langContent.p3;
+                document.getElementById('p4').textContent = langContent.p4;
+                document.getElementById('h2-2').textContent = langContent.h2_2;
+                document.getElementById('p5').textContent = langContent.p5;
+                document.getElementById('p6').textContent = langContent.p6;
+                document.getElementById('p7').textContent = langContent.p7;
+
+
+                // Apply language class for font family
+                document.body.classList.remove('lang-en', 'lang-ko');
+                document.body.classList.add(`lang-${lang}`);
+                
+                document.body.style.opacity = 1;
+                setZhiConcept(null); // Reset visualization
+            }, 300);
+        }
+
+        // Function to toggle language
+        function toggleLanguage(event) {
+            event.preventDefault();
+            currentLang = currentLang === 'en' ? 'ko' : 'en';
+            const url = new URL(window.location);
+            url.searchParams.set('lang', currentLang);
+            window.history.pushState({}, '', url);
+            updateText(currentLang);
+        }
+
+        // Function to control the zhi concept visualization
+        function setZhiConcept(concept) {
+            const descEl = document.getElementById('zhi-desc');
+            const concepts = document.querySelectorAll('.concept-item');
+            concepts.forEach(c => c.classList.remove('active'));
+            descEl.style.opacity = 0;
+
+            setTimeout(() => {
+                if (concept) {
+                    document.getElementById(`concept-${concept}`).classList.add('active');
+                    const key = `zhiDesc${concept.charAt(0).toUpperCase() + concept.slice(1)}`;
+                    descEl.textContent = content[currentLang][key];
+                } else {
+                    descEl.textContent = content[currentLang].zhiDescDefault;
+                }
+                descEl.style.opacity = 1;
+            }, 150);
+        }
+
+        // On initial page load, check URL for language parameter
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langFromUrl = urlParams.get('lang');
+
+            // Set language based on URL or default to English
+            currentLang = (langFromUrl === 'ko') ? 'ko' : 'en';
+            
+            updateText(currentLang);
+
+            // Add event listeners for the new visualization
+            document.getElementById('concept-water').addEventListener('click', () => setZhiConcept('water'));
+            document.getElementById('concept-govern').addEventListener('click', () => setZhiConcept('govern'));
+            document.getElementById('concept-heal').addEventListener('click', () => setZhiConcept('heal'));
+        });
+
+    </script>
+</body>
+</html>
+
