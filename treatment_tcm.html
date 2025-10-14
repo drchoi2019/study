@@ -159,7 +159,10 @@
                 document.documentElement.lang = lang;
 
                 // Manually update elements that don't follow the ID pattern
-                document.getElementById('header-link').innerHTML = langContent.headerLink;
+                const headerLinkEl = document.getElementById('header-link');
+                headerLinkEl.innerHTML = langContent.headerLink;
+                headerLinkEl.href = `index.html?lang=${lang}`;
+                
                 document.getElementById('main-title').textContent = langContent.mainTitle;
                 document.getElementById('p1').textContent = langContent.p1;
                 document.getElementById('p2').textContent = langContent.p2;
