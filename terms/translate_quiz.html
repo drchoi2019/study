@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive TCM Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .explanation {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .explanation.show {
+            max-height: 500px; /* Adjust as needed */
+            opacity: 1;
+        }
+        body {
+            background-color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .clickable-sentence {
+            cursor: pointer;
+            user-select: none; /* Prevents text selection on click */
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="text-stone-800">
+
+    <header id="page-header" class="w-full max-w-2xl mx-auto my-4 px-4 flex justify-end items-center">
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-200 transition-colors" style="background-color: #F0F4F8;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="w-full max-w-2xl mx-auto p-4">
+        <p id="instruction" class="text-center text-stone-600 mb-8"></p>
+        <div id="card-container" class="space-y-4">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <script>
+        const medicalTerms = [
+            { word: 'void', example: 'He <strong class="text-blue-500 font-semibold">voided</strong> twice during the night.', ko_trans: '그는 밤새 두 번 <strong>소변을 봤습니다</strong>.', ko_exp: "'void'는 일상적으로 '빈 공간, 공허'를 의미하지만, 의학적으로는 '소변보다'라는 뜻으로 사용됩니다.", en_exp: "In everyday language, 'void' means an empty space, but in medicine, it means 'to urinate'." },
+            { word: 'attending', example: 'She was waiting for her <strong class="text-blue-500 font-semibold">attending</strong> in the lounge.', ko_trans: '그녀는 라운지에서 자신의 <strong>주치의</strong>를 기다리고 있었습니다.', ko_exp: "'attending'은 보통 '참석하는'을 의미하지만, 병원에서는 '(병원의) 주치의, 책임의사'를 가리킵니다.", en_exp: "'Attending' usually means being present at an event, but in a hospital, it refers to the supervising physician." },
+            { word: 'study', example: 'She participated in the <strong class="text-blue-500 font-semibold">study</strong> last month.', ko_trans: '그녀는 지난달 그 <strong>임상시험</strong>에 참여했습니다.', ko_exp: "'study'는 '공부, 학문'을 의미하지만, 의학 분야에서는 '연구, 임상시험'을 뜻합니다.", en_exp: "While 'study' often means learning, in a medical context, it refers to a research or clinical trial." },
+            { word: 'rule out', example: 'He was admitted with <strong class="text-blue-500 font-semibold">r/o</strong> pneumonia.', ko_trans: '그는 폐렴 <strong>배제 진단</strong> 하에 입원했습니다.', ko_exp: "'rule out (R/O)'는 '배제하다'는 뜻이지만, 의학에서는 어떤 질병일 가능성을 염두에 두고 감별해야 할 때 사용합니다.", en_exp: "'Rule out (R/O)' means to exclude, but medically, it's used to list potential diagnoses that need to be excluded." },
+            { word: 'occult', example: 'The lab is checking for <strong class="text-blue-500 font-semibold">occult</strong> blood.', ko_trans: '검사실에서 <strong>잠혈</strong>을 확인하고 있습니다.', ko_exp: "'occult'는 '초자연적인'이라는 뜻이지만, 의학적으로는 '겉으로 보이지 않는'의 의미로 사용됩니다.", en_exp: "'Occult' refers to supernatural things, but medically, it means 'not visible on the surface', like occult blood." },
+            { word: 'present', example: 'The patient <strong class="text-blue-500 font-semibold">presents</strong> with chest pain.', ko_trans: '환자는 흉통 <strong>증상을 보입니다</strong>.', ko_exp: "'present'는 '선물, 현재의'라는 뜻이지만, 의학에서는 환자가 특정 '증상을 보이다'라는 의미로 쓰입니다.", en_exp: "'Present' can mean a gift, but medically, 'a patient presents with' means they are showing certain symptoms." },
+            { word: 'discharge', example: 'The nurse checked his <strong class="text-blue-500 font-semibold">discharge</strong> this morning.', ko_trans: '간호사가 오늘 아침 그의 <strong>분비물</strong>을 확인했습니다.', ko_exp: "'discharge'는 '해고, 방출' 외에, 의학적으로 '퇴원시키다' 또는 '분비물'이라는 두 가지 중요한 의미가 있습니다.", en_exp: "'Discharge' means release, but medically it can mean 'to release a patient from the hospital' or 'bodily secretions'." },
+            { word: 'follow-up', example: 'You should come back for a <strong class="text-blue-500 font-semibold">follow-up</strong>.', ko_trans: '<strong>추적진료</strong>를 위해 다시 내원하셔야 합니다.', ko_exp: "'follow-up'은 '후속조치'를 의미하지만, 의학에서는 '추적관찰' 또는 '재진'을 의미합니다.", en_exp: "'Follow-up' means subsequent action, and in medicine, it specifically refers to a return visit or ongoing monitoring." },
+            { word: 'screen', example: 'They plan to <strong class="text-blue-500 font-semibold">screen</strong> all new employees.', ko_trans: '그들은 모든 신입 직원을 <strong>검진할</strong> 계획입니다.', ko_exp: "'screen'은 '화면'이라는 뜻이지만, 의학 동사로는 질병 유무를 확인하기 위해 '검진하다'는 의미입니다.", en_exp: "'Screen' is a display surface, but as a medical verb, it means 'to test for the presence of a disease'." },
+            { word: 'positive / negative', example: 'The test came back <strong class="text-blue-500 font-semibold">positive</strong>.', ko_trans: '검사 결과가 <strong>양성</strong>으로 나왔습니다.', ko_exp: "'positive/negative'는 '긍정적/부정적'을 의미하지만, 검사 결과에서는 '있음(양성)/없음(음성)'을 나타냅니다.", en_exp: "'Positive/negative' means good/bad, but in test results, it indicates 'presence (positive)/absence (negative)' of something." },
+            { word: 'episode', example: 'He had another <strong class="text-blue-500 font-semibold">episode</strong> last night.', ko_trans: '그는 어젯밤 또 <strong>증상 발작</strong>이 있었습니다.', ko_exp: "'episode'는 '사건, 일화'를 의미하지만, 의학에서는 특정 증상의 '발작' 또는 '발현'을 의미합니다.", en_exp: "An 'episode' is usually an event, but medically, it refers to an attack or occurrence of symptoms." },
+            { word: 'expire', example: 'The patient <strong class="text-blue-500 font-semibold">expired</strong> peacefully.', ko_trans: '환자가 평화롭게 <strong>사망했습니다</strong>.', ko_exp: "'expire'는 '만료되다'는 뜻이지만, 의학 용어로는 '사망하다'는 완곡한 표현입니다.", en_exp: "'Expire' means to come to an end, and is used medically as a formal term for 'to die'." },
+            { word: 'admit', example: 'She finally <strong class="text-blue-500 font-semibold">admitted</strong> him last night.', ko_trans: '그녀는 마침내 어젯밤 그를 <strong>입원시켰습니다</strong>.', ko_exp: "'admit'은 '인정하다'는 뜻이지만, 병원에서는 '입원시키다'는 의미로 사용됩니다.", en_exp: "'Admit' means to confess, but in a hospital context, it means 'to check a patient in for treatment'." },
+            { word: 'case', example: 'It’s a rare <strong class="text-blue-500 font-semibold">case</strong> of liver disease.', ko_trans: '그것은 희귀한 간 질환 <strong>환자</strong>입니다.', ko_exp: "'case'는 '사건, 경우'를 의미하지만, 의학에서는 특정 질환을 가진 '환자' 또는 '사례'를 뜻합니다.", en_exp: "A 'case' is usually a situation, but in medicine, it refers to a particular instance of a disease or a patient." },
+            { word: 'unremarkable', example: 'The scan was <strong class="text-blue-500 font-semibold">unremarkable</strong>.', ko_trans: '스캔 결과는 <strong>정상 소견</strong>이었습니다.', ko_exp: "'remarkable/unremarkable'은 '주목할 만한/평범한'이지만, 의학에서는 '비정상 소견 있음/없음(정상)'을 의미합니다.", en_exp: "'Unremarkable' means ordinary, but in medical reports, it means 'normal, with no abnormalities found'." },
+            { word: 'drain', example: 'They placed a <strong class="text-blue-500 font-semibold">drain</strong> after the surgery.', ko_trans: '그들은 수술 후 <strong>배액관</strong>을 삽입했습니다.', ko_exp: "'drain'은 '배수하다'는 뜻이지만, 의학에서는 체내의 액체를 빼내는 '배액관' 또는 그 행위를 의미합니다.", en_exp: "A 'drain' is for water, but medically, it refers to a tube used to remove fluid from the body." },
+            { word: 'sound', example: 'The doctor <strong class="text-blue-500 font-semibold">sounded</strong> the bladder.', ko_trans: '의사가 방광을 <strong>초음파로 검사했습니다</strong>.', ko_exp: "'sound'는 '소리'라는 뜻이지만, 의학 동사로는 '(초음파 등으로) 검사하다'는 의미가 있습니다.", en_exp: "'Sound' means noise, but as a medical verb, it can mean 'to examine with a probe or ultrasound'." },
+            { word: 'evaluate', example: 'We need to <strong class="text-blue-500 font-semibold">evaluate</strong> her condition further.', ko_trans: '우리는 그녀의 상태를 더 <strong>진단/검사</strong>해야 합니다.', ko_exp: "'evaluate'는 '평가하다'는 일반적인 의미지만, 의학에서는 진단이나 검사를 통해 상태를 '판단하다'는 의미가 강합니다.", en_exp: "'Evaluate' means to assess, and medically, it means to determine a patient's condition through tests and examination." },
+            { word: 'remission', example: 'The cancer is in <strong class="text-blue-500 font-semibold">remission</strong>.', ko_trans: '암이 <strong>관해</strong> 상태에 있습니다.', ko_exp: "'remission'은 '완화'라는 뜻이지만, 의학에서는 암세포가 보이지 않는 '관해' 상태를 의미합니다.", en_exp: "'Remission' means relief, but medically, it refers to a state where signs of cancer have disappeared." },
+            { word: 'intervention', example: 'The patient required surgical <strong class="text-blue-500 font-semibold">intervention</strong>.', ko_trans: '그 환자는 외과적 <strong>처치</strong>가 필요했습니다.', ko_exp: "'intervention'은 '개입'을 의미하지만, 의학에서는 질병을 치료하기 위한 '시술, 처치'를 의미합니다.", en_exp: "'Intervention' means getting involved, but medically it refers to a procedure or treatment to improve a condition." },
+            { word: 'complication', example: 'There were no postoperative <strong class="text-blue-500 font-semibold">complications</strong>.', ko_trans: '수술 후 <strong>합병증</strong>은 없었습니다.', ko_exp: "'complication'은 '복잡함'을 뜻하지만, 의학에서는 질병이나 치료 중에 발생하는 '합병증'을 의미합니다.", en_exp: "A 'complication' makes things difficult, and in medicine, it's a secondary disease or problem that arises." },
+            { word: 'complaints', example: 'His main <strong class="text-blue-500 font-semibold">complaints</strong> were fatigue and dizziness.', ko_trans: '그의 주된 <strong>호소 증상</strong>은 피로와 어지러움이었습니다.', ko_exp: "'complaints'는 '불평들'을 의미하지만, 의학에서는 환자가 호소하는 '증상'들을 의미합니다.", en_exp: "'Complaints' are expressions of dissatisfaction, but medically, they are the symptoms a patient reports to a doctor." },
+            { word: 'appreciate', example: 'No mass was <strong class="text-blue-500 font-semibold">appreciated</strong> on palpation.', ko_trans: '촉진에서 종괴가 <strong>확인되지</strong> 않았습니다.', ko_exp: "'appreciate'는 '감사하다'는 뜻이지만, 의학 보고서에서는 '(검사에서) 확인되다/보이다'는 의미로 쓰입니다.", en_exp: "'Appreciate' means to be thankful, but in medical notes, it means 'to be seen or detected' during an exam." },
+            { word: 'tolerance', example: 'The patient has developed a <strong class="text-blue-500 font-semibold">tolerance</strong> to the drug.', ko_trans: '환자는 그 약물에 <strong>내성</strong>이 생겼습니다.', ko_exp: "'tolerance'는 '관용'을 의미하지만, 의학에서는 '약물 내성' 또는 통증 등을 '견디는 능력'을 뜻합니다.", en_exp: "'Tolerance' means acceptance, but medically, it's the body's reduced response to a drug, i.e., 'drug tolerance'." },
+            { word: 'conservative', example: 'They decided on <strong class="text-blue-500 font-semibold">conservative</strong> management.', ko_trans: '그들은 <strong>비침습적 치료</strong>로 결정했습니다.', ko_exp: "'conservative'는 '보수적인'을 의미하지만, 의학에서는 수술 등을 피하는 '비침습적 치료'를 의미합니다.", en_exp: "'Conservative' means traditional, but in medicine, it refers to non-invasive treatment that avoids surgery." },
+            { word: 'toilet', example: 'The nurse performed wound <strong class="text-blue-500 font-semibold">toilet</strong>.', ko_trans: '간호사가 상처 <strong>세척</strong>을 시행했습니다.', ko_exp: "'toilet'은 '화장실'을 의미하지만, 의학 용어로는 상처를 '세척/소독'하는 행위를 의미합니다.", en_exp: "'Toilet' is a bathroom fixture, but as a medical term, it refers to the cleaning of a wound ('wound toilet')." },
+            { word: 'gross', example: 'There was a <strong class="text-blue-500 font-semibold">gross</strong> amount of bleeding.', ko_trans: '<strong>육안으로 확인될 정도의</strong> 많은 출혈이 있었습니다.', ko_exp: "'gross'는 '거친, 심한'을 의미하지만, 의학에서는 '육안으로 보일 정도로 커다란'의 의미로 사용됩니다.", en_exp: "'Gross' can mean disgusting, but in a medical context, it means 'visible to the naked eye'." },
+            { word: 'indication', example: 'There’s no <strong class="text-blue-500 font-semibold">indication</strong> for surgery at this time.', ko_trans: '현시점에서는 수술에 대한 <strong>의학적 근거(적응증)</strong>가 없습니다.', ko_exp: "'indication'은 '표시, 신호'를 의미하지만, 의학에서는 특정 치료나 검사가 필요한 '의학적 근거(적응증)'를 뜻합니다.", en_exp: "An 'indication' is a sign, and medically, it is a valid reason to use a certain test or treatment." },
+            { word: 'impression', example: 'The clinical <strong class="text-blue-500 font-semibold">impression</strong> is viral infection.', ko_trans: '<strong>1차 진단 소견</strong>은 바이러스 감염입니다.', ko_exp: "'impression'은 '인상, 느낌'을 의미하지만, 의무기록에서는 의사의 '1차적인 진단 소견'을 의미합니다.", en_exp: "An 'impression' is a feeling, but on a medical chart, it refers to the initial diagnosis or assessment." },
+        ];
+        
+        const content = {
+            ko: {
+                instruction: "강조된 단어에 주의해서 예문을 해석해보세요. 문장을 클릭하면 설명이 나타납니다.",
+            },
+            en: {
+                instruction: "Pay attention to the highlighted word. Click the sentence to see the explanation.",
+            }
+        };
+
+        let currentLang = 'ko';
+
+        const instructionEl = document.getElementById('instruction');
+        const containerEl = document.getElementById('card-container');
+
+        function renderContent() {
+            instructionEl.textContent = content[currentLang].instruction;
+            containerEl.innerHTML = ''; // Clear existing cards
+
+            medicalTerms.forEach((term, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-gray-50 p-5 rounded-lg border border-gray-200';
+                
+                const exampleText = term.example; // Always show English example
+                let explanationContent = '';
+
+                if (currentLang === 'ko') {
+                    explanationContent = `
+                        <p class="text-stone-700 font-semibold mb-2">${term.ko_trans}</p>
+                        <p class="text-stone-600">${term.ko_exp}</p>
+                    `;
+                } else {
+                    explanationContent = `<p class="text-stone-600">${term.en_exp}</p>`;
+                }
+
+                card.innerHTML = `
+                    <p class="clickable-sentence text-lg text-stone-800 mb-3">${exampleText}</p>
+                    <div class="explanation mt-4 pt-4 border-t border-gray-200">
+                        ${explanationContent}
+                    </div>
+                `;
+                containerEl.appendChild(card);
+            });
+
+            addEventListeners();
+        }
+
+        function addEventListeners() {
+            document.querySelectorAll('.clickable-sentence').forEach(sentence => {
+                sentence.addEventListener('click', () => {
+                    const explanation = sentence.nextElementSibling;
+                    explanation.classList.toggle('show');
+                });
+            });
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            renderContent();
+        }
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const langParam = params.get('lang');
+                if (langParam === 'en' || langParam === 'ko') {
+                    currentLang = langParam;
+                }
+            } catch (e) {
+                console.log("Cannot read URL params in this environment, defaulting to 'ko'.");
+            }
+            renderContent();
+        });
+
+    </script>
+</body>
+</html>
+
