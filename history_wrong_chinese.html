@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- !!! 이 제목은 아래 i18n 객체에서 동적으로 업데이트됩니다. !!! -->
+    <title>페이지 제목 Placeholder</title> 
+
+    <!-- Google Fonts 및 기타 스타일/스크립트를 여기에 추가하세요 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&family=Noto+Serif+SC:wght@400;600&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics (GA) - GA_MEASUREMENT_ID를 실제 ID로 교체하세요 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            background-color: #FCFAF8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 메인 콘텐츠 너비 설정 */
+        main {
+            width: 100%;
+            max-width: 48rem;
+            margin: 0 auto; /* 헤더와 너비를 맞추기 위해 중앙 정렬 */
+            padding: 1rem 2rem;
+            box-sizing: border-box;
+            
+            /* 콘텐츠 영역 스타일 */
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* --- 콘텐츠 스타일 시작 --- */
+        h1, h2, h3 {
+            color: #2c2c2c;
+            border-bottom: 2px solid #F7F3EF;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            font-weight: 600;
+        }
+
+        h1 { font-size: 2rem; margin-top: 0; }
+        h2 { font-size: 1.6rem; }
+        h3 { font-size: 1.25rem; border-bottom: 1px solid #eee; }
+
+        p {
+            margin-bottom: 1.25rem;
+            text-align: justify; /* 양쪽 정렬 */
+            font-size: 1.05rem;
+        }
+
+        /* 인용문 스타일 */
+        blockquote {
+            font-family: "Noto Serif KR", "Noto Serif SC", serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            border-left: 4px solid #D1C7BC;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            color: #444;
+            background-color: #FDFCFB;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        
+        /* [NEW] 인용문 내 특정 한자 강조 스타일 */
+        blockquote .quote-highlight {
+            color: #8B0000; /* Dark Maroon: 어두운 적갈색 */
+            font-weight: 700;
+            font-size: 1.1em; 
+            font-style: normal; /* 인용문의 기울임꼴 스타일 무시 */
+        }
+
+        /* [수정] 본문 내 한자는 일반 폰트, h2 제목 내 한자만 크게 표시 */
+        .hanja {
+            /* 이 클래스는 이제 h2 태그 내에서만 특별한 의미를 가집니다. */
+            font-family: "Noto Serif TC", "Noto Serif SC", "Noto Serif KR", serif;
+            font-weight: 600;
+            color: #111;
+        }
+        
+        /* 제목(h2) 안의 한자는 더 크게 강조 */
+        h2 .hanja {
+            font-size: 2.0em;
+            vertical-align: -0.25em;
+            color: #000;
+            display: inline-block;
+            line-height: 1;
+        }
+        /* --- 콘텐츠 스타일 끝 --- */
+
+        /* 헤더 링크 스타일 */
+        #header-link:hover {
+            color: #000;
+        }
+        
+        /* 버튼의 링크 스타일 (파란색/밑줄) 강제 제거 */
+        .px-3.py-1, 
+        .px-3.py-1:link, 
+        .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; 
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 섹션: 사용자가 요청한 원본 HTML과 인라인 스타일을 그대로 적용했습니다. -->
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <!-- 언어 전환 버튼: 원본 HTML을 유지했습니다. CSS가 스타일을 보장합니다. -->
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main id="content">
+
+        <!-- ============================================= -->
+        <!-- 한국어 콘텐츠 (lang="ko") -->
+        <!-- ============================================= -->
+        <div class="lang-container" lang="ko">
+            <h1>중의학에서 흔히 잘못 이해되는 고대 한자 용어들</h1>
+            
+            <h2>한자 의미의 시대적 변천</h2>
+            <p>
+                논어(論語)의 첫 구절 "學而時習之 不亦說乎(학이시습지 불역열호)"는 매우 유명하다. 여기서 說은 '말씀 설'이 아니라 '기쁠 열'로 읽고 '기쁘다'라고 해석한다. "배우고 때때로 익히니 또한 기쁘지 아니한가"라는 뜻이다. 현대에는 說(설)이 거의 '말하다' 또는 '이론'의 의미로만 쓰이기 때문에, 이 구절을 처음 접하면 '말하지 아니한가?'로 오해하기 쉽다.
+            </p>
+            <p>
+                北(북)은 두 사람이 서로 등을 돌리고 있는 모습을 그린 글자로, 본래 '등'을 의미했다. '등지다', '패배하여 달아나다'(敗北) 등의 의미도 여기서 나왔다. 고대 중국에서는 왕이 남쪽을 바라보고 앉았기 때문에(南面), 왕의 등을 향하는 방향이 '북쪽'이 되었다. 이로 인해 北은 점차 '북쪽'이라는 방위의 의미로 굳어졌고, 본래의 '등'이라는 뜻은 肉(고기 육, 신체를 뜻함) 부수가 추가된 背(배)라는 글자가 대신하게 되었다. 고전에 나오는 北자를 현대처럼 방위로만 해석하면 본래 의미를 놓칠 수 있다.
+            </p>
+            <p>
+                우리가 보통 쿵푸라고 하는 것은 한자로 工夫(공부)라고 쓴다. 이 단어는 본래 '들인 시간', '노력', '정성' 또는 그로 인해 얻어진 '기술'이나 '솜씨'를 의미하는 넓은 개념의 단어였다. 하지만 현대 한국어에서 '공부'는 그 의미가 축소되어, 주로 '책을 읽고 배우는 학문적 학습'만을 지칭하는 단어가 되었다.
+            </p>
+            <p>
+                이처럼 고대 한자가 현재와 다른 의미로 쓰이는 경우가 있다. 중의학에서 특히 오해가 되는 한자들을 살펴보겠다.
+            </p>
+
+            <h2><span class="hanja">寒</span>(한): '차가움'이 아니라 '병적인 것 전반'</h2>
+            <p>
+                고대 중의학 문헌에서 寒(한)은 단순히 온도가 낮은 '차가움'을 의미하지 않았다. 中西惟忠의 『傷寒之研究』(1774)에는 다음과 같은 기록이 있다:
+            </p>
+            <blockquote>"謂邪而爲<span class="quote-highlight">寒</span>，盖古義也"</blockquote>
+            <p>
+                (사기(邪氣)를 寒이라고 칭하는 것은 고대의 용법이다)
+            </p>
+            <p>
+                이는 寒이 모든 병적인 기운(邪氣)을 지칭하는 포괄적 용어였음을 명확히 보여준다. 예를 들어 '寒膽(한담)', 즉 '차가운 담낭'이라는 표현은 실제로 온도가 낮은 담낭을 의미하는 것이 아니라 '기능이 약화되고 비정상적인 담낭' 상태를 의미한다.
+            </p>
+            <p>
+                여기서 파생된 상한(傷寒)이라는 용어도 마찬가지다. 이는 차가운 것을 병인으로 본 것이 아니라 모든 나쁜 기운을 의미하는 용어다. 매우 흔히 현대에 잘못 해석되고 있는 용어다.
+            </p>
+            
+            <h3>고대 문헌의 근거</h3>
+            <p>
+                『소문·열론』에는 다음과 같이 기록되어 있다:
+            </p>
+            <blockquote>"今夫熱病者, 皆傷寒之類也."</blockquote>
+            <p>
+                (무릇 열병이라는 것은 모두 상한의 범주에 속한다)
+            </p>
+            <p>
+                이는 발열을 동반하는 모든 질환이 상한의 범주에 포함되며, 여기에는 온병(溫病)의 개념도 포함된다는 것을 명시하고 있다. 즉, 상한은 단순히 '추위에 상한 것'이 아니라, 발열성 질환 전반을 아우르는 포괄적 용어였다.
+            </p>
+            <p>
+                또한 같은 문헌에서는:
+            </p>
+            <blockquote>"傷<span class="quote-highlight">寒</span>有五, 有中風, 有傷<span class="quote-highlight">寒</span>, 有濕溫, 有熱病, 有溫病."</blockquote>
+            <p>
+                (상한에는 다섯 가지가 있으니, 중풍이 있고, 상한이 있고, 습온이 있고, 열병이 있고, 온병이 있다)
+            </p>
+            <p>
+                이 구절은 상한이 풍한(風寒)에 의한 것, 습열(濕熱)에 의한 것, 순수한 열(熱)에 의한 것, 온열(溫熱)에 의한 것 등 다섯 가지 유형을 모두 포괄한다는 것을 보여준다. 따라서 寒(한)이라는 글자가 들어있다고 해서 이를 단순히 '차가움'이나 '추위'로만 해석하는 것은 큰 오류다.
+            </p>
+            <p>
+                『상한론』에도 이러한 해석을 뒷받침하는 구절이 있다:
+            </p>
+            <blockquote>"太陽病，發熱而渴，不悪<span class="quote-highlight">寒</span>者，爲温病"</blockquote>
+            <p>
+                (태양병에서 발열과 갈증이 있으면서 오한이 없는 것은 온병으로 본다)
+            </p>
+            <p>
+                이는 추위를 싫어하지 않는, 즉 한사(寒邪)와 무관한 질환임에도 불구하고 여전히 상한의 체계 안에서 논의되고 있음을 보여준다.
+            </p>
+            <p>
+                당나라의 명의 손사막(孫思邈)은 『천금요방』에서 다음과 같이 명확히 밝히고 있다:
+            </p>
+            <blockquote>"<span class="quote-highlight">傷寒</span>, 雅士之詞, 云 天行, 瘟疫, 乃田舍間號耳"</blockquote>
+            <p>
+                (상한은 고상한 선비들의 용어이고, 천행이나 온역이라고 하는 것은 민간에서 부르는 이름일 뿐이다)
+            </p>
+            <p>
+                즉, 상한은 발열성 질환과 전염병을 포괄하는 학술적 용어였다는 것이다.
+            </p>
+            <p>
+                갈홍(葛洪)의 『주후비급방』에도 유사한 기록이 있다:
+            </p>
+            <blockquote>"貴勝雅言, 總名傷<span class="quote-highlight">寒</span>, 世俗因號爲時行"</blockquote>
+            <p>
+                (귀한 이들의 고상한 언어로는 총칭하여 상한이라 하고, 세속에서는 시행(유행병)이라 부른다)
+            </p>
+            <p>
+                이는 상한이 고급 학술 용어였으며, 온병(溫病) 같은 발열성 질환을 모두 포괄하는 개념이었음을 재확인해준다.
+            </p>
+
+            <h2><span class="hanja">溫</span>(온): '따뜻하게 하다'가 아니라 '보양하다'</h2>
+            <p>
+                溫(온) 또한 현대적 의미의 '따뜻하게 만들다'와는 다른 의미로 사용되었다. 『단심(丹心)』에는 다음과 같은 명확한 설명이 있다:
+            </p>
+            <blockquote>"又曰, 形不足者, <span class="quote-highlight">溫</span>之以氣. <span class="quote-highlight">溫</span>, 養也... 局方悉以溫熱藥佐輔, 名曰溫補, 豈理也哉."</blockquote>
+            <p>
+                (또 말하기를, 형체가 부족한 자는 기로써 溫해야 한다. 溫은 養(기르다)을 의미한다... 『局方』에서는 모두 온열한 약재로 보조하여 이를 溫補라 부르는데, 어찌 이치에 맞는가?)
+            </p>
+            <p>
+                이 인용문은 溫이 '양육하다', '보양하다'를 의미하는 것이지, 온도를 올리는 것이 아님을 분명히 한다. 저자는 단지 '溫'이라는 글자 때문에 온열성 약재를 사용하는 것은 잘못된 해석이라고 비판하고 있다. 즉, 溫補(온보)란 온열한 약으로 보하는 것이 아니라, 부족한 것을 기르고 보양한다는 본래의 의미로 이해해야 한다는 것이다.
+            </p>
+
+            <h2><span class="hanja">膽</span>(담): 해부학적 장기가 아니라 '정신 상태'</h2>
+            <p>
+                중의학에서 膽(담)은 단순히 담낭이라는 장기를 넘어서는 의미를 가진다. 특히 온담탕(溫膽湯)과 같은 처방에서 '膽'은 정신적 기능을 주로 지칭한다.
+            </p>
+            <p>
+                온담탕의 주된 적응증은 煩躁(번조, 초조함과 심계항진)와 失眠(불면증)이다. 이는 명백히 정신적 문제이며, 중의학 이론에서 이러한 증상들은 주로 心(심)과 관련된다. 膽은 전통적으로 담력, 자신감 부족, 결단력 저하와 연관되어 있다.
+            </p>
+            <p>
+                따라서 '溫膽(온담)'은 문자 그대로 '담낭을 따뜻하게 하다'가 아니라 '정신적 문제를 치료하다'를 의미한다. 실제로 온담탕은 寒性(한성)이 아닌 涼性(량성) 처방이며, 그 주된 병기는 熱痰(열담, 열이 있는 담)으로 인한 煩躁와 失眠이다.
+            </p>
+
+            <h2><span class="hanja">心</span>(심): 심장만이 아닌 상복부 전체</h2>
+            <p>
+                딤섬은 한자로 마음 심(心)과 점(點)으로 구성되어, 흔히 '마음에 점을 찍다'라고 낭만적으로 해석하는데, 예전 중국에서의 心(심)은 단순히 해부학적 심장만을 의미하지 않고, 가슴과 상복부를 아우르는 넓은 영역을 지칭한다. 이는 동서양 공통적으로 나타나는 언어적 현상이다.
+            </p>
+            
+            <h3>서양의 사례: 가슴쓰림(Heartburn)</h3>
+            <p>
+                영어의 'Heartburn(가슴쓰림)'은 심장 문제가 아니라 소화기 문제, 특히 위산 역류를 가리킨다. 문자적으로는 "심장이 타는 것"을 의미하지만 실제로는 위산과 관련이 있다. 심장과 식도가 가까이 위치하여 통증이 유사하게 느껴지기 때문에 수세기 동안 혼동되어 왔다. 연구에 따르면 심근경색을 경험하는 여성의 약 40%가 처음에는 가슴쓰림과 유사한 증상으로 착각한다.
+            </p>
+            <p>
+                반대로 "Butterflies in the stomach(뱃속의 나비)"은 긴장하거나 불안할 때 느끼는 복부의 펄럭이는 감각을 묘사한다. 그러나 이 감각은 실제로 위장이 아닌 마음, 즉 심장의 감정적 반응과 연관되어 있다.
+            </p>
+
+            <h3>중국어의 사례: 心窩(심와)</h3>
+            <p>
+                중국어에서 心窩(심와, xīnwō)는 문자적으로 "심장의 움푹한 곳"을 의미하지만, 실제로는 위를 가리킨다. 예를 들어
+            </p>
+            <blockquote>"吃得太飽，<span class="quote-highlight">心窩</span>發悶"</blockquote>
+            <p>
+                은 "너무 많이 먹어서 위가 불편하다"는 뜻이다.
+            </p>
+
+            <h3>중의학의 사례: 瀉心湯(사심탕)</h3>
+            <p>
+                중의학에는 瀉心湯(사심탕, Xiexin Tang)이라는 처방이 있다. 瀉心(사심)은 문자적으로 "심장을 배설하다"로 번역되지만, 실제로는 상복부의 충만감과 불편함을 완화하는 데 사용된다.
+            </p>
+            <p>
+                半夏瀉心湯(반하사심탕)은 위염과 소화성 궤양 치료로 잘 알려진 처방이다. 중의학에서는 心下(심하, xinxia), 즉 "심장 아래"라는 용어로 위 부위를 지칭한다. 이는 心이 단순히 심장이라는 해부학적 장기만을 의미하는 것이 아니라, 상복부 전체를 포괄하는 개념이었음을 보여준다.
+            </p>
+
+            <h2><span class="hanja">風</span>(풍): '바람'이 아니라 '움직임과 변화'라는 질병의 속성</h2>
+            <p>
+                寒(한)이 '나쁜 것(邪)'이라는 추상적 의미로 쓰인 것처럼, 風(풍)도 마찬가지이다. 風은 단순히 대기 중의 '바람'이 아니라, '갑자기 발병하고', '증상이 이곳저곳 옮겨 다니며', '움직임이 많은(경련, 마비, 현기증)' 질병의 속성을 나타내는 용어이다.
+            </p>
+            <p>
+                뇌졸중을 中風(중풍, 바람에 맞았다)이라고 부르는 것은 실제 바람 때문이 아니라, 그 발병의 갑작스러운 특성을 비유한 것이다. 또한 신체 내부의 불균형으로 인해 발생하는 경련이나 현기증을 內風(내풍)이라고 부르기도 한다. 고대에는 실제 현재 중풍이라고 부르는 질환 외에 수많은 질환들이 풍이라는 이름으로 불렸다.
+            </p>
+
+            <h2>결론</h2>
+            <p>
+                중의학 용어를 이해할 때, 현대적 의미로만 해석하면 원래의 의도를 왜곡할 수 있다. 寒은 단순한 '차가움'이 아니라 '병적 상태', 溫은 '온도 상승'이 아니라 '보양', 膽은 '담낭 장기'가 아니라 '정신 기능', 心은 '심장'만이 아니라 '상복부 전체', 風은 '바람'이 아니라 '질병의 역동적 속성'을 의미한다. 이런 오랜 한자를 잘못해석하고, 이를 말이 되게 만들고자 견강부회의 해석을 하는 경우가 역사속에 많이 있었다. 현재도 다르지 않다. 고대 문헌을 잘못해석하고는 억지로 어떻게든 이를 증명하고자 하는 것은 어리석은 일이다.  따라서 고대 문헌의 용어를 해석할 때는 그 시대의 언어적 맥락과 실제 임상적 사실을 모두 고려해야 한다. 처방명이나 이론적 명칭에 얽매이기보다는, 실제 치료 효과와 적응증이라는 사실에 근거하여 중의학을 이해하고 발전시켜야 한다. 중의학은 경험적 과학이며, 그 용어들은 수천 년의 임상 경험을 통해 형성된 것이다. 현대의 우리는 이러한 역사적 맥락을 존중하면서도, 동시에 과학적 사실에 기반하여 중의학을 재해석하고 발전시켜 나가야 할 책임이 있다.
+            </p>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- 영어 콘텐츠 (lang="en") -->
+        <!-- ============================================= -->
+        <div class="lang-container" lang="en" style="display: none;">
+            <h1>Commonly Misunderstood Ancient Chinese Characters in TCM</h1>
+
+            <h2>The Historical Evolution of Hanzi Meanings</h2>
+            <p>
+                The opening line of the Analects (論語), "學而時習之 不亦說乎," is widely known. Here, the character 說 is read as 'yuè' (joyful), not 'shuō' (to speak), and is interpreted as 'joyful' or 'pleased.' The phrase means, "To learn and review from time to time, is that not a pleasure?" In modern times, 說 is almost exclusively used to mean 'to speak' or 'theory,' so one might mistakenly interpret this phrase as "is it not spoken?"
+            </p>
+            <p>
+                The character 北 (běi) is a pictogram of two people turning their backs on each other, originally meaning 'the back.' From this came meanings like 'to turn one's back on' and 'to flee in defeat' (敗北). In ancient China, the emperor sat facing south (南面), so the direction towards his back became 'north.' Consequently, 北 gradually solidified its meaning as the cardinal direction 'north,' and its original meaning of 'back' was taken over by the character 背 (bèi), which added the radical 肉 (ròu, meaning flesh or body). Interpreting the character 北 in classical texts solely by its modern directional meaning can cause one to miss its original intent.
+            </p>
+            <p>
+                What we commonly call 'kung fu' is written in Chinese characters as 工夫 (gōngfu). This word originally had a broad meaning, referring to 'time invested,' 'effort,' 'dedication,' or the 'skill' and 'craftsmanship' acquired through them. However, in modern Korean, the meaning of '공부' (gongbu) has narrowed to refer almost exclusively to academic learning, such as reading books.
+            </p>
+            <p>
+                As these examples show, ancient Chinese characters were often used with different meanings than they have today. We will now examine some characters that are particularly prone to misunderstanding in Traditional Chinese Medicine (TCM).
+            </p>
+
+            <h2><span class="hanja">寒</span> (hán): Not 'Cold', but 'Pathogenic Factors in General'</h2>
+            <p>
+                In ancient TCM literature, 寒 (hán) did not simply mean 'coldness' in terms of low temperature. The 1774 text "A Study of Shanghan" (傷寒之研究) by Nakanishi Ikkō states:
+            </p>
+            <blockquote>"謂邪而爲<span class="quote-highlight">寒</span>，盖古義也"</blockquote>
+            <p>
+                (To call pathogenic qi (邪氣) 'han' is an ancient usage.)
+            </p>
+            <p>
+                This clearly shows that 寒 was a comprehensive term for all pathogenic influences (邪氣, xiéqì). For example, the expression '寒膽 (hándǎn),' or 'cold gallbladder,' does not refer to a gallbladder that is literally cold, but rather to a state where its function is weakened and abnormal.
+            </p>
+            <p>
+                The term 傷寒 (shānghán), derived from this, follows the same logic. It does not mean injury by cold, but refers to harm from any adverse influence. This is a very commonly misinterpreted term today.
+            </p>
+
+            <h3>Evidence from Ancient Texts</h3>
+            <p>
+                The "Suwen: Discourse on Heat" (素問·熱論) records:
+            </p>
+            <blockquote>"今夫熱病者, 皆傷寒之類也."</blockquote>
+            <p>
+                (All febrile diseases belong to the category of Shanghan.)
+            </p>
+            <p>
+                This specifies that all illnesses accompanied by fever fall under the umbrella of Shanghan, including the concept of Warm Diseases (溫病, wēnbìng). Thus, Shanghan was not simply 'damage from cold' but a comprehensive term for febrile diseases in general.
+            </p>
+            <p>
+                The same text also states:
+            </p>
+            <blockquote>"傷<span class="quote-highlight">寒</span>有五, 有中風, 有傷<span class="quote-highlight">寒</span>, 有濕溫, 有熱病, 有溫病."</blockquote>
+            <p>
+                (There are five types of Shanghan: Wind-Strike, Cold Damage, Damp-Warmth, Heat Disease, and Warm Disease.)
+            </p>
+            <p>
+                This passage demonstrates that Shanghan encompasses conditions caused by Wind-Cold (風寒), Damp-Heat (濕熱), pure Heat (熱), and Warm-Heat (溫熱). Therefore, it is a significant error to interpret it merely as 'coldness' or 'chill' just because the character 寒 is present.
+            </p>
+            <p>
+                The "Treatise on Cold Damage" (傷寒論) also contains a passage supporting this interpretation:
+            </p>
+            <blockquote>"太陽病，發熱而渴，不悪<span class="quote-highlight">寒</span>者，爲温病"</blockquote>
+            <p>
+                (In Taiyang disease, if there is fever and thirst without an aversion to cold, it is considered a Warm Disease.)
+            </p>
+            <p>
+                This shows that even a condition unrelated to cold evil (寒邪), indicated by the absence of aversion to cold, is still discussed within the framework of Shanghan.
+            </p>
+            <p>
+                The renowned Tang dynasty physician Sun Simiao (孫思邈) clarified in his "Thousand Ducat Formulas" (千金要方):
+            </p>
+            <blockquote>"<span class="quote-highlight">傷寒</span>, 雅士之詞, 云 天行, 瘟疫, 乃田舍間號耳"</blockquote>
+            <p>
+                ('Shanghan' is the term of elegant scholars; 'celestial movement' or 'pestilence' are just names used by common folk.)
+            </p>
+            <p>
+                In other words, Shanghan was the academic term that encompassed febrile and epidemic diseases.
+            </p>
+            <p>
+                A similar record is found in Ge Hong's (葛洪) "Handbook of Prescriptions for Emergencies" (肘後備急方):
+            </p>
+            <blockquote>"貴勝雅言, 總名傷<span class="quote-highlight">寒</span>, 世俗因號爲時行"</blockquote>
+            <p>
+                (In the refined language of the elite, they are collectively called Shanghan; the common world calls them seasonal epidemics.)
+            </p>
+            <p>
+                This reaffirms that Shanghan was a high-level scholarly term that included all febrile conditions like Warm Diseases (溫病).
+            </p>
+
+            <h2><span class="hanja">溫</span> (wēn): Not 'to Warm', but 'to Nourish'</h2>
+            <p>
+                The character 溫 (wēn) was also used differently from its modern meaning of 'to make warm.' The "Danxi's Experiential Methods" (丹心) provides a clear explanation:
+            </p>
+            <blockquote>"又曰, 形不足者, <span class="quote-highlight">溫</span>之以氣. <span class="quote-highlight">溫</span>, 養也... 局方悉以溫熱藥佐輔, 名曰<span class="quote-highlight">溫補</span>, 豈理也哉."</blockquote>
+            <p>
+                (It is also said, for those with insufficient form, one should 溫 (wēn) them with Qi. Here, 溫 means to 養 (yǎng, nourish)... The "Formulary of the Pharmacy Service" uses all warming and heating herbs to assist, calling it 溫補 (wēnbǔ). How can this be rational?)
+            </p>
+            <p>
+                This quote makes it clear that 溫 means 'to nurture' or 'to nourish,' not to raise temperature. The author criticizes the practice of using warming herbs simply because of the character 溫, calling it a misinterpretation. In essence, 溫補 (wēnbǔ) should be understood not as supplementing with warming herbs, but in its original sense of nourishing and replenishing what is deficient.
+            </p>
+
+            <h2><span class="hanja">膽</span> (dǎn): Not an Anatomical Organ, but a 'State of Mind'</h2>
+            <p>
+                In TCM, 膽 (dǎn) signifies more than just the gallbladder. In formulas like "Gallbladder-Warming Decoction" (溫膽湯, Wēn Dǎn Tāng), '膽' primarily refers to mental and emotional functions.
+            </p>
+            <p>
+                The main indications for Wēn Dǎn Tāng are vexation and agitation (煩躁, fánzào) and insomnia (失眠, shīmián). These are clearly psychological issues, and in TCM theory, such symptoms are primarily related to the Heart (心, xīn). The 膽 is traditionally associated with courage, a lack of confidence, and indecisiveness.
+            </p>
+            <p>
+                Therefore, '溫膽 (wēndǎn)' does not literally mean 'to warm the gallbladder' but rather 'to treat a psychological issue.' In fact, Wēn Dǎn Tāng is a cooling (涼性, liángxìng), not a warming (寒性, hánxìng), formula. Its main pathology is vexation and insomnia caused by Heat-Phlegm (熱痰, rètán).
+            </p>
+
+            <h2><span class="hanja">心</span> (xīn): Not Just the Heart, but the Entire Upper Abdomen</h2>
+            <p>
+                Dim sum is written with the characters for heart (心) and dot (點), often romantically interpreted as 'to touch the heart.' However, in ancient China, 心 (xīn) referred not just to the anatomical heart but to a broad area encompassing the chest and upper abdomen. This is a linguistic phenomenon common to both Eastern and Western cultures.
+            </p>
+
+            <h3>Western Example: Heartburn</h3>
+            <p>
+                The English term 'heartburn' is not a cardiac issue but a digestive one, specifically acid reflux. Though it literally means "the heart is burning," it is related to stomach acid. The proximity of the heart and esophagus causes the pain to feel similar, leading to centuries of confusion. Studies show that about 40% of women experiencing a myocardial infarction initially mistake it for symptoms like heartburn.
+            </p>
+            <p>
+                Conversely, "butterflies in the stomach" describes the fluttering sensation in the abdomen when one is nervous or anxious. However, this sensation is not actually in the stomach but is related to the emotional response of the heart.
+            </p>
+
+            <h3>Chinese Example: 心窩 (xīnwō)</h3>
+            <p>
+                In Chinese, 心窩 (xīnwō) literally means "pit of the heart" but actually refers to the stomach. For example, "吃得太飽，<span class="quote-highlight">心窩</span>發悶" means "I ate too much, and my stomach feels uncomfortable."
+            </p>
+
+            <h3>TCM Example: 瀉心湯 (xièxīn tāng)</h3>
+            <p>
+                In TCM, there is a formula called 瀉心湯 (Xiè Xīn Tāng). 瀉心 (xièxīn) literally translates to "drain the heart," but it is actually used to relieve fullness and discomfort in the upper abdomen.
+            </p>
+            <p>
+                半夏瀉心湯 (Bàn Xià Xiè Xīn Tāng) is a well-known formula for treating gastritis and peptic ulcers. In TCM, the term 心下 (xīnxià), meaning "below the heart," is used to refer to the gastric region. This shows that 心 was a concept that encompassed the entire upper abdomen, not just the anatomical heart.
+            </p>
+
+            <h2><span class="hanja">風</span> (fēng): Not 'Wind', but the 'Quality of Movement and Change' in Disease</h2>
+            <p>
+                寒(한)이 '나쁜 것(邪)'이라는 추상적 의미로 쓰인 것처럼, 風(풍)도 마찬가지이다. 風은 단순히 대기 중의 '바람'이 아니라, '갑자기 발병하고', '증상이 이곳저곳 옮겨 다니며', '움직임이 많은(경련, 마비, 현기증)' 질병의 속성을 나타내는 용어이다.
+            </p>
+            <p>
+                뇌졸중을 中風(중풍, 바람에 맞았다)이라고 부르는 것은 실제 바람 때문이 아니라, 그 발병의 갑작스러운 특성을 비유한 것이다. 또한 신체 내부의 불균형으로 인해 발생하는 경련이나 현기증을 內風(내풍)이라고 부르기도 한다. 고대에는 실제 현재 중풍이라고 부르는 질환 외에 수많은 질환들이 풍이라는 이름으로 불렸다.
+            </p>
+
+            <h2>결론</h2>
+            <p>
+                중의학 용어를 이해할 때, 현대적 의미로만 해석하면 원래의 의도를 왜곡할 수 있다. 寒은 단순한 '차가움'이 아니라 '병적 상태', 溫은 '온도 상승'이 아니라 '보양', 膽은 '담낭 장기'가 아니라 '정신 기능', 心은 '심장'만이 아니라 '상복부 전체', 風은 '바람'이 아니라 '질병의 역동적 속성'을 의미한다. 이런 오랜 한자를 잘못해석하고, 이를 말이 되게 만들고자 견강부회의 해석을 하는 경우가 역사속에 많이 있었다. 현재도 다르지 않다. 고대 문헌을 잘못해석하고는 억지로 어떻게든 이를 증명하고자 하는 것은 어리석은 일이다.  따라서 고대 문헌의 용어를 해석할 때는 그 시대의 언어적 맥락과 실제 임상적 사실을 모두 고려해야 한다. 처방명이나 이론적 명칭에 얽매이기보다는, 실제 치료 효과와 적응증이라는 사실에 근거하여 중의학을 이해하고 발전시켜야 한다. 중의학은 경험적 과학이며, 그 용어들은 수천 년의 임상 경험을 통해 형성된 것이다. 현대의 우리는 이러한 역사적 맥락을 존중하면서도, 동시에 과학적 사실에 기반하여 중의학을 재해석하고 발전시켜 나가야 할 책임이 있다.
+            </p>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- 영어 콘텐츠 (lang="en") -->
+        <!-- ============================================= -->
+        <div class="lang-container" lang="en" style="display: none;">
+            <h1>Commonly Misunderstood Ancient Chinese Characters in TCM</h1>
+
+            <h2>The Historical Evolution of Hanzi Meanings</h2>
+            <p>
+                The opening line of the Analects (論語), "學而時習之 不亦說乎," is widely known. Here, the character 說 is read as 'yuè' (joyful), not 'shuō' (to speak), and is interpreted as 'joyful' or 'pleased.' The phrase means, "To learn and review from time to time, is that not a pleasure?" In modern times, 說 is almost exclusively used to mean 'to speak' or 'theory,' so one might mistakenly interpret this phrase as "is it not spoken?"
+            </p>
+            <p>
+                The character 北 (běi) is a pictogram of two people turning their backs on each other, originally meaning 'the back.' From this came meanings like 'to turn one's back on' and 'to flee in defeat' (敗北). In ancient China, the emperor sat facing south (南面), so the direction towards his back became 'north.' Consequently, 北 gradually solidified its meaning as the cardinal direction 'north,' and its original meaning of 'back' was taken over by the character 背 (bèi), which added the radical 肉 (ròu, meaning flesh or body). Interpreting the character 北 in classical texts solely by its modern directional meaning can cause one to miss its original intent.
+            </p>
+            <p>
+                What we commonly call 'kung fu' is written in Chinese characters as 工夫 (gōngfu). This word originally had a broad meaning, referring to 'time invested,' 'effort,' 'dedication,' or the 'skill' and 'craftsmanship' acquired through them. However, in modern Korean, the meaning of '공부' (gongbu) has narrowed to refer almost exclusively to academic learning, such as reading books.
+            </p>
+            <p>
+                As these examples show, ancient Chinese characters were often used with different meanings than they have today. We will now examine some characters that are particularly prone to misunderstanding in Traditional Chinese Medicine (TCM).
+            </p>
+
+            <h2><span class="hanja">寒</span> (hán): Not 'Cold', but 'Pathogenic Factors in General'</h2>
+            <p>
+                In ancient TCM literature, 寒 (hán) did not simply mean 'coldness' in terms of low temperature. The 1774 text "A Study of Shanghan" (傷寒之研究) by Nakanishi Ikkō states:
+            </p>
+            <blockquote>"謂邪而爲<span class="quote-highlight">寒</span>，盖古義也"</blockquote>
+            <p>
+                (To call pathogenic qi (邪氣) 'han' is an ancient usage.)
+            </p>
+            <p>
+                This clearly shows that 寒 was a comprehensive term for all pathogenic influences (邪氣, xiéqì). For example, the expression '寒膽 (hándǎn),' or 'cold gallbladder,' does not refer to a gallbladder that is literally cold, but rather to a state where its function is weakened and abnormal.
+            </p>
+            <p>
+                The term 傷寒 (shānghán), derived from this, follows the same logic. It does not mean injury by cold, but refers to harm from any adverse influence. This is a very commonly misinterpreted term today.
+            </p>
+
+            <h3>Evidence from Ancient Texts</h3>
+            <p>
+                The "Suwen: Discourse on Heat" (素問·熱論) records:
+            </p>
+            <blockquote>"今夫熱病者, 皆傷寒之類也."</blockquote>
+            <p>
+                (All febrile diseases belong to the category of Shanghan.)
+            </p>
+            <p>
+                This specifies that all illnesses accompanied by fever fall under the umbrella of Shanghan, including the concept of Warm Diseases (溫病, wēnbìng). Thus, Shanghan was not simply 'damage from cold' but a comprehensive term for febrile diseases in general.
+            </p>
+            <p>
+                The same text also states:
+            </p>
+            <blockquote>"傷<span class="quote-highlight">寒</span>有五, 有中風, 有傷<span class="quote-highlight">寒</span>, 有濕溫, 有熱病, 有溫病."</blockquote>
+            <p>
+                (There are five types of Shanghan: Wind-Strike, Cold Damage, Damp-Warmth, Heat Disease, and Warm Disease.)
+            </p>
+            <p>
+                This passage demonstrates that Shanghan encompasses conditions caused by Wind-Cold (風寒), Damp-Heat (濕熱), pure Heat (熱), and Warm-Heat (溫熱). Therefore, it is a significant error to interpret it merely as 'coldness' or 'chill' just because the character 寒 is present.
+            </p>
+            <p>
+                The "Treatise on Cold Damage" (傷寒論) also contains a passage supporting this interpretation:
+            </p>
+            <blockquote>"太陽病，發熱而渴，不悪<span class="quote-highlight">寒</span>者，爲温病"</blockquote>
+            <p>
+                (In Taiyang disease, if there is fever and thirst without an aversion to cold, it is considered a Warm Disease.)
+            </p>
+            <p>
+                This shows that even a condition unrelated to cold evil (寒邪), indicated by the absence of aversion to cold, is still discussed within the framework of Shanghan.
+            </p>
+            <p>
+                The renowned Tang dynasty physician Sun Simiao (孫思邈) clarified in his "Thousand Ducat Formulas" (千金要方):
+            </p>
+            <blockquote>"<span class="quote-highlight">傷寒</span>, 雅士之詞, 云 天行, 瘟疫, 乃田舍間號耳"</blockquote>
+            <p>
+                ('Shanghan' is the term of elegant scholars; 'celestial movement' or 'pestilence' are just names used by common folk.)
+            </p>
+            <p>
+                In other words, Shanghan was the academic term that encompassed febrile and epidemic diseases.
+            </p>
+            <p>
+                A similar record is found in Ge Hong's (葛洪) "Handbook of Prescriptions for Emergencies" (肘後備急方):
+            </p>
+            <blockquote>"貴勝雅言, 總名傷<span class="quote-highlight">寒</span>, 世俗因號爲時行"</blockquote>
+            <p>
+                (In the refined language of the elite, they are collectively called Shanghan; the common world calls them seasonal epidemics.)
+            </p>
+            <p>
+                This reaffirms that Shanghan was a high-level scholarly term that included all febrile conditions like Warm Diseases (溫病).
+            </p>
+
+            <h2><span class="hanja">溫</span> (wēn): Not 'to Warm', but 'to Nourish'</h2>
+            <p>
+                The character 溫 (wēn) was also used differently from its modern meaning of 'to make warm.' The "Danxi's Experiential Methods" (丹心) provides a clear explanation:
+            </p>
+            <blockquote>"又曰, 形不足者, <span class="quote-highlight">溫</span>之以氣. <span class="quote-highlight">溫</span>, 養也... 局方悉以溫熱藥佐輔, 名曰<span class="quote-highlight">溫補</span>, 豈理也哉."</blockquote>
+            <p>
+                (It is also said, for those with insufficient form, one should 溫 (wēn) them with Qi. Here, 溫 means to 養 (yǎng, nourish)... The "Formulary of the Pharmacy Service" uses all warming and heating herbs to assist, calling it 溫補 (wēnbǔ). How can this be rational?)
+            </p>
+            <p>
+                This quote makes it clear that 溫 means 'to nurture' or 'to nourish,' not to raise temperature. The author criticizes the practice of using warming herbs simply because of the character 溫, calling it a misinterpretation. In essence, 溫補 (wēnbǔ) should be understood not as supplementing with warming herbs, but in its original sense of nourishing and replenishing what is deficient.
+            </p>
+
+            <h2><span class="hanja">膽</span> (dǎn): Not an Anatomical Organ, but a 'State of Mind'</h2>
+            <p>
+                In TCM, 膽 (dǎn) signifies more than just the gallbladder. In formulas like "Gallbladder-Warming Decoction" (溫膽湯, Wēn Dǎn Tāng), '膽' primarily refers to mental and emotional functions.
+            </p>
+            <p>
+                The main indications for Wēn Dǎn Tāng are vexation and agitation (煩躁, fánzào) and insomnia (失眠, shīmián). These are clearly psychological issues, and in TCM theory, such symptoms are primarily related to the Heart (心, xīn). The 膽 is traditionally associated with courage, a lack of confidence, and indecisiveness.
+            </p>
+            <p>
+                Therefore, '溫膽 (wēndǎn)' does not literally mean 'to warm the gallbladder' but rather 'to treat a psychological issue.' In fact, Wēn Dǎn Tāng is a cooling (涼性, liángxìng), not a warming (寒性, hánxìng), formula. Its main pathology is vexation and insomnia caused by Heat-Phlegm (熱痰, rètán).
+            </p>
+
+            <h2><span class="hanja">心</span> (xīn): Not Just the Heart, but the Entire Upper Abdomen</h2>
+            <p>
+                Dim sum is written with the characters for heart (心) and dot (點), often romantically interpreted as 'to touch the heart.' However, in ancient China, 心 (xīn) referred not just to the anatomical heart but to a broad area encompassing the chest and upper abdomen. This is a linguistic phenomenon common to both Eastern and Western cultures.
+            </p>
+
+            <h3>Western Example: Heartburn</h3>
+            <p>
+                The English term 'heartburn' is not a cardiac issue but a digestive one, specifically acid reflux. Though it literally means "the heart is burning," it is related to stomach acid. The proximity of the heart and esophagus causes the pain to feel similar, leading to centuries of confusion. Studies show that about 40% of women experiencing a myocardial infarction initially mistake it for symptoms like heartburn.
+            </p>
+            <p>
+                Conversely, "butterflies in the stomach" describes the fluttering sensation in the abdomen when one is nervous or anxious. However, this sensation is not actually in the stomach but is related to the emotional response of the heart.
+            </p>
+
+            <h3>Chinese Example: 心窩 (xīnwō)</h3>
+            <p>
+                In Chinese, 心窩 (xīnwō) literally means "pit of the heart" but actually refers to the stomach. For example, "吃得太飽，<span class="quote-highlight">心窩</span>發悶" means "I ate too much, and my stomach feels uncomfortable."
+            </p>
+
+            <h3>TCM Example: 瀉心湯 (xièxīn tāng)</h3>
+            <p>
+                In TCM, there is a formula called 瀉心湯 (Xiè Xīn Tāng). 瀉心 (xièxīn) literally translates to "drain the heart," but it is actually used to relieve fullness and discomfort in the upper abdomen.
+            </p>
+            <p>
+                半夏瀉心湯 (Bàn Xià Xiè Xīn Tāng) is a well-known formula for treating gastritis and peptic ulcers. In TCM, the term 心下 (xīnxià), meaning "below the heart," is used to refer to the gastric region. This shows that 心 was a concept that encompassed the entire upper abdomen, not just the anatomical heart.
+            </p>
+
+            <h2><span class="hanja">風</span> (fēng): Not 'Wind', but the 'Quality of Movement and Change' in Disease</h2>
+            <p>
+                寒(한)이 '나쁜 것(邪)'이라는 추상적 의미로 쓰인 것처럼, 風(풍)도 마찬가지이다. 風은 단순히 대기 중의 '바람'이 아니라, '갑자기 발병하고', '증상이 이곳저곳 옮겨 다니며', '움직임이 많은(경련, 마비, 현기증)' 질병의 속성을 나타내는 용어이다.
+            </p>
+            <p>
+                뇌졸중을 中風(중풍, 바람에 맞았다)이라고 부르는 것은 실제 바람 때문이 아니라, 그 발병의 갑작스러운 특성을 비유한 것이다. 또한 신체 내부의 불균형으로 인해 발생하는 경련이나 현기증을 內風(내풍)이라고 부르기도 한다. 고대에는 실제 현재 중풍이라고 부르는 질환 외에 수많은 질환들이 풍이라는 이름으로 불렸다.
+            </p>
+
+            <h2>결론</h2>
+            <p>
+                중의학 용어를 이해할 때, 현대적 의미로만 해석하면 원래의 의도를 왜곡할 수 있다. 寒은 단순한 '차가움'이 아니라 '병적 상태', 溫은 '온도 상승'이 아니라 '보양', 膽은 '담낭 장기'가 아니라 '정신 기능', 心은 '심장'만이 아니라 '상복부 전체', 風은 '바람'이 아니라 '질병의 역동적 속성'을 의미한다. 이런 오랜 한자를 잘못해석하고, 이를 말이 되게 만들고자 견강부회의 해석을 하는 경우가 역사속에 많이 있었다. 현재도 다르지 않다. 고대 문헌을 잘못해석하고는 억지로 어떻게든 이를 증명하고자 하는 것은 어리석은 일이다.  따라서 고대 문헌의 용어를 해석할 때는 그 시대의 언어적 맥락과 실제 임상적 사실을 모두 고려해야 한다. 처방명이나 이론적 명칭에 얽매이기보다는, 실제 치료 효과와 적응증이라는 사실에 근거하여 중의학을 이해하고 발전시켜야 한다. 중의학은 경험적 과학이며, 그 용어들은 수천 년의 임상 경험을 통해 형성된 것이다. 현대의 우리는 이러한 역사적 맥락을 존중하면서도, 동시에 과학적 사실에 기반하여 중의학을 재해석하고 발전시켜 나가야 할 책임이 있다.
+            </p>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- 영어 콘텐츠 (lang="en") -->
+        <!-- ============================================= -->
+        <div class="lang-container" lang="en" style="display: none;">
+            <h1>Commonly Misunderstood Ancient Chinese Characters in TCM</h1>
+
+            <h2>The Historical Evolution of Hanzi Meanings</h2>
+            <p>
+                The opening line of the Analects (論語), "學而時習之 不亦說乎," is widely known. Here, the character 說 is read as 'yuè' (joyful), not 'shuō' (to speak), and is interpreted as 'joyful' or 'pleased.' The phrase means, "To learn and review from time to time, is that not a pleasure?" In modern times, 說 is almost exclusively used to mean 'to speak' or 'theory,' so one might mistakenly interpret this phrase as "is it not spoken?"
+            </p>
+            <p>
+                The character 北 (běi) is a pictogram of two people turning their backs on each other, originally meaning 'the back.' From this came meanings like 'to turn one's back on' and 'to flee in defeat' (敗北). In ancient China, the emperor sat facing south (南面), so the direction towards his back became 'north.' Consequently, 北 gradually solidified its meaning as the cardinal direction 'north,' and its original meaning of 'back' was taken over by the character 背 (bèi), which added the radical 肉 (ròu, meaning flesh or body). Interpreting the character 北 in classical texts solely by its modern directional meaning can cause one to miss its original intent.
+            </p>
+            <p>
+                What we commonly call 'kung fu' is written in Chinese characters as 工夫 (gōngfu). This word originally had a broad meaning, referring to 'time invested,' 'effort,' 'dedication,' or the 'skill' and 'craftsmanship' acquired through them. However, in modern Korean, the meaning of '공부' (gongbu) has narrowed to refer almost exclusively to academic learning, such as reading books.
+            </p>
+            <p>
+                As these examples show, ancient Chinese characters were often used with different meanings than they have today. We will now examine some characters that are particularly prone to misunderstanding in Traditional Chinese Medicine (TCM).
+            </p>
+
+            <h2><span class="hanja">寒</span> (hán): Not 'Cold', but 'Pathogenic Factors in General'</h2>
+            <p>
+                In ancient TCM literature, 寒 (hán) did not simply mean 'coldness' in terms of low temperature. The 1774 text "A Study of Shanghan" (傷寒之研究) by Nakanishi Ikkō states:
+            </p>
+            <blockquote>"謂邪而爲<span class="quote-highlight">寒</span>，盖古義也"</blockquote>
+            <p>
+                (To call pathogenic qi (邪氣) 'han' is an ancient usage.)
+            </p>
+            <p>
+                This clearly shows that 寒 was a comprehensive term for all pathogenic influences (邪氣, xiéqì). For example, the expression '寒膽 (hándǎn),' or 'cold gallbladder,' does not refer to a gallbladder that is literally cold, but rather to a state where its function is weakened and abnormal.
+            </p>
+            <p>
+                The term 傷寒 (shānghán), derived from this, follows the same logic. It does not mean injury by cold, but refers to harm from any adverse influence. This is a very commonly misinterpreted term today.
+            </p>
+
+            <h3>Evidence from Ancient Texts</h3>
+            <p>
+                The "Suwen: Discourse on Heat" (素問·熱論) records:
+            </p>
+            <blockquote>"今夫熱病者, 皆傷寒之類也."</blockquote>
+            <p>
+                (All febrile diseases belong to the category of Shanghan.)
+            </p>
+            <p>
+                This specifies that all illnesses accompanied by fever fall under the umbrella of Shanghan, including the concept of Warm Diseases (溫病, wēnbìng). Thus, Shanghan was not simply 'damage from cold' but a comprehensive term for febrile diseases in general.
+            </p>
+            <p>
+                The same text also states:
+            </p>
+            <blockquote>"傷<span class="quote-highlight">寒</span>有五, 有中風, 有傷<span class="quote-highlight">寒</span>, 有濕溫, 有熱病, 有溫病."</blockquote>
+            <p>
+                (There are five types of Shanghan: Wind-Strike, Cold Damage, Damp-Warmth, Heat Disease, and Warm Disease.)
+            </p>
+            <p>
+                This passage demonstrates that Shanghan encompasses conditions caused by Wind-Cold (風寒), Damp-Heat (濕熱), pure Heat (熱), and Warm-Heat (溫熱). Therefore, it is a significant error to interpret it merely as 'coldness' or 'chill' just because the character 寒 is present.
+            </p>
+            <p>
+                The "Treatise on Cold Damage" (傷寒論) also contains a passage supporting this interpretation:
+            </p>
+            <blockquote>"太陽病，發熱而渴，不悪<span class="quote-highlight">寒</span>者，爲温病"</blockquote>
+            <p>
+                (In Taiyang disease, if there is fever and thirst without an aversion to cold, it is considered a Warm Disease.)
+            </p>
+            <p>
+                This shows that even a condition unrelated to cold evil (寒邪), indicated by the absence of aversion to cold, is still discussed within the framework of Shanghan.
+            </p>
+            <p>
+                The renowned Tang dynasty physician Sun Simiao (孫思邈) clarified in his "Thousand Ducat Formulas" (千金要方):
+            </p>
+            <blockquote>"<span class="quote-highlight">傷寒</span>, 雅士之詞, 云 天行, 瘟疫, 乃田舍間號耳"</blockquote>
+            <p>
+                ('Shanghan' is the term of elegant scholars; 'celestial movement' or 'pestilence' are just names used by common folk.)
+            </p>
+            <p>
+                In other words, Shanghan was the academic term that encompassed febrile and epidemic diseases.
+            </p>
+            <p>
+                A similar record is found in Ge Hong's (葛洪) "Handbook of Prescriptions for Emergencies" (肘後備急方):
+            </p>
+            <blockquote>"貴勝雅言, 總名傷<span class="quote-highlight">寒</span>, 世俗因號爲時行"</blockquote>
+            <p>
+                (In the refined language of the elite, they are collectively called Shanghan; the common world calls them seasonal epidemics.)
+            </p>
+            <p>
+                This reaffirms that Shanghan was a high-level scholarly term that included all febrile conditions like Warm Diseases (溫病).
+            </p>
+
+            <h2><span class="hanja">溫</span> (wēn): Not 'to Warm', but 'to Nourish'</h2>
+            <p>
+                The character 溫 (wēn) was also used differently from its modern meaning of 'to make warm.' The "Danxi's Experiential Methods" (丹心) provides a clear explanation:
+            </p>
+            <blockquote>"又曰, 形不足者, <span class="quote-highlight">溫</span>之以氣. <span class="quote-highlight">溫</span>, 養也... 局方悉以溫熱藥佐輔, 名曰溫補, 豈理也哉."</blockquote>
+            <p>
+                (It is also said, for those with insufficient form, one should 溫 (wēn) them with Qi. Here, 溫 means to 養 (yǎng, nourish)... The "Formulary of the Pharmacy Service" uses all warming and heating herbs to assist, calling it 溫補 (wēnbǔ). How can this be rational?)
+            </p>
+            <p>
+                This quote makes it clear that 溫 means 'to nurture' or 'to nourish,' not to raise temperature. The author criticizes the practice of using warming herbs simply because of the character 溫, calling it a misinterpretation. In essence, 溫補 (wēnbǔ) should be understood not as supplementing with warming herbs, but in its original sense of nourishing and replenishing what is deficient.
+            </p>
+
+            <h2><span class="hanja">膽</span> (dǎn): Not an Anatomical Organ, but a 'State of Mind'</h2>
+            <p>
+                In TCM, 膽 (dǎn) signifies more than just the gallbladder. In formulas like "Gallbladder-Warming Decoction" (溫膽湯, Wēn Dǎn Tāng), '膽' primarily refers to mental and emotional functions.
+            </p>
+            <p>
+                The main indications for Wēn Dǎn Tāng are vexation and agitation (煩躁, fánzào) and insomnia (失眠, shīmián). These are clearly psychological issues, and in TCM theory, such symptoms are primarily related to the Heart (心, xīn). The 膽 is traditionally associated with courage, a lack of confidence, and indecisiveness.
+            </p>
+            <p>
+                Therefore, '溫膽 (wēndǎn)' does not literally mean 'to warm the gallbladder' but rather 'to treat a psychological issue.' In fact, Wēn Dǎn Tāng is a cooling (涼性, liángxìng), not a warming (寒性, hánxìng), formula. Its main pathology is vexation and insomnia caused by Heat-Phlegm (熱痰, rètán).
+            </p>
+
+            <h2><span class="hanja">心</span> (xīn): Not Just the Heart, but the Entire Upper Abdomen</h2>
+            <p>
+                Dim sum is written with the characters for heart (心) and dot (點), often romantically interpreted as 'to touch the heart.' However, in ancient China, 心 (xīn) referred not just to the anatomical heart but to a broad area encompassing the chest and upper abdomen. This is a linguistic phenomenon common to both Eastern and Western cultures.
+            </p>
+
+            <h3>Western Example: Heartburn</h3>
+            <p>
+                The English term 'heartburn' is not a cardiac issue but a digestive one, specifically acid reflux. Though it literally means "the heart is burning," it is related to stomach acid. The proximity of the heart and esophagus causes the pain to feel similar, leading to centuries of confusion. Studies show that about 40% of women experiencing a myocardial infarction initially mistake it for symptoms like heartburn.
+            </p>
+            <p>
+                Conversely, "butterflies in the stomach" describes the fluttering sensation in the abdomen when one is nervous or anxious. However, this sensation is not actually in the stomach but is related to the emotional response of the heart.
+            </p>
+
+            <h3>Chinese Example: 心窩 (xīnwō)</h3>
+            <p>
+                In Chinese, 心窩 (xīnwō) literally means "pit of the heart" but actually refers to the stomach. For example, "吃得太飽，<span class="quote-highlight">心窩</span>發悶" means "I ate too much, and my stomach feels uncomfortable."
+            </p>
+
+            <h3>TCM Example: 瀉心湯 (xièxīn tāng)</h3>
+            <p>
+                In TCM, there is a formula called 瀉心湯 (Xiè Xīn Tāng). 瀉心 (xièxīn) literally translates to "drain the heart," but it is actually used to relieve fullness and discomfort in the upper abdomen.
+            </p>
+            <p>
+                半夏瀉心湯 (Bàn Xià Xiè Xīn Tāng) is a well-known formula for treating gastritis and peptic ulcers. In TCM, the term 心下 (xīnxià), meaning "below the heart," is used to refer to the gastric region. This shows that 心 was a concept that encompassed the entire upper abdomen, not just the anatomical heart.
+            </p>
+
+            <h2><span class="hanja">風</span> (fēng): Not 'Wind', but the 'Quality of Movement and Change' in Disease</h2>
+            <p>
+                寒(한)이 '나쁜 것(邪)'이라는 추상적 의미로 쓰인 것처럼, 風(풍)도 마찬가지이다. 風은 단순히 대기 중의 '바람'이 아니라, '갑자기 발병하고', '증상이 이곳저곳 옮겨 다니며', '움직임이 많은(경련, 마비, 현기증)' 질병의 속성을 나타내는 용어이다.
+            </p>
+            <p>
+                뇌졸중을 中風(중풍, 바람에 맞았다)이라고 부르는 것은 실제 바람 때문이 아니라, 그 발병의 갑작스러운 특성을 비유한 것이다. 또한 신체 내부의 불균형으로 인해 발생하는 경련이나 현기증을 內風(내풍)이라고 부르기도 한다. 고대에는 실제 현재 중풍이라고 부르는 질환 외에 수많은 질환들이 풍이라는 이름으로 불렸다.
+            </p>
+
+            <h2>결론</h2>
+            <p>
+                중의학 용어를 이해할 때, 현대적 의미로만 해석하면 원래의 의도를 왜곡할 수 있다. 寒은 단순한 '차가움'이 아니라 '병적 상태', 溫은 '온도 상승'이 아니라 '보양', 膽은 '담낭 장기'가 아니라 '정신 기능', 心은 '심장'만이 아니라 '상복부 전체', 風은 '바람'이 아니라 '질병의 역동적 속성'을 의미한다. 이런 오랜 한자를 잘못해석하고, 이를 말이 되게 만들고자 견강부회의 해석을 하는 경우가 역사속에 많이 있었다. 현재도 다르지 않다. 고대 문헌을 잘못해석하고는 억지로 어떻게든 이를 증명하고자 하는 것은 어리석은 일이다.  따라서 고대 문헌의 용어를 해석할 때는 그 시대의 언어적 맥락과 실제 임상적 사실을 모두 고려해야 한다. 처방명이나 이론적 명칭에 얽매이기보다는, 실제 치료 효과와 적응증이라는 사실에 근거하여 중의학을 이해하고 발전시켜야 한다. 중의학은 경험적 과학이며, 그 용어들은 수천 년의 임상 경험을 통해 형성된 것이다. 현대의 우리는 이러한 역사적 맥락을 존중하면서도, 동시에 과학적 사실에 기반하여 중의학을 재해석하고 발전시켜 나가야 할 책임이 있다.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- 재사용 가능한 한/영 전환 자바스크립트 로직 -->
+    <script>
+        (function() {
+            // 1. 언어별 데이터 정의 (새 페이지 생성 시 이 부분만 업데이트하세요)
+            const i18n = {
+                'ko': {
+                    'title': '중의학에서 흔히 잘못 이해되는 고대 한자 용어들'
+                },
+                'en': {
+                    'title': 'Commonly Misunderstood Ancient Chinese Characters in TCM'
+                }
+            };
+
+            let currentLang = 'ko'; // 기본 언어 설정
+
+            // 2. 언어 설정 함수
+            function setLanguage(lang) {
+                // 유효성 검사
+                if (lang !== 'ko' && lang !== 'en') {
+                    lang = 'ko';
+                }
+                currentLang = lang;
+                
+                // 페이지 제목 및 HTML 언어 속성 변경
+                document.title = i18n[lang].title;
+                document.documentElement.lang = lang;
+
+                // 모든 .lang-container 요소를 순회하며 현재 언어만 표시
+                document.querySelectorAll('.lang-container').forEach(el => {
+                    if (el.getAttribute('lang') === lang) {
+                        el.style.display = 'block';
+                    } else {
+                        el.style.display = 'none';
+                    }
+                });
+
+                // *******************************************************************
+                // [오류 방지] window.history.replaceState 관련 오류 해결을 위해 코드 제거
+                // *******************************************************************
+            }
+
+            // 3. 언어 전환 토글 함수 (전역에서 접근 가능하도록 할당)
+            window.toggleLanguage = function(event) {
+                event.preventDefault();
+                const newLang = (currentLang === 'ko') ? 'en' : 'ko';
+                setLanguage(newLang);
+            }
+
+            // 4. 페이지 최초 로드 시 실행 (URL 파라미터 'lang'을 확인)
+            function loadLanguage() {
+                const params = new URLSearchParams(window.location.search);
+                const langFromURL = params.get('lang');
+                
+                // URL 파라미터가 없거나 유효하지 않으면 기본값 'ko'로 설정
+                setLanguage(langFromURL || 'ko');
+            }
+
+            // DOM 로드 완료 시 언어 설정 실행
+            document.addEventListener('DOMContentLoaded', loadLanguage);
+
+        })();
+    </script>
+
+</body>
+</html>
