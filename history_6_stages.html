@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- !!! 이 제목은 아래 i18n 객체에서 동적으로 업데이트됩니다. !!! -->
+    <title>페이지 제목 Placeholder</title> 
+
+    <!-- Google Fonts 및 기타 스타일/스크립트를 여기에 추가하세요 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics (GA) - GA_MEASUREMENT_ID를 실제 ID로 교체하세요 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            background-color: #FCFAF8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 메인 콘텐츠 너비 설정 */
+        main {
+            width: 100%;
+            max-width: 48rem;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            box-sizing: border-box;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 { margin-top: 0; font-weight: 600; font-size: 1.875rem; line-height: 2.25rem; }
+        h2 { margin-top: 1.5rem; font-weight: 600; font-size: 1.25rem; line-height: 1.75rem; }
+        p { margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; list-style-position: outside; }
+        li { margin-bottom: 0.5rem; }
+        
+        /* 인용문 스타일 */
+        .quote-block {
+            margin: 1.5rem 1rem;
+            padding: 1rem 1.5rem;
+            border-left: 4px solid #d1d5db; /* Tailwind gray-300 */
+            background-color: #f9fafb; /* Tailwind gray-50 */
+            color: #4b5563; /* Tailwind gray-600 */
+            font-style: italic;
+        }
+        .quote-block p {
+            margin-bottom: 0;
+        }
+        
+        /* 치법 도식화 스타일 */
+        .principles-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .principle-card {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border-width: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .principle-card .stage {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        .principle-card .pattern {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        .principle-card .treatment {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* 도해 노드와 색상 통일 */
+        .tai-yang-style {
+            background-color: #eff6ff; /* blue-50 */
+            border-color: #60a5fa; /* blue-400 */
+            color: #1e40af; /* blue-800 */
+        }
+        .yang-ming-style {
+            background-color: #fff1f2; /* red-50 */
+            border-color: #fca5a5; /* red-400 */
+            color: #991b1b; /* red-800 */
+        }
+        .shao-yang-style {
+            background-color: #fefce8; /* yellow-50 */
+            border-color: #fcd34d; /* yellow-400 */
+            color: #854d0e; /* yellow-800 */
+        }
+        
+        @media (max-width: 640px) {
+            .principles-container {
+                flex-direction: column;
+            }
+        }
+
+
+        /* 버튼의 링크 스타일 (파란색/밑줄) 강제 제거 */
+        .px-3.py-1, 
+        .px-3.py-1:link, 
+        .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; 
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* 도해 (Six Channel Flow) 스타일 */
+        .flow-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; 
+            aspect-ratio: 16 / 9;
+            background-color: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin: 20px 0;
+            box-sizing: border-box;
+        }
+        .flow-node {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 40px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            color: #1f2937;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .flow-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.15);
+        }
+        .svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .text-tai-yang { background-color: #60a5fa; color: white; }
+        .text-yang-ming { background-color: #fca5a5; }
+        .text-shao-yang { background-color: #fcd34d; }
+        .text-tai-yin { background-color: #93c5fd; }
+        .text-shao-yin { background-color: #c4b5fd; }
+        .text-jue-yin { background-color: #a7f3d0; }
+
+        @media (max-width: 640px) {
+            .flow-container {
+                aspect-ratio: 1 / 1.2;
+            }
+            .flow-node {
+                width: 70px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 섹션 -->
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main id="content">
+
+        <!-- ============================================= -->
+        <!-- 한국어 콘텐츠 (lang="ko") -->
+        <!-- ============================================= -->
+        <div class="lang-container" lang="ko">
+            <h1>상한론의 육경전변(六經傳變) 시스템</h1>
+            <p>
+                '상한론'은 종종 육경전변(六經傳變, Liùjīng Chuánbiàn) 시스템을 통해 해석됩니다. 일반적으로 이 단계들은 고정된 순서로 진행되는 것으로 묘사됩니다.
+            </p>
+            <p>
+                하지만, 표리(表裏)의 중간 단계로 묘사되는 소양(少陽) 단계의 위치에 대해 의문점이 있습니다. 왜 소양병이 태양(太陽, Greater Yang)과 양명(陽明, Bright Yang) 뒤에 오는 것일까요? 논리적으로는 표(表, 태양)에서 '반표반리(半表半裏, 소양)'를 거쳐 리(裏, 양명)로 진행되는 것이 타당해 보입니다. '반표반리(소양)'는 질병 진행의 과도기적 단계입니다.
+            </p>
+            <p>
+                학자들은 '상한론' 본문에 기술된 사례들에서 질병이 실제로 어떻게 전변되었는지 확인하기 위해 '상한론'의 모든 조문을 분석했습니다. 아래의 도해는 중국의 하오완산(郝萬山) 교수의 강의에서 발췌한 것입니다.
+            </p>
+            
+            <div class="flow-container" id="flowContainer_ko">
+                <div id="tai-yang-ko" class="flow-node text-tai-yang" data-node="A">Taiyang</div>
+                <div id="yang-ming-ko" class="flow-node text-yang-ming" data-node="B">Yangming</div>
+                <div id="shao-yang-ko" class="flow-node text-shao-yang" data-node="C">Shaoyang</div>
+                <div id="tai-yin-ko" class="flow-node text-tai-yin" data-node="D">Taiyin</div>
+                <div id="shao-yin-ko" class="flow-node text-shao-yin" data-node="E">Shaoyin</div>
+                <div id="jue-yin-ko" class="flow-node text-jue-yin" data-node="F">Jueyin</div>
+                <svg id="svgCanvas_ko" class="svg-canvas">
+                    <defs>
+                        <marker id="arrowhead_ko" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
+                        </marker>
+                        <marker id="arrowheadReverse_ko" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto-start-reverse">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            <p class="text-center text-xs text-gray-500 -mt-2 mb-4">
+                Hao, W. (2020). <i>Shang Han Lun</i> [Treatise on Cold Damage Disorders]. Beijing: Renmin Weisheng Chubanshe.
+            </p>
+            
+            <p>
+                두 분석 모두에서, 일반적인 질병 전변은 실제로 태양경, 소양경, 양명경의 순서를 따르며, 양명에서 소양으로 이동하는 경우는 발견되지 않았습니다. 더욱이, "상한론" 본문 자체에는 양명은 최종 단계이므로 다른 단계로 전변되지 않는다는 구절이 포함되어 있습니다. 위에서 언급된 도표에서도 양명에서 다른 곳으로의 전변은 없습니다(태양으로 가는 한 가지 경우 제외).
+            </p>
+            
+            <blockquote class="quote-block">
+                <p>
+                    양명은 중앙에 위치하며 '토(土, Tǔ)'를 주관하여 만물이 귀속되므로 다시 전변될 곳이 없습니다. 따라서 환자가 처음에 오한을 느끼더라도 보통 이틀 안에 그칩니다. 이것이 양명병의 특징입니다. ([184] 答曰: 陽明居中, 主土也, 萬物所歸, 無所復傳, 始雖惡寒, 二日自止, 此爲陽明病也.)
+                </p>
+            </blockquote>
+            
+            <p>
+                이러한 사실에 근거할 때, 우리는 태양, 양명, 소양이라는 구식 순서를 고수해야 할까요, 아니면 논리적이고 원문에 의해 뒷받침되는 태양, 소양, 양명의 순서를 채택해야 할까요?
+            </p>
+            <p>
+                상한론(傷寒論)은 송나라 시대에 이르러 주로 육경(六經) 체계를 통해 해석되기 시작했습니다. 현존하는 가장 오래된 판본인 강치본 상한론(康治本 傷寒論)은 일본에서 발견되었으며 단 65개의 조문으로만 구성되어 있습니다. 또한 총 50개의 처방만을 포함하고 있습니다.
+            </p>
+            <p>
+                상한론의 원본은 소실되어 초기 내용을 정확히 알 수 없습니다.
+            </p>
+            <p>
+                왕숙화(王叔和)는 처음으로 상한론을 편찬하면서 육경과 "가여불가(可與不可, 허용되는 것과 허용되지 않는 것)"라는 병의 증후와 금기 사항을 중심으로 구성했습니다. 이 구조는 초기에 전해진 문헌인 맥경(脈經) 7권에서 발견되며, 이는 두 가지 학술적 관점으로 이어집니다:
+            </p>
+            <ul>
+                <li>일부 학자들(예: 마계흥, 전초진)은 이것이 장중경의 원본 내용을 보존하고 있다고 주장합니다.</li>
+                <li>다른 학자들(예: 이순보)은 이것이 왕숙화의 개인적인 편집 방식을 반영한 것이라고 믿습니다.</li>
+            </ul>
+            <p>
+                이후 손사막(孫思邈)의 천금익방(千金翼方)은 내용을 육경에 따라 재분류했으며, 송나라 판본의 상한론은 이 육경 분류를 기본 틀로 채택했습니다.
+            </p>
+            <p>
+                '상한론'을 '내경'의 경락 이론에 맞춰 후대, 특히 송나라에 의해 수정된 육경 시스템을 통해 해석하는 것에 대해서는 상당한 비판이 있습니다. 미국에서 흔히 번역되어 출판되는 버전은 대체로 송나라 판본에 기반하고 있으며, 이는 '상한론'을 '내경'의 학설에 맞추려 했던 왕숙화와 같은 학자들의 영향을 받은 것입니다.
+            </p>
+            <p>
+                '상한론'의 재평가는 '내경'에 기반한 교조적인 이해를 따를 것이 아니라, '상한론'의 실제 텍스트에 근거해야 합니다. 이는 질병의 단계가 사례에 따라 다른 경로로 전변될 수 있으며, 대개 표(表)에서 리(裏)로, 즉 태양에서 소양을 거쳐 양명으로 진행됨을 시사합니다.
+            </p>
+            <p>
+                일부 태양, 양명, 소양을 표증, 태음,소음,궐음을 리증으로 가르치는 경우가 있는데, 이는 명백한 오류입니다. 양명부증(陽明腑證)은 리실증으로 치료법또한 사하법입니다. 사하법은 리증의 치료법입니다.
+            </p>
+            <div class="principles-container">
+                <div class="principle-card tai-yang-style">
+                    <div class="stage">태양 (太陽)</div>
+                    <div class="pattern">표증 (表證)</div>
+                    <div class="treatment">발한 (發汗)</div>
+                </div>
+                <div class="principle-card yang-ming-style">
+                    <div class="stage">양명 (陽明)</div>
+                    <div class="pattern">리증 (裏證)</div>
+                    <div class="treatment">사하 (瀉下)</div>
+                </div>
+                <div class="principle-card shao-yang-style">
+                    <div class="stage">소양 (少陽)</div>
+                    <div class="pattern">반표반리 (半表半裏)</div>
+                    <div class="treatment">화해 (和解)</div>
+                </div>
+            </div>
+            <p>
+                다음은 중국 의학사의 위대한 인물들의 비판 내용입니다:
+            </p>
+            <ol>
+                <li>
+                    청나라의 유가언(喻嘉言)은 왕숙화(王叔和)와 성무기(成無己)가 '내경' 이론에 텍스트를 맞추려 하면서 '상한론'의 본래 의미와 가르침이 모호해졌다고 주장했습니다. 유가언은 이러한 영향에서 벗어나 '상한론'을 재평가할 것을 주장했습니다.
+                </li>
+                <li>
+                    일본 에도 시대의 요시마스 토도(吉益東洞)는 삼음삼양(三陰三陽) 이론을 오류라고 비판하며, 규격화된 질병 전변 순서라는 개념 자체를 부정했습니다. 그는 " '상한론'에서 육경은 문자 그대로 질병이 머무는 장소가 아니며, 단지 틀로 사용될 뿐이다. 실제 치료에서 의사들은 육경에 구애받지 않고 증상을 따른다."라고 말했습니다. 이 비판은 1928년에 출판된 일본의 '상한론' 연구에서 두드러집니다.
+                </li>
+                <li>
+                    당나라의 손사막(孫思邈)은 그의 '천금요방(千金要方)'에서 육경 전변 시스템을 따르지 않았습니다. 대신 그는 피부 → 살 → 근육 → 가슴 → 복부 → 위장이라는 여섯 부분으로 질병이 진행되는 다른 순서를 제시하며, 질병 진행에 대한 독특한 관점을 제공했습니다.
+                </li>
+                <li>
+                    명나라의 장경악(張景岳)은 질병의 전변이 왕숙화(王叔和)가 제안한 태양병 → 양명병 → 소양병 → 태음병 → 소음병 → 궐음병의 '육경 시스템'에 의해 엄격하게 지배되지 않는다고 강조했습니다. 대신 장경악은 전통적인 정사병리(正邪病理)에 근거하여, 정기(正氣)와 사기(邪氣)의 불균형으로 인해 질병이 신체의 더 약한 부분으로 전변된다고 주장했습니다.
+                </li>
+                <li>
+                    역시 청나라의 서대춘(徐大椿)은 그의 저서 '상한류방(傷寒類方)'에서 관습적인 육경 전변 시스템을 비판하며, 전통적인 단계를 따르기보다 증상 패턴에 따라 치료법을 분류했습니다.
+                </li>
+            </ol>
+            <p>
+                이러한 비판들은 진화하는 의학 이론과 실제에 기반한 '상한론'에 대한 지속적인 논쟁과 재해석을 강조하며, 해석이 교조적인 틀에 엄격히 고수되기보다는 실제 적용과 원문 텍스트에 더 많이 의존해야 함을 시사합니다.
+            </p>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- 영어 콘텐츠 (lang="en") -->
+        <!-- ============================================= -->
+        <div class="lang-container" lang="en" style="display: none;">
+            <h1>Six-stage transfer system in Shang Han Lun</h1>
+            <p>
+                The "Shang Han Lun" is often interpreted through the six-stage transfer system (六經傳變, Liùjīng Chuánbiàn). Typically, the stages are depicted as progressing in a fixed sequence.
+            </p>
+            <p>
+                However, there's a questionable point regarding the position of the Shaoyang (少陽) stage, which is described as both exterior and interior. Why does it come after Taiyang (太陽, Greater Yang) and Yangming (陽明, Bright Yang)? Logically, it seems it should progress from exterior (Taiyang) to 'half exterior and half interior' (Shaoyang) and then to interior (Yangming). 'half exterior and half interior' (Shaoyang) is a transitional phase in disease progression.
+            </p>
+            <p>
+                Scholars have analyzed all texts of the 'Shang Han Lun' to see how diseases actually transferred in cases described within the Shang Han Lun text. The illustrations below are from lectures by Hao Wansan (郝萬山) of China.
+            </p>
+
+            <div class="flow-container" id="flowContainer_en">
+                <div id="tai-yang-en" class="flow-node text-tai-yang" data-node="A">Taiyang</div>
+                <div id="yang-ming-en" class="flow-node text-yang-ming" data-node="B">Yangming</div>
+                <div id="shao-yang-en" class="flow-node text-shao-yang" data-node="C">Shaoyang</div>
+                <div id="tai-yin-en" class="flow-node text-tai-yin" data-node="D">Taiyin</div>
+                <div id="shao-yin-en" class="flow-node text-shao-yin" data-node="E">Shaoyin</div>
+                <div id="jue-yin-en" class="flow-node text-jue-yin" data-node="F">Jueyin</div>
+                <svg id="svgCanvas_en" class="svg-canvas">
+                    <defs>
+                        <marker id="arrowhead_en" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
+                        </marker>
+                        <marker id="arrowheadReverse_en" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto-start-reverse">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" />
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            <p class="text-center text-xs text-gray-500 -mt-2 mb-4">
+                Hao, W. (2020). <i>Shang Han Lun</i> [Treatise on Cold Damage Disorders]. Beijing: Renmin Weisheng Chubanshe.
+            </p>
+            
+            <p>
+                In both analyses, the usual disease transfer indeed follows the sequence from Taiyang, to Shaoyang, to Yangming, without any cases of moving from Yangming to Shaoyang. Furthermore, the text of "Shang Han Lun" itself contains phrases stating that from Yangming, the disease does not transfer to another stage because it is a terminal stage. In the diagram mentioned above, there are no transfers from Yangming (except one case to Taiyang).
+            </p>
+            
+            <blockquote class="quote-block">
+                <p>
+                    Yangming is centrally located and governs 'earth' (土, Tǔ), to which all things return, with no further transfers. Thus, even if a patient initially feels chills, it typically resolves within two days. This is indicative of a Yangming disease.([184] 答曰: 陽明居中, 主土也, 萬物所歸, 無所復傳, 始雖惡寒, 二日自止, 此爲陽明病也.)
+                </p>
+            </blockquote>
+
+            <p>
+                Based on this fact, should we stick to the outdated sequence of Taiyang, Yangming, Shaoyang, or adopt the logical and text-supported order of Taiyang, Shaoyang, Yangming?
+            </p>
+            <p>
+                The Shanghan Lun (傷寒論) began to be interpreted primarily through the Six Meridians (六經) framework by the Song Dynasty. The earliest surviving version, the Kōji-bon Shanghan Lun (康治本 傷寒論), was discovered in Japan and consists of only 65 clauses. It also includes only 50 prescriptions in total.
+            </p>
+            <p>
+                The original version of the Shanghan Lun has been lost, making it impossible to know its exact early content.
+            </p>
+            <p>
+                Wang Shuhe (王叔和) was the first to compile the Shanghan Lun, organizing it around the Six Meridians and indications vs. contraindications—a system known as "可與不可" (What is Permissible and What is Not). This structure is found in the early transmitted text Mai Jing (脈經), Vol. 7, leading to two scholarly perspectives:
+            </p>
+            <ul>
+                <li>Some (e.g., Ma Jixing, Qian Chaochen) argue it preserves Zhang Zhongjing’s original content.</li>
+                <li>Others (e.g., Li Shunbao) believe it reflects Wang Shuhe’s personal editorial approach.</li>
+            </ul>
+            <p>
+                Later, Sun Simiao’s Qianjin Yifang (千金翼方) reclassified the content according to the Six Meridians, and the Song edition of the Shanghan Lun adopted this Six Meridians classification as its primary framework.
+            </p>
+            <p>
+                There is considerable critique of interpreting the "Shang Han Lun" through a six-stage system aligned with the "Neijing's" meridian theory, a framework modified by later generations, particularly by the Song dynasty. The version commonly translated and published in the U.S. is largely based on the Song dynasty edition, influenced by scholars like Wang Shuhe, who adapted the "Shang Han Lun" to fit the "Neijing's" doctrines.
+            </p>
+            <p>
+                The reevaluation of the "Shang Han Lun" should not follow a dogmatic understanding based on the "Neijing," but rather should be grounded in the actual text of the "Shang Han Lun," indicating that the stages of the disease can transfer along different paths depending on the case, usually progressing from exterior to interior, i.e., from Taiyang through Shaoyang to Yangming.
+            </p>
+            <p>
+                Some may teach that Taiyang, Yangming, and Shaoyang are exterior patterns, while Taiyin, Shaoyin, and Jueyin are interior patterns, but this is a clear error. Yangming Organ patterns are interior-excess patterns, and the treatment method is purgation. Purgation is a treatment for interior patterns.
+            </p>
+            <div class="principles-container">
+                <div class="principle-card tai-yang-style">
+                    <div class="stage">Taiyang</div>
+                    <div class="pattern">Exterior Pattern</div>
+                    <div class="treatment">Sweating</div>
+                </div>
+                <div class="principle-card yang-ming-style">
+                    <div class="stage">Yangming</div>
+                    <div class="pattern">Interior Pattern</div>
+                    <div class="treatment">Purgation</div>
+                </div>
+                <div class="principle-card shao-yang-style">
+                    <div class="stage">Shaoyang</div>
+                    <div class="pattern">Half-Exterior, Half-Interior</div>
+                    <div class="treatment">Harmonization</div>
+                </div>
+            </div>
+            <p>
+                The following are the critics from the great figures in Chinese medical history; 
+            </p>
+            <ol>
+                <li>
+                    During the Qing dynasty, Yu Jiayan (喻嘉言) argued that the original meanings and teachings of the "Shang Han Lun" had been obscured by the interpretations of Wang Shuhe and Cheng Wuji (成無己), who attempted to align the text with "Neijing" theories. Yu advocated for a reevaluation of the "Shang Han Lun" free from these influences.
+                </li>
+                <li>
+                    Yoshimasu Todo (吉益東洞) in the Edo period (Japan) criticized the three yin and three yang (三陰三陽) theory as fallacious, denying the very concept of a regulated disease transfer sequence. He stated, “In the 'Shang Han Lun,' the six stages are not literally places where the disease resides; they are merely used as a framework. In actual treatment, physicians follow the symptoms, not being restricted by the six stages.” This critique is prominent in the Japanese study of "Shang Han Lun" published in 1928.
+                </li>
+                <li>
+                    Sun Simiao in the Tang dynasty did not follow the six-stage transfer system in his "Qian Jin Yao Fang". Instead, he presented a different sequence of disease progression through six parts: skin → flesh → muscles → chest → abdomen → stomach, offering a unique perspective on disease progression.
+                </li>
+                <li>
+                    During the Ming dynasty, Zhang Jingyue emphasized that the transmission of diseases is not rigidly governed by the ‘six-stage system' of Taiyang disease → Yangming disease → Shaoyang disease → Taiyin disease → Shaoyin disease → Jueyin disease as proposed by Wang Shuhe (王叔和). Instead, Zhang argued that diseases transfer to the weaker parts of the body due to an imbalance between the righteous qi and the pathogenic qi, based on the traditional pathology of right and wrong (正邪病理).
+                </li>
+                <li>
+                    Xu Daichun (徐大椿), also of the Qing dynasty, criticized the conventional six-stage transfer system in his publication "Shang Han Liu Fang", categorizing treatments based on symptom patterns rather than following the traditional staging.
+                </li>
+            </ol>
+            <p>
+                These critiques highlight the ongoing debate and reinterpretation of the "Shang Han Lun" based on evolving medical theories and practices, suggesting that interpretations should be guided more by practical applications and the actual text rather than adhering strictly to dogmatic frameworks.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- 재사용 가능한 한/영 전환 자바스크립트 로직 -->
+    <script>
+        (function() {
+            const i18n = {
+                'ko': { 'title': '육경전변(六經傳變)의 논리적 순서' },
+                'en': { 'title': 'The Logical Order of the Six-Stage Transfer (六經傳變)' }
+            };
+            let currentLang = 'ko';
+            let diagramInitializers = [];
+
+            function setLanguage(lang) {
+                if (lang !== 'ko' && lang !== 'en') {
+                    lang = 'ko';
+                }
+                if (lang === currentLang && document.title === i18n[lang].title) {
+                    // Already set, just draw diagrams if needed
+                } else {
+                    currentLang = lang;
+                    document.title = i18n[lang].title;
+                    document.documentElement.lang = lang;
+                    document.querySelectorAll('.lang-container').forEach(el => {
+                        el.style.display = (el.getAttribute('lang') === lang) ? 'block' : 'none';
+                    });
+                }
+                diagramInitializers.forEach(initFunc => initFunc(lang));
+            }
+            window.toggleLanguage = function(event) {
+                event.preventDefault();
+                setLanguage((currentLang === 'ko') ? 'en' : 'ko');
+            }
+            window.registerDiagramInitializer = function(initFunc) {
+                diagramInitializers.push(initFunc);
+            }
+            function loadLanguage() {
+                const params = new URLSearchParams(window.location.search);
+                setLanguage(params.get('lang') || 'ko');
+            }
+            // 페이지의 모든 리소스(스타일, 폰트 등)가 로드된 후 언어 설정을 실행합니다.
+            // 이는 다이어그램의 크기 계산이 정확해지도록 보장합니다.
+            window.addEventListener('load', loadLanguage);
+        })();
+    </script>
+
+    <!-- 도해 (Six Channel Flow) 스크립트 -->
+    <script>
+    (function() {
+        const NODE_ARROW_BODY_GAP = 8; 
+        const MARKER_LENGTH = 10; 
+        const nodePositions = [
+            { idPrefix: 'tai-yang', pos: { x: 50, y: 15 } },
+            { idPrefix: 'yang-ming', pos: { x: 10, y: 40 } },
+            { idPrefix: 'shao-yang', pos: { x: 30, y: 40 } },
+            { idPrefix: 'tai-yin', pos: { x: 50, y: 40 } },
+            { idPrefix: 'shao-yin', pos: { x: 70, y: 40 } },
+            { idPrefix: 'jue-yin', pos: { x: 90, y: 40 } }
+        ];
+        const flows = [
+            { from: 'tai-yang', to: 'shao-yin', type: 'biSlanted' }, 
+            { from: 'tai-yang', to: 'yang-ming', type: 'diagonal' },
+            { from: 'tai-yang', to: 'shao-yang', type: 'diagonal' },
+            { from: 'tai-yang', to: 'tai-yin', type: 'diagonal' },
+            { from: 'tai-yang', to: 'jue-yin', type: 'diagonal' },
+            { from: 'shao-yang', to: 'yang-ming', type: 'straight' },
+            { from: 'shao-yang', to: 'tai-yin', type: 'straight' },
+            { from: 'tai-yin', to: 'shao-yin', type: 'straight' },
+            { from: 'shao-yin', to: 'jue-yin', type: 'straight' },
+            { from: 'tai-yin', to: 'yang-ming', type: 'rightAngled' },
+            { from: 'shao-yang', to: 'jue-yin', type: 'biRightAngled' }
+        ];
+        
+        function drawDiagram(langSuffix) {
+            const containerId = `flowContainer_${langSuffix}`;
+            const svgCanvasId = `svgCanvas_${langSuffix}`;
+            const arrowheadId = `arrowhead_${langSuffix}`;
+            const arrowheadReverseId = `arrowheadReverse_${langSuffix}`;
+
+            const container = document.getElementById(containerId);
+            const svgCanvas = document.getElementById(svgCanvasId);
+            
+            if (!container || !svgCanvas || container.offsetParent === null) return;
+
+            function getRect(idPrefix) {
+                const nodeEl = document.getElementById(`${idPrefix}-${langSuffix}`);
+                if (!nodeEl) return null;
+                return { x: nodeEl.offsetLeft, y: nodeEl.offsetTop, width: nodeEl.offsetWidth, height: nodeEl.offsetHeight };
+            }
+
+            function getAttachmentPoint(rect, direction) {
+                switch (direction) {
+                    case 'top': return { x: rect.x + rect.width / 2, y: rect.y };
+                    case 'bottom': return { x: rect.x + rect.width / 2, y: rect.y + rect.height };
+                    case 'left': return { x: rect.x, y: rect.y + rect.height / 2 };
+                    case 'right': return { x: rect.x + rect.width, y: rect.y + rect.height / 2 };
+                    default: return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+                }
+            }
+
+            function drawPath(d, startMarkerId, endMarkerId) {
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', d);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#4b5563');
+                path.setAttribute('stroke-width', '2');
+                if (endMarkerId) path.setAttribute('marker-end', `url(#${endMarkerId})`);
+                if (startMarkerId) path.setAttribute('marker-start', `url(#${startMarkerId})`);
+                svgCanvas.appendChild(path);
+            }
+            
+            function drawSlanted(fromRect, toRect, flowType) {
+                let startMarker = null;
+                let endMarker = arrowheadId;
+                let start = getAttachmentPoint(fromRect, 'bottom');
+                let end = getAttachmentPoint(toRect, 'top');
+                if (flowType === 'biSlanted') { 
+                    startMarker = arrowheadReverseId; 
+                }
+                const totalStartAdjust = (startMarker ? MARKER_LENGTH : 0) + NODE_ARROW_BODY_GAP;
+                const totalEndAdjust = (endMarker ? MARKER_LENGTH : 0) + NODE_ARROW_BODY_GAP;
+                const angle = Math.atan2(end.y - start.y, end.x - start.x);
+                const adjustedStartX = start.x + Math.cos(angle) * totalStartAdjust;
+                const adjustedStartY = start.y + Math.sin(angle) * totalStartAdjust;
+                const adjustedEndX = end.x - Math.cos(angle) * totalEndAdjust;
+                const adjustedEndY = end.y - Math.sin(angle) * totalEndAdjust;
+                const d = `M ${adjustedStartX} ${adjustedStartY} L ${adjustedEndX} ${adjustedEndY}`;
+                drawPath(d, startMarker, endMarker);
+            }
+            
+            function drawStraight(fromRect, toRect) {
+                let start, end;
+                const endMarker = arrowheadId;
+                const totalEndAdjust = (endMarker ? MARKER_LENGTH : 0) + NODE_ARROW_BODY_GAP;
+                if (fromRect.x > toRect.x) { 
+                     start = getAttachmentPoint(fromRect, 'left');
+                     end = getAttachmentPoint(toRect, 'right');
+                     start.x -= NODE_ARROW_BODY_GAP;
+                     end.x += totalEndAdjust;   
+                } else { 
+                    start = getAttachmentPoint(fromRect, 'right');
+                    end = getAttachmentPoint(toRect, 'left');
+                    start.x += NODE_ARROW_BODY_GAP;
+                    end.x -= totalEndAdjust;   
+                }
+                const d = `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
+                drawPath(d, null, endMarker); 
+            }
+            
+            function drawRightAngled(fromRect, toRect, yRatio, startMarkerId, endMarkerId) {
+                const start = getAttachmentPoint(fromRect, 'bottom');
+                const end = getAttachmentPoint(toRect, 'bottom');
+                const BEND_Y = container.offsetHeight * yRatio;
+                const totalStartAdjust = (startMarkerId ? MARKER_LENGTH : 0) + NODE_ARROW_BODY_GAP;
+                const totalEndAdjust = (endMarkerId ? MARKER_LENGTH : 0) + NODE_ARROW_BODY_GAP;
+                const maxAdjust = Math.max(totalStartAdjust, totalEndAdjust);
+                const startPathY = start.y + maxAdjust;
+                const endPathY = end.y + maxAdjust;
+                const d = `M ${start.x} ${startPathY} L ${start.x} ${BEND_Y} L ${end.x} ${BEND_Y} L ${end.x} ${endPathY}`;
+                drawPath(d, startMarkerId, endMarkerId); 
+            }
+
+            svgCanvas.innerHTML = '';
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            defs.innerHTML = `
+                <marker id="${arrowheadId}" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" /></marker>
+                <marker id="${arrowheadReverseId}" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto-start-reverse"><polygon points="0 0, 10 3.5, 0 7" fill="#4b5563" /></marker>
+            `;
+            svgCanvas.appendChild(defs);
+
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+
+            nodePositions.forEach(node => {
+                const el = document.getElementById(`${node.idPrefix}-${langSuffix}`);
+                if (el) {
+                    const nodeWidth = el.offsetWidth;
+                    const nodeHeight = el.offsetHeight;
+                    const x = (containerWidth * (node.pos.x / 100)) - (nodeWidth / 2);
+                    const y = (containerHeight * (node.pos.y / 100)) - (nodeHeight / 2);
+                    el.style.left = `${x}px`;
+                    el.style.top = `${y}px`;
+                }
+            });
+
+            flows.forEach(flow => {
+                const fromRect = getRect(flow.from);
+                const toRect = getRect(flow.to);
+                if (!fromRect || !toRect) return;
+
+                switch(flow.type) {
+                    case 'diagonal':
+                    case 'biSlanted':
+                        drawSlanted(fromRect, toRect, flow.type);
+                        break;
+                    case 'straight':
+                        drawStraight(fromRect, toRect);
+                        break;
+                    case 'rightAngled':
+                        drawRightAngled(fromRect, toRect, 0.63, null, arrowheadId);
+                        break;
+                    case 'biRightAngled':
+                        drawRightAngled(fromRect, toRect, 0.58, arrowheadReverseId, arrowheadId);
+                        break;
+                }
+            });
+        }
+
+        function initializeAllDiagrams(activeLang) {
+            if (activeLang) {
+                drawDiagram(activeLang);
+            } else {
+                drawDiagram('ko');
+                drawDiagram('en');
+            }
+        }
+        
+        if (window.registerDiagramInitializer) {
+            window.registerDiagramInitializer(initializeAllDiagrams);
+        }
+
+        window.addEventListener('resize', () => initializeAllDiagrams(null));
+    })();
+    </script>
+
+</body>
+</html>
+
+
