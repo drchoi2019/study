@@ -9,7 +9,7 @@
     <!-- Google Fonts 및 기타 스타일/스크립트를 여기에 추가하세요 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&family=Noto+Serif+KR:wght@400;600&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Google Analytics (GA) - GA_MEASUREMENT_ID를 실제 ID로 교체하세요 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -36,7 +36,7 @@
         /* 메인 콘텐츠 너비 설정 */
         main {
             width: 100%;
-            max-width: 48rem;
+            min-width: 320px;
             margin: 0 auto;
             padding: 1rem 2rem;
             box-sizing: border-box;
@@ -44,8 +44,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-
-        h1 { margin-top: 0; font-weight: 600; font-size: 1.875rem; line-height: 2.25rem; }
+        
         h2 { margin-top: 1.5rem; font-weight: 600; font-size: 1.25rem; line-height: 1.75rem; }
         p { margin-bottom: 1rem; }
         ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; list-style-position: outside; }
@@ -185,12 +184,22 @@
                 font-size: 12px;
             }
         }
+        
+        /* [추가] 저작권 표시 스타일 */
+        footer {
+            text-align: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
     </style>
 </head>
 <body>
 
     <!-- 헤더 섹션 -->
-    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
+    <header id="page-header" style="width: 100%; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;">
         <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
@@ -205,7 +214,8 @@
         <!-- 한국어 콘텐츠 (lang="ko") -->
         <!-- ============================================= -->
         <div class="lang-container" lang="ko">
-            <h1>상한론의 육경전변(六經傳變) 시스템</h1>
+            <!-- [수정] 한국어 제목 적용 -->
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-center text-gray-900 my-8 lg:my-12">육경전변(六經傳變)의 순서</h1>
             <p>
                 '상한론'은 종종 육경전변(六經傳變, Liùjīng Chuánbiàn) 시스템을 통해 해석됩니다. 일반적으로 이 단계들은 고정된 순서로 진행되는 것으로 묘사됩니다.
             </p>
@@ -322,7 +332,8 @@
         <!-- 영어 콘텐츠 (lang="en") -->
         <!-- ============================================= -->
         <div class="lang-container" lang="en" style="display: none;">
-            <h1>Six-stage transfer system in Shang Han Lun</h1>
+            <!-- [수정] 영어 제목 적용 -->
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-center text-gray-900 my-8 lg:my-12">Six-stage transfer system</h1>
             <p>
                 The "Shang Han Lun" is often interpreted through the six-stage transfer system (六經傳變, Liùjīng Chuánbiàn). Typically, the stages are depicted as progressing in a fixed sequence.
             </p>
@@ -437,12 +448,18 @@
 
     </main>
 
+    <!-- [추가] 저작권 표시를 위한 Footer 태그 -->
+    <footer>
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
     <!-- 재사용 가능한 한/영 전환 자바스크립트 로직 -->
     <script>
         (function() {
             const i18n = {
-                'ko': { 'title': '육경전변(六經傳變)의 논리적 순서' },
-                'en': { 'title': 'The Logical Order of the Six-Stage Transfer (六經傳變)' }
+                // [수정] 페이지 전체 타이틀은 한국어 제목으로 통일
+                'ko': { 'title': '육경전변(六經傳變)의 순서' },
+                'en': { 'title': 'Six-stage transfer system' } 
             };
             let currentLang = 'ko';
             let diagramInitializers = [];
@@ -451,16 +468,20 @@
                 if (lang !== 'ko' && lang !== 'en') {
                     lang = 'ko';
                 }
-                if (lang === currentLang && document.title === i18n[lang].title) {
-                    // Already set, just draw diagrams if needed
+                
+                // [수정] 타이틀 업데이트
+                document.title = i18n[lang].title;
+                
+                if (lang === currentLang) {
+                    // 이미 올바른 언어가 설정된 경우
                 } else {
                     currentLang = lang;
-                    document.title = i18n[lang].title;
                     document.documentElement.lang = lang;
                     document.querySelectorAll('.lang-container').forEach(el => {
                         el.style.display = (el.getAttribute('lang') === lang) ? 'block' : 'none';
                     });
                 }
+                // 언어 전환이 발생했거나 페이지 로드가 완료되면 다이어그램을 다시 그립니다.
                 diagramInitializers.forEach(initFunc => initFunc(lang));
             }
             window.toggleLanguage = function(event) {
@@ -475,7 +496,6 @@
                 setLanguage(params.get('lang') || 'ko');
             }
             // 페이지의 모든 리소스(스타일, 폰트 등)가 로드된 후 언어 설정을 실행합니다.
-            // 이는 다이어그램의 크기 계산이 정확해지도록 보장합니다.
             window.addEventListener('load', loadLanguage);
         })();
     </script>
@@ -661,5 +681,3 @@
 
 </body>
 </html>
-
-
