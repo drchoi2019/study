@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wuxing (五行): Mistranslation and Its Philosophical Implications</title>
     <style>
-        /* 기본 글꼴 및 배경 */
+        /* CSS Rules (Mandatory) for the language toggle button */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important;
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* Basic content styling */
         body {
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
             line-height: 1.6;
@@ -21,7 +29,6 @@
             padding: 0 1rem;
         }
 
-        /* 제목 스타일 */
         h1 {
             font-size: 2rem;
             font-weight: 800;
@@ -50,7 +57,7 @@
             padding-left: 1.5rem;
         }
 
-        /* Hanja 강조 */
+        /* Hanja Emphasis */
         .hanja {
             font-size: 1.75rem;
             font-weight: 900;
@@ -59,6 +66,7 @@
             display: inline-block;
         }
 
+        /* Quote Highlight for Hanja */
         .quote-highlight {
             font-weight: 800;
             color: rgb(6, 78, 59);
@@ -73,199 +81,203 @@
             color: #555;
         }
 
-        /* 정·기·신 리스트 */
+        /* List for Jīng-Qì-Shén */
         .essence-list {
             list-style: none;
             padding-left: 0;
             margin-top: 0.5rem;
         }
-
         .essence-list li {
             margin-bottom: 0.5rem;
             padding-left: 1rem;
             text-indent: -1rem;
         }
-
         .essence-list li strong {
             font-weight: 600;
             color: rgb(30, 41, 59);
-        }
-
-        /* 언어 전환 버튼 */
-        .lang-btn {
-            background-color: #F7F3EF;
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: rgb(68, 64, 60);
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-
-        .lang-btn:hover {
-            background-color: #e3ddd8;
-        }
-
-        /* 언어별 콘텐츠 표시/숨김 */
-        .lang-container[lang="en"] { display: none; }
-        .lang-container[lang="ko"] { display: block; }
-
-        /* 헤더/푸터 */
-        header, footer {
-            width: 100%;
-            max-width: 48rem;
-            margin: 1rem auto;
-            padding: 0 1rem;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #header-link {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: rgb(55, 65, 81);
-            text-decoration: none;
-        }
-
-        #page-footer {
-            text-align: right;
-            font-size: 0.875rem;
-            color: #999;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="index.html" id="header-link">&larr; Interactive TCM</a>
-        <a href="#" onclick="toggleLanguage(event)" class="lang-btn">Kor / Eng</a>
-    </header>
+<header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+        &larr; Interactive TCM
+    </a>
+    <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+        Kor / Eng
+    </a>
+</header>
 
-    <main>
-        <!-- 한국어 버전 -->
-        <div class="lang-container" lang="ko">
-            <h1>오행(五行), 오해된 번역과 그 철학적 함의</h1>
+<main>
+    <!-- KO -->
+    <div class="lang-container" lang="ko" style="display:none">
+        <h1>오행(五行), 오해된 번역과 그 철학적 함의</h1>
 
-            <p><strong>서론</strong></p>
-            <p>중의학의 핵심 이론 체계인 <span class="quote-highlight">오행(五行)</span>은 서양에 "Five Elements"로 번역되면서 오랜 오해의 대상이 되어왔다. 이 번역은 단순한 언어적 선택의 문제가 아니라, 동서양 철학의 근본적 차이를 은폐하고 중의학의 본질을 왜곡하는 심각한 문제를 야기했다...</p>
-            <h2>번역 오류의 기원: 동서양 철학의 잘못된 대응</h2>
-            <p>"Five Elements"라는 번역은 고대 그리스 철학의 4원소설과 오행을 대응시킨 데서 비롯되었다...</p>
-            <h2>'<span class="hanja">行</span>'(행)의 의미: 운동과 과정</h2>
-            <p>‘행(行)’은 “가다”, “움직이다”를 뜻하는 동사적 성격이 강하다...</p>
-            <blockquote>
-                이들은 고정된 물질이 아니라 시간 속에서 변화하는 동적 국면이다...
-            </blockquote>
-            <h2>인체 구성론과의 명확한 구분</h2>
-            <p>중의학에서 인체를 구성하는 요소는 오행이 아니라 <strong>정·기·신·혈·진액</strong>이다.</p>
-            <ul class="essence-list">
-                <li><strong>정(精)</strong>: 생명의 기본 물질</li>
-                <li><strong>기(氣)</strong>: 생명 활동의 동력</li>
-                <li><strong>신(神)</strong>: 정신 활동과 의식</li>
-                <li><strong>혈(血)</strong>: 영양을 공급</li>
-                <li><strong>진액(津液)</strong>: 체액, 윤활 기능</li>
-            </ul>
-            <p>오행은 이러한 구성요소의 존재를 설명하는 것이 아니라...</p>
-            <h2>관련 개념들의 구분</h2>
-            <ul>
-                <li><strong>오행(五行)</strong>: 다섯 가지 운동 양상</li>
-                <li><strong>오상(五常)</strong>: 도덕 원리</li>
-                <li><strong>사상(四象)</strong>: 네 가지 상징적 형상</li>
-                <li><strong>사대(四大)</strong>: 물질적 구성 요소</li>
-            </ul>
-            <h2>적절한 번역 대안</h2>
-            <ol>
-                <li><strong>Five Movements</strong></li>
-                <li><strong>Five Phases</strong></li>
-                <li><strong>Five Processes</strong></li>
-                <li><strong>Five Transformations</strong></li>
-                <li><strong>Wuxing (五行)</strong></li>
-            </ol>
-            <h2>결론</h2>
-            <p>오행을 "Five Elements"로 번역한 것은 문화 교류 초창기의 한계를 보여준다...</p>
-        </div>
+        <p><strong></strong></p>
+        <p>중의학의 핵심 이론 체계인 <span class="quote-highlight">오행(五行)</span>은 서양에 "Five Elements"로 번역되면서 오랜 오해의 대상이 되어왔다. 이 번역은 단순한 언어적 선택의 문제가 아니라, 동서양 철학의 근본적 차이를 은폐하고 중의학의 본질을 왜곡하는 심각한 문제를 야기했다. 이러한 번역 오류의 기원과 문제점을 분석하고, 오행 개념의 본래 의미를 회복하기 위한 대안을 찾아보자.</p>
 
-        <!-- 영어 버전 -->
-        <div class="lang-container" lang="en">
-            <h1>Wuxing (<span class="hanja">五行</span>): Mistranslation and Its Philosophical Implications</h1>
+        <h2>번역 오류의 기원: 동서양 철학의 잘못된 대응</h2>
+        <p>"Five Elements"라는 번역은 고대 그리스 철학의 4원소설(four elements)과 오행을 표면적으로 대응시킨 데서 비롯된 것으로 유추된다.[1] 그리스 철학에서 '원소(element)'는 만물을 구성하는 최소 단위의 물질적 성분을 의미한다. 탈레스가 물을, 아낙시메네스가 공기를, 헤라클레이토스가 불을 만물의 근원으로 본 것은 모두 물질적 환원주의의 시도였다. 엠페도클레스는 이를 종합하여 흙, 물, 공기, 불이라는 네 가지 불변하는 물질적 구성 요소로 우주를 설명했다.</p>
+        <p>그러나 오행(五行)의 '<span class="quote-highlight">행</span>(行)'은 완전히 다른 의미를 지닌다. 중국어에서 물질적 구성 요소를 지칭할 때는 '소(素)'라는 글자를 사용하며, 실제로 불교가 중국에 전래되면서 들어온 사대(四大, 地水火風)라는 물질론적 개념이 있다. 하지만 오행은 이와 근본적으로 다른 체계다.</p>
 
-            <p><strong>Introduction</strong></p>
-            <p>Wuxing (<span class="quote-highlight">五行</span>), a core theoretical framework in Traditional Chinese Medicine (TCM), has long been misunderstood due to its Western translation as "Five Elements."...</p>
-            <h2>Origins of the Mistranslation</h2>
-            <p>The translation “Five Elements” originated from a false correspondence with Greek philosophy...</p>
-            <h2>The Meaning of '<span class="hanja">行</span>' (Xíng): Movement and Process</h2>
-            <p>The character '<span class="quote-highlight">行</span>' means “to go,” “to move,” or “to act.”...</p>
-            <blockquote>
-                These are not fixed materials but dynamic phases that change over time...
-            </blockquote>
-            <h2>Distinction from Body Constitution Theory</h2>
-            <ul class="essence-list">
-                <li><strong>Essence (精)</strong>: Fundamental substance</li>
-                <li><strong>Qi (氣)</strong>: Vital energy</li>
-                <li><strong>Spirit (神)</strong>: Mental activity</li>
-                <li><strong>Blood (血)</strong>: Nutritional foundation</li>
-                <li><strong>Body Fluids (津液)</strong>: Lubricating fluids</li>
-            </ul>
-            <h2>Appropriate Translation Alternatives</h2>
-            <ol>
-                <li><strong>Five Movements</strong></li>
-                <li><strong>Five Phases</strong></li>
-                <li><strong>Five Processes</strong></li>
-                <li><strong>Five Transformations</strong></li>
-                <li><strong>Wuxing (五行)</strong></li>
-            </ol>
-            <h2>Conclusion</h2>
-            <p>The mistranslation “Five Elements” distorted the essence of Chinese philosophy...</p>
-        </div>
-    </main>
+        <h2>'<span class="hanja">行</span>'(행)의 의미: 운동과 과정</h2>
+        <p>'<span class="quote-highlight">행</span>(行)'은 "가다", "움직이다", "행하다"를 뜻하는 동사적 성격이 강한 글자다. 오행은 다섯 가지 물질이 아니라 다섯 가지 <strong>움직임의 양상</strong>, 즉 에너지의 변화 패턴을 나타낸다.</p>
+        <p>목(木)·화(火)·토(土)·금(金)·수(水)는 나무, 불, 흙, 쇠, 물이라는 물질 자체가 아니라, 이러한 자연 현상이 보여주는 <strong>특성과 작용 방식</strong>을 상징한다.[3] 예를 들어, 목(木)은 봄의 생장하는 힘, 상승하고 확산하는 기운의 성질을 나타낸다. 화(火)는 여름의 왕성한 활동성과 상승 극대화의 위상을 의미한다.</p>
+        <blockquote>
+            이들은 고정된 물질이 아니라 시간의 흐름 속에서 변화하는 동적 국면(dynamic phases)이다. 따라서 하나의 대상 안에서 목이 금으로 변화하고, 금이 토로 변화할 수 있다. 이는 물질적 구성 요소로서는 불가능한 일이다. 중의학 문헌 어디에도 "인체는 목·화·토·금·수라는 물질로 구성되어 있다"는 주장은 없다.
+        </blockquote>
 
-    <footer id="page-footer">
-        Credit: Hyungsuk Choi
-    </footer>
+        <h2>인체 구성론과의 명확한 구분</h2>
+        <p>중의학에서 인체를 실제로 구성하는 요소는 오행이 아니다. 인체의 물질적·기능적 기반은 <strong>정(精)·기(氣)·신(神)·혈(血)·진액(津液)</strong>이다.[4] 이들이야말로 인체를 이루는 '구성 요소'라 할 수 있다.</p>
+        <ul class="essence-list">
+            <li><strong>정(精)</strong>: 생명의 기본 물질, 생식과 성장의 근원</li>
+            <li><strong>기(氣)</strong>: 생명 활동의 동력, 기능적 에너지</li>
+            <li><strong>신(神)</strong>: 정신 활동과 의식</li>
+            <li><strong>혈(血)</strong>: 영양을 공급하는 물질적 기반</li>
+            <li><strong>진액(津液)</strong>: 체액, 윤활과 자양의 기능</li>
+        </ul>
+        <p>오행은 이러한 구성 요소들의 존재를 설명하는 것이 아니라, <strong>장부(臟腑) 간의 기능적 연관성</strong>과 상호작용의 패턴을 설명하는 이론적 틀이다.[5] 간(肝)을 목에, 심(心)을 화에 배속하는 것은 간과 심이 나무나 불로 만들어졌다는 뜻이 아니다. 간의 소통·조달 기능이 목의 생발(生發) 특성과 유사하고, 심의 온열·추동 기능이 화의 염상(炎上) 특성과 상응한다는 의미다.</p>
+        <p>이 차이는 결정적이다. "Five Elements" 번역은 오행을 마치 인체 구성 물질인 것처럼 오해하게 만들었고, 이는 중의학을 비과학적이거나 미신적인 것으로 폄하하는 근거가 되었다.</p>
 
-    <script>
-        // 언어 감지: URL → localStorage → 기본값(ko)
-        function loadLanguage() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlLang = urlParams.get('lang');
-            const storedLang = localStorage.getItem('appLang');
+        <h2>관련 개념들의 구분</h2>
+        <p>중국 철학에는 오행 외에도 숫자와 특정 개념을 결합한 여러 체계가 있으며, 각각 고유한 철학적 함의를 지닌다.[6]</p>
+        <ul>
+            <li><strong>오행(五行)</strong>: 다섯 가지 운동 양상, 위상, 과정</li>
+            <li><strong>오상(五常)</strong>: 다섯 가지 불변의 도덕 원리 (인·의·예·지·신)</li>
+            <li><strong>사상(四象)</strong>: 네 가지 상징적 형상 (태양·소양·태음·소음)</li>
+            <li><strong>사대(四大)</strong>: 불교의 네 가지 물질적 구성 요소 (지·수·화·풍)</li>
+        </ul>
+        <p>여기서 '상(象)'은 "형상", "상징"을 의미하고, '상(常)'은 "항상", "불변"을 뜻하며, '대(大)'는 "큰", "위대한"을 나타낸다. 각 글자가 지닌 의미의 차이는 명확하며, '<span class="quote-highlight">행</span>(行)'의 동적·과정적 성격은 다른 개념들과 구별된다.</p>
 
-            if (urlLang === 'en' || urlLang === 'ko') {
-                localStorage.setItem('appLang', urlLang);
-                return urlLang;
-            }
-            if (storedLang === 'en' || storedLang === 'ko') {
-                return storedLang;
-            }
-            return 'ko';
-        }
+        <h2>적절한 번역 대안</h2>
+        <p>오행의 본래 의미를 회복하기 위해서는 번역의 전환이 필수적이다. 1987년 중국학자 네이선 시빈(Nathan Sivin)이 "Five Phases"를 제안한 이후[7] 현대 학계에서 받아들여지고 있는 대안들은 다음과 같다.</p>
+        <ol>
+            <li><strong>Five Movements (오동)</strong>: '행(行)'의 본래 의미인 '움직임'을 가장 직접적으로 반영한 번역이다. 동적 특성을 명확히 전달하지만, 직관적 이해가 어려울 수 있다.</li>
+            <li><strong>Five Phases (오위상)</strong>: 현재 학술계에서 가장 널리 받아들여지는 번역이다.[8] 과정의 단계, 변화의 국면을 의미하며, 오행의 순환적·변화적 성격을 잘 표현한다.</li>
+            <li><strong>Five Processes (오과정)</strong>: 연속적 변화 과정으로서의 성격을 강조한다.</li>
+            <li><strong>Five Transformations (오변화)</strong>: 상호 변화와 전환이라는 관계적 측면을 부각시킨다.</li>
+            <li><strong>Wuxing (오행)</strong>: 필자가 가장 바람직하다고 생각하는 방법은 'Wuxing(오행)'이라는 고유 용어를 그대로 사용하는 것이다. 'Yoga', 'Qi', 'Zen'처럼 동양의 핵심 개념들이 음역된 형태로 국제 학술어로 정착한 선례가 있다. 개념의 왜곡을 피하는 가장 확실한 방법이다.</li>
+        </ol>
 
-        // 언어 설정
-        function setLanguage(lang) {
-            document.querySelectorAll('.lang-container').forEach(c => {
-                c.style.display = c.getAttribute('lang') === lang ? 'block' : 'none';
-            });
-            document.documentElement.setAttribute('lang', lang);
-            localStorage.setItem('appLang', lang);
-        }
+        <h2>오역이 가져온 철학적 손실</h2>
+        <p>"Five Elements"라는 번역은 단순한 용어의 문제를 넘어 중의학 이론 전체에 대한 오해를 초래했다.[9] 서양 의학의 해부학적·물질적 환원주의 관점에서 중의학을 바라보게 만들었고, 오행을 미신적이거나 비과학적인 것으로 폄하하는 근거가 되었다.</p>
+        <p>그러나 오행은 물질론이 아니라 <strong>관계론이자 기능론</strong>이다.[10] 현대 시스템 이론이나 과정 철학과 오히려 더 가까운 사유 체계다. 고정된 실체보다는 변화하는 관계, 분리된 부분보다는 전체의 역동을 중시하는 사고방식이다.</p>
+        <p>그리스 철학의 4원소가 "무엇으로 만들어졌는가"(What is it made of?)를 묻는다면, 오행은 "어떻게 작용하는가"(How does it function?)를 묻는다. 전자가 존재론(ontology)적이라면, 후자는 기능론(functional theory)적이다. 이러한 근본적 차이를 무시한 "Five Elements" 번역은 중국 철학과 의학의 본질을 왜곡했다.</p>
 
-        // 언어 토글
-        function toggleLanguage(event) {
-            event.preventDefault();
-            const current = document.documentElement.getAttribute('lang');
-            const next = current === 'ko' ? 'en' : 'ko';
-            setLanguage(next);
-        }
+        <p><strong>나가며</strong></p>
+        <p>오행을 "Five Elements"로 번역한 것은 동서 문화 교류 초기의 한계를 보여준다. 서양 독자의 이해를 돕기 위해 익숙한 개념에 끼워맞추려 했던 시도는, 결과적으로 중국 철학과 의학의 본질을 왜곡했다.</p>
+        <p>번역은 단순한 언어 전환이 아니라 세계관의 번역이다. Wuxing 혹은 "Five Phases"로의 전환은 늦었지만 필요한 수정이며, 이를 통해 중의학의 체계적·관계적 특성을 제대로 이해할 수 있는 길이 열릴 것이다.</p>
+    </div>
 
-        // 초기 설정
-        document.addEventListener('DOMContentLoaded', () => {
-            setLanguage(loadLanguage());
-        });
-    </script>
+    <!-- EN -->
+    <div class="lang-container" lang="en" style="display:none">
+        <h1>Wuxing (<span class="hanja">五行</span>): Mistranslation and Its Philosophical Implications</h1>
+
+        <p><strong>Introduction</strong></p>
+        <p>Wuxing (<span class="quote-highlight">五行</span>), a core theoretical framework in Traditional Chinese Medicine (TCM), has long been misunderstood due to its Western translation as "Five Elements." This translation is not merely a linguistic choice but a serious problem that obscures the fundamental differences between Eastern and Western philosophy and distorts the essence of TCM. Let's analyzes the origins and problems of this mistranslation and explores alternatives to restore the original meaning of the Wuxing concept.</p>
+
+        <h2>Origins of the Mistranslation: False Correspondence Between Eastern and Western Philosophy</h2>
+        <p>The translation "Five Elements" is inferred to have originated from a superficial correspondence between Wuxing and the Greek theory of four elements. In Greek philosophy, 'element' refers to the smallest units of material composition that constitute all things. Thales' water, Anaximenes' air, and Heraclitus' fire were all attempts at materialistic reductionism. Empedocles synthesized these into four immutable material components—earth, water, air, and fire—to explain the universe.</p>
+        <p>However, the character '<span class="quote-highlight">行</span>' (xíng) in Wuxing carries a completely different meaning. In Chinese, the character '素' (sù) is used to refer to material components. Buddhism introduced the concept of the Four Great Elements (四大, sìdà: earth, water, fire, wind) to China, which is indeed a materialistic concept. However, Wuxing is fundamentally different from this system.</p>
+
+        <h2>The Meaning of '<span class="hanja">行</span>' (Xíng): Movement and Process</h2>
+        <p>The character '<span class="quote-highlight">行</span>' (xíng) has a strong verbal nature, meaning "to go," "to move," or "to act." Wuxing represents not five types of matter but five <strong>patterns of movement</strong>—patterns of energy transformation.</p>
+        <p>Wood (木), Fire (火), Earth (土), Metal (金), and Water (水) do not refer to the materials themselves—wood, fire, soil, metal, and water—but symbolize the <strong>characteristics and modes of action</strong> that these natural phenomena exhibit. For example, Wood (木) represents the growing force of spring, the quality of ascending and expanding energy. Fire (火) signifies the vigorous activity of summer and the maximization of upward movement.</p>
+        <blockquote>
+            These are not fixed materials but dynamic phases that change over time. Therefore, within a single object, Wood can transform into Metal, and Metal can transform into Earth. This would be impossible if they were material components. Nowhere in TCM literature is there a claim that "the human body is composed of the materials Wood, Fire, Earth, Metal, and Water."
+        </blockquote>
+
+        <h2>Distinction from Body Constitution Theory</h2>
+        <p>In TCM, Wuxing is not what actually constitutes the human body. The material and functional foundation of the human body consists of <strong>Essence (精, jīng), Qi (氣, qì), Spirit (神, shén), Blood (血, xuè), and Body Fluids (津液, jīnyè)</strong>. These are the true 'components' that make up the human body.</p>
+        <ul class="essence-list">
+            <li><strong>Essence (精)</strong>: The fundamental substance of life</li>
+            <li><strong>Qi (氣)</strong>: The driving force of life activities, functional energy</li>
+            <li><strong>Spirit (神)</strong>: Mental activities and consciousness</li>
+            <li><strong>Blood (血)</strong>: The material foundation that supplies nutrition</li>
+            <li><strong>Body Fluids (津液)</strong>: Bodily fluids with lubricating and nourishing functions</li>
+        </ul>
+        <p>Wuxing is not a framework that explains the existence of these components but rather a theoretical structure that explains the <strong>functional relationships and patterns of interaction</strong> among the Zang-Fu organs (臟腑). Associating the Liver (肝) with Wood and the Heart (心) with Fire does not mean that the liver and heart are made of wood and fire. It means that the liver's function of facilitating smooth flow corresponds to Wood's characteristic of growth and spreading (生發), and the heart's warming and propelling function corresponds to Fire's characteristic of flaming upward (炎上).</p>
+        <p>This distinction is critical. The "Five Elements" translation misleads people into thinking that Wuxing consists of body-constituting materials, which has become grounds for dismissing TCM as unscientific or superstitious.</p>
+
+        <h2>Distinguishing Related Concepts</h2>
+        <p>Chinese philosophy contains several systems combining numbers with specific concepts, each carrying unique philosophical implications.</p>
+        <ul>
+            <li><strong>Wuxing (五行)</strong>: Five patterns of movement, phases, processes</li>
+            <li><strong>Wuchang (五常)</strong>: Five constant moral principles</li>
+            <li><strong>Sixiang (四象)</strong>: Four icons (Greater Yang, Lesser Yang, Greater Yin, Lesser Yin)</li>
+            <li><strong>Sida (四大)</strong>: Buddhism's four material components (earth, water, fire, wind)</li>
+        </ul>
+        <p>Here, '象' (xiàng) means "form" or "symbol," '常' (cháng) means "constant" or "unchanging," and '大' (dà) means "great" or "grand." The differences in meaning among these characters are clear, and the dynamic, processual nature of '<span class="quote-highlight">行</span>' (xíng) distinguishes it from other concepts.</p>
+
+        <h2>Appropriate Translation Alternatives</h2>
+        <p>To restore the original meaning of Wuxing, a shift in translation is essential. Since sinologist Nathan Sivin proposed "Five Phases" in 1987, the following alternatives have been accepted in modern academia:</p>
+        <ol>
+            <li><strong>Five Movements</strong>: This translation most directly reflects the original meaning of '<span class="quote-highlight">行</span>' (xíng) as "movement." It clearly conveys the dynamic nature of energy flow and transformation, though it may not be intuitively comprehensible to Western readers.</li>
+            <li><strong>Five Phases</strong>: This is currently the most widely accepted translation in academia. 'Phase' means a stage of a process or a period of change, effectively expressing the cyclical and transformative nature of Wuxing.</li>
+            <li><strong>Five Processes</strong>: This emphasizes the character as a continuous process of change, suitable for expressing the cyclical process of growth, flourishing, harvest, and storage.</li>
+            <li><strong>Five Transformations</strong>: This highlights the relational aspect of mutual change and transformation.</li>
+            <li><strong>Wuxing</strong>: The author believes the most desirable approach is to use the native term 'Wuxing (五行)' as is. There are precedents of core Eastern concepts being established as international academic terms in transliterated form, such as 'Yoga,' 'Qi,' and 'Zen.' This is the surest way to avoid conceptual distortion.</li>
+        </ol>
+
+        <h2>Philosophical Loss Caused by Mistranslation</h2>
+        <p>The "Five Elements" translation has caused misunderstandings that extend beyond mere terminology to the entire theory of TCM. It has led people to view TCM from the anatomical and materialistic reductionist perspective of Western medicine and has become grounds for dismissing Wuxing as superstitious or unscientific.</p>
+        <p>However, Wuxing is not materialism but <strong>relationalism and functionalism</strong>. It is a system of thought closer to modern systems theory or process philosophy. It is a way of thinking that emphasizes changing relationships over fixed substances and the dynamics of the whole over separated parts.</p>
+        <p>If Greek philosophy's four elements ask "What is it made of?", Wuxing asks "How does it function?". If the former is ontological, the latter is functional. The "Five Elements" translation, which ignores this fundamental difference, has distorted the essence of Chinese philosophy and medicine.</p>
+
+        <p><strong>Conclusion</strong></p>
+        <p>The translation of Wuxing as "Five Elements" reveals the limitations of early East-West cultural exchange. The attempt to fit unfamiliar concepts into familiar ones to help Western readers understand has resulted in distorting the essence of Chinese philosophy and medicine.</p>
+        <p>Translation is not merely linguistic conversion but translation of worldviews. The shift to Wuxing or "Five Phases" is a belated but necessary correction, and through it, a path will open to properly understand the systemic and relational characteristics of TCM.</p>
+    </div>
+</main>
+
+<footer id="page-footer" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: right; font-size: 0.875rem; color: #999;">
+    Credit: Hyungsuk Choi
+</footer>
+
+<script>
+/**
+ * Language logic (stateless):
+ * - If URL has ?lang=en|ko, use it.
+ * - Otherwise default to 'en'.
+ * - Ignore any local file/state (no localStorage).
+ * - On toggle, update DOM and URL (?lang=...) via history.replaceState.
+ */
+function getUrlLang() {
+    const params = new URLSearchParams(window.location.search);
+    const lang = (params.get('lang') || '').toLowerCase();
+    return (lang === 'en' || lang === 'ko') ? lang : null;
+}
+
+function setUrlLang(lang) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', lang);
+    // Do not reload; just update address bar
+    history.replaceState({}, '', url);
+}
+
+function setLanguage(lang) {
+    const containers = document.querySelectorAll('.lang-container');
+    containers.forEach(container => {
+        const isTarget = container.getAttribute('lang') === lang;
+        container.style.display = isTarget ? 'block' : 'none';
+    });
+    document.documentElement.setAttribute('lang', lang);
+    setUrlLang(lang);
+}
+
+function toggleLanguage(event) {
+    if (event) event.preventDefault();
+    const current = document.documentElement.getAttribute('lang') || 'en';
+    const next = current === 'ko' ? 'en' : 'ko';
+    setLanguage(next);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const initial = getUrlLang() || 'en'; // default English
+    setLanguage(initial);
+});
+</script>
 
 </body>
 </html>
