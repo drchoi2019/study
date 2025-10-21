@@ -238,36 +238,51 @@
     </footer>
 
     <script>
-        // Load the language preference from localStorage or default to 'ko'
-        function loadLanguage() {
-            const storedLang = localStorage.getItem('appLang');
-            return storedLang === 'en' ? 'en' : 'ko';
+    // 언어 감지: URL > localStorage > 기본값('ko')
+    function loadLanguage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlLang = urlParams.get('lang');
+        const storedLang = localStorage.getItem('appLang');
+
+        // URL 파라미터 우선
+        if (urlLang === 'en' || urlLang === 'ko') {
+            localStorage.setItem('appLang', urlLang); // 다음 방문 시에도 유지
+            return urlLang;
         }
 
-        // Set the active language and update the main HTML lang attribute
-        function setLanguage(lang) {
-            const containers = document.querySelectorAll('.lang-container');
-            containers.forEach(container => {
-                container.style.display = container.getAttribute('lang') === lang ? 'block' : 'none';
-            });
-            document.documentElement.setAttribute('lang', lang);
-            localStorage.setItem('appLang', lang);
+        // 그 다음 localStorage
+        if (storedLang === 'en' || storedLang === 'ko') {
+            return storedLang;
         }
 
-        // Toggle the language between 'ko' and 'en'
-        function toggleLanguage(event) {
-            event.preventDefault(); // Prevent the link from jumping/reloading
-            const currentLang = document.documentElement.getAttribute('lang');
-            const newLang = currentLang === 'ko' ? 'en' : 'ko';
-            setLanguage(newLang);
-        }
+        // 둘 다 없으면 기본값
+        return 'ko';
+    }
 
-        // Initialize the page with the stored or default language
-        document.addEventListener('DOMContentLoaded', () => {
-            const initialLang = loadLanguage();
-            setLanguage(initialLang);
+    // 언어 설정
+    function setLanguage(lang) {
+        const containers = document.querySelectorAll('.lang-container');
+        containers.forEach(container => {
+            container.style.display = container.getAttribute('lang') === lang ? 'block' : 'none';
         });
-    </script>
+        document.documentElement.setAttribute('lang', lang);
+        localStorage.setItem('appLang', lang);
+    }
+
+    // 언어 토글
+    function toggleLanguage(event) {
+        event.preventDefault();
+        const currentLang = document.documentElement.getAttribute('lang');
+        const newLang = currentLang === 'ko' ? 'en' : 'ko';
+        setLanguage(newLang);
+    }
+
+    // 초기 로드
+    document.addEventListener('DOMContentLoaded', () => {
+        const initialLang = loadLanguage();
+        setLanguage(initialLang);
+    });
+</script>
 
 </body>
 </html>
