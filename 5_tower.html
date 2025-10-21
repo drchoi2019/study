@@ -456,14 +456,12 @@
             const t = translations[currentLang];
             document.documentElement.lang = currentLang;
 
-            // ### MODIFICATION START ###
             const headerLink = document.getElementById('header-link');
             if (currentLang === 'ko') {
                 headerLink.href = 'index.html?lang=ko';
             } else {
                 headerLink.href = 'index.html';
             }
-            // ### MODIFICATION END ###
 
             document.title = currentLang === 'ko' ? '오행 탑 쌓기' : 'Five Elements Tower Stack';
             document.getElementById('main-title').innerHTML = t.mainTitle;
@@ -584,8 +582,8 @@
             gameState = {
                 score: 0, selectedMarble: null, selectedMarbleIndex: -1,
                 stacks: [ [], [], [] ], marbleQueue: [], nextMarbles: [],
-                awardedBonuses: [],
-                gameMode: newMode // Set the game mode
+                awardedBonuses: new Set(), // Set으로 변경하여 카테고리 추적
+                gameMode: newMode
             };
             document.getElementById('gameOver').style.display = 'none';
             document.getElementById('winModal').style.display = 'none';
@@ -599,7 +597,7 @@
             updateNextMarbles();
             updateStackDisplays();
             updateUI();
-            applyTranslations(); // Apply translations to show correct rules
+            applyTranslations();
         }
 
         function placeMarble(stackIndex, position) {
@@ -672,32 +670,43 @@
         }
 
         function checkFiveInARowBonus(stack, stackIndex) {
-            if (!gameState.awardedBonuses[stackIndex]) {
-                gameState.awardedBonuses[stackIndex] = [];
-            }
             if (stack.length < 5) return;
 
+            // 현재 스택에서 가능한 모든 5개 연속 구간을 확인
             for (let i = 0; i <= stack.length - 5; i++) {
-                if (gameState.awardedBonuses[stackIndex].includes(i)) {
-                    continue;
-                }
-                const bonusSlice = stack.slice(i, i + 5);
-                const firstCategory = bonusSlice[0].category;
-                const isBonus = bonusSlice.every(m => m.category === firstCategory);
+                const fiveMarbles = stack.slice(i, i + 5);
+                const firstCategory = fiveMarbles[0].category;
                 
-                if (isBonus) {
+                // 5개가 모두 같은 카테고리인지 확인
+                const allSameCategory = fiveMarbles.every(m => m.category === firstCategory);
+                
+                // 5가지 타입(목/화/토/금/수)이 모두 포함되는지 확인 (진정한 5개 완성)
+                const uniqueTypes = new Set(fiveMarbles.map(m => m.type));
+                const isFiveUnique = uniqueTypes.size === 5;
+                
+                // 조건: 같은 카테고리 + 5가지 오행이 모두 포함 + 아직 보너스를 받지 않은 카테고리
+                if (allSameCategory && isFiveUnique && !gameState.awardedBonuses.has(firstCategory)) {
+                    // 보너스 지급
                     const now = Tone.now();
                     const melody = ["C5", "E5", "G5"];
                     melody.forEach((note, idx) => synth.triggerAttackRelease(note, "16n", now + idx * 0.15));
-                    gameState.score += 100;
-                    gameState.awardedBonuses[stackIndex].push(i);
-                    showBonusModal();
-                    console.log(`🎉 5개 연속 보너스 발생! 스택: ${stackIndex}, 시작인덱스: ${i}, 카테고리: ${firstCategory}, 점수 +100`);
                     
+                    gameState.score += 100;
+                    gameState.awardedBonuses.add(firstCategory); // 카테고리를 Set에 추가
+                    showBonusModal();
+                    
+                    console.log(`🎉 5개 완성 보너스 발생!`);
+                    console.log(`   스택: ${stackIndex}, 시작인덱스: ${i}, 카테고리: ${firstCategory}`);
+                    console.log(`   구슬: ${fiveMarbles.map(m => `${m.emoji}${m.name}`).join(' ')}`);
+                    console.log(`   점수 +100 (총점: ${gameState.score})`);
+                    
+                    // 시각 효과
                     setTimeout(() => {
                         const marbleElements = [];
                         const stackEl = document.getElementById(`stack${stackIndex}`);
                         const allMarbleElsInStack = stackEl.querySelectorAll('.marble');
+                        
+                        // 스택은 역순으로 표시되므로 인덱스 변환
                         const startIndexInDOM = stack.length - 1 - (i + 4);
                         const endIndexInDOM = stack.length - 1 - i;
 
@@ -719,7 +728,9 @@
                     }, 50);
 
                     updateUI();
-                    break;
+                    
+                    // 하나의 카테고리당 한 번만 보너스이므로 더 이상 확인하지 않음
+                    return;
                 }
             }
         }
@@ -1009,9 +1020,6 @@
             }
             const categoryMarbles = allMarbles.filter(m => m.category === category);
             gameState.stacks[stackIndex] = [...categoryMarbles];
-            if (!gameState.awardedBonuses[stackIndex]) {
-                gameState.awardedBonuses[stackIndex] = [];
-            }
             updateStackDisplays();
             updateUI();
             console.log(`${category} 카테고리 5개를 스택 ${stackIndex}에 배치했습니다.`);
@@ -1053,7 +1061,7 @@
             console.log('스택 1:', gameState.stacks[1].map(m => `${m.emoji}${m.name}`));
             console.log('스택 2:', gameState.stacks[2].map(m => `${m.emoji}${m.name}`));
             console.log('다음 구슬:', gameState.nextMarbles.map(m => `${m.emoji}${m.name}`));
-            console.log('보너스 기록:', gameState.awardedBonuses);
+            console.log('보너스 받은 카테고리:', Array.from(gameState.awardedBonuses));
         }
         window.testHelp = function() {
             console.log('=== 테스트 함수 도움말 ===');
