@@ -22,20 +22,20 @@
             opacity: 0.7;
         }
         .element-emoji {
-            font-size: 4.5rem; /* Emoji size */
-            -webkit-user-select: none; /* Safari */
-            -ms-user-select: none; /* IE 10+ */
+            font-size: 4.5rem;
+            -webkit-user-select: none;
+            -ms-user-select: none;
             user-select: none;
         }
         .generation-arrow {
-            stroke: #6ee7b7; /* Lighter Green */
-            stroke-width: 6; /* Thicker */
+            stroke: #6ee7b7;
+            stroke-width: 6;
             fill: none;
             marker-end: url(#arrow-gen);
         }
         .restraint-arrow {
-            stroke: #f87171; /* Lighter Red */
-            stroke-width: 6; /* Thicker */
+            stroke: #f87171;
+            stroke-width: 6;
             fill: none;
             marker-end: url(#arrow-res);
         }
@@ -49,8 +49,8 @@
 <body class="min-h-screen flex flex-col items-center p-4">
 
     <!-- Header -->
-    <header id="page-header" class="w-full max-w-4xl mx-auto px-4 py-2 flex justify-between items-center">
-        <a href="index.html" id="header-link" class="text-lg font-semibold text-gray-700 hover:text-gray-900 transition-colors no-underline">
+    <header class="w-full max-w-4xl mx-auto px-4 py-2 flex justify-between items-center">
+        <a href="index.html" class="text-lg font-semibold text-gray-700 hover:text-gray-900 transition-colors">
             &larr; Interactive TCM
         </a>
         <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #EAE5E0;">
@@ -74,21 +74,21 @@
                     </marker>
                 </defs>
 
-                <!-- Generation Arrows (相生) - Arrow lengths reduced to 50% while maintaining the same circular path. -->
+                <!-- Generation Arrows (相生) -->
                 <g class="relation-arrow" data-relation="water_wood"><path class="generation-arrow" d="M 105 359 A 220 220 0 0 1 74 286"></path><path class="clickable-path" d="M 105 359 A 220 220 0 0 1 74 286"></path></g>
                 <g class="relation-arrow" data-relation="wood_fire"><path class="generation-arrow" d="M 105 133 A 220 220 0 0 1 165 78"></path><path class="clickable-path" d="M 105 133 A 220 220 0 0 1 165 78"></path></g>
                 <g class="relation-arrow" data-relation="fire_earth"><path class="generation-arrow" d="M 335 78 A 220 220 0 0 1 395 133"></path><path class="clickable-path" d="M 335 78 A 220 220 0 0 1 395 133"></path></g>
                 <g class="relation-arrow" data-relation="earth_metal"><path class="generation-arrow" d="M 426 286 A 220 220 0 0 1 395 359"></path><path class="clickable-path" d="M 426 286 A 220 220 0 0 1 395 359"></path></g>
                 <g class="relation-arrow" data-relation="metal_water"><path class="generation-arrow" d="M 290 405 A 220 220 0 0 1 210 405"></path><path class="clickable-path" d="M 290 405 A 220 220 0 0 1 210 405"></path></g>
 
-                <!-- Restraint Arrows (相剋) - Length increased by 20% -->
+                <!-- Restraint Arrows (相剋) -->
                 <g class="relation-arrow" data-relation="wood_earth"><path class="restraint-arrow" d="M 149 194 L 351 194"></path><path class="clickable-path" d="M 149 194 L 351 194"></path></g>
                 <g class="relation-arrow" data-relation="earth_water"><path class="restraint-arrow" d="M 365 230 L 200 359"></path><path class="clickable-path" d="M 365 230 L 200 359"></path></g>
                 <g class="relation-arrow" data-relation="water_fire"><path class="restraint-arrow" d="M 181 341 L 244 139"></path><path class="clickable-path" d="M 181 341 L 244 139"></path></g>
                 <g class="relation-arrow" data-relation="fire_metal"><path class="restraint-arrow" d="M 256 139 L 319 341"></path><path class="clickable-path" d="M 256 139 L 319 341"></path></g>
                 <g class="relation-arrow" data-relation="metal_wood"><path class="restraint-arrow" d="M 300 359 L 135 230"></path><path class="clickable-path" d="M 300 359 L 135 230"></path></g>
                 
-                <!-- Elements - Repositioned on a perfect circle -->
+                <!-- Elements -->
                 <g class="element" data-element="fire" transform="translate(250, 70)">
                     <circle cx="0" cy="0" r="40" fill="transparent"></circle>
                     <text class="element-emoji" x="0" y="0" dominant-baseline="middle" text-anchor="middle">🔥</text>
@@ -120,6 +120,11 @@
 
     </main>
 
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 text-gray-600 text-sm mt-8">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
     <script>
         const translations = {
             ko: {
@@ -133,16 +138,16 @@
                     water: { title: "수(水)의 속성", content: `<strong>특징:</strong> 내리고 차갑다 (폭포수)<br><strong>개념:</strong> 윤하(潤下) - 물이 흘러내리는 것` }
                 },
                 relations: {
-                    wood_fire: { title: "목(木) → 화(火)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상생)</h3><p>나무는 불의 땔감이 되어 불을 더 강하게 합니다. 강하고 위로 솟는 나무의 기운이 가지를 뻗고 퍼져나가는 불의 성질을 낳습니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (불생)</h3><p><strong>상생의 실패:</strong> 나무가 부족하면 불을 만들지 못합니다 (목불생화, 木不生火).</p>` },
-                    fire_earth: { title: "화(火) → 토(土)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상생)</h3><p>불이 타고 남은 재는 흙의 일부가 됩니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (불생)</h3><p><strong>상생의 실패:</strong> 불이 너무 약하면 재(흙)가 거의 생기지 않습니다 (화불생토, 火不生土).</p>` },
-                    earth_metal: { title: "토(土) → 금(金)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상생)</h3><p>쇠는 땅 속에서 형성됩니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (불생)</h3><p><strong>상생의 실패:</strong> 흙이 척박하면 쇠(광석)가 만들어지지 않습니다 (토불생금, 土不生金).</p>` },
-                    metal_water: { title: "금(金) → 수(水)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상생)</h3><p>차가운 쇠의 표면에 물방울이 맺힙니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (불생)</h3><p><strong>상생의 실패:</strong> 쇠가 뜨거우면 물방울이 맺히지 않습니다 (금불생수, 金不生水).</p>` },
-                    water_wood: { title: "수(水) → 목(木)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상생)</h3><p>물은 나무의 성장을 촉진합니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (불생)</h3><p><strong>상생의 실패:</strong> 물이 너무 적으면 나무가 자라지 못합니다 (수불생목, 水不生木).</p>` },
-                    wood_earth: { title: "목(木) ↔ 토(土)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상극)</h3><p>나무는 뿌리로 땅을 파고듭니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>상승(相乘) - 상극의 과잉:</strong> 나무가 지나치게 크면 흙의 양분을 고갈시킵니다.</p><p><strong>상모(相侮) - 상극의 실패:</strong> 단단한 암석에는 나무가 뿌리를 내리지 못합니다.</p>` },
-                    earth_water: { title: "토(土) ↔ 수(水)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상극)</h3><p>흙은 물을 막거나 흡수할 수 있습니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>상승(相乘) - 상극의 과잉:</strong> 땅이 너무 광대하면 물을 말려버릴 수 있습니다.</p><p><strong>상모(相侮) - 상극의 실패:</strong> 물이 지나치게 많으면 흙으로도 막을 수 없습니다.</p>` },
-                    water_fire: { title: "수(水) ↔ 화(火)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상극)</h3><p>물은 불을 끕니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>상승(相乘) - 상극의 과잉:</strong> 물이 열을 초과하면 불이 꺼지거나 얼어붙을 수 있습니다.</p><p><strong>상모(相侮) - 상극의 실패:</strong> 불이 너무 강하면 물을 증발시킬 수 있습니다.</p>` },
-                    fire_metal: { title: "화(火) ↔ 금(金)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상극)</h3><p>불은 쇠를 녹입니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>상승(相乘) - 상극의 과잉:</strong> 강한 불은 쇠를 녹여 쓸모없게 만들 수 있습니다.</p><p><strong>상모(相侮) - 상극의 실패:</strong> 작은 불꽃으로는 큰 쇳덩이를 녹일 수 없습니다.</p>` },
-                    metal_wood: { title: "금(金) ↔ 목(木)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (상극)</h3><p>쇠 도구는 나무를 베어낼 수 있습니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>상승(相乘) - 상극의 과잉:</strong> 쇠 도구로 과도하게 베면 나무를 파괴할 수 있습니다.</p><p><strong>상모(相侮) - 상극의 실패:</strong> 작은 쇠붙이로는 큰 나무를 벨 수 없습니다.</p>` }
+                    wood_fire: { title: "목(木) → 화(火)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (목생화)</h3><p>나무는 불의 땔감이 되어 불을 더 강하게 합니다. 강하고 위로 솟는 나무의 기운이 가지를 뻗고 퍼져나가는 불의 성질을 낳습니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (목불생화)</h3><p><strong>상생의 실패:</strong> 나무가 부족하면 불을 만들지 못합니다 (목불생화, 木不生火).</p>` },
+                    fire_earth: { title: "화(火) → 토(土)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (화생토)</h3><p>불이 타고 남은 재는 흙의 일부가 됩니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (화불생토)</h3><p><strong>상생의 실패:</strong> 불이 너무 약하면 재(흙)가 거의 생기지 않습니다 (화불생토, 火不生土).</p>` },
+                    earth_metal: { title: "토(土) → 금(金)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (토생금)</h3><p>쇠는 땅 속에서 형성됩니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (토불생금)</h3><p><strong>상생의 실패:</strong> 흙이 척박하면 쇠(광석)가 만들어지지 않습니다 (토불생금, 土不生金).</p>` },
+                    metal_water: { title: "금(金) → 수(水)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (금생수)</h3><p>차가운 쇠의 표면에 물방울이 맺힙니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (금불생수)</h3><p><strong>상생의 실패:</strong> 쇠가 뜨거우면 물방울이 맺히지 않습니다 (금불생수, 金不生水).</p>` },
+                    water_wood: { title: "수(水) → 목(木)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (수생목)</h3><p>물은 나무의 성장을 촉진합니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계 (수불생목)</h3><p><strong>상생의 실패:</strong> 물이 너무 적으면 나무가 자라지 못합니다 (수불생목, 水不生木).</p>` },
+                    wood_earth: { title: "목(木) ↔ 토(土)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (목극토)</h3><p>나무는 뿌리로 땅을 파고듭니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>목승토 - 상극의 과잉:</strong> 나무가 지나치게 크면 흙의 양분을 고갈시킵니다.</p><p><strong>토모목 - 상극의 실패:</strong> 단단한 암석에는 나무가 뿌리를 내리지 못합니다.</p>` },
+                    earth_water: { title: "토(土) ↔ 수(水)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (토극수)</h3><p>흙은 물을 막거나 흡수할 수 있습니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>토승수 - 상극의 과잉:</strong> 땅이 너무 광대하면 물을 말려버릴 수 있습니다.</p><p><strong>수모토 - 상극의 실패:</strong> 물이 지나치게 많으면 흙으로도 막을 수 없습니다.</p>` },
+                    water_fire: { title: "수(水) ↔ 화(火)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (수극화)</h3><p>물은 불을 끕니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>수승화 - 상극의 과잉:</strong> 물이 열을 초과하면 불이 꺼지거나 얼어붙을 수 있습니다.</p><p><strong>화모수 - 상극의 실패:</strong> 불이 너무 강하면 물을 증발시킬 수 있습니다.</p>` },
+                    fire_metal: { title: "화(火) ↔ 금(金)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (화극금)</h3><p>불은 쇠를 녹입니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>화승금 - 상극의 과잉:</strong> 강한 불은 쇠를 녹여 쓸모없게 만들 수 있습니다.</p><p><strong>금모화 - 상극의 실패:</strong> 작은 불꽃으로는 큰 쇳덩이를 녹일 수 없습니다.</p>` },
+                    metal_wood: { title: "금(金) ↔ 목(木)", content: `<h3 class='font-bold text-lg text-sky-700'>생리적 관계 (금극목)</h3><p>쇠 도구는 나무를 베어낼 수 있습니다.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>병리적 관계</h3><p><strong>금승목 - 상극의 과잉:</strong> 쇠 도구로 과도하게 베면 나무를 파괴할 수 있습니다.</p><p><strong>목모금 - 상극의 실패:</strong> 작은 쇠붙이로는 큰 나무를 벨 수 없습니다.</p>` }
                 }
             },
             en: {
@@ -156,16 +161,16 @@
                     water: { title: "Properties of Water (水)", content: `<strong>Characteristics:</strong> Descending and cold (waterfall)<br><strong>Concept:</strong> Rùn Xià (潤下) - Water flowing downwards.` }
                 },
                 relations: {
-                    wood_fire: { title: "Wood → Fire", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Generation)</h3><p>Wood serves as fuel, helping fire to burn more intensely. The strong, upward-rising energy of Wood gives rise to the branching, dispersing nature of Fire.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Failure to Generate)</h3><p><strong>Failure of Generation:</strong> If there is not enough wood, fire cannot be made (Mù Bù Shēng Huǒ).</p>` },
-                    fire_earth: { title: "Fire → Earth", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Generation)</h3><p>When fire burns out, it leaves behind ash, which becomes part of the earth.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Failure to Generate)</h3><p><strong>Failure of Generation:</strong> If the fire is too weak, it produces very little ash (earth) (Huǒ Bù Shēng Tǔ).</p>` },
-                    earth_metal: { title: "Earth → Metal", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Generation)</h3><p>Metal is formed within the earth.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Failure to Generate)</h3><p><strong>Failure of Generation:</strong> If the soil is barren, metal (ore) cannot be created (Tǔ Bù Shēng Jīn).</p>` },
-                    metal_water: { title: "Metal → Water", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Generation)</h3><p>Condensation forms on cold metal surfaces.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Failure to Generate)</h3><p><strong>Failure of Generation:</strong> If the metal is hot, condensation will not form (Jīn Bù Shēng Shuǐ).</p>` },
-                    water_wood: { title: "Water → Wood", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Generation)</h3><p>Water nourishes and promotes the growth of wood.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Failure to Generate)</h3><p><strong>Failure of Generation:</strong> If there is too little water, wood cannot grow (Shuǐ Bù Shēng Mù).</p>` },
-                    wood_earth: { title: "Wood ↔ Earth", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Restraint)</h3><p>Trees dig into the ground with their roots.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Overacting (相乘):</strong> An excessively large tree can deplete the nutrients in the soil.</p><p><strong>Insulting (相侮):</strong> Trees cannot take root in hard rock.</p>` },
-                    earth_water: { title: "Earth ↔ Water", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Restraint)</h3><p>Soil can block or absorb water.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Overacting (相乘):</strong> If the land is too vast, it can dry up the water.</p><p><strong>Insulting (相侮):</strong> An excess of water cannot be controlled even by earth.</p>` },
-                    water_fire: { title: "Water ↔ Fire", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Restraint)</h3><p>Water extinguishes fire.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Overacting (相乘):</strong> When water far exceeds heat, it can cause the fire to be extinguished or frozen.</p><p><strong>Insulting (相侮):</strong> When fire is too intense, it can cause water to evaporate.</p>` },
-                    fire_metal: { title: "Fire ↔ Metal", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Restraint)</h3><p>Fire melts metal.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Overacting (相乘):</strong> Intense fire can melt metal to the point of making it unusable.</p><p><strong>Insulting (相侮):</strong> A large chunk of metal cannot be melted with a small flame.</p>` },
-                    metal_wood: { title: "Metal ↔ Wood", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Mutual Restraint)</h3><p>Metal tools can cut down trees.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Overacting (相乘):</strong> Excessive cutting with metal tools can destroy wood.</p><p><strong>Insulting (相侮):</strong> A large tree cannot be cut by a small piece of metal.</p>` }
+                    wood_fire: { title: "Wood → Fire", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Wood Generates Fire)</h3><p>Wood serves as fuel, helping fire to burn more intensely. The strong, upward-rising energy of Wood gives rise to the branching, dispersing nature of Fire.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Wood Fails to Generate Fire)</h3><p><strong>Failure of Generation:</strong> If there is not enough wood, fire cannot be made (Mù Bù Shēng Huǒ).</p>` },
+                    fire_earth: { title: "Fire → Earth", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Fire Generates Earth)</h3><p>When fire burns out, it leaves behind ash, which becomes part of the earth.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Fire Fails to Generate Earth)</h3><p><strong>Failure of Generation:</strong> If the fire is too weak, it produces very little ash (earth) (Huǒ Bù Shēng Tǔ).</p>` },
+                    earth_metal: { title: "Earth → Metal", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Earth Generates Metal)</h3><p>Metal is formed within the earth.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Earth Fails to Generate Metal)</h3><p><strong>Failure of Generation:</strong> If the soil is barren, metal (ore) cannot be created (Tǔ Bù Shēng Jīn).</p>` },
+                    metal_water: { title: "Metal → Water", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Metal Generates Water)</h3><p>Condensation forms on cold metal surfaces.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Metal Fails to Generate Water)</h3><p><strong>Failure of Generation:</strong> If the metal is hot, condensation will not form (Jīn Bù Shēng Shuǐ).</p>` },
+                    water_wood: { title: "Water → Wood", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Water Generates Wood)</h3><p>Water nourishes and promotes the growth of wood.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological (Water Fails to Generate Wood)</h3><p><strong>Failure of Generation:</strong> If there is too little water, wood cannot grow (Shuǐ Bù Shēng Mù).</p>` },
+                    wood_earth: { title: "Wood ↔ Earth", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Wood Controls Earth)</h3><p>Trees dig into the ground with their roots.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Wood Overacts on Earth:</strong> An excessively large tree can deplete the nutrients in the soil.</p><p><strong>Earth Insults Wood:</strong> Trees cannot take root in hard rock.</p>` },
+                    earth_water: { title: "Earth ↔ Water", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Earth Controls Water)</h3><p>Soil can block or absorb water.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Earth Overacts on Water:</strong> If the land is too vast, it can dry up the water.</p><p><strong>Water Insults Earth:</strong> An excess of water cannot be controlled even by earth.</p>` },
+                    water_fire: { title: "Water ↔ Fire", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Water Controls Fire)</h3><p>Water extinguishes fire.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Water Overacts on Fire:</strong> When water far exceeds heat, it can cause the fire to be extinguished or frozen.</p><p><strong>Fire Insults Water:</strong> When fire is too intense, it can cause water to evaporate.</p>` },
+                    fire_metal: { title: "Fire ↔ Metal", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Fire Controls Metal)</h3><p>Fire melts metal.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Fire Overacts on Metal:</strong> Intense fire can melt metal to the point of making it unusable.</p><p><strong>Metal Insults Fire:</strong> A large chunk of metal cannot be melted with a small flame.</p>` },
+                    metal_wood: { title: "Metal ↔ Wood", content: `<h3 class='font-bold text-lg text-sky-700'>Physiological (Metal Controls Wood)</h3><p>Metal tools can cut down trees.</p><h3 class='font-bold text-lg mt-4 text-orange-700'>Pathological</h3><p><strong>Metal Overacts on Wood:</strong> Excessive cutting with metal tools can destroy wood.</p><p><strong>Wood Insults Metal:</strong> A large tree cannot be cut by a small piece of metal.</p>` }
                 }
             }
         };
@@ -174,7 +179,6 @@
 
         const infoTitle = document.getElementById('info-title');
         const infoContent = document.getElementById('info-content');
-        const headerLink = document.getElementById('header-link');
 
         function setLanguage(lang) {
             currentLang = lang;
@@ -183,13 +187,9 @@
             
             infoTitle.textContent = langData.welcome_title;
             infoContent.innerHTML = `<p>${langData.welcome_content}</p>`;
-            
-            headerLink.href = `index.html?lang=${lang}`;
 
             const url = new URL(window.location);
             url.searchParams.set('lang', lang);
-            // The following line is commented out to prevent security errors in blob environments.
-            // window.history.pushState({}, '', url);
         }
 
         function toggleLanguage(event) {
@@ -238,5 +238,3 @@
     </script>
 </body>
 </html>
-
-
