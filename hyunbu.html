@@ -277,32 +277,58 @@
             `;
         }
 
-        function EtiologyTable() {
-            const headers = ["병인", "빈도(수)", "백분율(%)"];
-            const rows = [
+        function EtiologyTable({ lang }) {
+            const isEN = lang === 'en';
+            const headers = isEN ? ["Etiology", "Frequency", "Percentage (%)"] : ["병인", "빈도(수)", "백분율(%)"];
+            const rows = isEN ? [
+                ["<span class='font-semibold'>Qi Stagnation in Blood</span>", "85", "83.33"],
+                ["<span class='font-semibold'>Cold Coagulation</span>", "2", "1.96"],
+                ["<span class='font-semibold'>Uterine Deficiency Heat</span>", "2", "1.96"],
+                ["<span class='font-semibold'>Uterine Cold Coagulation</span>", "2", "1.96"],
+            ] : [
                 ["<span class='font-semibold'>血中氣滯</span>", "85", "83.33"],
                 ["<span class='font-semibold'>寒凝</span>", "2", "1.96"],
                 ["<span class='font-semibold'>子宮虛熱</span>", "2", "1.96"],
                 ["<span class='font-semibold'>子宮寒凝</span>", "2", "1.96"],
             ];
-            return Table({ headers, rows, caption: "병인 분석" });
+            const caption = isEN ? "Etiological Analysis" : "병인 분석";
+            return Table({ headers, rows, caption: caption });
         }
 
-        function DiagnosisTable() {
-            const headers = ["병명", "빈도(수)", "백분율(%)"];
-            const rows = [
+        function DiagnosisTable({ lang }) {
+            const isEN = lang === 'en';
+            const headers = isEN ? ["Diagnosis", "Frequency", "Percentage (%)"] : ["병명", "빈도(수)", "백분율(%)"];
+            const rows = isEN ? [
+                ["<span class='font-semibold'>Premenstrual Abdominal Pain</span>", "69", "63.89"],
+                ["<span class='font-semibold'>Irregular Menstruation</span>", "16", "14.81"],
+                ["<span class='font-semibold'>Premenstrual Lumbar/Abdominal Pain</span>", "8", "7.41"],
+                ["<span class='font-semibold'>Premenstrual Low Back Pain</span>", "3", "2.78"],
+                ["<span class='font-semibold'>Blood Bi (Blockage)</span>", "3", "2.78"],
+            ] : [
                 ["<span class='font-semibold'>臨經腹痛</span>", "69", "63.89"],
                 ["<span class='font-semibold'>月經不調</span>", "16", "14.81"],
                 ["<span class='font-semibold'>臨經腰腹痛</span>", "8", "7.41"],
                 ["<span class='font-semibold'>臨經腰痛</span>", "3", "2.78"],
                 ["<span class='font-semibold'>血痺</span>", "3", "2.78"],
             ];
-            return Table({ headers, rows, caption: "병명 분석" });
+            const caption = isEN ? "Diagnosis Analysis" : "병명 분석";
+            return Table({ headers, rows, caption: caption });
         }
 
-        function AgeTable() {
-            const headers = ["연령대", "빈도(수)", "백분율(%)"];
-            const rows = [
+        function AgeTable({ lang }) {
+            const isEN = lang === 'en';
+            const headers = isEN ? ["Age Group", "Frequency", "Percentage (%)"] : ["연령대", "빈도(수)", "백분율(%)"];
+            const rows = isEN ? [
+                ["<span class='font-semibold'>0-9 yrs</span>", "1", "0.23"],
+                ["<span class='font-semibold'>10-19 yrs</span>", "71", "16.21"],
+                ["<span class='font-semibold'>20-29 yrs</span>", "195", "44.52"],
+                ["<span class='font-semibold'>30-39 yrs</span>", "120", "27.40"],
+                ["<span class='font-semibold'>40-49 yrs</span>", "40", "9.13"],
+                ["<span class='font-semibold'>50-59 yrs</span>", "1", "0.23"],
+                ["<span class='font-semibold'>60-69 yrs</span>", "0", "0"],
+                ["<span class='font-semibold'>70-70 yrs</span>", "1", "0.23"], // 원본 데이터 "70~70세" 유지
+                ["<span class='font-semibold'>Not specified</span>", "9", "2.05"],
+            ] : [
                 ["<span class='font-semibold'>0~9세</span>", "1", "0.23"],
                 ["<span class='font-semibold'>10~19세</span>", "71", "16.21"],
                 ["<span class='font-semibold'>20~29세</span>", "195", "44.52"],
@@ -313,7 +339,8 @@
                 ["<span class='font-semibold'>70~70세</span>", "1", "0.23"],
                 ["<span class='font-semibold'>미기재</span>", "9", "2.05"],
             ];
-            return Table({ headers, rows, caption: "연령대 분석" });
+            const caption = isEN ? "Age Group Analysis" : "연령대 분석";
+            return Table({ headers, rows, caption: caption });
         }
 
         function MainText({ lang }) {
@@ -400,9 +427,9 @@
 
                     <p>
                         ${isEN ?
-                            `• <strong>Adjunct warming</strong>: Rougui and Shengjiang warm the uterus and dispel cold (温经散寒), easing cramping in cold-type patterns with lower abdominal chill or cold extremities. Shengjiang also protects the stomach and aids absorption; Rougui helps open the channels, supports microcirculation, and complements the stasis-breaking strategy, thereby enhancing analgesia.`
+                            `• <strong>Adjunct warming</strong>: Rougui and Shengjiang warm the uterus and dispel cold (温经<em>&</em>#x6563;寒), easing cramping in cold-type patterns with lower abdominal chill or cold extremities. Shengjiang also protects the stomach and aids absorption; Rougui helps open the channels, supports microcirculation, and complements the stasis-breaking strategy, thereby enhancing analgesia.`
                         :
-                            `• 기타 보조 약재: 육계(肉桂)와 생강(生薑) – 몸을 따뜻하게 하고 경맥의 한습을 제거하여 온경산한(溫經散寒)하는 역할을 합니다. 월경통 환자 중 아랫배가 차고 팔다리가 냉한 한증(寒症) 소견이 있는 경우, 육계와 생강이 자궁 및 하복부를 따뜻하게 덥혀 경련성 통증을 완화시켜 줍니다. 생강은 소화기 보호와 약물 흡수 촉진에도 기여하며, 육계는 온경통맥과 더불어 활혈 작용을 도와 처방의 진통 효과를 보강합니다. 특히 육계는 천연 쿠마린류를 함유하여 혈소판 응집 억제 및 미세순환 개선과 연관된 작용을 나타내므로, 배합 시 파어혈제(破瘀血劑)적 성격을 보조해 어혈로 인한 통증·응체를 푸는 데 기여합니다.`
+                            `• 기타 보조 약재: 육계(肉桂)와 생강(生薑) – 몸을 따뜻하게 하고 경맥의 한습을 제거하여 온경산한(溫經<em>&</em>#x6563;寒)하는 역할을 합니다. 월경통 환자 중 아랫배가 차고 팔다리가 냉한 한증(寒症) 소견이 있는 경우, 육계와 생강이 자궁 및 하복부를 따뜻하게 덥혀 경련성 통증을 완화시켜 줍니다. 생강은 소화기 보호와 약물 흡수 촉진에도 기여하며, 육계는 온경통맥과 더불어 활혈 작용을 도와 처방의 진통 효과를 보강합니다. 특히 육계는 천연 쿠마린류를 함유하여 혈소판 응집 억제 및 미세순환 개선과 연관된 작용을 나타내므로, 배합 시 파어혈제(破瘀血劑)적 성격을 보조해 어혈로 인한 통증·응체를 푸는 데 기여합니다.`
                         }
                     </p>
 
@@ -423,9 +450,9 @@
                         }
                     </p>
                     
-                    ${EtiologyTable()}
-                    ${DiagnosisTable()}
-                    ${AgeTable()}
+                    ${EtiologyTable({ lang })}
+                    ${DiagnosisTable({ lang })}
+                    ${AgeTable({ lang })}
 
                     <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'Clinical Evidence' : '임상 연구 및 효과 근거'}</h3>
                     <p>
@@ -735,3 +762,4 @@
     </script>
 </body>
 </html>
+
