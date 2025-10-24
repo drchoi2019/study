@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title will be set by JavaScript -->
+    <title>좌귀음, 좌귀환, 우귀음, 우귀환 처방해설 비교</title>
+    <!-- Tailwind CSS 로드 --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Inter 폰트 적용 */
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        /* 하이라이트 태그 기본 스타일 */
+        .herb-tag {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+
+    <!-- New Page Header (from template) -->
+    <header id="page-header" style="max-width: 72rem; margin: 0 auto 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" onclick="event.preventDefault();" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem; color: #44403c; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 700; text-decoration: none;" class="hover:bg-stone-300 transition-colors">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8">
+        <!-- App Header (Title) -->
+        <header class="mb-6 border-b pb-4">
+            <!-- New Title -->
+            <h1 class="text-3xl font-bold text-gray-800" data-lang-key="mainTitle">좌귀음, 좌귀환, 우귀음, 우귀환 처방해설 비교</h1>
+            <!-- Subtitle Removed -->
+        </header>
+
+        <!-- 처방 설명 섹션 -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200 prose-sm prose-gray max-w-none">
+            <h3 class="text-xl font-semibold mb-3 text-gray-800" data-lang-key="philosophyTitle">좌귀(左歸)·우귀(右歸)의 철학</h3>
+            <p class="mb-4 text-gray-700 leading-relaxed" data-lang-key="philosophyP1">
+                명나라 때의 장경악(張景岳, 장개빈)은 “양을 잘 보려면 반드시 음 속에서 양을 구하고, 음을 잘 보려면 반드시 양 속에서 음을 구한다 - 신방팔진(新方八陣)”는 상호작용적 보익론을 제시하며, 명문화(命門火), 즉 신(腎)의 양기를 보하는 치료법을 제창하였습니다. 그는 기존의 신기환·육미지황환 체계를 비판적으로 계승·개작해, 좌귀(左歸)·우귀(右歸) 두 축—그리고 각 축의 환(丸)·음(飲)—을 만들었습니다.
+            </p>
+            <p class="mb-4 text-gray-700 leading-relaxed" data-lang-key="philosophyP2">
+                이름 자체가 처방의 생리학을 품고 있습니다. 좌(左)는 좌측 신장, 곧 신수(腎水, 음)를 상징하고 우(右)는 우측의 명문 화, 곧 신양(腎陽)을 상징합니다. 귀(歸)는 ‘되돌려 보충한다’는 뜻으로, 소모된 정·수·화(精·髓·火)를 원위치로 되돌려 인체의 근원을 복구한다는 표상입니다. 고전적 전승에서는 “왼쪽은 신수, 오른쪽은 명문”이라 하여(“좌자는 신(腎), 우자는 명문”) 좌·우의 구분을 분명히 했습니다. 이 관점에서 좌귀는 ‘잃은 음을 돌려준다’, 우귀는 ‘쇠한 양을 불러낸다’는 서로 보완적 역할을 맡습니다.
+            </p>
+
+            <!-- 처방 구성 비교 (위치 이동) -->
+            <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800" data-lang-key="comparisonTitle">처방 구성 비교</h3>
+            <div class="space-y-2 text-gray-700 mb-6 p-4 bg-white rounded-lg border">
+                <p data-lang-key="comp_lih"><strong>육미지황환:</strong> 숙지황 · 산수유 · 산약 + 복령 · 목단피 · 택사</p>
+                <p data-lang-key="comp_sqh"><strong>신기환:</strong> 숙지황 · 산수유 · 산약 + 복령 · 목단피 · 택사 · 육계 · 부자</p>
+                <p data-lang-key="comp_zgy"><strong>좌귀음:</strong> 숙지황 · 산수유 · 산약 · 구기자 + 복령 · 자감초</p>
+                <p data-lang-key="comp_zgh"><strong>좌귀환:</strong> 숙지황 · 산수유 · 산약 · 구기자 + 토사자 · 녹각교 · 귀판교 · 우슬</p>
+                <p data-lang-key="comp_ygy"><strong>우귀음:</strong> 숙지황 · 산수유 · 산약 · 구기자 · 두충 · 육계 · 부자 + 자감초</p>
+                <p data-lang-key="comp_ygh"><strong>우귀환:</strong> 숙지황 · 산수유 · 산약 · 구기자 · 두충 · 육계 · 부자 + 토사자 · 녹각교· 당귀</p>
+            </div>
+
+            <!-- 컨트롤 패널 (위치 이동) -->
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <!-- 기본 처방 선택 --><div class="flex-1">
+                    <label for="selectA" class="block text-sm font-medium text-gray-700 mb-1" data-lang-key="selectA_label">처방 선택 (A)</label>
+                    <select id="selectA" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="none" data-lang-key="selectA_none">-- 처방 A 선택 --</option>
+                    </select>
+                </div>
+                <!-- 비교 처방 선택 --><div class="flex-1">
+                    <label for="selectB" class="block text-sm font-medium text-gray-700 mb-1" data-lang-key="selectB_label">비교 처방 선택 (B)</label>
+                    <select id="selectB" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <option value="none" data-lang-key="selectB_none">-- 처방 B 선택 --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 시각화 영역 (위치 이동) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="visualizationContainer">
+                <!-- 처방 A에만 있는 약재 --><div id="onlyA" class="bg-blue-50 p-5 rounded-lg border border-blue-200 min-h-[200px]">
+                    <h2 class="text-xl font-semibold text-blue-800 mb-4 text-center"><span id="nameOnlyA" class="block text-lg font-medium" data-lang-key="noneSelected">(선택 없음)</span></h2>
+                    <div id="herbsOnlyA" class="flex flex-wrap gap-2 justify-center"></div>
+                </div>
+
+                <!-- 공통 약재 --><div id="common" class="bg-purple-50 p-5 rounded-lg border border-purple-200 min-h-[200px]">
+                    <h2 class="text-xl font-semibold text-purple-800 mb-4 text-center" data-lang-key="commonHerbsTitle">공통 약재</h2>
+                    <div id="herbsCommon" class="flex flex-wrap gap-2 justify-center"></div>
+                </div>
+
+                <!-- 처방 B에만 있는 약재 --><div id="onlyB" class="bg-green-50 p-5 rounded-lg border border-green-200 min-h-[200px]">
+                    <h2 class="text-xl font-semibold text-green-800 mb-4 text-center"><span id="nameOnlyB" class="block text-lg font-medium" data-lang-key="noneSelected">(선택 없음)</span></h2>
+                    <div id="herbsOnlyB" class="flex flex-wrap gap-2 justify-center"></div>
+                </div>
+            </div>
+            
+            <!-- 단일 처방 선택 시 표시되는 영역 (위치 이동) -->
+            <div id="singlePrescriptionDisplay" class="hidden">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 처방 A 상세 --><div id="detailsA_single" class="bg-blue-50 p-5 rounded-lg border border-blue-200 min-h-[200px]">
+                        <h2 class="text-xl font-semibold text-blue-800 mb-4" data-lang-key="singleA_title">처방 A: <span id="nameA_single" data-lang-key="noneSelected">선택 없음</span></h2>
+                        <div id="herbsA_single" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    
+                    <!-- 처방 B 상세 --><div id="detailsB_single" class="bg-green-50 p-5 rounded-lg border border-green-200 min-h-[200px]">
+                        <h2 class="text-xl font-semibold text-green-800 mb-4" data-lang-key="singleB_title">처방 B: <span id="nameB_single" data-lang-key="noneSelected">선택 없음</span></h2>
+                        <div id="herbsB_single" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 처방 해설 (용량 정보 포함) -->
+            <h4 class="text-lg font-semibold mt-8 mb-2 text-gray-800" data-lang-key="commentaryTitle">처방 해설</h4>
+            <p class="mb-3 text-gray-700 leading-relaxed" data-lang-key="zuoguihuan_intro"><strong>좌귀환(左歸丸)</strong>은 육미지황의 ‘사(瀉)’ 약을 제거하고 자음·전정(填精)의 힘을 극대화한 중중(重重)한 보음제입니다. 음, 정의 결핍이 분명하고 요슬산연, 현훈·이롱, 유정·활설, 자한·도한, 구건·인건, 설홍소태·맥세 같은 진음부족 표가 뚜렷할 때 씁니다.</p>
+            <!-- 좌귀환 용량 --><div class="my-3 p-4 bg-gray-100 rounded-lg border">
+                <h5 id="toggle-zuoguihuan" class="font-semibold mb-2 text-gray-800 cursor-pointer flex justify-between items-center hover:text-blue-600">
+                    <span data-lang-key="zuoguihuan_toggle">좌귀환 구성</span>
+                    <span class="toggle-icon text-gray-500 text-xs">►</span>
+                </h5>
+                <ul id="content-zuoguihuan" class="list-disc list-inside text-sm text-gray-700 space-y-1 hidden mt-2">
+                    <li data-lang-key="zuoguihuan_d1">숙지황 240g — 보혈·자음·보정</li>
+                    <li data-lang-key="zuoguihuan_d2">산수유 120g — 신 고삽, 정 수렴, 발한 억제</li>
+                    <li data-lang-key="zuoguihuan_d3">산약 120g — 비·폐·신 보익</li>
+                    <li data-lang-key="zuoguihuan_d4">토사자 120g — 신·간 보익, 정 수렴, 안태</li>
+                    <li data-lang-key="zuoguihuan_d5">녹각교 120g — 정·혈 증익, 근골 강화</li>
+                    <li data-lang-key="zuoguihuan_d6">구기자 120g — 간·신 보익, 정익, 명목</li>
+                    <li data-lang-key="zuoguihuan_d7">귀판교 120g — 신 보강, 골 강화, 양혈청열</li>
+                    <li data-lang-key="zuoguihuan_d8">우슬 90g — 활혈, 근골 강화</li>
+                </ul>
+            </div>
+
+            <p class="mb-3 text-gray-700 leading-relaxed" data-lang-key="zuoguiyin_intro"><strong>좌귀음(左歸飲)</strong>은 같은 방향성이지만 더 완만한 보익을 택해 경증의 음허에 맞춥니다. 임상에서는 야간 도한, 요산·유설, 구갈욕음, 설첨홍·맥세삭 등의 비교적 가벼운 신음허에 사용합니다.</p>
+            <!-- 좌귀음 용량 --><div class="my-3 p-4 bg-gray-100 rounded-lg border">
+                <h5 id="toggle-zuoguiyin" class="font-semibold mb-2 text-gray-800 cursor-pointer flex justify-between items-center hover:text-blue-600">
+                    <span data-lang-key="zuoguiyin_toggle">좌귀음 구성</span>
+                    <span class="toggle-icon text-gray-500 text-xs">►</span>
+                </h5>
+                <ul id="content-zuoguiyin" class="list-disc list-inside text-sm text-gray-700 space-y-1 hidden mt-2">
+                    <li data-lang-key="zuoguiyin_d1">숙지황 6–60g — 보혈·자음·보정(정 보충)</li>
+                    <li data-lang-key="zuoguiyin_d2">산수유 3–6g — 신(腎) 고삽, 정(精) 수렴, 발한 억제</li>
+                    <li data-lang-key="zuoguiyin_d3">산약 3–6g — 비·폐·신 보익</li>
+                    <li data-lang-key="zuoguiyin_d4">자감초 3g — 비 강화, 기(氣) 증익, 약물 조화</li>
+                    <li data-lang-key="zuoguiyin_d5">복령 4.5g — 습 제거, 중초 조화, 안신</li>
+                    <li data-lang-key="zuoguiyin_d6">구기자 6g — 간·신 보익, 정익, 명목(시력 도움)</li>
+                </ul>
+            </div>
+
+            <p class="mb-3 text-gray-700 leading-relaxed" data-lang-key="youguihuan_intro"><strong>우귀환(右歸丸)</strong>은 명문화를 덥혀 신양을 회복시키되, 단순 온열이 아니라 정·수까지 채워 불붙을 기름을 늘린다는 것이 핵심입니다. 양위·냉감·오한지랭·활설·불임 등 신양허의 핵심 증들과, 요슬산연·맥침세약 양상을 보일 때 씁니다.</p>
+            <!-- 우귀환 용량 --><div class="my-3 p-4 bg-gray-100 rounded-lg border">
+                <h5 id="toggle-youguihuan" class="font-semibold mb-2 text-gray-800 cursor-pointer flex justify-between items-center hover:text-blue-600">
+                    <span data-lang-key="youguihuan_toggle">우귀환 구성</span>
+                    <span class="toggle-icon text-gray-500 text-xs">►</span>
+                </h5>
+                <ul id="content-youguihuan" class="list-disc list-inside text-sm text-gray-700 space-y-1 hidden mt-2">
+                    <li data-lang-key="youguihuan_d1">숙지황 240g — 보혈·자음·보정</li>
+                    <li data-lang-key="youguihuan_d2">당귀 90g — 보혈·활혈, 조경</li>
+                    <li data-lang-key="youguihuan_d3">산수유 90g — 신 고삽, 정 수렴, 발한 억제</li>
+                    <li data-lang-key="youguihuan_d4">산약 120g — 비·폐·신 보익</li>
+                    <li data-lang-key="youguihuan_d5">두충 120g — 간·신 보익, 근골 강화</li>
+                    <li data-lang-key="youguihuan_d6">토사자 120g — 신·간 보익, 정 수렴, 안태</li>
+                    <li data-lang-key="youguihuan_d7">녹각교 120g — 정·혈 증익, 근골 강화</li>
+                    <li data-lang-key="youguihuan_d8">구기자 120g — 간·신 보익, 정익, 명목</li>
+                    <li data-lang-key="youguihuan_d9">육계 60–120g — 양 보익, 산한, 경락 온난</li>
+                    <li data-lang-key="youguihuan_d10">부자 60–180g — 망양 회복, 내한 제거</li>
+                </ul>
+            </div>
+
+            <p class="mb-3 text-gray-700 leading-relaxed" data-lang-key="youguiyin_intro"><strong>우귀음(右歸飲)</strong>은 우귀환의 경방으로, 숙지황·산수유·산약·구기자·두충·자감초에 육계·부자를 더해 경증 양허에 맞춥니다. 핵심은 양을 돋우되 음을 깎아먹지 않게 배오를 정미(精微)하게 조절한다는 데 있습니다.</p>
+            <!-- 우귀음 용량 --><div class="my-3 p-4 bg-gray-100 rounded-lg border">
+                <h5 id="toggle-youguiyin" class="font-semibold mb-2 text-gray-800 cursor-pointer flex justify-between items-center hover:text-blue-600">
+                    <span data-lang-key="youguiyin_toggle">우귀음 구성</span>
+                    <span class="toggle-icon text-gray-500 text-xs">►</span>
+                </h5>
+                <ul id="content-youguiyin" class="list-disc list-inside text-sm text-gray-700 space-y-1 hidden mt-2">
+                    <li data-lang-key="youguiyin_d1">숙지황 6–60g — 보혈·자음·보정</li>
+                    <li data-lang-key="youguiyin_d2">산수유 3g — 신 고삽, 정 수렴, 발한 억제</li>
+                    <li data-lang-key="youguiyin_d3">산약 6g — 비·폐·신 보익</li>
+                    <li data-lang-key="youguiyin_d4">자감초 3–6g — 비 강화, 기 증익, 약물 조화</li>
+                    <li data-lang-key="youguiyin_d5">두충 6g — 간·신 보익, 근골 강화</li>
+                    <li data-lang-key="youguiyin_d6">구기자 6g — 간·신 보익, 정익, 명목</li>
+                    <li data-lang-key="youguiyin_d7">육계 3–6g — 양(陽) 보익, 산한(散寒), 경락 온난</li>
+                    <li data-lang-key="youguiyin_d8">부자 3–9g — 망양(亡陽) 회복, 내한(內한) 제거</li>
+                </ul>
+            </div>
+            
+            <h4 class="text-lg font-semibold mt-6 mb-2 text-gray-800" data-lang-key="clinicalTitle">임상적 의미 및 근거</h4>
+            <p class="mb-3 text-gray-700 leading-relaxed" data-lang-key="clinicalP1">임상적 의미를 한 줄로 압축하면, 좌귀=신수·진음 회복, 우귀=명문화·신양 회복, 그리고 각 환·음은 강도(보력)의 차등이라고 할 수 있습니다. 좌귀환과 대보음환을 비교하면 좌귀환은 “자음·전정”에 집중해 보음력은 강하고 강화력은 약하며, 대보음환은 하초 화왕을 겨냥해 자음·강화가 모두 강하되 차고 끈적한 약들을 잘못 쓰면 위기(胃氣)를 상할 수 있어 변증·용량 관리가 필수입니다. 육미지황환은 보음·강화가 중등도 균형이라는 점에서 좌귀·대보음의 중간 기착지로 이해할 수 있습니다.</p>
+            
+            <p class="mb-3 text-gray-700 leading-relaxed" data-lang-key="clinicalP2">현대 임상 근거도 누적되고 있습니다. 다기관 무작위 대조시험에서 좌귀환·우귀환은 6–12개월 치료 후 요추(L1–4) 및(12개월 시점) 대퇴골 골밀도(BMD) 개선, 통증(VAS) 감소, 삶의 질(HRQoL) 향상을 보였고, 골형성·흡수 마커의 균형 조절이 시사되었습니다. 안전성 지표와 중도 탈락률은 대조군과 유의한 차이가 없었습니다. 흥미로운 점은 변증에 따라 신음허형엔 좌귀, 신양허형엔 우귀를 투여했다는 설계입니다.</p>
+            <!-- *** FIX HERE: Reference is OUTSIDE the <p> tag *** -->
+            <small class="text-gray-600 block mt-2" data-lang-key="reference">
+                <strong>참고 문헌:</strong> Li W, Liu Z, Liu L, Yang F, Li W, Zhang K, Liu Z, Cheng Y, Yin J, Sun Y. Effect of Zuogui pill and Yougui pill on osteoporosis: a randomized controlled trial. J Tradit Chin Med. 2018 Feb;38(1):33-42. PMID: 32185949.
+            </small>
+        </div>
+    </div>
+
+    <script>
+        // --- 번역 데이터 ---
+        const translations = {
+            // Header
+            // headerLink key removed to prevent translation
+            mainTitle: {
+                ko: "좌귀음, 좌귀환, 우귀음, 우귀환 처방해설 비교",
+                en: "Zuo Gui & You Gui Yin/Wan: Commentary and Comparison"
+            },
+            // Philosophy
+            philosophyTitle: {
+                ko: "좌귀(左歸)·우귀(右歸)의 철학",
+                en: "The Philosophy of Zuo Gui & You Gui"
+            },
+            philosophyP1: {
+                ko: "명나라 때의 장경악(張景岳, 장개빈)은 “양을 잘 보려면 반드시 음 속에서 양을 구하고, 음을 잘 보려면 반드시 양 속에서 음을 구한다 - 신방팔진(新方八陣)”는 상호작용적 보익론을 제시하며, 명문화(命門火), 즉 신(腎)의 양기를 보하는 치료법을 제창하였습니다. 그는 기존의 신기환·육미지황환 체계를 비판적으로 계승·개작해, 좌귀(左歸)·우귀(右歸) 두 축—그리고 각 축의 환(丸)·음(飲)—을 만들었습니다.",
+                en: "Zhang Jingyue (Zhang Jiebin) of the Ming Dynasty proposed an interactive theory of supplementation, stating, \"To supplement Yang effectively, one must seek Yang within Yin; to supplement Yin effectively, one must seek Yin within Yang - Xin Fang Ba Zhen.\" He advocated for therapies that tonify the Mingmen Huo (Gate of Vitality), the Yang Qi of the Shen (Kidneys). He critically inherited and adapted the existing Shenqi Wan and Liuwei Dihuang Wan systems, creating the two main pillars of Zuo Gui (Left-Restoring) and You Gui (Right-Restoring)—each with a Wan (Pill) and a Yin (Drink) formulation."
+            },
+            philosophyP2: {
+                ko: "이름 자체가 처방의 생리학을 품고 있습니다. 좌(左)는 좌측 신장, 곧 신수(腎水, 음)를 상징하고 우(右)는 우측의 명문 화, 곧 신양(腎陽)을 상징합니다. 귀(歸)는 ‘되돌려 보충한다’는 뜻으로, 소모된 정·수·화(精·髓·火)를 원위치로 되돌려 인체의 근원을 복구한다는 표상입니다. 고전적 전승에서는 “왼쪽은 신수, 오른쪽은 명문”이라 하여(“좌자는 신(腎), 우자는 명문”) 좌·우의 구분을 분명히 했습니다. 이 관점에서 좌귀는 ‘잃은 음을 돌려준다’, 우귀는 ‘쇠한 양을 불러낸다’는 서로 보완적 역할을 맡습니다.",
+                en: "The names themselves embody the physiology of the prescriptions. 'Zuo' (Left) symbolizes the left kidney, representing Shen Shui (Yin) (Kidkey Water). 'You' (Right) symbolizes the Mingmen Fire on the right, representing Shen Yang (Kidkey Yang). 'Gui' (Restore/Return) means 'to return and replenish,' symbolizing the restoration of the body's foundation by returning depleted Jing (Essence), Sui (Marrow), and Huo (Fire) to their original state. Classical tradition clearly distinguished this: \"The left is Shen (Kidkey Water), the right is Mingmen.\" In this view, Zuo Gui 'returns lost Yin,' and You Gui 'recalls waned Yang,' playing complementary roles."
+            },
+            // Comparison
+            comparisonTitle: {
+                ko: "처방 구성 비교",
+                en: "Prescription Composition Comparison"
+            },
+            comp_lih: { ko: "<strong>육미지황환:</strong> 숙지황 · 산수유 · 산약 + 복령 · 목단피 · 택사", en: "<strong>Liuwei Dihuang Wan:</strong> Shu Dihuang, Shanzhuyu, Shanyao + Fuling, Mudanpi, Zexie" },
+            comp_sqh: { ko: "<strong>신기환:</strong> 숙지황 · 산수유 · 산약 + 복령 · 목단피 · 택사 · 육계 · 부자", en: "<strong>Shenqi Wan:</strong> Shu Dihuang, Shanzhuyu, Shanyao + Fuling, Mudanpi, Zexie, Rougui, Fuzi" },
+            comp_zgy: { ko: "<strong>좌귀음:</strong> 숙지황 · 산수유 · 산약 · 구기자 + 복령 · 자감초", en: "<strong>Zuogui Yin:</strong> Shu Dihuang, Shanzhuyu, Shanyao, Gouqizi + Fuling, Zhigancao" },
+            comp_zgh: { ko: "<strong>좌귀환:</strong> 숙지황 · 산수유 · 산약 · 구기자 + 토사자 · 녹각교 · 귀판교 · 우슬", en: "<strong>Zuogui Wan:</strong> Shu Dihuang, Shanzhuyu, Shanyao, Gouqizi + Tusizi, Lujiaojiao, Guibanjiao, Niuxi" },
+            comp_ygy: { ko: "<strong>우귀음:</strong> 숙지황 · 산수유 · 산약 · 구기자 · 두충 · 육계 · 부자 + 자감초", en: "<strong>Yougui Yin:</strong> Shu Dihuang, Shanzhuyu, Shanyao, Gouqizi, Duzhong, Rougui, Fuzi + Zhigancao" },
+            comp_ygh: { ko: "<strong>우귀환:</strong> 숙지황 · 산수유 · 산약 · 구기자 · 두충 · 육계 · 부자 + 토사자 · 녹각교· 당귀", en: "<strong>Yougui Wan:</strong> Shu Dihuang, Shanzhuyu, Shanyao, Gouqizi, Duzhong, Rougui, Fuzi + Tusizi, Lujiaojiao, Danggui" },
+            // Controls
+            selectA_label: { ko: "처방 선택 (A)", en: "Select Prescription (A)" },
+            selectB_label: { ko: "비교 처방 선택 (B)", en: "Select Prescription (B)" },
+            selectA_none: { ko: "-- 처방 A 선택 --", en: "-- Select Prescription A --" },
+            selectB_none: { ko: "-- 처방 B 선택 --", en: "-- Select Prescription B --" },
+            // Visualizer
+            commonHerbsTitle: { ko: "공통 약재", en: "Common Herbs" },
+            noneSelected: { ko: "(선택 없음)", en: "(None Selected)" },
+            // Single View
+            singleA_title: { ko: "처방 A:", en: "Prescription A:" },
+            singleB_title: { ko: "처방 B:", en: "Prescription B:" },
+            // Commentary
+            commentaryTitle: { ko: "처방 해설", en: "Prescription Commentary" },
+            zuoguihuan_intro: {
+                ko: "<strong>좌귀환(左歸丸)</strong>은 육미지황의 ‘사(瀉)’ 약을 제거하고 자음·전정(填精)의 힘을 극대화한 중중(重重)한 보음제입니다. 음, 정의 결핍이 분명하고 요슬산연, 현훈·이롱, 유정·활설, 자한·도한, 구건·인건, 설홍소태·맥세 같은 진음부족 표가 뚜렷할 때 씁니다.",
+                en: "<strong>Zuogui Wan (Left-Restoring Pill)</strong> is a potent Yin-tonifying formula that removes the 'xie' (draining) herbs from Liuwei Dihuang Wan to maximize the power of nourishing Yin and replenishing Jing (Tian Jing). It is used when there is a clear deficiency of Yin and Essence, marked by symptoms of true Yin deficiency such as soreness in the lower back and knees, dizziness, tinnitus, nocturnal emissions, night sweats, dry mouth/throat, a red tongue with little coating, and a thready pulse."
+            },
+            zuoguihuan_toggle: { ko: "좌귀환 구성", en: "Zuogui Wan Composition" },
+            zuoguihuan_d1: { ko: "숙지황 240g — 보혈·자음·보정", en: "Shu Dihuang 240g — Enriches blood, nourishes Yin, replenishes essence" },
+            zuoguihuan_d2: { ko: "산수유 120g — 신 고삽, 정 수렴, 발한 억제", en: "Shanzhuyu 120g — Astringes Kidneys, secures essence, stops sweating" },
+            zuoguihuan_d3: { ko: "산약 120g — 비·폐·신 보익", en: "Shanyao 120g — Tonifies Spleen, Lung, and Kidney" },
+            zuoguihuan_d4: { ko: "토사자 120g — 신·간 보익, 정 수렴, 안태", en: "Tusizi 120g — Tonifies Kidney and Liver, secures essence, calms fetus" },
+            zuoguihuan_d5: { ko: "녹각교 120g — 정·혈 증익, 근골 강화", en: "Lujiaojiao 120g — Replenishes essence and blood, strengthens tendons and bones" },
+            zuoguihuan_d6: { ko: "구기자 120g — 간·신 보익, 정익, 명목", en: "Gouqizi 120g — Tonifies Liver and Kidney, enriches essence, brightens eyes" },
+            zuoguihuan_d7: { ko: "귀판교 120g — 신 보강, 골 강화, 양혈청열", en: "Guibanjiao 120g — Strengthens Kidneys and bones, nourishes blood, clears heat" },
+            zuoguihuan_d8: { ko: "우슬 90g — 활혈, 근골 강화", en: "Niuxi 90g — Invigorates blood, strengthens tendons and bones" },
+            
+            zuoguiyin_intro: {
+                ko: "<strong>좌귀음(左歸飲)</strong>은 같은 방향성이지만 더 완만한 보익을 택해 경증의 음허에 맞춥니다. 임상에서는 야간 도한, 요산·유설, 구갈욕음, 설첨홍·맥세삭 등의 비교적 가벼운 신음허에 사용합니다.",
+                en: "<strong>Zuogui Yin (Left-Restoring Drink)</strong> shares the same therapeutic direction but offers a gentler supplementation, making it suitable for mild Yin deficiency. Clinically, it is used for relatively light Shen Yin (Kidkey Yin) deficiency symptoms such as night sweats, lower back soreness, nocturnal emissions, thirst with a desire to drink, a red-tipped tongue, and a thready, rapid pulse."
+            },
+            zuoguiyin_toggle: { ko: "좌귀음 구성", en: "Zuogui Yin Composition" },
+            zuoguiyin_d1: { ko: "숙지황 6–60g — 보혈·자음·보정(정 보충)", en: "Shu Dihuang 6–60g — Enriches blood, nourishes Yin, replenishes essence" },
+            zuoguiyin_d2: { ko: "산수유 3–6g — 신(腎) 고삽, 정(精) 수렴, 발한 억제", en: "Shanzhuyu 3–6g — Astringes Kidneys, secures essence, stops sweating" },
+            zuoguiyin_d3: { ko: "산약 3–6g — 비·폐·신 보익", en: "Shanyao 3–6g — Tonifies Spleen, Lung, and Kidney" },
+            zuoguiyin_d4: { ko: "자감초 3g — 비 강화, 기(氣) 증익, 약물 조화", en: "Zhigancao 3g — Strengthens Spleen, tonifies Qi, harmonizes herbs" },
+            zuoguiyin_d5: { ko: "복령 4.5g — 습 제거, 중초 조화, 안신", en: "Fuling 4.5g — Drains dampness, harmonizes middle jiao, calms spirit" },
+            zuoguiyin_d6: { ko: "구기자 6g — 간·신 보익, 정익, 명목(시력 도움)", en: "Gouqizi 6g — Tonifies Liver and Kidney, enriches essence, brightens eyes" },
+
+            youguihuan_intro: {
+                ko: "<strong>우귀환(右歸丸)</strong>은 명문화를 덥혀 신양을 회복시키되, 단순 온열이 아니라 정·수까지 채워 불붙을 기름을 늘린다는 것이 핵심입니다. 양위·냉감·오한지랭·활설·불임 등 신양허의 핵심 증들과, 요슬산연·맥침세약 양상을 보일 때 씁니다.",
+                en: "<strong>Yougui Wan (Right-Restoring Pill)</strong> warms the Mingmen Fire to restore Kidney Yang. Its core principle is not just to warm, but to replenish Jing (Essence) and Sui (Marrow), thereby 'adding oil to the fire.' It is used for key symptoms of Shen Yang (Kidkey Yang) deficiency such as impotence, cold intolerance, cold limbs, persistent diarrhea, infertility, along with lower back/knee soreness and a deep, thready, weak pulse."
+            },
+            youguihuan_toggle: { ko: "우귀환 구성", en: "Yougui Wan Composition" },
+            youguihuan_d1: { ko: "숙지황 240g — 보혈·자음·보정", en: "Shu Dihuang 240g — Enriches blood, nourishes Yin, replenishes essence" },
+            youguihuan_d2: { ko: "당귀 90g — 보혈·활혈, 조경", en: "Danggui 90g — Tonifies and invigorates blood, regulates menses" },
+            youguihuan_d3: { ko: "산수유 90g — 신 고삽, 정 수렴, 발한 억제", en: "Shanzhuyu 90g — Astringes Kidneys, secures essence, stops sweating" },
+            youguihuan_d4: { ko: "산약 120g — 비·폐·신 보익", en: "Shanyao 120g — Tonifies Spleen, Lung, and Kidney" },
+            youguihuan_d5: { ko: "두충 120g — 간·신 보익, 근골 강화", en: "Duzhong 120g — Tonifies Liver and Kidney, strengthens tendons and bones" },
+            youguihuan_d6: { ko: "토사자 120g — 신·간 보익, 정 수렴, 안태", en: "Tusizi 120g — Tonifies Kidney and Liver, secures essence, calms fetus" },
+            youguihuan_d7: { ko: "녹각교 120g — 정·혈 증익, 근골 강화", en: "Lujiaojiao 120g — Replenishes essence and blood, strengthens tendons and bones" },
+            youguihuan_d8: { ko: "구기자 120g — 간·신 보익, 정익, 명목", en: "Gouqizi 120g — Tonifies Liver and Kidney, enriches essence, brightens eyes" },
+            youguihuan_d9: { ko: "육계 60–120g — 양 보익, 산한, 경락 온난", en: "Rougui 60–120g — Tonifies Yang, disperses cold, warms meridians" },
+            youguihuan_d10: { ko: "부자 60–180g — 망양 회복, 내한 제거", en: "Fuzi 60–180g — Restores devastated Yang, expels internal cold" },
+
+            youguiyin_intro: {
+                ko: "<strong>우귀음(右歸飲)</strong>은 우귀환의 경방으로, 숙지황·산수유·산약·구기자·두충·자감초에 육계·부자를 더해 경증 양허에 맞춥니다. 핵심은 양을 돋우되 음을 깎아먹지 않게 배오를 정미(精微)하게 조절한다는 데 있습니다.",
+                en: "<strong>Yougui Yin (Right-Restoring Drink)</strong> is the lighter version of Yougui Wan. It combines Shu Dihuang, Shanzhuyu, Shanyao, Gouqizi, Duzhong, and Zhigancao with Rougui and Fuzi to address mild Yang deficiency. The key is the precise formulation, designed to boost Yang without depleting Yin."
+            },
+            youguiyin_toggle: { ko: "우귀음 구성", en: "Yougui Yin Composition" },
+            youguiyin_d1: { ko: "숙지황 6–60g — 보혈·자음·보정", en: "Shu Dihuang 6–60g — Enriches blood, nourishes Yin, replenishes essence" },
+            youguiyin_d2: { ko: "산수유 3g — 신 고삽, 정 수렴, 발한 억제", en: "Shanzhuyu 3g — Astringes Kidneys, secures essence, stops sweating" },
+            youguiyin_d3: { ko: "산약 6g — 비·폐·신 보익", en: "Shanyao 6g — Tonifies Spleen, Lung, and Kidney" },
+            youguiyin_d4: { ko: "자감초 3–6g — 비 강화, 기 증익, 약물 조화", en: "Zhigancao 3–6g — Strengthens Spleen, tonifies Qi, harmonizes herbs" },
+            youguiyin_d5: { ko: "두충 6g — 간·신 보익, 근골 강화", en: "Duzhong 6g — Tonifies Liver and Kidney, strengthens tendons and bones" },
+            youguiyin_d6: { ko: "구기자 6g — 간·신 보익, 정익, 명목", en: "Gouqizi 6g — Tonifies Liver and Kidney, enriches essence, brightens eyes" },
+            youguiyin_d7: { ko: "육계 3–6g — 양(陽) 보익, 산한(散寒), 경락 온난", en: "Rougui 3–6g — Tonifies Yang, disperses cold, warms meridians" },
+            youguiyin_d8: { ko: "부자 3–9g — 망양(亡陽) 회복, 내한(內한) 제거", en: "Fuzi 3–9g — Restores devastated Yang, expels internal cold" },
+            
+            // Clinical Significance
+            clinicalTitle: {
+                ko: "임상적 의미 및 근거",
+                en: "Clinical Significance & Evidence"
+            },
+            clinicalP1: {
+                ko: "임상적 의미를 한 줄로 압축하면, 좌귀=신수·진음 회복, 우귀=명문화·신양 회복, 그리고 각 환·음은 강도(보력)의 차등이라고 할 수 있습니다. 좌귀환과 대보음환을 비교하면 좌귀환은 “자음·전정”에 집중해 보음력은 강하고 강화력은 약하며, 대보음환은 하초 화왕을 겨냥해 자음·강화가 모두 강하되 차고 끈적한 약들을 잘못 쓰면 위기(胃氣)를 상할 수 있어 변증·용량 관리가 필수입니다. 육미지황환은 보음·강화가 중등도 균형이라는 점에서 좌귀·대보음의 중간 기착지로 이해할 수 있습니다.",
+                en: "In short, Zuo Gui = restores Shen Shui (Kidkey Water)/True Yin, and You Gui = restores Mingmen Huo/Kidkey Yang. The Pill vs. Drink versions represent differences in potency. Comparing Zuogui Wan and Dabuyin Wan, Zuogui Wan focuses on 'nourishing Yin and replenishing Jing (Tian Jing),' making it strongly tonifying for Yin but weak at subduing fire. Dabuyin Wan targets fire flaring from the lower jiao, being strong in both nourishing Yin and subduing fire; however, improper use of its cold, cloying herbs can damage Wei Qi (Stomach Qi), requiring careful pattern differentiation and dosage management. Liuwei Dihuang Wan, with its moderate balance of tonifying Yin and subduing fire, can be seen as a middle ground between the two."
+            },
+            clinicalP2: {
+                ko: "현대 임상 근거도 누적되고 있습니다. 다기관 무작위 대조시험에서 좌귀환·우귀환은 6–12개월 치료 후 요추(L1–4) 및(12개월 시점) 대퇴골 골밀도(BMD) 개선, 통증(VAS) 감소, 삶의 질(HRQoL) 향상을 보였고, 골형성·흡수 마커의 균형 조절이 시사되었습니다. 안전성 지표와 중도 탈락률은 대조군과 유의한 차이가 없었습니다. 흥미로운 점은 변증에 따라 신음허형엔 좌귀, 신양허형엔 우귀를 투여했다는 설계입니다.",
+                en: "Modern clinical evidence is also accumulating. A multi-center randomized controlled trial showed that after 6-12 months of treatment, Zuogui Wan and Yougui Wan improved lumbar (L1-4) and (at 12 months) femoral bone mineral density (BMD), reduced pain (VAS), and improved health-related quality of life (HRQoL). This suggested a regulatory effect on the balance of bone formation and absorption markers. Safety indicators and dropout rates were not significantly different from the control group. An interesting aspect of the study design was that Zuogui was administered for Shen Yin (Kidkey Yin) deficiency patterns, and Yougui for Shen Yang (Kidkey Yang) deficiency patterns, based on pattern differentiation."
+            },
+            reference: {
+                ko: "<strong>참고 문헌:</strong> Li W, Liu Z, Liu L, Yang F, Li W, Zhang K, Liu Z, Cheng Y, Yin J, Sun Y. Effect of Zuogui pill and Yougui pill on osteoporosis: a randomized controlled trial. J Tradit Chin Med. 2018 Feb;38(1):33-42. PMID: 32185949.",
+                en: "<strong>Reference:</strong> Li W, Liu Z, Liu L, Yang F, Li W, Zhang K, Liu Z, Cheng Y, Yin J, Sun Y. Effect of Zuogui pill and Yougui pill on osteoporosis: a randomized controlled trial. J Tradit Chin Med. 2018 Feb;38(1):33-42. PMID: 32185949."
+            },
+            // Prescription names in data
+            '육미지황환_name': { ko: "육미지황환 (六味地黄丸)", en: "Liuwei Dihuang Wan" },
+            '신기환_name': { ko: "신기환 (腎氣丸)", en: "Shenqi Wan" },
+            '좌귀음_name': { ko: "좌귀음 (左歸飲)", en: "Zuogui Yin (Left-Restoring Drink)" },
+            '좌귀환_name': { ko: "좌귀환 (左歸丸)", en: "Zuogui Wan (Left-Restoring Pill)" },
+            '우귀음_name': { ko: "우귀음 (右歸飲)", en: "Yougui Yin (Right-Restoring Drink)" },
+            '우귀환_name': { ko: "우귀환 (右歸丸)", en: "Yougui Wan (Right-Restoring Pill)" }
+        };
+
+        // --- 약재 번역 데이터 (신규 추가) ---
+        const herbTranslations = {
+            '숙지황': { ko: '숙지황', en: 'Shu Dihuang' },
+            '산수유': { ko: '산수유', en: 'Shanzhuyu' },
+            '산약': { ko: '산약', en: 'Shanyao' },
+            '복령': { ko: '복령', en: 'Fuling' },
+            '목단피': { ko: '목단피', en: 'Mudanpi' },
+            '택사': { ko: "택사", en: 'Zexie' },
+            '육계': { ko: '육계', en: 'Rougui' },
+            '부자': { ko: '부자', en: 'Fuzi' },
+            '구기자': { ko: '구기자', en: 'Gouqizi' },
+            '자감초': { ko: '자감초', en: 'Zhigancao' },
+            '토사자': { ko: '토사자', en: 'Tusizi' },
+            '녹각교': { ko: '녹각교', en: 'Lujiaojiao' },
+            '귀판교': { ko: '귀판교', en: 'Guibanjiao' },
+            '우슬': { ko: '우슬', en: 'Niuxi' },
+            '두충': { ko: '두충', en: 'Duzhong' },
+            '당귀': { ko: '당귀', en: 'Danggui' }
+        };
+
+
+        // --- 처방 데이터 (키 값으로 변경) ---
+        const prescriptions = {
+            '육미지황환': {
+                id: '육미지황환',
+                all: ['숙지황', '산수유', '산약', '복령', '목단피', '택사']
+            },
+            '신기환': {
+                id: '신기환',
+                all: ['숙지황', '산수유', '산약', '복령', '목단피', '택사', '육계', '부자']
+            },
+            '좌귀음': {
+                id: '좌귀음',
+                all: ['숙지황', '산수유', '산약', '구기자', '복령', '자감초']
+            },
+            '좌귀환': {
+                id: '좌귀환',
+                all: ['숙지황', '산수유', '산약', '구기자', '토사자', '녹각교', '귀판교', '우슬']
+            },
+            '우귀음': {
+                id: '우귀음',
+                all: ['숙지황', '산수유', '산약', '구기자', '두충', '육계', '부자', '자감초']
+            },
+            '우귀환': {
+                id: '우귀환',
+                all: ['숙지황', '산수유', '산약', '구기자', '두충', '육계', '부자', '토사자', '녹각교', '당귀']
+            }
+        };
+
+        let currentLang = 'ko'; // 기본 언어
+
+        // --- DOM 요소 ---
+        const selectA = document.getElementById('selectA');
+        const selectB = document.getElementById('selectB');
+        
+        const visualizationContainer = document.getElementById('visualizationContainer');
+        const singlePrescriptionDisplay = document.getElementById('singlePrescriptionDisplay');
+
+        const nameOnlyA = document.getElementById('nameOnlyA');
+        const herbsOnlyA = document.getElementById('herbsOnlyA');
+        const herbsCommon = document.getElementById('herbsCommon');
+        const nameOnlyB = document.getElementById('nameOnlyB');
+        const herbsOnlyB = document.getElementById('herbsOnlyB');
+
+        const nameA_single = document.getElementById('nameA_single');
+        const herbsA_single = document.getElementById('herbsA_single');
+        const nameB_single = document.getElementById('nameB_single');
+        const herbsB_single = document.getElementById('herbsB_single');
+
+
+        // --- 언어 관련 함수 ---
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            // Update URL by reloading the page with the new lang parameter
+            const url = new URL(window.location);
+            url.searchParams.set('lang', newLang);
+
+            // Add current selections to URL
+            if (selectA.value !== 'none') {
+                url.searchParams.set('a', selectA.value);
+            }
+            if (selectB.value !== 'none') {
+                url.searchParams.set('b', selectB.value);
+            }
+            
+            window.location.href = url.href;
+        }
+
+        function setLanguage(lang, initialA = 'none', initialB = 'none') {
+            currentLang = lang === 'en' ? 'en' : 'ko';
+            document.documentElement.lang = currentLang;
+            document.title = translations.mainTitle[currentLang]; // 페이지 타이틀 업데이트
+
+            // data-lang-key를 가진 모든 요소의 텍스트 업데이트
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.dataset.langKey;
+                if (translations[key] && translations[key][currentLang]) {
+                    el.innerHTML = translations[key][currentLang]; // innerHTML을 사용해 <strong> 등 태그 렌더링
+                }
+            });
+
+            // 드롭다운 새로고침 (선택값 전달)
+            initDropdowns(initialA, initialB);
+
+            // 시각화 업데이트 (선택된 값 유지)
+            updateVisualization();
+        }
+
+        function initDropdowns(initialA = 'none', initialB = 'none') {
+            const lang = currentLang;
+            
+            // 기존 옵션 (placeholder 제외) 삭제
+            selectA.innerHTML = `<option value="none" data-lang-key="selectA_none">${translations.selectA_none[lang]}</option>`;
+            selectB.innerHTML = `<option value="none" data-lang-key="selectB_none">${translations.selectB_none[lang]}</option>`;
+
+            Object.keys(prescriptions).forEach(key => {
+                const p = prescriptions[key];
+                const translationKey = `${p.id}_name`;
+                const name = translations[translationKey] ? translations[translationKey][lang] : p.id;
+
+                const optionA = document.createElement('option');
+                optionA.value = p.id;
+                optionA.textContent = name;
+                selectA.appendChild(optionA);
+
+                const optionB = document.createElement('option');
+                optionB.value = p.id;
+                optionB.textContent = name;
+                selectB.appendChild(optionB);
+            });
+
+            // URL 파라미터로 전달받은 선택값 복원
+            selectA.value = initialA;
+            selectB.value = initialB;
+        }
+
+
+        // --- 앱 로직 함수 ---
+
+        function createHerbTag(herbKey, type = 'default') {
+            const tag = document.createElement('span');
+            
+            // 약재 이름 번역 (수정됨)
+            const herbName = (herbTranslations[herbKey] && herbTranslations[herbKey][currentLang]) 
+                             ? herbTranslations[herbKey][currentLang] 
+                             : herbKey; // 번역을 찾지 못하면 키 값을 그대로 사용
+                             
+            tag.textContent = herbName;
+            tag.dataset.herb = herbKey; 
+            // *** FIX HERE: Corrected the typo "whitespace- nowrap" to "whitespace-nowrap" ***
+            tag.className = 'herb-tag px-3 py-1 text-sm rounded-full font-medium shadow-sm whitespace-nowrap';
+            
+            updateTagStyle(tag, type);
+            return tag;
+        }
+        
+        function updateTagStyle(tag, type) {
+            tag.className = tag.className.replace(/bg-\S+ border-\S+ text-\S+/g, ''); // 기존 스타일 제거
+            switch (type) {
+                case 'A':
+                    tag.classList.add('bg-blue-300', 'border-blue-400', 'text-blue-900', 'border');
+                    break;
+                case 'B':
+                    tag.classList.add('bg-green-300', 'border-green-400', 'text-green-900', 'border');
+                    break;
+                case 'common':
+                    tag.classList.add('bg-purple-300', 'border-purple-400', 'text-purple-900', 'border');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // 초기화 함수
+        function init() {
+            // 용량 토글 이벤트 리스너
+            function setupToggle(toggleId, contentId) {
+                const toggle = document.getElementById(toggleId);
+                const content = document.getElementById(contentId);
+                if (toggle && content) {
+                    toggle.addEventListener('click', () => {
+                        content.classList.toggle('hidden');
+                        const icon = toggle.querySelector('.toggle-icon');
+                        if (icon) {
+                            icon.textContent = content.classList.contains('hidden') ? '►' : '▼';
+                        }
+                    });
+                }
+            }
+
+            setupToggle('toggle-zuoguihuan', 'content-zuoguihuan');
+            setupToggle('toggle-zuoguiyin', 'content-zuoguiyin');
+            setupToggle('toggle-youguihuan', 'content-youguihuan');
+            setupToggle('toggle-youguiyin', 'content-youguiyin');
+
+            // 이벤트 리스너 추가
+            selectA.addEventListener('change', updateVisualization);
+            selectB.addEventListener('change', updateVisualization);
+            
+            // 언어 설정 및 초기 렌더링 (URL 파라미터 포함)
+            const initialLang = getUrlParam('lang') || 'ko';
+            const initialA = getUrlParam('a') || 'none';
+            const initialB = getUrlParam('b') || 'none';
+            
+            setLanguage(initialLang, initialA, initialB); // This calls initDropdowns and updateVisualization
+        }
+
+        // 시각화 업데이트 함수
+        function updateVisualization() {
+            const valA = selectA.value;
+            const valB = selectB.value;
+
+            const pA = valA !== 'none' ? prescriptions[valA] : null;
+            const pB = valB !== 'none' ? prescriptions[valB] : null;
+
+            const herbsInA = pA ? pA.all : [];
+            const herbsInB = pB ? pB.all : [];
+
+            // 모든 패널 초기화
+            herbsOnlyA.innerHTML = '';
+            herbsCommon.innerHTML = '';
+            herbsOnlyB.innerHTML = '';
+            herbsA_single.innerHTML = '';
+            herbsB_single.innerHTML = '';
+
+            // 텍스트 초기화 (언어에 맞게)
+            const noneSelectedText = translations.noneSelected[currentLang];
+            nameOnlyA.textContent = noneSelectedText;
+            nameOnlyB.textContent = noneSelectedText;
+            nameA_single.textContent = noneSelectedText;
+            nameB_single.textContent = noneSelectedText;
+
+            // 시각화 컨테이너 토글
+            if (!pA && !pB) {
+                visualizationContainer.classList.add('hidden');
+                singlePrescriptionDisplay.classList.add('hidden');
+            } else if (pA && pB) {
+                // 2개 처방 비교
+                visualizationContainer.classList.remove('hidden');
+                singlePrescriptionDisplay.classList.add('hidden');
+
+                const common = herbsInA.filter(h => herbsInB.includes(h)).sort((a, b) => a.localeCompare(b, 'ko'));
+                const onlyA = herbsInA.filter(h => !herbsInB.includes(h)).sort((a, b) => a.localeCompare(b, 'ko'));
+                // *** LOGIC FIX HERE: Changed !herbsInB to !herbsInA ***
+                const onlyB = herbsInB.filter(h => !herbsInA.includes(h)).sort((a, b) => a.localeCompare(b, 'ko'));
+
+                const nameA = translations[`${pA.id}_name`][currentLang];
+                const nameB = translations[`${pB.id}_name`][currentLang];
+                nameOnlyA.textContent = `(${nameA})`;
+                nameOnlyB.textContent = `(${nameB})`;
+
+                onlyA.forEach(h => herbsOnlyA.appendChild(createHerbTag(h, 'A')));
+                common.forEach(h => herbsCommon.appendChild(createHerbTag(h, 'common')));
+                onlyB.forEach(h => herbsOnlyB.appendChild(createHerbTag(h, 'B')));
+                
+            } else { 
+                // 1개 처방만 선택
+                visualizationContainer.classList.add('hidden');
+                singlePrescriptionDisplay.classList.remove('hidden');
+
+                if (pA) {
+                    const nameA = translations[`${pA.id}_name`][currentLang];
+                    nameA_single.textContent = nameA;
+                    herbsInA.forEach(herb => herbsA_single.appendChild(createHerbTag(herb, 'A')));
+                    document.getElementById('detailsA_single').classList.remove('hidden');
+                } else {
+                    document.getElementById('detailsA_single').classList.add('hidden');
+                }
+
+                if (pB) {
+                    const nameB = translations[`${pB.id}_name`][currentLang];
+                    nameB_single.textContent = nameB;
+                    herbsInB.forEach(herb => herbsB_single.appendChild(createHerbTag(herb, 'B')));
+                    document.getElementById('detailsB_single').classList.remove('hidden');
+                } else {
+                    document.getElementById('detailsB_single').classList.add('hidden');
+                }
+            }
+        }
+
+        // 앱 시작
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
+
