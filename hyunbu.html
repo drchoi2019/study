@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현부이경탕 (玄附理經湯) 개요</title>
+    <!-- Tailwind CSS 및 Typography 플러그인 로드 -->
+    <script src="https://cdn.tailwindcss.com/3.4.1?plugins=typography"></script>
+    <style>
+        /* 기본 글꼴 및 스무딩 설정 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="bg-white text-stone-800">
+
+    <!-- React 앱이 렌더링되던 루트 컨테이너 -->
+    <div id="app" class="min-h-screen w-full p-4 md:p-8">
+        <!-- 앱 콘텐츠는 JavaScript로 생성됩니다 -->
+    </div>
+
+    <script type/="module">
+        /*************************
+         * 데이터
+         *************************/
+        const DATA = {
+            stages: [
+                {
+                    id: "ganul",
+                    title: "간울",
+                    subtitle: "肝鬱 | Liver Constraint",
+                    desc: "정서·스트레스 등으로 간의 소설 기능이 막혀 울체가 시작되는 단계",
+                    herbsKeys: ["iqi"],
+                },
+                {
+                    id: "giche",
+                    title: "기체",
+                    subtitle: "氣滯 | Qi Stagnation",
+                    desc: "울체가 진행되어 기의 순환이 정체된 상태. 흉협창만·유방창통 등이 동반",
+                    herbsKeys: ["iqi", "assist"],
+                },
+                {
+                    id: "hyeore",
+                    title: "혈어",
+                    subtitle: "血瘀 | Blood Stasis",
+                    desc: "기체가 오래되어 혈행까지 막힘. 어혈·응체로 경통이 심해지는 단계",
+                    herbsKeys: ["huoxue"],
+                },
+            ],
+            herbs: {
+                iqi: {
+                    label: "이기(理氣)",
+                    items: [
+                        { name: "향부자", hanja: "香附子", note: "소간해울·이기조경" },
+                        { name: "오약", hanja: "烏藥", note: "행기지통" },
+                        { name: "목향", hanja: "木香", note: "이기화중·지통" },
+                        { name: "귤피(진피)", hanja: "橘皮", note: "이기건비·담습 제거" },
+                        { name: "지각", hanja: "枳殼", note: "행기소적·흉복창만" },
+                    ],
+                },
+                assist: {
+                    label: "보조 이기/운비",
+                    items: [{ name: "창출", hanja: "蒼朮", note: "조습건비·창만 개선" }],
+                },
+                huoxue: {
+                    label: "활혈거어(活血祛瘀)",
+                    items: [
+                        { name: "현호색", hanja: "玄胡索", note: "활혈지통·진통 핵심" },
+                        { name: "홍화", hanja: "紅花", note: "활혈통경" },
+                        { name: "도인", hanja: "桃仁", note: "파혈윤장·통경" },
+                        { name: "봉출(아출)", hanja: "蓬朮", note: "파혈행기·응체" },
+                        { name: "소목", hanja: "蘇木", note: "활혈거어" },
+                    ],
+                },
+                base: {
+                    label: "조경·보혈 베이스",
+                    items: [
+                        { name: "당귀", hanja: "當歸", note: "보혈활혈·조경" },
+                        { name: "백작약", hanja: "白芍", note: "양간유간·완급지통" },
+                        { name: "천궁", hanja: "川芎", note: "행기활혈·두통지통" },
+                    ],
+                },
+                warming: {
+                    label: "온경·산한 보조",
+                    items: [
+                        { name: "육계", hanja: "肉桂", note: "온경통맥·미세순환 보조" },
+                        { name: "생강", hanja: "生薑", note: "온중화위·흡수 보조" },
+                    ],
+                },
+            },
+            symptoms: {
+                ganul: ["흉협창만", "감정변동", "유방창통"],
+                giche: ["트림·답답", "복창", "통증은 창통 양상"],
+                hyeore: ["어두운 혈색", "혈괴/피떡", "박동성 통증"],
+            },
+            notes: [
+                "간울 → 기체 → 혈어는 월경통에서 흔한 진행 패턴.",
+                "이기는 간울/기체 단계에서, 활혈은 혈어 단계에서 핵심적으로 개입.",
+                "사물류(당귀·백작약·천궁)는 전 과정의 조경·보혈 베이스로 하부 통증 경련을 완화.",
+            ],
+        };
+
+        const TABS = [
+            { id: "text", label: "본문" },
+            { id: "map", label: "경로 지도" },
+            { id: "herbs", label: "약재 레이어" },
+            { id: "tips", label: "가감·메모" },
+        ];
+
+        const STR = {
+            ko: {
+                headerBack: "← Interactive TCM",
+                title: "현부이경탕 (玄附理經湯) 개요",
+                tabs: { text: "본문", map: "경로 지도", herbs: "약재 레이어", tips: "가감·메모" },
+                mapTitle: "경로 지도",
+                mapSub: "단계를 클릭하여 연결된 약재 레이어를 확인하세요.",
+                herbsAllTitle: "약재 레이어 전체 보기",
+                tipsTitle: "가감·활용 메모",
+            },
+            en: {
+                headerBack: "← Interactive TCM",
+                title: "Hyunburikyung-tang (玄附理經湯) Overview",
+                tabs: { text: "Main", map: "Pathway Map", herbs: "Herb Layers", tips: "Modification Notes" },
+                mapTitle: "Pathway Map",
+                mapSub: "Click a stage to see its linked herb layers.",
+                herbsAllTitle: "All Herb Layers",
+                tipsTitle: "Modifications & Notes",
+            },
+        };
+
+        const PINYIN = {
+            "향부자": "Xiangfuzi",
+            "오약": "Wuyao",
+            "목향": "Muxiang",
+            "귤피(진피)": "Chenpi (Jupi)",
+            "지각": "Zhike",
+            "창출": "Cangzhu",
+            "현호색": "Yanhusuo",
+            "홍화": "Honghua",
+            "도인": "Taoren",
+            "봉출(아출)": "Ezhu",
+            "소목": "Sumu",
+            "당귀": "Danggui",
+            "백작약": "Baishao",
+            "천궁": "Chuanxiong",
+            "육계": "Rougui",
+            "생강": "Shengjiang",
+        };
+
+        const HERB_LABEL_EN = {
+            iqi: "Li-qi (Regulate Qi)",
+            assist: "Auxiliary Qi/Transport",
+            huoxue: "Huo-xue (Invigorate Blood)",
+            base: "Regulate Menses · Tonify Blood",
+            warming: "Warming · Dispel Cold",
+        };
+
+        // REFERENCES: React JSX(<></>)를 HTML 문자열로 변환
+        const REFERENCES = {
+            "1": `청강 김영훈의 월경 관련 질환 처방에 관한 연구 - 病因 血中氣滯를 중심으로.<br>KoreaScience. JAKO201913661037951.`,
+            "2": `Zhang, Y., Wang, Y., Xiang, Y., Lee, S., Oulton, M., Zhao, R., … Schulz, S. (2014). A novel analgesic isolated from a traditional Chinese medicine. Current Biology, 24(2), 117–123.<br>https://doi.org/10.1016/j.cub.2013.11.039`,
+            "3": `Alhassen, L., Dajani, S., & Azab, A. (2021). The analgesic properties of Corydalis yanhusuo. Molecules, 26(24), 7498.<br>https://doi.org/10.3390/molecules26247498`,
+            "4": `Yuan, C.-S., Mehendale, S. R., Wang, C.-Z., Aung, H. H., Jiang, T., Guan, X., & Shoyama, Y. (2004). Effects of Corydalis yanhusuo and Angelicae dahuricae on cold pressor-induced pain in humans: A controlled trial. Journal of Clinical Pharmacology, 44(11), 1323–1327.<br>https://doi.org/10.1177/0091270004267809`,
+            "5": `Xue, B.-X., Gao, X., Zhang, Y., et al. (2023). Phytochemistry, data mining, pharmacology, toxicology and analytical methods of Cyperus rotundus L.: A comprehensive review. Phytochemistry Reviews, 22, 1541–1585.<br>https://doi.org/10.1007/s11101-023-09870-3`,
+            "6": `Lim, J. H., Cho, H. J., Lee, S. L., & Choi, E. M. (2002). 현부리경탕가감(玄附理經湯加減)의 기체혈어형(氣滯血瘀型) 월경통(月經痛)에 미치는 효과에 대한 임상적 고찰.<br>대한한방부인과학회지, 15(4), 228–237.`,
+            "7": `Kim, H. J., Son, Y. J., & Lee, Y. H. (2012). 여대생을 대상으로 한 월경통 클리닉에 대한 임상 보고.<br>대한한방부인과학회지, 25(2), 142–153.`,
+            "8": `Park, S. J., Joo, J. C., Kim, J. H., Kim, S. B., & Lee, S. D. (2016). 중고등학교 여학생의 월경통 한방 치료 효과 및 만족도 분석.<br>대한한방부인과학회지, 29(1), 69–77.`,
+            "9": `Jo, S.-Y., Hwang, S.-M., Kim, J.-S., Kim, S.-Y., Woo, K.-W., Cho, H.-W., & Nho, J.-H. (2025). Genotoxicity and acute toxicity of Hyunburikyung-tang: Assessing the safety of prescribing traditional Korean medicine for dysmenorrhea.<br>BMC Complementary Medicine and Therapies, 25, 372. doi:10.1186/s12906-025-05127-y`,
+        };
+
+        /*************************
+         * 앱 상태 (State)
+         *************************/
+        let lang = 'ko';
+        let activeStage = 'ganul';
+        let tab = 'text';
+        let activePopup = null; // 팝업 ID 저장 (예: "1", "2", ...)
+
+        /*************************
+         * 컴포넌트 → HTML 문자열 변환 함수
+         *************************/
+
+        function StageStrip({ activeStage }) {
+            return `
+            <div class="relative overflow-hidden rounded-xl border bg-white p-4 md:p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    ${DATA.stages.map((s, idx) => `
+                        <div class="relative">
+                            <button
+                                data-stage-id="${s.id}"
+                                class="w-full h-full text-left p-4 rounded-2xl border shadow-sm transition ${
+                                    activeStage === s.id
+                                        ? "bg-stone-900 text-white"
+                                        : "bg-stone-50 hover:bg-stone-100"
+                                }"
+                            >
+                                <div class="text-lg font-extrabold">${s.title}</div>
+                                <div class="text-xs opacity-80">${s.subtitle}</div>
+                                <div class="text-sm mt-2 opacity-90">${s.desc}</div>
+                                <div class="mt-3 text-xs opacity-80">
+                                    대표 증상: ${DATA.symptoms[s.id].join(" · ")}
+                                </div>
+                            </button>
+                            ${idx < DATA.stages.length - 1 ? `
+                                <svg
+                                    class="hidden md:block absolute -right-6 top-1/2 -translate-y-1/2 text-stone-300"
+                                    width="64" height="24" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M4 12 H52" stroke="currentColor" stroke-width="2" />
+                                    <path d="M52 6 L60 12 L52 18" stroke="currentColor" stroke-width="2" fill="none" />
+                                </svg>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            `;
+        }
+        
+        function ReferencePopup({ content }) {
+             return `
+            <div class="fixed inset-0 z-[999] flex items-center justify-center">
+                <div class="absolute inset-0 bg-black/30" data-action="popup-overlay"></div>
+                <div class="relative z-[1000] w-[min(720px,90vw)] max-h-[80vh] overflow-auto bg-white rounded-2xl border shadow-xl p-5">
+                    <div class="text-sm leading-6 whitespace-pre-wrap">${content}</div>
+                    <div class="mt-4 text-right">
+                        <button
+                            data-action="close-popup"
+                            class="px-4 py-2 rounded-xl border text-sm font-semibold bg-white hover:bg-stone-50"
+                        >
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function RefLink({ id }) {
+            return `
+            <button
+                data-ref-id="${id}"
+                class="align-super text-[11px] ml-0.5 px-1 py-0.5 rounded-md border hover:bg-stone-50"
+                aria-label="참고문헌 ${id} 보기"
+            >
+                [${id}]
+            </button>
+            `;
+        }
+
+        function Table({ headers, rows, caption }) {
+            return `
+            <div class="my-8 overflow-hidden rounded-2xl border bg-white">
+                <table class="w-full text-sm">
+                    ${caption ? `<caption class="text-left p-4 text-stone-700 font-semibold">${caption}</caption>` : ''}
+                    <thead class="bg-stone-50 text-stone-600">
+                        <tr>
+                            ${headers.map(h => `
+                                <th class="px-4 py-3 text-left font-semibold border-b align-top break-words">${h}</th>
+                            `).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map(r => `
+                            <tr class="even:bg-stone-50/40">
+                                ${r.map(c => `
+                                    <td class="px-4 py-3 align-top border-b break-words">${c}</td>
+                                `).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+            `;
+        }
+
+        function EtiologyTable() {
+            const headers = ["병인", "빈도(수)", "백분율(%)"];
+            const rows = [
+                ["<span class='font-semibold'>血中氣滯</span>", "85", "83.33"],
+                ["<span class='font-semibold'>寒凝</span>", "2", "1.96"],
+                ["<span class='font-semibold'>子宮虛熱</span>", "2", "1.96"],
+                ["<span class='font-semibold'>子宮寒凝</span>", "2", "1.96"],
+            ];
+            return Table({ headers, rows, caption: "병인 분석" });
+        }
+
+        function DiagnosisTable() {
+            const headers = ["병명", "빈도(수)", "백분율(%)"];
+            const rows = [
+                ["<span class='font-semibold'>臨經腹痛</span>", "69", "63.89"],
+                ["<span class='font-semibold'>月經不調</span>", "16", "14.81"],
+                ["<span class='font-semibold'>臨經腰腹痛</span>", "8", "7.41"],
+                ["<span class='font-semibold'>臨經腰痛</span>", "3", "2.78"],
+                ["<span class='font-semibold'>血痺</span>", "3", "2.78"],
+            ];
+            return Table({ headers, rows, caption: "병명 분석" });
+        }
+
+        function AgeTable() {
+            const headers = ["연령대", "빈도(수)", "백분율(%)"];
+            const rows = [
+                ["<span class='font-semibold'>0~9세</span>", "1", "0.23"],
+                ["<span class='font-semibold'>10~19세</span>", "71", "16.21"],
+                ["<span class='font-semibold'>20~29세</span>", "195", "44.52"],
+                ["<span class='font-semibold'>30~39세</span>", "120", "27.40"],
+                ["<span class='font-semibold'>40~49세</span>", "40", "9.13"],
+                ["<span class='font-semibold'>50~59세</span>", "1", "0.23"],
+                ["<span class='font-semibold'>60~69세</span>", "0", "0"],
+                ["<span class='font-semibold'>70~70세</span>", "1", "0.23"],
+                ["<span class='font-semibold'>미기재</span>", "9", "2.05"],
+            ];
+            return Table({ headers, rows, caption: "연령대 분석" });
+        }
+
+        function MainText({ lang }) {
+            const isEN = lang === 'en';
+            return `
+            <section class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border max-w-3xl mx-auto">
+                <div class="prose prose-stone max-w-[78ch] mx-auto text-[0.98rem] md:text-base leading-7 tracking-[0.005em]">
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'Origin & Characteristics' : '처방의 유래와 특징'}</h3>
+                    <p>
+                        ${isEN ?
+                            `Hyunburikyung-tang is a classical herbal prescription tailored for dysmenorrhea, especially the pattern of <em>Qi stagnation with blood stasis</em>. First introduced in <em>Cheonggang Euigam</em> by physician Kim Young‑hoon (Cheonggang), it modifies the Sa‑mul‑tang base by adding <em>Li‑qi</em> and <em>Huo‑xue</em> medicinals. The name “Hyun‑bu” derives from <em>Yanhusuo</em> (玄胡索) and <em>Xiangfuzi</em> (香附子), highlighting their central role. Clinically it promotes Qi–blood flow and relieves pain, and is widely used in modern practice for menstrual pain. ${RefLink({ id: "1" })}`
+                        :
+                            `현부이경탕은 월경통(痛經) 치료를 위해 개발된 한약 처방으로, 특히 기체혈어(氣滯血瘀)로 인한 월경통에 쓰이는 대표 처방입니다. 이 처방은 일제강점기 한의학자 청강(晴崗) 김영훈이 집필한 의학서 청강의감(晴崗醫鑑)에 처음 소개되었으며, 김영훈이 사물탕을 기본으로 여기에 이기(理氣)·활혈(活血) 약물을 가감하여 독자적으로 구성한 처방입니다. “현부(玄附)”라는 명칭은 처방에 포함된 현호색(玄胡索)과 향부자(香附子)에서 따온 것으로, 이들 약물이 처방의 중심임을 시사합니다. ${RefLink({ id: "1" })}`
+                        }
+                    </p>
+
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'TCM View & Indications' : '월경통의 한의학적 이해 및 적응증'}</h3>
+                    <p>
+                        ${isEN ?
+                            `Dysmenorrhea is cramping lower abdominal pain during menstruation and affects roughly 50–90% of women of reproductive age worldwide. Primary dysmenorrhea occurs without pelvic organic disease, whereas secondary dysmenorrhea is associated with conditions such as fibroids or endometriosis. Primary dysmenorrhea typically begins 1–2 years after menarche as ovulatory cycles establish, with pain starting just before or at the onset of menses and lasting 2–3 days. In severe cases, dysmenorrhea impairs school or work performance and quality of life; fortunately, Korean medicine therapies show favorable clinical effects. In TCM, intense menstrual pain is traditionally attributed to blood stasis, often developing along the pathway — liver constraint (Gan Yu) → Qi stagnation (Qi Zhi) → blood stasis (Xue Yu). Classical texts describe adding blood-activating and Qi-regulating herbs (e.g., Yanhusuo, Xiangfuzi, Taoren, Honghua) to formulas like Samul-tang to treat such patterns. Clinically, Qi-stagnation-with-blood-stasis type presents with distending lower abdominal pain that eases after passage of clots, chest or hypochondriac oppression, breast tenderness, and dark scanty flow with clots. Hyunburikyung-tang is tailored for precisely this pattern, smoothing Qi, activating blood, and relieving pain.`
+                        :
+                            `월경통이란 월경기간 중에 발생하는 하복부 경련성 통증을 말하며, 전 세계 가임기 여성의 약 50~90%가 경험하는 매우 흔한 부인과 증상입니다. 일반적으로 특별한 골반 내 기질적 원인 없이 발생하는 경우를 원발성 월경통이라 하고, 자궁근종·자궁내막증 등 특정 병변에 의해 생기는 경우를 속발성 월경통이라 구분합니다. 원발성 월경통은 초경 후 1~2년 내 배란주기가 확립되면서 나타나기 시작하여, 월경 시작 직전이나 시작과 동시에 통증이 발현되고 2~3일간 지속되는 양상을 보입니다. 속발성 월경통은 나이가 들면서 또는 무배란 주기 등에 나타나는 경향이 있고, 원인 질환의 치료와 병행하여 통증 관리가 필요합니다. 월경통이 심한 경우 학업이나 업무 수행에 지장이 커져 삶의 질이 저하될 수 있는데, 다행히 한의학적 치료는 월경통에 비교적 양호한 효과를 보여왔으며, 통증 경감을 통해 여성들의 삶의 질 향상에 기여할 수 있다는 연구 보고들이 누적되고 있습니다. 한의학에서는 월경통을 전통적으로 통경(痛經), 경행복통(經行腹痛) 등으로 칭하며, 원인과 시기에 따라 변증론치합니다. 동의보감에서는 월경 시 복통은 어혈로 인한 실증(實證)으로 보고, 청열조혈탕이나 사물탕에 현호색, 향부자, 도인, 홍화 등의 활혈거어약을 가미하여 치료한다고 기록하고 있습니다. 즉 월경기에 나타나는 격심한 복통은 어혈(瘀血)로 인한 혈행 장애로 파악한 것입니다. 현대 임상에서도 월경통 환자의 상당수에서 어혈이 병인으로 작용하는데, 특히 간울(肝鬱)로 인한 기체(氣滯) → 혈어(血瘀) 경로가 흔합니다. 기체혈어형 월경통은 스트레스나 정서적 긴장 등으로 간의 기운이 울체되어 혈행까지 막힘으로써 발생하는 통증 유형으로, 흔히 월경 전이나 월경 초기에 아랫배가 창통(脹痛)하면서 덩어리진 혈괴가 배출되고 나면 통증이 경감되는 경향을 보입니다. 또 가슴이나 옆구리가 답답하고 팽만한 느낌, 유방의 통증 및 팽창감, 월경량은 적거나 혈색이 어둡고 혈전(피떡) 등이 동반되는 것이 특징입니다. 현부이경탕은 바로 이러한 기체혈어로 인한 월경곤란증을 풀어주는 데 특화된 처방으로, 기혈 순환을 순조롭게 하여 어혈을 없애고 통증을 멎게 하는 효능(順氣活血止痛)이 있습니다. 요컨대 현부이경탕의 주치는 “혈중기체로 인하여 월경이 막히고 임박해 복통이 심한 증상”으로 요약되며, 이러한 증상을 나타내는 월경통 환자라면 원발성·속발성 여부를 막론하고 적용해 볼 수 있습니다. 실제 임상에서도 현부이경탕은 월경통에 대한 특효방(特效方)으로 인식되어, 월경통 환자에게 가장 우선적으로 고려되는 처방 중 하나입니다.`
+                        }
+                    </p>
+
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'Composition & Key Herbs' : '처방 구성 및 약물 설명'}</h3>
+                    <p>
+                        ${isEN ?
+                            `Core synergy comes from <strong>Yanhusuo</strong> (pain‑relieving, activates blood) and <strong>Xiangfuzi</strong> (soothes constrained liver Qi).`
+                        :
+                            `이 처방의 핵심은 현호색과 향부자에 있습니다. 현호색은 기체로 인한 혈체를, 향부자는 간기울결로 인한 기체를 치료합니다.`
+                        }
+                    </p>
+
+                    <p class="font-bold mt-4">${isEN ? 'Liver Constraint → Qi Stagnation → Blood Stasis' : '간울 → 기체 → 혈어'}</p>
+
+                    <p>
+                        ${isEN ?
+                            `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Yanhusuo</span> (延胡索, <em>Corydalis yanhusuo</em>): analgesic and blood‑activating; relieves fixed, stabbing pains due to Qi‑blood stagnation. Mechanisms involve isoquinoline alkaloids (e.g., DHCB) modulating peripheral/central pain pathways. ${RefLink({ id: "2" })} ${RefLink({ id: "3" })} ${RefLink({ id: "4" })}`
+                        :
+                            `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">현호색</span>(延胡索, Corydalis yanhusuo): 기미·약성은 매운맛·쓴맛, 따뜻함에 가깝고(활혈거어·이기지통 계열), 귀경은 간·심·비로 본다. 핵심 효능은 기혈울체로 인한 다양한 동통(흉협·위복·월경통·사지통 등) 완화이며, 움직이지 않는 어혈·기체를 동시에 풀어 “기행즉혈행(氣行則血行)”을 도와 통증을 꺼준다. 월경통·상복부 창만·협통에는 이기약(향부자, 청피)과, 고질적 통증·타박상에는 활혈지통약(몰약·유향·오령지)과 병용한다. 현호색은 활혈제로 구분되므로, 임신·월경과다·혈허에는 신중히 쓴다. 현호색은 실제 혈액의 항응고의 관점에서 파어혈약이라기보다, 진통효과에 바탕하여 파어혈제로 여겨진 약이다. 중의학에서는 고정된 위치에 통증이 있는 경우 이를 어혈로 진단하였다. 현호색의 약리 기전은 이소퀴놀린 알칼로이드에 기인한다. DHCB는 동물 모델에서 도파민계·통증경로 조절을 통해 내성 없이 진통을 보였고, 현호색 알칼로이드들의 말초·중추 경로 조절과 통증 과민 억제를 하는 것으로 알려져 있다. 임상 연구에서는 현호색 병용 제제가 냉수통 유발 모델에서 통증 강도·불쾌감 점수를 낮춰 임상 가능성을 시사했다. ${RefLink({ id: "2" })} ${RefLink({ id: "3" })} ${RefLink({ id: "4" })}`
+                        }
+                    </p>
+
+                    <p class="mb-6">
+                        ${isEN ?
+                            `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Xiangfuzi</span> (香附子, <em>Cyperus rotundus</em>): soothes liver, regulates Qi and menses, and alleviates pain; essential in gynecology. Volatile oils and flavonoids contribute to anti‑inflammatory and antispasmodic effects. ${RefLink({ id: "5" })}`
+                        :
+                            `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">향부자</span>(香附子, Cyperus rotundus): 기미·약성은 매운맛·약간 쓴맛·약간 단맛, 평성(혹은 미온)으로 보고, 귀경은 간·삼초(및 담)이다. 핵심 효능은 소간해울·이기조경·지통으로, 간기울결로 인한 월경불조·월경통·유방창통·협완 등에 두루 쓴다. “여과(女科) 제약장(諸藥長)”이라 하여 여성과 질환의 기본 이기약으로 사용된다. 동의보감은 부인의 성격은 너그럽지 못하여 맺힌 것을 풀 줄 모르는 때가 많은데 이 약은 맺힌 것을 잘 헤치고 어혈을 잘 몰아낸다고 하였다. 혈분 증상(월경통·어혈경향)에는 사물류·천궁·현호색 등과 배합해 기혈을 아울러 통하게 한다. 향부자의 정유·플라보노이드 등 다성분이 항염·진통·평활근 경련 완화에 기여하는 것으로 알려졌다. ${RefLink({ id: "5" })}`
+                        }
+                    </p>
+
+                    <p class="whitespace-pre-wrap bg-stone-50 border rounded-xl p-4">
+                        ${isEN ?
+                            'Xiangfuzi 11.25g  Cangzhu 5.625g  Wuyao 5.625g  Yanhusuo 3.75g  Chenpi 3.75g  Danggui 3.75g  Baishao 3.75g  Chuanxiong 3.75g  Zhike 3.75g  Ezhu 3.75g  Taoren 3.75g  Gancao 2.625g  Muxiang 2.625g  Honghua 2.625g  Shengjiang 3 slices'
+                        :
+                            '향부자 11.25g  창출 5.625g  오약 5.625g  현호색 3.75g  귤피 3.75g  당귀 3.75g  백작약 3.75g  천궁 3.75g  지각 3.75g  봉출 3.75g  도인 3.75g  관계 2.625g  목향 2.625g  홍화 2.625g  생강 3편'
+                        }
+                    </p>
+
+                    <p class="mt-6">
+                        ${isEN ?
+                            `• <strong>Li‑qi (regulate Qi)</strong>: Xiangfuzi, Wuyao, Muxiang, Chenpi, Zhike — open constrained liver Qi, ease cramping pain, and support digestion.`
+                        :
+                            `• 이기(理氣) 약재: 향부자(香附子), 오약(烏藥), 목향(木香), 귤피(橘皮, 진피), 지각(枳殼) 등 – 울체된 간기(肝氣)를 소통시켜 경련성 통증을 완화하고, 소화기를 돕는 역할도 합니다.`
+                        }
+                    </p>
+
+                    <p>
+                        ${isEN ?
+                            `• <strong>Huo‑xue, dispel stasis</strong>: Yanhusuo, Honghua, Taoren, Ezhu, Sumu — break stasis and improve pelvic blood flow to relieve pain.`
+                        :
+                            `• 활혈거어(活血祛瘀) 약재: 현호색(玄胡索), 홍화(紅花), 도인(桃仁), 봉출(蓬朮, 아출), 소목(笑杍/蘇木) 등 – 어혈을 깨뜨리고 혈액 순환을 촉진하여 통증의 원인인 어혈을 제거합니다.`
+                        }
+                    </p>
+
+                    <p>
+                        ${isEN ?
+                            `• <strong>Tonify blood & regulate menses</strong>: Danggui, Baishao, Chuanxiong — the (modified) Samul-tang core excluding Shu Di Huang. Danggui both nourishes and moves blood to harmonize menses and reduce pain; Baishao soothes the liver, relieves spasm, and enriches Yin-blood; Chuanxiong, often called the “Qi herb in the blood,” promotes circulation and relieves headache and pain. Together they form the harmonizing-blood foundation while the rest of the formula intensifies stasis-dispelling and analgesic actions.`
+                        :
+                            `• 보혈 조경(補혈調經) 약재: 당귀(當歸), 백작약(白芍藥), 천궁(川芎) – 피를 보충하고 어혈을 없애며 경락을 잘 통하게 하는 약물들로, 사물탕 중 숙지황을 제외한 3가지가 들어 있습니다. 당귀는 보혈하면서도 활혈하는 효능으로 월경을 조화시키고 통증을 개선하며, 백작약은 간을 평화시켜 경련을 완화하고 음혈을 보충해줍니다. 천궁은 혈중의 기약(氣藥)으로 불릴 정도로 혈행을 촉진하고 두통이나 통증을 없애는 작용이 있어, 당귀와 배합하여 부녀의 어혈증상을 치료하는 기본으로 삼습니다. 이처럼 현부이경탕은 사물탕의 혈조화 기능을 바탕으로, 어혈을 풀고 통증을 제거하는 효과를 대폭 강화한 처방입니다.`
+                        }
+                    </p>
+
+                    <p>
+                        ${isEN ?
+                            `• <strong>Adjunct warming</strong>: Rougui and Shengjiang warm the uterus and dispel cold (温经散寒), easing cramping in cold-type patterns with lower abdominal chill or cold extremities. Shengjiang also protects the stomach and aids absorption; Rougui helps open the channels, supports microcirculation, and complements the stasis-breaking strategy, thereby enhancing analgesia.`
+                        :
+                            `• 기타 보조 약재: 육계(肉桂)와 생강(生薑) – 몸을 따뜻하게 하고 경맥의 한습을 제거하여 온경산한(溫經散寒)하는 역할을 합니다. 월경통 환자 중 아랫배가 차고 팔다리가 냉한 한증(寒症) 소견이 있는 경우, 육계와 생강이 자궁 및 하복부를 따뜻하게 덥혀 경련성 통증을 완화시켜 줍니다. 생강은 소화기 보호와 약물 흡수 촉진에도 기여하며, 육계는 온경통맥과 더불어 활혈 작용을 도와 처방의 진통 효과를 보강합니다. 특히 육계는 천연 쿠마린류를 함유하여 혈소판 응집 억제 및 미세순환 개선과 연관된 작용을 나타내므로, 배합 시 파어혈제(破瘀血劑)적 성격을 보조해 어혈로 인한 통증·응체를 푸는 데 기여합니다.`
+                        }
+                    </p>
+
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'Administration' : '복약 방법'}</h3>
+                    <p>
+                        ${isEN ?
+                            `Typically taken as a decoction 2–3 times daily. For prevention, start about one week before the expected period and continue through menses. A practical regimen is to prepare roughly 10 days of decoction, begin 7 days premenstrually, and continue into the period for 2–3 cycles; many patients then experience markedly reduced pain in subsequent cycles. On very painful days, conventional analgesics or acupuncture may be combined as needed, though Hyunburikyung-tang alone often achieves meaningful relief.`
+                        :
+                            `현부이경탕은 달인 한약으로 하루 2~3회 복용하는 것이 일반적입니다. 월경통 예방을 위해서는 월경 예정일 약 1주일 전부터 현부이경탕 복용을 시작하여 월경 끝날 때까지 꾸준히 복용하는 전략이 권장됩니다. 예컨대 한 번에 10일치 정도의 탕약을 조제하여, 월경 7일 전에 복용을 시작하고 월경 기간까지 이어서 먹는 과정을 2~3개월간(2~3회 월경 주기 연속) 시행하면 이후 월경통의 정도가 훨씬 경감되는 효과를 기대할 수 있습니다. 통증이 심한 날에는 필요에 따라 진통제를 병행하거나 침구 치료를 병용할 수도 있지만, 현부이경탕 단독으로도 상당수 환자에서 통증 조절에 유의미한 호전을 보입니다.`
+                        }
+                    </p>
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-10 mb-2">${isEN ? "Cheonggang's Usage Pattern" : '청강선생의 현부이경탕 사용 패턴'}</h3>
+                    <p class="text-stone-800">
+                        ${isEN ?
+                            `Primarily used for dysmenorrhea accompanied by Qi stagnation and blood stasis; the largest patient group was women in their 20s, followed by those in their 30s—making it a first-line formula for dysmenorrhea in younger women.`
+                        :
+                            `주된 대상은 기체와 혈어가 함께 나타나는 생리통 환자였고, 연령은 20대가 가장 많았으며 그다음이 30대였다. 즉 젊은 여성의 월경통에서 가장 우선적으로 고려된 처방이었다.`
+                        }
+                    </p>
+                    
+                    ${EtiologyTable()}
+                    ${DiagnosisTable()}
+                    ${AgeTable()}
+
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'Clinical Evidence' : '임상 연구 및 효과 근거'}</h3>
+                    <p>
+                        ${isEN ?
+                            `• Effect on Qi-stagnation/blood-stasis dysmenorrhea: In a cohort of 47 patients diagnosed as Qi stagnation with blood stasis, individualized Hyunburikyung-tang (with modifications) given for ~20 days significantly reduced pain indices in both primary and secondary dysmenorrhea. On follow-up, about 45% (21 patients) maintained pain relief for ≥6 months. ${RefLink({ id: "6" })}`
+                        :
+                            `• 기체혈어형 월경통에 대한 현부이경탕의 효과: 조현주 등(2002)은 월경통 환자 47례를 대상으로 변증상 기체혈어형으로 진단된 경우 현부이경탕을 환자 상태에 맞게 가감하여 평균 20일간 투여하고 경과를 관찰하였습니다. 그 결과 원발성 월경곤란증 환자뿐 아니라 속발성 월경곤란증 환자 모두에서 월경통 통증 지수의 유의한 감소가 나타났으며, 치료 종료 후 추적 관찰에서도 약 45%에 해당하는 환자들(21명)이 6개월 이상 통증 완화 효과가 지속되었다고 보고되었습니다. ${RefLink({ id: "6" })}`
+                        }
+                    </p>
+                    <p>
+                        ${isEN ?
+                            `• College clinic report: In 26 university students with dysmenorrhea, pattern-based Korean medicine care was provided over one menstrual cycle: Hyunburikyung-tang modifications for Qi-stagnation/blood-stasis; Huo-xiang-zheng-qi-san for cold-damp obstruction; Liu-wei-di-huang-wan for liver–kidney deficiency, alongside acupuncture/moxibustion. Pain intensity decreased markedly versus baseline, and associated symptoms (abdominal distension, low back pain, nausea) improved significantly. ${RefLink({ id: "7" })}`
+                        :
+                            `• 여대생 월경통 클리닉 임상보고: 김현주 등(2012)은 월경통을 호소하는 대학생 26명을 대상으로 1개 월경 주기 동안 한의 복합치료를 시행한 임상 결과를 보고하였습니다. 환자들의 변증 유형에 따라 기체혈어형에는 현부이경탕 가감방을, 한습응체형에는 곽향정기산을, 간신휴손형에는 육미지황환을 각각 처방하고 아울러 침뜸 요법을 병행하였습니다. 치료 결과 월경통의 정도가 치료 전보다 현저히 감소하였을 뿐만 아니라, 월경 시 수반되던 증상들(복부 팽만감, 요통, 오심 등) 역시 유의하게 개선된 것으로 나타났습니다. ${RefLink({ id: "7" })}`
+                        }
+                    </p>
+                    <p>
+                        ${isEN ?
+                            `• Middle/High-school program: After two months of herbal medicine and acupuncture, pain scores fell by ~26% (6.69→4.93), with substantial improvements in school activity impairment index and overall satisfaction. ${RefLink({ id: "8" })}`
+                        :
+                            `• 중고등학생 대상 한방치료 효과 분석: 2개월간 한약 복용 및 침치료 등을 시행한 결과, 월경통 통증 정도가 약 26% 감소(6.69→4.93점)하는 등 유의한 호전을 보였고, 월경통으로 인한 학업 장애 지수와 전반적 만족도 역시 크게 개선되었습니다. ${RefLink({ id: "8" })}`
+                        }
+                    </p>
+
+                    <h3 class="text-lg md:text-xl font-extrabold tracking-tight text-stone-900 mt-8 mb-2">${isEN ? 'Safety' : '안전성'}</h3>
+                    <p>
+                        ${isEN ?
+                            `A 2025 non-clinical safety evaluation reported that residual pesticides and heavy metals were below limits and no acute or genotoxic risks were detected within tested ranges. The work, conducted under GLP/GMP-like standards and published in BMC Complementary Medicine and Therapies, supports the quality and safety of Hyunburikyung-tang for dysmenorrhea care. ${RefLink({ id: "9" })}`
+                        :
+                            `한편, 현부이경탕의 안전성에 대한 과학적 검증 연구도 이루어졌습니다. 2025년 한국한의약진흥원 한약비임상시험센터 연구진은 BMC 보완대체의학 저널에 현부이경탕의 비임상 안전성 평가 결과를 보고하였는데, 잔류 농약 및 중금속 함유량이 모두 기준치 이하이며 과량 투여 시에도 독성 반응이나 발암 가능성이 나타나지 않는 것으로 확인되었습니다. 이 연구는 국제적 기준(GLP, GMP)에 따라 수행되어 현부이경탕의 품질과 안전성을 입증한 것으로, 한의 월경통 치료에 대한 과학적 신뢰도를 높이는 근거가 되고 있습니다. ${RefLink({ id: "9" })}`
+                        }
+                    </p>
+                </div>
+            </section>
+            `;
+        }
+        
+        function HerbPanel({ title, items, accent, lang = 'ko' }) {
+            const ring =
+                accent === "accent"
+                    ? "ring-rose-400"
+                    : accent === "primary"
+                    ? "ring-emerald-400"
+                    : "ring-stone-300";
+            const badge =
+                accent === "accent"
+                    ? "bg-rose-100 text-rose-700"
+                    : accent === "primary"
+                    ? "bg-emerald-100 text-emerald-700"
+                    : "bg-stone-100 text-stone-700";
+            
+            return `
+            <div class="rounded-2xl bg-white border shadow-sm p-4 ring-1 ${ring}">
+                <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${badge}">${title}</div>
+                <ul class="mt-3 grid gap-2">
+                    ${items.map(h => {
+                        const display = lang === 'en' ? (PINYIN[h.name] || h.name) : h.name;
+                        return `
+                        <li class="p-3 rounded-xl bg-stone-50 border">
+                            <div class="text-sm font-semibold">
+                                ${display} <span class="opacity-70 text-xs">${h.hanja}</span>
+                            </div>
+                            ${h.note ? `<div class="text-xs opacity-80 mt-0.5">${h.note}</div>` : ''}
+                        </li>
+                        `;
+                    }).join('')}
+                </ul>
+            </div>
+            `;
+        }
+
+        function Tip({ title, children }) {
+            return `
+            <div class="p-3 rounded-xl bg-white border shadow-sm">
+                <div class="text-sm font-bold">${title}</div>
+                <div class="text-sm opacity-90 mt-0.5">${children}</div>
+            </div>
+            `;
+        }
+
+        /*************************
+         * 메인 렌더링 함수
+         *************************/
+        function renderApp() {
+            const app = document.getElementById('app');
+            if (!app) return;
+
+            // 파생 상태 계산
+            const stage = DATA.stages.find((s) => s.id === activeStage);
+            const activeHerbKeys = Array.from(new Set(["base", "warming", ...stage.herbsKeys]));
+
+            let contentHtml = '';
+            if (tab === 'text') {
+                contentHtml = MainText({ lang });
+            } else if (tab === 'map') {
+                contentHtml = `
+                <section class="bg-stone-50 rounded-2xl p-4 md:p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">${STR[lang].mapTitle}</h2>
+                    <p class="text-sm mb-4">${STR[lang].mapSub}</p>
+                    ${StageStrip({ activeStage })}
+                    <div class="grid md:grid-cols-2 gap-4 mt-6">
+                        ${activeHerbKeys.map(key => HerbPanel({
+                            key: key,
+                            title: lang === 'en' ? (HERB_LABEL_EN[key] || DATA.herbs[key].label) : DATA.herbs[key].label,
+                            items: DATA.herbs[key].items,
+                            accent: key === "huoxue" ? "accent" : key === "iqi" ? "primary" : "muted",
+                            lang: lang
+                        })).join('')}
+                    </div>
+                    <ul class="mt-6 text-sm list-disc ml-5 space-y-1">
+                        ${DATA.notes.map(t => `<li>${t}</li>`).join('')}
+                    </ul>
+                </section>
+                `;
+            } else if (tab === 'herbs') {
+                contentHtml = `
+                <section class="bg-stone-50 rounded-2xl p-4 md:p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">${STR[lang].herbsAllTitle}</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        ${Object.entries(DATA.herbs).map(([key, group]) => HerbPanel({
+                            key: key,
+                            title: lang === 'en' ? (HERB_LABEL_EN[key] || group.label) : group.label,
+                            items: group.items,
+                            accent: key === "huoxue" ? "accent" : key === "iqi" ? "primary" : "muted",
+                            lang: lang
+                        })).join('')}
+                    </div>
+                </section>
+                `;
+            } else if (tab === 'tips') {
+                const tipsEn = `
+                <div class="grid gap-3 text-sm">
+                    ${Tip({ title: "When phlegm-damp is prominent", children: "Combine with Erchen-tang; increase Cangzhu to disperse dampness." })}
+                    ${Tip({ title: "When Qi stagnation is severe", children: "Add a small amount of Qingpi to move Qi and resolve accumulation." })}
+                    ${Tip({ title: "With low back pain", children: "Add Niuxi and Duzhong to support lumbar/leg pain." })}
+                    ${Tip({ title: "Cold-type cramping", children: "Combine Xiao Hui Xiang, Mudanpi, and dry-fried Ganjiang for warming & blood-activating support." })}
+                    ${Tip({ title: "Cold hands and feet", children: "Add a small dose of Wuzhuyu." })}
+                    ${Tip({ title: "Amenorrhea or scanty flow due to stasis", children: "Use Dangguimi with Sumu, or Da Huang + a small amount of medicinal wine when appropriate." })}
+                    ${Tip({ title: "Habitual perimenstrual pain", children: "Consider adding Yimucao." })}
+                    <div class="text-xs text-stone-600 mt-2">※ For education only; modify by pattern, constitution, and severity.</div>
+                </div>
+                `;
+                const tipsKo = `
+                <div class="grid gap-3 text-sm">
+                    ${Tip({ title: "습담이 많을 때", children: "이진탕을 합방하고, 창출을 증량하여 담습을 걷어냅니다." })}
+                    ${Tip({ title: "기가 심하게 뭉쳤을 때", children: "청피를 소량 가하여 행기 소적을 도와줍니다." })}
+                    ${Tip({ title: "요통 동반", children: "우슬·두충을 가하여 요·하지로의 통증을 보조합니다." })}
+                    ${Tip({ title: "냉통/한증 동반", children: "소회향·목단피·건강(볶음) 등을 배합하여 온경산한·활혈 보조." })}
+                    ${Tip({ title: "수족 궐냉", children: "오수유 소량 가미." })}
+                    ${Tip({ title: "혈어로 경폐·불행", children: "당귀미·소목 또는 대황+소량의 약주를 활용." })}
+                    ${Tip({ title: "습관성 임경통", children: "익모초 가미." })}
+                    <div class="text-xs text-stone-600 mt-2">※ 변증·체질·병기 강도에 따라 가감. 교육용 참고.</div>
+                </div>
+                `;
+
+                contentHtml = `
+                <section class="bg-stone-50 rounded-2xl p-4 md:p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">${STR[lang].tipsTitle}</h2>
+                    ${lang === 'en' ? tipsEn : tipsKo}
+                </section>
+                `;
+            }
+
+            // 전체 앱 HTML 구성
+            const appHtml = `
+                <!-- 헤더 -->
+                <header style="width:100%; max-width:48rem; margin:1rem auto; padding:0 1rem; display:flex; justify-content:space-between; align-items:center;">
+                    <a href="#" id="header-link" style="font-size:1.125rem; font-weight:600; color:rgb(55,65,81); text-decoration:none;">
+                        ← Interactive TCM
+                    </a>
+                    <a href="#" data-action="toggle-lang" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color:#F7F3EF; padding:0.25rem 0.75rem; text-decoration: none;">
+                        ${lang === 'ko' ? 'Kor / Eng' : 'Eng / Kor'}
+                    </a>
+                </header>
+                <header class="max-w-3xl mx-auto mb-6">
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">${STR[lang].title}</h1>
+                </header>
+
+                <!-- 메인 콘텐츠 -->
+                <main class="max-w-3xl mx-auto grid gap-6">
+                    <!-- 탭 네비게이션 -->
+                    <nav class="flex gap-2">
+                        ${TABS.map(t => `
+                            <button
+                                data-tab-id="${t.id}"
+                                class="px-4 py-2 rounded-2xl border text-sm font-semibold shadow-sm transition ${
+                                    tab === t.id ? "bg-stone-900 text-white" : "bg-white hover:bg-stone-100"
+                                }"
+                            >
+                                ${STR[lang].tabs[t.id]}
+                            </button>
+                        `).join('')}
+                    </nav>
+
+                    <!-- 탭 콘텐츠 -->
+                    ${contentHtml}
+                </main>
+
+                <!-- 푸터 -->
+                <footer class="max-w-5xl mx-auto mt-10 pt-6 border-t text-xs text-stone-500 text-center">
+                    Hyungsuk Choi
+                </footer>
+
+                <!-- 팝업 (활성화된 경우) -->
+                ${activePopup ? ReferencePopup({ content: REFERENCES[activePopup] }) : ''}
+            `;
+
+            app.innerHTML = appHtml;
+        }
+
+        /*************************
+         * 초기화 및 이벤트 리스너
+         *************************/
+        
+        function getLangFromURL() {
+            try {
+                const p = new URLSearchParams(window.location.search);
+                const v = (p.get("lang") || "ko").toLowerCase();
+                return v === "en" ? "en" : "ko";
+            } catch {
+                return "ko";
+            }
+        };
+
+        function runSmokeTest() {
+            try {
+                DATA.stages.forEach((s) => {
+                    console.assert(s.id in DATA.symptoms, `TEST FAIL: symptoms missing for stage ${s.id}`);
+                    s.herbsKeys.forEach((k) =>
+                        console.assert(k in DATA.herbs, `TEST FAIL: stage ${s.id} refers unknown herb key ${k}`)
+                    );
+                });
+                ["1", "2", "5", "6", "7", "8", "9"].forEach((rid) =>
+                    console.assert(rid in REFERENCES, `TEST FAIL: reference id ${rid} missing`)
+                );
+                console.log("Smoke test passed.");
+            } catch (e) {
+                console.error("Smoke test failed:", e);
+            }
+        }
+        
+        // DOM이 로드된 후 앱 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            lang = getLangFromURL();
+            
+            runSmokeTest();
+            renderApp(); // 첫 렌더링
+
+            // 이벤트 위임을 사용하여 클릭 이벤트 처리
+            const app = document.getElementById('app');
+            app.addEventListener('click', (e) => {
+                // 클릭된 요소 또는 가장 가까운 버튼/링크 찾기
+                const targetButton = e.target.closest('button');
+                const targetLink = e.target.closest('a');
+                const targetOverlay = e.target.dataset.action === 'popup-overlay' ? e.target : null;
+                
+                let target = targetButton || targetLink;
+
+                if (target) {
+                    // 언어 토글
+                    if (target.dataset.action === 'toggle-lang') {
+                        e.preventDefault();
+                        lang = lang === 'ko' ? 'en' : 'ko';
+                        renderApp();
+                        return;
+                    }
+
+                    // 탭 네비게이션
+                    if (target.dataset.tabId) {
+                        tab = target.dataset.tabId;
+                        renderApp();
+                        return;
+                    }
+                    
+                    // 스테이지 선택
+                    if (target.dataset.stageId) {
+                        activeStage = target.dataset.stageId;
+                        renderApp();
+                        return;
+                    }
+
+                    // 참고문헌 링크
+                    if (target.dataset.refId) {
+                        e.preventDefault();
+                        activePopup = target.dataset.refId;
+                        renderApp();
+                        return;
+                    }
+
+                    // 팝업 닫기 버튼
+                    if (target.dataset.action === 'close-popup') {
+                        activePopup = null;
+                        renderApp();
+                        return;
+                    }
+                }
+                
+                // 팝업 오버레이 클릭
+                if (targetOverlay) {
+                     activePopup = null;
+                     renderApp();
+                     return;
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
