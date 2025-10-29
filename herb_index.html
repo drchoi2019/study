@@ -9,6 +9,11 @@
     <style>
         /* Inter font setting */
         html { font-family: 'Inter', sans-serif; }
+        /* 이미지 크기 조정을 위한 추가 스타일 (선택 사항) */
+        .book-cover {
+            max-width: 70%; /* 명시적으로 70%로 제한 */
+            height: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen p-4 sm:p-8">
@@ -39,6 +44,16 @@
             <p class="text-gray-500 italic text-center" id="initialMessage">Total herbs loaded: 120.</p>
         </div>
 
+        <!-- Image/Link for Book Cover (Size reduced using CSS class and w-full/max-w-[70%]) -->
+        <div class="mt-8 flex justify-center">
+            <a href="https://www.amazon.com/dp/B08YS62KPK" target="_blank" rel="noopener noreferrer" class="shadow-lg hover:shadow-xl transition duration-300 rounded-lg overflow-hidden block">
+                <img src="https://m.media-amazon.com/images/I/71uoU95igEL._AC_UY436_FMwebp_QL65_.jpg" 
+                     alt="Traditional Medicinal Herbology book cover" 
+                     class="w-full max-w-[210px] sm:max-w-[210px] mx-auto rounded-lg book-cover"
+                     onerror="this.onerror=null;this.src='https://placehold.co/150x200/96a6a6/ffffff?text=Book+Cover+Error';" />
+            </a>
+        </div>
+        
         <!-- Credit/Attribution -->
         <div class="text-sm text-gray-700 mt-8 pt-4 border-t border-gray-100 text-center">
             Data based on: Traditional Medicinal Herbology, second edition by Seung Choi
@@ -300,7 +315,7 @@
             {"Main Category":"Tonifying","Sub Category":"Tonify yang","Korean Name":"선모","Pinyin":"Xian Mao","Hanzi":"仙茅","Latin Name":"Curculiginis Rhizoma","Temperature":"hot","Taste":"acrid","Channel":"Kidney","Actions":"Tonifies the Kidneys and assists yang, Dispels cold-dampness","Cautions & Contraindications":"Contraindications: heat from yin deficiency"},
             {"Main Category":"Tonifying","Sub Category":"Tonify yang","Korean Name":"호도인","Pinyin":"He Tao Ren","Hanzi":"核桃仁","Latin Name":"Juglandis Semen","Temperature":"warm","Taste":"sweet","Channel":"Kidney, Lung, Large intestine","Actions":"Tonifies the Kidneys and assists yang, Warms the Lungs and helps the Kidneys grasp the qi, Moistens the Intestines to relieve constipation","Cautions & Contraindications":"Contraindications: heat from yin deficiency"},
             {"Main Category":"Tonifying","Sub Category":"Tonify yang","Korean Name":"동충하초","Pinyin":"Dong Chong Xia Cao","Hanzi":"冬蟲夏草","Latin Name":"Cordyceps","Temperature":"warm","Taste":"sweet","Channel":"Lung, Kidney","Actions":"Tonifies the Kidneys and assists yang, Tonifies the Lungs, transforms phlegm and stops bleeding","Cautions & Contraindications":"Cautions: exterior conditions"},
-            {"Main Category":"Tonifying","Sub Category":"Tonify yang","Korean Name":"자하거","Pinyin":"Zi He Che","Hanzi":"紫河車","Latin Name":"Hominis Placenta","Temperature":"warm","Taste":"sweet, salty","Channel":"Lung, Liver, Kidney","Actions":"Tonifies the Liver and Kidney, Tonifies qi and nourishes blood, Tonifies the Kidney essence and tonifies the Lung qi","Cautions & Contraindications":"Contraindications: heat from yin deficiency"},
+            {"Main Category":"Tonifying","Sub Category":"Tonify yang","Korean Name":"자하거","Pinyin":"Zi He Che","Hanzi":"紫河車","Latin Name":"Hominis Placenta","Temperature":"warm","Taste":"acrid, salty","Channel":"Lung, Liver, Kidney","Actions":"Tonifies the Liver and Kidney, Tonifies qi and nourishes blood, Tonifies the Kidney essence and tonifies the Lung qi","Cautions & Contraindications":"Contraindications: heat from yin deficiency"},
             {"Main Category":"Tonifying","Sub Category":"Tonify yin","Korean Name":"맥문동","Pinyin":"Mai Men Dong","Hanzi":"麥門冬","Latin Name":"Ophiopogonis Radix","Temperature":"cold","Taste":"sweet, bitter","Channel":"Lung, Stomach, Heart","Actions":"Moistens the Lungs and nourishes yin, Tonifies the Stomach yin and generates fluids, Clears the Heart and relieves irritability, Moistens the Intestines","Cautions & Contraindications":"Contraindications: loose stools from Spleen deficiency, the early stages of wind-cold coughs"},
             {"Main Category":"Tonifying","Sub Category":"Tonify yin","Korean Name":"천문동","Pinyin":"Tian Men Dong","Hanzi":"天門冬","Latin Name":"Asparagi Radix","Temperature":"cold","Taste":"sweet, bitter","Channel":"Lung, Kidney","Actions":"Clears Lung heat and descends fire, Moistens the Lungs and nourishes the Kidneys","Cautions & Contraindications":"Contraindications: diarrhea from deficiency or cold"},
             {"Main Category":"Tonifying","Sub Category":"Tonify yin","Korean Name":"구기자","Pinyin":"Gou Qi Zi","Hanzi":"枸杞子","Latin Name":"Lycii Fructus","Temperature":"neutral","Taste":"sweet","Channel":"Liver, Kidney, Lung","Actions":"Nourishes and tonifies the Liver and Kidney, Benefits the essence and improves vision, Nourishes yin and moistens the Lungs","Cautions & Contraindications":"Cautions: Spleen deficiency and dampness leading to diarrhea"},
@@ -375,15 +390,18 @@
                 return;
             }
 
-            // 1. Search for substring match (Korean Name or Pinyin word match)
+            // --- IMPROVED FILTERING LOGIC ---
             const matchingHerbs = herbData.filter(herb => {
-                const koreanMatch = herb['Korean Name'].toLowerCase().includes(query);
+                const koreanQueryMatch = herb['Korean Name'].toLowerCase().includes(query);
                 
-                // Check if the query matches a word part in Pinyin (e.g., 'jiang' in 'Sheng Jiang')
-                const pinyinParts = herb['Pinyin'].toLowerCase().split(' ');
-                const pinyinWordMatch = pinyinParts.some(part => part.includes(query));
+                // 1. Normalize Pinyin: Replace slashes, parentheses, and spaces with a single space for robust searching.
+                // e.g., "Ju Pi/Chen Pi" or "Xin Yi (Hua)" becomes "ju pi chen pi" or "xin yi hua"
+                const normalizedPinyin = herb['Pinyin'].toLowerCase().replace(/[\/\(\)]/g, ' '); 
+                
+                // 2. Check if the query is included anywhere in the normalized Pinyin string.
+                const pinyinSubstringMatch = normalizedPinyin.includes(query);
 
-                return koreanMatch || pinyinWordMatch;
+                return koreanQueryMatch || pinyinSubstringMatch;
             });
 
             if (matchingHerbs.length > 0) {
@@ -397,16 +415,15 @@
                     renderSuggestionList(matchingHerbs, resultsContainer, 'Click a result to view details.');
                 }
             } else {
-                // 2. No exact match, suggest similar herbs (using the same partial string logic)
-                // This step is redundant because the initial filter already covers all partial matches. 
-                // We just rely on the "No matching herb found" message in this case.
-                appStatus.textContent = `No exact match found for "${query}". Check suggestions below.`;
+                // No match
+                appStatus.textContent = `No exact match found for "${query}". Try a different query.`;
                 resultsContainer.innerHTML = `<p class="text-red-500 font-medium text-center mt-4">No matching herb found. Try a different query.</p>`;
             }
         }
 
         // --- Download Logic ---
         function downloadData() {
+            // This function creates and downloads the CSV file in the browser.
             const keys = Object.keys(herbData[0]);
             const header = keys.map(key => keyMap[key] || key).join(',');
             
@@ -472,7 +489,7 @@
                 const displayKey = keyMap[key] || key; 
                 
                 // Skip Actions and Cautions for the grid layout (they are displayed in their own sections)
-                if (key === 'Actions' || key === 'Cautions & Contraindications') return; 
+                if (key === 'Actions' || key === 'Cautions and Contraindications') return; 
 
                 detailHtml += `
                     <div class="sm:col-span-1 p-2 border-b border-gray-100">
@@ -502,7 +519,7 @@
                     </div>
                     
                     <div>
-                        <!-- Cautions section now uses Teal styling -->
+                        <!-- Cautions section uses Teal styling -->
                         <h3 class="text-xl font-bold text-teal-600 mb-2">${keyMap['Cautions and Contraindications']}</h3>
                         <p class="text-gray-700 bg-teal-50 p-3 rounded-md border border-teal-200 whitespace-pre-wrap">${herb['Cautions & Contraindications']}</p>
                     </div>
