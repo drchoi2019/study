@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCM에는 뇌가 없는데, 어떻게 뇌의 병을 치료하나? 장상론</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 필수 CSS 규칙: 언어 전환 버튼 스타일 */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* 폰트 설정: 한국어 우선, 영어 차선 */
+        html[lang="ko"] body { font-family: 'Noto Sans KR', sans-serif; }
+        html[lang="en"] body { font-family: 'Inter', sans-serif; }
+
+        /* 한자 강조 스타일 */
+        .hanja { font-weight: 800; color: #0059CF; font-size: 1.2em; }
+        .quote-highlight { font-weight: 700; color: #0059CF; }
+
+        /* 차트 컨테이너 스타일 */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 640px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        
+        /* 표 스타일 */
+        .table-wrap-content td {
+            white-space: normal; /* 줄바꿈 허용 */
+            word-break: break-word; /* 긴 단어 강제 줄바꿈 (모바일 친화적) */
+        }
+        .table-wrap-content {
+            width: 100%;
+            min-width: 450px; /* 작은 화면에서 너무 좁아지는 것을 방지 */
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" onclick="getHeaderLink(event)" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 md:p-8" style="max-width: 48rem; margin: 0 auto;">
+
+        <div class="lang-container" lang="ko">
+            <header class="shadow-md mb-8 p-4 rounded-lg">
+                <h1 class="text-3xl font-bold text-center text-[#00449E]">TCM에는 뇌가 없는데, 어떻게 뇌의 병을 치료하나?</h1>
+                <p class="text-3xl font-bold text-center text-[#007BFF] mt-1">장상론</p>
+            </header>
+
+            <div class="grid grid-cols-1 gap-8">
+
+                <section class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-4 text-center">📌 가장 중요한 관점의 전환</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-3xl mx-auto">장상학설의 본질은 '장기'가 아닌 '기능'에서 출발합니다. 이 두 관점의 차이를 이해하는 것이 핵심입니다.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-inner border border-gray-200 p-6 flex flex-col items-center justify-center min-h-[180px]">
+                            <span class="text-4xl mb-3">🔬</span>
+                            <span class="inline-block bg-gray-200 text-gray-700 rounded-full px-3 py-1 text-sm font-semibold mb-3">서양의학의 설명 (구조 중심)</span>
+                            <p class="text-xl md:text-2xl font-semibold text-center text-gray-800">"간장의 기능은 이러이러한 것이 있다."</p>
+                            <p class="text-center text-gray-500 mt-2">(구조 &rarr; 기능)</p>
+                        </div>
+                        <div class="bg-[#00449E] text-white rounded-lg shadow-lg p-6 flex flex-col items-center justify-center min-h-[180px]">
+                            <span class="text-4xl mb-3">💡</span>
+                            <span class="inline-block bg-white text-[#00449E] rounded-full px-3 py-1 text-sm font-semibold mb-3">장상학설의 설명 (기능 중심)</span>
+                            <p class="text-xl md:text-2xl font-semibold text-center">"이러이러한 기능들을 하는 것을 '간'이라고 부르기로 했다."</p>
+                            <p class="text-center text-[#cce0ff] mt-2">(기능 &rarr; 명칭)</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-lg text-gray-700"><strong>핵심:</strong> 중의학의 장부(<span class="hanja">臟</span>腑)는 해부학적 실체가 아니라, <strong class="text-[#0059CF]">유사한 계통의 기능들을 묶은 시스템</strong>을 의미합니다.</p>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">인체 접근 방식 비교</h2>
+                    <p class="text-center text-gray-600 mb-8">두 의학 체계는 인체를 바라보는 근본적인 흐름과 순서가 다릅니다.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        <div class="flex flex-col items-center text-center p-6 border-2 border-gray-200 rounded-xl bg-white shadow-inner">
+                            <h3 class="text-xl font-bold text-gray-700 mb-4">서양의학적 접근 (구조 기반)</h3>
+                            <div class="flex items-center justify-center space-x-4">
+                                <div class="p-3 bg-red-100 text-red-800 rounded-lg shadow-md font-semibold text-lg">해부학적 장기</div>
+                                <span class="text-4xl text-red-500 font-extrabold">&rarr;</span>
+                                <div class="p-3 bg-red-200 text-red-800 rounded-lg shadow-md font-semibold text-lg">기능 탐구</div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">물리적 실체(간)를 먼저 정의하고, 그 실체의 작용(기능)을 밝혀냅니다.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-6 border-2 border-[#0059CF] rounded-xl bg-[#cce0ff] shadow-inner">
+                            <h3 class="text-xl font-bold text-[#00449E] mb-4">중의학적 접근 (기능 기반)</h3>
+                            <div class="flex items-center justify-center space-x-4">
+                                <div class="p-3 bg-[#0059CF] text-white rounded-lg shadow-md font-semibold text-lg">기능 (에너지 계통)</div>
+                                <span class="text-4xl text-[#0059CF] font-extrabold">&rarr;</span>
+                                <div class="p-3 bg-white text-[#00449E] rounded-lg shadow-md font-semibold text-lg">장부 명칭 부여 (간)</div>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-4">유사 기능(에너지)을 먼저 정의하고, 그 계통에 '간'이라는 이름을 붙입니다.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 mt-10 text-center">인체 접근 방식 비교: 상세표</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table-wrap-content text-left border-collapse mx-auto">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="p-4 font-semibold text-gray-700 border-b-2 border-gray-300">구분</th>
+                                    <th class="p-4 font-semibold text-[#0059CF] border-b-2 border-gray-300">중의학 (장상론)</th>
+                                    <th class="p-4 font-semibold text-gray-700 border-b-2 border-gray-300">서양의학 (해부학)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">출발점</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]"><strong>기능(에너지 계통)</strong>을 먼저 정의</td>
+                                    <td class="p-4 border-b border-gray-200"><strong>해부학적 실체</strong>를 먼저 정의</td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">접근 방식</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]">기능 &rarr; 장부 명칭 부여</td>
+                                    <td class="p-4 border-b border-gray-200">장기 &rarr; 기능 탐구</td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">본질</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]">오행(<span class="hanja">五</span>行)을 인체에 적용한 <strong>기능적 상징 체계</strong></td>
+                                    <td class="p-4 border-b border-gray-200">만질 수 있는 <strong>물리적 실체</strong>로 부터 그 기능을 탐구함</td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">새로운 발견</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]">새로운 기관이 발견되어도 <strong>이론 체계 불변</strong> (기능에 따라 귀속)</td>
+                                    <td class="p-4 border-b border-gray-200">새로운 기관이 발견되면 <strong>이론 체계 업데이트</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">장상론의 기반: 오행(<span class="hanja">五</span>行) 시스템</h2>
+                    <p class="text-gray-600 mb-6 text-center">장상론은 해부학이 아니라 자연의 원리인 오행(五行)을 인체에 적용한 에너지 모델입니다. 각 장부는 이 에너지의 속성을 상징합니다.</p>
+                    <div class="flex flex-col items-center">
+                        <div class="px-6 py-3 bg-[#00449E] text-white rounded-lg shadow-lg mb-4 text-lg font-semibold">오행 (五行) 에너지</div>
+                        <div class="w-full h-1 bg-[#0059CF] mb-6 opacity-50"></div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 w-full text-white text-center font-semibold">
+                            <div class="bg-[#007BFF] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">🌳</span>
+                                <span class="text-lg mt-1">간(<span class="hanja">肝</span>)</span>
+                            </div>
+                            <div class="bg-[#0059CF] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">🔥</span>
+                                <span class="text-lg mt-1">심(<span class="hanja">心</span>)</span>
+                            </div>
+                            <div class="bg-[#41A0FF] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">⛰️</span>
+                                <span class="text-lg mt-1">비(<span class="hanja">脾</span>)</span>
+                            </div>
+                            <div class="bg-[#00449E] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">🪙</span>
+                                <span class="text-lg mt-1">폐(<span class="hanja">肺</span>)</span>
+                            </div>
+                            <div class="bg-[#89C8FF] text-gray-800 p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square sm:col-start-2 lg:col-start-auto">
+                                <span class="text-4xl">💧</span>
+                                <span class="text-lg mt-1">신(<span class="hanja">腎</span>)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">사례: 자궁(<span class="hanja">女</span>子胞)의 기능적 분해</h2>
+                    <p class="text-gray-600 mb-6 text-center">고대인들은 자궁의 해부학적 구조를 알았지만, 장부로 포함시키지 않았습니다. 대신 그 기능은 '간'과 '신'이 나누어 담당합니다. 이로 인해 생리의 문제는 주로 장상학설의 간(肝) 영역에서 치료하며, 불임의 문제는 신(腎) 영역에서 치료하는 방식으로 접근합니다. 이는 자궁의 기능을 오행과 오장의 관점으로 바라보는 중의학의 특성을 명확히 보여줍니다.</p>
+                    <div class="chart-container">
+                        <canvas id="uterusChart_ko"></canvas>
+                    </div>
+                    <div class="flex justify-center flex-wrap gap-4 mt-4 text-sm">
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 rounded-full bg-[#007BFF] mr-2"></span>
+                            <span><strong>간 (肝)</strong>: 생리 기능 관장 (주요 치료 영역)</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 rounded-full bg-[#00449E] mr-2"></span>
+                            <span><strong>신 (腎)</strong>: 생식 기능 관장 (불임 치료 영역)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">장부의 <span class="text-red-600">이름</span>은 <span class="text-green-600">기호</span>일 뿐입니다.</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-3xl mx-auto">장부의 이름은 기능을 상징하는 기호일 뿐, 해부학적 장기와 1:1로 대응되지 않습니다.</p>
+                    <div class="bg-white rounded-lg shadow-inner p-6 border-l-4 border-[#0059CF]">
+                        <blockquote class="text-lg italic font-semibold text-gray-700">
+                            "고전에서 말하는 '비(<span class="quote-highlight">脾</span>)'의 기능을 억지로 서양의학의 지라(Spleen)나 췌장(Pancreas)에 대응시키려 하는 것은 바람직하지 않습니다."
+                        </blockquote>
+                        <footer class="mt-3 text-gray-600 text-right font-medium">
+                            - 그 이름은 단지 기능을 상징하는 하나의 기호일 뿐입니다.
+                        </footer>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <div class="lang-container" lang="en" style="display:none;">
+            <header class="shadow-md mb-8 p-4 rounded-lg">
+                <h1 class="text-3xl font-bold text-center text-[#00449E]">TCM has no concept of the brain, so how does it treat brain diseases?</h1>
+                <p class="text-3xl font-bold text-center text-[#007BFF] mt-1">Zangxiang Theory</p>
+            </header>
+
+            <div class="grid grid-cols-1 gap-8">
+
+                <section class="bg-gray-50 rounded-lg shadow-lg p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-4 text-center">📌 The Most Important Shift in Perspective</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-3xl mx-auto">The essence of Zangxiang Theory starts not from 'organs' but from 'functions'. Understanding the difference between these two perspectives is key.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-inner border border-gray-200 p-6 flex flex-col items-center justify-center min-h-[180px]">
+                            <span class="text-4xl mb-3">🔬</span>
+                            <span class="inline-block bg-gray-200 text-gray-700 rounded-full px-3 py-1 text-sm font-semibold mb-3">Western Medicine's Explanation (Structure-Centric)</span>
+                            <p class="text-xl md:text-2xl font-semibold text-center text-gray-800">"The Liver organ has these functions."</p>
+                            <p class="text-center text-gray-500 mt-2">(Structure &rarr; Function)</p>
+                        </div>
+                        <div class="bg-[#00449E] text-white rounded-lg shadow-lg p-6 flex flex-col items-center justify-center min-h-[180px]">
+                            <span class="text-4xl mb-3">💡</span>
+                            <span class="inline-block bg-white text-[#00449E] rounded-full px-3 py-1 text-sm font-semibold mb-3">Zangxiang Theory's Explanation (Function-Centric)</span>
+                            <p class="text-xl md:text-2xl font-semibold text-center">"Ancient Chinese doctors decided to call these particular functions/energy Gan(liver)."</p>
+                            <p class="text-center text-[#cce0ff] mt-2">(Function &rarr; Naming)</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <p class="text-lg text-gray-700"><strong>CORE:</strong> The Zangfu (Organs) in Traditional Chinese Medicine refer not to anatomical entities, but to a system that groups together <strong class="text-[#0059CF]">similar functional systems</strong>.</p>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">Comparison of Human Body Approaches</h2>
+                    <p class="text-center text-gray-600 mb-8">The two medical systems differ in their fundamental flow and order when viewing the human body.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        <div class="flex flex-col items-center text-center p-6 border-2 border-gray-200 rounded-xl bg-white shadow-inner">
+                            <h3 class="text-xl font-bold text-gray-700 mb-4">Western Medical Approach (Structure Based)</h3>
+                            <div class="flex items-center justify-center space-x-4">
+                                <div class="p-3 bg-red-100 text-red-800 rounded-lg shadow-md font-semibold text-lg">Anatomical Organ</div>
+                                <span class="text-4xl text-red-500 font-extrabold">&rarr;</span>
+                                <div class="p-3 bg-red-200 text-red-800 rounded-lg shadow-md font-semibold text-lg">Function Exploration</div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">The physical entity (e.g., Liver) is defined first, and the entity's actions (functions) are then uncovered.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-6 border-2 border-[#0059CF] rounded-xl bg-[#cce0ff] shadow-inner">
+                            <h3 class="text-xl font-bold text-[#00449E] mb-4">TCM Approach (Function Based)</h3>
+                            <div class="flex items-center justify-center space-x-4">
+                                <div class="p-3 bg-[#0059CF] text-white rounded-lg shadow-md font-semibold text-lg">Function (Energy System)</div>
+                                <span class="text-4xl text-[#0059CF] font-extrabold">&rarr;</span>
+                                <div class="p-3 bg-white text-[#00449E] rounded-lg shadow-md font-semibold text-lg">Zangfu Naming (e.g., Liver)</div>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-4">Similar functions (energies) are defined first, and that system is named 'Liver' (Gan).</p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 mt-10 text-center">Comparison of Human Body Approaches: Detailed Table</h2>
+                    <div class="overflow-x-auto">
+                        <table class="table-wrap-content text-left border-collapse mx-auto">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="p-4 font-semibold text-gray-700 border-b-2 border-gray-300">Category</th>
+                                    <th class="p-4 font-semibold text-[#0059CF] border-b-2 border-gray-300">TCM (Zangxiang Theory)</th>
+                                    <th class="p-4 font-semibold text-gray-700 border-b-2 border-gray-300">Western Medicine (Anatomy)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">Starting Point</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]">Defines <strong>Function (Energy System)</strong> first</td>
+                                    <td class="p-4 border-b border-gray-200">Defines <strong>Anatomical Entity</strong> first</td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">Approach Method</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]">Function &rarr; Zangfu Naming</td>
+                                    <td class="p-4 border-b border-gray-200">Organ &rarr; Function Exploration</td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">Essence</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]"><strong>Functional Symbolic System</strong> applying Five Elements (Wuxing) to the body</td>
+                                    <td class="p-4 border-b border-gray-200">Explores functions starting from a palpable <strong>Physical Entity</strong></td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="p-4 border-b border-gray-200 font-medium">New Discoveries</td>
+                                    <td class="p-4 border-b border-gray-200 text-[#0059CF]"><strong>Theoretical structure remains unchanged</strong> even if a new organ is discovered (it's ascribed based on function)</td>
+                                    <td class="p-4 border-b border-gray-200"><strong>Theoretical structure is updated</strong> when a new organ is discovered</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">The Foundation of Zangxiang Theory: The Five Elements (Wuxing) System</h2>
+                    <p class="text-gray-600 mb-6 text-center">Zangxiang Theory is an energy model that applies the principles of nature, the Five Elements (Wuxing), to the human body, not an anatomy-based model. Each Zangfu symbolizes the properties of its corresponding energy.</p>
+                    <div class="flex flex-col items-center">
+                        <div class="px-6 py-3 bg-[#00449E] text-white rounded-lg shadow-lg mb-4 text-lg font-semibold">Five Elements (Wuxing) Energy</div>
+                        <div class="w-full h-1 bg-[#0059CF] mb-6 opacity-50"></div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 w-full text-white text-center font-semibold">
+                            <div class="bg-[#007BFF] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">🌳</span>
+                                <span class="text-lg mt-1">Liver (Gan)</span>
+                            </div>
+                            <div class="bg-[#0059CF] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">🔥</span>
+                                <span class="text-lg mt-1">Heart (Xin)</span>
+                            </div>
+                            <div class="bg-[#41A0FF] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">⛰️</span>
+                                <span class="text-lg mt-1">Spleen (Pi)</span>
+                            </div>
+                            <div class="bg-[#00449E] p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square">
+                                <span class="text-4xl">🪙</span>
+                                <span class="text-lg mt-1">Lung (Fei)</span>
+                            </div>
+                            <div class="bg-[#89C8FF] text-gray-800 p-4 rounded-lg shadow-lg flex flex-col items-center justify-center aspect-square sm:col-start-2 lg:col-start-auto">
+                                <span class="text-4xl">💧</span>
+                                <span class="text-lg mt-1">Kidney (Shen)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">Case Study: Functional Division of the Uterus (Nuzibao)</h2>
+                    <p class="text-gray-600 mb-6 text-center">Ancient people were aware of the anatomical structure of the uterus but did not include it as one of the Zangfu. Instead, its functions are divided and managed by the 'Liver' (Gan) and 'Kidney' (Shen). Consequently, menstrual issues are mainly treated within the Liver (Gan) domain of Zangxiang Theory, while fertility issues are approached via the Kidney (Shen) domain. This clearly demonstrates TCM's characteristic of viewing the uterus's functions through the lens of the Five Elements and Zangfu.</p>
+                    <div class="chart-container">
+                        <canvas id="uterusChart_en"></canvas>
+                    </div>
+                    <div class="flex justify-center flex-wrap gap-4 mt-4 text-sm">
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 rounded-full bg-[#007BFF] mr-2"></span>
+                            <span><strong>Liver (Gan)</strong>: Governs Menstrual Function (Primary Treatment Domain)</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 rounded-full bg-[#00449E] mr-2"></span>
+                            <span><strong>Kidney (Shen)</strong>: Governs Reproductive Function (Infertility Treatment Domain)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 rounded-lg shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-[#00449E] mb-6 text-center">The Zangfu <span class="text-red-600">Name</span> is merely a <span class="text-green-600">Symbol</span>.</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-3xl mx-auto">The name of the Zangfu is merely a symbol representing functions and does not correspond 1:1 with an anatomical organ.</p>
+                    <div class="bg-white rounded-lg shadow-inner p-6 border-l-4 border-[#0059CF]">
+                        <blockquote class="text-lg italic font-semibold text-gray-700">
+                            "It is undesirable to forcibly match the function of the '<span class="quote-highlight">Spleen</span>' (Pi) mentioned in classical texts to the Western medical Spleen or Pancreas."
+                        </blockquote>
+                        <footer class="mt-3 text-gray-600 text-right font-medium">
+                            - The name is simply a symbol representing function.
+                        </footer>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+    
+    <footer id="page-footer" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
+    <script>
+        // 현재 언어를 저장하는 전역 변수
+        let currentLang = 'ko';
+
+        /**
+         * 지정된 언어로 페이지를 설정합니다.
+         * @param {string} lang - 'ko' 또는 'en'
+         */
+        function setLanguage(lang) {
+            const containers = document.querySelectorAll('.lang-container');
+            const htmlTag = document.querySelector('html');
+            const titleElement = document.querySelector('title');
+            const headerLink = document.getElementById('header-link');
+
+            currentLang = lang;
+            htmlTag.lang = lang;
+
+            containers.forEach(container => {
+                if (container.getAttribute('lang') === lang) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+
+            // 페이지 제목 업데이트
+            if (lang === 'ko') {
+                titleElement.textContent = 'TCM에는 뇌가 없는데, 어떻게 뇌의 병을 치료하나? 장상론';
+            } else {
+                titleElement.textContent = 'TCM has no concept of the brain, so how does it treat brain diseases? Zangxiang Theory';
+            }
+
+            // 헤더 링크 URL 업데이트
+            headerLink.href = 'index.html?lang=' + lang;
+
+            // 차트 재생성 (언어 레이블 업데이트를 위해)
+            initCharts(lang);
+        }
+
+        /**
+         * 언어를 토글하고, URL 쿼리 파라미터를 업데이트합니다. (history.replaceState 사용 금지)
+         * @param {Event} event - 클릭 이벤트 객체
+         */
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+
+            // URL 쿼리 파라미터 업데이트 (history.replaceState 사용 금지 지침 준수)
+            // URL 자체는 변경하지 않고 클라이언트 상태만 변경.
+        }
+
+        /**
+         * 헤더 링크 클릭 시 현재 언어를 파라미터로 포함하여 이동
+         * @param {Event} event - 클릭 이벤트 객체
+         */
+        function getHeaderLink(event) {
+            event.preventDefault(); // 기본 동작(href)을 막고
+            window.location.href = 'index.html?lang=' + currentLang; // 언어 파라미터를 포함하여 이동
+        }
+
+
+        /**
+         * URL 쿼리 파라미터에서 언어를 로드합니다.
+         */
+        function loadLanguage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang');
+            // 기본 언어는 'ko'
+            setLanguage(lang === 'en' ? 'en' : 'ko');
+        }
+
+        // Chart.js 인스턴스 저장을 위한 전역 변수
+        window.uterusChartKo = null;
+        window.uterusChartEn = null;
+
+
+        /**
+         * 차트 인스턴스를 생성하거나 업데이트합니다.
+         * @param {string} lang - 'ko' 또는 'en'
+         */
+        function initCharts(lang) {
+            // 기존 차트 인스턴스 파괴 (차트 중복 생성 방지)
+            if (window.uterusChartKo) { window.uterusChartKo.destroy(); window.uterusChartKo = null; }
+            if (window.uterusChartEn) { window.uterusChartEn.destroy(); window.uterusChartEn = null; }
+
+            const koLabels = ['간 (생리 기능)', '신 (생식 기능)'];
+            const enLabels = ['Liver (Menstrual Function)', 'Kidney (Reproductive Function)'];
+            const ctxKo = document.getElementById('uterusChart_ko')?.getContext('2d');
+            const ctxEn = document.getElementById('uterusChart_en')?.getContext('2d');
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                // 괄호 안의 내용 제거 (예: 간 (생리 기능) -> 간)
+                                return item.chart.data.labels[item.dataIndex].replace(/\s*\([^)]*\)/g, ''); 
+                            },
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += '50%'; // 임의의 값
+                                return label;
+                            }
+                        }
+                    }
+                }
+            };
+            
+            const chartData = {
+                datasets: [{
+                    label: lang === 'ko' ? '기능적 분담' : 'Functional Allocation',
+                    data: [1, 1],
+                    backgroundColor: ['#007BFF', '#00449E'],
+                    borderColor: '#ffffff',
+                    borderWidth: 3,
+                    hoverOffset: 8
+                }]
+            };
+
+            // 한국어 차트 생성
+            if (ctxKo) {
+                window.uterusChartKo = new Chart(ctxKo, {
+                    type: 'doughnut',
+                    data: {
+                        labels: koLabels,
+                        datasets: chartData.datasets
+                    },
+                    options: chartOptions
+                });
+            }
+
+            // 영어 차트 생성
+            if (ctxEn) {
+                window.uterusChartEn = new Chart(ctxEn, {
+                    type: 'doughnut',
+                    data: {
+                        labels: enLabels,
+                        datasets: chartData.datasets
+                    },
+                    options: chartOptions
+                });
+            }
+        }
+
+        // 초기 로드 시 언어 설정
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+    </script>
+</body>
+</html>
