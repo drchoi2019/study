@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAM and Acupuncture Analysis</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- D3.js CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Inter font import */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Tooltip style */
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        /* Bar animation */
+        .bar-inner {
+            transition: width 0.5s ease-in-out;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto space-y-8">
+
+        <!-- New Introductory Text Section -->
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 md:p-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-800 text-center mb-4">Analysis of CAM and Acupuncture Usage</h2>
+            <p class="text-base text-gray-700 leading-relaxed">
+                This page presents data from two distinct surveys, both highlighting the primary conditions for which alternative and traditional therapies are sought:
+            </p>
+            <ul class="list-disc list-inside space-y-2 mt-4 text-gray-700">
+                <li>
+                    <strong>1. U.S. Consumer CAM Usage:</strong> The first chart displays data from a U.S. survey on the frequency of Complementary and Alternative Medicine (CAM) use by consumers.
+                </li>
+                <li>
+                    <strong>2. Korean Practitioner Acupuncture Survey:</strong> The second chart shows results from a survey of clinical Korean Medicine practitioners regarding the conditions they believe acupuncture is most effective for.
+                </li>
+            </ul>
+            
+            <!-- Key Finding Box REMOVED from here -->
+        </div>
+
+        <!-- First Chart: CAM Usage Bar Chart -->
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <header class="bg-slate-700 p-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-white text-center">Adult CAM Usage by Condition (2002 vs 2007)</h1>
+            </header>
+
+            <div class="p-6 md:p-8 space-y-8">
+                <!-- Legend -->
+                <div class="flex justify-center space-x-6">
+                    <div class="flex items-center">
+                        <span class="w-4 h-4 rounded-full bg-emerald-700 mr-2"></span>
+                        <span class="text-sm font-medium text-gray-700">2002</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-4 h-4 rounded-full bg-amber-600 mr-2"></span>
+                        <span class="text-sm font-medium text-gray-700">2007</span>
+                    </div>
+                </div>
+
+                <!-- Chart Data -->
+                <div id="bar-chart-data" class="space-y-6">
+                    <!-- Bar chart will be rendered here -->
+                </div>
+
+                <!-- Footer -->
+                <footer class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500">
+                    <p class="mt-4 text-xs text-gray-600"><strong>Note on Calculation:</strong> Percentages represent the proportional share of CAM usage for each category *within* that year's total reported uses. Each year's data is normalized to a 100% total to compare the *distribution* of usage, not the absolute number of users.</p>
+                    <p class="mt-2"><strong>Grouping Criteria:</strong></p>
+                    <ul class="list-disc list-inside ml-2">
+                        <li><strong>Musculoskeletal:</strong> Back Pain, Neck Pain, Joint Pain, Arthritis, Other Musculoskeletal, Recurring Pain</li>
+                        <li><strong>Respiratory:</strong> Head or Chest Cold</li>
+                        <li><strong>Mental/Neurological:</strong> Anxiety/Depression, Severe Headache or Migraine, Insomnia</li>
+                        <li><strong>Other:</strong> Cholesterol, Stomach Upset</li>
+                    </ul>
+                    <p class="mt-4"><strong>Source:</strong> Fisher, C. (2009, December 8). The use of complementary and alternative medicine in the United States. BMED Report. https://www.bmedreport.com/archives/7687</p>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Second Chart: Acupuncture Pie Chart -->
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <header class="bg-slate-700 p-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-white text-center">Perceived Effectiveness of Acupuncture by Condition</h1>
+            </header>
+
+            <div class="p-6 md:p-8">
+                <!-- Pie chart container -->
+                <div id="pie-chart-container" class="w-full flex justify-center">
+                    <svg id="pie-chart" width="400" height="400"></svg>
+                </div>
+
+                <!-- Legend -->
+                <div id="pie-legend" class="mt-8 flex flex-wrap justify-center gap-4">
+                    <!-- Legend will be rendered here -->
+                </div>
+
+                <!-- Footer -->
+                <footer class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500">
+                    <p class="mt-4"><strong>Note on Calculation:</strong> The pie chart represents the distribution of total responses. Since respondents could select multiple conditions, the raw counts were summed (Total: 5,145) and each category's proportion of that total is shown.</p>
+                    <p class="mt-2"><strong>Grouping Criteria:</strong></p>
+                    <ul class="list-disc list-inside ml-2">
+                        <li><strong>Musculoskeletal (29.5%):</strong> "운동, 골 관절계 질환" (Movement, Musculoskeletal), "퇴행성 신경 질환" (Degenerative Neurological)</li>
+                        <li><strong>Digestive (18.4%):</strong> "소화기계" (Digestive)</li>
+                        <li><strong>Respiratory (12.9%):</strong> "호흡기계 질환" (Respiratory), "이비인후과 질환" (ENT)</li>
+                        <li><strong>Mental/Neurological (10.3%):</strong> "신경, 정신과 질환" (Neurological, Psychiatric)</li>
+                        <li><strong>Circulatory (6.0%):</strong> "순환기계 질환" (Circulatory)</li>
+                        <li><strong>Gynecological (5.6%):</strong> "부인과 질환" (Gynecological)</li>
+                        <li><strong>Other (17.3%):</strong> "신, 비뇨기과" (Kidney, Urological), "안과" (Ophthalmological), "내분비, 대사계" (Endocrine, Metabolic), "면역, 감염계" (Immune, Infectious), "혈액 조혈계" (Hematopoietic)</li>
+                    </ul>
+                     <p class="mt-4"><strong>Source:</strong> Han Chang Hyun, 박지은, Sangwoo Ahn and SunMi Choi. (2005). A Survey about the recognition regarding the Korean acupuncture method and research direction. THE JOURNAL OF KOREAN MEDICAL HISTORY , 18(1), 89-101.</p>
+                </footer>
+            </div>
+        </div>
+
+        <!-- New Key Finding Box (MOVED HERE and EDITED) -->
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 md:p-8">
+            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md shadow-sm">
+                <h3 class="font-bold text-lg mb-2">Key Finding & Future Consideration</h3>
+                <p class="text-base">
+                    A key finding is the overwhelming prominence of musculoskeletal disorders. <strong>Chart 1 (U.S. Consumer Survey)</strong> reveals this from the consumer's perspective, while <strong>Chart 2 (Korean Practitioner Survey)</strong> confirms the same finding from the practitioner's perspective.
+                </p>
+                <p class="text-base mt-2">
+                    Given this strong, consistent demand from both patients and practitioners, it is worth considering this area as a primary focus for future study and research.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tooltip div (shared by both charts) -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+        // --- Bar Chart Helper Function ---
+        function createBar(year, value, maxValue, colorClass) {
+            const percentageWidth = (value / maxValue) * 100;
+            const barContainer = document.createElement('div');
+            barContainer.className = 'flex items-center group';
+            const yearLabel = document.createElement('span');
+            yearLabel.className = 'w-12 text-sm font-medium text-gray-600';
+            yearLabel.textContent = year;
+            barContainer.appendChild(yearLabel);
+            const barOuter = document.createElement('div');
+            barOuter.className = 'flex-1 bg-gray-200 rounded-full h-6 overflow-hidden';
+            const barInner = document.createElement('div');
+            barInner.className = `bar-inner ${colorClass} h-6 rounded-full flex items-center justify-end pr-3`;
+            barInner.style.width = '0%'; // Initial width 0
+            barInner.setAttribute('data-width', `${percentageWidth}%`); // Target width
+            const valueLabel = document.createElement('span');
+            valueLabel.className = 'text-sm font-bold text-white';
+            valueLabel.textContent = `${value.toFixed(1)}%`;
+            barInner.appendChild(valueLabel);
+            barOuter.appendChild(barInner);
+            barContainer.appendChild(barOuter);
+            return barContainer;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. BAR CHART LOGIC ---
+            const barData = [
+                { category: 'Musculoskeletal', 2002: 60.8, 2007: 77.2 },
+                { category: 'Mental/Neurological', 2002: 16.7, 2007: 13.4 },
+                { category: 'Respiratory', 2002: 16.2, 2007: 4.6 },
+                { category: 'Other', 2002: 6.3, 2007: 4.8 }
+            ];
+            const barChartContainer = document.getElementById('bar-chart-data');
+            const barMaxValue = 100; // Normalized to 100%
+
+            barData.forEach(item => {
+                const categoryEl = document.createElement('div');
+                categoryEl.className = 'space-y-3';
+                const titleEl = document.createElement('h3');
+                titleEl.className = 'text-lg font-semibold text-gray-800';
+                titleEl.textContent = item.category;
+                categoryEl.appendChild(titleEl);
+                const bar2002 = createBar('2002', item[2002], barMaxValue, 'bg-emerald-700');
+                categoryEl.appendChild(bar2002);
+                const bar2007 = createBar('2007', item[2007], barMaxValue, 'bg-amber-600');
+                categoryEl.appendChild(bar2007);
+                barChartContainer.appendChild(categoryEl);
+            });
+
+            // Bar animation trigger
+            setTimeout(() => {
+                document.querySelectorAll('.bar-inner').forEach(bar => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    bar.style.width = targetWidth;
+                });
+            }, 100);
+
+            // --- 2. PIE CHART LOGIC ---
+            const pieData = [
+                { category: 'Musculoskeletal', value: 1518, count: 1518 },
+                { category: 'Digestive', value: 946, count: 946 },
+                // { category: 'Other', value: 892, count: 892 }, // Moved from here
+                { category: 'Respiratory', value: 665, count: 665 },
+                { category: 'Mental/Neurological', value: 529, count: 529 },
+                { category: 'Circulatory', value: 307, count: 307 },
+                { category: 'Gynecological', value: 288, count: 288 },
+                { category: 'Other', value: 892, count: 892 } // Moved to here
+            ];
+            const totalValue = 5145;
+
+            const width = 400;
+            const height = 400;
+            const radius = Math.min(width, height) / 2 - 20;
+
+            const svg = d3.select("#pie-chart")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .append("g")
+                .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+            const color = d3.scaleOrdinal()
+                .domain(pieData.map(d => d.category))
+                .range(d3.schemeSpectral[7]);
+
+            const pie = d3.pie()
+                .value(d => d.value)
+                .sort(null);
+
+            const arc = d3.arc()
+                .innerRadius(0)
+                .outerRadius(radius);
+
+            const tooltip = d3.select("#tooltip");
+
+            const arcs = svg.selectAll("path")
+                .data(pie(pieData))
+                .enter()
+                .append("path")
+                .attr("d", arc)
+                .attr("fill", d => color(d.data.category))
+                .attr("stroke", "white")
+                .style("stroke-width", "2px")
+                .style("opacity", 0.9)
+                .on("mouseover", (event, d) => {
+                    d3.select(event.currentTarget)
+                        .transition()
+                        .duration(150)
+                        .style("opacity", 1)
+                        .attr("transform", "scale(1.03)");
+                    tooltip.style("opacity", 1)
+                        .html(`<strong>${d.data.category}</strong><br>${d.data.count.toLocaleString()} responses (${((d.data.value / totalValue) * 100).toFixed(1)}%)`)
+                        .style("left", (event.pageX + 15) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mousemove", (event) => {
+                    tooltip.style("left", (event.pageX + 15) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", (event, d) => {
+                    d3.select(event.currentTarget)
+                        .transition()
+                        .duration(150)
+                        .style("opacity", 0.9)
+                        .attr("transform", "scale(1)");
+                    tooltip.style("opacity", 0);
+                });
+
+            // Pie chart legend
+            const legendContainer = d3.select("#pie-legend");
+            const legend = legendContainer.selectAll(".legend-item")
+                .data(pieData)
+                .enter()
+                .append("div")
+                .attr("class", "legend-item flex items-center");
+            legend.append("span")
+                .attr("class", "w-4 h-4 rounded-full mr-2")
+                .style("background-color", d => color(d.category));
+            legend.append("span")
+                .attr("class", "text-sm font-medium text-gray-700")
+                .text(d => `${d.category} (${((d.value / totalValue) * 100).toFixed(1)}%)`);
+        });
+    </script>
+
+    <!-- Copyright Footer -->
+    <footer class="text-center text-sm text-gray-500 py-4 mt-8">
+        &copy; 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
+</body>
+</html>
+
