@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자감초탕 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 기본 스타일 (가이드라인 및 원본) --- */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FDFBF5; /* 매우 연한 베이지/오프 화이트 */
+            color: #403A3A; /* 기본 텍스트 색상 */
+        }
+        .section-bg { background-color: #F8F4E8; }
+        .card-bg { background-color: #FDFBF5; }
+        .header-text { color: #8D6E63; }
+        .accent-text { color: #A1887F; }
+
+        /* 약재 색상 */
+        .color-blue { color: #0284C7; }
+        .color-green { color: #16A34A; }
+        .color-yellow { color: #EAB308; }
+        .color-pink { color: #DB2777; }
+        .color-red { color: #DC2626; }
+        .border-blue { border-color: #0284C7; }
+        .border-yellow { border-color: #EAB308; }
+        .border-red { border-color: #DC2626; }
+
+        /* 탭 버튼 */
+        .tab-btn {
+            background-color: #F8F4E8;
+            color: #786862;
+            border: 2px solid #EAE0C8;
+        }
+        .tab-btn.active {
+            background-color: #A1887F;
+            color: #FFFFFF;
+            border-color: #A1887F;
+        }
+        .tab-btn-warning {
+            background-color: #F8F4E8;
+            color: #DC2626;
+            border-color: #F8D7DA;
+        }
+        .tab-btn-warning.active {
+            background-color: #DC2626;
+            color: #FFFFFF;
+            border-color: #DC2626;
+        }
+
+        /* --- 가이드라인 필수 CSS --- */
+
+        /* 1. 언어 전환 버튼 스타일 (Mandatory) */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* 2. 다국어 컨테이너 (Mandatory) */
+        .lang-container {
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        /* 3. 한자 강조 스타일 (Mandatory) */
+        .hanja {
+            font-family: 'Noto Sans KR', serif; /* 세리프 폰트 계열 */
+            font-weight: 700;
+            color: #8D6E63; /* header-text color */
+            font-style: italic;
+            margin-left: 0.25rem;
+            margin-right: 0.1rem;
+        }
+        
+        .quote-highlight {
+            font-weight: 700;
+            color: #A1887F; /* accent-text color */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <div class="lang-container" lang="ko">
+        <div class="max-w-6xl mx-auto space-y-16">
+
+            <header class="text-center p-8 md:p-12">
+                <h1 class="text-5xl md:text-6xl font-bold header-text mb-6">자감초탕 (<span class="hanja">炙</span>甘草湯)</h1>
+            </header>
+
+            <section class="section-bg rounded-lg p-8 shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">출처</h3>
+                        <p class="text-lg">상한론(傷寒論)</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-1.414a5 5 0 010-7.072m7.072 0a5 5 0 010 7.072m-7.072 0l-2.121 2.121m7.072-7.072l2.121-2.121m-4.242 0l-2.122-2.121m0 4.242l-2.121 2.121m7.072 7.072l2.121 2.121m-7.072 0l2.121 2.121m0-4.242l2.121-2.121m-4.242 0l2.122 2.121"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">핵심 개념</h3>
+                        <p class="text-lg">기혈음양(氣血陰陽) 모두 허(虛)</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">주요 증상</h3>
+                        <p class="text-lg">가슴 두근거림, 고르지 못한 맥(脈)</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">별칭</h3>
+                        <p class="text-lg accent-text font-bold">복맥탕(復脈湯)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">처방 구성 (<span class="hanja">組</span>成)</h2>
+                <div class="flex flex-col md:flex-row justify-center items-start gap-6 md:gap-10">
+                    <div class="w-full md:w-1/2 section-bg p-8 rounded-lg shadow-xl border-t-4 border-blue">
+                        <h3 class="text-2xl font-bold mb-6 color-blue">기(氣)와 양(陽)의 보충</h3>
+                        <div class="space-y-4">
+                            <p class="text-xl color-blue">감초(炙甘草): 12g (보기)</p>
+                            <p class="text-xl color-blue">인삼(人蔘): 6g (보기)</p>
+                            <p class="text-xl color-green">생강(生薑): 9g (보양)</p>
+                            <p class="text-xl color-green">계지(桂枝): 9g (보양)</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 section-bg p-8 rounded-lg shadow-xl border-t-4 border-yellow">
+                        <h3 class="text-2xl font-bold mb-6 color-yellow">음(陰)과 혈(血)의 보충</h3>
+                        <div class="space-y-4">
+                            <p class="text-xl color-yellow">생지황(生地黃): 30g (보음)</p>
+                            <p class="text-xl color-yellow">아교(阿膠): 6g (보음)</p>
+                            <p class="text-xl color-pink">맥문동(麥門冬): 10g (보음)</p>
+                            <p class="text-xl color-pink">마자인(麻子仁): 10g (보음)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-8 section-bg p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-bold mb-4 header-text">보조 및 탕전</h3>
+                    <p class="text-xl">대추(大棗): 5~10개</p>
+                    <p class="text-xl">청주(清酒): 10ml (지용성 성분 추출)</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">처방 해설 (<span class="hanja">方</span>解)</h2>
+                <div class="flex justify-center flex-wrap gap-2 md:gap-4 mb-4">
+                    <button class="tab-btn active py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-ko-1">군약: 자감초</button>
+                    <button class="tab-btn py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-ko-2">기와 양</button>
+                    <button class="tab-btn py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-ko-3">음과 혈</button>
+                    <button class="tab-btn tab-btn-warning py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-ko-4">!! 감초 부작용 !!</button>
+                </div>
+                <div class="section-bg rounded-lg p-8 shadow-xl min-h-[300px]">
+                    <div id="tab-ko-1" class="tab-content text-lg space-y-4">
+                        <h3 class="text-2xl font-bold header-text mb-4">군약(君藥): 자감초 (12g)</h3>
+                        <p>단순한 보조약(佐使藥)이 아니며, 손상된 기혈을 보하는 급증(急證)의 약으로 사용되었습니다.</p>
+                        <p>음양허(陰陽虛)가 모두 허한 상황에서는 "단맛의 약으로 조합해야 하며, 극단적인 처방을 쓸 수는 없다"는 원칙이 적용됩니다.</p>
+                        <p>심장이 상한 상태이므로, 부드러우면서 강력하게 보하는 감초를 군약으로 사용했습니다.</p>
+                    </div>
+                    <div id="tab-ko-2" class="tab-content text-lg space-y-4 hidden">
+                        <h3 class="text-2xl font-bold color-blue mb-4">1. 기(氣)와 양(陽)의 이해</h3>
+                        <p><span class="color-blue">보기(補氣):</span> 감초, 인삼</p>
+                        <p><span class="color-green">보양(補陽) / 온경(溫經):</span> 생강, 계지 (맥 순행을 도움)</p>
+                        <p class="text-gray-600 text-base">(*장중경 선생은 계지와 육계(肉桂)를 구별하지 않음)</p>
+                        <hr class="border-gray-300 my-4">
+                        <h4 class="text-xl font-bold header-text">인삼(人蔘)의 다각적 효능</h4>
+                        <ul class="list-disc list-outside pl-6 space-y-2 text-base">
+                            <li>단순 '보기(補氣)'가 아님: 장중경 시대의 인삼은 '미한(微寒)'하다고 보았습니다.</li>
+                            <li><span class="font-semibold">맥문동탕(麥門冬湯):</span> 보음(補陰), 생진(生津) 효과</li>
+                            <li><span class="font-semibold">백호가인삼탕(白虎加人蔘湯):</span> 생진(生津), 자음(滋陰) 효과</li>
+                            <li><span class="font-semibold">본방에서 (감초, 인삼, 대추):</span> 기(氣)를 보하면서 동시에 음(陰)을 보충</li>
+                        </ul>
+                    </div>
+                    <div id="tab-ko-3" class="tab-content text-lg space-y-4 hidden">
+                        <h3 class="text-2xl font-bold color-yellow mb-4">2. 음(陰)과 혈(血)의 보충</h3>
+                        <p><span class="color-yellow">주요 약물 (음 자양/혈 보충):</span> 생지황, 아교</p>
+                        <p><span class="color-pink">보조 약물 (음 자양):</span> 맥문동, 마자인</p>
+                        <hr class="border-gray-300 my-4">
+                        <h4 class="text-xl font-bold header-text">약물 조합</h4>
+                        <ul class="list-disc list-outside pl-6 space-y-2 text-base">
+                            <li><span class="font-semibold">생지황 + 맥문동:</span> 심장을 보하고 음을 자양하는 작용 강화</li>
+                            <li><span class="font-semibold">마자인 + 아교:</span> 음을 자양하고 피를 생성</li>
+                        </ul>
+                        <p class="text-gray-600 text-base">*고증: 당시 숙지황(熟地黃)이 없어 생지황을 사용했습니다. (현대에는 숙지황으로 대체 가능)</p>
+                    </div>
+                    <div id="tab-ko-4" class="tab-content text-lg space-y-4 hidden">
+                        <h3 class="text-2xl font-bold color-red mb-4">!! 감초 복용 시 주의점 !!</h3>
+                        <p class="font-bold color-red">위알도스테론증 (Pseudoaldosteronism)</p>
+                        <p>감초의 글리시리진산을 과다/장기 복용 시 발생합니다. 나트륨/수분 저류(貯留) 및 칼륨 배설(排泄)을 촉진시킵니다.</p>
+                        <p class="font-bold color-red mt-4">주요 증상</p>
+                        <ul class="list-disc list-outside pl-6 space-y-2">
+                            <li>부종(浮腫) (몸이 붓는 증상)</li>
+                            <li>혈압 상승 (고혈압(高血壓))</li>
+                            <li>저칼륨혈증 (이로 인한 근병증(筋病症) - 무력감, 경련, 마비)</li>
+                        </ul>
+                        <p class="mt-4 p-4 bg-red-100 border-l-4 border-red rounded-r-lg text-red-900">
+                            <span class="font-bold">임상 주의:</span> 자감초탕은 감초를 9g 이상 사용하므로, 환자에게 위 증상이 나타나는지 주의 깊게 관찰해야 합니다.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">효능 및 처방 원리</h2>
+                <div class="section-bg rounded-lg p-8 shadow-xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-green mb-2">溫陽 (온양)</h4>
+                            <p>양(陽)을 따뜻하게 하되 건조하지 않게</p>
+                        </div>
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-blue mb-2">補氣 (보기)</h4>
+                            <p>기(氣)를 보하되 막히지 않게</p>
+                        </div>
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-yellow mb-2">滋陰 (자음)</h4>
+                            <p>음(陰)을 자양하되 끈적이지 않게</p>
+                        </div>
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-pink mb-2">補血 (보혈)</h4>
+                            <p>혈(血)을 보하되 끈적이지 않게</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 p-6 bg-white border-2 border-amber-800 text-amber-900 rounded-lg text-center shadow-lg">
+                        <h3 class="text-2xl font-bold">결과: 복맥탕 (復脈湯)</h3>
+                        <p class="text-lg">음양과 기혈을 모두 조절하여 심장(心臟)을 보하고 맥(脈)을 돌아오게 함</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">적응증 상세</h2>
+                <div class="space-y-6">
+                    <div class="section-bg rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-left accent-text mb-4">1. 심계(心悸)와 결대맥(結代脈)</h3>
+                        <div class="text-lg space-y-4">
+                            <p>기허(氣虛)와 혈허(血虛)로 인해 맥이 맺히고(결맥(結脈)) 혹은 건너뛰는(대맥(代脈)) 현상이 나타납니다.</p>
+                            <p>단순히 가슴이 두근거리는 심계(心悸)뿐 아니라, 심장박동이 빠르고 강해지는 심동계(心動悸)까지 나타나는, 심허(心虛)가 심각한 상태입니다.</p>
+                            <p>심허는 혈허를 주관하므로, 심허가 심해지면 맥에 문제가 생깁니다. 맥이 두근거리고 빠르게 뛰면 정상으로 돌아올 수 없습니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="section-bg rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-left accent-text mb-4">2. 임상 활용 (심장병)</h3>
+                        <div class="text-lg space-y-4">
+                            <p>현대 응용: 심근염, 류머티즘성 심장염.</p>
+                            <p>왕멘즈(王孟英) 선생은 승모판막협착증, 계폐부전증, 동방결절 기능 부전증에 효과가 좋다고 하였습니다.</p>
+                            <p><span class="font-bold">설진(舌診) 소견:</span> 설태(舌苔)가 없거나 아주 희미하고, 설질(舌質)은 아주 여리고 너무 붉지 않은 경우, 어혈반점(瘀血斑點)이 있는 경우.</p>
+                            <p><span class="font-bold">맥진(脈診) 소견:</span> 세삭맥(細數脈)이 나타날 수 있으나, 아주 빠르지 않고 맥에 힘이 없어야 합니다.</p>
+                            <p class="p-4 bg-red-100 border-l-4 border-red rounded-r-lg text-red-900"><span class="font-bold">핵심 조건:</span> 열증(熱證)이 심하지 않고 허증(虛證)이 명확해야 쓸 수 있는 처방입니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="section-bg rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-left accent-text mb-4">3. 폐위증 (肺痿證) / 허로 (虛勞)</h3>
+                        <div class="text-lg space-y-4">
+                            <p>각종 원인으로 인한 허로폐위(虛勞肺痿) 증상, 즉 과로하거나 오랜 병으로 음이 허하고 폐가 상한 상태에 씁니다.</p>
+                            <p><span class="font-bold">허로(虛勞)의 개념:</span> "허(虛)하면 손(損)상이 나고, 손상이 나면 로(勞)에 이른다"는 개념으로, 허-손-로의 순서로 진행된, 매우 손상된 상태를 말합니다.</p>
+                            <p>&lt;금궤요략&gt;에서는 허로의 범주를 기혈음양(氣血陰陽)이 모두 허한 것으로 보았습니다.</p>
+                            <p><span class="font-bold">병리:</span> 폐의 맥이 혈액을 태우는 폐위를 말합니다.</p>
+                            <p>현대 의학의 폐결핵이나 만성폐병증과 유사하지만, 반드시 명확한 <span class="font-bold">변증(辨證)</span>을 거쳐야 합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">원문(<span class="hanja">原</span>文) 및 유래</h2>
+                <div class="space-y-8">
+                    <div class="section-bg rounded-lg p-6 shadow-xl">
+                        <p class="text-lg font-bold mb-3">傷寒脈結代心動悸炙甘草湯主之</p>
+                        <p><span class="font-bold accent-text">[상한론]</span> 상한(傷寒)과 함께 결대맥(結代脈)이 있고 가슴이 두근거리는 증상은 자감초탕이 다스린다.</p>
+                    </div>
+                    <div class="section-bg rounded-lg p-6 shadow-xl">
+                        <p class="text-lg font-bold mb-3">治虛勞不足，汗出而悶，脈結悸. ... 危急者十日死.</p>
+                        <p><span class="font-bold accent-text">[금궤요략]</span> 허로(虛勞)와 부족으로 땀이 나고 가슴이 답답하며, 맥이 고르지 못하고 가슴이 두근거리며, 땀이 백일동안 나는 경우 위급하여 10일이면 죽는다.</p>
+                    </div>
+                    
+                    <div class="section-bg rounded-lg p-6 shadow-xl">
+                        <p class="text-lg font-bold mb-3">治肺痿涎唾多, 心中溫溫液液者.</p>
+                        <p><span class="font-bold accent-text">[금궤요략]</span> 폐위허로로 담(痰)이 많고, 가슴이 답답한 사람을 치료한다.</p>
+                        
+                        <hr class="border-gray-300 my-6">
+
+                        <div class="text-lg space-y-2">
+                            <p>같은 구절에 대해 &lt;외대비요(外臺秘要)&gt;는 자감초탕을, &lt;천금요방(千金要方)&gt;은 감초탕(감초 단미)을 기록했습니다.</p>
+                            <p>이는 감초가 단미로도 급증(急證)을 치료했으며, 자감초탕에서 감초가 군약(君藥)인 이유를 보여줍니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </div>
+
+    <div class="lang-container" lang="en">
+        <div class="max-w-6xl mx-auto space-y-16">
+
+            <header class="text-center p-8 md:p-12">
+                <h1 class="text-5xl md:text-6xl font-bold header-text mb-6">Zhigancao Tang (<span class="hanja">炙</span>甘草湯)</h1>
+            </header>
+
+            <section class="section-bg rounded-lg p-8 shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">Source</h3>
+                        <p class="text-lg">Shanghan Lun (傷寒論)</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-1.414a5 5 0 010-7.072m7.072 0a5 5 0 010 7.072m-7.072 0l-2.121 2.121m7.072-7.072l2.121-2.121m-4.242 0l-2.122-2.121m0 4.242l-2.121 2.121m7.072 7.072l2.121 2.121m-7.072 0l2.121 2.121m0-4.242l2.121-2.121m-4.242 0l2.122 2.121"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">Core Concept</h3>
+                        <p class="text-lg">Deficiency of Qi, Blood, Yin, & Yang</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">Key Symptoms</h3>
+                        <p class="text-lg">Palpitations, Irregular Pulse</p>
+                    </div>
+                    <div class="flex flex-col items-center p-4 card-bg rounded-lg shadow-inner">
+                        <svg class="w-12 h-12 accent-text mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                        <h3 class="text-xl font-bold header-text mb-1">Alias</h3>
+                        <p class="text-lg accent-text font-bold">Fu Mai Tang (復脈湯)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">Formula Composition (<span class="hanja">組</span>成)</h2>
+                <div class="flex flex-col md:flex-row justify-center items-start gap-6 md:gap-10">
+                    <div class="w-full md:w-1/2 section-bg p-8 rounded-lg shadow-xl border-t-4 border-blue">
+                        <h3 class="text-2xl font-bold mb-6 color-blue">Replenish Qi (氣) & Yang (陽)</h3>
+                        <div class="space-y-4">
+                            <p class="text-xl color-blue">Zhigancao (炙甘草): 12g (Tonify Qi)</p>
+                            <p class="text-xl color-blue">Renshen (人蔘): 6g (Tonify Qi)</p>
+                            <p class="text-xl color-green">Shengjiang (生薑): 9g (Warm Yang)</p>
+                            <p class="text-xl color-green">Guizhi (桂枝): 9g (Warm Yang)</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 section-bg p-8 rounded-lg shadow-xl border-t-4 border-yellow">
+                        <h3 class="text-2xl font-bold mb-6 color-yellow">Replenish Yin (陰) & Blood (血)</h3>
+                        <div class="space-y-4">
+                            <p class="text-xl color-yellow">Shengdihuang (生地黃): 30g (Nourish Yin)</p>
+                            <p class="text-xl color-yellow">Ejiao (阿膠): 6g (Nourish Yin)</p>
+                            <p class="text-xl color-pink">Maimendong (麥門冬): 10g (Nourish Yin)</p>
+                            <p class="text-xl color-pink">Maziren (麻子仁): 10g (Nourish Yin)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-8 section-bg p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-bold mb-4 header-text">Adjuvants & Decoction</h3>
+                    <p class="text-xl">Dazao (大棗): 5-10 pieces</p>
+                    <p class="text-xl">Qingjiu (清酒): 10ml (Sake, for extraction)</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">Formula Analysis (<span class="hanja">方</span>解)</h2>
+                <div class="flex justify-center flex-wrap gap-2 md:gap-4 mb-4">
+                    <button class="tab-btn active py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-en-1">Chief: Zhigancao</button>
+                    <button class="tab-btn py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-en-2">Qi & Yang</button>
+                    <button class="tab-btn py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-en-3">Yin & Blood</button>
+                    <button class="tab-btn tab-btn-warning py-2 px-6 rounded-lg font-bold text-lg transition-colors" data-target="tab-en-4">!! Licorice Warning !!</button>
+                </div>
+                <div class="section-bg rounded-lg p-8 shadow-xl min-h-[300px]">
+                    <div id="tab-en-1" class="tab-content text-lg space-y-4">
+                        <h3 class="text-2xl font-bold header-text mb-4">Chief (君藥): Zhigancao (12g)</h3>
+                        <p>Not a simple assistant (佐使藥), but used as a primary herb for acute cases (急證) to restore damaged Qi and Blood.</p>
+                        <p>In a state of dual Yin-Yang deficiency, the principle is to "harmonize with sweet herbs, as extreme formulas cannot be used."</p>
+                        <p>The Heart is damaged, so Gancao, which is both gentle and strongly tonifying, is used as the chief herb.</p>
+                    </div>
+                    <div id="tab-en-2" class="tab-content text-lg space-y-4 hidden">
+                        <h3 class="text-2xl font-bold color-blue mb-4">1. Understanding Qi (氣) & Yang (陽)</h3>
+                        <p><span class="color-blue">Tonify Qi (補氣):</span> Gancao, Renshen</p>
+                        <p><span class="color-green">Warm Yang (補陽) / Warm Meridians (溫經):</span> Shengjiang, Guizhi (Aids pulse circulation)</p>
+                        <p class="text-gray-600 text-base">(*Zhang Zhongjing did not differentiate between Guizhi (桂枝) and Rougui (肉桂))</p>
+                        <hr class="border-gray-300 my-4">
+                        <h4 class="text-xl font-bold header-text">Multi-faceted Effects of Renshen (人蔘)</h4>
+                        <ul class="list-disc list-outside pl-6 space-y-2 text-base">
+                            <li>Not just 'Tonify Qi': In Zhang's era, Renshen was considered 'slightly cold (微寒)'.</li>
+                            <li><span class="font-semibold">In Maimendong Tang (麥門冬湯):</span> Nourishes Yin (補陰), Generates Fluids (生津)</li>
+                            <li><span class="font-semibold">In Baihu Jia Renshen Tang (白虎加人蔘湯):</span> Generates Fluids (生津), Nourishes Yin (滋陰)</li>
+                            <li><span class="font-semibold">In this formula (w/ Gancao, Dazao):</span> Tonifies Qi (氣) while simultaneously nourishing Yin (陰)</li>
+                        </ul>
+                    </div>
+                    <div id="tab-en-3" class="tab-content text-lg space-y-4 hidden">
+                        <h3 class="text-2xl font-bold color-yellow mb-4">2. Replenishing Yin (陰) & Blood (血)</h3>
+                        <p><span class="color-yellow">Main Herbs (Nourish Yin/Blood):</span> Shengdihuang, Ejiao</p>
+                        <p><span class="color-pink">Assistant Herbs (Nourish Yin):</span> Maimendong, Maziren</p>
+                        <hr class="border-gray-300 my-4">
+                        <h4 class="text-xl font-bold header-text">Herb Combinations</h4>
+                        <ul class="list-disc list-outside pl-6 space-y-2 text-base">
+                            <li><span class="font-semibold">Shengdihuang + Maimendong:</span> Strengthens the action of nourishing the Heart and Yin.</li>
+                            <li><span class="font-semibold">Maziren + Ejiao:</span> Nourishes Yin and generates Blood.</li>
+                        </ul>
+                        <p class="text-gray-600 text-base">*Note: Shudihuang (熟地黃) did not exist then, so Shengdihuang was used. (Can be replaced with Shudihuang in modern use)</p>
+                    </div>
+                    <div id="tab-en-4" class="tab-content text-lg space-y-4 hidden">
+                        <h3 class="text-2xl font-bold color-red mb-4">!! Licorice (Gancao) Warning !!</h3>
+                        <p class="font-bold color-red">Pseudoaldosteronism</p>
+                        <p>Occurs from excessive or long-term intake of glycyrrhizin in licorice. It promotes sodium/water retention (貯留) and potassium excretion (排泄).</p>
+                        <p class="font-bold color-red mt-4">Key Symptoms</p>
+                        <ul class="list-disc list-outside pl-6 space-y-2">
+                            <li>Edema (浮腫) (Swelling)</li>
+                            <li>Hypertension (高血壓) (High Blood Pressure)</li>
+                            <li>Hypokalemia (Low potassium, leading to myopathy (筋病症) - weakness, cramps, paralysis)</li>
+                        </ul>
+                        <p class="mt-4 p-4 bg-red-100 border-l-4 border-red rounded-r-lg text-red-900">
+                            <span class="font-bold">Clinical Note:</span> This formula uses 9g+ of Gancao. Patients must be carefully monitored for these symptoms.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">Efficacy & Principles</h2>
+                <div class="section-bg rounded-lg p-8 shadow-xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-green mb-2">Warm Yang (溫陽)</h4>
+                            <p>Warms Yang without being drying</p>
+                        </div>
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-blue mb-2">Tonify Qi (補氣)</h4>
+                            <p>Tonifies Qi without causing stagnation</p>
+                        </div>
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-yellow mb-2">Nourish Yin (滋陰)</h4>
+                            <p>Nourishes Yin without being cloying</p>
+                        </div>
+                        <div class="card-bg p-6 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold color-pink mb-2">Nourish Blood (補血)</h4>
+                            <p>Nourishes Blood without being cloying</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 p-6 bg-white border-2 border-amber-800 text-amber-900 rounded-lg text-center shadow-lg">
+                        <h3 class="text-2xl font-bold">Result: Fu Mai Tang (復脈湯)</h3>
+                        <p class="text-lg">Regulates Yin, Yang, Qi & Blood to nourish the Heart (心) and restore the Pulse (脈)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">Detailed Indications</h2>
+                <div class="space-y-6">
+                    <div class="section-bg rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-left accent-text mb-4">1. Palpitations (心悸) & Intermittent/Bound Pulse (結代脈)</h3>
+                        <div class="text-lg space-y-4">
+                            <p>Due to Qi and Blood deficiency, the pulse becomes "bound" (結脈, slow, irregular) or "intermittent" (代脈, stops at regular intervals).</p>
+                            <p>This is not just simple palpitations (心悸), but can include severe, throbbing palpitations (心動悸), indicating severe Heart deficiency (心虛).</p>
+                            <p>Heart deficiency governs Blood deficiency. When severe, it manifests in the pulse. If the pulse is racing and throbbing, it cannot return to normal.</p>
+                        </div>
+                    </div>
+
+                    <div class="section-bg rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-left accent-text mb-4">2. Clinical Use (Cardiac Conditions)</h3>
+                        <div class="text-lg space-y-4">
+                            <p>Modern applications: Myocarditis, Rheumatic heart disease.</p>
+                            <p>Wang Mengying (王孟英) stated it is effective for mitral stenosis, valve insufficiency, and sick sinus syndrome.</p>
+                            <p><span class="font-bold">Tongue (舌診):</span> No coating or very faint coating. Tongue body is pale/tender and not overly red. May have stasis spots (瘀血斑點).</p>
+                            <p><span class="font-bold">Pulse (脈診):</span> May be thin and rapid (細數脈), but not excessively fast and must lack strength.</p>
+                            <p class="p-4 bg-red-100 border-l-4 border-red rounded-r-lg text-red-900"><span class="font-bold">Key Condition:</span> This formula can only be used when Heat signs (熱證) are not severe and Deficiency signs (虛證) are clear.</p>
+                        </div>
+                    </div>
+
+                    <div class="section-bg rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-left accent-text mb-4">3. Lung Atrophy (肺痿證) / Consumptive Disorder (虛勞)</h3>
+                        <div class="text-lg space-y-4">
+                            <p>Used for consumptive lung atrophy (虛勞肺痿) from various causes: a state of Yin deficiency and Lung damage from overwork or chronic illness.</p>
+                            <p><span class="font-bold">Concept of 虛勞 (Xu Lao):</span> "Deficiency (虛) leads to Damage (損), Damage leads to Consumption (勞)." It implies a severely depleted state.</p>
+                            <p>The &lt;Jin Gui Yao Lue&gt; categorized Xu Lao as a deficiency of all four: Qi, Blood, Yin, and Yang.</p>
+                            <p><span class="font-bold">Pathology:</span> Refers to the Lung vessels "wilting" or "withering" (atrophy).</p>
+                            <p>It is similar to modern tuberculosis or chronic lung disease, but clear <span class="font-bold">pattern differentiation (辨證)</span> is required.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-bold text-center mb-10 header-text">Original Text (<span class="hanja">原</span>文) & Origin</h2>
+                <div class="space-y-8">
+                    <div class="section-bg rounded-lg p-6 shadow-xl">
+                        <p class="text-lg font-bold mb-3">傷寒脈結代心動悸炙甘草湯主之</p>
+                        <p><span class="font-bold accent-text">[Shanghan Lun]</span> "In Cold Damage, when the pulse is bound (結) or intermittent (代) and there are palpitations (心動悸), Zhigancao Tang governs."</p>
+                    </div>
+                    <div class="section-bg rounded-lg p-6 shadow-xl">
+                        <p class="text-lg font-bold mb-3">治虛勞不足，汗出而悶，脈結悸. ... 危急者十日死.</p>
+                        <p><span class="font-bold accent-text">[Jin Gui Yao Lue]</span> "Treats consumptive taxation (虛勞) and deficiency, with sweating and oppression, a bound pulse and palpitations... In critical cases, death occurs in ten days."</p>
+                    </div>
+                    
+                    <div class="section-bg rounded-lg p-6 shadow-xl">
+                        <p class="text-lg font-bold mb-3">治肺痿涎唾多, 心中溫溫液液者.</p>
+                        <p><span class="font-bold accent-text">[Jin Gui Yao Lue]</span> "Treats lung atrophy (肺痿) with copious sputum, and a feeling of 'warmth and moisture' (distress) in the chest."</p>
+                        
+                        <hr class="border-gray-300 my-6">
+
+                        <div class="text-lg space-y-2">
+                            <p>For this same passage, the &lt;Waitai Miyao&gt; records Zhigancao Tang, but the &lt;Qianjin Yaofang&gt; records Gancao Tang (Licorice alone).</p>
+                            <p>This shows that Gancao was used alone for acute cases (急證) and supports why it is the chief (君藥) herb in the full formula.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer id="page-footer" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer> 
+
+
+    <script>
+        /**
+         * 탭 기능을 특정 컨테이너(언어)에 맞게 초기화합니다.
+         * @param {string} containerSelector - 탭 버튼과 콘텐츠를 포함하는 부모 컨테이너의 셀렉터 (e.g., '.lang-container[lang="ko"]')
+         */
+        function initializeTabs(containerSelector) {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
+
+            const tabButtons = container.querySelectorAll('.tab-btn');
+            const tabContents = container.querySelectorAll('.tab-content');
+            
+            // 기존에 활성화된 탭이 있는지 확인 (없으면 첫 번째 탭을 활성화)
+            let hasActiveTab = false;
+            tabButtons.forEach(btn => {
+                if(btn.classList.contains('active')) hasActiveTab = true;
+            });
+
+            if (!hasActiveTab && tabButtons.length > 0) {
+                tabButtons[0].classList.add('active');
+            }
+
+            // 활성화된 탭에 해당하는 콘텐츠만 표시
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            const activeBtn = container.querySelector('.tab-btn.active');
+            if (activeBtn) {
+                const activeTargetId = activeBtn.getAttribute('data-target');
+                const activeContent = container.querySelector(`#${activeTargetId}`);
+                if (activeContent) {
+                    activeContent.classList.remove('hidden');
+                }
+            }
+
+            // 버튼 클릭 이벤트 리스너 추가
+            tabButtons.forEach(button => {
+                // 중복 리스너 방지를 위해 기존 리스너가 있다면 제거 (간단한 클론 방식)
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+
+                newButton.addEventListener('click', () => {
+                    const targetId = newButton.getAttribute('data-target');
+                    
+                    // 모든 버튼 스타일 초기화
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // 모든 콘텐츠 숨기기
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // 클릭된 버튼 활성화
+                    newButton.classList.add('active');
+                    
+                    // 클릭된 콘텐츠 보이기 (반드시 container 내부에서 탐색)
+                    const targetContent = container.querySelector(`#${targetId}`);
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+        }
+
+        /**
+         * 선택된 언어의 콘텐츠를 표시합니다.
+         * @param {string} lang - 표시할 언어 코드 ('ko' 또는 'en')
+         */
+        function setLanguage(lang) {
+            // 모든 언어 컨테이너 숨기기
+            document.querySelectorAll('.lang-container').forEach(div => {
+                div.style.display = 'none';
+            });
+            
+            // 선택된 언어 컨테이너 표시
+            const containerSelector = `.lang-container[lang="${lang}"]`;
+            const activeContainer = document.querySelector(containerSelector);
+            if (activeContainer) {
+                activeContainer.style.display = 'block';
+            }
+            
+            // localStorage에 언어 설정 저장
+            localStorage.setItem('userLanguage', lang);
+            
+            // <html> 태그의 lang 속성 변경
+            document.documentElement.lang = lang;
+
+            // 페이지 제목 변경
+            if (lang === 'ko') {
+                document.title = '자감초탕 인포그래픽';
+            } else {
+                document.title = 'Zhigancao Tang Infographic';
+            }
+            
+            // *** 중요: 현재 활성화된 언어의 탭 기능만 초기화 ***
+            initializeTabs(containerSelector);
+        }
+
+        /**
+         * 언어 전환 버튼 클릭 시 호출됩니다.
+         * @param {Event} event - 클릭 이벤트
+         */
+        function toggleLanguage(event) {
+            event.preventDefault(); // 링크의 기본 동작(페이지 이동) 방지
+            const currentLang = localStorage.getItem('userLanguage') || 'ko';
+            const newLang = (currentLang === 'ko') ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        /**
+         * 페이지 로드 시 저장된 언어 또는 기본 언어를 불러옵니다.
+         */
+        function loadLanguage() {
+            // URL 파라미터( ?lang=en ) 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLang = urlParams.get('lang');
+
+            if (urlLang === 'en' || urlLang === 'ko') {
+                setLanguage(urlLang);
+            } else {
+                // localStorage 확인
+                const savedLang = localStorage.getItem('userLanguage');
+                setLanguage(savedLang || 'ko'); // 저장된 값이 없으면 'ko' 기본값
+            }
+        }
+
+        // --- DOM 로드 완료 시 스크립트 실행 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLanguage(); // 페이지 로드 시 언어 설정 적용
+        });
+    </script>
+
+</body>
+</html>
