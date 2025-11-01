@@ -4,18 +4,19 @@
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-QC84KCE6C1');
+    gtag('config', 'G-QC84KCE6C1');
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>빈호맥학 퀴즈</title>
+    <title>빈호맥학</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* 퀴즈 공통 스타일 */
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #F7F3EF; /* 부드러운 베이지 배경 */
@@ -25,7 +26,13 @@
             background-color: #FFFFFF;
             border: 1px solid #EAE0D5;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            /* 최대 너비를 늘려 학습 자료가 더 잘 보이도록 조정 */
+            max-width: 1000px; 
+            margin-left: auto;
+            margin-right: auto;
         }
+        
+        /* 퀴즈 버튼 스타일 */
         .btn-choice {
             background-color: #FFF8F0;
             border: 1px solid #EAE0D5;
@@ -60,6 +67,29 @@
             background-color: #A07C5B;
             transition: width 0.5s ease-in-out;
         }
+
+        /* -------------------------------------- */
+        /* 시각화 (아코디언) 스타일 병합 */
+        /* -------------------------------------- */
+
+        /* 아코디언 콘텐츠의 애니메이션을 위한 스타일 */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* 한문(Classical Chinese) 텍스트 스타일 */
+        .classical-text {
+            font-family: 'Noto Sans KR', serif; /* 한문 가독성을 위해 세리프 계열 폰트 사용 */
+            font-style: italic;
+            color: #4b5563; /* text-gray-600 */
+            background-color: #f9fafb; /* bg-gray-50 */
+            border-left: 3px solid #d1d5db; /* border-l-4 border-gray-300 */
+            padding: 0.75rem; /* p-3 */
+            margin-top: 0.75rem; /* mt-3 */
+            border-radius: 0.25rem; /* rounded-md */
+        }
         /* 모든 텍스트의 기본 폰트를 'Noto Sans KR'로 설정합니다. */
         body, h1, h2, p, a, button, span, div {
              font-family: 'Noto Sans KR', sans-serif;
@@ -83,15 +113,348 @@
     </a>
 </header>
 
-<!-- 메인 퀴즈 컨테이너가 남은 공간을 채우도록 변경 -->
-<main id="quiz-container" class="w-full max-w-2xl mx-auto flex-grow flex items-center justify-center p-4">
+<!-- 메인 컨테이너: 퀴즈와 학습 자료 모두 포함 -->
+<main id="main-container" class="w-full mx-auto flex-grow flex items-start justify-center p-4">
     <div class="quiz-card rounded-xl p-6 md:p-8 w-full">
+        <!-- 1. 메인 제목 변경 및 색상 적용 -->
+        <h1 class="text-4xl font-extrabold text-center text-teal-700 mb-8">빈호맥학</h1>
+
+        <!-- ============================================== -->
+        <!-- 1. 맥상 학습 자료 (아코디언) - 섹션 제목 삭제 -->
+        <!-- ============================================== -->
+        <div id="visualization-section" class="space-y-4 mb-10">
+            <!-- 1. 깊이 - 표리 --><div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <div class="accordion-header bg-gradient-to-r from-blue-600 to-blue-400 text-white p-4 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                    <span class="font-bold text-xl flex items-center">
+                        깊이 - 표리 (浮脈, 沈脈)
+                    </span>
+                    <span class="accordion-icon text-2xl font-semibold transform transition-transform duration-300">+</span>
+                </div>
+                <div class="accordion-content bg-white">
+                    <div class="p-4 space-y-3">
+                        <!-- 1.1 부맥 --><div class="border border-blue-200 rounded-lg overflow-hidden bg-blue-50">
+                            <div class="accordion-header text-blue-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold text-lg flex items-center">
+                                    부맥(浮脈) - 표증 (Exterior)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-blue-200 bg-white">
+                                    <p class="mb-2">부맥(浮脈)은, 가볍게 손을 대었을 때 그 박동에 힘이 있고, 힘있게 눌렀을 때는 무력한 모습을 나타낸다. 마치 미풍이 서서히 불어 새의 깃털을 미약하게 움직이게 하는 것 같은 느낌이다. 또한 느릅나무를 서서히 문지르는 듯한 느낌이며, 물 위에 나무조각이 떠있는 것 같은 느낌 같기도 하고 파를 비비는 듯한 감촉 같기도 하다.</p>
+                                    <p class="classical-text">浮脈, 擧之有餘, 按之不足. 如微風吹鳥背上毛, 厭厭聶聶, 如循楡莢, 如水漂木, 如捻葱葉.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 1.2 침맥 --><div class="border border-blue-200 rounded-lg overflow-hidden bg-blue-50">
+                            <div class="accordion-header text-blue-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold text-lg flex items-center">
+                                    침맥(沈脈) - 이증 (Interior)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-blue-200 bg-white">
+                                    <p class="mb-2">침맥(沈脈)은 손을 힘있게 근골(筋骨) 부위까지 눌렀을 때 촉지(觸知)할 수 있는 맥을 말한다. 마치 면포(棉布) 속에 모래가 들어 있어서 속은 단단하지만 겉은 유연한 것 같은 모습이다. 또, 돌을 물 속에 던졌을 때 밑바닥까지 가라앉는 형상으로 비유할 수 있다.</p>
+                                    <p class="classical-text">沈脈, 重手按至筋骨乃得. 如綿裏砂, 內剛外柔; 如石投水, 必極其底.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 빠르기 - 한열 --><div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <div class="accordion-header bg-gradient-to-r from-green-600 to-green-400 text-white p-4 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                    <span class="font-bold text-xl flex items-center">
+                        빠르기 - 한열 (遲脈, 數脈, 緩脈)
+                    </span>
+                    <span class="accordion-icon text-2xl font-semibold transform transition-transform duration-300">+</span>
+                </div>
+                <div class="accordion-content bg-white">
+                    <div class="p-4 space-y-3">
+                        <!-- 2.1 지맥 --><div class="border border-green-200 rounded-lg overflow-hidden bg-green-50">
+                            <div class="accordion-header text-green-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold text-lg flex items-center">
+                                    지맥(遲脈) - 한증 (Cold)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-green-200 bg-white">
+                                    <p class="mb-2">지맥(遲脈)은 일호일흡지간(一呼一吸之間)의 박동이 3회로서, 그 오고 가는 모양이 완만(緩慢)하다.</p>
+                                    <p class="classical-text">一息三至, 去來極慢.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 2.2 삭맥 --><div class="border border-green-200 rounded-lg overflow-hidden bg-green-50">
+                            <div class="accordion-header text-green-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold text-lg flex items-center">
+                                    삭맥(數脈) - 열증 (Heat)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-green-200 bg-white">
+                                    <p class="mb-2">삭맥(數脈)은 한 호흡지간(呼吸之間)에 6회 박동하는 것이며, 맥기(脈氣)의 유동(流動)이 아주 급박(急迫)하다.</p>
+                                    <p class="classical-text">一息六至, 脈流薄疾.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 2.3 완맥 (정상 및 습) --><div class="border border-green-200 rounded-lg overflow-hidden bg-green-50">
+                            <div class="accordion-header text-green-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold text-lg flex items-center">
+                                    완맥(緩脈) - 정상, 습 (Dampness)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-green-200 bg-white">
+                                    <p class="mb-2">완맥(緩脈)은 지맥(遲脈)보다 약간 빠른데, 한 호흡지간(呼吸之間)에 4회 박동하는 맥을 말한다. 이는 마치 날실 한 줄이 방직기에 걸려있지만 팽팽하게 감겨 있지 않은 모습과 같으며, 왕래가 아주 균일하다.</p>
+                                    <p class="classical-text">緩脈, 去來小快于遲, 一息四至. 如絲在經, 不卷其軸, 往來甚勻.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 강약 - 허실 --><div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <div class="accordion-header bg-gradient-to-r from-red-600 to-red-400 text-white p-4 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                    <span class="font-bold text-xl flex items-center">
+                        강약 - 허실 (實脈, 虛脈, 弱脈)
+                    </span>
+                    <span class="accordion-icon text-2xl font-semibold transform transition-transform duration-300">+</span>
+                </div>
+                <div class="accordion-content bg-white">
+                    <div class="p-4 space-y-3">
+                        <!-- 3.1 실맥 --><div class="border border-red-200 rounded-lg overflow-hidden bg-red-50">
+                            <div class="accordion-header text-red-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    실맥(實脈) - 실증 (Excess)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-red-200 bg-white">
+                                    <p class="mb-2">실맥(實脈)은 부부(浮부)와 침부(沈부)에서 모두 촉지(觸知)할 수 있다. 맥의 형체가 크고(大) 길며(長), 약간 현(弦)한 느낌이 들면서 손끝에서 강하고 힘있는 박동감을 얻을 수 있다.</p>
+                                    <p class="classical-text">實脈, 浮沈皆得, 脈大而長, 微弦, 應指愊愊然.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 3.2 허맥 --><div class="border border-red-200 rounded-lg overflow-hidden bg-red-50">
+                            <div class="accordion-header text-red-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    허맥(虛脈) - 기허 (Qi deficiency)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-red-200 bg-white">
+                                    <p class="mb-2">허맥(虛脈)은 박동이 늦고 완만하며 부대(浮大)하면서도 연(軟)하며, 힘주어 누르면 그 감각이 무력(無力)한 느낌이 든다. 손 끝에서 은은하게 박동하면서 돌연히 공허(空虛)해지는 감각을 느낄 수 있다.</p>
+                                    <p class="classical-text">虛脈, 遲大而軟, 按之無力, 隱指豁豁亂然空.</p>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- 3.3 약맥 --><div class="border border-red-200 rounded-lg overflow-hidden bg-red-50">
+                            <div class="accordion-header text-red-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    약맥(弱脈) - 혈허 (Blood deficiency), 양허(Yang deficiency)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-red-200 bg-white">
+                                    <p class="mb-2">약맥(弱脈)은 그 맥상(脈象)이 아주 유연(柔軟)하면서 침세(沈細)한 것을 말하는데, 힘주어 눌러야 비로소 감지할 수 있으며, 가볍게 대어서는 촉지(觸知)할 수 없는 맥이다.</p>
+                                    <p class="classical-text">弱脈, 極軟而沈細, 按之乃得, 擧手無有.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 리듬 - 순환/부조 --><div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <div class="accordion-header bg-gradient-to-r from-purple-600 to-purple-400 text-white p-4 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                    <span class="font-bold text-xl flex items-center">
+                        리듬 - 순환/부조 (滑脈, 澁脈, 促脈, 結脈, 代脈)
+                    </span>
+                    <span class="accordion-icon text-2xl font-semibold transform transition-transform duration-300">+</span>
+                </div>
+                <div class="accordion-content bg-white">
+                    <div class="p-4 space-y-3">
+                        <!-- 4.1 활맥 --><div class="border border-purple-200 rounded-lg overflow-hidden bg-purple-50">
+                            <div class="accordion-header text-purple-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    활맥(滑脈) - 습담 (Dampness, Phlegm)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-purple-200 bg-white">
+                                    <p class="mb-2">활맥(滑脈)은 그 박동의 오고 감이 모두 유리(流利)하고 원활(圓滑)한 모습인데, 연이어 나타나는 그 모습이 마치 둥근 구슬이 손가락 아래서 굴러다니는 듯한 느낌이며, 또 손에서 달아나려는 듯한 감각이다.</p>
+                                    <p class="classical-text">滑脈, 往來前却, 流利展轉, 贊贊然如珠之應指, 록록如慾脫.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 4.2 삽맥 --><div class="border border-purple-200 rounded-lg overflow-hidden bg-purple-50">
+                            <div class="accordion-header text-purple-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    삽맥(澁脈) - 혈어 (Blood stasis), 혈허 (Blood deficiency)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-purple-200 bg-white">
+                                    <p class="mb-2">삽맥(澁脈)은 세소(細小)하면서 지만(遲慢)하고, 그 박동이 매끄럽지 못하며 맥체(脈體)가 짧고 흩어지는 모습이다. 마치 가벼운 칼로 대나무를 긁는 듯하며, 빗물이 모래를 적시는 것 같기도 하고, 병든 누에가 나뭇잎을 먹는 모습 같기도 하다.</p>
+                                    <p class="classical-text">澁脈, 細而遲, 往來難; 短且散; 或一止復來, 參伍不調. 如輕刀刮竹.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 4.3 촉맥 --><div class="border border-purple-200 rounded-lg overflow-hidden bg-purple-50">
+                            <div class="accordion-header text-purple-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    촉맥(促脈) - 빠르다 - 혈어 (Blood stasis)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-purple-200 bg-white">
+                                    <p class="mb-2">촉맥(促脈)은 그 오고 가는 모양이 모두 빠른 모습(數象)을 보이는데, 어떤 때는 한 번 정지하다가 다시 계속된다. 마치 절름발이가 길을 빨리 걷는 것처럼 그 속도에 일정한 규율이 없다.</p>
+                                    <p class="classical-text">促脈, 來去數, 時一止復來. 如蹶之趣, 徐疾不常.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 4.4 결맥 --><div class="border border-purple-200 rounded-lg overflow-hidden bg-purple-50">
+                            <div class="accordion-header text-purple-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    결맥(結脈) - 혈어 (Blood stasis)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-purple-200 bg-white">
+                                    <p class="mb-2">결맥(結脈)은 그 박동이 완만(緩慢)하며, 때때로 한번씩 쉬다가 다시 돌아오는 맥을 말한다.</p>
+                                    <p class="classical-text">結脈, 往來緩, 時一止復來.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 4.5 대맥 --><div class="border border-purple-200 rounded-lg overflow-hidden bg-purple-50">
+                            <div class="accordion-header text-purple-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    대맥(代脈) - 혈어 (Blood stasis)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-purple-200 bg-white">
+                                    <p class="mb-2">대맥(代脈)은 박동하면서 중간에 때대로 멈추는 맥인데, 제법 오랫동안 원래의 상태로 돌아오지 않으며, 다시 돌아온 후에는 재차 원래대로 박동하는 맥이다.</p>
+                                    <p class="classical-text">代脈, 動而中止, 不能自還, 因而復動.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 부드러움 - 긴장/습 --><div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <div class="accordion-header bg-gradient-to-r from-yellow-600 to-yellow-400 text-white p-4 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                    <span class="font-bold text-xl flex items-center">
+                        단단함/부드러움 - 긴장/습 (弦脈, 緊脈, 濡脈)
+                    </span>
+                    <span class="accordion-icon text-2xl font-semibold transform transition-transform duration-300">+</span>
+                </div>
+                <div class="accordion-content bg-white">
+                    <div class="p-4 space-y-3">
+                        <!-- 5.1 현맥 --><div class="border border-yellow-200 rounded-lg overflow-hidden bg-yellow-50">
+                            <div class="accordion-header text-yellow-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    현맥(弦脈) - 간기울결 (Liver Qi stagnation)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-yellow-200 bg-white">
+                                    <p class="mb-2">현맥은 맥체(脈體)가 단직(端直)하고 길다. 이는 마치 팽팽하게 끌어 당겨져 있는 활시위와 같다. 힘 주어 눌러도 이동감(移動感)이 없으며 그 길면서 유여(有餘)한 모습이 마치 거문고나 비파의 줄을 누르고 있는 듯 하다.</p>
+                                    <p class="classical-text">弦脈, 端直以長, 如張弓弦. 按之不移, 綽綽如按琴瑟弦.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 5.2 긴맥 --><div class="border border-yellow-200 rounded-lg overflow-hidden bg-yellow-50">
+                            <div class="accordion-header text-yellow-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    긴맥(緊脈) - 한증 (Cold)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-yellow-200 bg-white">
+                                    <p class="mb-2">긴맥(緊脈)은 그 박동의 오고 감에 힘이 있으며 좌우측에서 모두 이를 느낄 수 있다. 이는 마치 비틀어 끌리는 밧줄의 전동(轉動)과 같다.</p>
+                                    <p class="classical-text">緊脈, 往來有力, 左右彈人手. 如轉索無常.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 5.3 유맥 --><div class="border border-yellow-200 rounded-lg overflow-hidden bg-yellow-50">
+                            <div class="accordion-header text-yellow-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    유맥(濡脈) - 습담 (Dampness, Phlegm)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-yellow-200 bg-white">
+                                    <p class="mb-2">유맥(濡脈)은 그 형세(形勢)가 아주 유연(柔軟)하고 부세(浮細)하다. 마치 솜이 물 위에 떠있는 것 같으며, 손을 가볍게 대면 촉지(觸知)가 되지만 힘주어 누르면 감지되지 않는다.</p>
+                                    <p class="classical-text">濡脈, 極軟而浮細, 如綿在水中, 輕手相得, 按之無有.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. 길이/부피 - 장단/대소 (세맥 추가) --><div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <div class="accordion-header bg-gradient-to-r from-indigo-600 to-indigo-400 text-white p-4 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                    <span class="font-bold text-xl flex items-center">
+                        부피/길이 (細脈 등)
+                    </span>
+                    <span class="accordion-icon text-2xl font-semibold transform transition-transform duration-300">+</span>
+                </div>
+                <div class="accordion-content bg-white">
+                    <div class="p-4 space-y-3">
+                        <!-- 6.1 세맥 --><div class="border border-indigo-200 rounded-lg overflow-hidden bg-indigo-50">
+                            <div class="accordion-header text-indigo-800 p-3 cursor-pointer flex justify-between items-center" onclick="toggleAccordion(this)">
+                                <span class="font-semibold flex items-center">
+                                    세맥(細脈) - 혈허 (Blood deficiency) / 음허 (Yin deficiency)
+                                </span>
+                                <span class="accordion-icon text-xl font-semibold transform transition-transform duration-300">+</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="p-3 border-t border-indigo-200 bg-white">
+                                    <p class="mb-2">세맥(細脈)은 미맥(微脈)보다는 약간 큰 모습이며, 시종(始終) 잘 만져지는 맥이다. 맥상(脈象)은 세직(細直)하면서도 연(軟)하다. 마치 한 가닥의 실처럼 손 아래서 박동한다.</p>
+                                    <p class="classical-text">細脈, 小大于微而常有, 細直而軟, 若絲線之應指.</p>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- 6.2 실맥 (크기 포함) - 3.1에서 재분류하여 포함 가능하나 중복 방지를 위해 패턴만 나열 -->
+                        <p class="text-sm text-gray-500 mt-2">다른 맥상(예: 실맥, 대맥, 현맥 등)도 부피와 길이를 나타내는 특징이 있으나, 다른 분류(강약, 단단함)에서 이미 상세히 설명되었습니다.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <!-- ============================================== -->
+        <!-- 2. 퀴즈 기능 - 섹션 제목 삭제 -->
+        <!-- ============================================== -->
+        
+        <!-- 퀴즈 시작 화면 -->
         <div id="start-screen">
-            <h1 class="text-3xl font-bold text-center text-[#4A3F35] mb-4">빈호맥학 퀴즈</h1>
-            <p class="text-center text-gray-600 mb-8">주어진 내용을 보고 알맞은 맥(脈)을 맞춰보세요.</p>
+            <p class="text-xl font-semibold text-center text-[#4A3F35] mb-4">맥진 학습 후, 아래 버튼으로 실력을 점검해 보세요.</p>
+            <p class="text-center text-gray-600 mb-8">주어진 증상과 맥상을 보고 알맞은 맥(脈)을 맞춰보세요. 총 10문제</p>
+            
             <button id="start-btn" class="w-full btn-next font-bold py-3 px-4 rounded-lg text-lg">퀴즈 시작하기</button>
         </div>
 
+        <!-- 퀴즈 진행 화면 -->
         <div id="quiz-screen" class="hidden">
             <!-- 진행 상태와 점수 -->
             <div class="flex justify-between items-center mb-4">
@@ -121,8 +484,9 @@
             </div>
         </div>
 
+        <!-- 퀴즈 결과 화면 -->
         <div id="result-screen" class="hidden text-center">
-             <h2 class="text-3xl font-bold text-[#4A3F35] mb-4">퀴즈 결과</h2>
+             <h3 class="text-3xl font-bold text-[#4A3F35] mb-4">퀴즈 결과</h3>
              <p class="text-xl text-gray-700 mb-2">총 <span id="final-total"></span>문제 중 <strong id="final-score" class="text-2xl text-[#A07C5B]"></span>문제를 맞혔습니다!</p>
              <p id="result-message" class="text-lg font-medium mt-4 mb-8"></p>
              <button id="restart-btn" class="w-full btn-next font-bold py-3 px-4 rounded-lg text-lg">다시 풀어보기</button>
@@ -136,7 +500,73 @@
 </footer>
 
 <script>
-    // 언어 전환 기능
+    // --------------------------------------
+    // 아코디언 (학습 자료) JavaScript 로직
+    // --------------------------------------
+    
+    // 아코디언 토글 및 중첩된 부모 높이 업데이트를 처리하는 핵심 함수
+    function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.accordion-icon');
+        
+        // 토글될 콘텐츠의 실제 높이를 미리 계산합니다.
+        const childScrollHeight = content.scrollHeight; 
+
+        // 현재 열려있는지(maxHeight가 0이 아닌 유효한 값인지) 확인합니다.
+        let isOpening = !(content.style.maxHeight && content.style.maxHeight !== '0px');
+
+        if (isOpening) {
+            // 1. 현재 콘텐츠 열기
+            content.style.maxHeight = childScrollHeight + 'px';
+            icon.style.transform = 'rotate(180deg)';
+            icon.textContent = '−'; // Minus sign
+        } else {
+            // 1. 현재 콘텐츠 닫기
+            content.style.maxHeight = '0px';
+            icon.style.transform = 'rotate(0deg)';
+            icon.textContent = '+';
+        }
+
+        // 2. 부모 아코디언 요소들을 찾아 높이를 업데이트합니다. (가장 중요)
+        let parentContent = header.parentElement.closest('.accordion-content');
+        
+        while (parentContent) {
+            // 부모가 현재 열려있는 상태일 때만 높이를 조절합니다.
+            if (parentContent.style.maxHeight && parentContent.style.maxHeight !== '0px') {
+                
+                let currentParentHeight = parseInt(parentContent.style.maxHeight, 10);
+                let newParentHeight;
+
+                if (isOpening) {
+                    // 자식이 열리면, 자식의 높이만큼 부모의 높이를 늘려줍니다.
+                    newParentHeight = currentParentHeight + childScrollHeight;
+                } else {
+                    // 자식이 닫히면, 자식의 높이만큼 부모의 높이를 줄여줍니다.
+                    newParentHeight = currentParentHeight - childScrollHeight;
+                }
+                
+                // 새로운 높이를 적용합니다.
+                parentContent.style.maxHeight = newParentHeight + 'px';
+            }
+            
+            // 그 다음 상위 부모를 찾아 올라갑니다.
+            parentContent = parentContent.parentElement.closest('.accordion-content');
+        }
+    }
+
+    // 초기 로드 시 모든 아코디언을 닫힌 상태로 만듭니다.
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.accordion-content').forEach(content => {
+            content.style.maxHeight = '0px';
+        });
+    });
+
+
+    // --------------------------------------
+    // 퀴즈 JavaScript 로직
+    // --------------------------------------
+    
+    // 언어 전환 기능 (기존 로직 유지)
     async function toggleLanguage(event) {
         event.preventDefault();
         const currentPath = window.location.pathname;
@@ -145,12 +575,10 @@
 
         // 대상 파일 결정
         if (currentFile.includes('_k.html') || currentFile.includes('_kor.html')) {
-            // 한글 -> 영어
             targetFile = currentFile.replace('_k.html', '.html').replace('_kor.html', '.html');
             window.location.href = targetFile;
             return;
         } else {
-            // 영어 -> 한글
             if (currentFile.includes('history.html')) {
                 targetFile = 'history_kor.html';
             } else {
@@ -164,15 +592,16 @@
             if (response.ok) {
                 window.location.href = targetFile;
             } else {
-                alert('준비중입니다.');
+                // custom modal UI 대신 console.error를 사용
+                console.error('준비중입니다.');
             }
         } catch (error) {
             console.error('페이지 확인 중 오류 발생:', error);
-            alert('준비중입니다.');
+            console.error('준비중입니다.');
         }
     }
 
-    // 퀴즈 데이터
+    // 퀴즈 데이터 (기존 로직 유지)
     const quizData = [
         { pulse: "부맥(浮脈)", pattern: "표증 (Exterior)", description: "가볍게 손을 대었을 때 그 박동에 힘이 있고, 힘있게 눌렀을 때는 무력한 모습을 나타낸다. 마치 미풍이 서서히 불어 새의 깃털을 미약하게 움직이게 하는 것 같은 느낌이다. 또한 느릅나무를 서서히 문지르는 듯한 느낌이며, 물 위에 나무조각이 떠있는 것 같은 느낌 같기도 하고 파를 비비는 듯한 감촉 같기도 하다." },
         { pulse: "침맥(沈脈)", pattern: "이증 (Interior)", description: "손을 힘있게 근골(筋骨) 부위까지 눌렀을 때 촉지(觸知)할 수 있는 맥을 말한다. 마치 면포(棉布) 속에 모래가 들어 있어서 속은 단단하지만 겉은 유연한 것 같은 모습이다. 또, 돌을 물 속에 던졌을 때 밑바닥까지 가라앉는 형상으로 비유할 수 있다." },
@@ -180,7 +609,7 @@
         { pulse: "삭맥(數脈)", pattern: "열증 (Heat)", description: "한 호흡지간(呼吸之間)에 6회 박동하는 것이며, 맥기(脈氣)의 유동(流動)이 아주 급박(急迫)하다." },
         { pulse: "허맥(虛脈)", pattern: "기허 (Qi deficiency)", description: "박동이 늦고 완만하며 부대(浮大)하면서도 연(軟)하며, 힘주어 누르면 그 감각이 무력(無力)한 느낌이 든다. 손 끝에서 은은하게 박동하면서 돌연히 공허(空虛)해지는 감각을 느낄 수 있다." },
         { pulse: "약맥(弱脈)", pattern: "혈허 (Blood deficiency)", description: "그 맥상(脈象)이 아주 유연(柔軟)하면서 침세(沈細)한 것을 말하는데, 힘주어 눌러야 비로소 감지할 수 있으며, 가볍게 대어서는 촉지(觸知)할 수 없는 맥이다." },
-        { pulse: "실맥(實脈)", pattern: "실증 (Excess)", description: "부부(浮部)와 침부(沈部)에서 모두 촉지(觸知)할 수 있다. 맥의 형체가 크고(大) 길며(長), 약간 현(弦)한 느낌이 들면서 손끝에서 강하고 힘있는 박동감을 얻을 수 있다." },
+        { pulse: "실맥(實脈)", pattern: "실증 (Excess)", description: "부부(浮부)와 침부(沈부)에서 모두 촉지(觸知)할 수 있다. 맥의 형체가 크고(大) 길며(長), 약간 현(弦)한 느낌이 들면서 손끝에서 강하고 힘있는 박동감을 얻을 수 있다." },
         { pulse: "활맥(滑脈)", pattern: "습담 (Dampness, Phlegm)", description: "그 박동의 오고 감이 모두 유리(流利)하고 원활(圓滑)한 모습인데, 연이어 나타나는 그 모습이 마치 둥근 구슬이 손가락 아래서 굴러다니는 듯한 느낌이며, 또 손에서 달아나려는 듯한 감각이다." },
         { pulse: "삽맥(澁脈)", pattern: "혈어 (Blood stasis)", description: "세소(細小)하면서 지만(遲慢)하고, 그 박동이 매끄럽지 못하며 맥체(脈體)가 짧고 흩어지는 모습이다. 마치 가벼운 칼로 대나무를 긁는 듯하며, 빗물이 모래를 적시는 것 같기도 하고, 병든 누에가 나뭇잎을 먹는 모습 같기도 하다." },
         { pulse: "현맥(弦脈)", pattern: "간기울결 (Liver Qi stagnation)", description: "맥체(脈體)가 단직(端直)하고 길다. 이는 마치 팽팽하게 끌어 당겨져 있는 활시위와 같다. 힘 주어 눌러도 이동감(移動感)이 없으며 그 길면서 유여(有餘)한 모습이 마치 거문고나 비파의 줄을 누르고 있는 듯 하다." },
@@ -236,6 +665,7 @@
         startScreen.classList.add('hidden');
         resultScreen.classList.add('hidden');
         quizScreen.classList.remove('hidden');
+        document.getElementById('visualization-section').classList.add('hidden'); // 학습 자료 숨기기
 
         // 첫 문제 표시
         showQuestion();
@@ -350,10 +780,21 @@
         resultMessageEl.textContent = message;
     }
 
+    // 퀴즈 재시작 함수 (학습 자료 다시 표시)
+    function restartQuizAndShowStudy() {
+        // 퀴즈 화면 요소 초기화
+        startScreen.classList.remove('hidden');
+        quizScreen.classList.add('hidden');
+        resultScreen.classList.add('hidden');
+        
+        // 학습 자료 다시 표시
+        document.getElementById('visualization-section').classList.remove('hidden'); 
+    }
+
     // 이벤트 리스너 연결
     startBtn.addEventListener('click', startQuiz);
     nextBtn.addEventListener('click', showNextQuestion);
-    restartBtn.addEventListener('click', startQuiz);
+    restartBtn.addEventListener('click', restartQuizAndShowStudy);
 
 </script>
 </body>
