@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한의학의 간(肝) 치료법 SPA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutral (bg-stone-100) with Herbal Accents (Rose, Teal, Amber) -->
+    <!-- Application Structure Plan: A single-page SPA. The top section provides a comparison table. The main section uses three icon-based navigation buttons to dynamically display detailed content for each of the three treatments (발산, 소통, 보충). This icon-button navigation is chosen for a more visual and direct user flow, replacing the pie chart. JS manages content visibility based on button clicks. -->
+    <!-- Visualization & Content Choices: 1. Comparison Table (HTML/Tailwind) -> Goal: Organize -> Justification: Direct data presentation of all three herbs. 2. Navigation Buttons (HTML/Tailwind/JS) -> Goal: Organize/Interact -> Justification: Acts as the primary navigation for the details section. Clicking a button reveals the relevant content. 3. Source Text (HTML <details>) -> Goal: Organize -> Justification: Hides complex source text by default for a cleaner UI, accessible on click. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f5f5f4;
+            color: #44403c;
+        }
+        .nav-button {
+            background-color: #ffffff;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .nav-button[data-herb="shiho"].active { border-color: #e11d48; }
+        .nav-button[data-herb="hyangbuja"].active { border-color: #0d9488; }
+        .nav-button[data-herb="baekjakyak"].active { border-color: #d97706; }
+        
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        details > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background-color: #f5f5f4;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        details > summary:hover {
+            background-color: #e7e5e4;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] > summary {
+            background-color: #e7e5e4;
+        }
+        .source-text {
+            margin-top: 0.75rem;
+            padding: 1rem;
+            background-color: #fafaf9;
+            border-left: 4px solid #d6d3d1;
+            border-radius: 0 0.375rem 0.375rem 0;
+        }
+        .herb-shiho { border-color: #fb7185; }
+        .herb-hyangbuja { border-color: #2dd4bf; }
+        .herb-baekjakyak { border-color: #facc15; }
+
+        /* --- Mandatory CSS Rules --- */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+        
+        /* Hanja Emphasis Styles */
+        .hanja {
+            font-weight: 700;
+            color: #1e3a8a; /* A deep blue for emphasis */
+            font-size: 1.05em;
+        }
+        .quote-highlight {
+            font-weight: 600;
+            color: #a16207; /* Amber color */
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+
+    <!-- === MANDATORY HEADER (Width Updated) === -->
+    <header id="page-header" style="width: 100%; max-width: 70rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+    <!-- === END HEADER === -->
+
+    <!-- === KOREAN CONTENT (MARKDOWN BOLD REMOVED) === -->
+    <div class="lang-container" lang="ko">
+        <!-- Width Updated -->
+        <div class="container mx-auto p-4 md:p-8 max-w-[70rem]">
+
+            <header class="mb-12 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-teal-900 mb-4">한의학의 간(<span class="hanja">肝</span>) 치료법</h1>
+                <p class="text-lg text-stone-700 max-w-3xl mx-auto">
+                    한의학에서 간(<span class="hanja">肝</span>)은 기(<span class="hanja">氣</span>)의 흐름을 조절하고 혈액을 저장하며 감정을 다스리는 핵심 역할을 합니다. 간 기능에 문제가 생겼을 때, 한의학은 주로 발산(<span class="hanja">發散</span>), 소통(<span class="hanja">疏通</span>), 보충(<span class="hanja">補充</span>)의 세 가지 방식으로 접근합니다.
+                </p>
+            </header>
+    
+            <section class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">주요 약재 비교</h2>
+                <!-- overflow-x-auto removed -->
+                <div class="">
+                    <table class="min-w-full divide-y divide-stone-200">
+                        <thead class="bg-stone-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">약재</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">성질</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">맛</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">핵심 효능</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-stone-200">
+                            <!-- whitespace-nowrap removed from all <td> -->
+                            <tr class="hover:bg-rose-50">
+                                <td class="px-6 py-4 text-sm font-medium text-rose-700">시호(<span class="hanja">柴胡</span>)</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">차가움</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">씀, 매움</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">화해퇴열, 소간해울</td>
+                            </tr>
+                            <tr class="hover:bg-teal-50">
+                                <td class="px-6 py-4 text-sm font-medium text-teal-700">향부자(<span class="hanja">香附子</span>)</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">평이하거나 약간 차가움</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">매움, 씀, 단맛</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">행기해울, 조경지통</td>
+                            </tr>
+                            <tr class="hover:bg-amber-50">
+                                <td class="px-6 py-4 text-sm font-medium text-amber-700">백작약(<span class="hanja">白芍藥</span>)</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">차가움</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">신맛, 씀</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">양혈렴음, 완급지통</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+    
+            <section class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">세가지 치료법</h2>
+                
+                <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+                    <!-- Shiho Button -->
+                    <button id="nav-shiho" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="shiho">
+                        <span class="text-4xl mb-3">🔥</span>
+                        <span class="text-lg font-semibold text-rose-700">발산 (시호)</span>
+                    </button>
+                    <!-- Hyangbuja Button -->
+                    <button id="nav-hyangbuja" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="hyangbuja">
+                        <span class="text-4xl mb-3">💨</span>
+                        <span class="text-lg font-semibold text-teal-700">소통 (향부자)</span>
+                    </button>
+                    <!-- Baekjakyak Button -->
+                    <button id="nav-baekjakyak" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="baekjakyak">
+                        <span class="text-4xl mb-3">💧</span>
+                        <span class="text-lg font-semibold text-amber-700">보충 (백작약)</span>
+                    </button>
+                </div>
+    
+                <div id="tab-content">
+                    
+                    <div id="pane-shiho" class="tab-pane active">
+                        <h3 class="text-2xl font-bold mb-4 text-rose-700">1. 발산(<span class="hanja">發散</span>): 가벼운 기운으로 간의 열을 흩어내다 - 시호(<span class="hanja">柴胡</span>)</h3>
+                        <div>
+                            <p class="text-stone-700 mb-6 leading-relaxed">간에 나쁜 기운, 특히 열(<span class="hanja">熱</span>)이 들어와 병이 안으로 깊어지지도 않고 완전히 밖으로 나가지도 못하는 '<span class="hanja">반표반리(半表半裏)</span>' 상태가 될 수 있습니다. 이는 감기몸살처럼 춥다가 덥다가를 반복하고, 입이 쓰며, 옆구리가 결리는 등의 증상으로 나타납니다.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">이때 사용하는 대표적인 약재가 시호입니다. 시호는 성질이 가볍고 위로 솟아오르는 특징이 있어, 간에 정체된 열을 부드럽게 들어 올려 몸 밖으로 흩어내는 역할을 합니다. 이를 '<span class="hanja">화해(和解)</span>' 작용이라 하며, 마치 갈등하는 두 세력을 중재하여 화해시키는 것과 같습니다.</p>
+                            
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">핵심 효능</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>화해퇴열(和解退熱)</li>
+                                        <li>소간해울(疏肝解鬱)</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">주요 증상</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>한열왕래 (춥다가 덥다가 반복)</li>
+                                        <li>흉협고만 (가슴/옆구리 답답함)</li>
+                                        <li>구고 (입이 씀)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <details class="text-sm mt-4">
+                            <summary class="text-stone-600">원문 자료: 동의보감 (펼치기)</summary>
+                            <blockquote class="source-text herb-shiho">
+                                <p class="font-mono text-stone-700">性微寒一云平, 味微苦一云甘, 無毒. 主傷寒寒熱往來, 天行時疾, 內外熱不解. 治熱勞, 骨節煩疼. 除虛勞寒熱, 解肌熱, 早晨潮熱, 能瀉肝火, 除寒熱往來瘧疾, 及胸脇痛滿.</p>
+                                <hr class="my-3 border-stone-200">
+                                <p class="text-stone-600">성질은 약간 차다고 하며... 주로 상한으로 인한 한열이 왕래하는 증상... <span class="quote-highlight">간(肝)의 화(火)</span>를 사하여, <span class="quote-highlight">한열(寒熱)이 왕래(往來)</span>하는 학질(말라리아 유사 증상)을 제거하고, <span class="quote-highlight">가슴과 옆구리가 아픈 창만(胸脇痛滿)</span>을 치료한다.</p>
+                            </blockquote>
+                        </details>
+                    </div>
+    
+                    <div id="pane-hyangbuja" class="tab-pane">
+                        <h3 class="text-2xl font-bold mb-4 text-teal-700">2. 소통(<span class="hanja">疏通</span>): 꽉 막힌 기의 흐름을 강력하게 뚫다 - 향부자(<span class="hanja">香附子</span>)</h3>
+                        <div>
+                            <p class="text-stone-700 mb-6 leading-relaxed">과도한 스트레스나 억눌린 감정은 간의 기운(肝氣)을 뭉치게 만듭니다. 이를 '<span class="hanja">간기울결(肝氣鬱結)</span>'이라 하는데, 기의 흐름이 막히면서 가슴이 답답하고, 옆구리가 뻐근하며, 소화가 잘 안 되고, 여성의 경우 생리통이나 생리불순이 나타나기도 합니다.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">이때 사용하는 대표적인 약재가 향부자입니다. 향부자는 '<span class="hanja">기병(氣병)</span>의 총사령관'이라 불릴 만큼 막힌 기를 뚫어주는 데 탁월한 효능을 가진 약재입니다. 향부자의 맵고 향기로운 기운은 뭉쳐있는 기를 강력하게 움직여 전신으로 소통시킵니다.</p>
+    
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">핵심 효능</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>행기해울(行氣解鬱)</li>
+                                        <li>조경지통(調經止痛)</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">주요 증상</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>흉협창통 (가슴, 옆구리 뻐근함)</li>
+                                        <li>완복창만 (배가 더부룩함)</li>
+                                        <li>월경불순 및 생리통</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mt-4">
+                            <details class="text-sm">
+                                <summary class="text-stone-600">원문 자료: 본초 (펼치기)</summary>
+                                <blockquote class="source-text herb-hyangbuja">
+                                    <p class="text-stone-600">성질은 약간 차고[微寒] 맛은 달며[甘] 독이 없다. 기를 세게 내리고 가슴 속의 열을 없앤다. 오래 먹으면 기를 보하고 기분을 좋게 하며 속이 답답한 것을 풀어 준다. 통증을 멈추며 월경을 고르게 하고 오랜 식체를 삭게 한다.</p>
+                                </blockquote>
+                            </details>
+                            <details class="text-sm">
+                                <summary class="text-stone-600">원문 자료: 단심 (펼치기)</summary>
+                                <blockquote class="source-text herb-hyangbuja">
+                                    <p class="text-stone-600">향부자는 <span class="quote-highlight">기분(氣분)</span>의 병을 주로 낫게 한다. 향기는 잘 뚫고 나가고 쓴 맛은 묵은 것을 잘 밀어내고 새것을 생기게 한다. 부인은 혈이 잘 돌면 기도 잘 돌기 때문에 병이 나지 않는다...</p>
+                                </blockquote>
+                            </details>
+                            <details class="text-sm">
+                                <summary class="text-stone-600">원문 자료: 입문 (펼치기)</summary>
+                                <blockquote class="source-text herb-hyangbuja">
+                                    <p class="text-stone-600">향부자는 부인에게 아주 좋은 약이다. 부인의 성격은 너그럽지 못하여 <span class="quote-highlight">맺힌 것(結)</span>을 풀 줄 모르는 때가 많은데 이 약은 맺힌 것을 잘 헤치고 <span class="quote-highlight">어혈(瘀血)</span>을 잘 몰아낸다...</p>
+                                </blockquote>
+                            </details>
+                        </div>
+                    </div>
+    
+                    <div id="pane-baekjakyak" class="tab-pane">
+                        <h3 class="text-2xl font-bold mb-4 text-amber-700">3. 보충(<span class="hanja">補充</span>): 혈액을 채워 메마른 간을 부드럽게 하다 - 백작약(<span class="hanja">白芍藥</span>)</h3>
+                        <div>
+                            <p class="text-stone-700 mb-6 leading-relaxed">간은 '혈액을 저장하는 창고(<span class="hanja">肝藏血</span>)'입니다. 간에 혈액이 충분해야 우리 몸의 근육이 부드럽게 움직이고, 눈이 맑아지며, 감정도 안정될 수 있습니다. 과로나 영양 부족 등으로 간의 혈(肝血)이 부족해지면, 간은 마치 물기가 마른 스펀지처럼 뻣뻣해집니다.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">이때 사용하는 대표적인 약재가 백작약입니다. 백작약은 혈액을 보충하고 음액(陰液)을 더해주는 대표적인 <span class="hanja">보혈(補血)</span> 약재입니다. 백작약은 부족해진 간의 혈을 채워 간을 부드럽고 촉촉하게 만들어 주며, 경직된 근육을 이완시키고 불안정한 간의 기운을 차분하게 가라앉히는 효과를 발휘합니다.</p>
+                            
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">핵심 효능</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>양혈렴음(養혈렴음)</li>
+                                        <li>완급지통(緩急- 지통)</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">주요 증상</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>근육 경련 (쥐가 잘 남)</li>
+                                        <li>옆구리 통증</li>
+                                        <li>어지럼증, 눈이 뻑뻑함</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <details class="text-sm mt-4">
+                            <summary class="text-stone-600">원문 자료: 의서 인용 (펼치기)</summary>
+                            <blockquote class="source-text herb-baekjakyak">
+                                <p class="font-mono text-stone-700">"損其肝者, 緩其中, 謂調血也. 問曰, 當用何藥以治之. 答曰, 當用四物湯, 以其中有芍藥故也."</p>
+                                <hr class="my-3 border-stone-200">
+                                <p class="text-stone-600">(의미) "<span class="quote-highlight">간(肝)</span>이 상했을 때는 <span class="quote-highlight">부드럽게(緩)</span> 해주어야 하는데, 이는 혈을 조화롭게 하는 것이다. 어떤 약을 써야 하는가? <span class="quote-highlight">사물탕(四物湯)</span>을 써야 하는데, 그 안에 <span class="quote-highlight">작약(芍藥)</span>이 있기 때문이다."</p>
+                            </blockquote>
+                        </details>
+                    </div>
+    
+                </div>
+            </section>
+    
+        </div>
+    </div>
+    <!-- === END KOREAN CONTENT === -->
+
+    <!-- === ENGLISH CONTENT (UPDATED: MARKDOWN BOLD REMOVED) === -->
+    <div class="lang-container" lang="en" style="display:none;">
+        <!-- Width Updated -->
+        <div class="container mx-auto p-4 md:p-8 max-w-[70rem]">
+
+            <header class="mb-12 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-teal-900 mb-4">TCM Liver Treatment Methods</h1>
+                <p class="text-lg text-stone-700 max-w-3xl mx-auto">
+                    In Traditional Chinese Medicine (TCM), the Liver plays a crucial role in regulating the flow of Qi, storing Blood, and managing emotions. When Liver function is compromised, TCM primarily approaches treatment in three ways: Dispersing, Soothing, and Supplementing.
+                </p>
+            </header>
+    
+            <section class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-12">
+                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">Key Herb Comparison</h2>
+                <!-- overflow-x-auto removed -->
+                <div class="">
+                    <table class="min-w-full divide-y divide-stone-200">
+                        <thead class="bg-stone-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Herb</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Property</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Taste</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Core Efficacy</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-stone-200">
+                            <!-- Pinyin Names, Hanja removed -->
+                            <tr class="hover:bg-rose-50">
+                                <td class="px-6 py-4 text-sm font-medium text-rose-700">Chai Hu</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Cool</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Bitter, Acrid</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Harmonizes & reduces fever, soothes Liver & resolves depression</td>
+                            </tr>
+                            <tr class="hover:bg-teal-50">
+                                <td class="px-6 py-4 text-sm font-medium text-teal-700">Xiang Fu Zi</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Neutral or slightly cool</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Acrid, Bitter, Sweet</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Moves Qi & resolves depression, regulates menstruation & stops pain</td>
+                            </tr>
+                            <tr class="hover:bg-amber-50">
+                                <td class="px-6 py-4 text-sm font-medium text-amber-700">Bai Shao Yao</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Cool</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Sour, Bitter</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Nourishes Blood & astringes Yin, relaxes tension & stops pain</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+    
+            <section class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">The Three Treatment Methods</h2>
+                
+                <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+                    <!-- Shiho Button (Pinyin Updated) -->
+                    <button id="nav-shiho-en" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="shiho">
+                        <span class="text-4xl mb-3">🔥</span>
+                        <span class="text-lg font-semibold text-rose-700">Dispersing (Chai Hu)</span>
+                    </button>
+                    <!-- Hyangbuja Button (Pinyin Updated) -->
+                    <button id="nav-hyangbuja-en" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="hyangbuja">
+                        <span class="text-4xl mb-3">💨</span>
+                        <span class="text-lg font-semibold text-teal-700">Soothing (Xiang Fu Zi)</span>
+                    </button>
+                    <!-- Baekjakyak Button (Pinyin Updated) -->
+                    <button id="nav-baekjakyak-en" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="baekjakyak">
+                        <span class="text-4xl mb-3">💧</span>
+                        <span class="text-lg font-semibold text-amber-700">Supplementing (Bai Shao Yao)</span>
+                    </button>
+                </div>
+    
+                <div id="tab-content-en">
+                    
+                    <div id="pane-shiho-en" class="tab-pane active">
+                        <!-- Hanja removed from Title -->
+                        <h3 class="text-2xl font-bold mb-4 text-rose-700">1. Dispersing: Scattering Liver Heat with Light Qi - Chai Hu</h3>
+                        <div>
+                            <!-- Hanja removed from Paragraph -->
+                            <p class="text-stone-700 mb-6 leading-relaxed">When a pathogenic influence, especially Heat, enters the Liver, it can get stuck in a 'Half-Exterior, Half-Interior' state, neither fully external nor internal. This manifests as alternating chills and fever, a bitter taste in the mouth, and tightness in the flanks.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">The primary herb used for this is Chai Hu. Chai Hu is light and has an ascending quality, allowing it to gently lift and scatter the stagnant heat from the Liver out of the body. This is called a 'Harmonizing' action, like mediating a conflict.</p>
+                            
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Core Efficacy</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Harmonizes & reduces fever</li>
+                                        <li>Soothes the Liver & resolves depression</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Key Symptoms</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Alternating chills and fever</li>
+                                        <li>Fullness in the chest/flanks</li>
+                                        <li>Bitter taste in mouth</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <details class="text-sm mt-4">
+                            <summary class="text-stone-600">Source Text: Dongui Bogam (Expand)</summary>
+                            <blockquote class="source-text herb-shiho">
+                                <p class="font-mono text-stone-700">... 主傷寒寒熱往來... 能瀉肝火, 除寒熱往來瘧疾, 及胸脇痛滿.</p>
+                                <hr class="my-3 border-stone-200">
+                                <!-- MARKDOWN BOLD REMOVED -->
+                                <p class="text-stone-600">(Meaning) Its property is slightly cold... Mainly for alternating chills and fever from cold damage... It drains Liver Fire, removes alternating chills and fever from malarial disorders, and treats pain and fullness in the chest and flanks.</p>
+                            </blockquote>
+                        </details>
+                    </div>
+    
+                    <div id="pane-hyangbuja-en" class="tab-pane">
+                        <!-- Hanja removed from Title -->
+                        <h3 class="text-2xl font-bold mb-4 text-teal-700">2. Soothing: Powerfully Unblocking Qi Stagnation - Xiang Fu Zi</h3>
+                        <div>
+                            <!-- Hanja removed from Paragraph (Markdown bold removed) -->
+                            <p class="text-stone-700 mb-6 leading-relaxed">Excessive stress or suppressed emotions can cause the Liver Qi (肝氣) to stagnate. This is called 'Liver Qi Stagnation'. As the flow of Qi is blocked, it can cause chest tightness, flank pain, poor digestion, and in women, menstrual pain or irregularities.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">The primary herb used for this is Xiang Fu Zi. Xiang Fu Zi is known as the 'Commander-in-Chief of Qi disorders' due to its outstanding ability to unblock stagnant Qi. Its acrid and aromatic nature strongly moves and circulates the stagnant Qi throughout the body.</p>
+    
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Core Efficacy</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Moves Qi & resolves depression</li>
+                                        <li>Regulates menstruation & stops pain</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Key Symptoms</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Distending pain in chest/flanks</li>
+                                        <li>Abdominal distention</li>
+                                        <li>Irregular menstruation & pain</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mt-4">
+                            <details class="text-sm">
+                                <summary class="text-stone-600">Source Text: Boncho (Expand)</summary>
+                                <blockquote class="source-text herb-hyangbuja">
+                                    <p class="text-stone-600">Property is slightly cold, taste is sweet, non-toxic. Strongly descends Qi and clears heat from the chest. Long-term use supplements Qi, brightens the mood, and resolves stuffiness. It stops pain, regulates menses, and dissolves chronic food stagnation.</p>
+                                </blockquote>
+                            </details>
+                            <details class="text-sm">
+                                <summary class="text-stone-600">Source Text: Danshim (Expand)</summary>
+                            <blockquote class="source-text herb-hyangbuja">
+                                    <!-- MARKDOWN BOLD REMOVED -->
+                                    <p class="text-stone-600">Xiang Fu Zi primarily treats diseases of the Qi-level. Its aroma penetrates well, and its bitterness pushes out the old and generates the new. For women, if blood circulates well, Qi also circulates well, and disease does not arise...</p>
+                                </blockquote>
+                            </details>
+                            <details class="text-sm">
+                                <summary class="text-stone-600">Source Text: Imun (Expand)</summary>
+                                <blockquote class="source-text herb-hyangbuja">
+                                    <!-- MARKDOWN BOLD REMOVED -->
+                                    <p class="text-stone-600">Xiang Fu Zi is a very good herb for women. Women's tempers are often not "generous," and they may not know how to release stagnation; this herb excels at resolving stagnation and dispersing blood stasis...</p>
+                                </blockquote>
+                            </details>
+                        </div>
+                    </div>
+    
+                    <div id="pane-baekjakyak-en" class="tab-pane">
+                        <!-- Hanja removed from Title -->
+                        <h3 class="text-2xl font-bold mb-4 text-amber-700">3. Supplementing: Softening a Dry Liver by Replenishing Blood - Bai Shao Yao</h3>
+                        <div>
+                            <!-- Hanja removed from Paragraph (Markdown bold removed) -->
+                            <p class="text-stone-700 mb-6 leading-relaxed">The Liver is the 'storehouse of Blood'. When the Liver Blood is sufficient, our muscles move smoothly, our eyes are clear, and our emotions are stable. If Liver Blood becomes deficient from overwork or poor nutrition, the Liver becomes stiff, like a dry sponge.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">The primary herb used for this is Bai Shao Yao. Bai Shao Yao is a primary Blood-supplementing herb that also adds Yin fluids. It replenishes the deficient Liver Blood, making the Liver soft and moist. It relaxes stiff muscles and calms the unstable Liver Qi, which can rise up.</p>
+                            
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Core Efficacy</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Nourishes Blood & astringes Yin</li>
+                                        <li>Relaxes tension & stops pain</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Key Symptoms</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Muscle spasms (cramps)</li>
+                                        <li>Flank pain</li>
+                                        <li>Dizziness, dry eyes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <details class="text-sm mt-4">
+                            <summary class="text-stone-600">Source Text: Medical Classic Excerpt (Expand)</summary>
+                            <blockquote class="source-text herb-baekjakyak">
+                                <p class="font-mono text-stone-700">"損其肝者, 緩其中, 謂調血也. 問曰, 當用何藥以治之. 答曰, 當用四物湯, 以其中有芍藥故也."</p>
+                                <hr class="my-3 border-stone-200">
+                                <!-- MARKDOWN BOLD REMOVED. Pinyin names Si Wu Tang and Shao Yao maintained as Pinyin per instruction. -->
+                                <p class="text-stone-600">(Meaning) "When the Liver is damaged, one must soften its center, which means to harmonize the Blood. What herb should be used? One must use Si Wu Tang, because it contains Shao Yao."</p>
+                            </blockquote>
+                        </details>
+                    </div>
+    
+                </div>
+            </section>
+    
+        </div>
+    </div>
+    <!-- === END ENGLISH CONTENT === -->
+
+
+    <!-- === MANDATORY FOOTER (Width Updated) === -->
+    <footer id="page-footer" style="width: 100%; max-width: 70rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+    <!-- === END FOOTER === -->
+
+
+    <!-- === MANDATORY SCRIPT === -->
+    <script>
+        // --- Mandatory Language Functions ---
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('.lang-container').forEach(div => {
+                if (div.lang === lang) {
+                    div.style.display = 'block';
+                } else {
+                    div.style.display = 'none';
+                }
+            });
+            localStorage.setItem('userLanguage', lang);
+            // window.history.replaceState is NOT used, as per instructions.
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const currentLang = document.documentElement.lang || 'ko';
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            const savedLang = localStorage.getItem('userLanguage');
+            const userLang = navigator.language || navigator.userLanguage;
+            
+            if (savedLang) {
+                setLanguage(savedLang);
+            } else if (userLang.startsWith('en')) {
+                setLanguage('en');
+            } else {
+                setLanguage('ko'); // Default to Korean
+            }
+        }
+        
+        // --- User's Original Script (with language loader integrated) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Load the correct language first
+            loadLanguage();
+
+            // Original App Logic
+            const palette = {
+                shiho: '#e11d48',
+                hyangbuja: '#0d9488',
+                baekjakyak: '#d97706',
+                shiho_hover: '#f43f5e',
+                hyangbuja_hover: '#14b8a6',
+                baekjakyak_hover: '#f59e0b',
+                dark: '#44403c'
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                } else {
+                    return label;
+                }
+            };
+
+            // This function handles tab switching for BOTH languages
+            const setupTabs = (langPrefix = '') => {
+                const containerId = langPrefix ? `#tab-content-${langPrefix}` : '#tab-content';
+                const tabPanes = document.querySelectorAll(`${containerId} .tab-pane`);
+                
+                // Select buttons within the correct language container
+                const langDiv = langPrefix ? `.lang-container[lang="${langPrefix}"]` : `.lang-container[lang="ko"]`;
+                const navButtons = document.querySelectorAll(`${langDiv} .nav-button`);
+                
+                if (tabPanes.length === 0 || navButtons.length === 0) {
+                    return; // In case elements aren't found
+                }
+
+                const showTab = (herbName) => {
+                    tabPanes.forEach(pane => {
+                        const paneId = langPrefix ? `pane-${herbName}-${langPrefix}` : `pane-${herbName}`;
+                        if (pane.id === paneId) {
+                            pane.classList.add('active');
+                        } else {
+                            pane.classList.remove('active');
+                        }
+                    });
+                    
+                    navButtons.forEach(button => {
+                        if (button.getAttribute('data-herb') === herbName) {
+                            button.classList.add('active');
+                        } else {
+                            button.classList.remove('active');
+                        }
+                    });
+                };
+                
+                navButtons.forEach(button => {
+                    // Prevent duplicate listeners
+                    if (!button.dataset.listenerAttached) {
+                        button.addEventListener('click', () => {
+                            const herbName = button.getAttribute('data-herb');
+                            if (herbName) {
+                                showTab(herbName);
+                            }
+                        });
+                        button.dataset.listenerAttached = 'true';
+                    }
+                });
+
+                // Show the first tab by default
+                showTab('shiho');
+            };
+
+            // Setup tabs for both Korean and English versions
+            setupTabs(); // For Korean (default)
+            setupTabs('en'); // For English
+
+        });
+    </script>
+</body>
+</html>
