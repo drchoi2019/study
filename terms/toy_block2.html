@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpheme Block Combiner</title>
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 기본 스타일 및 폰트 설정 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* 흰 바탕 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 블록 공통 스타일: 장난감 블록 */
+        .word-block {
+            cursor: grab;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
+            border-bottom: 6px solid; /* 3D 효과 */
+            font-weight: 800; /* 굵은 글자 */
+            
+            /* 핵심: 높이는 고정, 너비는 유동적 */
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.5rem; /* 좌우 패딩으로 너비 확보 */
+            height: 90px; /* 모든 블록 높이 고정 */
+        }
+
+        .word-block:active { cursor: grabbing; }
+
+        /* 중앙 놀이판 드롭 존 스타일 */
+        #play-area-wrapper {
+            transition: all 0.2s;
+        }
+
+        /* 드래그 올렸을 때 놀이판 하이라이트 */
+        .slot-highlight {
+            background-color: #e0f2fe; /* light-blue-50 */
+            border-color: #3b82f6; /* blue-500 */
+        }
+
+        /* 조합 결과의 폰트 색상 강제 지정 */
+        .text-dark-contrast { color: #374151; }
+        .text-light-contrast { color: white; }
+
+        /* 만화 글씨체 스타일링 (Comic Sans MS 또는 유사한 폰트로 대체, Tailwind로 그림자 효과 추가) */
+        .cartoon-title {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-shadow: 3px 3px 0 #1f2937, 5px 5px 0 #9ca3af; /* 두꺼운 그림자 효과 */
+            line-height: 1.1;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <div id="app-container" class="w-full max-w-7xl p-4 md:p-8 pt-8">
+        <!-- 만화 글씨체 제목: 색상 blue-600으로 변경 및 이모지 현미경(🔬)으로 변경 -->
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-blue-600 mb-10 cartoon-title">
+            Combine Morpheme Blocks and Make Medical Terms 🔬
+        </h1>
+
+        <!-- items-center로 변경하여 세로 중앙 정렬 -->
+        <div class="flex flex-col lg:flex-row justify-center items-center gap-8">
+
+            <!-- 1. 왼쪽: 접두사 블록 (Draggable) -->
+            <div class="w-full lg:w-1/4 p-4 bg-gray-50 rounded-xl shadow-inner min-h-[300px]">
+                <div id="prefix-container" class="flex flex-col items-center space-y-3 pt-4">
+                    <!-- Prefix blocks will be added here -->
+                </div>
+            </div>
+
+            <!-- 2. 중앙: 조합 공간 (단일 Drop Zone) -->
+            <div class="w-full lg:w-1/2 p-6 bg-white rounded-xl shadow-2xl border-4 border-gray-100 min-h-[300px] flex flex-col justify-center items-center text-center">
+                
+                <!-- 조합된 단어 시각화 영역 (놀이판) -->
+                <div id="play-area-wrapper" class="flex justify-center items-center w-full min-h-[110px] bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                    
+                    <!-- 블록 조합 결과 또는 플레이스홀더가 표시되는 영역 -->
+                    <div id="combination-display" class="flex justify-center items-center w-full h-full">
+                        <!-- JS fills this area. -->
+                    </div>
+                </div>
+
+                <!-- 정의 표시 영역 (Definition & Example) -->
+                <div id="result-display" class="px-4 mt-6 min-h-[5rem] opacity-0 transition-opacity duration-300">
+                    <!-- Definition and example will be rendered here. -->
+                </div>
+            </div>
+
+            <!-- 3. 오른쪽: 단어 블록 (Draggable) -->
+            <div class="w-full lg:w-1/4 p-4 bg-gray-50 rounded-xl shadow-inner min-h-[300px]">
+                <div id="stem-container" class="flex flex-col items-center space-y-3 pt-4">
+                    <!-- Stem blocks will be added here -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE (New Set) ---
+        
+        // 9 New Prefixes (Unique colors)
+        const prefixes = [
+            { id: "oligo", label: "oligo-", meaning: "Few, scanty", class: "bg-orange-600 border-orange-800 text-light-contrast" },
+            { id: "poly", label: "poly-", meaning: "Many, much", class: "bg-violet-600 border-violet-800 text-light-contrast" },
+            { id: "dys", label: "dys-", meaning: "Abnormal, painful", class: "bg-amber-500 border-amber-700 text-dark-contrast" },
+            { id: "a_n", label: "a(n)-", meaning: "Without, lack of", class: "bg-red-500 border-red-700 text-light-contrast" },
+            { id: "in", label: "in-", meaning: "Not, into", class: "bg-gray-500 border-gray-700 text-light-contrast" },
+            { id: "hyper", label: "hyper-", meaning: "Excessive, above", class: "bg-blue-500 border-blue-700 text-light-contrast" },
+            { id: "hypo", label: "hypo-", meaning: "Deficient, below", class: "bg-teal-500 border-teal-700 text-light-contrast" },
+            { id: "para", label: "para-", meaning: "Beside, near, abnormal", class: "bg-fuchsia-500 border-fuchsia-700 text-light-contrast" },
+        ];
+
+        // 9 New Stems (Unique colors)
+        const stems = [
+            { id: "somnia", label: "somnia", meaning: "Sleep", class: "bg-lime-400 border-lime-600 text-dark-contrast" },
+            { id: "uria", label: "uria", meaning: "Urination", class: "bg-cyan-400 border-cyan-600 text-dark-contrast" },
+            { id: "tension", label: "tension", meaning: "Pressure", class: "bg-yellow-400 border-yellow-600 text-dark-contrast" },
+            { id: "tonia", label: "tonia", meaning: "Tone, Tension", class: "bg-pink-400 border-pink-600 text-dark-contrast" },
+            { id: "kinesia", label: "kinesia", meaning: "Movement", class: "bg-indigo-400 border-indigo-600 text-dark-contrast" },
+            { id: "esthesia", label: "esthesia", meaning: "Sensation", class: "bg-red-400 border-red-600 text-dark-contrast" },
+            { id: "trophy", label: "trophy", meaning: "Growth, Nourishment", class: "bg-green-400 border-green-600 text-dark-contrast" },
+            { id: "phagia", label: "phagia", meaning: "Swallowing, Eating", class: "bg-purple-400 border-purple-600 text-dark-contrast" },
+            { id: "pepsia", label: "pepsia", meaning: "Digestion", class: "bg-sky-400 border-sky-600 text-dark-contrast" },
+        ];
+
+        // Combined words and definitions map (Leaving out non-standard or non-existent terms)
+        const combinations = {
+            // SOMNIA
+            "oligo_somnia": { word: "Oligosomnia", def: "A condition of insufficient sleep; chronic sleep deprivation.", example: "Chronic pain can lead to oligosomnia, compounding fatigue." },
+            "poly_somnia": { word: "Polysomnia", def: "A rare condition characterized by excessive or prolonged sleep periods. (Note: Often used non-medically)", example: "The patient's polysomnia required specialized sleep clinic assessment." },
+            "dys_somnia": { word: "Dyssomnia", def: "A broad category of sleep disorders involving difficulty falling asleep or staying asleep, or excessive sleepiness.", example: "Insomnia is the most common type of dyssomnia." },
+            "a_n_somnia": { word: "Ansomnia", def: "The inability to sleep; severe insomnia. (Technically 'Insomnia' is more common)", example: "Due to severe stress, the patient suffered from ansomnia for days." },
+            "para_somnia": { word: "Parasomnia", def: "A category of sleep disorders involving abnormal and unnatural movements, behaviors, or experiences during sleep.", example: "Sleepwalking and sleep terrors are forms of parasomnia." },
+            
+            // URIA
+            "oligo_uria": { word: "Oliguria", def: "The production of abnormally small amounts of urine (typically <400ml/day in adults).", example: "Oliguria is a common sign of acute kidney injury." },
+            "poly_uria": { word: "Polyuria", def: "Excessive or abnormally large production and passage of urine.", example: "Uncontrolled diabetes is a major cause of polyuria." },
+            "dys_uria": { word: "Dysuria", def: "Painful or difficult urination.", example: "Dysuria is a primary symptom of a urinary tract infection (UTI)." },
+            "a_n_uria": { word: "Anuria", def: "Failure of the kidneys to produce urine (typically <100ml/day in adults).", example: "Anuria is a critical condition requiring immediate medical intervention." },
+            
+            // TENSION
+            "hyper_tension": { word: "Hypertension", def: "Abnormally high blood pressure.", example: "Hypertension is often called a 'silent killer' because it has few symptoms." },
+            "hypo_tension": { word: "Hypotension", def: "Abnormally low blood pressure.", example: "A sudden drop in blood pressure can cause symptomatic hypotension." },
+            
+            // TONIA
+            "dys_tonia": { word: "Dystonia", def: "A movement disorder in which a person's muscles contract uncontrollably.", example: "Botox injections can be used to treat focal dystonia." },
+            "a_n_tonia": { word: "Atonia", def: "Lack of normal muscle tone or strength.", example: "Uterine atonia is the failure of the uterus to contract after delivery." },
+            "hyper_tonia": { word: "Hypertonia", def: "Excessive muscle tone or stiffness, which makes movement difficult.", example: "Hypertonia can be a symptom of a neurological disorder." },
+            "hypo_tonia": { word: "Hypotonia", def: "Reduced muscle tone; often described as 'floppy' muscles.", example: "Infant hypotonia may indicate developmental or genetic issues." },
+
+            // KINESIA
+            "oligo_kinesia": { word: "Oligokinesia", def: "A neurological disorder characterized by slowness and poverty of movement.", example: "Oligokinesia is a cardinal symptom of Parkinson's disease." },
+            "dys_kinesia": { word: "Dyskinesia", def: "Involuntary, erratic, writhing movements of the face, arms, legs, or trunk.", example: "Tardive dyskinesia is a side effect of some long-term medications." },
+            "a_n_kinesia": { word: "Akinesia", def: "The loss of ability to move one's muscles voluntarily.", example: "Severe akinesia can render a patient almost immobile." },
+            "hyper_kinesia": { word: "Hyperkinesia", def: "Abnormally increased or excessive muscle movement.", example: "ADHD in children is sometimes characterized by hyperkinesia." },
+            "hypo_kinesia": { word: "Hypokinesia", def: "Abnormally diminished muscle movement.", example: "Hypokinesia is characterized by reduced speed and amplitude of movement." },
+            
+            // ESTHESIA
+            "dys_esthesia": { word: "Dysesthesia", def: "An abnormal, unpleasant sensation in response to normal stimuli (e.g., pain from a light touch).", example: "Patients with neuropathy often report painful dysesthesia." },
+            "a_n_esthesia": { word: "Anesthesia", def: "Total or partial loss of sensation, especially tactile sensibility, induced by drugs.", example: "General anesthesia renders the patient unconscious during surgery." },
+            "hyper_esthesia": { word: "Hyperesthesia", def: "Abnormal increase in sensitivity to sensory stimuli.", example: "Sunburn can cause temporary hyperesthesia of the skin." },
+            "hypo_esthesia": { word: "Hypoesthesia", def: "A decreased sensitivity to stimulation, or a partial loss of sensation.", example: "Hypoesthesia of the foot is a common warning sign of diabetes." },
+            "para_esthesia": { word: "Paresthesia", def: "An abnormal sensation, typically 'pins and needles,' caused by pressure on or damage to peripheral nerves.", example: "Sitting in one position too long can cause transient paresthesia." },
+
+            // TROPHY
+            "dys_trophy": { word: "Dystrophy", def: "Any disorder arising from defective or faulty nutrition (e.g., muscular dystrophy).", example: "Muscular dystrophy leads to progressive weakening and wasting of muscles." },
+            "a_n_trophy": { word: "Atrophy", def: "The wasting away or decrease in size of a body organ or tissue.", example: "Muscle atrophy occurs after prolonged periods of immobility." },
+            "hyper_trophy": { word: "Hypertrophy", def: "The enlargement of an organ or tissue caused by an increase in the size of its cells.", example: "Weightlifting results in muscle hypertrophy." },
+            "hypo_trophy": { word: "Hypotrophy", def: "A state of inadequate nutrition or development; underdevelopment of a body part.", example: "Infants with severe malnutrition can exhibit signs of hypotrophy." },
+
+            // PHAGIA
+            "poly_phagia": { word: "Polyphagia", def: "Excessive hunger or increased appetite.", example: "Polyphagia, along with polydipsia, is a classic symptom of diabetes." },
+            "dys_phagia": { word: "Dysphagia", def: "Difficulty or discomfort in swallowing.", example: "Severe dysphagia may require a feeding tube." },
+            "a_n_phagia": { word: "Aphagia", def: "The inability or refusal to swallow.", example: "Aphagia can be caused by neurological damage or severe throat pain." },
+            
+            // PEPSIA
+            "dys_pepsia": { word: "Dyspepsia", def: "Pain or discomfort in the upper abdomen; indigestion.", example: "Antacids can help relieve mild dyspepsia." },
+            "a_n_pepsia": { word: "Apepsia", def: "Cessation or failure of the digestive process (rarely used, usually replaced by severe dyspepsia).", example: "Apepsia implies a total lack of digestive ability." },
+        };
+        
+        // --- STATE MANAGEMENT ---
+        let currentPrefix = null;
+        let currentStem = null;
+
+        // --- DOM ELEMENT REFERENCES ---
+        const playAreaWrapperEl = document.getElementById('play-area-wrapper');
+        const combinationDisplayEl = document.getElementById('combination-display');
+        const resultDisplayEl = document.getElementById('result-display'); // Renamed from definitionEl
+
+        // --- DOM GENERATION AND EVENT REGISTRATION ---
+        function createBlock(item, isPrefix) {
+            const block = document.createElement('div');
+            block.id = item.id;
+            block.className = `word-block ${item.class} p-4`;
+            
+            // Block content: English labels and meanings
+            block.innerHTML = `
+                <div class="flex flex-col items-center justify-center">
+                    <span class="text-2xl font-black">${item.label}</span>
+                    <span class="text-xs mt-1 font-semibold opacity-90">${item.meaning}</span>
+                </div>
+            `;
+
+            // Make all blocks Draggable
+            block.setAttribute('draggable', 'true');
+            block.addEventListener('dragstart', (e) => {
+                const type = isPrefix ? 'prefix' : 'stem';
+                // Serialize item data for transfer
+                e.dataTransfer.setData('text/plain', JSON.stringify({ ...item, type }));
+                e.dataTransfer.effectAllowed = 'copy';
+                block.classList.add('opacity-50');
+            });
+            block.addEventListener('dragend', (e) => {
+                block.classList.remove('opacity-50');
+            });
+
+            return block;
+        }
+
+        // Render original block lists
+        function renderBlockLists() {
+            const prefixContainer = document.getElementById('prefix-container');
+            const stemContainer = document.getElementById('stem-container');
+            
+            prefixContainer.innerHTML = ''; 
+            stemContainer.innerHTML = ''; 
+
+            prefixes.forEach(p => prefixContainer.appendChild(createBlock(p, true)));
+            stems.forEach(s => stemContainer.appendChild(createBlock(s, false)));
+        }
+
+        // --- PLAY AREA LOGIC ---
+        
+        // Helper function to handle a(n)- prefix logic
+        function getCombinedWordLabel(prefixId, stemLabel) {
+            if (prefixId === 'a_n') {
+                const firstLetter = stemLabel.charAt(0);
+                // Check if the stem starts with a vowel for 'an'
+                if (['a', 'e', 'i', 'o', 'u', 'y'].includes(firstLetter)) { // Including 'y' as sometimes a vowel
+                    return 'an' + stemLabel;
+                } else {
+                    return 'a' + stemLabel;
+                }
+            } else {
+                return prefixId + stemLabel;
+            }
+        }
+
+
+        // Attach single drop zone listeners
+        function attachDropListeners() {
+            // DragOver handler
+            playAreaWrapperEl.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                playAreaWrapperEl.classList.add('slot-highlight');
+            });
+            
+            // DragLeave handler
+            playAreaWrapperEl.addEventListener('dragleave', (e) => {
+                playAreaWrapperEl.classList.remove('slot-highlight');
+            });
+
+            // Drop handler (Main Logic)
+            playAreaWrapperEl.addEventListener('drop', (e) => {
+                e.preventDefault();
+                playAreaWrapperEl.classList.remove('slot-highlight');
+                
+                try {
+                    // Receive and parse transferred data
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    // Update state based on type
+                    if (data.type === 'prefix') {
+                        currentPrefix = data;
+                    } else if (data.type === 'stem') {
+                        currentStem = data;
+                    }
+
+                    // Check and render immediately after state change
+                    checkCombination();
+
+                } catch (error) {
+                    console.error("Drop data error:", error);
+                    resultDisplayEl.innerHTML = `<span class="text-red-500 font-bold">Drop Error: Please drag a valid block.</span>`;
+                    resultDisplayEl.classList.add('opacity-100'); 
+                }
+            });
+        }
+
+        // HTML for individual blocks or placeholders
+        function getBlockVisualHTML(itemData, type) {
+            if (!itemData) {
+                // Placeholder HTML: hidden elements to maintain layout
+                return `<div class="flex justify-center items-center h-[90px] w-full mx-1"></div>`;
+            }
+
+            // HTML for the actual block component
+            let borderClass = '';
+            let roundedClass = '';
+            
+            // Apply visual cut/connection based on block type
+            if (type === 'prefix') {
+                borderClass = 'border-r-4 border-gray-900';
+                roundedClass = 'rounded-l-lg';
+            } else { // stem
+                borderClass = '';
+                roundedClass = 'rounded-r-lg';
+            }
+            
+            // For combined word display, use the prefix ID as the display content, removing trailing hyphen
+            const content = itemData.label.replace('-', ''); 
+
+            return `
+                <span class="${itemData.class} p-4 md:p-6 ${roundedClass} ${borderClass} h-[90px] flex items-center justify-center text-2xl font-black shadow-lg">
+                    ${content}
+                </span>
+            `;
+        }
+
+        // Render content based on current combination state
+        function checkCombination() {
+            combinationDisplayEl.innerHTML = '';
+            resultDisplayEl.classList.remove('opacity-100'); // Start definition hiding
+            resultDisplayEl.innerHTML = '';
+            
+            if (currentPrefix && currentStem) {
+                // 1. Full Combination: Render the two connected blocks
+                const prefixHTML = getBlockVisualHTML(currentPrefix, 'prefix');
+                const stemHTML = getBlockVisualHTML(currentStem, 'stem');
+
+                // Place blocks side-by-side to look connected
+                combinationDisplayEl.innerHTML = `
+                    <div class="flex justify-center items-center">
+                        ${prefixHTML}
+                        ${stemHTML}
+                    </div>
+                `;
+                
+                // Find and display the definition and example
+                const key = `${currentPrefix.id}_${currentStem.id}`;
+                const result = combinations[key];
+                
+                if (result) {
+                    // Get the dynamically generated word label (e.g., Anuria or Atrophy)
+                    const combinedWord = getCombinedWordLabel(currentPrefix.id, currentStem.label);
+
+                    // Definition: regular font (no italic)
+                    // Example: italic font
+                    resultDisplayEl.innerHTML = `
+                        <p class="text-2xl font-extrabold text-gray-800">${combinedWord}</p>
+                        <p class="text-lg mt-2 text-gray-700">${result.def}</p>
+                        ${result.example ? `
+                            <p class="text-lg italic mt-3 text-gray-700 font-medium">"${result.example}"</p>
+                            <p class="text-5xl mt-4">🧑‍⚕️</p>
+                        ` : ''}
+                    `;
+                    resultDisplayEl.classList.remove('text-red-500');
+                    setTimeout(() => resultDisplayEl.classList.add('opacity-100'), 50); // Show results
+                } else {
+                    // As requested: just leave the definition area blank for non-standard terms.
+                    resultDisplayEl.innerHTML = '';
+                    resultDisplayEl.classList.remove('opacity-100'); 
+                }
+
+            } else {
+                // 2. Incomplete Combination: Render individual block(s) or empty space
+                
+                const prefixHTML = getBlockVisualHTML(currentPrefix, 'prefix');
+                const stemHTML = getBlockVisualHTML(currentStem, 'stem');
+
+                // Use two halves to show where the blocks belong
+                combinationDisplayEl.innerHTML = `
+                    <div class="flex w-full space-x-2">
+                        <div class="w-1/2 flex justify-center items-center">
+                            ${prefixHTML}
+                        </div>
+                        <div class="w-1/2 flex justify-center items-center">
+                            ${stemHTML}
+                        </div>
+                    </div>
+                `;
+                resultDisplayEl.innerHTML = '';
+                resultDisplayEl.classList.remove('opacity-100');
+            }
+        }
+
+        // Initialization function
+        function initializeStateAndArea() {
+            renderBlockLists(); // Create draggable source blocks
+            attachDropListeners(); // Attach drop listeners to the play area
+            // Initial render (empty slots)
+            checkCombination(); 
+        }
+        
+        // --- INITIALIZE ---
+        window.onload = initializeStateAndArea;
+    </script>
+</body>
+</html>
