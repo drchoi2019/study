@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpheme Block Combiner</title>
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 기본 스타일 및 폰트 설정 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* 흰 바탕 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 블록 공통 스타일: 장난감 블록 */
+        .word-block {
+            cursor: grab;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
+            border-bottom: 6px solid; /* 3D 효과 */
+            font-weight: 800; /* 굵은 글자 */
+            
+            /* 핵심: 높이는 고정, 너비는 유동적 */
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.5rem; /* 좌우 패딩으로 너비 확보 */
+            height: 90px; /* 모든 블록 높이 고정 */
+        }
+
+        .word-block:active { cursor: grabbing; }
+
+        /* 중앙 놀이판 드롭 존 스타일 */
+        #play-area-wrapper {
+            transition: all 0.2s;
+        }
+
+        /* 드래그 올렸을 때 놀이판 하이라이트 */
+        .slot-highlight {
+            background-color: #e0f2fe; /* light-blue-50 */
+            border-color: #3b82f6; /* blue-500 */
+        }
+
+        /* 조합 결과의 폰트 색상 강제 지정 */
+        .text-dark-contrast { color: #374151; }
+        .text-light-contrast { color: white; }
+
+        /* 만화 글씨체 스타일링 (Comic Sans MS 또는 유사한 폰트로 대체, Tailwind로 그림자 효과 추가) */
+        .cartoon-title {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-shadow: 3px 3px 0 #1f2937, 5px 5px 0 #9ca3af; /* 두꺼운 그림자 효과 */
+            line-height: 1.1;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <div id="app-container" class="w-full max-w-7xl p-4 md:p-8 pt-8">
+        <!-- 만화 글씨체 제목: 색상 blue-600으로 변경 및 이모지 현미경(🔬)으로 변경 -->
+        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-blue-600 mb-10 cartoon-title">
+            Combine Morpheme Blocks and Make Medical Terms 🔬
+        </h1>
+
+        <!-- items-center로 변경하여 세로 중앙 정렬 -->
+        <div class="flex flex-col lg:flex-row justify-center items-center gap-8">
+
+            <!-- 1. 왼쪽: 접두사 블록 (Draggable) -->
+            <div class="w-full lg:w-1/4 p-4 bg-gray-50 rounded-xl shadow-inner min-h-[300px]">
+                <div id="prefix-container" class="flex flex-col items-center space-y-3 pt-4">
+                    <!-- Prefix blocks will be added here -->
+                </div>
+            </div>
+
+            <!-- 2. 중앙: 조합 공간 (단일 Drop Zone) -->
+            <div class="w-full lg:w-1/2 p-6 bg-white rounded-xl shadow-2xl border-4 border-gray-100 min-h-[300px] flex flex-col justify-center items-center text-center">
+                
+                <!-- 조합된 단어 시각화 영역 (놀이판) -->
+                <div id="play-area-wrapper" class="flex justify-center items-center w-full min-h-[110px] bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+                    
+                    <!-- 블록 조합 결과 또는 플레이스홀더가 표시되는 영역 -->
+                    <div id="combination-display" class="flex justify-center items-center w-full h-full">
+                        <!-- JS fills this area. -->
+                    </div>
+                </div>
+
+                <!-- 정의 표시 영역 (Definition & Example) -->
+                <div id="result-display" class="px-4 mt-6 min-h-[5rem] opacity-0 transition-opacity duration-300">
+                    <!-- Definition and example will be rendered here. -->
+                </div>
+            </div>
+
+            <!-- 3. 오른쪽: 단어 블록 (Draggable) -->
+            <div class="w-full lg:w-1/4 p-4 bg-gray-50 rounded-xl shadow-inner min-h-[300px]">
+                <div id="stem-container" class="flex flex-col items-center space-y-3 pt-4">
+                    <!-- Stem blocks will be added here -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE (All block colors are unique) ---
+        const prefixes = [
+            { id: "pre", label: "pre-", meaning: "Before, Earlier", class: "bg-red-500 border-red-700 text-light-contrast" },
+            { id: "peri", label: "peri-", meaning: "Around, Near", class: "bg-blue-500 border-blue-700 text-light-contrast" },
+            { id: "post", label: "post-", meaning: "After, Following", class: "bg-green-500 border-green-700 text-light-contrast" },
+        ];
+
+        const stems = [
+            { id: "menopause", label: "menopause", meaning: "Cessation of Menstruation", class: "bg-yellow-400 border-yellow-600 text-dark-contrast" },
+            { id: "natal", label: "natal", meaning: "Birth", class: "bg-purple-500 border-purple-700 text-light-contrast" },
+            { id: "operative", label: "operative", meaning: "Surgical Procedure", class: "bg-pink-500 border-pink-700 text-light-contrast" },
+            { id: "mortem", label: "mortem", meaning: "Death", class: "bg-indigo-500 border-indigo-700 text-light-contrast" },
+            { id: "partum", label: "partum", meaning: "Childbirth, Delivery", class: "bg-teal-400 border-teal-600 text-dark-contrast" },
+            { id: "coital", label: "coital", meaning: "Sexual Intercourse", class: "bg-lime-400 border-lime-600 text-dark-contrast" },
+            { id: "marital", label: "marital", meaning: "Marriage", class: "bg-fuchsia-500 border-fuchsia-700 text-light-contrast" },
+        ];
+
+        // Combined words and definitions map (Updated with Examples)
+        const combinations = {
+            "pre_menopause": { 
+                word: "Premenopause", 
+                def: "The period immediately preceding menopause.",
+                example: "Irregular periods are common during premenopause."
+            },
+            "pre_natal": { 
+                word: "Prenatal", 
+                def: "Relating to the period before birth.",
+                example: "Prenatal care is essential for a healthy pregnancy."
+            },
+            "pre_operative": { 
+                word: "Preoperative", 
+                def: "The phase preceding a surgical operation.",
+                example: "The patient underwent several preoperative tests."
+            },
+            "pre_mortem": { 
+                word: "Premortem", 
+                def: "Occurring or done before death (rarely used outside legal/medical context).",
+                example: "A premortem diagnosis was crucial in determining the treatment."
+            },
+            "pre_partum": { 
+                word: "Prepartum", 
+                def: "Before childbirth or delivery.",
+                example: "Prepartum discomfort often includes back pain."
+            },
+            "pre_coital": { 
+                word: "Precoital", 
+                def: "Occurring or performed before sexual intercourse.",
+                example: "The study analyzed physiological changes during the precoital phase."
+            },
+            "pre_marital": { 
+                word: "Premarital", 
+                def: "Occurring or done before marriage.",
+                example: "They signed a premarital agreement before the wedding."
+            },
+            "peri_menopause": { 
+                word: "Perimenopause", 
+                def: "The transitional period around menopause, often several years long.",
+                example: "Hormone therapy can help manage symptoms during perimenopause."
+            },
+            "peri_natal": { 
+                word: "Perinatal", 
+                def: "Relating to the period immediately before and after birth (typically from the 20th week of gestation to 28 days after birth).",
+                example: "Perinatal mortality rates are a key indicator of health system quality."
+            },
+            "peri_operative": { 
+                word: "Perioperative", 
+                def: "The period spanning the preoperative, intraoperative (during), and postoperative phases.",
+                example: "Perioperative care is managed by a multidisciplinary team."
+            },
+            "peri_mortem": { 
+                word: "Perimortem", 
+                def: "Occurring at the time of death or immediately surrounding it.",
+                example: "Perimortem injuries require careful investigation in forensic science."
+            },
+            "peri_partum": { 
+                word: "Peripartum", 
+                def: "Occurring during the period immediately before or after childbirth.",
+                example: "Peripartum cardiomyopathy is a rare form of heart failure."
+            },
+            "peri_coital": { 
+                word: "Pericoital", 
+                def: "Relating to the time around sexual intercourse (often refers to on-demand contraceptives).",
+                example: "Pericoital contraception is a method used only when intercourse is anticipated."
+            },
+            "peri_marital": { 
+                word: "Peri-marital", 
+                def: "Generally unused; refers theoretically to the time immediately surrounding marriage (like a wedding).",
+                example: "This term is not standard medical/formal terminology."
+            },
+            "post_menopause": { 
+                word: "Postmenopause", 
+                def: "The phase of life beginning after a woman has definitively experienced menopause (12 continuous months without a period).",
+                example: "Bone density loss is a concern for women in postmenopause."
+            },
+            "post_natal": { 
+                word: "Postnatal", 
+                def: "Relating to the period immediately after birth.",
+                example: "Postnatal depression requires immediate treatment."
+            },
+            "post_operative": { 
+                word: "Postoperative", 
+                def: "The phase following a surgical operation.",
+                example: "Postoperative recovery time depends on the type of surgery."
+            },
+            "post_mortem": { 
+                word: "Postmortem", 
+                def: "Happening or performed after death (e.g., an autopsy).",
+                example: "The results of the postmortem examination were inconclusive."
+            },
+            "post_partum": { 
+                word: "Postpartum", 
+                def: "Following childbirth, referring to the mother.",
+                example: "Postpartum hemorrhage is a serious complication."
+            },
+            "post_coital": { 
+                word: "Postcoital", 
+                def: "Occurring or performed after sexual intercourse.",
+                example: "Postcoital testing is sometimes performed for fertility diagnosis."
+            },
+            "post_marital": { 
+                word: "Postmarital", 
+                def: "Relating to the period after a marriage has ended (e.g., divorce).",
+                example: "The postmarital relationship between the ex-spouses was strained."
+            },
+        };
+        
+        // --- STATE MANAGEMENT ---
+        let currentPrefix = null;
+        let currentStem = null;
+
+        // --- DOM ELEMENT REFERENCES ---
+        const playAreaWrapperEl = document.getElementById('play-area-wrapper');
+        const combinationDisplayEl = document.getElementById('combination-display');
+        const resultDisplayEl = document.getElementById('result-display'); // Renamed from definitionEl
+
+        // --- DOM GENERATION AND EVENT REGISTRATION ---
+        function createBlock(item, isPrefix) {
+            const block = document.createElement('div');
+            block.id = item.id;
+            block.className = `word-block ${item.class} p-4`;
+            
+            // Block content: English labels and meanings
+            block.innerHTML = `
+                <div class="flex flex-col items-center justify-center">
+                    <span class="text-2xl font-black">${item.label}</span>
+                    <span class="text-xs mt-1 font-semibold opacity-90">${item.meaning}</span>
+                </div>
+            `;
+
+            // Make all blocks Draggable
+            block.setAttribute('draggable', 'true');
+            block.addEventListener('dragstart', (e) => {
+                const type = isPrefix ? 'prefix' : 'stem';
+                // Serialize item data for transfer
+                e.dataTransfer.setData('text/plain', JSON.stringify({ ...item, type }));
+                e.dataTransfer.effectAllowed = 'copy';
+                block.classList.add('opacity-50');
+            });
+            block.addEventListener('dragend', (e) => {
+                block.classList.remove('opacity-50');
+            });
+
+            return block;
+        }
+
+        // Render original block lists
+        function renderBlockLists() {
+            const prefixContainer = document.getElementById('prefix-container');
+            const stemContainer = document.getElementById('stem-container');
+            
+            prefixContainer.innerHTML = ''; 
+            stemContainer.innerHTML = ''; 
+
+            prefixes.forEach(p => prefixContainer.appendChild(createBlock(p, true)));
+            stems.forEach(s => stemContainer.appendChild(createBlock(s, false)));
+        }
+
+        // --- PLAY AREA LOGIC ---
+
+        // Attach single drop zone listeners
+        function attachDropListeners() {
+            // DragOver handler
+            playAreaWrapperEl.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                playAreaWrapperEl.classList.add('slot-highlight');
+            });
+            
+            // DragLeave handler
+            playAreaWrapperEl.addEventListener('dragleave', (e) => {
+                playAreaWrapperEl.classList.remove('slot-highlight');
+            });
+
+            // Drop handler (Main Logic)
+            playAreaWrapperEl.addEventListener('drop', (e) => {
+                e.preventDefault();
+                playAreaWrapperEl.classList.remove('slot-highlight');
+                
+                try {
+                    // Receive and parse transferred data
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    
+                    // Update state based on type
+                    if (data.type === 'prefix') {
+                        currentPrefix = data;
+                    } else if (data.type === 'stem') {
+                        currentStem = data;
+                    }
+
+                    // Check and render immediately after state change
+                    checkCombination();
+
+                } catch (error) {
+                    console.error("Drop data error:", error);
+                    resultDisplayEl.innerHTML = `<span class="text-red-500 font-bold">Drop Error: Please drag a valid block.</span>`;
+                    resultDisplayEl.classList.add('opacity-100'); 
+                }
+            });
+        }
+
+        // HTML for individual blocks or placeholders
+        function getBlockVisualHTML(itemData, type) {
+            if (!itemData) {
+                // Placeholder HTML: hidden elements to maintain layout
+                return `<div class="flex justify-center items-center h-[90px] w-full mx-1"></div>`;
+            }
+
+            // HTML for the actual block component
+            let borderClass = '';
+            let roundedClass = '';
+            
+            // Apply visual cut/connection based on block type
+            if (type === 'prefix') {
+                borderClass = 'border-r-4 border-gray-900';
+                roundedClass = 'rounded-l-lg';
+            } else { // stem
+                borderClass = '';
+                roundedClass = 'rounded-r-lg';
+            }
+            
+            const content = itemData.label.replace('-', ''); // Remove hyphen from display
+
+            return `
+                <span class="${itemData.class} p-4 md:p-6 ${roundedClass} ${borderClass} h-[90px] flex items-center justify-center text-2xl font-black shadow-lg">
+                    ${content}
+                </span>
+            `;
+        }
+
+        // Render content based on current combination state
+        function checkCombination() {
+            combinationDisplayEl.innerHTML = '';
+            resultDisplayEl.classList.remove('opacity-100'); // Start definition hiding
+            resultDisplayEl.innerHTML = '';
+            
+            if (currentPrefix && currentStem) {
+                // 1. Full Combination: Render the two connected blocks
+                const prefixHTML = getBlockVisualHTML(currentPrefix, 'prefix');
+                const stemHTML = getBlockVisualHTML(currentStem, 'stem');
+
+                // Place blocks side-by-side to look connected
+                combinationDisplayEl.innerHTML = `
+                    <div class="flex justify-center items-center">
+                        ${prefixHTML}
+                        ${stemHTML}
+                    </div>
+                `;
+                
+                // Find and display the definition and example
+                const key = `${currentPrefix.id}_${currentStem.id}`;
+                const result = combinations[key];
+                
+                if (result) {
+                    // Definition: regular font (no italic)
+                    // Example: italic font
+                    resultDisplayEl.innerHTML = `
+                        <p class="text-2xl font-extrabold text-gray-800">${result.word}</p>
+                        <p class="text-lg mt-2 text-gray-700">${result.def}</p>
+                        ${result.example ? `
+                            <p class="text-lg italic mt-3 text-gray-700 font-medium">"${result.example}"</p>
+                            <p class="text-5xl mt-4">🧑‍⚕️</p>
+                        ` : ''}
+                    `;
+                    resultDisplayEl.classList.remove('text-red-500');
+                } else {
+                    resultDisplayEl.innerHTML = `
+                        <p class="text-xl font-bold text-red-500">Combination is possible but is generally not standard or formal terminology.</p>
+                    `;
+                }
+
+                // Show results
+                setTimeout(() => resultDisplayEl.classList.add('opacity-100'), 50);
+
+            } else {
+                // 2. Incomplete Combination: Render individual block(s) or empty space
+                
+                const prefixHTML = getBlockVisualHTML(currentPrefix, 'prefix');
+                const stemHTML = getBlockVisualHTML(currentStem, 'stem');
+
+                // Use two halves to show where the blocks belong
+                combinationDisplayEl.innerHTML = `
+                    <div class="flex w-full space-x-2">
+                        <div class="w-1/2 flex justify-center items-center">
+                            ${prefixHTML}
+                        </div>
+                        <div class="w-1/2 flex justify-center items-center">
+                            ${stemHTML}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialization function
+        function initializeStateAndArea() {
+            renderBlockLists(); // Create draggable source blocks
+            attachDropListeners(); // Attach drop listeners to the play area
+            // Initial render (empty slots)
+            checkCombination(); 
+        }
+        
+        // --- INITIALIZE ---
+        window.onload = initializeStateAndArea;
+    </script>
+</body>
+</html>
