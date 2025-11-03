@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>심플 메모장 (최소 디자인)</title>
+    <title>메모</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -29,7 +29,7 @@
         }
         
         #content {
-            font-size: 1.5rem; /* 폰트 크기 1.5rem 유지 */
+            font-size: 1.28rem; /* 폰트 크기를 1.28rem으로 변경 */
             line-height: 1.6;
             caret-color: #333; /* 커서 색상 */
             color: #1f2937; /* text-gray-800에 해당하는 색상 */
@@ -69,7 +69,7 @@
 
     <script>
         const content = document.getElementById('content');
-        // CSS에서 1.5rem으로 설정된 초기 폰트 크기를 가져옵니다.
+        // CSS에서 1.28rem으로 설정된 초기 폰트 크기를 가져옵니다.
         let currentFontSizePx = parseFloat(getComputedStyle(content).fontSize); 
 
         function adjustFontSize(delta) {
