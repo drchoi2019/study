@@ -57,6 +57,33 @@
             text-shadow: 3px 3px 0 #1f2937, 5px 5px 0 #9ca3af; /* 두꺼운 그림자 효과 */
             line-height: 1.1;
         }
+
+        .tts-icon {
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6; /* Blue for clarity */
+            transition: color 0.15s ease-in-out;
+        }
+
+        .tts-icon:hover {
+            color: #1d4ed8;
+        }
+
+        /* Loading animation for the icon */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -196,6 +223,148 @@
         const playAreaWrapperEl = document.getElementById('play-area-wrapper');
         const combinationDisplayEl = document.getElementById('combination-display');
         const resultDisplayEl = document.getElementById('result-display'); // Renamed from definitionEl
+
+        // --- AUDIO/TTS UTILITIES ---
+        const apiKey = ""; // API key is provided by the runtime environment
+        
+        // Converts base64 string to ArrayBuffer
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // Converts PCM (raw audio data) to a WAV Blob
+        function pcmToWav(pcm16, sampleRate) {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            
+            const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+            const view = new DataView(buffer);
+
+            // RIFF chunk
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.length * 2, true);
+            writeString(view, 8, 'WAVE');
+
+            // FMT chunk
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // PCM format
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+
+            // DATA chunk
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcm16.length * 2, true);
+
+            // Write PCM data
+            let offset = 44;
+            for (let i = 0; i < pcm16.length; i++, offset += 2) {
+                view.setInt16(offset, pcm16[i], true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        // Helper for writing strings to DataView
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+        
+        // Main TTS function
+        async function speakWord(word) {
+            const icon = document.getElementById('tts-icon');
+            if (!icon) return;
+
+            icon.innerHTML = `<svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+            icon.disabled = true;
+
+            const maxRetries = 3;
+            let attempt = 0;
+            
+            while (attempt < maxRetries) {
+                try {
+                    const payload = {
+                        contents: [{
+                            parts: [{ text: word }]
+                        }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: {
+                                    prebuiltVoiceConfig: { voiceName: "Kore" }
+                                }
+                            }
+                        },
+                        model: "gemini-2.5-flash-preview-tts"
+                    };
+
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType;
+
+                    if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                        const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                        const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
+                        
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmData);
+                        const wavBlob = pcmToWav(pcm16, sampleRate);
+                        const audioUrl = URL.createObjectURL(wavBlob);
+                        
+                        const audio = new Audio(audioUrl);
+                        audio.play();
+
+                        // Simple Speaker Icon (lucide-react-style SVG)
+                        icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a4.99 4.99 0 0 1 0 7.07"></path></svg>`;
+                        icon.disabled = false;
+                        return;
+                    } else {
+                        throw new Error("Invalid audio data received.");
+                    }
+
+                } catch (error) {
+                    console.error("TTS Attempt failed:", error);
+                    attempt++;
+                    if (attempt < maxRetries) {
+                        // Exponential backoff
+                        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt - 1)));
+                    }
+                }
+            }
+
+            // Fallback after retries
+            icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-500"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`; // X icon
+            setTimeout(() => {
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a4.99 4.99 0 0 1 0 7.07"></path></svg>`; // Speaker icon
+                icon.disabled = false;
+            }, 2000);
+        }
 
         // --- DOM GENERATION AND EVENT REGISTRATION ---
         function createBlock(item, isPrefix) {
@@ -354,10 +523,18 @@
                     // Get the dynamically generated word label (e.g., Anuria or Atrophy)
                     const combinedWord = getCombinedWordLabel(currentPrefix.id, currentStem.label);
 
+                    // Simple Speaker Icon (lucide-react-style SVG)
+                    const speakerIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a4.99 4.99 0 0 1 0 7.07"></path></svg>`;
+
                     // Definition: regular font (no italic)
                     // Example: italic font
                     resultDisplayEl.innerHTML = `
-                        <p class="text-2xl font-extrabold text-gray-800">${combinedWord}</p>
+                        <p class="text-2xl font-extrabold text-gray-800 flex items-center justify-center">
+                            ${combinedWord}
+                            <button id="tts-icon" class="tts-icon ml-3" onclick="speakWord('${combinedWord}')">
+                                ${speakerIcon}
+                            </button>
+                        </p>
                         <p class="text-lg mt-2 text-gray-700">${result.def}</p>
                         ${result.example ? `
                             <p class="text-lg italic mt-3 text-gray-700 font-medium">"${result.example}"</p>
