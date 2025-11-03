@@ -69,13 +69,39 @@
 
     <script>
         const content = document.getElementById('content');
+        const STORAGE_KEY = 'memo_app_content'; // localStorage 키 정의
         // CSS에서 1.28rem으로 설정된 초기 폰트 크기를 가져옵니다.
         let currentFontSizePx = parseFloat(getComputedStyle(content).fontSize); 
+
+        // 1. 저장된 내용을 불러오는 함수
+        function loadContent() {
+            const savedContent = localStorage.getItem(STORAGE_KEY);
+            if (savedContent) {
+                content.innerHTML = savedContent;
+            }
+        }
+
+        // 2. 내용을 저장하는 함수
+        function saveContent() {
+            localStorage.setItem(STORAGE_KEY, content.innerHTML);
+        }
 
         function adjustFontSize(delta) {
             currentFontSizePx = Math.max(12, Math.min(32, currentFontSizePx + delta));
             content.style.fontSize = `${currentFontSizePx}px`;
+            // 폰트 크기 변경 시에도 저장 (다음에 로드할 때 적용되도록)
+            localStorage.setItem('memo_app_font_size', currentFontSizePx); 
         }
+
+        // 3. 초기 로드 시 저장된 폰트 크기 적용
+        function loadFontSize() {
+             const savedSize = localStorage.getItem('memo_app_font_size');
+             if (savedSize) {
+                 currentFontSizePx = parseFloat(savedSize);
+                 content.style.fontSize = `${currentFontSizePx}px`;
+             }
+        }
+
 
         document.addEventListener('keydown', (e) => {
             const isModifier = e.metaKey || e.ctrlKey;
@@ -111,10 +137,18 @@
                 selection.removeAllRanges();
                 selection.addRange(range);
             }
+            
+            // 키 입력 시 바로 저장
+            setTimeout(saveContent, 50); 
         });
+
+        // 4. 입력 내용 변경 시 저장 이벤트 리스너 추가
+        content.addEventListener('input', saveContent);
+
 
         content.addEventListener('paste', (event) => {
             const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            let imagePasted = false;
             for (let i = 0; i < items.length; i++) {
                 if (items[i].type.indexOf('image') !== -1) {
                     const file = items[i].getAsFile();
@@ -139,16 +173,24 @@
                                 content.appendChild(img);
                                 content.appendChild(document.createElement('br'));
                             }
+                            saveContent(); // 이미지 붙여넣기 후 내용 저장
                         };
                         reader.readAsDataURL(file);
                         event.preventDefault();
-                        return;
+                        imagePasted = true;
+                        break;
                     }
                 }
+            }
+            if (!imagePasted) {
+                // 이미지가 아닌 일반 텍스트 붙여넣기의 경우, 붙여넣기 완료 후 저장 호출
+                setTimeout(saveContent, 0);
             }
         });
 
         window.onload = () => {
+            loadFontSize(); // 저장된 폰트 크기 로드
+            loadContent();  // 저장된 메모 내용 로드
             content.focus();
         };
     </script>
