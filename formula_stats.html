@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCM Prescription Ranking Statistics</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        /* 가이드라인 필수 CSS: 언어 전환 버튼 */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* 가이드라인 필수 CSS: 다국어 컨테이너 숨김 */
+        .lang-container {
+            display: none;
+        }
+
+        /* 원본 페이지 스타일 */
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+            #page-header, #page-footer { display: none; }
+        }
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f9fafb;
+        }
+        .citation {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;" class="no-print">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <!-- [수정됨] max-w-7xl (1280px) -> style="max-width: 850px;" (850px)로 변경 -->
+    <main class="mx-auto bg-white shadow-lg rounded-lg p-8" style="max-width: 850px;">
+
+        <div class="lang-container" lang="ko">
+            
+            <section class="text-center mb-8 border-b pb-6">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-pills text-green-600 mr-3"></i>
+                    중의학 처방 사용 순위 통계자료
+                </h1>
+                <p class="text-xl text-gray-600">일본, 대만, 한국의 중의학 처방 빈도 순위 연구별 통계표</p>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-bar text-blue-600 mr-2"></i>
+                    개요
+                </h2>
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <p class="text-gray-700 leading-relaxed">
+                        본 보고서는 일본, 대만, 한국의 중의학 처방 사용 빈도에 대한 실증적 통계자료를 제시합니다. 
+                        각국의 국민건강보험 데이터와 의료기관 기록을 바탕으로 한 연구에서 도출된 처방 순위를 
+                        연구별로 직접 인용하여 정리하였습니다.
+                    </p>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-torii-gate text-red-600 mr-2"></i>
+                    일본 (Japan) - Kampo 의학 처방 순위
+                </h2>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        1. 일본 Kampo 처방 상위 20개 (2017-2018)
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>순위</th>
+                                    <th>Kampo 처방명</th>
+                                    <th>환자 수</th>
+                                    <th>여성 비율 (%)</th>
+                                    <th>평균 연령</th>
+                                    <th>주요 질환 (J00-J99, %)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Kakkonto (gegen tang)</td><td>92,699</td><td>53</td><td>39</td><td>51</td></tr>
+                                <tr><td>2</td><td>Shoseiryuto (xiao qing long tang)</td><td>71,333</td><td>55</td><td>37</td><td>57</td></tr>
+                                <tr><td>3</td><td>Maoto (ma huang tang)</td><td>66,789</td><td>41</td><td>31</td><td>60</td></tr>
+                                <tr><td>4</td><td>Bakumondoto (mai men dong tang)</td><td>61,571</td><td>57</td><td>40</td><td>61</td></tr>
+                                <tr><td>5</td><td>Goreisan (wu ling san)</td><td>41,277</td><td>54</td><td>31</td><td>46</td></tr>
+                                <tr><td>6</td><td>Maobushisaishinto (ma huang fu zi xi xin tang)</td><td>33,628</td><td>50</td><td>37</td><td>55</td></tr>
+                                <tr><td>7</td><td>Kikyoto (jie geng tang)</td><td>28,691</td><td>53</td><td>37</td><td>60</td></tr>
+                                <tr><td>8</td><td>Shakuyakukanzoto (shao yao gan cao tang)</td><td>25,714</td><td>51</td><td>49</td><td>30</td></tr>
+                                <tr><td>9</td><td>Kakkontokasenkyushin'i (gegen jia chuan xiong xin yi)</td><td>24,975</td><td>51</td><td>33</td><td>64</td></tr>
+                                <tr><td>10</td><td>Hochuekkito (bu zhong yi qi tang)</td><td>19,856</td><td>51</td><td>41</td><td>43</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        출처: Yamana H, et al. Outpatient prescriptions of Kampo formulations in Japan. Internal Medicine. 2020;59(22):5012-20.
+                        <a href="https://www.jstage.jst.go.jp/article/internalmedicine/59/22/59_5012-20/_pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        2. 의료기록 기반 자주 사용되는 Kampo 처방 상위 10개
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>순위</th>
+                                    <th>Kampo 처방명</th>
+                                    <th>환자 수</th>
+                                    <th>평균 연령 ± SD</th>
+                                    <th>남성:여성</th>
+                                    <th>평균 BMI ± SD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Hachimijiogan (ba wei di huang wan)</td><td>54</td><td>71.9 ± 9.6</td><td>19:35</td><td>22.9 ± 3.1</td></tr>
+                                <tr><td>2</td><td>Kamishoyosan (jia wei xiao yao san)</td><td>46</td><td>53.5 ± 13.3</td><td>0:46</td><td>22.2 ± 2.4</td></tr>
+                                <tr><td>3</td><td>Keishikaryukotsuboreito (gui zhi jia long gu mu li tang)</td><td>33</td><td>56.3 ± 14.1</td><td>2:31</td><td>18.6 ± 2.2</td></tr>
+                                <tr><td>4</td><td>Keishibukuryogan (gui zhi fu ling wan)</td><td>29</td><td>49.0 ± 15.1</td><td>0:29</td><td>23.2 ± 3.4</td></tr>
+                                <tr><td>5</td><td>Shimbuto (zhen wu tang)</td><td>17</td><td>62.4 ± 18.4</td><td>2:15</td><td>20.2 ± 4.0</td></tr>
+                                <tr><td>6</td><td>Bukuryoingohangekobokuto (fu ling yin jia ban xia hou po tang)</td><td>17</td><td>55.6 ± 14.3</td><td>1:16</td><td>20.7 ± 3.6</td></tr>
+                                <tr><td>7</td><td>Yokukansan (yi guan jian)</td><td>17</td><td>51.9 ± 16.0</td><td>2:15</td><td>21.3 ± 2.6</td></tr>
+                                <tr><td>8</td><td>Tokishakuyakusan (dang gui shao yao san)</td><td>15</td><td>49.1 ± 16.4</td><td>0:15</td><td>20.2 ± 1.5</td></tr>
+                                <tr><td>9</td><td>Hochuekkito (bu zhong yi qi tang)</td><td>12</td><td>60.6 ± 16.1</td><td>2:10</td><td>22.0 ± 2.7</td></tr>
+                                <tr><td>10</td><td>Tokishigyakukagoshuyushokyoto (dang gui si ni jia wu zhu yu sheng jiang tang)</td><td>11</td><td>58.1 ± 13.7</td><td>0:11</td><td>22.6 ± 3.0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        출처: Yoshino T, et al. Predicting Japanese Kampo formulas by analyzing database of medical records. BMC Medical Informatics and Decision Making. 2016;16:361.
+                        <a href="https://link.springer.com/content/pdf/10.1186/s12911-016-0361-9.pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-mountain text-green-600 mr-2"></i>
+                    대만 (Taiwan) - 중의학 처방 순위
+                </h2>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        1. 간암 환자 대상 상위 10개 한약 처방 (2002-2009)
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>순위</th>
+                                    <th>한약 처방명</th>
+                                    <th>표준화 발생률 (IR)</th>
+                                    <th>표준화 발생률 비 (IRR)</th>
+                                    <th>통계적 유의성</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Jia-Wei-Xia-Yao-San</td><td>13.52</td><td>1.87</td><td>***</td></tr>
+                                <tr><td>2</td><td>Xiao-Chai-Hu-Tang</td><td>10.18</td><td>1.86</td><td>***</td></tr>
+                                <tr><td>3</td><td>Xiang-Sha-Liu-Jun-Zi-Tang</td><td>7.89</td><td>1.96</td><td>***</td></tr>
+                                <tr><td>4</td><td>Long-Dan-Xie-Gan-Tang</td><td>7.19</td><td>1.56</td><td>**</td></tr>
+                                <tr><td>5</td><td>Shu-Jing-Hwo-Shiee-Tang</td><td>6.82</td><td>1.56</td><td>**</td></tr>
+                                <tr><td>6</td><td>Ping-Wei-San</td><td>6.79</td><td>1.97</td><td>***</td></tr>
+                                <tr><td>7</td><td>Gan-Lu-Yin</td><td>6.01</td><td>1.79</td><td>***</td></tr>
+                                <tr><td>8</td><td>Sho-Yao-Gan-Cao-Tang</td><td>5.73</td><td>1.68</td><td>**</td></tr>
+                                <tr><td>9</td><td>Shiee-Fuu-Jwu-Iu-Tang</td><td>5.41</td><td>1.69</td><td>**</td></tr>
+                                <tr><td>10</td><td>Chuan-Chung-Cha-Tiao-San</td><td>5.03</td><td>1.59</td><td>*</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        출처: Ting CT, et al. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan. BMC Complementary and Alternative Medicine. 2017;17:628.
+                        <a href="https://link.springer.com/content/pdf/10.1186/s12906-017-1628-0.pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        2. 아동 대상 상위 10개 한약 처방 (2005-2013)
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>순위</th>
+                                    <th>한약 처방명</th>
+                                    <th>빈도 (%)</th>
+                                    <th>평균 일일 용량 (g)<br>0-5세</th>
+                                    <th>평균 일일 용량 (g)<br>6-11세</th>
+                                    <th>평균 일일 용량 (g)<br>12-18세</th>
+                                    <th>평균 처방 기간 (일)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Shin-Yi-Ching-Fey-Tang (SYCFT)</td><td>14.8</td><td>3.1</td><td>3.9</td><td>4.7</td><td>6.3</td></tr>
+                                <tr><td>2</td><td>Xiao-Qing-Long-Tang (XQLT)</td><td>10.9</td><td>2.9</td><td>3.3</td><td>4.4</td><td>6.9</td></tr>
+                                <tr><td>3</td><td>Cang-Er-San</td><td>9.9</td><td>2.8</td><td>3.7</td><td>3.8</td><td>6.4</td></tr>
+                                <tr><td>4</td><td>Xin-Yi-San (XYS)</td><td>9.8</td><td>3.0</td><td>3.7</td><td>4.4</td><td>6.5</td></tr>
+                                <tr><td>5</td><td>Ma-Xin-Gan-Shi-Tang (MXGST)</td><td>9.7</td><td>2.8</td><td>3.3</td><td>4.1</td><td>6.6</td></tr>
+                                <tr><td>6</td><td>Huang-Qi-Jian-Zhong-Tang</td><td>7.7</td><td>2.9</td><td>3.8</td><td>4.4</td><td>5.5</td></tr>
+                                <tr><td>7</td><td>Xin-Su-San</td><td>6.7</td><td>2.5</td><td>3.1</td><td>3.7</td><td>7.2</td></tr>
+                                <tr><td>8</td><td>Ge-Gen-Tang</td><td>6.6</td><td>2.5</td><td>3.0</td><td>4.0</td><td>6.5</td></tr>
+                                <tr><td>9</td><td>Zhi-Sou-San</td><td>5.2</td><td>2.8</td><td>3.4</td><td>4.0</td><td>6.3</td></tr>
+                                <tr><td>10</td><td>Jia-Wei-Xiao-Yao-San (JWXYS)</td><td>4.9</td><td>2.5</td><td>3.2</td><td>4.4</td><td>6.6</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        출처: Liang HF, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children. BMC Complementary and Alternative Medicine. 2018;18:261.
+                        <a href="https://link.springer.com/content/pdf/10.1186/s12906-018-2261-2.pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-1xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-book text-gray-600 mr-2"></i>
+                    참고문헌
+                </h2>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <ol class="text-sm text-gray-700 space-y-3" style="list-style: decimal; padding-left: 1.5rem;">
+                        <li>Yamana H, Ono S, Michihata N, et al. Outpatient prescriptions of Kampo formulations in Japan. <em>Internal Medicine</em>. 2020;59(22):5012-5020.</li>
+                        <li>Yoshino T, Katayama K, Horiba Y, et al. Predicting Japanese Kampo formulas by analyzing database of medical records: a preliminary observational study. <em>BMC Medical Informatics and Decision Making</em>. 2016;16:361.</li>
+                        <li>Ting CT, Kuo CJ, Hu HY, Lee YL, Tsai TH. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan: a cross-sectional analysis of the National Health Insurance Research Database. <em>BMC Complementary and Alternative Medicine</em>. 2017;17:628.</li>
+                        <li>Liang HF, Yang YH, Chen PC, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children: a population-based cohort study. <em>BMC Complementary and Alternative Medicine</em>. 2018;18:261.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- [삭제됨] 하단 내부 푸터 섹션
+            <section class="text-center text-gray-500 text-sm border-t pt-4 mt-8">
+                <p>© 2024 중의학 처방 순위 통계자료 종합 보고서</p>
+            </section>
+            -->
+
+        </div> <div class="lang-container" lang="en">
+
+            <section class="text-center mb-8 border-b pb-6">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-pills text-green-600 mr-3"></i>
+                    TCM Prescription Usage Ranking Statistics
+                </h1>
+                <p class="text-xl text-gray-600">Statistical Table of TCM Prescription Frequency Rankings by Study in Japan, Taiwan, and Korea</p>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-bar text-blue-600 mr-2"></i>
+                    Overview
+                </h2>
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <p class="text-gray-700 leading-relaxed">
+                        This report presents empirical statistics on the frequency of TCM prescription use in Japan, Taiwan, and Korea. 
+                        The prescription rankings derived from studies based on national health insurance data and medical records 
+                        from each country have been compiled and directly cited by study.
+                    </p>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-torii-gate text-red-600 mr-2"></i>
+                    Japan - Kampo Medicine Prescription Rankings
+                </h2>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        1. Top 10 Kampo Prescriptions in Japan (2017-2018)
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Kampo Prescription</th>
+                                    <th>Patients</th>
+                                    <th>Female Ratio (%)</th>
+                                    <th>Avg. Age</th>
+                                    <th>Main Disease (J00-J99, %)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Kakkonto (gegen tang)</td><td>92,699</td><td>53</td><td>39</td><td>51</td></tr>
+                                <tr><td>2</td><td>Shoseiryuto (xiao qing long tang)</td><td>71,333</td><td>55</td><td>37</td><td>57</td></tr>
+                                <tr><td>3</td><td>Maoto (ma huang tang)</td><td>66,789</td><td>41</td><td>31</td><td>60</td></tr>
+                                <tr><td>4</td><td>Bakumondoto (mai men dong tang)</td><td>61,571</td><td>57</td><td>40</td><td>61</td></tr>
+                                <tr><td>5</td><td>Goreisan (wu ling san)</td><td>41,277</td><td>54</td><td>31</td><td>46</td></tr>
+                                <tr><td>6</td><td>Maobushisaishinto (ma huang fu zi xi xin tang)</td><td>33,628</td><td>50</td><td>37</td><td>55</td></tr>
+                                <tr><td>7</td><td>Kikyoto (jie geng tang)</td><td>28,691</td><td>53</td><td>37</td><td>60</td></tr>
+                                <tr><td>8</td><td>Shakuyakukanzoto (shao yao gan cao tang)</td><td>25,714</td><td>51</td><td>49</td><td>30</td></tr>
+                                <tr><td>9</td><td>Kakkontokasenkyushin'i (gegen jia chuan xiong xin yi)</td><td>24,975</td><td>51</td><td>33</td><td>64</td></tr>
+                                <tr><td>10</td><td>Hochuekkito (bu zhong yi qi tang)</td><td>19,856</td><td>51</td><td>41</td><td>43</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        Source: Yamana H, et al. Outpatient prescriptions of Kampo formulations in Japan. Internal Medicine. 2020;59(22):5012-20.
+                        <a href="https://www.jstage.jst.go.jp/article/internalmedicine/59/22/59_5012-20/_pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        2. Top 10 Frequently Used Kampo Prescriptions Based on Medical Records
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Kampo Prescription</th>
+                                    <th>Patients</th>
+                                    <th>Avg. Age ± SD</th>
+                                    <th>Male:Female</th>
+                                    <th>Avg. BMI ± SD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Hachimijiogan (ba wei di huang wan)</td><td>54</td><td>71.9 ± 9.6</td><td>19:35</td><td>22.9 ± 3.1</td></tr>
+                                <tr><td>2</td><td>Kamishoyosan (jia wei xiao yao san)</td><td>46</td><td>53.5 ± 13.3</td><td>0:46</td><td>22.2 ± 2.4</td></tr>
+                                <tr><td>3</td><td>Keishikaryukotsuboreito (gui zhi jia long gu mu li tang)</td><td>33</td><td>56.3 ± 14.1</td><td>2:31</td><td>18.6 ± 2.2</td></tr>
+                                <tr><td>4</td><td>Keishibukuryogan (gui zhi fu ling wan)</td><td>29</td><td>49.0 ± 15.1</td><td>0:29</td><td>23.2 ± 3.4</td></tr>
+                                <tr><td>5</td><td>Shimbuto (zhen wu tang)</td><td>17</td><td>62.4 ± 18.4</td><td>2:15</td><td>20.2 ± 4.0</td></tr>
+                                <tr><td>6</td><td>Bukuryoingohangekobokuto (fu ling yin jia ban xia hou po tang)</td><td>17</td><td>55.6 ± 14.3</td><td>1:16</td><td>20.7 ± 3.6</td></tr>
+                                <tr><td>7</td><td>Yokukansan (yi guan jian)</td><td>17</td><td>51.9 ± 16.0</td><td>2:15</td><td>21.3 ± 2.6</td></tr>
+                                <tr><td>8</td><td>Tokishakuyakusan (dang gui shao yao san)</td><td>15</td><td>49.1 ± 16.4</td><td>0:15</td><td>20.2 ± 1.5</td></tr>
+                                <tr><td>9</td><td>Hochuekkito (bu zhong yi qi tang)</td><td>12</td><td>60.6 ± 16.1</td><td>2:10</td><td>22.0 ± 2.7</td></tr>
+                                <tr><td>10</td><td>Tokishigyakukagoshuyushokyoto (dang gui si ni jia wu zhu yu sheng jiang tang)</td><td>11</td><td>58.1 ± 13.7</td><td>0:11</td><td>22.6 ± 3.0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        Source: Yoshino T, et al. Predicting Japanese Kampo formulas by analyzing database of medical records. BMC Medical Informatics and Decision Making. 2016;16:361.
+                        <a href="https://link.springer.com/content/pdf/10.1186/s12911-016-0361-9.pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-mountain text-green-600 mr-2"></i>
+                    Taiwan - TCM Prescription Rankings
+                </h2>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        1. Top 10 Chinese Herbal Medicine (CHM) Prescriptions for Liver Cancer Patients (2002-2009)
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>CHM Prescription</th>
+                                    <th>Standardized Incidence Rate (IR)</th>
+                                    <th>Standardized Incidence Rate Ratio (IRR)</th>
+                                    <th>Statistical Significance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Jia-Wei-Xia-Yao-San</td><td>13.52</td><td>1.87</td><td>***</td></tr>
+                                <tr><td>2</td><td>Xiao-Chai-Hu-Tang</td><td>10.18</td><td>1.86</td><td>***</td></tr>
+                                <tr><td>3</td><td>Xiang-Sha-Liu-Jun-Zi-Tang</td><td>7.89</td><td>1.96</td><td>***</td></tr>
+                                <tr><td>4</td><td>Long-Dan-Xie-Gan-Tang</td><td>7.19</td><td>1.56</td><td>**</td></tr>
+                                <tr><td>5</td><td>Shu-Jing-Hwo-Shiee-Tang</td><td>6.82</td><td>1.56</td><td>**</td></tr>
+                                <tr><td>6</td><td>Ping-Wei-San</td><td>6.79</td><td>1.97</td><td>***</td></tr>
+                                <tr><td>7</td><td>Gan-Lu-Yin</td><td>6.01</td><td>1.79</td><td>***</td></tr>
+                                <tr><td>8</td><td>Sho-Yao-Gan-Cao-Tang</td><td>5.73</td><td>1.68</td><td>**</td></tr>
+                                <tr><td>9</td><td>Shiee-Fuu-Jwu-Iu-Tang</td><td>5.41</td><td>1.69</td><td>**</td></tr>
+                                <tr><td>10</td><td>Chuan-Chung-Cha-Tiao-San</td><td>5.03</td><td>1.59</td><td>*</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        Source: Ting CT, et al. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan. BMC Complementary and Alternative Medicine. 2017;17:628.
+                        <a href="https://link.springer.com/content/pdf/10.1186/s12906-017-1628-0.pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        2. Top 10 Chinese Herbal Medicine (CHM) Prescriptions for Children (2005-2013)
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>CHM Prescription</th>
+                                    <th>Frequency (%)</th>
+                                    <th>Avg. Daily Dose (g)<br>0-5 yrs</th>
+                                    <th>Avg. Daily Dose (g)<br>6-11 yrs</th>
+                                    <th>Avg. Daily Dose (g)<br>12-18 yrs</th>
+                                    <th>Avg. Duration (days)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Shin-Yi-Ching-Fey-Tang (SYCFT)</td><td>14.8</td><td>3.1</td><td>3.9</td><td>4.7</td><td>6.3</td></tr>
+                                <tr><td>2</td><td>Xiao-Qing-Long-Tang (XQLT)</td><td>10.9</td><td>2.9</td><td>3.3</td><td>4.4</td><td>6.9</td></tr>
+                                <tr><td>3</td><td>Cang-Er-San</td><td>9.9</td><td>2.8</td><td>3.7</td><td>3.8</td><td>6.4</td></tr>
+                                <tr><td>4</td><td>Xin-Yi-San (XYS)</td><td>9.8</td><td>3.0</td><td>3.7</td><td>4.4</td><td>6.5</td></tr>
+                                <tr><td>5</td><td>Ma-Xin-Gan-Shi-Tang (MXGST)</td><td>9.7</td><td>2.8</td><td>3.3</td><td>4.1</td><td>6.6</td></tr>
+                                <tr><td>6</td><td>Huang-Qi-Jian-Zhong-Tang</td><td>7.7</td><td>2.9</td><td>3.8</td><td>4.4</td><td>5.5</td></tr>
+                                <tr><td>7</td><td>Xin-Su-San</td><td>6.7</td><td>2.5</td><td>3.1</td><td>3.7</td><td>7.2</td></tr>
+                                <tr><td>8</td><td>Ge-Gen-Tang</td><td>6.6</td><td>2.5</td><td>3.0</td><td>4.0</td><td>6.5</td></tr>
+                                <tr><td>9</td><td>Zhi-Sou-San</td><td>5.2</td><td>2.8</td><td>3.4</td><td>4.0</td><td>6.3</td></tr>
+                                <tr><td>10</td><td>Jia-Wei-Xiao-Yao-San (JWXYS)</td><td>4.9</td><td>2.5</td><td>3.2</td><td>4.4</td><td>6.6</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="citation">
+                        Source: Liang HF, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children. BMC Complementary and Alternative Medicine. 2018;18:261.
+                        <a href="https://link.springer.com/content/pdf/10.1186/s12906-018-2261-2.pdf" class="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-1xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-book text-gray-600 mr-2"></i>
+                    References
+                </h2>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <ol class="text-sm text-gray-700 space-y-3" style="list-style: decimal; padding-left: 1.5rem;">
+                        <li>Yamana H, Ono S, Michihata N, et al. Outpatient prescriptions of Kampo formulations in Japan. <em>Internal Medicine</em>. 2020;59(22):5012-5020.</li>
+                        <li>Yoshino T, Katayama K, Horiba Y, et al. Predicting Japanese Kampo formulas by analyzing database of medical records: a preliminary observational study. <em>BMC Medical Informatics and Decision Making</em>. 2016;16:361.</li>
+                        <li>Ting CT, Kuo CJ, Hu HY, Lee YL, Tsai TH. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan: a cross-sectional analysis of the National Health Insurance Research Database. <em>BMC Complementary and Alternative Medicine</em>. 2017;17:628.</li>
+                        <li>Liang HF, Yang YH, Chen PC, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children: a population-based cohort study. <em>BMC Complementary and Alternative Medicine</em>. 2018;18:261.</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <!-- [삭제됨] 하단 내부 푸터 섹션
+            <section class="text-center text-gray-500 text-sm border-t pt-4 mt-8">
+                <p>© 2024 Comprehensive Report on TCM Prescription Ranking Statistics</p>
+            </section>
+            -->
+
+        </div> </main> <footer id="page-footer" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;" class="no-print">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
+    <script>
+        /**
+         * 지정된 언어(lang)로 페이지 언어를 설정합니다.
+         * @param {string} lang - 'ko' 또는 'en'
+         */
+        function setLanguage(lang) {
+            // 모든 언어 컨테이너 숨기기
+            document.querySelectorAll('.lang-container').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            
+            // 선택된 언어 컨테이너 표시
+            const selectedContainer = document.querySelector(`.lang-container[lang="${lang}"]`);
+            if (selectedContainer) {
+                selectedContainer.style.display = 'block';
+            }
+            
+            // <html> 태그의 lang 속성 설정
+            document.documentElement.lang = lang;
+            
+            // 로컬 스토리지에 언어 설정 저장
+            try {
+                localStorage.setItem('preferredLanguage', lang);
+            } catch (e) {
+                console.warn('localStorage is not available:', e);
+            }
+        }
+
+        /**
+         * 언어 전환 버튼 클릭 시 호출됩니다.
+         * @param {Event} event - 클릭 이벤트
+         */
+        function toggleLanguage(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            const currentLang = document.documentElement.lang || 'ko';
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        /**
+         * 페이지 로드 시 저장된 언어 설정을 불러옵니다.
+         */
+        function loadLanguage() {
+            let preferredLang = 'ko'; // 기본값
+            try {
+                const storedLang = localStorage.getItem('preferredLanguage');
+                if (storedLang) {
+                    preferredLang = storedLang;
+                }
+            } catch (e) {
+                console.warn('localStorage is not available:', e);
+            }
+            setLanguage(preferredLang);
+        }
+
+        // DOM 콘텐츠 로드 완료 시 언어 설정 실행
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+    </script>
+
+</body>
+</html>
