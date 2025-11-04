@@ -6,21 +6,19 @@
     <title>TCM Prescription Ranking Statistics</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <style>
-        /* 가이드라인 필수 CSS: 언어 전환 버튼 */
         .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
             text-decoration: none !important; 
-            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            color: rgb(68, 64, 60) !important;
             font-size: 0.875rem; 
             font-weight: 700; 
         }
 
-        /* 가이드라인 필수 CSS: 다국어 컨테이너 숨김 */
         .lang-container {
             display: none;
         }
 
-        /* 원본 페이지 스타일 */
         @media print {
             body { margin: 0; }
             .no-print { display: none; }
@@ -48,11 +46,14 @@
             color: #6b7280;
             margin-top: 0.5rem;
         }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <!-- 가이드라인 필수 헤더 (수정 금지) -->
     <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;" class="no-print">
         <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
@@ -62,7 +63,6 @@
         </a>
     </header>
 
-    <!-- [수정됨] 메인 콘텐츠 래퍼: 최대 가로 폭이 950px로 설정되었습니다. -->
     <main class="mx-auto bg-white shadow-lg rounded-lg p-8" style="max-width: 950px;">
 
         <!-- 한국어 콘텐츠 -->
@@ -96,9 +96,38 @@
                     일본 (Japan) - Kampo 의학 처방 순위
                 </h2>
 
+                <div class="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        1. 지역 보건 의료에서의 Kampo 의약품 사용 현황 (2012)
+                    </h3>
+                    <div class="flex flex-col gap-8 items-center">
+                        
+                        <div class="w-full p-2 flex flex-col items-center"> 
+                            <h4 class="text-base font-medium text-gray-800 mb-2 text-center">
+                                그림 1. Kampo 처방 빈도
+                            </h4>
+                            <div style="position: relative; width: 75%; max-width: 450px; height: 375px;">
+                                <canvas id="kampoFrequencyChart_ko_v6"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="w-full p-2">
+                            <h4 class="text-base font-medium text-gray-800 mb-2 text-center">
+                                그림 2. 자주 사용되는 제형 상위 10개
+                            </h4>
+                            <div style="position: relative; width: 100%; height: 400px;">
+                                <canvas id="frequentlyUsedChart_ko_v6"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="citation mt-4">
+                        출처: Muramatsu S. Current Status of Kampo Medicine in Community Health Care. General Medicine. 2012;13(1):37-45.
+                    </div>
+                </div>
+
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">
-                        1. 일본 Kampo 처방 상위 20개 (2017-2018)
+                        2. 일본 Kampo 처방 상위 20개 (2017-2018)
                     </h3>
                     <div class="table-container">
                         <table>
@@ -136,7 +165,7 @@
 
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">
-                        2. 의료기록 기반 자주 사용되는 Kampo 처방 상위 10개
+                        3. 의료기록 기반 자주 사용되는 Kampo 처방 상위 10개
                     </h3>
                     <div class="table-container">
                         <table>
@@ -263,15 +292,16 @@
                 </h2>
                 <div class="bg-gray-50 p-6 rounded-lg">
                     <ol class="text-sm text-gray-700 space-y-3" style="list-style: decimal; padding-left: 1.5rem;">
-                        <li>Yamana H, Ono S, Michihata N, et al. Outpatient prescriptions of Kampo formulations in Japan. <em>Internal Medicine</em>. 2020;59(22):5012-5020.</li>
-                        <li>Yoshino T, Katayama K, Horiba Y, et al. Predicting Japanese Kampo formulas by analyzing database of medical records: a preliminary observational study. <em>BMC Medical Informatics and Decision Making</em>. 2016;16:361.</li>
-                        <li>Ting CT, Kuo CJ, Hu HY, Lee YL, Tsai TH. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan: a cross-sectional analysis of the National Health Insurance Research Database. <em>BMC Complementary and Alternative Medicine</em>. 2017;17:628.</li>
-                        <li>Liang HF, Yang YH, Chen PC, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children: a population-based cohort study. <em>BMC Complementary and Alternative Medicine</em>. 2018;18:261.</li>
+                        <li>1. Muramatsu S. Current Status of Kampo Medicine in Community Health Care. <em>General Medicine</em>. 2012;13(1):37-45.</li>
+                        <li>2. Yamana H, Ono S, Michihata N, et al. Outpatient prescriptions of Kampo formulations in Japan. <em>Internal Medicine</em>. 2020;59(22):5012-20.</li>
+                        <li>3. Yoshino T, Katayama K, Horiba Y, et al. Predicting Japanese Kampo formulas by analyzing database of medical records: a preliminary observational study. <em>BMC Medical Informatics and Decision Making</em>. 2016;16:361.</li>
+                        <li>4. Ting CT, Kuo CJ, Hu HY, Lee YL, Tsai TH. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan: a cross-sectional analysis of the National Health Insurance Research Database. <em>BMC Complementary and Alternative Medicine</em>. 2017;17:628.</li>
+                        <li>5. Liang HF, 양YH, Chen PC, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children: a population-based cohort study. <em>BMC Complementary and Alternative Medicine</em>. 2018;18:261.</li>
                     </ol>
                 </div>
             </section>
 
-        </div> <!-- [END] lang-container ko -->
+        </div>
 
         <!-- 영어 콘텐츠 -->
         <div class="lang-container" lang="en">
@@ -304,9 +334,38 @@
                     Japan - Kampo Medicine Prescription Rankings
                 </h2>
 
+                <div class="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                        1. Current Status of Kampo Medicine Use in Community Health Care (2012)
+                    </h3>
+                    <div class="flex flex-col gap-8 items-center">
+                        
+                        <div class="w-full p-2 flex flex-col items-center">
+                            <h4 class="text-base font-medium text-gray-800 mb-2 text-center">
+                                Figure 1. Frequency of Kampo prescribing
+                            </h4>
+                            <div style="position: relative; width: 75%; max-width: 450px; height: 375px;">
+                                <canvas id="kampoFrequencyChart_en_v6"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full p-2">
+                            <h4 class="text-base font-medium text-gray-800 mb-2 text-center">
+                                Figure 2. Frequently used formulae (Top 10)
+                            </h4>
+                            <div style="position: relative; width: 100%; height: 400px;">
+                                <canvas id="frequentlyUsedChart_en_v6"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="citation mt-4">
+                        Source: Muramatsu S. Current Status of Kampo Medicine in Community Health Care. General Medicine. 2012;13(1):37-45.
+                    </div>
+                </div>
+
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">
-                        1. Top 10 Kampo Prescriptions in Japan (2017-2018)
+                        2. Top 10 Kampo Prescriptions in Japan (2017-2018)
                     </h3>
                     <div class="table-container">
                         <table>
@@ -327,6 +386,7 @@
                                 <tr><td>4</td><td>Bakumondoto (mai men dong tang)</td><td>61,571</td><td>57</td><td>40</td><td>61</td></tr>
                                 <tr><td>5</td><td>Goreisan (wu ling san)</td><td>41,277</td><td>54</td><td>31</td><td>46</td></tr>
                                 <tr><td>6</td><td>Maobushisaishinto (ma huang fu zi xi xin tang)</td><td>33,628</td><td>50</td><td>37</td><td>55</td></tr>
+                                <!-- === 사용자님이 주신 코드의 잘린 부분 시작 === -->
                                 <tr><td>7</td><td>Kikyoto (jie geng tang)</td><td>28,691</td><td>53</td><td>37</td><td>60</td></tr>
                                 <tr><td>8</td><td>Shakuyakukanzoto (shao yao gan cao tang)</td><td>25,714</td><td>51</td><td>49</td><td>30</td></tr>
                                 <tr><td>9</td><td>Kakkontokasenkyushin'i (gegen jia chuan xiong xin yi)</td><td>24,975</td><td>51</td><td>33</td><td>64</td></tr>
@@ -344,7 +404,7 @@
 
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-700 mb-4">
-                        2. Top 10 Frequently Used Kampo Prescriptions Based on Medical Records
+                        3. Top 10 Frequently Used Kampo Prescriptions Based on Medical Records
                     </h3>
                     <div class="table-container">
                         <table>
@@ -471,70 +531,60 @@
                 </h2>
                 <div class="bg-gray-50 p-6 rounded-lg">
                     <ol class="text-sm text-gray-700 space-y-3" style="list-style: decimal; padding-left: 1.5rem;">
-                        <li>Yamana H, Ono S, Michihata N, et al. Outpatient prescriptions of Kampo formulations in Japan. <em>Internal Medicine</em>. 2020;59(22):5012-5020.</li>
-                        <li>Yoshino T, Katayama K, Horiba Y, et al. Predicting Japanese Kampo formulas by analyzing database of medical records: a preliminary observational study. <em>BMC Medical Informatics and Decision Making</em>. 2016;16:361.</li>
-                        <li>Ting CT, Kuo CJ, Hu HY, Lee YL, Tsai TH. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan: a cross-sectional analysis of the National Health Insurance Research Database. <em>BMC Complementary and Alternative Medicine</em>. 2017;17:628.</li>
-                        <li>Liang HF, Yang YH, Chen PC, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children: a population-based cohort study. <em>BMC Complementary and Alternative Medicine</em>. 2018;18:261.</li>
+                        <li>1. Muramatsu S. Current Status of Kampo Medicine in Community Health Care. <em>General Medicine</em>. 2012;13(1):37-45.</li>
+                        <li>2. Yamana H, Ono S, Michihata N, et al. Outpatient prescriptions of Kampo formulations in Japan. <em>Internal Medicine</em>. 2020;59(22):5012-20.</li>
+                        <li>3. Yoshino T, Katayama K, Horiba Y, et al. Predicting Japanese Kampo formulas by analyzing database of medical records: a preliminary observational study. <em>BMC Medical Informatics and Decision Making</em>. 2016;16:361.</li>
+                        <li>4. Ting CT, Kuo CJ, Hu HY, Lee YL, Tsai TH. Prescription frequency and patterns of Chinese herbal medicine for liver cancer patients in Taiwan: a cross-sectional analysis of the National Health Insurance Research Database. <em>BMC Complementary and Alternative Medicine</em>. 2017;17:628.</li>
+                        <li>5. Liang HF, Yang YH, Chen PC, et al. Prescription patterns of traditional Chinese medicine amongst Taiwanese children: a population-based cohort study. <em>BMC Complementary and Alternative Medicine</em>. 2018;18:261.</li>
                     </ol>
                 </div>
             </section>
 
-        </div> <!-- [END] lang-container en -->
+        </div>
 
-    </main> <!-- [END] main (max-width: 950px) -->
+    </main>
 
-    <!-- 가이드라인 필수 푸터 (수정 금지) -->
     <footer id="page-footer" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;" class="no-print">
         © 2024 Hyungsuk Choi. All Rights Reserved.
     </footer>
 
-    <!-- 가이드라인 필수 JavaScript (history.replaceState 미사용) -->
     <script>
-        /**
-         * 지정된 언어(lang)로 페이지 언어를 설정합니다.
-         * @param {string} lang - 'ko' 또는 'en'
-         */
+        let currentLang = 'ko';
+        const chartInstances = {};
+
         function setLanguage(lang) {
-            // 모든 언어 컨테이너 숨기기
+            currentLang = lang;
+            
             document.querySelectorAll('.lang-container').forEach(function(el) {
                 el.style.display = 'none';
             });
             
-            // 선택된 언어 컨테이너 표시
             const selectedContainer = document.querySelector(`.lang-container[lang="${lang}"]`);
             if (selectedContainer) {
                 selectedContainer.style.display = 'block';
             }
             
-            // <html> 태그의 lang 속성 설정
             document.documentElement.lang = lang;
             
-            // 로컬 스토리지에 언어 설정 저장
             try {
                 localStorage.setItem('preferredLanguage', lang);
             } catch (e) {
                 console.warn('localStorage is not available:', e);
             }
+
+            renderCharts(lang);
         }
 
-        /**
-         * 언어 전환 버튼 클릭 시 호출됩니다.
-         * @param {Event} event - 클릭 이벤트
-         */
         function toggleLanguage(event) {
             if (event) {
                 event.preventDefault();
             }
-            const currentLang = document.documentElement.lang || 'ko';
             const newLang = currentLang === 'ko' ? 'en' : 'ko';
             setLanguage(newLang);
         }
 
-        /**
-         * 페이지 로드 시 저장된 언어 설정을 불러옵니다.
-         */
         function loadLanguage() {
-            let preferredLang = 'ko'; // 기본값
+            let preferredLang = 'ko';
             try {
                 const storedLang = localStorage.getItem('preferredLanguage');
                 if (storedLang) {
@@ -546,9 +596,158 @@
             setLanguage(preferredLang);
         }
 
-        // DOM 콘텐츠 로드 완료 시 언어 설정 실행
-        document.addEventListener('DOMContentLoaded', loadLanguage);
+        const pieData = {
+            labels_ko: ['매일 (Daily)', '가끔 (Occasionally)', '드물게 (Rarely)', '전혀 안 함 (None)'],
+            labels_en: ['Daily', 'Occasionally', 'Rarely', 'None'],
+            data: [30, 45, 22, 3],
+            backgroundColor: [
+                'rgb(75, 85, 99)',
+                'rgb(107, 114, 128)',
+                'rgb(156, 163, 175)',
+                'rgb(31, 41, 55)'
+            ],
+            borderColor: '#fff',
+            hoverOffset: 4
+        };
+
+        const barData_v6 = {
+            labels: [
+                'Shakuyakukanzoto',
+                'Daikenchuto',
+                'Kakkonto',
+                'Rikkunshito',
+                'Hochuekkito',
+                'Shoseiryuto',
+                'Bakumondoto',
+                'Goshajinkigan',
+                'Yokukansan',
+                'Kamishoyosan',
+                'Tokishakuyakusan'
+            ],
+            data: [230, 215, 205, 110, 100, 60, 55, 50, 45, 38, 35],
+            label_ko: '환자 수 (n=508)',
+            label_en: 'Number of Patients (n=508)',
+            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+            borderColor: 'rgba(29, 78, 216, 1)'
+        };
+
+        function renderCharts(lang) {
+            const pieId = `kampoFrequencyChart_${lang}_v6`;
+            const barId = `frequentlyUsedChart_${lang}_v6`;
+
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded yet. Cannot render charts.');
+                return;
+            }
+
+            // 모든 차트 인스턴스 파괴
+            Object.keys(chartInstances).forEach(key => {
+                if (chartInstances[key]) {
+                    chartInstances[key].destroy();
+                    delete chartInstances[key];
+                }
+            });
+
+            const pieCtx = document.getElementById(pieId);
+            if (pieCtx) {
+                chartInstances[pieId] = new Chart(pieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: lang === 'ko' ? pieData.labels_ko : pieData.labels_en,
+                        datasets: [{
+                            data: pieData.data,
+                            backgroundColor: pieData.backgroundColor,
+                            borderColor: pieData.borderColor,
+                            hoverOffset: pieData.hoverOffset
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                align: 'center',
+                                labels: {
+                                    boxWidth: 15
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const barCtx = document.getElementById(barId);
+            if (barCtx) {
+                chartInstances[barId] = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: barData_v6.labels,
+                        datasets: [{
+                            label: lang === 'ko' ? barData_v6.label_ko : barData_v6.label_en,
+                            data: barData_v6.data,
+                            backgroundColor: barData_v6.backgroundColor,
+                            borderColor: barData_v6.borderColor,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: lang === 'ko' ? '환자 수' : 'Number of Patients'
+                                },
+                                max: 250
+                            },
+                            y: {
+                                beginAtZero: true,
+                                reverse: false
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function initApp() {
+            loadLanguage();
+        }
+
+        function checkChartJS() {
+            if (typeof Chart !== 'undefined' && Chart.register) {
+                initApp();
+            } else {
+                setTimeout(checkChartJS, 100);
+            }
+        }
+
+        checkChartJS();
     </script>
 
 </body>
 </html>
+
