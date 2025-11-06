@@ -6,9 +6,9 @@
     <title>한의학의 간(肝) 치료법 SPA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Warm Neutral (bg-stone-100) with Herbal Accents (Rose, Teal, Amber) -->
-    <!-- Application Structure Plan: A single-page SPA. The top section provides a comparison table. The main section uses three icon-based navigation buttons to dynamically display detailed content for each of the three treatments (발산, 소통, 보충). This icon-button navigation is chosen for a more visual and direct user flow, replacing the pie chart. JS manages content visibility based on button clicks. -->
-    <!-- Visualization & Content Choices: 1. Comparison Table (HTML/Tailwind) -> Goal: Organize -> Justification: Direct data presentation of all three herbs. 2. Navigation Buttons (HTML/Tailwind/JS) -> Goal: Organize/Interact -> Justification: Acts as the primary navigation for the details section. Clicking a button reveals the relevant content. 3. Source Text (HTML <details>) -> Goal: Organize -> Justification: Hides complex source text by default for a cleaner UI, accessible on click. NO SVG/Mermaid used. -->
+    <!-- Chosen Palette: Warm Neutral (bg-stone-100) with Herbal Accents (Rose, Teal, Amber, Blue) -->
+    <!-- Application Structure Plan: A single-page SPA. The top section provides a comparison table. The main section uses four icon-based navigation buttons to dynamically display detailed content for each of the four treatments (발산, 소통, 보충, 잠양). JS manages content visibility based on button clicks. -->
+    <!-- Visualization & Content Choices: 1. Comparison Table (HTML/Tailwind) -> Goal: Organize -> Justification: Direct data presentation of all four herbs. 2. Navigation Buttons (HTML/Tailwind/JS) -> Goal: Organize/Interact -> Justification: Acts as the primary navigation for the details section. Clicking a button reveals the relevant content. 3. Source Text (HTML <details>) -> Goal: Organize -> Justification: Hides complex source text by default for a cleaner UI, accessible on click. NO SVG/Mermaid used. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -25,9 +25,11 @@
         .nav-button.active {
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .nav-button[data-herb="shiho"].active { border-color: #e11d48; }
-        .nav-button[data-herb="hyangbuja"].active { border-color: #0d9488; }
-        .nav-button[data-herb="baekjakyak"].active { border-color: #d97706; }
+        /* Color mapping for 4 herbs */
+        .nav-button[data-herb="shiho"].active { border-color: #e11d48; } /* Rose */
+        .nav-button[data-herb="hyangbuja"].active { border-color: #0d9488; } /* Teal */
+        .nav-button[data-herb="baekjakyak"].active { border-color: #d97706; } /* Amber */
+        .nav-button[data-herb="gouteng"].active { border-color: #3b82f6; } /* Blue */
         
         .tab-pane {
             display: none;
@@ -63,6 +65,7 @@
         .herb-shiho { border-color: #fb7185; }
         .herb-hyangbuja { border-color: #2dd4bf; }
         .herb-baekjakyak { border-color: #facc15; }
+        .herb-gouteng { border-color: #93c5fd; } /* Light Blue */
 
         /* --- Mandatory CSS Rules --- */
         .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
@@ -106,7 +109,7 @@
             <header class="mb-12 text-center">
                 <h1 class="text-4xl md:text-5xl font-bold text-teal-900 mb-4">한의학의 간(<span class="hanja">肝</span>) 치료법</h1>
                 <p class="text-lg text-stone-700 max-w-3xl mx-auto">
-                    한의학에서 간(<span class="hanja">肝</span>)은 기(<span class="hanja">氣</span>)의 흐름을 조절하고 혈액을 저장하며 감정을 다스리는 핵심 역할을 합니다. 간 기능에 문제가 생겼을 때, 한의학은 주로 발산(<span class="hanja">發散</span>), 소통(<span class="hanja">疏通</span>), 보충(<span class="hanja">補充</span>)의 세 가지 방식으로 접근합니다.
+                    한의학에서 간(<span class="hanja">肝</span>)은 기(<span class="hanja">氣</span>)의 흐름을 조절하고 혈액을 저장하며 감정을 다스리는 핵심 역할을 합니다. 간 기능에 문제가 생겼을 때, 한의학은 주로 발산(<span class="hanja">發散</span>), 소통(<span class="hanja">疏通</span>), 보충(<span class="hanja">補充</span>), 그리고 잠양(<span class="hanja">潛陽</span>)의 네 가지 방식으로 접근합니다.
                 </p>
             </header>
     
@@ -143,29 +146,41 @@
                                 <td class="px-6 py-4 text-sm text-stone-700">신맛, 씀</td>
                                 <td class="px-6 py-4 text-sm text-stone-700">양혈렴음, 완급지통</td>
                             </tr>
+                            <!-- New row for Gou Teng -->
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 text-sm font-medium text-blue-700">조구등(<span class="hanja">釣鉤藤</span>)</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">약간 차가움</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">달콤함</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">평간잠양, 청열식풍</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
     
             <section class="bg-white rounded-lg shadow-lg p-6 md:p-8">
-                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">세가지 치료법</h2>
+                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">네 가지 치료법</h2>
                 
-                <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+                <div class="flex flex-wrap justify-center gap-4 md:gap-6 mb-12">
                     <!-- Shiho Button -->
-                    <button id="nav-shiho" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="shiho">
+                    <button id="nav-shiho-ko" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="shiho">
                         <span class="text-4xl mb-3">🔥</span>
                         <span class="text-lg font-semibold text-rose-700">발산 (시호)</span>
                     </button>
                     <!-- Hyangbuja Button -->
-                    <button id="nav-hyangbuja" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="hyangbuja">
+                    <button id="nav-hyangbuja-ko" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="hyangbuja">
                         <span class="text-4xl mb-3">💨</span>
                         <span class="text-lg font-semibold text-teal-700">소통 (향부자)</span>
                     </button>
                     <!-- Baekjakyak Button -->
-                    <button id="nav-baekjakyak" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="baekjakyak">
+                    <button id="nav-baekjakyak-ko" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="baekjakyak">
                         <span class="text-4xl mb-3">💧</span>
                         <span class="text-lg font-semibold text-amber-700">보충 (백작약)</span>
+                    </button>
+                    <!-- Gou Teng Button (NEW) -->
+                    <button id="nav-gouteng-ko" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="gouteng">
+                        <span class="text-4xl mb-3">🌊</span>
+                        <span class="text-lg font-semibold text-blue-700">잠양 (조구등)</span>
                     </button>
                 </div>
     
@@ -284,6 +299,41 @@
                             </blockquote>
                         </details>
                     </div>
+
+                    <!-- NEW PANE FOR GOUTENG (잠양) - KOREAN -->
+                    <div id="pane-gouteng" class="tab-pane">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-700">4. 잠양(<span class="hanja">潛陽</span>): 위로 떠오른 간의 양기를 누르다 - 조구등(<span class="hanja">釣鉤藤</span>)</h3>
+                        <div>
+                            <p class="text-stone-700 mb-6 leading-relaxed">간의 음혈(<span class="hanja">陰血</span>)이 부족하여 양기(<span class="hanja">陽氣</span>)를 제어하지 못하면 '<span class="hanja">간양상항(肝陽上亢)</span>' 상태가 되어, 양기가 위로 떠올라 두통, 어지럼증, 안면홍조 등을 일으킵니다. 심해지면 '<span class="hanja">간풍내동(肝風內動)</span>'으로 발전하여 경련, 떨림을 유발할 수 있습니다. 조구등은 이처럼 위로 떠오른 간의 양기를 눌러 진정시키는(잠양) 핵심 약재입니다.</p>
+                            
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">핵심 효능</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>평간잠양(平肝潛陽): 위로 떠오른 간의 양기(<span class="hanja">陽氣</span>)를 눌러 진정시킵니다.</li>
+                                        <li>평간식풍(平肝息風): 간의 기운을 평온하게 하고 내풍(<span class="hanja">內風</span>)을 잠재웁니다.</li>
+                                        <li>청열진경(淸熱鎭驚): 열을 식히고 경련이나 놀라는 증상을 진정시킵니다.</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">주요 증상</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>두통, 어지럼증 (고혈압성 증상)</li>
+                                        <li>경련, 수족떨림, 경기 (특히 어린이)</li>
+                                        <li>불면증, 심신 불안</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 border-t border-stone-200 pt-6">
+                                <h4 class="font-semibold text-lg text-stone-800 mb-2">임상 응용 및 현대 연구</h4>
+                                <ul class="list-disc list-inside text-stone-700 space-y-2">
+                                    <li>사용법: "일반적으로 6-15g 사용. 오래 달이면 효능이 감소하므로 후하(<span class="hanja">後下</span>)하여 15-20분 정도만 달이는 것이 중요합니다."</li>
+                                    <li>현대 연구: "혈압 강하, 진정, 항경련, 혈관 확장 작용이 보고되었습니다."</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
     
                 </div>
             </section>
@@ -300,7 +350,7 @@
             <header class="mb-12 text-center">
                 <h1 class="text-4xl md:text-5xl font-bold text-teal-900 mb-4">TCM Liver Treatment Methods</h1>
                 <p class="text-lg text-stone-700 max-w-3xl mx-auto">
-                    In Traditional Chinese Medicine (TCM), the Liver plays a crucial role in regulating the flow of Qi, storing Blood, and managing emotions. When Liver function is compromised, TCM primarily approaches treatment in three ways: Dispersing, Soothing, and Supplementing.
+                    In Traditional Chinese Medicine (TCM), the Liver plays a crucial role in regulating the flow of Qi, storing Blood, and managing emotions. When Liver function is compromised, TCM primarily approaches treatment in four ways: Dispersing, Soothing, Supplementing, and Subduing Ascendant Yang (Qian Yang).
                 </p>
             </header>
     
@@ -337,29 +387,41 @@
                                 <td class="px-6 py-4 text-sm text-stone-700">Sour, Bitter</td>
                                 <td class="px-6 py-4 text-sm text-stone-700">Nourishes Blood & astringes Yin, relaxes tension & stops pain</td>
                             </tr>
+                            <!-- New row for Gou Teng -->
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 text-sm font-medium text-blue-700">Gou Teng</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Slightly Cool</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Salty</td>
+                                <td class="px-6 py-4 text-sm text-stone-700">Subdues Yang, clears Heat & extinguishes Wind</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
     
             <section class="bg-white rounded-lg shadow-lg p-6 md:p-8">
-                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">The Three Treatment Methods</h2>
+                <h2 class="text-3xl font-semibold mb-6 text-center text-teal-800">The Four Treatment Methods</h2>
                 
-                <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+                <div class="flex flex-wrap justify-center gap-4 md:gap-6 mb-12">
                     <!-- Shiho Button (Pinyin Updated) -->
-                    <button id="nav-shiho-en" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="shiho">
+                    <button id="nav-shiho-en" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="shiho">
                         <span class="text-4xl mb-3">🔥</span>
                         <span class="text-lg font-semibold text-rose-700">Dispersing (Chai Hu)</span>
                     </button>
                     <!-- Hyangbuja Button (Pinyin Updated) -->
-                    <button id="nav-hyangbuja-en" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="hyangbuja">
+                    <button id="nav-hyangbuja-en" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="hyangbuja">
                         <span class="text-4xl mb-3">💨</span>
                         <span class="text-lg font-semibold text-teal-700">Soothing (Xiang Fu Zi)</span>
                     </button>
                     <!-- Baekjakyak Button (Pinyin Updated) -->
-                    <button id="nav-baekjakyak-en" class="nav-button flex flex-col items-center p-6 rounded-lg shadow-md w-40 transform hover:scale-105" data-herb="baekjakyak">
+                    <button id="nav-baekjakyak-en" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="baekjakyak">
                         <span class="text-4xl mb-3">💧</span>
                         <span class="text-lg font-semibold text-amber-700">Supplementing (Bai Shao Yao)</span>
+                    </button>
+                    <!-- Gou Teng Button (NEW) -->
+                    <button id="nav-gouteng-en" class="nav-button flex flex-col items-center p-4 rounded-lg shadow-md w-36 transform hover:scale-105" data-herb="gouteng">
+                        <span class="text-4xl mb-3">🌊</span>
+                        <span class="text-lg font-semibold text-blue-700">Subduing (Gou Teng)</span>
                     </button>
                 </div>
     
@@ -488,6 +550,42 @@
                             </blockquote>
                         </details>
                     </div>
+
+                    <!-- NEW PANE FOR GOUTENG (잠양) - ENGLISH -->
+                    <div id="pane-gouteng-en" class="tab-pane">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-700">4. Subduing Ascendant Yang (Qian Yang): Calming Liver Yang Rising - Gou Teng</h3>
+                        <div>
+                            <p class="text-stone-700 mb-6 leading-relaxed">When Liver Yin and Blood (Yin Xue) are insufficient to restrain the Yang Qi, the condition of 'Liver Yang Rising (Gan Yang Shang Kang)' develops. This causes Yang Qi to rush upwards, leading to symptoms like headaches, dizziness, and facial flushing. If severe, it can evolve into 'Internal Liver Wind (Gan Feng Nei Dong)', causing convulsions and tremors.</p>
+                            <p class="text-stone-700 mb-6 leading-relaxed">Gou Teng is a key herb used to subdue (Qian Yang) this rapidly ascending Liver Yang, bringing calm and stability.</p>
+                            
+                            <div class="flex flex-wrap gap-4 mb-6">
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Core Efficacy</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Ping Gan Qian Yang: Subdues the ascending Liver Yang Qi.</li>
+                                        <li>Ping Gan Xi Feng: Calms the Liver and extinguishes Internal Wind.</li>
+                                        <li>Qing Re Zhen Jing: Clears Heat and calms convulsions or fright.</li>
+                                    </ul>
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <h4 class="font-semibold text-lg text-stone-800 mb-2">Key Symptoms</h4>
+                                    <ul class="list-disc list-inside text-stone-700 space-y-1">
+                                        <li>Headache, dizziness (often hypertension-related)</li>
+                                        <li>Convulsions, tremors of hands and feet, seizures (especially in children)</li>
+                                        <li>Insomnia, restlessness</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 border-t border-stone-200 pt-6">
+                                <h4 class="font-semibold text-lg text-stone-800 mb-2">Clinical Applications & Modern Research</h4>
+                                <ul class="list-disc list-inside text-stone-700 space-y-2">
+                                    <li>Usage: "The common dosage is 6-15g. Its efficacy is reduced by prolonged decoction, so it is crucial to add it late (Hou Xia) and decoct for only about 15-20 minutes."</li>
+                                    <li>Modern Research: "Actions such as lowering blood pressure, sedation, anti-convulsant, and vasodilatory effects have been reported."</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
     
                 </div>
             </section>
@@ -504,7 +602,7 @@
     <!-- === END FOOTER === -->
 
 
-    <!-- === MANDATORY SCRIPT === -->
+    <!-- === MANDATORY SCRIPT (JAVASCRIPT BUG FIXED) === -->
     <script>
         // --- Mandatory Language Functions ---
         function setLanguage(lang) {
@@ -540,47 +638,37 @@
             }
         }
         
-        // --- User's Original Script (with language loader integrated) ---
+        // --- User's Original Script (with language loader integrated and GOUTENG added) ---
         document.addEventListener('DOMContentLoaded', () => {
             
             // Load the correct language first
             loadLanguage();
 
-            // Original App Logic
+            // Original App Logic (Simplified and Bug Fixed)
             const palette = {
                 shiho: '#e11d48',
                 hyangbuja: '#0d9488',
                 baekjakyak: '#d97706',
-                shiho_hover: '#f43f5e',
-                hyangbuja_hover: '#14b8a6',
-                baekjakyak_hover: '#f59e0b',
+                gouteng: '#3b82f6', // New Color for Gou Teng (Blue)
                 dark: '#44403c'
             };
 
-            const tooltipTitleCallback = (tooltipItems) => {
-                const item = tooltipItems[0];
-                let label = item.chart.data.labels[item.dataIndex];
-                if (Array.isArray(label)) {
-                    return label.join(' ');
-                } else {
-                    return label;
-                }
-            };
 
             // This function handles tab switching for BOTH languages
             const setupTabs = (langPrefix = '') => {
-                const containerId = langPrefix ? `#tab-content-${langPrefix}` : '#tab-content';
-                const tabPanes = document.querySelectorAll(`${containerId} .tab-pane`);
+                // Select elements *within* the specific language container
+                const langContainerSelector = langPrefix ? `.lang-container[lang="${langPrefix}"]` : `.lang-container[lang="ko"]`;
+                const tabContainerSelector = langPrefix ? `#tab-content-${langPrefix}` : '#tab-content';
                 
-                // Select buttons within the correct language container
-                const langDiv = langPrefix ? `.lang-container[lang="${langPrefix}"]` : `.lang-container[lang="ko"]`;
-                const navButtons = document.querySelectorAll(`${langDiv} .nav-button`);
+                const tabPanes = document.querySelectorAll(`${tabContainerSelector} .tab-pane`);
+                const navButtons = document.querySelectorAll(`${langContainerSelector} .nav-button`);
                 
                 if (tabPanes.length === 0 || navButtons.length === 0) {
                     return; // In case elements aren't found
                 }
 
                 const showTab = (herbName) => {
+                    // Hide all panes in this container
                     tabPanes.forEach(pane => {
                         const paneId = langPrefix ? `pane-${herbName}-${langPrefix}` : `pane-${herbName}`;
                         if (pane.id === paneId) {
@@ -590,6 +678,7 @@
                         }
                     });
                     
+                    // Deactivate all buttons *in this container*
                     navButtons.forEach(button => {
                         if (button.getAttribute('data-herb') === herbName) {
                             button.classList.add('active');
@@ -612,8 +701,10 @@
                     }
                 });
 
-                // Show the first tab by default
-                showTab('shiho');
+                // Set initial tab based on current language
+                const initialHerb = 'shiho'; // Always start with Shiho
+                // We only need to show the tab for the container we are setting up
+                showTab(initialHerb);
             };
 
             // Setup tabs for both Korean and English versions
