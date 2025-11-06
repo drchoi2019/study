@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중의학에서 '화해(和解)' 개념</title>
+    <!-- Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Inter 폰트 대신 Noto Sans KR 폰트 적용 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 700;
+        }
+        /* 한자(Hanja)에 Noto Serif KR 폰트 적용 */
+        .hanja {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 700;
+            font-size: 3rem; /* 3rem */
+            line-height: 1;
+            color: #1E3A8A; /* 진한 파란색 */
+        }
+        .hanja-sm {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 400;
+            font-size: 1.25rem; /* 1.25rem */
+            color: #1E3A8A; /* 진한 파란색 */
+        }
+        /* 빨대 비유를 위한 스타일 */
+        .straw {
+            height: 40px;
+            width: 100%;
+            background-color: #E5E7EB; /* light gray */
+            border: 2px solid #9CA3AF; /* medium gray */
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .blockage {
+            width: 20%;
+            height: 100%;
+            background-color: #EF4444; /* red */
+            opacity: 0.7;
+            position: absolute;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+        /* 엉킨 실타래 비유 (간단한 SVG) */
+        .tangle-svg {
+            width: 80px;
+            height: 80px;
+            stroke: #3B82F6; /* blue */
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* --- Mandatory Template CSS --- */
+
+        /* 언어 전환 버튼 링크 스타일 제거 */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* 언어 컨테이너 기본 숨김 */
+        .lang-container {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <!-- === 템플릿 헤더 (Mandatory / max-width: 72rem으로 수정) === -->
+    <header id="page-header" style="width: 100%; max-width: 72rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <!-- === 메인 콘텐츠 컨테이너 (max-w-6xl로 수정) === -->
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- === 한국어 콘텐츠 === -->
+        <div class="lang-container" lang="ko">
+            
+            <!-- 헤더 -->
+            <header class="mb-8 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">중의학에서 '화해(和解)' 개념</h1>
+                <p class="text-lg text-gray-600 mt-2">두 가지 다른 의미 명확히 구분하기</p>
+            </header>
+
+            <!-- 1. 한자 풀이 -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold mb-4 text-center">1. 한자(漢字)로 이해하는 '화해'</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- 解 (해) 카드 -->
+                    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-600">
+                        <div class="flex items-center mb-4">
+                            <span class="hanja">解</span>
+                            <span class="ml-4 text-3xl font-bold">해</span>
+                        </div>
+                        <p class="text-xl font-semibold mb-2">뜻: 풀다, 제거하다, 방출하다</p>
+                        <p class="text-gray-600 mb-4">우리가 이미 아는 개념과 연결해 보세요.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong class="hanja-sm">해표(解表)</strong>: '표(表)'의 사기(邪氣)를 <span class="text-red-600 font-semibold">제거한다</span>.</li>
+                            <li><strong class="hanja-sm">해열(解熱)</strong>: '열(熱)'을 <span class="text-red-600 font-semibold">제거한다</span>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 和 (화) 카드 -->
+                    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
+                        <div class="flex items-center mb-4">
+                            <span class="hanja">和</span>
+                            <span class="ml-4 text-3xl font-bold">화</span>
+                        </div>
+                        <p class="text-xl font-semibold mb-2">뜻: 그리고, ~와, 사이(between)</p>
+                        <p class="text-gray-600 mb-4">두 영역의 중간 지점을 의미합니다.</p>
+                    </div>
+                </div>
+                <p class="text-center mt-4 text-lg text-gray-700">
+                    <span class="font-bold text-red-600">핵심 포인트:</span> 많은 학생들이 '화해'의 '해(解)'를 '해표/해열'의 '해(解)'와
+                    <span class="font-bold">다르게(조화/완화)</span> 해석하는 데서 혼동이 시작됩니다.
+                    <span class="font-semibold">화해는 중간<strong class="text-green-700">(화:和)</strong>에 있는 것을 제거<strong class="text-red-700">(해:解)</strong>한다는 의미도 될수 있고, 두개의 중간<strong class="text-green-700">(화:和)</strong>에서 갈등을 풀어준다<strong class="text-red-700">(해:解)</strong>는 의미도 될 수 있습니다.</span>
+                    <span> 소양경을 화해한다고 할때는 첫번째 의미, 간비불화를 화해한다고 할 때는 두번째 의미가 됩니다.</span>
+                </p>
+            </section>
+
+            <!-- 2. 의미 1: 방출/제거 (Release) -->
+            <section class="mb-8 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-center">화해소양: 방출과 제거 (Release)</h2>
+                <p class="text-lg text-center text-gray-600 mb-6">소양병(少陽病)의 '사이에 낀<strong class="text-green-700">(화:和)</strong>' 사기(邪氣)를 제거<strong class="text-red-700">(해:解)</strong>합니다.</p>
+
+                <!-- 병의 위치 다이어그램 -->
+                <div class="flex justify-around items-start text-center mb-6">
+                    <!-- 표(태양) -->
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="p-4 bg-blue-100 border-2 border-blue-300 rounded-lg w-full">
+                            <h3 class="font-bold text-lg">표(表) - 태양</h3>
+                        </div>
+                        <svg class="w-6 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="p-2 bg-blue-200 rounded-md">
+                            <span class="font-semibold">땀 (해표)</span>
+                        </div>
+                    </div>
+                    <!-- 반표반리(소양) -->
+                    <div class="flex flex-col items-center w-1/3 mx-2">
+                        <div class="p-4 bg-red-100 border-2 border-red-300 rounded-lg w-full">
+                            <h3 class="font-bold text-lg text-red-700">반표반리(半表半裏) - 소양</h3>
+                        </div>
+                        <svg class="w-6 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="p-2 bg-red-200 rounded-md">
+                            <span class="font-semibold text-red-700">화해(和解)</span>
+                        </div>
+                    </div>
+                    <!-- 리(양명) -->
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="p-4 bg-yellow-100 border-2 border-yellow-300 rounded-lg w-full">
+                            <h3 class="font-bold text-lg">리(裏) - 양명</h3>
+                        </div>
+                        <svg class="w-6 h-12 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="p-2 bg-yellow-200 rounded-md">
+                            <span class="font-semibold">설사 (공하)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 빨대 비유 -->
+                <div class="mt-8">
+                    <div class="straw">
+                        <div class="blockage"></div>
+                        <span class="relative text-black font-semibold z-10">병사(病邪)</span>
+                    </div>
+                    <p class="text-center mt-4 text-gray-700">빨대 입구(표)에서 불거나(해표) 끝(리)에서 빨아들여도(공하) 빠지지 않는 중간의 덩어리.<br>
+                    이것을 빼내는 것이 첫 번째 의미의 '화해'입니다.</p>
+                </div>
+                
+                <div class="text-center mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-bold text-lg">대표 처방: <span class="text-red-700">소시호탕 (Xiao Chai Hu Tang)</span></h4>
+                </div>
+            </section>
+
+            <!-- 3. 의미 2: 완화/조화 (Harmonize) -->
+            <section class="mb-8 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-center">간비불화: 완화와 조화 (Harmonize)</h2>
+                <p class="text-lg text-center text-gray-600 mb-6">간과 비의 중간에서<strong class="text-green-700">(화:和)</strong> 갈등(목극토)를 풀어줍니다<strong class="text-red-700">(해:解)</strong>.</p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <!-- 엉킨 실타래 비유 -->
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold mb-3">비유: 엉킨 실타래</h3>
+                        <svg class="tangle-svg mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 20,20 C 40,80 60,10 80,90 C 70,30 30,70 50,50 C 10,60 90,40 20,80 C 40,20 80,60 60,90"/>
+                            <path d="M 80,20 C 60,80 40,10 20,90 C 30,30 70,70 50,50 C 90,60 10,40 80,80 C 60,20 20,60 40,90" stroke-dasharray="5"/>
+                        </svg>
+                        <p class="text-center mt-4 text-gray-700">사기(邪氣)를 '제거'한다기보다는, 엉키고 뭉친 것을 '부드럽게 완화'시키는 데 초점을 둡니다.</p>
+                    </div>
+
+                    <div class="text-left p-4 max-w-md">
+                        <h3 class="text-xl font-semibold mb-3">대상: 간비불화 (肝脾不和), 간기를 풀어주어 비와 조화롭게 만드는 것.</h3>
+                        <p class="text-gray-700">
+                            여기서 '화해'는 '해(解)'의 '제거' 의미보다는 '화(和)'의 '조화' 의미에 더 무게를 둡니다.
+                            간(肝)의 기운이 울결(鬱結)된 것을 부드럽게 달래고 풀어주어(소간해울, 疏肝解鬱) 비장과의 조화를 되찾게 합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-bold text-lg">대표 처방: <span class="text-blue-700">소요산 (Xiao Yao San)</span></h4>
+                </div>
+            </section>
+
+            <!-- 4. 두 가지 의미 비교표 -->
+            <section class="mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- 카드 1: 의미 1 (방출/제거) -->
+                    <div class="bg-white rounded-lg shadow-xl border-t-4 border-red-600 p-6">
+                        <h3 class="text-xl font-bold text-center mb-4 text-red-700">의미 1: 방출과 제거 (Release)</h3>
+                        <dl class="space-y-3">
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">개념</dt>
+                                <dd class="w-2/3 font-semibold text-red-700">사이에 낀 사기(邪氣)를 방출/제거</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">핵심 한자</dt>
+                                <dd class="w-2/3"><span class="hanja-sm">解 (제거)</span> (해표/해열과 동일)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">대상</dt>
+                                <dd class="w-2/3">간비불화 (간기울결)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">비유</dt>
+                                <dd class="w-2/3">막힌 빨대 뚫기</dd>
+                            </div>
+                            <div class="flex items-center">
+                                <dt class="w-1/3 font-semibold text-gray-500">대표 처방</dt>
+                                <dd class="w-2/3 font-bold text-red-700">소시호탕</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- 카드 2: 의미 2 (완화/조화) -->
+                    <div class="bg-white rounded-lg shadow-xl border-t-4 border-blue-600 p-6">
+                        <h3 class="text-xl font-bold text-center mb-4 text-blue-700">의미 2: 완화와 조화 (Harmonize)</h3>
+                        <dl class="space-y-3">
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">개념</dt>
+                                <dd class="w-2/3 font-semibold text-blue-700">뭉친 기운(氣運)을 부드럽게 완화</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">핵심 한자</dt>
+                                <dd class="w-2/3"><span class="hanja-sm">和 (조화)</span> (부드럽게 함)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">대상</dt>
+                                <dd class="w-2/3">간기울결 (소양 장부)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">비유</dt>
+                                <dd class="w-2/3">엉킨 실타래 풀기</dd>
+                            </div>
+                            <div class="flex items-center">
+                                <dt class="w-1/3 font-semibold text-gray-500">대표 처방</dt>
+                                <dd class="w-2/3 font-bold text-blue-700">소요산</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                </div>
+            </section>
+        </div> <!-- END: lang-container[lang="ko"] -->
+
+        <!-- === 영어 콘텐츠 (Placeholder) === -->
+        <div class="lang-container" lang="en">
+            <header class="mb-8 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Concept of 'He-Jie' (和解) in TCM</h1>
+                <p class="text-lg text-gray-600 mt-2">Clearly Distinguishing Two Different Meanings</p>
+            </header>
+            
+            <!-- 1. Hanja Breakdown -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold mb-4 text-center">1. Understanding 'He-Jie' (和解) through Hanja (漢字)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- 解 (Jie) Card -->
+                    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-600">
+                        <div class="flex items-center mb-4">
+                            <span class="hanja">解</span>
+                            <span class="ml-4 text-3xl font-bold">Jie (Hae)</span>
+                        </div>
+                        <p class="text-xl font-semibold mb-2">Meaning: To untie, remove, release, resolve</p>
+                        <p class="text-gray-600 mb-4">Connect it with concepts you already know:</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong class="hanja-sm">Jie Biao(Release Exterior)</strong>: 'Removes' pathogenic qi from the <span class="text-red-600 font-semibold">'Exterior (表)'</span>.</li>
+                            <li><strong class="hanja-sm">Jie Re(Release Fever)</strong>: 'Removes' <span class="text-red-600 font-semibold">'Heat (熱)'</span>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 和 (He) Card -->
+                    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-600">
+                        <div class="flex items-center mb-4">
+                            <span class="hanja">和</span>
+                            <span class="ml-4 text-3xl font-bold">He (Hwa)</span>
+                        </div>
+                        <p class="text-xl font-semibold mb-2">Meaning: And, with, between, harmony</p>
+                        <p class="text-gray-600 mb-4">It signifies a middle ground or harmony between two areas.</p>
+                    </div>
+                </div>
+                <p class="text-center mt-4 text-lg text-gray-700">
+                    <span class="font-bold text-red-600">Key Point:</span> Confusion often begins when students interpret the 'Jie (解)' in 'He-Jie' differently (as 'harmonize/alleviate') from the 'Jie (解)' in 'Jie Biao / Jie Re'.
+                    <span class="font-semibold">He-Jie can mean removing <strong class="text-red-700">(解: Jie)</strong> what is in the middle <strong class="text-green-700">(和: He)</strong>, OR it can mean resolving <strong class="text-red-700">(解: Jie)</strong> conflict in the middle <strong class="text-green-700">(和: He)</strong> of two things.</span>
+                    <span> When harmonizing the Shaoyang channel, it's the first meaning. When harmonizing Liver-Spleen disharmony, it's the second meaning.</span>
+                </p>
+            </section>
+
+            <!-- 2. Meaning 1: Release -->
+            <section class="mb-8 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-center">Harmonizing Shaoyang: Release and Removal</h2>
+                <p class="text-lg text-center text-gray-600 mb-6">It removes <strong class="text-red-700">(解: Jie)</strong> the pathogenic qi 'stuck in the middle <strong class="text-green-700">(和: He)</strong>' of the Shaoyang (少陽病).</p>
+
+                <!-- Pathogen Location Diagram -->
+                <div class="flex justify-around items-start text-center mb-6">
+                    <!-- Exterior (Taiyang) -->
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="p-4 bg-blue-100 border-2 border-blue-300 rounded-lg w-full">
+                            <h3 class="font-bold text-lg">Exterior (表) - Taiyang</h3>
+                        </div>
+                        <svg class="w-6 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="p-2 bg-blue-200 rounded-md">
+                            <span class="font-semibold">Sweat (Jie Biao)</span>
+                        </div>
+                    </div>
+                    <!-- Half-Exterior, Half-Interior (Shaoyang) -->
+                    <div class="flex flex-col items-center w-1/3 mx-2">
+                        <div class="p-4 bg-red-100 border-2 border-red-300 rounded-lg w-full">
+                            <h3 class="font-bold text-lg text-red-700">Half-Exterior, Half-Interior (半表半裏) - Shaoyang</h3>
+                        </div>
+                        <svg class="w-6 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="p-2 bg-red-200 rounded-md">
+                            <span class="font-semibold text-red-700">Harmonize (He-Jie)</span>
+                        </div>
+                    </div>
+                    <!-- Interior (Yangming) -->
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="p-4 bg-yellow-100 border-2 border-yellow-300 rounded-lg w-full">
+                            <h3 class="font-bold text-lg">Interior (裏) - Yangming</h3>
+                        </div>
+                        <svg class="w-6 h-12 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="p-2 bg-yellow-200 rounded-md">
+                            <span class="font-semibold">Purge (Gong Xia)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Straw Analogy -->
+                <div class="mt-8">
+                    <div class="straw">
+                        <div class="blockage"></div>
+                        <span class="relative text-black font-semibold z-10">Pathogen</span>
+                    </div>
+                    <p class="text-center mt-4 text-gray-700">A blockage in the middle of a straw that can't be cleared by blowing from the entrance (Exterior/Jie Biao) or sucking from the end (Interior/Gong Xia).<br>
+                    Removing this blockage is the first meaning of 'He-Jie'.</p>
+                </div>
+                
+                <div class="text-center mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-bold text-lg">Representative Formula: <span class="text-red-700">Xiao Chai Hu Tang (소시호탕)</span></h4>
+                </div>
+            </section>
+
+            <!-- 3. Meaning 2: Harmonize -->
+            <section class="mb-8 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-center">Liver-Spleen Disharmony: Alleviation and Harmonization</h2>
+                <p class="text-lg text-center text-gray-600 mb-6">It resolves <strong class="text-red-700">(解: Jie)</strong> the conflict (Wood overacting on Earth) in the middle <strong class="text-green-700">(和: He)</strong> of the Liver and Spleen.</p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <!-- Tangled Yarn Analogy -->
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold mb-3">Analogy: Tangled Yarn</h3>
+                        <svg class="tangle-svg mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 20,20 C 40,80 60,10 80,90 C 70,30 30,70 50,50 C 10,60 90,40 20,80 C 40,20 80,60 60,90"/>
+                            <path d="M 80,20 C 60,80 40,10 20,90 C 30,30 70,70 50,50 C 90,60 10,40 80,80 C 60,20 20,60 40,90" stroke-dasharray="5"/>
+                        </svg>
+                        <p class="text-center mt-4 text-gray-700">Rather than 'removing' a pathogen, the focus is on 'gently alleviating' and untangling what is bound and knotted.</p>
+                    </div>
+
+                    <div class="text-left p-4 max-w-md">
+                        <h3 class="text-xl font-semibold mb-3">Target: Liver Spleen Disharmony (肝脾不和), resolving Liver Qi to harmonize with the Spleen.</h3>
+                        <p class="text-gray-700">
+                            Here, 'He-Jie' places more emphasis on the 'harmonizing' meaning of 'He (和)' rather than the 'removing' meaning of 'Jie (解)'.
+                            It soothes and resolves (Shu Gan Jie Yu, 疏肝解鬱) the constrained Liver (肝) Qi, restoring harmony with Spleen (脾).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-bold text-lg">Representative Formula: <span class="text-blue-700">Xiao Yao San (소요산)</span></h4>
+                </div>
+            </section>
+
+            <!-- 4. Comparison Table -->
+            <section class="mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Card 1: Meaning 1 (Release) -->
+                    <div class="bg-white rounded-lg shadow-xl border-t-4 border-red-600 p-6">
+                        <h3 class="text-xl font-bold text-center mb-4 text-red-700">Meaning 1: Release and Removal</h3>
+                        <dl class="space-y-3">
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Concept</dt>
+                                <dd class="w-2/3 font-semibold text-red-700">Release/Remove pathogenic qi stuck in the middle</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Key Hanja</dt>
+                                <dd class="w-2/3"><span class="hanja-sm">解 (Jie - Removal)</span> (Same as in Jie Biao(Release Exterior)/Jie Re(Release Fever))</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Target</dt>
+                                <dd class="w-2/3">Liver Spleen Disharmony (Liver Qi Stagnation)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Analogy</dt>
+                                <dd class="w-2/3">Unclogging a straw</dd>
+                            </div>
+                            <div class="flex items-center">
+                                <dt class="w-1/3 font-semibold text-gray-500">Formula</dt>
+                                <dd class="w-2/3 font-bold text-red-700">Xiao Chai Hu Tang</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- Card 2: Meaning 2 (Harmonize) -->
+                    <div class="bg-white rounded-lg shadow-xl border-t-4 border-blue-600 p-6">
+                        <h3 class="text-xl font-bold text-center mb-4 text-blue-700">Meaning 2: Alleviation and Harmonization</h3>
+                        <dl class="space-y-3">
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Concept</dt>
+                                <dd class="w-2/3 font-semibold text-blue-700">Gently alleviate constrained Qi</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Key Hanja</dt>
+                                <dd class="w-2/3"><span class="hanja-sm">和 (He - Harmony)</span> (To make gentle/harmonious)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Target</dt>
+                                <dd class="w-2/3">Liver Qi Stagnation (Shaoyang Organ)</dd>
+                            </div>
+                            <div class="flex">
+                                <dt class="w-1/3 font-semibold text-gray-500">Analogy</dt>
+                                <dd class="w-2/3">Untangling yarn</dd>
+                            </div>
+                            <div class="flex items-center">
+                                <dt class="w-1/3 font-semibold text-gray-500">Formula</dt>
+                                <dd class="w-2/3 font-bold text-blue-700">Xiao Yao San</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                </div>
+            </section>
+        </div> <!-- END: lang-container[lang="en"] -->
+
+    </div> <!-- END: max-w-6xl -->
+
+    <!-- === 템플릿 푸터 (Mandatory / max-width: 72rem으로 수정) === -->
+    <footer id="page-footer" style="width: 100%; max-width: 72rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+         © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
+
+    <!-- === 템플릿 자바스크립트 (Mandatory) === -->
+    <script>
+        /**
+         * 지정된 언어(lang)로 언어를 설정합니다.
+         * 해당 언어의 컨테이너를 표시하고 다른 컨테이너는 숨깁니다.
+         * @param {string} lang - 표시할 언어 ('ko' 또는 'en')
+         */
+        function setLanguage(lang) {
+            // 모든 언어 컨테이너를 숨깁니다.
+            document.querySelectorAll('.lang-container').forEach(function(el) {
+                el.style.display = 'none';
+            });
+
+            // 선택된 언어의 컨테이너를 표시합니다.
+            const selectedContainer = document.querySelector('.lang-container[lang="' + lang + '"]');
+            if (selectedContainer) {
+                selectedContainer.style.display = 'block';
+            }
+
+            // <html> 태그의 lang 속성을 업데이트합니다.
+            document.documentElement.lang = lang;
+
+            // localStorage에 사용자의 언어 설정을 저장합니다.
+            try {
+                localStorage.setItem('userLanguage', lang);
+            } catch (e) {
+                console.warn('localStorage is not available for saving language preference.');
+            }
+        }
+
+        /**
+         * 언어를 'ko' <-> 'en' 간에 전환합니다.
+         * @param {Event} event - 클릭 이벤트 (기본 동작 방지용)
+         */
+        function toggleLanguage(event) {
+            if (event) {
+                event.preventDefault(); // 링크의 기본 동작(페이지 이동)을 막습니다.
+            }
+            const currentLang = document.documentElement.lang;
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        /**
+         * 페이지 로드 시 사용자의 저장된 언어 설정 또는 브라우저 기본값을 로드합니다.
+         * 기본값은 'ko'입니다.
+         */
+        function loadLanguage() {
+            let preferredLang = 'ko'; // 기본 언어
+            try {
+                const savedLang = localStorage.getItem('userLanguage');
+                if (savedLang && (savedLang === 'ko' || savedLang === 'en')) {
+                    preferredLang = savedLang;
+                } else {
+                    // (선택 사항) 저장된 설정이 없으면 브라우저 언어를 확인할 수 있습니다.
+                    // const browserLang = navigator.language || navigator.userLanguage;
+                    // if (browserLang.startsWith('en')) {
+                    //     preferredLang = 'en';
+                    // }
+                    // 여기서는 'ko'를 기본값으로 유지합니다.
+                }
+            } catch (e) {
+                console.warn('localStorage is not available for loading language preference.');
+            }
+            setLanguage(preferredLang);
+        }
+
+        // DOM 콘텐츠가 로드되면 언어 설정을 실행합니다.
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+    </script>
+
+</body>
+</html>
