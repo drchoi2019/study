@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- 
+    수정 사항:
+    1.  사용자 요청에 따라 <title> 및 <h1> 제목을 "사심탕계열 처방의 이해" (및 영문 번역)로 변경했습니다.
+    2.  "최대 가로폭을 950 픽셀로 제한" 지침을 준수하기 위해 메인 콘텐츠 컨테이너의 max-width를 'max-w-4xl'(1024px)에서 'max-w-3xl'(896px)로 수정했습니다.
+    3.  JavaScript의 setLanguage 함수 내의 title 업데이트 로직도 새 제목으로 수정했습니다.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사심탕계열 처방의 이해</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f4f4f5; /* zinc-100 */
+        }
+
+        /* --- Language Container Display --- */
+        .lang-container { 
+            display: none; 
+        }
+        html[lang="ko"] .lang-container[lang="ko"] { 
+            display: block; 
+        }
+        html[lang="en"] .lang-container[lang="en"] { 
+            display: block; 
+        }
+
+        /* --- Mandatory Guideline CSS --- */
+        
+        /* Language Toggle Button Style (지침 준수) */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* stone-700 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+
+        /* Hanja Emphasis Styles (지침 준수) */
+        .hanja {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 600;
+            color: #b91c1c; /* red-700 */
+            margin-right: 0.15em;
+        }
+        .quote-highlight {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 600;
+            color: #b91c1c; /* red-700 */
+        }
+    </style>
+</head>
+<body class="text-zinc-800">
+
+    <!-- Hyungsuk Choi 템플릿 지침: 원본 헤더 (수정 금지) -->
+    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+
+    <!-- 
+      메인 콘텐츠 컨테이너: 
+      "최대 가로폭 950px" 지침 준수를 위해 max-w-3xl (896px)로 설정.
+      (header/footer의 48rem(768px)과도 조화됨)
+    -->
+    <div class="container mx-auto max-w-3xl p-4 md:p-8">
+
+        <!-- Hyungsuk Choi 템플릿 지침: 한국어 콘텐츠 -->
+        <div class="lang-container" lang="ko">
+            
+            <header class="text-center mb-10 md:mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold text-teal-800 mb-2">사심탕계열 처방의 이해</h1>
+                <p class="text-lg text-zinc-600">핵심 약물 모듈을 통해 처방 간의 관계를 한눈에 파악합니다.</p>
+            </header>
+
+            <section class="mb-10 md:mb-12">
+                <h2 class="text-2xl font-semibold text-center text-zinc-700 mb-6">두 가지 핵심 모듈 (The Two Core Modules)</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-teal-500">
+                        <h3 class="text-xl font-bold text-teal-700 mb-3">◼︎ 모듈 A: Middle Jiao (소화기)</h3>
+                        <p class="text-lg mb-2"><strong class="font-semibold">핵심 약물:</strong> <code class="bg-zinc-100 px-2 py-1 rounded">Ren Shen</code> + <code class="bg-zinc-100 px-2 py-1 rounded">Ban Xia</code></p>
+                        <p class="text-zinc-700"><strong class="font-semibold">주요 기능:</strong> 중초(Middle Jiao)를 다스리고 소화기 증상을 치료합니다.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+                        <h3 class="text-xl font-bold text-emerald-700 mb-3">◼︎ 모듈 B: 심하비 (Chest Obstruction)</h3>
+                        <p class="text-lg mb-2"><strong class="font-semibold">핵심 약물:</strong> <code class="bg-zinc-100 px-2 py-1 rounded">Huang Qin</code> + <code class="bg-zinc-100 px-2 py-1 rounded">Huang Lian</code></p>
+                        <p class="text-zinc-700"><strong class="font-semibold">주요 기능:</strong> 흉부의 막힘(胸痞)을 뚫어줍니다. ("Xie Xin")</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="my-10 md:my-12 bg-teal-50 p-6 md:p-8 rounded-2xl shadow-inner text-center border border-teal-200">
+                <h2 class="text-2xl font-bold text-teal-800 mb-4">🔑 마스터 키: Ban Xia Xie Xin Tang</h2>
+                <p class="text-lg text-zinc-700 max-w-3xl mx-auto mb-4">
+                    이 처방은 두 가지 핵심 모듈을 <strong class="font-semibold">모두 포함</strong>하는 유일한 처방입니다.<br>
+                    따라서 이 처방을 이해하는 것이 전체 처방 그룹을 파악하는 "마스터 키"가 됩니다.
+                </p>
+                <div class="flex justify-center items-center gap-4 text-lg md:text-xl font-semibold">
+                    <span class="bg-teal-100 text-teal-800 px-4 py-2 rounded-lg shadow-sm">모듈 A (Ren Shen + Ban Xia)</span>
+                    <span class="text-zinc-500 text-2xl">+</span>
+                    <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg shadow-sm">모듈 B (Huang Qin + Huang Lian)</span>
+                </div>
+            </section>
+
+            <section class="my-10 md:my-12">
+                <h2 class="text-2xl font-semibold text-center text-zinc-700 mb-8">처방 파생 (Formula Families)</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-teal-700 mb-4 border-b-2 border-teal-200 pb-2">모듈 A (Ren Shen + Ban Xia) 기반</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ [모듈 B]</code> ➔ <strong class="text-teal-800">Ban Xia Xie Xin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 중초 + 흉부 막힘)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Chai Hu</code> ➔ <strong>Xiao Chai Hu Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 중초 + 소양병)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Zhu Ye, Shi Gao, Mai Dong</code> ➔ <strong>Zhu Ye Shi Gao Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 중초 + 위열)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Xuan Fu Hua, Dai Zhe Shi</code> ➔ <strong>Xuan Fu Dai Zhe Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 중초 + 기 역류/구토)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Huang Lian (단독)</code> ➔ <strong>Huang Lian Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 중초 + 흉부 번열/구토)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-emerald-700 mb-4 border-b-2 border-emerald-200 pb-2">모듈 B (Huang Qin + Huang Lian) 기반</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ [모듈 A]</code> ➔ <strong class="text-emerald-800">Ban Xia Xie Xin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 흉부 막힘 + 중초)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Da Huang</code> ➔ <strong>San Huang Xie Xin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 흉부 막힘 + 삼초의 습열)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Ge Gen</code> ➔ <strong>Ge Gen Huang Lian Huang Qin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 흉부 막힘 + 감기/설사)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="my-10 md:my-12">
+                <h2 class="text-2xl font-semibold text-center text-zinc-700 mb-8">주요 처방 구성 비교 (상세)</h2>
+                <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
+                    <table class="min-w-full">
+                        <thead class="bg-zinc-100">
+                            <tr>
+                                <th class="p-4 text-left text-sm font-semibold text-zinc-600 uppercase tracking-wider">처방명</th>
+                                <th class="p-4 text-center text-sm font-semibold text-emerald-700 uppercase tracking-wider">Huang Qin</th>
+                                <th class="p-4 text-center text-sm font-semibold text-emerald-700 uppercase tracking-wider">Huang Lian</th>
+                                <th class="p-4 text-center text-sm font-semibold text-teal-700 uppercase tracking-wider">Ren Shen</th>
+                                <th class="p-4 text-center text-sm font-semibold text-teal-700 uppercase tracking-wider">Ban Xia</th>
+                                <th class="p-4 text-left text-sm font-semibold text-zinc-600 uppercase tracking-wider">추가 약물 (Herbs added)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-200">
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">San Huang Xie Xin Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4">Da Huang</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Ge Gen Lian Qin Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4">Ge Gen</td>
+                            </tr>
+                            <tr class="bg-teal-50 hover:bg-teal-100 border-y-2 border-teal-200">
+                                <td class="p-4 font-bold text-teal-800">Ban Xia Xie Xin Tang (마스터 키)</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-100">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-100">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-100">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-100">◎</td>
+                                <td class="p-4 text-zinc-400">-</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Zhu Ye Shi Gao Tang</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Zhu Ye, Shi Gao, Mai Dong</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Xuan Fu Dai Zhe Tang</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Xuan Fu, Dai Zhe Shi</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Xiao Chai Hu Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td classs="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Chi Hu</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Huang Lian Tang</td>
+                                <td class_s="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Gui Zhi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6 p-4 bg-white rounded-lg shadow-md border-t-4 border-zinc-200">
+                    <h4 class="text-lg font-semibold text-zinc-700 mb-2">핵심 모듈 기능 요약</h4>
+                    <ul class="list-disc list-inside text-zinc-700 space-y-1">
+                        <li><strong class="text-emerald-700">Huang Qin + Huang Lian (Xie Xin):</strong> 흉부(및 위장관)의 울체/번조함을 해소합니다.</li>
+                        <li><strong class="text-teal-700">Ren Shen + Ban Xia:</strong> 중초(Middle Jiao)를 조절합니다.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Hyungsuk Choi 템플릿 지침: 영어 콘텐츠 -->
+        <div class="lang-container" lang="en">
+
+            <header class="text-center mb-10 md:mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold text-teal-800 mb-2">Understanding the Xie Xin Tang Formula Family</h1>
+                <p class="text-lg text-zinc-600">Understand formula relationships at a glance through core herb modules.</p>
+            </header>
+
+            <section class="mb-10 md:mb-12">
+                <h2 class="text-2xl font-semibold text-center text-zinc-700 mb-6">The Two Core Modules</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-teal-500">
+                        <h3 class="text-xl font-bold text-teal-700 mb-3">◼︎ Module A: Middle Jiao (Digestive)</h3>
+                        <p class="text-lg mb-2"><strong class="font-semibold">Core Herbs:</strong> <code class="bg-zinc-100 px-2 py-1 rounded">Ren Shen</code> + <code class="bg-zinc-100 px-2 py-1 rounded">Ban Xia</code></p>
+                        <p class="text-zinc-700"><strong class="font-semibold">Key Function:</strong> Governs the Middle Jiao and treats digestive symptoms.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+                        <h3 class="text-xl font-bold text-emerald-700 mb-3">◼︎ Module B: Chest Obstruction (Xie Xin)</h3>
+                        <p class="text-lg mb-2"><strong class="font-semibold">Core Herbs:</strong> <code class="bg-zinc-100 px-2 py-1 rounded">Huang Qin</code> + <code class="bg-zinc-100 px-2 py-1 rounded">Huang Lian</code></p>
+                        <p class="text-zinc-700"><strong class="font-semibold">Key Function:</strong> Unblocks obstruction in the chest (胸痞). ("Xie Xin")</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="my-10 md:my-12 bg-teal-50 p-6 md:p-8 rounded-2xl shadow-inner text-center border border-teal-200">
+                <h2 class="text-2xl font-bold text-teal-800 mb-4">🔑 The Master Key: Ban Xia Xie Xin Tang</h2>
+                <p class="text-lg text-zinc-700 max-w-3xl mx-auto mb-4">
+                    This is the only formula that <strong class="font-semibold">contains both</strong> core modules.<br>
+                    Understanding it is the "master key" to the entire group.
+                </p>
+                <div class="flex justify-center items-center gap-4 text-lg md:text-xl font-semibold">
+                    <span class="bg-teal-100 text-teal-800 px-4 py-2 rounded-lg shadow-sm">Module A (Ren Shen + Ban Xia)</span>
+                    <span class="text-zinc-500 text-2xl">+</span>
+                    <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg shadow-sm">Module B (Huang Qin + Huang Lian)</span>
+                </div>
+            </section>
+
+            <section class="my-10 md:my-12">
+                <h2 class="text-2xl font-semibold text-center text-zinc-700 mb-8">Formula Families</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-teal-700 mb-4 border-b-2 border-teal-200 pb-2">Based on Module A (Ren Shen + Ban Xia)</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ [Module B]</code> ➔ <strong class="text-teal-800">Ban Xia Xie Xin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Middle Jiao + Chest Obstruction)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Chai Hu</code> ➔ <strong>Xiao Chai Hu Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Middle Jiao + Shaoyang)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Zhu Ye, Shi Gao, Mai Dong</code> ➔ <strong>Zhu Ye Shi Gao Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Middle Jiao + Stomach Heat)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Xuan Fu Hua, Dai Zhe Shi</code> ➔ <strong>Xuan Fu Dai Zhe Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Middle Jiao + Qi Reversal/Vomiting)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Huang Lian (Single)</code> ➔ <strong>Huang Lian Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Middle Jiao + Chest Vexation/Vomiting)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-emerald-700 mb-4 border-b-2 border-emerald-200 pb-2">Based on Module B (Huang Qin + Huang Lian)</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ [Module A]</code> ➔ <strong class="text-emerald-800">Ban Xia Xie Xin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Chest Obstruction + Middle Jiao)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Da Huang</code> ➔ <strong>San Huang Xie Xin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Chest Obstruction + Damp-Heat in Triple Burner)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Ge Gen</code> ➔ <strong>Ge Gen Huang Lian Huang Qin Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Chest Obstruction + Cold/Diarrhea)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="my-10 md:my-12">
+                <h2 class="text-2xl font-semibold text-center text-zinc-700 mb-8">Detailed Formula Composition Comparison</h2>
+                <div class="overflow-x-auto bg-white rounded-lg shadow-lg">
+                    <table class="min-w-full">
+                        <thead class="bg-zinc-100">
+                            <tr>
+                                <th class="p-4 text-left text-sm font-semibold text-zinc-600 uppercase tracking-wider">Formula Name</th>
+                                <th class="p-4 text-center text-sm font-semibold text-emerald-700 uppercase tracking-wider">Huang Qin</th>
+                                <th class="p-4 text-center text-sm font-semibold text-emerald-700 uppercase tracking-wider">Huang Lian</th>
+                                <th class="p-4 text-center text-sm font-semibold text-teal-700 uppercase tracking-wider">Ren Shen</th>
+                                <th class="p-4 text-center text-sm font-semibold text-teal-700 uppercase tracking-wider">Ban Xia</th>
+                                <th class="p-4 text-left text-sm font-semibold text-zinc-600 uppercase tracking-wider">Herbs Added</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-200">
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">San Huang Xie Xin Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4">Da Huang</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Ge Gen Lian Qin Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4">Ge Gen</td>
+                            </tr>
+                            <tr class="bg-teal-50 hover:bg-teal-100 border-y-2 border-teal-200">
+                                <td class="p-4 font-bold text-teal-800">Ban Xia Xie Xin Tang (Master Key)</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-100">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-100">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-100">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-100">◎</td>
+                                <td class="p-4 text-zinc-400">-</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Zhu Ye Shi Gao Tang</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Zhu Ye, Shi Gao, Mai Dong</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Xuan Fu Dai Zhe Tang</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Xuan Fu, Dai Zhe Shi</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Xiao Chai Hu Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Chi Hu</td>
+                            </tr>
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Huang Lian Tang</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
+                                <td class="p-4">Gui Zhi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6 p-4 bg-white rounded-lg shadow-md border-t-4 border-zinc-200">
+                    <h4 class="text-lg font-semibold text-zinc-700 mb-2">Core Module Function Summary</h4>
+                    <ul class="list-disc list-inside text-zinc-700 space-y-1">
+                        <li><strong class="text-emerald-700">Huang Qin + Huang Lian (Xie Xin):</strong> Resolves stagnation/vexation in the chest (and GI tract).</li>
+                        <li><strong class="text-teal-700">Ren Shen + Ban Xia:</strong> Regulates the Middle Jiao.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        
+    </div>
+
+    <!-- Hyungsuk Choi 템플릿 지침: 원본 푸터 (수정 금지) -->
+    <footer id="page-footer" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer> 
+
+    <!-- Hyungsuk Choi 템플릿 지침: 다국어 스크립트 (history.replaceState 제외) -->
+    <script>
+        // Language Setting
+        function setLanguage(lang) {
+            if (!['ko', 'en'].includes(lang)) {
+                lang = 'ko'; // Default to Korean
+            }
+            document.documentElement.lang = lang;
+            localStorage.setItem('userLang', lang);
+            
+            // 제목을 요청에 맞게 수정
+            if (lang === 'en') {
+                document.title = "Understanding the Xie Xin Tang Formula Family";
+            } else {
+                document.title = "사심탕계열 처방의 이해";
+            }
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const currentLang = document.documentElement.lang;
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            const savedLang = localStorage.getItem('userLang');
+            const browserLang = (navigator.language || navigator.userLanguage).substring(0, 2);
+            
+            let defaultLang = 'ko'; // Default to Korean
+            
+            if (savedLang) {
+                defaultLang = savedLang;
+            } else if (browserLang === 'en') {
+                defaultLang = 'en';
+            }
+            
+            setLanguage(defaultLang);
+        }
+
+        // Load language on page load
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+    </script>
+
+</body>
+</html>
