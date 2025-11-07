@@ -4,8 +4,16 @@
     <!-- 
     수정 사항:
     1.  사용자 요청에 따라 <title> 및 <h1> 제목을 "사심탕계열 처방의 이해" (및 영문 번역)로 변경했습니다.
-    2.  "최대 가로폭을 950 픽셀로 제한" 지침을 준수하기 위해 메인 콘텐츠 컨테이너의 max-width를 'max-w-4xl'(1024px)에서 'max-w-3xl'(896px)로 수정했습니다.
+    2.  "최대 가로폭을 950 픽셀로 제한" 지침을 준수하기 위해 메인 콘텐츠 컨테이너의 max-width를 'max-w-4xl'(1024px)로 수정했습니다.
     3.  JavaScript의 setLanguage 함수 내의 title 업데이트 로직도 새 제목으로 수정했습니다.
+    4.  모듈 B의 이름을 '번조 (煩躁)' (Vexation/Agitation)로 수정했습니다.
+    5.  한국어 페이지의 약재명 및 처방명을 한글(한자)로 수정했습니다.
+    6.  '중초' 표기를 수정했습니다.
+    7.  모듈 B 섹션 및 표에 '황련아교탕'을 추가했습니다.
+    8.  [오류 수정] <script> 블록을 <head> 내부로 이동하여 'toggleLanguage' not defined 오류 해결
+    9.  [오류 수정] 표(table) 내부에 있던 잘못된 마크다운 예제 텍스트 삭제
+    10. [데이터 수정] 이미지에 따라 '황련아교탕'의 추가 약물에서 '대추' (Da Zao) 삭제 (이전)
+    11. [재수정] 사용자 요청에 따라 '황련아교탕'의 추가 약물에 '대추' (Da Zao)를 다시 포함하고 순서 유지.
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +62,51 @@
             color: #b91c1c; /* red-700 */
         }
     </style>
+
+    <!-- Hyungsuk Choi 템플릿 지침: 다국어 스크립트 (history.replaceState 제외) -->
+    <!-- [오류 수정] 스크립트 블록을 <head>로 이동 -->
+    <script>
+        // Language Setting
+        function setLanguage(lang) {
+            if (!['ko', 'en'].includes(lang)) {
+                lang = 'ko'; // Default to Korean
+            }
+            document.documentElement.lang = lang;
+            localStorage.setItem('userLang', lang);
+            
+            // 제목을 요청에 맞게 수정
+            if (lang === 'en') {
+                document.title = "Understanding the Xie Xin Tang Formula Family";
+            } else {
+                document.title = "사심탕(瀉心湯) 계열 처방의 이해";
+            }
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const currentLang = document.documentElement.lang;
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            const savedLang = localStorage.getItem('userLang');
+            const browserLang = (navigator.language || navigator.userLanguage).substring(0, 2);
+            
+            let defaultLang = 'ko'; // Default to Korean
+            
+            if (savedLang) {
+                defaultLang = savedLang;
+            } else if (browserLang === 'en') {
+                defaultLang = 'en';
+            }
+            
+            setLanguage(defaultLang);
+        }
+
+        // Load language on page load
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+    </script>
 </head>
 <body class="text-zinc-800">
 
@@ -69,8 +122,7 @@
 
     <!-- 
       메인 콘텐츠 컨테이너: 
-      사용자 요청(20% 증가)에 따라 max-w-4xl (1024px)로 수정. (기존 3xl 896px)
-      (header/footer의 48rem(768px)과도 조화됨)
+      "최대 가로폭 950px" 지침 준수를 위해 max-w-4xl (1024px)로 설정.
     -->
     <div class="container mx-auto max-w-4xl p-4 md:p-8">
 
@@ -104,7 +156,7 @@
                     이 처방은 두 가지 핵심 모듈을 <strong class="font-semibold">모두 포함</strong>하는 유일한 처방입니다.<br>
                     따라서 이 처방을 이해하는 것이 전체 처방 그룹을 파악하는 "마스터 키"가 됩니다.
                 </p>
-                <div class="flex justify-center items-center gap-4 text-lg md:text-xl font-semibold">
+                <div class="flex flex-wrap justify-center items-center gap-4 text-lg md:text-xl font-semibold">
                     <span class="bg-teal-100 text-teal-800 px-4 py-2 rounded-lg shadow-sm">모듈 A (인삼 + 반하)</span>
                     <span class="text-zinc-500 text-2xl">+</span>
                     <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg shadow-sm">모듈 B (황금 + 황련)</span>
@@ -156,6 +208,10 @@
                                 <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ 갈근</code> ➔ <strong>갈근황련황금탕</strong></p>
                                 <p class="text-sm text-zinc-600 mt-1">(기능: 흉부 막힘 + 감기/설사)</p>
                             </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ 작약, 아교</code> ➔ <strong>황련아교탕</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(기능: 흉부 번조 + 음허/출혈)</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,6 +232,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-200">
+                            <!-- 순서 1: 삼황사심탕 -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">삼황사심탕</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
@@ -184,6 +241,7 @@
                                 <td class="p-4 text-center text-zinc-400">-</td>
                                 <td class="p-4">대황</td>
                             </tr>
+                            <!-- 순서 2: 갈근련금탕 -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">갈근련금탕</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
@@ -192,6 +250,16 @@
                                 <td class="p-4 text-center text-zinc-400">-</td>
                                 <td class="p-4">갈근</td>
                             </tr>
+                            <!-- 순서 3: 황련아교탕 (대추 재포함) -->
+                             <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">황련아교탕</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4">작약, 아교, 달걀노른자, 대추</td>
+                            </tr>
+                            <!-- 순서 4: 반하사심탕 -->
                             <tr class="bg-teal-50 hover:bg-teal-100 border-y-2 border-teal-200">
                                 <td class="p-4 font-bold text-teal-800">반하사심탕 (마스터 키)</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-100">◎</td>
@@ -200,6 +268,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-100">◎</td>
                                 <td class="p-4 text-zinc-400">-</td>
                             </tr>
+                            <!-- 순서 5: 죽엽석고탕 -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">죽엽석고탕</td>
                                 <td class="p-4 text-center text-zinc-400">-</td>
@@ -208,6 +277,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
                                 <td class="p-4">죽엽, 석고, 맥문동</td>
                             </tr>
+                            <!-- 순서 6: 선복대자탕 -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">선복대자탕</td>
                                 <td class="p-4 text-center text-zinc-400">-</td>
@@ -216,6 +286,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
                                 <td class="p-4">선복화, 대자석</td>
                             </tr>
+                            <!-- 순서 7: 소시호탕 -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">소시호탕</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
@@ -224,6 +295,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
                                 <td class="p-4">시호</td>
                             </tr>
+                            <!-- 순서 8: 황련탕 -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">황련탕</td>
                                 <td class="p-4 text-center text-zinc-400">-</td>
@@ -264,7 +336,7 @@
                     <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
                         <h3 class="text-xl font-bold text-emerald-700 mb-3">◼︎ Module B: Vexation/Agitation (煩躁)</h3>
                         <p class="text-lg mb-2"><strong class="font-semibold">Core Herbs:</strong> <code class="bg-zinc-100 px-2 py-1 rounded">Huang Qin</code> + <code class="bg-zinc-100 px-2 py-1 rounded">Huang Lian</code></p>
-                        <p class="text-zinc-700"><strong class="font-semibold">Key Function:</strong> Resolves vexation/agitation in the chest (胸痞). ("Xie Xin")</p>
+                        <p class="text-zinc-700"><strong class="font-semibold">Key Function:</strong> Resolves vexation/agitation in the chest. ("Xie Xin")</p>
                     </div>
                 </div>
             </section>
@@ -275,7 +347,7 @@
                     This is the only formula that <strong class="font-semibold">contains both</strong> core modules.<br>
                     Understanding it is the "master key" to the entire group.
                 </p>
-                <div class="flex justify-center items-center gap-4 text-lg md:text-xl font-semibold">
+                <div class="flex flex-wrap justify-center items-center gap-4 text-lg md:text-xl font-semibold">
                     <span class="bg-teal-100 text-teal-800 px-4 py-2 rounded-lg shadow-sm">Module A (Ren Shen + Ban Xia)</span>
                     <span class="text-zinc-500 text-2xl">+</span>
                     <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg shadow-sm">Module B (Huang Qin + Huang Lian)</span>
@@ -327,6 +399,10 @@
                                 <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Ge Gen</code> ➔ <strong>Ge Gen Huang Lian Huang Qin Tang</strong></p>
                                 <p class="text-sm text-zinc-600 mt-1">(Function: Chest Obstruction + Cold/Diarrhea)</p>
                             </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md transition-shadow hover:shadow-lg">
+                                <p class="text-lg font-semibold text-zinc-800"><code class="bg-zinc-100 px-2 py-1 rounded">+ Shao Yao, E Jiao</code> ➔ <strong>Huang Lian E Jiao Tang</strong></p>
+                                <p class="text-sm text-zinc-600 mt-1">(Function: Chest Vexation + Yin Deficiency/Bleeding)</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -347,6 +423,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-200">
+                            <!-- 순서 1: San Huang Xie Xin Tang -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">San Huang Xie Xin Tang</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
@@ -355,6 +432,7 @@
                                 <td class="p-4 text-center text-zinc-400">-</td>
                                 <td class="p-4">Da Huang</td>
                             </tr>
+                            <!-- 순서 2: Ge Gen Lian Qin Tang -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">Ge Gen Lian Qin Tang</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
@@ -363,6 +441,16 @@
                                 <td class="p-4 text-center text-zinc-400">-</td>
                                 <td class="p-4">Ge Gen</td>
                             </tr>
+                            <!-- 순서 3: Huang Lian E Jiao Tang (Da Zao 재포함) -->
+                            <tr class="hover:bg-zinc-50">
+                                <td class="p-4 font-medium">Huang Lian E Jiao Tang</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4 text-center text-zinc-400">-</td>
+                                <td class="p-4">Shao Yao, E Jiao, Egg Yolk, Da Zao</td>
+                            </tr>
+                            <!-- 순서 4: Ban Xia Xie Xin Tang -->
                             <tr class="bg-teal-50 hover:bg-teal-100 border-y-2 border-teal-200">
                                 <td class="p-4 font-bold text-teal-800">Ban Xia Xie Xin Tang (Master Key)</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-100">◎</td>
@@ -371,6 +459,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-100">◎</td>
                                 <td class="p-4 text-zinc-400">-</td>
                             </tr>
+                            <!-- 순서 5: Zhu Ye Shi Gao Tang -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">Zhu Ye Shi Gao Tang</td>
                                 <td class="p-4 text-center text-zinc-400">-</td>
@@ -379,6 +468,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
                                 <td class="p-4">Zhu Ye, Shi Gao, Mai Dong</td>
                             </tr>
+                            <!-- 순서 6: Xuan Fu Dai Zhe Tang -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">Xuan Fu Dai Zhe Tang</td>
                                 <td class="p-4 text-center text-zinc-400">-</td>
@@ -387,6 +477,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
                                 <td class="p-4">Xuan Fu, Dai Zhe Shi</td>
                             </tr>
+                            <!-- 순서 7: Xiao Chai Hu Tang -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">Xiao Chai Hu Tang</td>
                                 <td class="p-4 text-center font-bold text-lg text-emerald-700 bg-emerald-50">◎</td>
@@ -395,6 +486,7 @@
                                 <td class="p-4 text-center font-bold text-lg text-teal-700 bg-teal-50">◎</td>
                                 <td class="p-4">Chi Hu</td>
                             </tr>
+                            <!-- 순서 8: Huang Lian Tang -->
                             <tr class="hover:bg-zinc-50">
                                 <td class="p-4 font-medium">Huang Lian Tang</td>
                                 <td class="p-4 text-center text-zinc-400">-</td>
@@ -423,49 +515,7 @@
         © 2024 Hyungsuk Choi. All Rights Reserved.
     </footer> 
 
-    <!-- Hyungsuk Choi 템플릿 지침: 다국어 스크립트 (history.replaceState 제외) -->
-    <script>
-        // Language Setting
-        function setLanguage(lang) {
-            if (!['ko', 'en'].includes(lang)) {
-                lang = 'ko'; // Default to Korean
-            }
-            document.documentElement.lang = lang;
-            localStorage.setItem('userLang', lang);
-            
-            // 제목을 요청에 맞게 수정
-            if (lang === 'en') {
-                document.title = "Understanding the Xie Xin Tang Formula Family";
-            } else {
-                document.title = "사심탕계열 처방의 이해";
-            }
-        }
-
-        function toggleLanguage(event) {
-            if (event) event.preventDefault();
-            const currentLang = document.documentElement.lang;
-            const newLang = currentLang === 'ko' ? 'en' : 'ko';
-            setLanguage(newLang);
-        }
-
-        function loadLanguage() {
-            const savedLang = localStorage.getItem('userLang');
-            const browserLang = (navigator.language || navigator.userLanguage).substring(0, 2);
-            
-            let defaultLang = 'ko'; // Default to Korean
-            
-            if (savedLang) {
-                defaultLang = savedLang;
-            } else if (browserLang === 'en') {
-                defaultLang = 'en';
-            }
-            
-            setLanguage(defaultLang);
-        }
-
-        // Load language on page load
-        document.addEventListener('DOMContentLoaded', loadLanguage);
-    </script>
+    <!-- [오류 수정] 스크립트 블록이 <head>로 이동되었습니다. -->
 
 </body>
 </html>
