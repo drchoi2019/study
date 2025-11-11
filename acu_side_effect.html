@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>침구 관련 연구 요약 및 심각한 부작용 보고서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Chart container styling for responsiveness */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        /* Custom scrollbar for table on smaller screens */
+        .table-container {
+            overflow-x: auto;
+        }
+        /* Tailwind classes for sticky table header */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* --- MANDATORY CSS RULE (Hyungsuk Choi Guideline) --- */
+        .px-3.py-1, .px-3.py-1:link, .px-3.py-1:visited { 
+            text-decoration: none !important; 
+            color: rgb(68, 64, 60) !important; /* 원본 텍스트 색상 */
+            font-size: 0.875rem; 
+            font-weight: 700; 
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 sm:p-8">
+
+    <!-- === MANDATORY HEADER (Hyungsuk Choi Guideline) === -->
+    <header id="page-header" style="width: 100%; max-width: 950px; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors" style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+    <!-- === END MANDATORY HEADER === -->
+
+    <!-- Main Content Wrapper -->
+    <div class="max-w-[950px] mx-auto bg-white shadow-2xl rounded-2xl p-6 sm:p-10 space-y-12">
+
+        <!-- === KOREAN CONTENT BLOCK === -->
+        <div class="lang-container" lang="ko">
+        
+            <!-- Header: Main Title -->
+            <header class="text-center border-b pb-4">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-blue-900 mb-2">침구 관련 부작용 보고</h1>
+            </header>
+
+            <!-- Introduction Section (KO) -->
+            <div class="intro-text p-6 bg-gray-50 rounded-lg text-gray-800 space-y-4 my-8 border border-gray-200">
+                <p>저는 한의사 생활을 35년째 해오고 있습니다. 저도 개인적으로 의료사고와 부작용을 경험했고, 제가 일했던 병원에서도 늘 침술 부작용은 있었습니다.</p>
+                <p>가장 흔하게 겪은 것은 낙상, 빼지 않은 침, 출혈과 멍, 화상 등이었고, 드물게 기흉, 신경손상, 훈침 등도 관찰하였습니다. 위중한 부작용은 없었지만, 보고된 부작용으로는 복막염의 사례, 두개골절의 사례 등도 있으므로 꼭 주의해야 할 것입니다.</p>
+                <p class="font-bold text-gray-900">이하 두 편의 연구를 통해서 어떤 침술 부작용들이 보고되었는지 살펴보겠습니다.</p>
+            </div>
+
+            <!-- 연구 1: Chan et al. 2017 (Overview of SRs) -->
+            <section class="space-y-8 p-6 bg-blue-50 rounded-xl shadow-inner border border-blue-200">
+                <h2 class="text-3xl font-bold text-blue-800 border-b pb-3 mb-6">침술 안전성에 대한 체계적 문헌 고찰 개요</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 md:p-8 text-center">
+                    <p class="text-lg text-gray-800 max-w-3xl mx-auto mb-4">
+                        11개의 문헌 고찰에서 총 21건의 합병증이 보고되었습니다. 가장 흔한 합병증은 어지러움 또는 실신(10.5건), 메스꺼움 및 구토(약 11.5건), 간질(2건) 등이었으며, 서맥, 벨 마비 악화 등의 드문 사례도 보고되었습니다.
+                    </p>
+                    <p class="text-sm text-gray-600 font-medium leading-relaxed mt-4">
+                        Chan, M. W. C., Wu, X. Y., Wu, J. C. Y., Wong, S. Y. S., & Chung, V. C. H. (2017). Safety of Acupuncture: Overview of Systematic Reviews. <em class="italic">Scientific Reports</em>, <span class="font-semibold">7</span>, 3369.
+                    </p>
+                </div>
+
+                <!-- Bar Chart (Centered) -->
+                <div class="grid grid-cols-1 gap-8 justify-items-center">
+                    <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-xl">
+                        <h3 class="text-xl font-bold text-blue-700 mb-4 align-middle text-center">주요 부작용 4가지 유형</h3>
+                        <p class="text-gray-700 mb-6 text-center text-sm">보고된 사례의 중앙값을 기준으로, 어떤 유형의 부작용이 더 빈번하게 보고되었는지 보여줍니다.</p>
+                        <div class="chart-container" style="max-width: 500px; height: 350px;">
+                            <canvas id="barChart_ko"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-4 text-center">
+                            <b>요약:</b> '장기 또는 조직 손상'(36건)이 가장 많았으며, '기타 합병증'(21건), '감염'(17건) 순이었습니다.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-blue-700 mb-6 text-center">부작용 상세 분류</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="border-l-4 border-blue-500 bg-blue-50 p-4 rounded">
+                            <h4 class="text-lg font-bold text-blue-700 mb-2">감염 (11개 SR)</h4>
+                            <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                <li>간염</li>
+                                <li>농양</li>
+                                <li>파상풍</li>
+                                <li>마이코박테리아 감염</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded">
+                            <h4 class="text-lg font-bold text-yellow-700 mb-2">국소 부작용 (12개 SR)</h4>
+                            <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                <li>접촉성 피부염</li>
+                                <li>알레르기 반응</li>
+                                <li>국소 통증 또는 출혈</li>
+                                <li>멍 또는 화상</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded">
+                            <h4 class="text-lg font-bold text-green-700 mb-2">기타 합병증 (11개 SR)</h4>
+                            <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                <li>어지러움</li>
+                                <li>실신 (Syncope)</li>
+                                <li>메스꺼움, 구토</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- NEW SECTION: 사망 관련 상세 분석 (문헌 기반) - Separated -->
+            <section class="space-y-8 p-6 bg-red-50 rounded-xl shadow-inner border border-red-200">
+                <h2 class="text-3xl font-bold text-red-800 border-b pb-3 mb-6">사망 관련 상세 분석</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h4 class="text-lg font-bold text-red-700 mb-3 text-left">세부 분석</h4>
+                    <ul class="list-disc list-inside text-gray-700 text-sm space-y-3 text-left">
+                        <li>
+                            <b>장기·조직 손상</b> 범주에서 사망 사례가 가장 많이 나왔습니다. <b>기흉</b>에서 복수의 리뷰가 사망을 보고했고 (예: Lao 2003 1명, Zhang 2010 4명, Ernst 2011a 4명, He 2012 6명, Xu 2013 1명, Wu 2015 2명), 자입 부위는 흉부·견갑부 주변과 GB21, BL13 등 상흉부·견갑 라인이 반복되었습니다.
+                        </li>
+                        <li>
+                            <b>심장압전/심장 손상</b>에서도 사망이 확인되었습니다 (Ernst 2011b 6명, Zheng 2012 1명-CV15 자입 후). 이 범주는 작은 수이지만 치명률이 상대적으로 높다는 점이 강조됩니다.
+                        </li>
+                        <li>
+                            <b>중추신경계·척수 손상</b>에서도 사망이 보고되었습니다 (Zheng 2012 2명, Wu 2015 12명). 경항부 후두하 부위(GB20, DU16 등)나 경추 주변 깊은 자입이 공통적인 맥락입니다.
+                        </li>
+                        <li>
+                            <b>두개강내 출혈</b>(지주막하/두개내)도 사망이 보고되었습니다 (Zhang 2010 3명, He 2012 2명). 역시 후두하·경항부 자입이 다수였다는 기술이 붙어 있습니다.
+                        </li>
+                        <li>
+                            <b>감염</b> 범주에서는 B형간염 등 바이러스성 간염에서 1명 사망이 있었고, <b>파상풍</b>에서 사망이 보고되었습니다 (He 2012 8명, Wu 2015 3명). 감염은 대개 비멸균 시술·환경 요인이 동반되었다고 서술됩니다.
+                        </li>
+                    </ul>
+
+                    <div class="mt-6 pt-4 border-t border-dashed border-gray-300">
+                        <h5 class="text-md font-bold text-gray-800 mb-2 text-left">주요 사망 원인 요약</h5>
+                        <ul class="list-disc list-inside text-gray-700 text-sm space-y-1 text-left">
+                            <li><b>기흉:</b> 8개 보고서에서 언급, 약 25-26건, 사망자 약 3명.</li>
+                            <li><b>뇌/척수 손상:</b> 6개 보고서에서 언급, 약 13건.</li>
+                            <li><b>뇌/주변 출혈:</b> 3개 보고서에서 언급, 약 35건, 사망자 약 2-3명.</li>
+                            <li><b>심장 손상/압전:</b> 3개 보고서에서 언급, 약 7건, 사망자 약 1명.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 연구 2: SAE Detailed Report (Bäumler et al. 2021 Data) -->
+            <section class="space-y-8 p-6 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-3 mb-6"> 침구 관련 심각한 부작용 상세 보고 </h2>
+                
+                <div class="mb-4">
+                    <p class="text-gray-700 font-medium p-4 border-l-4 border-red-500 bg-red-50 rounded-lg">
+                        총 7,679개의 문헌 중 21개 연구가 분석에 포함되었습니다. 메타 분석 결과, 침술 치료를 받은 환자의 9.31% (95% CI 5.10%~14.62%)에서 최소 한 가지 이상의 부작용(AE)이 발생한 것으로 나타났습니다. 심각한 부작용(SAE)의 위험 추정치는 환자 10,000명당 1.01건, 치료 100만 건당 7.98건으로 매우 드물었습니다. 평균적으로 치료 100건당 9.4건의 AE가 발생했으며, 이 중 절반은 침 부위의 출혈, 통증 또는 발적과 같이 침술의 의도된 반응으로 간주될 수 있는 경미한 부작용이었습니다. 결론적으로 침술은 의학적으로 안전한 치료법 중 하나로 간주될 수 있으며, SAE는 희귀하고 경미한 AE가 가장 흔합니다. 부작용의 정의 및 평가의 이질성이 크므로, 표준화된 평가 도구가 필요합니다.
+                    </p>
+                    <p class="text-sm text-gray-600 font-medium leading-relaxed mt-2 text-left pl-4">
+                        Bäumler P, Zhang W, Stübinger T, Irnich D. Acupuncture-related adverse events: systematic review and meta-analyses of prospective clinical studies. <em class="italic">BMJ Open</em>. 2021 Sep 6;11(9):e045961.
+                    </p>
+                </div>
+                
+                <p class="text-gray-700 mb-6">전향적 임상 연구에서 보고된 심각한 부작용(SAE)의 상세 내역과 연구자들의 인과관계 평가 결과입니다.</p>
+
+                <!-- Data Table Section -->
+                <div class="table-container bg-white rounded-xl border border-gray-200 shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100 sticky-header">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider rounded-tl-xl">
+                                    연구 (Source)
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                    심각한 부작용 (SAEs)
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                    인과관계 (Causality)
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider rounded-tr-xl">
+                                    사례 수 (n)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody_ko" class="divide-y divide-gray-100 text-sm">
+                            <!-- Data rows will be injected here by script -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Footer / Source Citation (Combined) -->
+            <footer class="mt-12 pt-4 border-t text-xs text-gray-500">
+                <p class="font-bold mb-2 text-gray-800 text-base">참고 문헌 (Source Citations):</p>
+                <ol class="list-decimal list-inside space-y-1 pl-4">
+                    <li>Chan, M. W. C., Wu, X. Y., Wu, J. C. Y., Wong, S. Y. S., & Chung, V. C. H. (2017). Safety of Acupuncture: Overview of Systematic Reviews. *Scientific Reports*, *7*, 3369. (연구 1의 근거)</li>
+                    <li>Bäumler P, Zhang W, Stübinger T, Irnich D. Acupuncture-related adverse events: systematic review and meta-analyses of prospective clinical studies. BMJ Open. 2021 Sep 6;11(9):e045961. (연구 2의 상세 데이터 및 요약 근거)</li>
+                    <li>MacPherson H, Thomas K, Walters S, Fitter M. The persistence of acupuncture benefits: follow-up of an initial randomized controlled trial for chronic back pain. Pain. 2007 Oct;131(1-2):228-36. (연구 2에 포함된 MacPherson 연구의 근거)</li>
+                </ol>
+            </footer>
+        </div>
+        <!-- === END KOREAN CONTENT BLOCK === -->
+
+
+        <!-- === ENGLISH CONTENT BLOCK === -->
+        <div class="lang-container" lang="en" style="display: none;">
+
+            <!-- Header: Main Title -->
+            <header class="text-center border-b pb-4">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-blue-900 mb-2">Acupuncture-Related Adverse Event Report</h1>
+            </header>
+
+            <!-- Introduction Section (EN) -->
+            <div class="intro-text p-6 bg-gray-50 rounded-lg text-gray-800 space-y-4 my-8 border border-gray-200">
+                <p>I have been working as a traditional Korean medicine doctor for 35 years. I have also personally experienced medical accidents and adverse events, and there were always acupuncture-related adverse events at the hospitals where I worked.</p>
+                <p>The most common ones I encountered were falls, retained needles, bleeding and bruising, and burns. Rarely, I also observed pneumothorax, nerve damage, and needle shock (fainting). Although there were no severe adverse events in my experience, reported cases include instances of peritonitis and skull fractures, so caution is necessary.</p>
+                <p class="font-bold text-gray-900">Through the two studies below, we will examine what acupuncture adverse events have been reported.</p>
+            </div>
+            <!-- END NEW: Introduction Section -->
+
+            <!-- Study 1: Chan et al. 2017 (Overview of SRs) -->
+            <section class="space-y-8 p-6 bg-blue-50 rounded-xl shadow-inner border border-blue-200">
+                <h2 class="text-3xl font-bold text-blue-800 border-b pb-3 mb-6">Overview of Systematic Reviews on Acupuncture Safety</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 md:p-8 text-center">
+                    <p class="text-lg text-gray-800 max-w-3xl mx-auto mb-4">
+                        A total of 21 complications were reported in 11 systematic reviews. The most common complications were dizziness or syncope (10.5 cases), nausea and vomiting (approx. 11.5 cases), and epilepsy (2 cases), with rare cases such as bradycardia and worsening of Bell's palsy also reported.
+                    </p>
+                    <p class="text-sm text-gray-600 font-medium leading-relaxed mt-4">
+                        Chan, M. W. C., Wu, X. Y., Wu, J. C. Y., Wong, S. Y. S., & Chung, V. C. H. (2017). Safety of Acupuncture: Overview of Systematic Reviews. <em class="italic">Scientific Reports</em>, <span class="font-semibold">7</span>, 3369.
+                    </p>
+                </div>
+
+                <!-- Bar Chart (Centered) -->
+                <div class="grid grid-cols-1 gap-8 justify-items-center">
+                    <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-xl"> <!-- Added max-w-xl for better centering -->
+                        <h3 class="text-xl font-bold text-blue-700 mb-4 align-middle text-center">4 Major Types of Adverse Events (Median Comparison)</h3>
+                        <p class="text-gray-700 mb-6 text-center text-sm">Based on the median of reported cases, this shows which types of adverse events were more frequently reported.</p>
+                        <div class="chart-container" style="max-width: 500px; height: 350px;">
+                            <canvas id="barChart_en"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-4 text-center">
+                            <b>Summary:</b> 'Organ or tissue damage' (36 cases) was the most frequent, followed by 'Other complications' (21 cases), and 'Infection' (17 cases).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-blue-700 mb-6 text-center">Detailed Classification of Adverse Events</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="border-l-4 border-blue-500 bg-blue-50 p-4 rounded">
+                            <h4 class="text-lg font-bold text-blue-700 mb-2">Infection (11 SRs)</h4>
+                            <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                <li>Hepatitis</li>
+                                <li>Abscess</li>
+                                <li>Tetanus</li>
+                                <li>Mycobacterial infection</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded">
+                            <h4 class="text-lg font-bold text-yellow-700 mb-2">Local Adverse Events (12 SRs)</h4>
+                            <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                <li>Contact dermatitis</li>
+                                <li>Allergic reaction</li>
+                                <li>Local pain or bleeding</li>
+                                <li>Bruising or burns</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded">
+                            <h4 class="text-lg font-bold text-green-700 mb-2">Other Complications (11 SRs)</h4>
+                            <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                <li>Dizziness</li>
+                                <li>Syncope</li>
+                                <li>Nausea, vomiting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- NEW SECTION: Detailed Analysis of Death-Related Events (Literature-Based) -->
+            <section class="space-y-8 p-6 bg-red-50 rounded-xl shadow-inner border border-red-200">
+                <h2 class="text-3xl font-bold text-red-800 border-b pb-3 mb-6">Detailed Analysis of Death-Related Events (Literature-Based)</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h4 class="text-lg font-bold text-red-700 mb-3 text-left">Detailed Analysis</h4>
+                    <ul class="list-disc list-inside text-gray-700 text-sm space-y-3 text-left">
+                        <li>
+                            The <b>Organ/Tissue Damage</b> category had the most reported deaths. Multiple reviews reported deaths from <b>pneumothorax</b> (e.g., 1 in Lao 2003, 4 in Zhang 2010, 4 in Ernst 2011a, 6 in He 2012, 1 in Xu 2013, 2 in Wu 2015). Needling sites were repeatedly noted around the chest/scapular region and points like GB21 and BL13 on the upper chest/scapular line.
+                        </li>
+                        <li>
+                            Deaths were also confirmed from <b>cardiac tamponade/cardiac injury</b> (6 in Ernst 2011b, 1 after needling CV15 in Zheng 2012). It is emphasized that although this category has a small number of cases, its fatality rate is relatively high.
+                        </li>
+                        <li>
+                            Deaths also occurred from <b>central nervous system/spinal cord injuries</b> (2 in Zheng 2012, 12 in Wu 2015). Deep needling in the sub-occipital region of the neck (e.g., GB20, DU16) or around the cervical spine is a common context.
+                        </li>
+                        <li>
+                            Deaths were also reported from <b>intracranial hemorrhage</b> (subarachnoid/intracranial) (3 in Zhang 2010, 2 in He 2012). It is noted that these also involved needling in the sub-occipital/neck region.
+                        </li>
+                        <li>
+                            In the <b>Infection</b> category, there was 1 death from viral hepatitis (e.g., Hepatitis B), and deaths from <b>tetanus</b> were reported (8 in He 2012, 3 in Wu 2015). It is described that infections were generally accompanied by non-sterile procedures/environmental factors.
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-6 pt-4 border-t border-dashed border-gray-300">
+                        <h5 class="text-md font-bold text-gray-800 mb-2 text-left">Summary of Major Causes of Death</h5>
+                        <ul class="list-disc list-inside text-gray-700 text-sm space-y-1 text-left">
+                            <li><b>Pneumothorax:</b> Mentioned in 8 reports, approx. 25-26 cases, approx. 3 deaths.</li>
+                            <li><b>Brain/Spinal Cord Injury:</b> Mentioned in 6 reports, approx. 13 cases.</li>
+                            <li><b>Intracranial/Pericranial Hemorrhage:</b> Mentioned in 3 reports, approx. 35 cases, approx. 2-3 deaths.</li>
+                            <li><b>Cardiac Injury/Tamponade:</b> Mentioned in 3 reports, approx. 7 cases, approx. 1 death.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 연구 2: SAE Detailed Report (Bäumler et al. 2021 Data) -->
+            <section class="space-y-8 p-6 bg-gray-50 rounded-xl shadow-inner border border-gray-200">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-3 mb-6"> Detailed Report on Serious Adverse Events (SAEs) </h2>
+                
+                <div class="mb-4">
+                    <p class="text-gray-700 font-medium p-4 border-l-4 border-red-500 bg-red-50 rounded-lg">
+                        Out of 7,679 literature entries, 21 studies were included in the analysis. The meta-analysis showed that 9.31% (95% CI 5.10%~14.62%) of patients receiving acupuncture experienced at least one adverse event (AE). The risk estimate for serious adverse events (SAEs) was very rare, at 1.01 per 10,000 patients and 7.98 per 1 million treatments. On average, 9.4 AEs occurred per 100 treatments, with half being minor AEs considered intended reactions to acupuncture, such as bleeding, pain, or redness at the needle site. In conclusion, acupuncture can be considered one of the medically safe treatment methods; SAEs are rare, and minor AEs are most common. Due to significant heterogeneity in the definition and assessment of AEs, standardized assessment tools are needed.
+                    </p>
+                    <p class="text-sm text-gray-600 font-medium leading-relaxed mt-2 text-left pl-4">
+                        Bäumler P, Zhang W, Stübinger T, Irnich D. Acupuncture-related adverse events: systematic review and meta-analyses of prospective clinical studies. <em class="italic">BMJ Open</em>. 2021 Sep 6;11(9):e045961.
+                    </p>
+                </div>
+                
+                <p class="text-gray-700 mb-6">This table details the Serious Adverse Events (SAEs) reported in prospective clinical studies and the researchers' assessment of their causality.</p>
+
+                <!-- Data Table Section -->
+                <div class="table-container bg-white rounded-xl border border-gray-200 shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100 sticky-header">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider rounded-tl-xl">
+                                    Source
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                    Serious Adverse Events (SAEs)
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                    Causality
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider rounded-tr-xl">
+                                    Cases (n)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody_en" class="divide-y divide-gray-100 text-sm">
+                            <!-- Data rows will be injected here by script -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Footer / Source Citation (Combined) -->
+            <footer class="mt-12 pt-4 border-t text-xs text-gray-500">
+                <p class="font-bold mb-2 text-gray-800 text-base">Source Citations:</p>
+                <ol class="list-decimal list-inside space-y-1 pl-4">
+                    <li>Chan, M. W. C., Wu, X. Y., Wu, J. C. Y., Wong, S. Y. S., & Chung, V. C. H. (2017). Safety of Acupuncture: Overview of Systematic Reviews. *Scientific Reports*, *7*, 3369. (Basis for Study 1)</li>
+                    <li>Bäumler P, Zhang W, Stübinger T, Irnich D. Acupuncture-related adverse events: systematic review and meta-analyses of prospective clinical studies. BMJ Open. 2021 Sep 6;11(9):e045961. (Basis for Study 2 detailed data and summary)</li>
+                    <li>MacPherson H, Thomas K, Walters S, Fitter M. The persistence of acupuncture benefits: follow-up of an initial randomized controlled trial for chronic back pain. Pain. 2007 Oct;131(1-2):228-36. (Basis for MacPherson study included in Study 2)</li>
+                </ol>
+            </footer>
+        </div>
+        <!-- === END ENGLISH CONTENT BLOCK === -->
+
+    </div>
+
+    <!-- === MANDATORY FOOTER (Hyungsuk Choi Guideline) === -->
+    <footer id="page-footer" style="width: 100%; max-width: 950px; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+    <!-- === END MANDATORY FOOTER === -->
+
+
+    <script>
+        "use strict";
+
+        /* --- Language Switching (Mandatory) --- */
+        
+        /**
+         * Sets the visible language and saves the preference.
+         * @param {string} lang - The language code ('ko' or 'en').
+         */
+        function setLanguage(lang) {
+            document.querySelectorAll('.lang-container').forEach(el => {
+                el.style.display = el.lang === lang ? 'block' : 'none';
+            });
+            // Set the lang attribute on the <html> tag for accessibility
+            document.documentElement.lang = lang;
+            try {
+                // Save preference to localStorage
+                localStorage.setItem('preferredLanguage', lang);
+            } catch (e) {
+                console.warn('LocalStorage not available:', e.message);
+            }
+        }
+
+        /**
+         * Toggles the language between 'ko' and 'en'.
+         * @param {Event} event - The click event.
+         */
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const currentLang = document.documentElement.lang || 'ko';
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        /**
+         * Loads the preferred language from localStorage or defaults to 'ko'.
+         */
+        function loadLanguage() {
+            let preferredLang = 'ko'; // Default
+            try {
+                preferredLang = localStorage.getItem('preferredLanguage') || 'ko';
+            } catch (e) {
+                console.warn('LocalStorage not available:', e.message);
+            }
+            // Ensure the value is valid
+            if (preferredLang !== 'ko' && preferredLang !== 'en') {
+                preferredLang = 'ko';
+            }
+            setLanguage(preferredLang);
+        }
+
+
+        /* --- Chart.js Configuration & Data (For Study 1: Chan et al. 2017) --- */
+
+        // Helper function for chart tooltips
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            } else {
+                return label;
+            }
+        };
+
+        // Helper function to wrap long chart labels
+        const wrapChartLabels = (labels) => {
+            const maxChars = 16;
+            return labels.map(label => {
+                if (typeof label === 'string' && label.length > maxChars) {
+                    const words = label.split(' ');
+                    const newLabel = [];
+                    let line = '';
+                    words.forEach(word => {
+                        if ((line + word).length > maxChars) {
+                            newLabel.push(line.trim());
+                            line = word + ' ';
+                        } else {
+                            line += word + ' ';
+                        }
+                    });
+                    newLabel.push(line.trim());
+                    return newLabel;
+                }
+                return label;
+            });
+        };
+        
+        // Chart colors and base labels
+        const barChartColors = ['#DC2626', '#10B981', '#3B82F6', '#F59E0B'];
+        const originalBarLabels = ['장기 또는 조직 손상', '기타 합병증', '감염', '국소 부작용 또는 반응'];
+
+        /**
+         * Renders all Chart.js charts for Study 1, modified for language.
+         * @param {string} lang - 'ko' or 'en' suffix.
+         */
+        function renderCharts(lang) {
+            // Determine labels based on language
+            const barLabels = (lang === 'ko') ? originalBarLabels : ['Organ/Tissue Damage', 'Other Complications', 'Infection', 'Local AEs/Reactions'];
+            const barLabelY = (lang === 'ko') ? '보고된 중앙값 (건)' : 'Median Reported Cases (n)';
+            const barLabelTooltip = (lang === 'ko') ? '보고된 중앙값 (건)' : 'Median (n)';
+
+            // Create language-specific data objects
+            const barData = {
+                labels: wrapChartLabels(barLabels),
+                datasets: [{
+                    label: barLabelTooltip,
+                    data: [36, 21, 17, 8.5],
+                    backgroundColor: barChartColors,
+                    borderColor: barChartColors.map(color => color.replace('0.8', '1')),
+                    borderWidth: 1
+                }]
+            };
+
+            // Render Bar Chart
+            const barCtx = document.getElementById('barChart_' + lang);
+            if (barCtx && !Chart.getChart(barCtx)) { // Check if chart already exists
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: barData,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: tooltipTitleCallback
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: barLabelY
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+
+        /* --- Table Rendering Logic (For Study 2: SAE Detailed Report) --- */
+
+        // *** MODIFICATION START ***
+        // Raw data for the detailed SAE table, now with translations
+        const rawData = [
+            { study: "Endres et al 2004", sae: { en: "Death", ko: "사망" }, causality: "Unlikely", n: 9 },
+            { study: "Endres et al 2004", sae: { en: "Fall or trauma, with or without fracture", ko: "낙상 또는 외상 (골절 유무와 관계 없음)" }, causality: "Possible", n: 4 },
+            { study: "Endres et al 2004", sae: { en: "Acute general infection with hospitalisation", ko: "입원이 필요한 급성 전신 감염" }, causality: "Unlikely", n: 2 },
+            { study: "Endres et al 2004", sae: { en: "Allergic reaction to concomitant medication (atopy)", ko: "병용 약물에 대한 알레르기 반응 (아토피)" }, causality: "Possible", n: 1 },
+            { study: "Endres et al 2004", sae: { en: "Stroke with hospitalisation", ko: "입원이 필요한 뇌졸중" }, causality: "Unlikely", n: 3 },
+            { study: "Endres et al 2004", sae: { en: "Cardiovascular problems (hospital admission)", ko: "심혈관계 문제 (병원 입원)" }, causality: "Possible", n: 3 },
+            { study: "Endres et al 2004", sae: { en: "Intervertebral disk prolapse, pain exacerbation with hospital admission", ko: "추간판 탈출증, 통증 악화로 입원" }, causality: "Unclassifiable", n: 5 },
+            { study: "Endres et al 2004", sae: { en: "Malignant parotid tumour (hospital admission)", ko: "악성 이하선 종양 (병원 입원)" }, causality: "Unlikely", n: 1 },
+            { study: "Endres et al 2004", sae: { en: "Hospitalisation (unknown reasons)", ko: "입원 (원인 불명)" }, causality: "Unclassifiable", n: 17 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Pneumothorax", ko: "기흉" }, causality: "Possible", n: 5 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Suicidiation in a patient with borderline syndrome", ko: "경계성 증후군 환자의 자살" }, causality: "Unlikely", n: 1 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Hypertensive crisis", ko: "고혈압성 위기" }, causality: "Possible", n: 1 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Syncope (vasovagal reaction)", ko: "실신 (미주신경성 반응)" }, causality: "Possible", n: 2 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Asthma attack in a patient with asthma", ko: "천식 환자의 천식 발작" }, causality: "Possible", n: 1 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Erysipelas (one in a patient with lymphedema)", ko: "단독 (림프부종 환자 1명 포함)" }, causality: "Possible", n: 2 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Circulatory collapse (one with uncontrolled defecation and one with vertigo and paraesthesia)", ko: "순환 허탈 (조절되지 않는 배변 1명, 현기증 및 감각이상 1명)" }, causality: "Possible", n: 2 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Circulatory reaction with amnesia", ko: "기억상실을 동반한 순환계 반응" }, causality: "Unlikely", n: 1 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Tonic–clonic seizures and ophistotonus", ko: "강직간대성 발작 및 후궁반장" }, causality: "Unlikely", n: 1 },
+            { study: "Weidenhammer et al 2008", sae: { en: "Infection of the knee joint with Escherichia coli bacteria", ko: "대장균으로 인한 무릎 관절 감염" }, causality: "Possible", n: 1 },
+            { study: "Melchart et al 2004", sae: { en: "Exacerbation of depression", ko: "우울증 악화" }, causality: "Possible", n: 1 },
+            { study: "Melchart et al 2004", sae: { en: "Hypertensive crisis", ko: "고혈압성 위기" }, causality: "Possible", n: 1 },
+            { study: "Melchart et al 2004", sae: { en: "Vasovagal reaction", ko: "미주신경성 반응" }, causality: "Possible", n: 1 },
+            { study: "Melchart et al 2004", sae: { en: "Asthma attack with hypertension and angina", ko: "고혈압 및 협심증을 동반한 천식 발작" }, causality: "Possible", n: 1 },
+            { study: "Melchart et al 2004", sae: { en: "Pneumothorax", ko: "기흉" }, causality: "Possible", n: 2 },
+            { study: "Yamashita et al 1999", sae: { en: "Hospitalisation of patient with asthma because of coughing", ko: "기침으로 인한 천식 환자 입원" }, causality: "Possible", n: 1 },
+            { study: "Yamashita et al 1999", sae: { en: "One case of deep burn that recovered after 2 years", ko: "2년 후 회복된 심부 화상 1건" }, causality: "Possible", n: 1 },
+            { study: "MacPherson et al 2004", sae: { en: "LBP in patient with breast cancer, hospital admission, disappeared without medication, since then no more LBP", ko: "유방암 환자의 요통, 입원, 약물 없이 소실, 이후 요통 없음" }, causality: "Possible", n: 1 },
+            { study: "MacPherson et al 2004", sae: { en: "Car crash 2 days after acupuncture, very little sleep the night before", ko: "침술 2일 후 교통사고, 전날 수면 부족" }, causality: "Unlikely", n: 1 },
+            { study: "MacPherson et al 2004", sae: { en: "Skin rash and feeling ill for several weeks accompanied by decrease of myalgic encephalomyelitis symptoms and feeling of catharsis (no treatment)", ko: "수주간의 피부 발진 및 불쾌감, 근통성 뇌척수염 증상 감소 및 카타르시스 느낌 동반 (치료 없음)" }, causality: "Possible", n: 1 },
+        ];
+        // *** MODIFICATION END ***
+
+        // Helper function for table row styling
+        const getCausalityClass = (causality) => {
+            switch (causality) {
+                case 'Possible':
+                    return 'text-red-600 font-semibold';
+                case 'Unlikely':
+                    return 'text-green-600';
+                case 'Unclassifiable':
+                    return 'text-yellow-600';
+                default:
+                    return 'text-gray-900';
+            }
+        };
+
+        /**
+         * Renders the rawData array into the HTML table for Study 2.
+         * @param {string} lang - 'ko' or 'en' suffix.
+         */
+        function renderTable(lang) {
+            const dataTableBody = document.getElementById('dataTableBody_' + lang);
+            // Don't re-render if table already has children
+            if (!dataTableBody || dataTableBody.childElementCount > 0) {
+                return; 
+            }
+
+            // Sort data by study and then by n descending for better reading
+            rawData.sort((a, b) => {
+                if (a.study < b.study) return -1;
+                if (a.study > b.study) return 1;
+                return b.n - a.n;
+            });
+
+            rawData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                
+                // Truncate study name for cleaner table display
+                const displayStudy = item.study.replace(/ et al \d+/, ' et al.');
+
+                // *** MODIFICATION START ***
+                // Select the correct language for the SAE field
+                const saeText = (lang === 'ko') ? item.sae.ko : item.sae.en;
+                // *** MODIFICATION END ***
+
+                row.className = `${rowClass} hover:bg-gray-100 transition duration-150`;
+                row.innerHTML = `
+                    <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">${displayStudy}</td>
+                    <td class="px-4 py-3">${saeText}</td> <!-- MODIFIED LINE -->
+                    <td class="px-4 py-3 whitespace-nowrap ${getCausalityClass(item.causality)}">${item.causality}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-right text-gray-700 font-bold">${item.n}</td>
+                `;
+                dataTableBody.appendChild(row);
+            });
+        }
+        
+        // Initial setup on load
+        window.onload = () => {
+            // Render content for *both* languages first
+            renderCharts('ko');
+            renderCharts('en');
+            renderTable('ko');
+            renderTable('en');
+            
+            // Set the initial language visibility based on preference
+            loadLanguage(); 
+        };
+
+    </script>
+</body>
+</html>
