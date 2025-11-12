@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>의학 용어 요약표</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background-color: #ffffff; /* 완전 흰색 배경 */
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #111;
+        }
+        .subtitle {
+            font-size: 1.5rem; /* 소제목 크기 키움 */
+            font-weight: 600;  /* 굵게 */
+            color: #555;
+            margin-top: 0;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr; /* 모바일 기본 1단 */
+            gap: 2rem;
+        }
+        
+        /* 1024px 이상 데스크탑 화면에서 2단 적용 */
+        @media (min-width: 1024px) {
+            .grid-container {
+                /* 1:1 비율로 수정 */
+                grid-template-columns: 1fr 1fr; 
+            }
+        }
+
+        .grid-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            /* min-height를 설정하여 카드가 깨지는 것을 방지 */
+            display: flex;
+            flex-direction: column;
+        }
+        .card-header {
+            padding: 1rem 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .card-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .card-table th,
+        .card-table td {
+            padding: 0.75rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        .card-table tr:last-child td {
+            border-bottom: none;
+        }
+        .card-table th {
+            background-color: #f9f9f9;
+            font-size: 0.9rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+        }
+        .card-table td:first-child {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* Color Themes */
+        .card-header.blue { background-color: #007bff; }
+        .card-header.green { background-color: #28a745; }
+        .card-header.red { background-color: #dc3545; }
+        .card-header.orange { background-color: #fd7e14; }
+        .card-header.purple { background-color: #6f42c1; }
+        .card-header.teal { background-color: #20c997; }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>의학 용어 요약 (Medical Terminology Summary)</h1>
+        <p class="subtitle">별것 아닌 의학용어</p>
+    </div>
+
+    <div class="grid-container">
+        <!-- 긴 목록 (Left Column) -->
+        <div class="grid-column">
+            
+            <!-- 신체 부위 -->
+            <div class="card">
+                <div class="card-header blue">🩺 신체 부위 (Body Parts)</div>
+                <table class="card-table">
+                    <thead>
+                        <tr><th>용어 (Term)</th><th>영어 의미 (Meaning)</th><th>한글 의미 (Korean)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>pulmo, pneumo</td><td>lung</td><td>폐, 허파</td></tr>
+                        <tr><td>cardio, cardial</td><td>heart</td><td>심장</td></tr>
+                        <tr><td>hepato</td><td>liver</td><td>간</td></tr>
+                        <tr><td>nephro/reno</td><td>kidney</td><td>신장, 콩팥</td></tr>
+                        <tr><td>metro / hystero</td><td>uterus</td><td>자궁</td></tr>
+                        <tr><td>cysto</td><td>bladder</td><td>방광</td></tr>
+                        <tr><td>cholecyst</td><td>gallbladder</td><td>담낭, 쓸개</td></tr>
+                        <tr><td>gastro</td><td>stomach</td><td>위</td></tr>
+                        <tr><td>entero</td><td>intestine</td><td>장, 소장</td></tr>
+                        <tr><td>colo</td><td>colon</td><td>결장, 대장</td></tr>
+                        <tr><td>procto</td><td>anus, rectum</td><td>항문, 직장</td></tr>
+                        <tr><td>pancreato</td><td>pancreas</td><td>췌장, 이자</td></tr>
+                        <tr><td>spleno</td><td>spleen</td><td>비장, 지라</td></tr>
+                        <tr><td>tracheo</td><td>trachea</td><td>기관</td></tr>
+                        <tr><td>esophago</td><td>esophagus</td><td>식도</td></tr>
+                        <tr><td>ophthalmo / opt / oculo</td><td>eye</td><td>눈</td></tr>
+                        <tr><td>oto / auriculo</td><td>ear</td><td>귀</td></tr>
+                        <tr><td>rhino / naso</td><td>nose</td><td>코</td></tr>
+                        <tr><td>stomato</td><td>mouth</td><td>입, 구강</td></tr>
+                        <tr><td>dento / odonto</td><td>teeth</td><td>치아, 이</td></tr>
+                        <tr><td>glosso</td><td>tongue</td><td>혀</td></tr>
+                        <tr><td>gingivo</td><td>gums</td><td>잇몸</td></tr>
+                        <tr><td>masto</td><td>breast</td><td>유방, 가슴</td></tr>
+                        <tr><td>angio</td><td>vessel</td><td>혈관</td></tr>
+                        <tr><td>veno/ phlebo</td><td>vein</td><td>정맥</td></tr>
+                        <tr><td>arterio</td><td>artery</td><td>동맥</td></tr>
+                        <tr><td>hemo</td><td>blood</td><td>혈액, 피</td></tr>
+                        <tr><td>pleuro</td><td>pleura</td><td>흉막, 가슴막</td></tr>
+                        <tr><td>cerebro,encephalo</td><td>brain</td><td>뇌</td></tr>
+                        <tr><td>neuro</td><td>nerve</td><td>신경</td></tr>
+                        <tr><td>myo</td><td>muscle</td><td>근육</td></tr>
+                        <tr><td>thoraco</td><td>chest</td><td>흉부, 가슴</td></tr>
+                        <tr><td>osteo</td><td>bone</td><td>뼈</td></tr>
+                        <tr><td>chondro</td><td>cartilage</td><td>연골</td></tr>
+                        <tr><td>arthro</td><td>joint</td><td>관절</td></tr>
+                        <tr><td>psycho</td><td>mind</td><td>정신, 마음</td></tr>
+                        <tr><td>dermato</td><td>skin</td><td>피부</td></tr>
+                        <tr><td>cyto</td><td>cell</td><td>세포</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 접미사 -->
+            <div class="card">
+                <div class="card-header red">✍️ 접미사 (Suffix)</div>
+                <table class="card-table">
+                    <thead>
+                        <tr><th>용어 (Term)</th><th>영어 의미 (Meaning)</th><th>한글 의미 (Korean)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>-algia</td><td>Pain</td><td>통증</td></tr>
+                        <tr><td>-itis</td><td>Inflammation</td><td>염증</td></tr>
+                        <tr><td>-pathy</td><td>Disease or disorder</td><td>질병, 장애</td></tr>
+                        <tr><td>-megaly</td><td>Abnormal enlargement</td><td>비대</td></tr>
+                        <tr><td>-ia</td><td>Condition</td><td>상태</td></tr>
+                        <tr><td>-osis</td><td>Condition</td><td>증상, 상태</td></tr>
+                        <tr><td>-rrhage, -rrhagia</td><td>Flow (bleeding)</td><td>흐름 (출혈)</td></tr>
+                        <tr><td>-rrhea</td><td>Flow</td><td>흐름</td></tr>
+                        <tr><td>-cise</td><td>Cut</td><td>자르다</td></tr>
+                        <tr><td>-ectomy</td><td>Surgical removal</td><td>수술적 제거, 절제술</td></tr>
+                        <tr><td>-otomy</td><td>Incision</td><td>절개(술)</td></tr>
+                        <tr><td>-pexy</td><td>Fixation</td><td>고정(술)</td></tr>
+                        <tr><td>-plasty</td><td>Surgical correction</td><td>성형(술)</td></tr>
+                        <tr><td>-emia</td><td>Condition of blood</td><td>혈액 상태</td></tr>
+                        <tr><td>-penia</td><td>Decrease</td><td>감소</td></tr>
+                        <tr><td>-stenosis</td><td>Abnormal tightening</td><td>협착</td></tr>
+                        <tr><td>-cide</td><td>Kill</td><td>죽임, 살균</td></tr>
+                        <tr><td>-oma</td><td>Tumor</td><td>종양</td></tr>
+                        <tr><td>-genic</td><td>Origin</td><td>기원, 발생</td></tr>
+                        <tr><td>-tripsy</td><td>Crushing</td><td>분쇄(술)</td></tr>
+                        <tr><td>-oscopy</td><td>Examination by seeing</td><td>검사 (시각), 내시경</td></tr>
+                        <tr><td>-lysis</td><td>Breaking down</td><td>분해, 용해</td></tr>
+                        <tr><td>-graphy</td><td>Drawing, Writing</td><td>기록(법), 촬영(술)</td></tr>
+                        <tr><td>-gram</td><td>Record or picture</td><td>기록, 그림</td></tr>
+                        <tr><td>-oid</td><td>Ressembling</td><td>유사한, ~모양의</td></tr>
+                        <tr><td>-metry</td><td>Process of measuring</td><td>측정(법)</td></tr>
+                        <tr><td>-phobia</td><td>Fear</td><td>공포(증)</td></tr>
+                        <tr><td>-philia</td><td>Attraction or affinity</td><td>친화성, 기호</td></tr>
+                        <tr><td>-genesis</td><td>Formation or origin</td><td>형성, 발생</td></tr>
+                        <tr><td>-trophy</td><td>Nourishment or growth</td><td>영양, 성장</td></tr>
+                        <tr><td>-plasia</td><td>Formation or development</td><td>형성, 발달</td></tr>
+                        <tr><td>-cyte</td><td>Cell</td><td>세포</td></tr>
+                        <tr><td>-ase</td><td>Enzyme</td><td>효소</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 짧은 목록 (Right Column) -->
+        <div class="grid-column">
+
+            <!-- 접두사 - 일반 -->
+            <div class="card">
+                <div class="card-header green">🧭 접두사 - 일반 (Prefix - General)</div>
+                <table class="card-table">
+                    <thead>
+                        <tr><th>용어 (Term)</th><th>영어 의미 (Meaning)</th><th>한글 의미 (Korean)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A, An</td><td>Without, lack of</td><td>없음, 결핍</td></tr>
+                        <tr><td>Ab</td><td>Away from</td><td>~로부터 멀리</td></tr>
+                        <tr><td>Ad</td><td>To, toward, near to</td><td>~쪽으로, 가까이</td></tr>
+                        <tr><td>Ambi</td><td>Both</td><td>양쪽의</td></tr>
+                        <tr><td>Anti</td><td>Against, opposed to</td><td>반대, 대항</td></tr>
+                        <tr><td>Circum</td><td>Around, about</td><td>주위, 둘레</td></tr>
+                        <tr><td>Con/com</td><td>With, together</td><td>함께</td></tr>
+                        <tr><td>Contra</td><td>Against, opposite</td><td>반대의</td></tr>
+                        <tr><td>De</td><td>Away from</td><td>떨어져, 제거</td></tr>
+                        <tr><td>Dia</td><td>Through, apart, across</td><td>~을 통해, 가로질러</td></tr>
+                        <tr><td>Dis</td><td>Reversal, apart from</td><td>반대, 분리</td></tr>
+                        <tr><td>Dys</td><td>Bad, difficult, disordered</td><td>나쁜, 어려운, 장애</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 접두사 - 숫자 -->
+            <div class="card">
+                <div class="card-header orange">🔢 접두사 - 숫자 (Prefix - Numbers)</div>
+                <table class="card-table">
+                    <thead>
+                        <tr><th>용어 (Term)</th><th>영어 의미 (Meaning)</th><th>한글 의미 (Korean)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Hemi / Semi</td><td>Half</td><td>반 (1/2)</td></tr>
+                        <tr><td>Uni / Mono</td><td>One</td><td>하나 (1)</td></tr>
+                        <tr><td>Bi / Di</td><td>Two</td><td>둘 (2)</td></tr>
+                        <tr><td>Tri</td><td>Three</td><td>셋 (3)</td></tr>
+                        <tr><td>Quadri / Tetra</td><td>Four</td><td>넷 (4)</td></tr>
+                        <tr><td>Quinti / Penta</td><td>Five</td><td>다섯 (5)</td></tr>
+                        <tr><td>Sexi / Hexa</td><td>Six</td><td>여섯 (6)</td></tr>
+                        <tr><td>Septi / Hepta</td><td>Seven</td><td>일곱 (7)</td></tr>
+                        <tr><td>Octi / Octa</td><td>Eight</td><td>여덟 (8)</td></tr>
+                        <tr><td>Noni / Ennea</td><td>Nine</td><td>아홉 (9)</td></tr>
+                        <tr><td>Oligo</td><td>Few, small</td><td>소수, 적은</td></tr>
+                        <tr><td>Poly</td><td>Many, much</td><td>다수, 많은</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 접두사 - 위치 -->
+            <div class="card">
+                <div class="card-header purple">📍 접두사 - 위치 (Prefix - Location)</div>
+                <table class="card-table">
+                    <thead>
+                        <tr><th>용어 (Term)</th><th>영어 의미 (Meaning)</th><th>한글 의미 (Korean)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ante</td><td>Before, forward</td><td>앞, 이전</td></tr>
+                        <tr><td>Em, En</td><td>In</td><td>안에</td></tr>
+                        <tr><td>E, Ex</td><td>Out, away from</td><td>밖으로, 멀리</td></tr>
+                        <tr><td>Endo</td><td>Within</td><td>내부</td></tr>
+                        <tr><td>Epi</td><td>Upon, on</td><td>위에</td></tr>
+                        <tr><td>Extra</td><td>Outside</td><td>외부</td></tr>
+                        <tr><td>Hyper</td><td>Over, above, excessive</td><td>과다, 초과</td></tr>
+                        <tr><td>Hypo</td><td>Under, below, deficient</td><td>저하, 아래, 부족</td></tr>
+                        <tr><td>Im, In</td><td>In, Into</td><td>안에, 안으로</td></tr>
+                        <tr><td>Im, In</td><td>Not</td><td>부정 (아님)</td></tr>
+                        <tr><td>Infra</td><td>Below</td><td>아래</td></tr>
+                        <tr><td>Inter</td><td>Between</td><td>사이</td></tr>
+                        <tr><td>Intra</td><td>Within</td><td>내부</td></tr>
+                        <tr><td>Meta</td><td>Beyond, after, change</td><td>넘어, 후, 변화</td></tr>
+                        <tr><td>Para</td><td>Beside, beyond, near to</td><td>곁에, 넘어, 가까이</td></tr>
+                        <tr><td>Per</td><td>Through, excessive</td><td>~을 통해, 과도한</td></tr>
+                        <tr><td>Peri</td><td>Around</td><td>주위</td></tr>
+                        <tr><td>Post</td><td>After, behind</td><td>후, 뒤</td></tr>
+                        <tr><td>Pre/pro</td><td>Before, in front of</td><td>전, 앞</td></tr>
+                        <tr><td>Re</td><td>Back, again, contrary</td><td>뒤로, 다시, 반대로</td></tr>
+                        <tr><td>Retro</td><td>Backward, located behind</td><td>뒤로, 후방</td></tr>
+                        <tr><td>Sub</td><td>Under</td><td>아래</td></tr>
+                        <tr><td>Supra</td><td>Above, upper, excessive</td><td>위, 상부, 초과</td></tr>
+                        <tr><td>Sym, Syn</td><td>Together, with</td><td>함께</td></tr>
+                        <tr><td>Trans</td><td>Across, through, beyond</td><td>가로질러, 통해</td></tr>
+                        <tr><td>Ultra</td><td>Beyond, in excess</td><td>넘어, 초과</td></tr>
+Read 21 more lines...
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 접두사 - 색상 -->
+            <div class="card">
+                <div class="card-header teal">🎨 접두사 - 색상 (Prefix - Colors)</div>
+                <table class="card-table">
+                    <thead>
+                        <tr><th>용어 (Term)</th><th>영어 의미 (Meaning)</th><th>한글 의미 (Korean)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Chloro</td><td>Green</td><td>녹색</td></tr>
+                        <tr><td>Cirrho</td><td>Yellow-orange</td><td>황갈색</td></tr>
+                        <tr><td>Erythro</td><td>Red</td><td>적색 (붉은)</td></tr>
+                        <tr><td>Leuko / Albino</td><td>White</td><td>백색 (흰)</td></tr>
+                        <tr><td>Melano</td><td>Black</td><td>흑색 (검은)</td></tr>
+                        <tr><td>Xantho</td><td>Yellow</td><td>황색 (노란)</td></tr>
+                        <tr><td>Cyano</td><td>Blue</td><td>청색 (푸른)</td></tr>
+                        <tr><td>Polio</td><td>Gray</td><td>회색</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Hyungsuk Choi. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
