@@ -2,855 +2,1167 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>의학 용어 목록</title>
     <style>
+        /* 기본 스타일 */
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            margin: 20px;
-        }
-        h2 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-            margin-top: 30px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        tr:nth-child(even) {
+            margin: 0;
+            padding: 20px;
             background-color: #f9f9f9;
+            color: #333;
         }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        /* 헤더 및 컨트롤: 제목 영역과 언어 토글 영역을 수평 배치 */
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 상단 정렬 */
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap; /* 모바일 대응 */
+        }
+
+        /* ---------------------------------------------------- */
+        /* 🔥 제목 및 펼치기/접기 버튼 영역 (수직 정렬) */
+        .title-and-expand-controls {
+            display: flex;
+            flex-direction: column; /* H1과 controls-group을 수직으로 쌓음 */
+            flex-grow: 1; /* 남은 공간을 채우도록 설정 (언어 토글 그룹이 오른쪽에 붙도록) */
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        /* 펼치기/접기 버튼 그룹 */
+        .expand-collapse-group {
+            margin-top: 12px; /* 제목 아래에 충분한 간격 추가 */
+        }
+        /* ---------------------------------------------------- */
+
+        /* 일반 컨트롤 그룹 스타일 */
+        .controls-group {
+            display: flex;
+            gap: 10px;
+            /* margin-top은 개별 그룹에 설정 */
+        }
+
+        /* 언어 토글 그룹 (모바일에서 줄바꿈 시 여백) */
+        .lang-toggle-group {
+             margin-top: 10px;
+        }
+
+        /* 🔥 미니멀 디자인 적용: 4개 버튼 스타일 */
+        .header-controls button {
+            padding: 5px 10px;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: none;
+            background-color: transparent;
+            color: #555;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-bottom 0.2s;
+        }
+
+        .header-controls button:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .header-controls button.active {
+            background-color: transparent;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .header-controls button.active:hover {
+            background-color: #f0f0f0;
+            color: #007bff;
+        }
+        
+        /* 모바일 대응 (600px 이상) */
+        @media (min-width: 600px) {
+            .header-controls {
+                flex-wrap: nowrap;
+            }
+            /* 언어 토글 그룹을 제목 영역과 수평으로 배치하며 모바일 여백 제거 */
+            .lang-toggle-group {
+                margin-top: 0; 
+                margin-left: 20px; 
+            }
+        }
+
+        /* 아코디언 (접힘 메뉴) */
+        .collapsible-section {
+            border-bottom: 1px solid #eee;
+        }
+        .collapsible-section:last-child {
+            border-bottom: none;
+        }
+
+        .collapsible-header {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
+
+        .collapsible-header:hover {
+            background-color: #fcfcfc;
+        }
+
+        .collapsible-header h2 {
+            margin: 0;
+            font-size: 1.3em;
+            color: #0056b3;
+        }
+
+        .toggle-arrow {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .collapsible-content {
+            padding: 0 20px 20px 20px;
+            background-color: #ffffff;
+            display: block;
+            overflow-x: auto;
+        }
+        
+        /* 테이블 스타일 및 언어 전환 로직 (기존 유지) */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; white-space: nowrap; }
+        th { background-color: #f4f4f4; font-weight: 600; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .lang-en { display: none; }
+        body.lang-en-active .lang-ko { display: none; }
+        body.lang-en-active .lang-en { display: inline; }
+        body.lang-en-active .col-ko { display: none; }
     </style>
 </head>
 <body>
 
-    <h1>의학 용어 목록</h1>
+    <div class="container">
+        
+        <!-- 헤더: 제목, 전체 컨트롤, 언어 스위치 -->
+        <div class="header-controls">
+            
+            <!-- 🔥 제목과 펼치기/접기 버튼을 묶어 수직으로 배치하는 영역 -->
+            <div class="title-and-expand-controls">
+                <h1>
+                    <span class="lang-ko">의학 용어 목록</span>
+                    <span class="lang-en">Medical Terminology List</span>
+                </h1>
+                
+                <!-- 펼치기/접기 버튼 그룹 -->
+                <div class="controls-group expand-collapse-group">
+                    <button id="btn-expand-all">
+                        <span class="lang-ko">모두 펼치기</span>
+                        <span class="lang-en">Expand All</span>
+                    </button>
+                    <button id="btn-collapse-all">
+                        <span class="lang-ko">모두 접기</span>
+                        <span class="lang-en">Collapse All</span>
+                    </button>
+                </div>
+            </div>
+            <!-- 🔥 /제목과 펼치기/접기 버튼 영역 끝 -->
+            
+            <!-- 언어 토글 그룹 (오른쪽에 위치) -->
+            <div class="controls-group lang-toggle-group" id="lang-toggle-container">
+                <button id="btn-ko" class="active">한글</button>
+                <button id="btn-en">English</button>
+            </div>
+        </div>
 
-    <h2>🩺 신체 부위 (Body Parts)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>용어</th>
-                <th>영어 의미</th>
-                <th>한글 의미</th>
-                <th>예시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>pulmo, pneumo</td>
-                <td>lung</td>
-                <td><strong>폐, 허파</strong></td>
-                <td>pulmonary, pneumonia</td>
-            </tr>
-            <tr>
-                <td>cardio, cardial</td>
-                <td>heart</td>
-                <td><strong>심장</strong></td>
-                <td>cardiovascular, myocardial</td>
-            </tr>
-            <tr>
-                <td>hepato</td>
-                <td>liver</td>
-                <td><strong>간</strong></td>
-                <td>hepatitis, hepatomegaly</td>
-            </tr>
-            <tr>
-                <td>nephro/reno</td>
-                <td>kidney</td>
-                <td><strong>신장, 콩팥</strong></td>
-                <td>nephrology, nephrectomy</td>
-            </tr>
-            <tr>
-                <td>metro / hystero</td>
-                <td>uterus</td>
-                <td><strong>자궁</strong></td>
-                <td>metrorrhagia, hysterectomy</td>
-            </tr>
-            <tr>
-                <td>cysto</td>
-                <td>bladder</td>
-                <td><strong>방광</strong></td>
-                <td>cystitis, cholcystitis, renal cyst</td>
-            </tr>
-            <tr>
-                <td>cholecyst</td>
-                <td>gallbladder</td>
-                <td><strong>담낭, 쓸개</strong></td>
-                <td>cholecystitis, cholecystectomy</td>
-            </tr>
-            <tr>
-                <td>gastro</td>
-                <td>stomach</td>
-                <td><strong>위</strong></td>
-                <td>gastritis, gastrectomy</td>
-            </tr>
-            <tr>
-                <td>entero</td>
-                <td>intestine</td>
-                <td><strong>장, 소장</strong></td>
-                <td>enteritis, enteropathy</td>
-            </tr>
-            <tr>
-                <td>colo</td>
-                <td>colon</td>
-                <td><strong>결장, 대장</strong></td>
-                <td>colitis, colonoscopy</td>
-            </tr>
-            <tr>
-                <td>procto</td>
-                <td>anus, rectum</td>
-                <td><strong>항문, 직장</strong></td>
-                <td>proctitis, proctoscope</td>
-            </tr>
-            <tr>
-                <td>pancreato</td>
-                <td>pancreas</td>
-                <td><strong>췌장, 이자</strong></td>
-                <td>pancreatitis, pancreatectomy</td>
-            </tr>
-            <tr>
-                <td>spleno</td>
-                <td>spleen</td>
-                <td><strong>비장, 지라</strong></td>
-                <td>splenomegaly, splenectomy</td>
-            </tr>
-            <tr>
-                <td>tracheo</td>
-                <td>trachea</td>
-                <td><strong>기관</strong></td>
-                <td>tracheotomy, tracheitis</td>
-            </tr>
-            <tr>
-                <td>esophago</td>
-                <td>esophagus</td>
-                <td><strong>식도</strong></td>
-                <td>esophagitis, esophagectomy</td>
-            </tr>
-            <tr>
-                <td>ophthalmo / opt / oculo</td>
-                <td>eye</td>
-                <td><strong>눈</strong></td>
-                <td>ophthalmology, ophthalmoscope</td>
-            </tr>
-            <tr>
-                <td>oto / auriculo</td>
-                <td>ear</td>
-                <td><strong>귀</strong></td>
-                <td>otoscope, otitis</td>
-            </tr>
-            <tr>
-                <td>rhino / naso</td>
-                <td>nose</td>
-                <td><strong>코</strong></td>
-                <td>rhinoplasty, rhinitis</td>
-            </tr>
-            <tr>
-                <td>stomato</td>
-                <td>mouth</td>
-                <td><strong>입, 구강</strong></td>
-                <td>stomatology, stomatitis</td>
-            </tr>
-            <tr>
-                <td>dento / odonto</td>
-                <td>teeth</td>
-                <td><strong>치아, 이</strong></td>
-                <td>dentist, dental</td>
-            </tr>
-            <tr>
-                <td>glosso</td>
-                <td>tongue</td>
-                <td><strong>혀</strong></td>
-                <td>epiglottis, glossitis</td>
-            </tr>
-            <tr>
-                <td>gingivo</td>
-                <td>gums</td>
-                <td><strong>잇몸</strong></td>
-                <td>gingivitis, gingivectomy</td>
-            </tr>
-            <tr>
-                <td>masto</td>
-                <td>breast</td>
-                <td><strong>유방, 가슴</strong></td>
-                <td>mastitis, mastectomy</td>
-            </tr>
-            <tr>
-                <td>angio</td>
-                <td>vessel</td>
-                <td><strong>혈관</strong></td>
-                <td>angiography, angioplasty</td>
-            </tr>
-            <tr>
-                <td>veno/ phlebo</td>
-                <td>vein</td>
-                <td><strong>정맥</strong></td>
-                <td>venous, venography, phlebotomist</td>
-            </tr>
-            <tr>
-                <td>arterio</td>
-                <td>artery</td>
-                <td><strong>동맥</strong></td>
-                <td>arteriosclerosis, arteriography</td>
-            </tr>
-            <tr>
-                <td>hemo</td>
-                <td>blood</td>
-                <td><strong>혈액, 피</strong></td>
-                <td>hemoglobin, hemorrhage</td>
-            </tr>
-            <tr>
-                <td>pleuro</td>
-                <td>pleura</td>
-                <td><strong>흉막, 가슴막</strong></td>
-                <td>pleuritis, pleurodynia</td>
-            </tr>
-            <tr>
-                <td>cerebro,encephalo</td>
-                <td>brain</td>
-                <td><strong>뇌</strong></td>
-                <td>cerebral, encephalopathy</td>
-            </tr>
-            <tr>
-                <td>neuro</td>
-                <td>nerve</td>
-                <td><strong>신경</strong></td>
-                <td>neurology, neuritis</td>
-            </tr>
-            <tr>
-                <td>myo</td>
-                <td>muscle</td>
-                <td><strong>근육</strong></td>
-                <td>myopathy, myositis</td>
-            </tr>
-            <tr>
-                <td>thoraco</td>
-                <td>chest</td>
-                <td><strong>흉부, 가슴</strong></td>
-                <td>thoracic, thoracotomy</td>
-            </tr>
-            <tr>
-                <td>osteo</td>
-                <td>bone</td>
-                <td><strong>뼈</strong></td>
-                <td>Osteoporosis, osteoarthritis</td>
-            </tr>
-            <tr>
-                <td>chondro</td>
-                <td>cartilage</td>
-                <td><strong>연골</strong></td>
-                <td>chondritis, chondrocyte</td>
-            </tr>
-            <tr>
-                <td>arthro</td>
-                <td>joint</td>
-                <td><strong>관절</strong></td>
-                <td>arthritis, arthroscopy</td>
-            </tr>
-            <tr>
-                <td>psycho</td>
-                <td>mind</td>
-                <td><strong>정신, 마음</strong></td>
-                <td>psychology, psychosis</td>
-            </tr>
-            <tr>
-                <td>dermato</td>
-                <td>skin</td>
-                <td><strong>피부</strong></td>
-                <td>dermatology, dermatitis</td>
-            </tr>
-            <tr>
-                <td>cyto</td>
-                <td>cell</td>
-                <td><strong>세포</strong></td>
-                <td>cytology, cytoplasm</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- 1. 신체 부위 -->
+        <div class="collapsible-section">
+            <div class="collapsible-header collapsed"> <!-- 초기 상태는 접힌 상태로 변경 -->
+                <h2>
+                    <span class="lang-ko">🩺 신체 부위</span>
+                    <span class="lang-en">🩺 Body Parts</span>
+                </h2>
+                <span class="toggle-arrow">▶</span>
+            </div>
+            <div class="collapsible-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="lang-ko">용어</span><span class="lang-en">Term</span></th>
+                            <th><span class="lang-ko">영어 의미</span><span class="lang-en">Meaning</span></th>
+                            <th class="col-ko">한글 의미</th>
+                            <th><span class="lang-ko">예시</span><span class="lang-en">Examples</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>pulmo, pneumo</td>
+                            <td>lung</td>
+                            <td class="col-ko"><strong>폐, 허파</strong></td>
+                            <td>pulmonary, pneumonia</td>
+                        </tr>
+                        <tr>
+                            <td>cardio, cardial</td>
+                            <td>heart</td>
+                            <td class="col-ko"><strong>심장</strong></td>
+                            <td>cardiovascular, myocardial</td>
+                        </tr>
+                        <tr>
+                            <td>hepato</td>
+                            <td>liver</td>
+                            <td class="col-ko"><strong>간</strong></td>
+                            <td>hepatitis, hepatomegaly</td>
+                        </tr>
+                        <tr>
+                            <td>nephro/reno</td>
+                            <td>kidney</td>
+                            <td class="col-ko"><strong>신장, 콩팥</strong></td>
+                            <td>nephrology, nephrectomy</td>
+                        </tr>
+                        <tr>
+                            <td>metro / hystero</td>
+                            <td>uterus</td>
+                            <td class="col-ko"><strong>자궁</strong></td>
+                            <td>metrorrhagia, hysterectomy</td>
+                        </tr>
+                        <tr>
+                            <td>cysto</td>
+                            <td>bladder</td>
+                            <td class="col-ko"><strong>방광</strong></td>
+                            <td>cystitis, cholcystitis, renal cyst</td>
+                        </tr>
+                        <tr>
+                            <td>cholecyst</td>
+                            <td>gallbladder</td>
+                            <td class="col-ko"><strong>담낭, 쓸개</strong></td>
+                            <td>cholecystitis, cholecystectomy</td>
+                        </tr>
+                        <tr>
+                            <td>gastro</td>
+                            <td>stomach</td>
+                            <td class="col-ko"><strong>위</strong></td>
+                            <td>gastritis, gastrectomy</td>
+                        </tr>
+                        <tr>
+                            <td>entero</td>
+                            <td>intestine</td>
+                            <td class="col-ko"><strong>장, 소장</strong></td>
+                            <td>enteritis, enteropathy</td>
+                        </tr>
+                        <tr>
+                            <td>colo</td>
+                            <td>colon</td>
+                            <td class="col-ko"><strong>결장, 대장</strong></td>
+                            <td>colitis, colonoscopy</td>
+                        </tr>
+                        <tr>
+                            <td>procto</td>
+                            <td>anus, rectum</td>
+                            <td class="col-ko"><strong>항문, 직장</strong></td>
+                            <td>proctitis, proctoscope</td>
+                        </tr>
+                        <tr>
+                            <td>pancreato</td>
+                            <td>pancreas</td>
+                            <td class="col-ko"><strong>췌장, 이자</strong></td>
+                            <td>pancreatitis, pancreatectomy</td>
+                        </tr>
+                        <tr>
+                            <td>spleno</td>
+                            <td>spleen</td>
+                            <td class="col-ko"><strong>비장, 지라</strong></td>
+                            <td>splenomegaly, splenectomy</td>
+                        </tr>
+                        <tr>
+                            <td>tracheo</td>
+                            <td>trachea</td>
+                            <td class="col-ko"><strong>기관</strong></td>
+                            <td>tracheotomy, tracheitis</td>
+                        </tr>
+                        <tr>
+                            <td>esophago</td>
+                            <td>esophagus</td>
+                            <td class="col-ko"><strong>식도</strong></td>
+                            <td>esophagitis, esophagectomy</td>
+                        </tr>
+                        <tr>
+                            <td>ophthalmo / opt / oculo</td>
+                            <td>eye</td>
+                            <td class="col-ko"><strong>눈</strong></td>
+                            <td>ophthalmology, ophthalmoscope</td>
+                        </tr>
+                        <tr>
+                            <td>oto / auriculo</td>
+                            <td>ear</td>
+                            <td class="col-ko"><strong>귀</strong></td>
+                            <td>otoscope, otitis</td>
+                        </tr>
+                        <tr>
+                            <td>rhino / naso</td>
+                            <td>nose</td>
+                            <td class="col-ko"><strong>코</strong></td>
+                            <td>rhinoplasty, rhinitis</td>
+                        </tr>
+                        <tr>
+                            <td>stomato</td>
+                            <td>mouth</td>
+                            <td class="col-ko"><strong>입, 구강</strong></td>
+                            <td>stomatology, stomatitis</td>
+                        </tr>
+                        <tr>
+                            <td>dento / odonto</td>
+                            <td>teeth</td>
+                            <td class="col-ko"><strong>치아, 이</strong></td>
+                            <td>dentist, dental</td>
+                        </tr>
+                        <tr>
+                            <td>glosso</td>
+                            <td>tongue</td>
+                            <td class="col-ko"><strong>혀</strong></td>
+                            <td>epiglottis, glossitis</td>
+                        </tr>
+                        <tr>
+                            <td>gingivo</td>
+                            <td>gums</td>
+                            <td class="col-ko"><strong>잇몸</strong></td>
+                            <td>gingivitis, gingivectomy</td>
+                        </tr>
+                        <tr>
+                            <td>masto</td>
+                            <td>breast</td>
+                            <td class="col-ko"><strong>유방, 가슴</strong></td>
+                            <td>mastitis, mastectomy</td>
+                        </tr>
+                        <tr>
+                            <td>angio</td>
+                            <td>vessel</td>
+                            <td class="col-ko"><strong>혈관</strong></td>
+                            <td>angiography, angioplasty</td>
+                        </tr>
+                        <tr>
+                            <td>veno/ phlebo</td>
+                            <td>vein</td>
+                            <td class="col-ko"><strong>정맥</strong></td>
+                            <td>venous, venography, phlebotomist</td>
+                        </tr>
+                        <tr>
+                            <td>arterio</td>
+                            <td>artery</td>
+                            <td class="col-ko"><strong>동맥</strong></td>
+                            <td>arteriosclerosis, arteriography</td>
+                        </tr>
+                        <tr>
+                            <td>hemo</td>
+                            <td>blood</td>
+                            <td class="col-ko"><strong>혈액, 피</strong></td>
+                            <td>hemoglobin, hemorrhage</td>
+                        </tr>
+                        <tr>
+                            <td>pleuro</td>
+                            <td>pleura</td>
+                            <td class="col-ko"><strong>흉막, 가슴막</strong></td>
+                            <td>pleuritis, pleurodynia</td>
+                        </tr>
+                        <tr>
+                            <td>cerebro,encephalo</td>
+                            <td>brain</td>
+                            <td class="col-ko"><strong>뇌</strong></td>
+                            <td>cerebral, encephalopathy</td>
+                        </tr>
+                        <tr>
+                            <td>neuro</td>
+                            <td>nerve</td>
+                            <td class="col-ko"><strong>신경</strong></td>
+                            <td>neurology, neuritis</td>
+                        </tr>
+                        <tr>
+                            <td>myo</td>
+                            <td>muscle</td>
+                            <td class="col-ko"><strong>근육</strong></td>
+                            <td>myopathy, myositis</td>
+                        </tr>
+                        <tr>
+                            <td>thoraco</td>
+                            <td>chest</td>
+                            <td class="col-ko"><strong>흉부, 가슴</strong></td>
+                            <td>thoracic, thoracotomy</td>
+                        </tr>
+                        <tr>
+                            <td>osteo</td>
+                            <td>bone</td>
+                            <td class="col-ko"><strong>뼈</strong></td>
+                            <td>Osteoporosis, osteoarthritis</td>
+                        </tr>
+                        <tr>
+                            <td>chondro</td>
+                            <td>cartilage</td>
+                            <td class="col-ko"><strong>연골</strong></td>
+                            <td>chondritis, chondrocyte</td>
+                        </tr>
+                        <tr>
+                            <td>arthro</td>
+                            <td>joint</td>
+                            <td class="col-ko"><strong>관절</strong></td>
+                            <td>arthritis, arthroscopy</td>
+                        </tr>
+                        <tr>
+                            <td>psycho</td>
+                            <td>mind</td>
+                            <td class="col-ko"><strong>정신, 마음</strong></td>
+                            <td>psychology, psychosis</td>
+                        </tr>
+                        <tr>
+                            <td>dermato</td>
+                            <td>skin</td>
+                            <td class="col-ko"><strong>피부</strong></td>
+                            <td>dermatology, dermatitis</td>
+                        </tr>
+                        <tr>
+                            <td>cyto</td>
+                            <td>cell</td>
+                            <td class="col-ko"><strong>세포</strong></td>
+                            <td>cytology, cytoplasm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <h2>🧭 접두사 - 일반 (Prefix - General)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>용어</th>
-                <th>영어 의미</th>
-                <th>한글 의미</th>
-                <th>예시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>A, An</td>
-                <td>Without, lack of</td>
-                <td><strong>없음, 결핍</strong></td>
-                <td>Apnea, aphasia, anemia, amnesia</td>
-            </tr>
-            <tr>
-                <td>Ab</td>
-                <td>Away from</td>
-                <td><strong>~로부터 멀리</strong></td>
-                <td>Abductor, aboral</td>
-            </tr>
-            <tr>
-                <td>Ad</td>
-                <td>To, toward, near to</td>
-                <td><strong>~쪽으로, 가까이</strong></td>
-                <td>Adductor, adhesion, adnexia, adrenal</td>
-            </tr>
-            <tr>
-                <td>Ambi</td>
-                <td>Both</td>
-                <td><strong>양쪽의</strong></td>
-                <td>Ambidextrous, ambilaterally</td>
-            </tr>
-            <tr>
-                <td>Anti</td>
-                <td>Against, opposed to</td>
-                <td><strong>반대, 대항</strong></td>
-                <td>Antiperistalsis, antisepsis</td>
-            </tr>
-            <tr>
-                <td>Circum</td>
-                <td>Around, about</td>
-                <td><strong>주위, 둘레</strong></td>
-                <td>Circumference, circumcision</td>
-            </tr>
-            <tr>
-                <td>Con/com</td>
-                <td>With, together</td>
-                <td><strong>함께</strong></td>
-                <td>Conception, concrescence</td>
-            </tr>
-            <tr>
-                <td>Contra</td>
-                <td>Against, opposite</td>
-                <td><strong>반대의</strong></td>
-                <td>Contralateral, contraception</td>
-            </tr>
-            <tr>
-                <td>De</td>
-                <td>Away from</td>
-                <td><strong>떨어져, 제거</strong></td>
-                <td>Dehydrate, dementia</td>
-            </tr>
-            <tr>
-                <td>Dia</td>
-                <td>Through, apart, across</td>
-                <td><strong>~을 통해, 가로질러</strong></td>
-                <td>Diaphragm, diapedesis, diagnosis</td>
-            </tr>
-            <tr>
-                <td>Dis</td>
-                <td>Reversal, apart from</td>
-                <td><strong>반대, 분리</strong></td>
-                <td>Disinfection, dissect</td>
-            </tr>
-            <tr>
-                <td>Dys</td>
-                <td>Bad, difficult, disordered</td>
-                <td><strong>나쁜, 어려운, 장애</strong></td>
-                <td>Dyspepsia, dyspnea, dysuria</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- 2. 접두사 - 일반 (이후 섹션은 기존 내용과 동일) -->
+        <div class="collapsible-section">
+            <div class="collapsible-header collapsed">
+                <h2>
+                    <span class="lang-ko">🧭 접두사 - 일반</span>
+                    <span class="lang-en">🧭 Prefix - General</span>
+                </h2>
+                <span class="toggle-arrow">▶</span>
+            </div>
+            <div class="collapsible-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="lang-ko">용어</span><span class="lang-en">Term</span></th>
+                            <th><span class="lang-ko">영어 의미</span><span class="lang-en">Meaning</span></th>
+                            <th class="col-ko">한글 의미</th>
+                            <th><span class="lang-ko">예시</span><span class="lang-en">Examples</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A, An</td>
+                            <td>Without, lack of</td>
+                            <td class="col-ko"><strong>없음, 결핍</strong></td>
+                            <td>Apnea, aphasia, anemia, amnesia</td>
+                        </tr>
+                        <tr>
+                            <td>Ab</td>
+                            <td>Away from</td>
+                            <td class="col-ko"><strong>~로부터 멀리</strong></td>
+                            <td>Abductor, aboral</td>
+                        </tr>
+                        <tr>
+                            <td>Ad</td>
+                            <td>To, toward, near to</td>
+                            <td class="col-ko"><strong>~쪽으로, 가까이</strong></td>
+                            <td>Adductor, adhesion, adnexia, adrenal</td>
+                        </tr>
+                        <tr>
+                            <td>Ambi</td>
+                            <td>Both</td>
+                            <td class="col-ko"><strong>양쪽의</strong></td>
+                            <td>Ambidextrous, ambilaterally</td>
+                        </tr>
+                        <tr>
+                            <td>Anti</td>
+                            <td>Against, opposed to</td>
+                            <td class="col-ko"><strong>반대, 대항</strong></td>
+                            <td>Antiperistalsis, antisepsis</td>
+                        </tr>
+                        <tr>
+                            <td>Circum</td>
+                            <td>Around, about</td>
+                            <td class="col-ko"><strong>주위, 둘레</strong></td>
+                            <td>Circumference, circumcision</td>
+                        </tr>
+                        <tr>
+                            <td>Con/com</td>
+                            <td>With, together</td>
+                            <td class="col-ko"><strong>함께</strong></td>
+                            <td>Conception, concrescence</td>
+                        </tr>
+                        <tr>
+                            <td>Contra</td>
+                            <td>Against, opposite</td>
+                            <td class="col-ko"><strong>반대의</strong></td>
+                            <td>Contralateral, contraception</td>
+                        </tr>
+                        <tr>
+                            <td>De</td>
+                            <td>Away from</td>
+                            <td class="col-ko"><strong>떨어져, 제거</strong></td>
+                            <td>Dehydrate, dementia</td>
+                        </tr>
+                        <tr>
+                            <td>Dia</td>
+                            <td>Through, apart, across</td>
+                            <td class="col-ko"><strong>~을 통해, 가로질러</strong></td>
+                            <td>Diaphragm, diapedesis, diagnosis</td>
+                        </tr>
+                        <tr>
+                            <td>Dis</td>
+                            <td>Reversal, apart from</td>
+                            <td class="col-ko"><strong>반대, 분리</strong></td>
+                            <td>Disinfection, dissect</td>
+                        </tr>
+                        <tr>
+                            <td>Dys</td>
+                            <td>Bad, difficult, disordered</td>
+                            <td class="col-ko"><strong>나쁜, 어려운, 장애</strong></td>
+                            <td>Dyspepsia, dyspnea, dysuria</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <h2>🔢 접두사 - 숫자 (Prefix - Numbers)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>용어</th>
-                <th>영어 의미</th>
-                <th>한글 의미</th>
-                <th>예시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Hemi/semi</td>
-                <td>Half</td>
-                <td><strong>반 (1/2)</strong></td>
-                <td>Hemiplegia, hemianesthesia</td>
-            </tr>
-            <tr>
-                <td>Bi/di</td>
-                <td>Twice, double</td>
-                <td><strong>둘, 두 배</strong></td>
-                <td>Biarticulate, bifocal, bifurcation</td>
-            </tr>
-            <tr>
-                <td>Tri</td>
-                <td>Three</td>
-                <td><strong>셋</strong></td>
-                <td>Trimester, tripod, tricuspid</td>
-            </tr>
-            <tr>
-                <td>Quadro/tetra</td>
-                <td>Four</td>
-                <td><strong>넷</strong></td>
-                <td>Quadruped, quadriceps, quadrilateral</td>
-            </tr>
-            <tr>
-                <td>Oligo</td>
-                <td>Few, small</td>
-                <td><strong>소수, 적은</strong></td>
-                <td>Oliguria, oligosaccharide</td>
-            </tr>
-            <tr>
-                <td>Poly</td>
-                <td>Many, much</td>
-                <td><strong>다수, 많은</strong></td>
-                <td>Polyuria, polydactyly, polymorphism</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- 3. 접두사 - 숫자 -->
+        <div class="collapsible-section">
+            <div class="collapsible-header collapsed">
+                <h2>
+                    <span class="lang-ko">🔢 접두사 - 숫자</span>
+                    <span class="lang-en">🔢 Prefix - Numbers</span>
+                </h2>
+                <span class="toggle-arrow">▶</span>
+            </div>
+            <div class="collapsible-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="lang-ko">용어</span><span class="lang-en">Term</span></th>
+                            <th><span class="lang-ko">영어 의미</span><span class="lang-en">Meaning</span></th>
+                            <th class="col-ko">한글 의미</th>
+                            <th><span class="lang-ko">예시</span><span class="lang-en">Examples</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hemi/semi</td>
+                            <td>Half</td>
+                            <td class="col-ko"><strong>반 (1/2)</strong></td>
+                            <td>Hemiplegia, hemianesthesia</td>
+                        </tr>
+                        <tr>
+                            <td>Bi/di</td>
+                            <td>Twice, double</td>
+                            <td class="col-ko"><strong>둘, 두 배</strong></td>
+                            <td>Biarticulate, bifocal, bifurcation</td>
+                        </tr>
+                        <tr>
+                            <td>Tri</td>
+                            <td>Three</td>
+                            <td class="col-ko"><strong>셋</strong></td>
+                            <td>Trimester, tripod, tricuspid</td>
+                        </tr>
+                        <tr>
+                            <td>Quadro/tetra</td>
+                            <td>Four</td>
+                            <td class="col-ko"><strong>넷</strong></td>
+                            <td>Quadruped, quadriceps, quadrilateral</td>
+                        </tr>
+                        <tr>
+                            <td>Oligo</td>
+                            <td>Few, small</td>
+                            <td class="col-ko"><strong>소수, 적은</strong></td>
+                            <td>Oliguria, oligosaccharide</td>
+                        </tr>
+                        <tr>
+                            <td>Poly</td>
+                            <td>Many, much</td>
+                            <td class="col-ko"><strong>다수, 많은</strong></td>
+                            <td>Polyuria, polydactyly, polymorphism</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <h2>📍 접두사 - 위치 (Prefix - Location)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>용어</th>
-                <th>영어 의미</th>
-                <th>한글 의미</th>
-                <th>예시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Ante</td>
-                <td>Before, forward</td>
-                <td><strong>앞, 이전</strong></td>
-                <td>Antecubital, anteflexion</td>
-            </tr>
-            <tr>
-                <td>Em, En</td>
-                <td>In</td>
-                <td><strong>안에</strong></td>
-                <td>encephalon, endocrine</td>
-            </tr>
-            <tr>
-                <td>E, Ex</td>
-                <td>Out, away from</td>
-                <td><strong>밖으로, 멀리</strong></td>
-                <td>Exogenous, exocrine, exision</td>
-            </tr>
-            <tr>
-                <td>Endo</td>
-                <td>Within</td>
-                <td><strong>내부</strong></td>
-                <td>Endogenous, endocrine</td>
-            </tr>
-            <tr>
-                <td>Epi</td>
-                <td>Upon, on</td>
-                <td><strong>위에</strong></td>
-                <td>Epidural, epidermis, epicondyle</td>
-            </tr>
-            <tr>
-                <td>Extra</td>
-                <td>Outside</td>
-                <td><strong>외부</strong></td>
-                <td>Extracellular</td>
-            </tr>
-            <tr>
-                <td>Hyper</td>
-                <td>Over, above, excessive</td>
-                <td><strong>과다, 초과</strong></td>
-                <td>Hypertrophy, hyperplasia</td>
-            </tr>
-            <tr>
-                <td>Hypo</td>
-                <td>Under, below, deficient</td>
-                <td><strong>저하, 아래, 부족</strong></td>
-                <td>Hypotension, hypothyroidism</td>
-            </tr>
-            <tr>
-                <td>Im, In</td>
-                <td>In, Into</td>
-                <td><strong>안에, 안으로</strong></td>
-                <td>Immersion, infiltration, injection</td>
-            </tr>
-            <tr>
-                <td>Im, In</td>
-                <td>Not</td>
-                <td><strong>부정 (아님)</strong></td>
-                <td>Immature, involuntary, inability</td>
-            </tr>
-            <tr>
-                <td>Infra</td>
-                <td>Below</td>
-                <td><strong>아래</strong></td>
-                <td>Infraorbital, infraclavicular</td>
-            </tr>
-            <tr>
-                <td>Inter</td>
-                <td>Between</td>
-                <td><strong>사이</strong></td>
-                <td>Intercostal, intervene</td>
-            </tr>
-            <tr>
-                <td>Intra</td>
-                <td>Within</td>
-                <td><strong>내부</strong></td>
-                <td>Intracerebral, intraventricular</td>
-            </tr>
-            <tr>
-                <td>Meta</td>
-                <td>Beyond, after, change</td>
-                <td><strong>넘어, 후, 변화</strong></td>
-                <td>Metamorphosis, metastasis</td>
-            </tr>
-            <tr>
-                <td>Para</td>
-                <td>Beside, beyond, near to</td>
-                <td><strong>곁에, 넘어, 가까이</strong></td>
-                <td>Parasomnia</td>
-            </tr>
-            <tr>
-                <td>Per</td>
-                <td>Through, excessive</td>
-                <td><strong>~을 통해, 과도한</strong></td>
-                <td>Perspiration, permeability</td>
-            </tr>
-            <tr>
-                <td>Peri</td>
-                <td>Around</td>
-                <td><strong>주위</strong></td>
-                <td>Pericardium, peritoneum, periarthritis</td>
-            </tr>
-            <tr>
-                <td>Post</td>
-                <td>After, behind</td>
-                <td><strong>후, 뒤</strong></td>
-                <td>Postoperative, postpartum</td>
-            </tr>
-            <tr>
-                <td>Pre/pro</td>
-                <td>Before, in front of</td>
-                <td><strong>전, 앞</strong></td>
-                <td>Premaxillary, premature</td>
-            </tr>
-            <tr>
-                <td>Re</td>
-                <td>Back, again, contrary</td>
-                <td><strong>뒤로, 다시, 반대로</strong></td>
-                <td>Reflex, revert, regurgitation</td>
-            </tr>
-            <tr>
-                <td>Retro</td>
-                <td>Backward, located behind</td>
-                <td><strong>뒤로, 후방</strong></td>
-                <td>Retrograde peristalsis</td>
-            </tr>
-            <tr>
-                <td>Sub</td>
-                <td>Under</td>
-                <td><strong>아래</strong></td>
-                <td>Subcutaneous, subscapularis</td>
-            </tr>
-            <tr>
-                <td>Supra</td>
-                <td>Above, upper, excessive</td>
-                <td><strong>위, 상부, 초과</strong></td>
-                <td>supraspinatus</td>
-            </tr>
-            <tr>
-                <td>Sym, Syn</td>
-                <td>Together, with</td>
-                <td><strong>함께</strong></td>
-                <td>Symphysis, symbiosis, symphony</td>
-            </tr>
-            <tr>
-                <td>Trans</td>
-                <td>Across, through, beyond</td>
-                <td><strong>가로질러, 통해</strong></td>
-                <td>Transection, transduodenal, transmit</td>
-            </tr>
-            <tr>
-                <td>Ultra</td>
-                <td>Beyond, in excess</td>
-                <td><strong>넘어, 초과</strong></td>
-                <td>Ultraviolet, ultraligation, ultrasonic</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- 4. 접두사 - 위치 -->
+        <div class="collapsible-section">
+            <div class="collapsible-header collapsed">
+                <h2>
+                    <span class="lang-ko">📍 접두사 - 위치</span>
+                    <span class="lang-en">📍 Prefix - Location</span>
+                </h2>
+                <span class="toggle-arrow">▶</span>
+            </div>
+            <div class="collapsible-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="lang-ko">용어</span><span class="lang-en">Term</span></th>
+                            <th><span class="lang-ko">영어 의미</span><span class="lang-en">Meaning</span></th>
+                            <th class="col-ko">한글 의미</th>
+                            <th><span class="lang-ko">예시</span><span class="lang-en">Examples</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ante</td>
+                            <td>Before, forward</td>
+                            <td class="col-ko"><strong>앞, 이전</strong></td>
+                            <td>Antecubital, anteflexion</td>
+                        </tr>
+                        <tr>
+                            <td>Em, En</td>
+                            <td>In</td>
+                            <td class="col-ko"><strong>안에</strong></td>
+                            <td>encephalon, endocrine</td>
+                        </tr>
+                        <tr>
+                            <td>E, Ex</td>
+                            <td>Out, away from</td>
+                            <td class="col-ko"><strong>밖으로, 멀리</strong></td>
+                            <td>Exogenous, exocrine, exision</td>
+                        </tr>
+                        <tr>
+                            <td>Endo</td>
+                            <td>Within</td>
+                            <td class="col-ko"><strong>내부</strong></td>
+                            <td>Endogenous, endocrine</td>
+                        </tr>
+                        <tr>
+                            <td>Epi</td>
+                            <td>Upon, on</td>
+                            <td class="col-ko"><strong>위에</strong></td>
+                            <td>Epidural, epidermis, epicondyle</td>
+                        </tr>
+                        <tr>
+                            <td>Extra</td>
+                            <td>Outside</td>
+                            <td class="col-ko"><strong>외부</strong></td>
+                            <td>Extracellular</td>
+                        </tr>
+                        <tr>
+                            <td>Hyper</td>
+                            <td>Over, above, excessive</td>
+                            <td class="col-ko"><strong>과다, 초과</strong></td>
+                            <td>Hypertrophy, hyperplasia</td>
+                        </tr>
+                        <tr>
+                            <td>Hypo</td>
+                            <td>Under, below, deficient</td>
+                            <td class="col-ko"><strong>저하, 아래, 부족</strong></td>
+                            <td>Hypotension, hypothyroidism</td>
+                        </tr>
+                        <tr>
+                            <td>Im, In</td>
+                            <td>In, Into</td>
+                            <td class="col-ko"><strong>안에, 안으로</strong></td>
+                            <td>Immersion, infiltration, injection</td>
+                        </tr>
+                        <tr>
+                            <td>Im, In</td>
+                            <td>Not</td>
+                            <td class="col-ko"><strong>부정 (아님)</strong></td>
+                            <td>Immature, involuntary, inability</td>
+                        </tr>
+                        <tr>
+                            <td>Infra</td>
+                            <td>Below</td>
+                            <td class="col-ko"><strong>아래</strong></td>
+                            <td>Infraorbital, infraclavicular</td>
+                        </tr>
+                        <tr>
+                            <td>Inter</td>
+                            <td>Between</td>
+                            <td class="col-ko"><strong>사이</strong></td>
+                            <td>Intercostal, intervene</td>
+                        </tr>
+                        <tr>
+                            <td>Intra</td>
+                            <td>Within</td>
+                            <td class="col-ko"><strong>내부</strong></td>
+                            <td>Intracerebral, intraventricular</td>
+                        </tr>
+                        <tr>
+                            <td>Meta</td>
+                            <td>Beyond, after, change</td>
+                            <td class="col-ko"><strong>넘어, 후, 변화</strong></td>
+                            <td>Metamorphosis, metastasis</td>
+                        </tr>
+                        <tr>
+                            <td>Para</td>
+                            <td>Beside, beyond, near to</td>
+                            <td class="col-ko"><strong>곁에, 넘어, 가까이</strong></td>
+                            <td>Parasomnia</td>
+                        </tr>
+                        <tr>
+                            <td>Per</td>
+                            <td>Through, excessive</td>
+                            <td class="col-ko"><strong>~을 통해, 과도한</strong></td>
+                            <td>Perspiration, permeability</td>
+                        </tr>
+                        <tr>
+                            <td>Peri</td>
+                            <td>Around</td>
+                            <td class="col-ko"><strong>주위</strong></td>
+                            <td>Pericardium, peritoneum, periarthritis</td>
+                        </tr>
+                        <tr>
+                            <td>Post</td>
+                            <td>After, behind</td>
+                            <td class="col-ko"><strong>후, 뒤</strong></td>
+                            <td>Postoperative, postpartum</td>
+                        </tr>
+                        <tr>
+                            <td>Pre/pro</td>
+                            <td>Before, in front of</td>
+                            <td class="col-ko"><strong>전, 앞</strong></td>
+                            <td>Premaxillary, premature</td>
+                        </tr>
+                        <tr>
+                            <td>Re</td>
+                            <td>Back, again, contrary</td>
+                            <td class="col-ko"><strong>뒤로, 다시, 반대로</strong></td>
+                            <td>Reflex, revert, regurgitation</td>
+                        </tr>
+                        <tr>
+                            <td>Retro</td>
+                            <td>Backward, located behind</td>
+                            <td class="col-ko"><strong>뒤로, 후방</strong></td>
+                            <td>Retrograde peristalsis</td>
+                        </tr>
+                        <tr>
+                            <td>Sub</td>
+                            <td>Under</td>
+                            <td class="col-ko"><strong>아래</strong></td>
+                            <td>Subcutaneous, subscapularis</td>
+                        </tr>
+                        <tr>
+                            <td>Supra</td>
+                            <td>Above, upper, excessive</td>
+                            <td class="col-ko"><strong>위, 상부, 초과</strong></td>
+                            <td>supraspinatus</td>
+                        </tr>
+                        <tr>
+                            <td>Sym, Syn</td>
+                            <td>Together, with</td>
+                            <td class="col-ko"><strong>함께</strong></td>
+                            <td>Symphysis, symbiosis, symphony</td>
+                        </tr>
+                        <tr>
+                            <td>Trans</td>
+                            <td>Across, through, beyond</td>
+                            <td class="col-ko"><strong>가로질러, 통해</strong></td>
+                            <td>Transection, transduodenal, transmit</td>
+                        </tr>
+                        <tr>
+                            <td>Ultra</td>
+                            <td>Beyond, in excess</td>
+                            <td class="col-ko"><strong>넘어, 초과</strong></td>
+                            <td>Ultraviolet, ultraligation, ultrasonic</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <h2>✍️ 접미사 (Suffix)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>용어</th>
-                <th>영어 의미</th>
-                <th>한글 의미</th>
-                <th>예시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>-algia</td>
-                <td>Pain</td>
-                <td><strong>통증</strong></td>
-                <td>Myalgia</td>
-            </tr>
-            <tr>
-                <td>-itis</td>
-                <td>Inflammation</td>
-                <td><strong>염증</strong></td>
-                <td>Arthritis</td>
-            </tr>
-            <tr>
-                <td>-pathy</td>
-                <td>Disease or disorder</td>
-                <td><strong>질병, 장애</strong></td>
-                <td>Tendinopathy, Neuropathy</td>
-            </tr>
-            <tr>
-                <td>-megaly</td>
-                <td>Abnormal enlargement</td>
-                <td><strong>비대</strong></td>
-                <td>Hepatomegaly, Splenomegaly</td>
-            </tr>
-            <tr>
-                <td>-ia</td>
-                <td>Condition</td>
-                <td><strong>상태</strong></td>
-                <td>Insomnia, Pneumonia</td>
-            </tr>
-            <tr>
-                <td>-osis</td>
-                <td>Condition</td>
-                <td><strong>증상, 상태</strong></td>
-                <td>Spondylosis</td>
-            </tr>
-            <tr>
-                <td>-rrhage, -rrhagia</td>
-                <td>Flow (bleeding)</td>
-                <td><strong>흐름 (출혈)</strong></td>
-                <td>Hemorrhage, Metrorrhagia</td>
-            </tr>
-            <tr>
-                <td>-rrhea</td>
-                <td>Flow</td>
-                <td><strong>흐름</strong></td>
-                <td>Diarrhea</td>
-            </tr>
-            <tr>
-                <td>-cise</td>
-                <td>Cut</td>
-                <td><strong>자르다</strong></td>
-                <td>Incision, exision, circumcision</td>
-            </tr>
-            <tr>
-                <td>-ectomy</td>
-                <td>Surgical removal</td>
-                <td><strong>수술적 제거, 절제술</strong></td>
-                <td>Tonsillectomy</td>
-            </tr>
-            <tr>
-                <td>-otomy</td>
-                <td>Incision</td>
-                <td><strong>절개(술)</strong></td>
-                <td>Gastrotomy</td>
-            </tr>
-            <tr>
-                <td>-pexy</td>
-                <td>Fixation</td>
-                <td><strong>고정(술)</strong></td>
-                <td>Gastropexy</td>
-            </tr>
-            <tr>
-                <td>-plasty</td>
-                <td>Surgical correction</td>
-                <td><strong>성형(술)</strong></td>
-                <td>Hernioplasty</td>
-            </tr>
-            <tr>
-                <td>-emia</td>
-                <td>Condition of blood</td>
-                <td><strong>혈액 상태</strong></td>
-                <td>Hyperglycemia</td>
-            </tr>
-            <tr>
-                <td>-penia</td>
-                <td>Decrease</td>
-                <td><strong>감소</strong></td>
-                <td>Leukopenia</td>
-            </tr>
-            <tr>
-                <td>-stenosis</td>
-                <td>Abnormal tightening</td>
-                <td><strong>협착</strong></td>
-                <td>Arteriostenosis, spinal stenosis</td>
-            </tr>
-            <tr>
-                <td>-cide</td>
-                <td>Kill</td>
-                <td><strong>죽임, 살균</strong></td>
-                <td>Germicide</td>
-            </tr>
-            <tr>
-                <td>-oma</td>
-                <td>Tumor</td>
-                <td><strong>종양</strong></td>
-                <td>Carcinoma</td>
-            </tr>
-            <tr>
-                <td>-genic</td>
-                <td>Origin</td>
-                <td><strong>기원, 발생</strong></td>
-                <td>Osteogenic</td>
-            </tr>
-            <tr>
-                <td>-tripsy</td>
-                <td>Crushing</td>
-                <td><strong>분쇄(술)</strong></td>
-                <td>Lithotripsy</td>
-            </tr>
-            <tr>
-                <td>-oscopy</td>
-                <td>Examination by seeing</td>
-                <td><strong>검사 (시각), 내시경</strong></td>
-                <td>Bronchoscopy</td>
-            </tr>
-            <tr>
-                <td>-lysis</td>
-                <td>Breaking down</td>
-                <td><strong>분해, 용해</strong></td>
-                <td>Hemolysis</td>
-            </tr>
-            <tr>
-                <td>-graphy</td>
-                <td>Drawing, Writing</td>
-                <td><strong>기록(법), 촬영(술)</strong></td>
-                <td>Cardiography</td>
-            </tr>
-            <tr>
-                <td>-gram</td>
-                <td>Record or picture</td>
-                <td><strong>기록, 그림</strong></td>
-                <td>Angiogram, Electrocardiogram</td>
-            </tr>
-            <tr>
-                <td>-oid</td>
-                <td>Resembling</td>
-                <td><strong>유사한, ~모양의</strong></td>
-                <td>Fibroid, Rheumatoid</td>
-            </tr>
-            <tr>
-                <td>-metry</td>
-                <td>Process of measuring</td>
-                <td><strong>측정(법)</strong></td>
-                <td>Optometry, Spirometry</td>
-            </tr>
-            <tr>
-                <td>-phobia</td>
-                <td>Fear</td>
-                <td><strong>공포(증)</strong></td>
-                <td>Claustrophobia, Acrophobia</td>
-            </tr>
-            <tr>
-                <td>-philia</td>
-                <td>Attraction or affinity</td>
-                <td><strong>친화성, 기호</strong></td>
-                <td>Hemophilia, Eosinophilia</td>
-            </tr>
-            <tr>
-                <td>-genesis</td>
-                <td>Formation or origin</td>
-                <td><strong>형성, 발생</strong></td>
-                <td>Osteogenesis, Pathogenesis</td>
-            </tr>
-            <tr>
-                <td>-trophy</td>
-                <td>Nourishment or growth</td>
-                <td><strong>영양, 성장</strong></td>
-                <td>Hypertrophy, Atrophy</td>
-            </tr>
-            <tr>
-                <td>-plasia</td>
-                <td>Formation or development</td>
-                <td><strong>형성, 발달</strong></td>
-                <td>Hyperplasia, Aplasia</td>
-            </tr>
-            <tr>
-                <td>-cyte</td>
-                <td>Cell</td>
-                <td><strong>세포</strong></td>
-                <td>Erythrocyte, Leukocyte</td>
-            </tr>
-            <tr>
-                <td>-ase</td>
-                <td>Enzyme</td>
-                <td><strong>효소</strong></td>
-                <td>Amylase, Lipase</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- 5. 접미사 -->
+        <div class="collapsible-section">
+            <div class="collapsible-header collapsed">
+                <h2>
+                    <span class="lang-ko">✍️ 접미사</span>
+                    <span class="lang-en">✍️ Suffix</span>
+                </h2>
+                <span class="toggle-arrow">▶</span>
+            </div>
+            <div class="collapsible-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="lang-ko">용어</span><span class="lang-en">Term</span></th>
+                            <th><span class="lang-ko">영어 의미</span><span class="lang-en">Meaning</span></th>
+                            <th class="col-ko">한글 의미</th>
+                            <th><span class="lang-ko">예시</span><span class="lang-en">Examples</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>-algia</td>
+                            <td>Pain</td>
+                            <td class="col-ko"><strong>통증</strong></td>
+                            <td>Myalgia</td>
+                        </tr>
+                        <tr>
+                            <td>-itis</td>
+                            <td>Inflammation</td>
+                            <td class="col-ko"><strong>염증</strong></td>
+                            <td>Arthritis</td>
+                        </tr>
+                        <tr>
+                            <td>-pathy</td>
+                            <td>Disease or disorder</td>
+                            <td class="col-ko"><strong>질병, 장애</strong></td>
+                            <td>Tendinopathy, Neuropathy</td>
+                        </tr>
+                        <tr>
+                            <td>-megaly</td>
+                            <td>Abnormal enlargement</td>
+                            <td class="col-ko"><strong>비대</strong></td>
+                            <td>Hepatomegaly, Splenomegaly</td>
+                        </tr>
+                        <tr>
+                            <td>-ia</td>
+                            <td>Condition</td>
+                            <td class="col-ko"><strong>상태</strong></td>
+                            <td>Insomnia, Pneumonia</td>
+                        </tr>
+                        <tr>
+                            <td>-osis</td>
+                            <td>Condition</td>
+                            <td class="col-ko"><strong>증상, 상태</strong></td>
+                            <td>Spondylosis</td>
+                        </tr>
+                        <tr>
+                            <td>-rrhage, -rrhagia</td>
+                            <td>Flow (bleeding)</td>
+                            <td class="col-ko"><strong>흐름 (출혈)</strong></td>
+                            <td>Hemorrhage, Metrorrhagia</td>
+                        </tr>
+                        <tr>
+                            <td>-rrhea</td>
+                            <td>Flow</td>
+                            <td class="col-ko"><strong>흐름</strong></td>
+                            <td>Diarrhea</td>
+                        </tr>
+                        <tr>
+                            <td>-cise</td>
+                            <td>Cut</td>
+                            <td class="col-ko"><strong>자르다</strong></td>
+                            <td>Incision, exision, circumcision</td>
+                        </tr>
+                        <tr>
+                            <td>-ectomy</td>
+                            <td>Surgical removal</td>
+                            <td class="col-ko"><strong>수술적 제거, 절제술</strong></td>
+                            <td>Tonsillectomy</td>
+                        </tr>
+                        <tr>
+                            <td>-otomy</td>
+                            <td>Incision</td>
+                            <td class="col-ko"><strong>절개(술)</strong></td>
+                            <td>Gastrotomy</td>
+                        </tr>
+                        <tr>
+                            <td>-pexy</td>
+                            <td>Fixation</td>
+                            <td class="col-ko"><strong>고정(술)</strong></td>
+                            <td>Gastropexy</td>
+                        </tr>
+                        <tr>
+                            <td>-plasty</td>
+                            <td>Surgical correction</td>
+                            <td class="col-ko"><strong>성형(술)</strong></td>
+                            <td>Hernioplasty</td>
+                        </tr>
+                        <tr>
+                            <td>-emia</td>
+                            <td>Condition of blood</td>
+                            <td class="col-ko"><strong>혈액 상태</strong></td>
+                            <td>Hyperglycemia</td>
+                        </tr>
+                        <tr>
+                            <td>-penia</td>
+                            <td>Decrease</td>
+                            <td class="col-ko"><strong>감소</strong></td>
+                            <td>Leukopenia</td>
+                        </tr>
+                        <tr>
+                            <td>-stenosis</td>
+                            <td>Abnormal tightening</td>
+                            <td class="col-ko"><strong>협착</strong></td>
+                            <td>Arteriostenosis, spinal stenosis</td>
+                        </tr>
+                        <tr>
+                            <td>-cide</td>
+                            <td>Kill</td>
+                            <td class="col-ko"><strong>죽임, 살균</strong></td>
+                            <td>Germicide</td>
+                        </tr>
+                        <tr>
+                            <td>-oma</td>
+                            <td>Tumor</td>
+                            <td class="col-ko"><strong>종양</strong></td>
+                            <td>Carcinoma</td>
+                        </tr>
+                        <tr>
+                            <td>-genic</td>
+                            <td>Origin</td>
+                            <td class="col-ko"><strong>기원, 발생</strong></td>
+                            <td>Osteogenic</td>
+                        </tr>
+                        <tr>
+                            <td>-tripsy</td>
+                            <td>Crushing</td>
+                            <td class="col-ko"><strong>분쇄(술)</strong></td>
+                            <td>Lithotripsy</td>
+                        </tr>
+                        <tr>
+                            <td>-oscopy</td>
+                            <td>Examination by seeing</td>
+                            <td class="col-ko"><strong>검사 (시각), 내시경</strong></td>
+                            <td>Bronchoscopy</td>
+                        </tr>
+                        <tr>
+                            <td>-lysis</td>
+                            <td>Breaking down</td>
+                            <td class="col-ko"><strong>분해, 용해</strong></td>
+                            <td>Hemolysis</td>
+                        </tr>
+                        <tr>
+                            <td>-graphy</td>
+                            <td>Drawing, Writing</td>
+                            <td class="col-ko"><strong>기록(법), 촬영(술)</strong></td>
+                            <td>Cardiography</td>
+                        </tr>
+                        <tr>
+                            <td>-gram</td>
+                            <td>Record or picture</td>
+                            <td class="col-ko"><strong>기록, 그림</strong></td>
+                            <td>Angiogram, Electrocardiogram</td>
+                        </tr>
+                        <tr>
+                            <td>-oid</td>
+                            <td>Resembling</td>
+                            <td class="col-ko"><strong>유사한, ~모양의</strong></td>
+                            <td>Fibroid, Rheumatoid</td>
+                        </tr>
+                        <tr>
+                            <td>-metry</td>
+                            <td>Process of measuring</td>
+                            <td class="col-ko"><strong>측정(법)</strong></td>
+                            <td>Optometry, Spirometry</td>
+                        </tr>
+                        <tr>
+                            <td>-phobia</td>
+                            <td>Fear</td>
+                            <td class="col-ko"><strong>공포(증)</strong></td>
+                            <td>Claustrophobia, Acrophobia</td>
+                        </tr>
+                        <tr>
+                            <td>-philia</td>
+                            <td>Attraction or affinity</td>
+                            <td class="col-ko"><strong>친화성, 기호</strong></td>
+                            <td>Hemophilia, Eosinophilia</td>
+                        </tr>
+                        <tr>
+                            <td>-genesis</td>
+                            <td>Formation or origin</td>
+                            <td class="col-ko"><strong>형성, 발생</strong></td>
+                            <td>Osteogenesis, Pathogenesis</td>
+                        </tr>
+                        <tr>
+                            <td>-trophy</td>
+                            <td>Nourishment or growth</td>
+                            <td class="col-ko"><strong>영양, 성장</strong></td>
+                            <td>Hypertrophy, Atrophy</td>
+                        </tr>
+                        <tr>
+                            <td>-plasia</td>
+                            <td>Formation or development</td>
+                            <td class="col-ko"><strong>형성, 발달</strong></td>
+                            <td>Hyperplasia, Aplasia</td>
+                        </tr>
+                        <tr>
+                            <td>-cyte</td>
+                            <td>Cell</td>
+                            <td class="col-ko"><strong>세포</strong></td>
+                            <td>Erythrocyte, Leukocyte</td>
+                        </tr>
+                        <tr>
+                            <td>-ase</td>
+                            <td>Enzyme</td>
+                            <td class="col-ko"><strong>효소</strong></td>
+                            <td>Amylase, Lipase</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <h2>🎨 접두사 - 색상 (Prefix - Colors)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>용어</th>
-                <th>영어 의미</th>
-                <th>한글 의미</th>
-                <th>예시</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Chloro</td>
-                <td>Green</td>
-                <td><strong>녹색</strong></td>
-                <td>Chloroma, chlorophyll</td>
-            </tr>
-            <tr>
-                <td>Cirrho</td>
-                <td>Yellow-orange</td>
-                <td><strong>황갈색</strong></td>
-                <td>Liver cirrhosis</td>
-            </tr>
-            <tr>
-                <td>Erythro</td>
-                <td>Red</td>
-                <td><strong>적색 (붉은)</strong></td>
-                <td>Erythrocyte, erythroderma</td>
-            </tr>
-            <tr>
-                <td>Leuko / Albino/ Candid</td>
-                <td>White</td>
-                <td><strong>백색 (흰)</strong></td>
-                <td>Leukocyte, leukemia</td>
-            </tr>
-            <tr>
-                <td>Melano</td>
-                <td>Black</td>
-                <td><strong>흑색 (검은)</strong></td>
-                <td>Melanocyte, melanoma</td>
-            </tr>
-            <tr>
-                <td>Xantho</td>
-                <td>Yellow</td>
-                <td><strong>황색 (노란)</strong></td>
-                <td>Xanthoma, xanthelasma</td>
-            </tr>
-            <tr>
-                <td>Cyano</td>
-                <td>Blue</td>
-                <td><strong>청색 (푸른)</strong></td>
-                <td>Cyanosis, cyanoderma</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- 6. 접두사 - 색상 -->
+        <div class="collapsible-section">
+            <div class="collapsible-header collapsed">
+                <h2>
+                    <span class="lang-ko">🎨 접두사 - 색상</span>
+                    <span class="lang-en">🎨 Prefix - Colors</span>
+                </h2>
+                <span class="toggle-arrow">▶</span>
+            </div>
+            <div class="collapsible-content" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="lang-ko">용어</span><span class="lang-en">Term</span></th>
+                            <th><span class="lang-ko">영어 의미</span><span class="lang-en">Meaning</span></th>
+                            <th class="col-ko">한글 의미</th>
+                            <th><span class="lang-ko">예시</span><span class="lang-en">Examples</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chloro</td>
+                            <td>Green</td>
+                            <td class="col-ko"><strong>녹색</strong></td>
+                            <td>Chloroma, chlorophyll</td>
+                        </tr>
+                        <tr>
+                            <td>Cirrho</td>
+                            <td>Yellow-orange</td>
+                            <td class="col-ko"><strong>황갈색</strong></td>
+                            <td>Liver cirrhosis</td>
+                        </tr>
+                        <tr>
+                            <td>Erythro</td>
+                            <td>Red</td>
+                            <td class="col-ko"><strong>적색 (붉은)</strong></td>
+                            <td>Erythrocyte, erythroderma</td>
+                        </tr>
+                        <tr>
+                            <td>Leuko / Albino/ Candid</td>
+                            <td>White</td>
+                            <td class="col-ko"><strong>백색 (흰)</strong></td>
+                            <td>Leukocyte, leukemia</td>
+                        </tr>
+                        <tr>
+                            <td>Melano</td>
+                            <td>Black</td>
+                            <td class="col-ko"><strong>흑색 (검은)</strong></td>
+                            <td>Melanocyte, melanoma</td>
+                        </tr>
+                        <tr>
+                            <td>Xantho</td>
+                            <td>Yellow</td>
+                            <td class="col-ko"><strong>황색 (노란)</strong></td>
+                            <td>Xanthoma, xanthelasma</td>
+                        </tr>
+                        <tr>
+                            <td>Cyano</td>
+                            <td>Blue</td>
+                            <td class="col-ko"><strong>청색 (푸른)</strong></td>
+                            <td>Cyanosis, cyanoderma</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div> <!-- .container 끝 -->
+
+    <script>
+        // DOM이 로드되면 스크립트 실행
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 언어 전환 기능 ---
+            const btnKo = document.getElementById('btn-ko');
+            const btnEn = document.getElementById('btn-en');
+            
+            // 한글 버튼 클릭
+            btnKo.addEventListener('click', () => {
+                document.body.classList.remove('lang-en-active');
+                btnKo.classList.add('active');
+                btnEn.classList.remove('active');
+            });
+
+            // 영어 버튼 클릭
+            btnEn.addEventListener('click', () => {
+                document.body.classList.add('lang-en-active');
+                btnEn.classList.add('active');
+                btnKo.classList.remove('active');
+            });
+
+            // --- 아코디언 (접힘 메뉴) 기능 ---
+            const allHeaders = document.querySelectorAll('.collapsible-header');
+            const allContents = document.querySelectorAll('.collapsible-content');
+
+            // 초기 상태: 모든 콘텐츠를 숨김 처리 (CSS와 HTML에서 이미 처리되었지만 스크립트에서도 확인)
+            allHeaders.forEach(header => {
+                if (header.classList.contains('collapsed')) {
+                    const arrow = header.querySelector('.toggle-arrow');
+                    arrow.textContent = '▶';
+                    header.nextElementSibling.style.display = 'none';
+                }
+            });
+
+            allHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    // 클릭된 헤더에 'collapsed' 클래스 토글
+                    header.classList.toggle('collapsed');
+                    
+                    // 해당 컨텐츠(테이블) 선택
+                    const content = header.nextElementSibling;
+                    const arrow = header.querySelector('.toggle-arrow');
+
+                    // 상태에 따라 표시/숨김 및 화살표 변경
+                    if (header.classList.contains('collapsed')) {
+                        content.style.display = 'none';
+                        arrow.textContent = '▶'; // 닫힘
+                    } else {
+                        content.style.display = 'block';
+                        arrow.textContent = '▼'; // 열림
+                    }
+                });
+            });
+
+            // --- 전체 펼치기/접기 기능 ---
+            const btnExpandAll = document.getElementById('btn-expand-all');
+            const btnCollapseAll = document.getElementById('btn-collapse-all');
+
+            // 모두 펼치기
+            btnExpandAll.addEventListener('click', () => {
+                allHeaders.forEach(header => {
+                    header.classList.remove('collapsed');
+                    header.querySelector('.toggle-arrow').textContent = '▼';
+                });
+                allContents.forEach(content => {
+                    content.style.display = 'block';
+                });
+            });
+
+            // 모두 접기
+            btnCollapseAll.addEventListener('click', () => {
+                allHeaders.forEach(header => {
+                    header.classList.add('collapsed');
+                    header.querySelector('.toggle-arrow').textContent = '▶';
+                });
+                allContents.forEach(content => {
+                    content.style.display = 'none';
+                });
+            });
+
+        });
+    </script>
 
 </body>
 </html>
+
