@@ -57,8 +57,6 @@
             overflow: hidden;
             border: 1px solid #e0e0e0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            /* margin-bottom은 .grid-column의 gap으로 대체 */
-            /* break-inside 제거 */
         }
         
         .card-header {
@@ -83,7 +81,10 @@
             border-bottom: none;
         }
         .card-table th {
-            background-color: #f9f9f9;
+            /* * 수정: PDF 인쇄 시 회색 음영이 나타나는 문제를 해결하기 위해
+             * #f9f9f9 (연한 회색)에서 #ffffff (흰색)으로 변경합니다.
+             */
+            background-color: #ffffff; 
             font-size: 0.9rem;
             color: #555;
             text-transform: uppercase;
@@ -109,6 +110,35 @@
             border-top: 1px solid #eee;
             color: #888;
             font-size: 0.9rem;
+        }
+
+        /* * PDF 인쇄 전용 스타일:
+         * 브라우저의 '인쇄' 기능을 사용할 때(PDF 저장 포함)
+         * 그림자, 테두리 등을 강제로 제거하여 깨끗하게 만듭니다.
+         */
+        @media print {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            .header, footer {
+                border: none;
+            }
+            /* PDF에서 색상 헤더가 강제로 인쇄되도록 함 */
+            .card-header {
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            /* PDF에서 테이블 헤더 배경이 강제로 흰색이 되도록 함 */
+            .card-table th {
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+                background-color: #ffffff;
+            }
         }
     </style>
 </head>
@@ -320,7 +350,7 @@
                         <tr><td>Peri</td><td>Around</td><td>주위</td></tr>
                         <tr><td>Post</td><td>After, behind</td><td>후, 뒤</td></tr>
                         <tr><td>Pre/pro</td><td>Before, in front of</td><td>전, 앞</td></tr>
-                        <tr><td>Re</td><td>Back, again, contrary</td><td>뒤로, 다시, 반대로</td></tr>
+F;                        <tr><td>Re</td><td>Back, again, contrary</td><td>뒤로, 다시, 반대로</td></tr>
                         <tr><td>Retro</td><td>Backward, located behind</td><td>뒤로, 후방</td></tr>
                         <tr><td>Sub</td><td>Under</td><td>아래</td></tr>
                         <tr><td>Supra</td><td>Above, upper, excessive</td><td>위, 상부, 초과</td></tr>
