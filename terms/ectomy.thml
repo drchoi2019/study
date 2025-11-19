@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Suffix: '-ectomy' (Surgical Removal)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Merriweather&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #f8f9fa; /* 약간의 회색톤을 주어 눈의 피로 감소 */
+            color: #212529;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Lora', serif;
+        }
+        .word-node {
+            transition: all 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .word-node:hover {
+            transform: scale(1.15) translate(-43%, -43%) !important;
+            z-index: 20;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #3b82f6;
+        }
+        #center-display {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            pointer-events: none;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .mobile-card.active .mobile-card-body {
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .mobile-card.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .speaker-icon {
+            color: #6c757d;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: color 0.2s;
+        }
+        .speaker-icon:hover {
+            color: #0d6efd;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="py-12 md:py-20">
+        <section id="interactive-explorer" class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 pt-4">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800">The Suffix '-ectomy'</h2>
+                <p class="mt-6 text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                    In medical terminology, the suffix <span class="font-lora italic font-bold text-blue-600">'-ectomy'</span> implies surgical removal or excision. <br>
+                    Derived from the Greek word <em>ektomē</em> (cutting out).
+                </p>
+                <p class="text-sm text-gray-500 mt-2">Click a term to explore its breakdown.</p>
+            </div>
+
+            <div class="hidden md:flex justify-center items-center min-h-[70vh]">
+                <div id="word-diagram-container" class="relative w-full aspect-square max-w-2xl cursor-pointer">
+                    <div id="center-display" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 rounded-full flex items-center justify-center text-center p-8 opacity-0 scale-90 bg-white z-30">
+                        </div>
+                </div>
+            </div>
+
+            <div id="mobile-list-view" class="md:hidden space-y-3">
+                </div>
+        </section>
+    </main>
+    <footer class="text-center pb-8">
+        <p class="text-base text-slate-500">Medical Terminology Interactive Helper</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 의학용어 데이터셋: -ectomy (절제술)
+            const wordData = [
+                { 
+                    word: 'Appendectomy', 
+                    prefix: 'Append-', prefixMeaning: 'appendix', 
+                    root: 'ectomy', rootMeaning: 'surgical removal', 
+                    meaning: 'Surgical removal of the vermiform appendix.', 
+                    example: 'An emergency appendectomy was performed to treat acute appendicitis.', 
+                    angle: 0, icon: '🐛' 
+                },
+                { 
+                    word: 'Tonsillectomy', 
+                    prefix: 'Tonsill-', prefixMeaning: 'tonsil', 
+                    root: 'ectomy', rootMeaning: 'surgical removal', 
+                    meaning: 'Surgical removal of the tonsils.', 
+                    example: 'Frequent throat infections may require a tonsillectomy.', 
+                    angle: 51, icon: '👄' 
+                },
+                { 
+                    word: 'Mastectomy', 
+                    prefix: 'Mast-', prefixMeaning: 'breast', 
+                    root: 'ectomy', rootMeaning: 'surgical removal', 
+                    meaning: 'Surgical removal of all or part of the breast, usually to treat cancer.', 
+                    example: 'She underwent a mastectomy followed by reconstruction surgery.', 
+                    angle: 102, icon: '🎗️' 
+                },
+                { 
+                    word: 'Gastrectomy', 
+                    prefix: 'Gastr-', prefixMeaning: 'stomach', 
+                    root: 'ectomy', rootMeaning: 'surgical removal', 
+                    meaning: 'Surgical removal of a part or the whole of the stomach.', 
+                    example: 'A partial gastrectomy was necessary to remove the ulcer.', 
+                    angle: 153, icon: '🍽️' 
+                },
+                { 
+                    word: 'Hysterectomy', 
+                    prefix: 'Hyster-', prefixMeaning: 'uterus', 
+                    root: 'ectomy', rootMeaning: 'surgical removal', 
+                    meaning: 'Surgical removal of the uterus.', 
+                    example: 'A hysterectomy may be recommended for severe fibroids.', 
+                    angle: 204, icon: '👩‍⚕️' 
+                },
+                { 
+                    word: 'Thyroidectomy', 
+                    prefix: 'Thyroid-', prefixMeaning: 'thyroid gland', 
+                    root: 'ectomy', rootMeaning: 'surgical removal', 
+                    meaning: 'Surgical removal of all or part of the thyroid gland.', 
+                    example: 'Patients often need hormone replacement after a total thyroidectomy.', 
+                    angle: 255, icon: '🦋' 
+                },
+                { 
+                    word: 'Vasectomy', 
+                    prefix: 'Vas-', prefixMeaning: 'vas deferens', 
+                    root: 'ectomy', rootMeaning: 'surgical removal/cutting', 
+                    meaning: 'Surgical cutting and sealing of part of each vas deferens (sterilization).', 
+                    example: 'A vasectomy is a common form of permanent male contraception.', 
+                    angle: 306, icon: '✂️' 
+                }
+            ];
+
+            const defaultContentHTML = `
+                <div class="text-center">
+                    <p class="font-lora italic text-4xl md:text-5xl text-blue-800 mb-2">-ectomy</p>
+                    <p class="text-lg text-gray-500 font-serif">(excision / removal)</p>
+                    <div class="mt-6 text-3xl text-gray-300">🏥</div>
+                </div>
+            `;
+
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.9; // 의학 용어이므로 약간 천천히
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Text-to-speech not supported in this browser.');
+                }
+            }
+
+            function updateCenterDisplay(content) {
+                const centerDisplay = document.getElementById('center-display');
+                if (!centerDisplay) return;
+                
+                // Fade out
+                centerDisplay.style.opacity = '0';
+                centerDisplay.style.transform = 'translate(-50%, -50%) scale(0.95)';
+
+                setTimeout(() => {
+                    centerDisplay.innerHTML = content;
+                    // Fade in
+                    centerDisplay.style.opacity = '1';
+                    centerDisplay.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 250);
+            }
+
+            function getBreakdownHtml(item) {
+                // 접두사(신체부위)는 붉은색 계열, 어근(절제술)은 파란색 계열로 시각적 분리
+                return `
+                    <div class="flex flex-col items-center">
+                         <p class="mt-4 text-lg md:text-xl text-gray-700">
+                            <span class="font-bold border-b-2 border-red-300 text-red-600" title="Body Part">${item.prefix}</span>
+                            <span class="text-gray-400 mx-1">+</span>
+                            <span class="font-bold border-b-2 border-blue-300 text-blue-600" title="Suffix">${item.root}</span>
+                        </p>
+                        <p class="text-sm text-gray-500 mb-4">
+                            (${item.prefixMeaning} + ${item.rootMeaning})
+                        </p>
+                    </div>
+                    <p class="mt-2 text-gray-800 text-md md:text-lg font-medium leading-snug">${item.meaning}</p>
+                    <blockquote class="mt-4 w-full bg-gray-50 rounded p-3 border-l-4 border-gray-300">
+                        <p class="text-gray-600 italic text-sm md:text-base">"${item.example}"</p>
+                    </blockquote>
+                `;
+            }
+            
+            function setupDesktopView() {
+                const diagramContainer = document.getElementById('word-diagram-container');
+                if (!diagramContainer) return;
+
+                const nodes = [];
+                
+                updateCenterDisplay(defaultContentHTML);
+
+                // 배경 클릭 시 초기화
+                diagramContainer.addEventListener('click', (e) => {
+                    if (e.target === diagramContainer) {
+                        updateCenterDisplay(defaultContentHTML);
+                    }
+                });
+
+                wordData.forEach(item => {
+                    const node = document.createElement('div');
+                    // 노드 디자인: 깔끔한 캡슐형
+                    node.className = 'word-node absolute py-2 px-5 bg-white rounded-full shadow-md cursor-pointer border border-gray-200 flex items-center gap-2 hover:border-blue-400';
+                    node.innerHTML = `<span class="text-2xl pointer-events-none select-none">${item.icon}</span><span class="font-bold text-lg pointer-events-none text-gray-700 select-none">${item.word}</span>`;
+                    
+                    diagramContainer.appendChild(node);
+                    nodes.push(node);
+
+                    node.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // 모바일과 동일한 구조를 사용하되, 스피커 아이콘 등 배치 조정
+                        const content = `
+                            <div class="flex flex-col items-center w-full">
+                                <div class="flex items-center justify-center gap-3 mb-1">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 font-lora">${item.word}</h3>
+                                    <button class="speaker-icon text-2xl p-1 rounded-full hover:bg-gray-100 focus:outline-none transition-colors" data-word="${item.word}" aria-label="Listen">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                    </button>
+                                </div>
+                                ${getBreakdownHtml(item)}
+                            </div>
+                        `;
+                        updateCenterDisplay(content);
+                    });
+                });
+
+                function positionNodes() {
+                    const containerWidth = diagramContainer.offsetWidth;
+                    if (containerWidth === 0) {
+                        requestAnimationFrame(positionNodes);
+                        return;
+                    }
+                    // 반지름 설정 (컨테이너 크기에 비례)
+                    const radius = containerWidth * 0.40; 
+
+                    nodes.forEach((node, index) => {
+                        const item = wordData[index];
+                        // 12시 방향(-90도) 부터 시작하도록 조정
+                        const angleRad = (item.angle - 90) * (Math.PI / 180);
+                        
+                        // 중심점(50, 50) 기준 좌표 계산
+                        const x = 50 + (radius / containerWidth * 100) * Math.cos(angleRad);
+                        const y = 50 + (radius / containerWidth * 100) * Math.sin(angleRad);
+
+                        node.style.left = `${x}%`;
+                        node.style.top = `${y}%`;
+                        node.style.transform = 'translate(-50%, -50%)';
+                    });
+                }
+
+                positionNodes();
+                window.addEventListener('resize', positionNodes);
+            }
+
+            function setupMobileView() {
+                const mobileContainer = document.getElementById('mobile-list-view');
+                if (!mobileContainer) return;
+
+                wordData.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'mobile-card bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200';
+                    
+                    const header = document.createElement('div');
+                    header.className = 'p-4 flex justify-between items-center cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors';
+                    header.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl select-none">${item.icon}</span>
+                            <h3 class="font-bold text-lg text-gray-800 font-lora">${item.word}</h3>
+                        </div>
+                        <div class="flex items-center gap-4">
+                             <button class="speaker-icon text-gray-500 hover:text-blue-600 p-1" data-word="${item.word}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            </button>
+                            <span class="arrow-icon text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </span>
+                        </div>
+                    `;
+
+                    const body = document.createElement('div');
+                    body.className = 'mobile-card-body px-5 bg-white text-center';
+                    body.innerHTML = getBreakdownHtml(item);
+
+                    card.appendChild(header);
+                    card.appendChild(body);
+                    mobileContainer.appendChild(card);
+
+                    header.addEventListener('click', (e) => {
+                        // 스피커 아이콘 클릭 시 아코디언 동작 방지
+                        if (!e.target.closest('.speaker-icon')) {
+                            document.querySelectorAll('.mobile-card.active').forEach(activeCard => {
+                                if (activeCard !== card) {
+                                    activeCard.classList.remove('active');
+                                }
+                            });
+                            card.classList.toggle('active');
+                        }
+                    });
+                });
+            }
+
+            // 이벤트 위임을 사용한 TTS 처리
+            document.body.addEventListener('click', function(e) {
+                const speakerBtn = e.target.closest('.speaker-icon');
+                if (speakerBtn) {
+                    e.stopPropagation();
+                    const wordToSpeak = speakerBtn.dataset.word;
+                    if (wordToSpeak) {
+                        speak(wordToSpeak);
+                        
+                        // 시각적 피드백 (잠시 색상 변경)
+                        const originalColor = speakerBtn.style.color;
+                        speakerBtn.style.color = '#2563eb'; // blue-600
+                        setTimeout(() => {
+                            speakerBtn.style.color = originalColor;
+                        }, 500);
+                    }
+                }
+            });
+
+            setupDesktopView();
+            setupMobileView();
+        });
+    </script>
+</body>
+</html>
