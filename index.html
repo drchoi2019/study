@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-QC84KCE6C1');
-</script>
-    
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-QC84KCE6C1');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive TCM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -27,28 +30,36 @@
             -moz-osx-font-smoothing: grayscale;
             touch-action: manipulation;
         }
-        h1, h2, .font-serif {
+
+        h1,
+        h2,
+        .font-serif {
             font-family: 'Cormorant Garamond', serif;
         }
+
         .nav-link {
             display: block;
-            padding: 0.5rem 0.75rem;
+            padding: 0.2rem 0.75rem;
             border-radius: 6px;
             transition: background-color 0.3s, color 0.3s;
             color: #5a5a5a;
         }
+
         .nav-link:hover {
             background-color: #EAE8E1;
             color: #000;
         }
+
         #gameFrame {
             border: none;
             border-radius: 8px;
             background-color: #F7F3EF;
         }
+
         .lang-button {
             transition: all 0.3s ease;
         }
+
         .lang-button.active {
             background-color: #4a5568;
             color: white;
@@ -56,19 +67,23 @@
         }
     </style>
 </head>
+
 <body class="text-gray-800">
 
     <!-- Main Header -->
     <header id="main-header" class="text-center py-16 md:py-20 relative">
         <div class="absolute top-4 right-4 flex gap-2">
-            <button id="lang-en" onclick="switchLanguage('en')" class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            <button id="lang-en" onclick="switchLanguage('en')"
+                class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
                 ENG
             </button>
-            <button id="lang-ko" onclick="switchLanguage('ko')" class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+            <button id="lang-ko" onclick="switchLanguage('ko')"
+                class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
                 한국어
             </button>
         </div>
-        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM" data-ko="한의학 공부">
+        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM"
+            data-ko="한의학 공부">
             Interactive TCM
         </h1>
         <p id="author" class="text-gray-500 mt-2 text-lg" data-en="Hyungsuk Choi" data-ko="최형석">Hyungsuk Choi</p>
@@ -79,50 +94,83 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             <!-- Theory -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Theory" data-ko="이론">Theory</h2>
-                <ul class="space-y-2 pl-0">
-                  <li><a href="treatment_tcm.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Concept of Treatment in TCM" data-ko="치료의 개념">Treatment in TCM</a></li>                    
-                  <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Organs Summary" data-ko="오장 생리">Five Organs Summary</a></li>
-                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Pattern Diagnosis" data-ko="변증 기초">Pattern Basic</a></li>
-                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
-                    <li><a href="five_diagram.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Phases Diagram" data-ko="오행 기초">Five Phases</a></li>
-                  <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
-                  <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
-                    <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>
-                   <li><a href="organ_theory.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Theory" data-ko="장상론">Organ Theory</a></li>
-                  <li><a href="organpattern_comb.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Pattern Combination" data-ko="장부변증 조합">Organ Pattern Combination</a></li>
-                  <li><a href="organpattern_card.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Patterns Flash Cards" data-ko="장부변증 암기 카드">Organ Pattern Cards</a></li>  
-                    <li><a href="organpattern_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Patterns Quiz" data-ko="장부변증 퀴즈">Organ Pattern Quiz</a></li>  
-                  <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
-                 <li><a href="harmonize.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Harmonize?" data-ko="화해의 개념">harmonize</a></li>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Theory" data-ko="이론">Theory</h2>
+                <ul class="space-y-1 pl-0">
+                    <li><a href="treatment_tcm.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Concept of Treatment in TCM" data-ko="치료의 개념">Treatment in TCM</a></li>
+                    <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Organs Summary" data-ko="오장 생리">Five Organs Summary</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Basic Pattern Diagnosis" data-ko="변증 기초">Pattern Basic</a></li>
+                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
+                    <li><a href="five_diagram.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Phases Diagram" data-ko="오행 기초">Five Phases</a></li>
+                    <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
+                    <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
+                    <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>
+                    <li><a href="organ_theory.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Theory" data-ko="장상론">Organ Theory</a></li>
+                    <li><a href="organpattern_comb.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Pattern Combination" data-ko="장부변증 조합">Organ Pattern Combination</a></li>
+                    <li><a href="organpattern_card.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Patterns Flash Cards" data-ko="장부변증 암기 카드">Organ Pattern Cards</a></li>
+                    <li><a href="organpattern_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Patterns Quiz" data-ko="장부변증 퀴즈">Organ Pattern Quiz</a></li>
+                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                    <li><a href="harmonize.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="What is Harmonize?" data-ko="화해의 개념">harmonize</a></li>
 
                 </ul>
             </div>
-         
+
             <!-- Formula -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Formula" data-ko="방제학">Formula</h2>
-                <ul class="space-y-2 pl-0">
-                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
-                    <li><a href="pre_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Before Study Formula" data-ko="방제수업 시작 필수 지식">Before start formula</a></li>
-                  <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
-                     <li><a href="formula_name_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula name quiz" data-ko="처방 이름 퀴즈">Formula name Quiz</a></li>
-                   <li><a href="formula_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Formulas" data-ko="기본 처방 해설">Basic Formulae</a></li>                  
-                    <li><a href="formula_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Variations" data-ko="기본 처방 변방">Formula Variations</a></li>                  
-                  <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li> 
-                     <li><a href="xiaochaihu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Xiao Chai Hu Tang Tragedy" data-ko="소시호탕 사고">Xiao Chai Hu Tang Tragedy</a></li>
-                  <li><a href="5ling.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Wu Ling San" data-ko="오령산과 저령탕">Wu Ling San</a></li>
-                  <li><a href="guizhi_3_action.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Understanding Gui Zhi" data-ko="방제속 계지의 역할">Gui Zhi</a></li>                  
-                    <li><a href="chaihu_formula.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Understanding Chai Hu" data-ko="방제속 시호의 역할">Chai Hu</a></li>                  
-                    <li><a href="formula_left_right.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Left and Right Returning Pills" data-ko="좌귀환과 우귀환">Zuo Gui Wan</a></li>                  
-                    <li><a href="hyunbu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Hyunbu Yigyung Tang" data-ko="현부이경탕">현부이경탕</a></li>                  
-                    <li><a href="zhigancaotang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Zhi Gan Cao Tang" data-ko="자감초탕">Zhi Gan Cao Tang</a></li>                  
-                    <li><a href="3_tx_liver.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="4 ways to treat Liver" data-ko="간치료의 네가지 방법">Liver</a></li>                  
-              <li><a href="xiexintang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Xie Xin Tang Variations" data-ko="사심탕류의 이해">Xie Xin Tangr</a></li>                  
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Formula" data-ko="방제학">Formula</h2>
+                <ul class="space-y-1 pl-0">
+                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
+                    <li><a href="pre_formula.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Before Study Formula" data-ko="방제수업 시작 필수 지식">Before start formula</a></li>
+                    <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
+                    <li><a href="formula_name_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formula name quiz" data-ko="처방 이름 퀴즈">Formula name Quiz</a></li>
+                    <li><a href="formula_basic.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Basic Formulas" data-ko="기본 처방 해설">Basic Formulae</a></li>
+                    <li><a href="formula_var.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formula Variations" data-ko="기본 처방 변방">Formula Variations</a></li>
+                    <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
+                    <li><a href="xiaochaihu.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Xiao Chai Hu Tang Tragedy" data-ko="소시호탕 사고">Xiao Chai Hu Tang Tragedy</a></li>
+                    <li><a href="5ling.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Wu Ling San"
+                            data-ko="오령산과 저령탕">Wu Ling San</a></li>
+                    <li><a href="guizhi_3_action.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Understanding Gui Zhi" data-ko="방제속 계지의 역할">Gui Zhi</a></li>
+                    <li><a href="chaihu_formula.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Understanding Chai Hu" data-ko="방제속 시호의 역할">Chai Hu</a></li>
+                    <li><a href="formula_left_right.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Left and Right Returning Pills" data-ko="좌귀환과 우귀환">Zuo Gui Wan</a></li>
+                    <li><a href="hyunbu.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Hyunbu Yigyung Tang" data-ko="현부이경탕">현부이경탕</a></li>
+                    <li><a href="zhigancaotang.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Zhi Gan Cao Tang" data-ko="자감초탕">Zhi Gan Cao Tang</a></li>
+                    <li><a href="3_tx_liver.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="4 ways to treat Liver" data-ko="간치료의 네가지 방법">Liver</a></li>
+                    <li><a href="xiexintang.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Xie Xin Tang Variations" data-ko="사심탕류의 이해">Xie Xin Tangr</a></li>
 
-                  <li><a href="formula_stats.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Formulae Usage Statistics" data-ko="다용 처방 통계">statistics</a></li>                  
+                    <li><a href="formula_stats.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formulae Usage Statistics" data-ko="다용 처방 통계">statistics</a></li>
 
-                  <!-- <li><a href="erchentang_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang" data-ko="이진탕">Er Chen Tang</a></li>                  
+                    <!-- <li><a href="erchentang_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang" data-ko="이진탕">Er Chen Tang</a></li>                  
                   <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
                     <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
                     <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
@@ -130,62 +178,92 @@
                     <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
                     <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
                      -->
-                  
+
                 </ul>
             </div>
 
             <!-- Acupuncture -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Acupuncture" data-ko="침구학">Acupuncture</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Acupuncture" data-ko="침구학">Acupuncture</h2>
                 <ul class="space-y-2 pl-0">
-                   <li><a href="acu_process.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Acupuncture Process" data-ko="침구과정">Acupuncture Process</a></li>
-                    <li><a href="acu_organ_injury.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Organ Injury" data-ko="장부손상">Organ Injury</a></li>
-                    <li><a href="truepoint.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="True Point" data-ko="진혈">True Point</a></li>
-                    <li><a href="hegu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="True Hegu Point" data-ko="진짜 합곡혈">Hegu</a></li>
-                    <li><a href="acu_side_effect.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Reported Side Effects" data-ko="침치료 부작용">acupuncture side effect</a></li>
+                    <li><a href="acu_process.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Acupuncture Process" data-ko="침구과정">Acupuncture Process</a></li>
+                    <li><a href="acu_organ_injury.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Injury" data-ko="장부손상">Organ Injury</a></li>
+                    <li><a href="truepoint.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="True Point"
+                            data-ko="진혈">True Point</a></li>
+                    <li><a href="hegu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="True Hegu Point"
+                            data-ko="진짜 합곡혈">Hegu</a></li>
+                    <li><a href="acu_side_effect.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Reported Side Effects" data-ko="침치료 부작용">acupuncture side effect</a></li>
 
                 </ul>
             </div>
 
             <!-- History -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="History" data-ko="한의학사">History</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="History" data-ko="한의학사">History</h2>
                 <ul class="space-y-2 pl-0">
-                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Brief History of TCM" data-ko="한의학사 요약">Brief History of TCM</a></li>                                        
-                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
-                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
-                     <li><a href="m_tcm.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Birth of Morden TCM" data-ko="중의학의 탄생">Mordern TCM</a></li>  
-                  <li><a href="history_6_stages.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Six Stages Theory" data-ko="육경변증의 오류">Six stages</a></li>
-                   <li><a href="term_wuxing.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Wuxing Translation" data-ko="오행의 번역">Wuxing</a></li>
-                  <li><a href="history_wrong_chinese.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Wrong Translations" data-ko="고대 한자의 해석 오류">Chinese</a></li>
-                  <li><a href="qi_letter.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Qi in TCM" data-ko="중의학에서 기">Qi</a></li>
+                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Brief History of TCM" data-ko="한의학사 요약">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
+                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
+                    <li><a href="m_tcm.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Birth of Morden TCM" data-ko="중의학의 탄생">Mordern TCM</a></li>
+                    <li><a href="history_6_stages.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Six Stages Theory" data-ko="육경변증의 오류">Six stages</a></li>
+                    <li><a href="term_wuxing.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Wuxing Translation" data-ko="오행의 번역">Wuxing</a></li>
+                    <li><a href="history_wrong_chinese.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Wrong Translations" data-ko="고대 한자의 해석 오류">Chinese</a></li>
+                    <li><a href="qi_letter.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Qi in TCM"
+                            data-ko="중의학에서 기">Qi</a></li>
 
                 </ul>
             </div>
 
             <!-- Games -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Games" data-ko="게임">Games</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Games" data-ko="게임">Games</h2>
                 <ul class="space-y-2 pl-0">
-                    <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>                    
-                    <li><a href="5_tower.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Five Element Tower Stack" data-ko="오행 탑 쌓기">Five Element Tower</a></li>
-                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
-                    <li><a href="herbal_runner_game.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Herb Runner Game" data-ko="약초 달리기">Herb Runner</a></li>
+                    <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>
+                    <li><a href="5_tower.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Element Tower Stack" data-ko="오행 탑 쌓기">Five Element Tower</a></li>
+                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
+                    <li><a href="herbal_runner_game.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Herb Runner Game" data-ko="약초 달리기">Herb Runner</a></li>
                 </ul>
             </div>
 
             <!-- Misc -->
             <div class="p-6">
-                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center" data-en="Misc" data-ko="기타">Misc</h2>
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Misc" data-ko="기타">Misc</h2>
                 <ul class="space-y-2 pl-0">
-                    <li><a href="pulse101.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse 101" data-ko="맥진 변증 기초">Basic Pulse</a></li>
-                   <li><a href="tongue101.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Tongue 101" data-ko="설진 변증 기초">Basic Tongue</a></li>
-                   <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Basic Pattern's Tongue and Pulse" data-ko="기본 변증 맥과 설">Basic Pattern Tongue and Pulse</a></li>
-                  <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>                  
-                   <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
-                   <li><a href="single_herb_quiz.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Single Herb Quiz" data-ko="기본 본초 퀴즈">Herb Quiz</a></li>
-                   <li><a href="herb_index.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Single Herb Search" data-ko="본초 검색">Herb Quiz</a></li>
-                   <li><a href="acu_stats.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Some Statistics" data-ko="침 이용 실태">acupuncture</a></li>
+                    <li><a href="pulse101.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse 101"
+                            data-ko="맥진 변증 기초">Basic Pulse</a></li>
+                    <li><a href="tongue101.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Tongue 101"
+                            data-ko="설진 변증 기초">Basic Tongue</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Basic Pattern's Tongue and Pulse" data-ko="기본 변증 맥과 설">Basic Pattern Tongue and
+                            Pulse</a></li>
+                    <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
+                    <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
+                    <li><a href="single_herb_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Single Herb Quiz" data-ko="기본 본초 퀴즈">Herb Quiz</a></li>
+                    <li><a href="herb_index.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Single Herb Search" data-ko="본초 검색">Herb Quiz</a></li>
+                    <li><a href="acu_stats.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Some Statistics" data-ko="침 이용 실태">acupuncture</a></li>
 
                 </ul>
             </div>
@@ -194,19 +272,16 @@
 
     <!-- Food Runner Game Section -->
     <section class="max-w-4xl mx-auto px-4 pb-16 flex flex-col items-center">
-        <iframe 
-            id="gameFrame" 
-            src="food_runner.html?lang=en" 
-            width="820" 
-            height="170"
-            title="Food Runner Game">
+        <iframe id="gameFrame" src="food_runner.html?lang=en" width="820" height="170" title="Food Runner Game">
         </iframe>
     </section>
 
     <!-- Main Footer -->
     <footer class="text-center py-4 mt-8 text-sm text-gray-500">
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
-        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank" class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback" data-ko="피드백">Feedback</a>
+        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank"
+            class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback"
+            data-ko="피드백">Feedback</a>
     </footer>
 
     <script>
@@ -217,14 +292,14 @@
         function getLanguageFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const langParam = urlParams.get('lang');
-            
+
             // 지원되는 언어만 허용
             if (langParam === 'ko' || langParam === 'kor' || langParam === 'korean') {
                 return 'ko';
             } else if (langParam === 'en' || langParam === 'eng' || langParam === 'english') {
                 return 'en';
             }
-            
+
             // 기본값은 영어
             return 'en';
         }
@@ -241,7 +316,7 @@
             document.querySelectorAll('.lang-button').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             const activeButton = document.getElementById(`lang-${lang}`);
             if (activeButton) {
                 activeButton.classList.add('active');
@@ -256,21 +331,21 @@
             const modalOverlay = document.createElement('div');
             modalOverlay.id = 'page-message-modal';
             modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4';
-            
+
             const modalContent = document.createElement('div');
             modalContent.className = 'bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full';
             modalContent.innerHTML = `<p class="mb-4 text-gray-800">${message}</p>`;
-            
+
             const closeButton = document.createElement('button');
             closeButton.className = 'px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors';
             closeButton.textContent = 'OK';
-            
+
             modalContent.appendChild(closeButton);
             modalOverlay.appendChild(modalContent);
             document.body.appendChild(modalOverlay);
-            
+
             const closeModal = () => {
-                if(document.body.contains(modalOverlay)){
+                if (document.body.contains(modalOverlay)) {
                     document.body.removeChild(modalOverlay);
                 }
             };
@@ -284,7 +359,7 @@
         }
 
         // 네비게이션 확인 및 이동 함수
-        window.checkAndNavigate = async function(event) {
+        window.checkAndNavigate = async function (event) {
             event.preventDefault();
             const linkElement = event.currentTarget;
             const targetUrl = await determineTargetUrl(linkElement, currentLanguage);
@@ -321,7 +396,7 @@
                 if (kVersionResponse.ok) {
                     return kVersionUrl;
                 }
-                
+
                 // 2. 파라미터 방식 확인
                 const baseFileResponse = await fetch(originalHref, { method: 'HEAD' });
                 if (baseFileResponse.ok) {
@@ -339,13 +414,13 @@
         // 언어 설정 함수
         function setLanguage(lang) {
             currentLanguage = lang;
-            
+
             // HTML lang 속성 업데이트
             document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
-            
+
             // 페이지 제목 업데이트
             document.title = lang === 'ko' ? '한의학 공부' : 'Interactive TCM';
-            
+
             // 텍스트 번역
             const elementsToTranslate = document.querySelectorAll('[data-en]');
             elementsToTranslate.forEach(el => {
@@ -361,13 +436,13 @@
 
             // 버튼 상태 업데이트
             updateLanguageButtons(lang);
-            
+
             // URL 업데이트
             updateURLLanguage(lang);
         }
 
         // 언어 전환 함수 (버튼 클릭용)
-        window.switchLanguage = function(lang) {
+        window.switchLanguage = function (lang) {
             setLanguage(lang);
         }
 
@@ -379,14 +454,14 @@
         });
 
         // 초기화
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // URL에서 언어 파라미터 읽기
             const urlLanguage = getLanguageFromURL();
             setLanguage(urlLanguage);
         });
 
         // 뒤로가기/앞으로가기 시 언어 상태 동기화
-        window.addEventListener('popstate', function() {
+        window.addEventListener('popstate', function () {
             const urlLanguage = getLanguageFromURL();
             if (urlLanguage !== currentLanguage) {
                 setLanguage(urlLanguage);
@@ -395,4 +470,5 @@
     </script>
 
 </body>
+
 </html>
