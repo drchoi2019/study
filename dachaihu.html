@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daesihotang (Dachaihutang) Interactive Infogram</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* Mandatory CSS Rule for Language Toggle Button */
+        .px-3.py-1,
+        .px-3.py-1:link,
+        .px-3.py-1:visited {
+            text-decoration: none !important;
+            color: rgb(68, 64, 60) !important;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        /* Custom Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Typography Styles */
+        .hanja {
+            font-family: "Noto Serif KR", serif;
+            font-weight: 600;
+            color: #4b5563;
+            /* stone-600 */
+        }
+
+        .quote-highlight {
+            color: #b91c1c;
+            /* red-700 */
+            font-weight: 700;
+            background-color: #fee2e2;
+            /* red-100 */
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+
+        /* Layout Constraint */
+        .app-container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 text-stone-800">
+
+    <!-- MANDATORY HEADER START -->
+    <header id="page-header"
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)"
+            class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors"
+            style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+    <!-- MANDATORY HEADER END -->
+
+    <div id="root" class="app-container"></div>
+
+    <!-- MANDATORY FOOTER START -->
+    <footer id="page-footer"
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+    <!-- MANDATORY FOOTER END -->
+
+    <!-- Language Logic Script -->
+    <script>
+        // Default Language
+        let currentLang = 'ko';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // Dispatch event for React to listen to
+            const event = new CustomEvent('languageChange', { detail: lang });
+            window.dispatchEvent(event);
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            // No history.replaceState, no localStorage requirement specified, 
+            // defaulting to simple variable initialization.
+            setLanguage('ko');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+    </script>
+
+    <!-- React Application -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Icons ---
+        const IconBase = ({ size = 24, color = "currentColor", children }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{children}</svg>
+        );
+        const Wind = (props) => <IconBase {...props}><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2" /><path d="M9.6 4.6A2 2 0 1 1 11 8H2" /><path d="M12.6 19.4A2 2 0 1 0 14 16H2" /></IconBase>;
+        const Flame = (props) => <IconBase {...props}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3a9 9 0 0 0 .9-2c.5 2.5 1.5 3.3 1.5 4.8Z" /></IconBase>;
+        const Activity = (props) => <IconBase {...props}><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></IconBase>;
+        const MoveVertical = (props) => <IconBase {...props}><path d="M12 2v20" /><path d="m8 6 4-4 4 4" /><path d="m8 18 4 4 4-4" /></IconBase>;
+        const Layers = (props) => <IconBase {...props}><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></IconBase>;
+        const Anchor = (props) => <IconBase {...props}><circle cx="12" cy="5" r="3" /><line x1="12" y1="22" x2="12" y2="8" /><path d="M5 12H2a10 10 0 0 0 20 0h-3" /></IconBase>;
+        const Plus = (props) => <IconBase {...props}><path d="M5 12h14" /><path d="M12 5v14" /></IconBase>;
+
+        // --- Data ---
+        const DATA = {
+            ko: {
+                title: "대시호탕 (Dachaihutang)",
+                subtitle: "소양(少陽)과 양명(陽明)을 동시에 다스리는 묘방",
+                labels: {
+                    monarch: "군약 (君)",
+                    minister: "신약 (臣)",
+                    assistant: "좌약 (佐)",
+                    role_ext: "소양 해표 (Exterior)",
+                    role_int: "양명 사하 (Interior)",
+                    synergy_heat: "열 제어 (Heat Control)",
+                    synergy_qi: "기 & 적체 (Qi & Accumulation)",
+                    click_hint: "약재를 클릭하여 상세 정보를 확인하세요."
+                },
+                herbs: {
+                    siho: {
+                        name: "시호",
+                        hanja: "柴胡",
+                        role: "군약 (君)",
+                        desc: "소양의 사기를 밖으로 흩어내며(해표), 반표반리의 열을 다스립니다.",
+                        color: "bg-green-100 border-green-500 text-green-800",
+                    },
+                    daehwang: {
+                        name: "대황",
+                        hanja: "大黃",
+                        role: "군약 (君)",
+                        desc: "양명의 실열을 내리고 대변을 통하게 하여(사하), 이(裡)의 열을 뺍니다.",
+                        color: "bg-red-100 border-red-500 text-red-800",
+                    },
+                    hwanggeum: {
+                        name: "황금",
+                        hanja: "黃芩",
+                        role: "신약 (臣)",
+                        desc: "쓰고 차가운 성질로 군약들의 열을 식히는 역할을 보조합니다.",
+                        detail: "시호와 함께 소양의 열을 끄고(소시호탕 의미), 대황과 함께 내장기의 실열을 끕니다(삼황사심탕 의미).",
+                        color: "bg-yellow-100 border-yellow-500 text-yellow-800",
+                    },
+                    jisil: {
+                        name: "지실",
+                        hanja: "枳實",
+                        role: "신약 (臣)",
+                        desc: "기를 강하게 소통시켜 가슴과 배의 그득함(비만)을 깨뜨립니다.",
+                        detail: "시호와 함께 기의 흐름을 돕고(사역산 의미), 대황과 함께 장내의 굳은 적체(승기탕 의미)를 배출합니다.",
+                        color: "bg-orange-100 border-orange-500 text-orange-800",
+                    },
+                    jakyak: {
+                        name: "작약",
+                        hanja: "芍藥",
+                        role: "좌약 (佐)",
+                        desc: "급박함을 완화하고 통증을 멎게 합니다. 지실, 대황과 함께 복통을 다스립니다.",
+                        color: "bg-pink-100 border-pink-500 text-pink-800",
+                    },
+                    banha: {
+                        name: "반하",
+                        hanja: "半夏",
+                        role: "좌약 (佐)",
+                        desc: "중초를 조화롭게 하고(화위), 기운을 아래로 내려 구토를 멎게 합니다.",
+                        color: "bg-gray-100 border-gray-500 text-gray-800",
+                    }
+                },
+                synergies: {
+                    hwanggeum: [
+                        { label: "시호", desc: "소양열 해소" },
+                        { label: "대황", desc: "실열 해소" }
+                    ],
+                    jisil: [
+                        { label: "시호", desc: "기 순환 (+사역산)" },
+                        { label: "대황", desc: "적체 파괴" }
+                    ]
+                }
+            },
+            en: {
+                title: "Dachaihutang (Da Chai Hu Tang)",
+                subtitle: "Wondrous formula for Harmonizing Interior and Exterior",
+                labels: {
+                    monarch: "Monarch (Jun)",
+                    minister: "Minister (Chen)",
+                    assistant: "Assistant (Zuo)",
+                    role_ext: "Releases Shaoyang (Exterior)",
+                    role_int: "Purges Yangming (Interior)",
+                    synergy_heat: "Heat Control",
+                    synergy_qi: "Qi & Accumulation",
+                    click_hint: "Click on an herb to see details"
+                },
+                herbs: {
+                    siho: {
+                        name: "Chaihu",
+                        hanja: "柴胡",
+                        role: "Monarch (Jun)",
+                        desc: "Relieves Shaoyang stagnation and disperses external pathogens.",
+                        color: "bg-green-100 border-green-500 text-green-800",
+                    },
+                    daehwang: {
+                        name: "Dahuang",
+                        hanja: "大黃",
+                        role: "Monarch (Jun)",
+                        desc: "Enters Yangming to clear heat and purge bowels (Heat purging).",
+                        color: "bg-red-100 border-red-500 text-red-800",
+                    },
+                    hwanggeum: {
+                        name: "Huangqin",
+                        hanja: "黃芩",
+                        role: "Minister (Chen)",
+                        desc: "Bitter and cold nature helps cool the heat of Monarch herbs.",
+                        detail: "Clears Shaoyang heat with Chaihu (Xiaochaihutang), clears visceral heat with Dahuang (Sanhuangxiexintang).",
+                        color: "bg-yellow-100 border-yellow-500 text-yellow-800",
+                    },
+                    jisil: {
+                        name: "Zhishi",
+                        hanja: "枳實",
+                        role: "Minister (Chen)",
+                        desc: "Strongly regulates Qi flow to break focal distention and fullness in the chest and abdomen.",
+                        detail: "Promotes Qi flow with Chaihu (+ Shaoyao, Sinisan), breaks intestinal accumulations with Dahuang.",
+                        color: "bg-orange-100 border-orange-500 text-orange-800",
+                    },
+                    jakyak: {
+                        name: "Shaoyao",
+                        hanja: "芍藥",
+                        role: "Assistant (Zuo)",
+                        desc: "Relieves urgency and stops pain. Manages excessive abdominal pain with Zhishi and Dahuang.",
+                        color: "bg-pink-100 border-pink-500 text-pink-800",
+                    },
+                    banha: {
+                        name: "Banxia",
+                        hanja: "半夏",
+                        role: "Assistant (Zuo)",
+                        desc: "Harmonizes the Middle Jiao and lowers counterflow to stop vomiting.",
+                        color: "bg-gray-100 border-gray-500 text-gray-800",
+                    }
+                },
+                synergies: {
+                    hwanggeum: [
+                        { label: "Chaihu", desc: "Clears Shaoyang Heat" },
+                        { label: "Dahuang", desc: "Clears Visceral Heat" }
+                    ],
+                    jisil: [
+                        { label: "Chaihu", desc: "Promotes Qi (+Sinisan)" },
+                        { label: "Dahuang", desc: "Breaks Mass" }
+                    ]
+                }
+            }
+        };
+
+        const HerbIcons = {
+            siho: <Wind size={24} />,
+            daehwang: <Flame size={24} />,
+            hwanggeum: <Activity size={24} />,
+            jisil: <MoveVertical size={24} />,
+            jakyak: <Layers size={24} />,
+            banha: <Anchor size={24} />
+        };
+
+        // --- Components ---
+        const HerbCard = ({ herbKey, data, onClick, active }) => {
+            const herbData = data.herbs[herbKey];
+            return (
+                <div
+                    onClick={() => onClick(herbKey)}
+                    className={`
+                        cursor-pointer rounded-lg p-3 sm:p-4 shadow-sm border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md
+                        ${active ? herbData.color + ' ring-2 ring-offset-2 ring-stone-300' : 'bg-white border-stone-100 text-stone-600 hover:border-stone-300'}
+                        flex flex-col items-center text-center w-full h-full justify-between
+                    `}
+                >
+                    <div className={`mb-2 p-2 rounded-full ${active ? 'bg-white bg-opacity-50' : 'bg-stone-100'}`}>
+                        {HerbIcons[herbKey]}
+                    </div>
+                    <div>
+                        <div className="font-bold text-lg leading-tight">
+                            {herbData.name}
+                            <span className="block text-xs font-serif opacity-70 mt-1">{herbData.hanja}</span>
+                        </div>
+                        <div className="text-xs opacity-75 mt-1">{herbData.role}</div>
+                    </div>
+                </div>
+            );
+        };
+
+        const InfogramContent = ({ lang, data }) => {
+            const [selectedHerb, setSelectedHerb] = useState(null);
+
+            return (
+                <div className="bg-white rounded-xl shadow-xl overflow-hidden mb-8 border border-stone-200">
+
+                    {/* Header Section */}
+                    <div className="bg-stone-800 text-white p-6 text-center">
+                        <h2 className="text-2xl sm:text-3xl font-bold mb-2">
+                            {data.title.split('(')[0]}<span className="hanja text-stone-400 text-xl ml-2">{data.title.match(/\((.*?)\)/)?.[1]}</span>
+                        </h2>
+                        <p className="text-stone-300 text-sm sm:text-base">{data.subtitle}</p>
+                    </div>
+
+                    <div className="p-4 sm:p-8 relative">
+                        {/* Level 1: Monarchs */}
+                        <div className="flex justify-between items-start mb-12 sm:mb-16 gap-4 sm:gap-8 relative z-10">
+                            <div className="flex-1 flex flex-col items-center">
+                                <HerbCard herbKey="siho" data={data} onClick={setSelectedHerb} active={selectedHerb === 'siho'} />
+                                <div className="mt-3 px-3 py-1.5 bg-white border-2 border-green-100 text-green-700 text-xs sm:text-sm font-bold rounded-full shadow-sm z-20 text-center">
+                                    {data.labels.role_ext}
+                                </div>
+                            </div>
+
+                            <div className="flex-1 flex flex-col items-center">
+                                <HerbCard herbKey="daehwang" data={data} onClick={setSelectedHerb} active={selectedHerb === 'daehwang'} />
+                                <div className="mt-3 px-3 py-1.5 bg-white border-2 border-red-100 text-red-700 text-xs sm:text-sm font-bold rounded-full shadow-sm z-20 text-center">
+                                    {data.labels.role_int}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Connection Lines (SVG) */}
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-20">
+                            <line x1="25%" y1="180" x2="25%" y2="350" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="75%" y1="180" x2="75%" y2="350" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
+                        </svg>
+
+                        {/* Level 2: Ministers & Synergies */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mb-12 sm:mb-16 relative z-10">
+
+                            {/* Hwanggeum Interaction */}
+                            <div className="bg-white border-2 border-dashed border-stone-200 rounded-xl p-4 relative group hover:border-yellow-400 transition-colors">
+                                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white px-2 text-xs text-stone-500 font-bold whitespace-nowrap">
+                                    {data.labels.synergy_heat}
+                                </div>
+                                <HerbCard herbKey="hwanggeum" data={data} onClick={setSelectedHerb} active={selectedHerb === 'hwanggeum'} />
+                                <div className="mt-3 text-xs text-stone-600 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Plus size={10} className="text-green-600 flex-shrink-0" />
+                                        <span>
+                                            <span className="text-green-800 font-bold">{data.synergies.hwanggeum[0].label}</span>: {data.synergies.hwanggeum[0].desc}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Plus size={10} className="text-red-600 flex-shrink-0" />
+                                        <span>
+                                            <span className="text-red-800 font-bold">{data.synergies.hwanggeum[1].label}</span>: {data.synergies.hwanggeum[1].desc}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Jisil Interaction */}
+                            <div className="bg-white border-2 border-dashed border-stone-200 rounded-xl p-4 relative group hover:border-orange-400 transition-colors">
+                                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-white px-2 text-xs text-stone-500 font-bold whitespace-nowrap">
+                                    {data.labels.synergy_qi}
+                                </div>
+                                <HerbCard herbKey="jisil" data={data} onClick={setSelectedHerb} active={selectedHerb === 'jisil'} />
+                                <div className="mt-3 text-xs text-stone-600 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Plus size={10} className="text-green-600 flex-shrink-0" />
+                                        <span>
+                                            <span className="text-green-800 font-bold">{data.synergies.jisil[0].label}</span>: {data.synergies.jisil[0].desc}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Plus size={10} className="text-red-600 flex-shrink-0" />
+                                        <span>
+                                            <span className="text-red-800 font-bold">{data.synergies.jisil[1].label}</span>: {data.synergies.jisil[1].desc}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* Level 3: Assistants */}
+                        <div className="flex justify-center gap-4 sm:gap-8 relative z-10">
+                            <div className="w-1/2 sm:w-1/3">
+                                <HerbCard herbKey="jakyak" data={data} onClick={setSelectedHerb} active={selectedHerb === 'jakyak'} />
+                            </div>
+                            <div className="w-1/2 sm:w-1/3">
+                                <HerbCard herbKey="banha" data={data} onClick={setSelectedHerb} active={selectedHerb === 'banha'} />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Detail Footer */}
+                    <div className="bg-stone-100 p-6 border-t border-stone-200 min-h-[140px]">
+                        {selectedHerb ? (
+                            <div className="animate-fade-in">
+                                <h3 className="font-bold text-xl mb-1 flex items-center gap-2 text-stone-800">
+                                    {HerbIcons[selectedHerb]}
+                                    <span>
+                                        {data.herbs[selectedHerb].name}
+                                        <span className="hanja ml-2 text-lg">{data.herbs[selectedHerb].hanja}</span>
+                                    </span>
+                                </h3>
+                                <div className="text-xs font-bold text-stone-500 mb-2 uppercase tracking-wide">
+                                    {data.herbs[selectedHerb].role}
+                                </div>
+                                <p className="text-stone-700 mb-3 leading-relaxed">
+                                    {data.herbs[selectedHerb].desc}
+                                </p>
+                                {data.herbs[selectedHerb].detail && (
+                                    <div className="text-sm text-stone-600 bg-white p-3 rounded border border-stone-200 shadow-sm">
+                                        <span className="font-bold text-yellow-600 mr-2">Tip</span>
+                                        {data.herbs[selectedHerb].detail}
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="text-center text-stone-400 flex flex-col items-center justify-center h-full py-4">
+                                <span className="text-2xl mb-2 animate-bounce">👆</span>
+                                <p className="font-medium">{data.labels.click_hint}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [lang, setLang] = useState('ko');
+
+            useEffect(() => {
+                const handleLanguageChange = (e) => {
+                    setLang(e.detail);
+                };
+                window.addEventListener('languageChange', handleLanguageChange);
+                return () => window.removeEventListener('languageChange', handleLanguageChange);
+            }, []);
+
+            return (
+                <div className="w-full">
+                    {/* Mandatory Structure: Content must be put separately into lang-container divs */}
+
+                    {/* Korean Container */}
+                    <div className={`lang-container ${lang === 'ko' ? 'block' : 'hidden'}`} lang="ko">
+                        <InfogramContent lang="ko" data={DATA.ko} />
+                    </div>
+
+                    {/* English Container */}
+                    <div className={`lang-container ${lang === 'en' ? 'block' : 'hidden'}`} lang="en">
+                        <InfogramContent lang="en" data={DATA.en} />
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
