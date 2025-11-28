@@ -1,431 +1,476 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-QC84KCE6C1');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dog & Pig Poop Catching Game</title>
+    <title>Interactive TCM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+KR:wght@300;400&display=swap"
+        rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #f0f8ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            height: 100dvh;
-            /* Mobile viewport fix */
-            font-family: 'Fredoka One', cursive;
-            overflow: hidden;
-            touch-action: none;
-            /* Prevent default touch actions like scrolling */
-        }
-
-        #game-container {
-            width: 100%;
-            max-width: 400px;
-            height: 100%;
-            max-height: 600px;
-            aspect-ratio: 2/3;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-            /* Sky gradient */
-            border: 8px solid #333;
-            border-radius: 20px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            box-sizing: border-box;
-            /* Include border in size */
-        }
-
-        #game-screen {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        /* Grass at the bottom */
-        #game-screen::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background-color: #4CAF50;
-            border-top: 5px solid #388E3C;
-            z-index: 5;
-        }
-
-        #dog {
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: left 0.2s linear;
-            z-index: 10;
-        }
-
-        #pig {
-            bottom: 30px;
-            /* Adjusted for grass */
-            left: 50%;
-            transform: translateX(-50%);
-            transition: left 0.1s linear;
-            z-index: 10;
-        }
-
-        .poop {
-            position: absolute;
-            font-size: 30px;
-            z-index: 8;
-            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
-        }
-
-        #ui-layer {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            display: flex;
-            justify-content: space-between;
-            z-index: 20;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F7F3EF;
             color: #333;
-            text-shadow: 2px 2px 0px #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: manipulation;
         }
 
-        #score,
-        #level {
-            font-size: 24px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 5px 15px;
-            border-radius: 15px;
-            border: 2px solid #333;
+        h1,
+        h2,
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
         }
 
-        #game-over {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            display: none;
-            z-index: 30;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            border: 5px solid #FF5722;
-            color: #333;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        .nav-link {
+            display: block;
+            padding: 0.2rem 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.3s, color 0.3s;
+            color: #5a5a5a;
         }
 
-        #game-over h1 {
-            color: #FF5722;
-            margin-top: 0;
-            text-shadow: 2px 2px 0px #333;
+        .nav-link:hover {
+            background-color: #EAE8E1;
+            color: #000;
         }
 
-        button {
-            background: #FF5722;
+        #gameFrame {
+            border: none;
+            border-radius: 8px;
+            background-color: #F7F3EF;
+        }
+
+        .lang-button {
+            transition: all 0.3s ease;
+        }
+
+        .lang-button.active {
+            background-color: #4a5568;
             color: white;
-            border: 3px solid #333;
-            padding: 15px 30px;
-            font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            cursor: pointer;
-            margin-top: 20px;
-            border-radius: 50px;
-            transition: transform 0.1s;
-        }
-
-        button:hover {
             transform: scale(1.05);
-            background: #F4511E;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        /* Mobile Controls */
-        #controls {
-            position: absolute;
-            bottom: -80px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-sizing: border-box;
         }
     </style>
 </head>
 
-<body>
+<body class="text-gray-800">
 
-    <div id="game-container">
-        <div id="ui-layer">
-            <div id="score">SCORE: 0</div>
-            <div id="level">SPEED: 1</div>
+    <!-- Main Header -->
+    <header id="main-header" class="text-center py-16 md:py-20 relative">
+        <div class="absolute top-4 right-4 flex gap-2">
+            <button id="lang-en" onclick="switchLanguage('en')"
+                class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+                ENG
+            </button>
+            <button id="lang-ko" onclick="switchLanguage('ko')"
+                class="lang-button px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm font-bold hover:bg-gray-300">
+                한국어
+            </button>
         </div>
+        <h1 id="main-title" class="text-5xl md:text-7xl font-serif text-gray-700" data-en="Interactive TCM"
+            data-ko="한의학 공부">
+            Interactive TCM
+        </h1>
+        <p id="author" class="text-gray-500 mt-2 text-lg" data-en="Hyungsuk Choi" data-ko="최형석">Hyungsuk Choi</p>
+    </header>
 
-        <div id="game-screen">
-            <img id="dog" src="dog.png" alt="Dog" style="width: 80px; height: 80px; position: absolute;">
-            <img id="pig" src="pig.png" alt="Pig" style="width: 80px; height: 80px; position: absolute;">
-        </div>
+    <!-- Main Navigation Menu -->
+    <nav id="main-nav" class="max-w-6xl mx-auto px-10 pb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <!-- Theory -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Theory" data-ko="이론">Theory</h2>
+                <ul class="space-y-1 pl-0">
+                    <li><a href="treatment_tcm.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Concept of Treatment in TCM" data-ko="치료의 개념">Treatment in TCM</a></li>
+                    <li><a href="five_organs.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Organs Summary" data-ko="오장 생리">Five Organs Summary</a></li>
+                    <li><a href="pattern_basic.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Basic Pattern Diagnosis" data-ko="변증 기초">Pattern Basic</a></li>
+                    <li><a href="yinyang_gram.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Yin Yang Diagram" data-ko="음양 태극도 설명">Yin Yang Diagram</a></li>
+                    <li><a href="five_diagram.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Phases Diagram" data-ko="오행 기초">Five Phases</a></li>
+                    <li><a href="yinyang_consum.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Yin / Yang Deficiency" data-ko="음 / 양 허증">Yin / Yang Deficiency</a></li>
+                    <li><a href="empty_heat.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Empty Heat" data-ko="음허열 특징">Empty Heat</a></li>
+                    <li><a href="16pattern.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="16 Basic Patterns" data-ko="필수 암기 변증">16 Patterns</a></li>
+                    <li><a href="organ_theory.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Theory" data-ko="장상론">Organ Theory</a></li>
+                    <li><a href="organpattern_comb.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Pattern Combination" data-ko="장부변증 조합">Organ Pattern Combination</a></li>
+                    <li><a href="organpattern_card.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Patterns Flash Cards" data-ko="장부변증 암기 카드">Organ Pattern Cards</a></li>
+                    <li><a href="organpattern_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Patterns Quiz" data-ko="장부변증 퀴즈">Organ Pattern Quiz</a></li>
+                    <li><a href="yinyang.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Yin and Yang Quiz" data-ko="음양 퀴즈">Yin and Yang Quiz</a></li>
+                    <li><a href="harmonize.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="What is Harmonize?" data-ko="화해의 개념">harmonize</a></li>
 
-        <div id="game-over">
-            <h1>GAME OVER</h1>
-            <p>SCORE: <span id="final-score">0</span></p>
-            <button onclick="resetGame()">RETRY</button>
+                </ul>
+            </div>
+
+            <!-- Formula -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Formula" data-ko="방제학">Formula</h2>
+                <ul class="space-y-1 pl-0">
+                    <li><a href="what_formula.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="What is Formula" data-ko="방제학이란?">What is Formula</a></li>
+                    <li><a href="pre_formula.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Before Study Formula" data-ko="방제수업 시작 필수 지식">Before start formula</a></li>
+                    <li><a href="hack_names.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Hacking formula names" data-ko="처방 이름 구성">Hacking formula names</a></li>
+                    <li><a href="formula_name_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formula name quiz" data-ko="처방 이름 퀴즈">Formula name Quiz</a></li>
+                    <li><a href="formula_basic.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Basic Formulas" data-ko="기본 처방 해설">Basic Formulae</a></li>
+                    <li><a href="formula_var.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formula Variations" data-ko="기본 처방 변방">Formula Variations</a></li>
+                    <li><a href="miniformula_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formula Finder Quiz" data-ko="처방찾기퀴즈">Formula Finder Quiz</a></li>
+                    <li><a href="xiaochaihu.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Xiao Chai Hu Tang Tragedy" data-ko="소시호탕 사고">Xiao Chai Hu Tang Tragedy</a></li>
+                    <li><a href="dachaihu.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Da Chai Hu Tang" data-ko="대시호탕">Da Chai Hu Tang</a></li>
+                    <li><a href="5ling.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Wu Ling San"
+                            data-ko="오령산과 저령탕">Wu Ling San</a></li>
+                    <li><a href="guizhi_3_action.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Understanding Gui Zhi" data-ko="방제속 계지의 역할">Gui Zhi</a></li>
+                    <li><a href="chaihu_formula.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Understanding Chai Hu" data-ko="방제속 시호의 역할">Chai Hu</a></li>
+                    <li><a href="formula_left_right.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Left and Right Returning Pills" data-ko="좌귀환과 우귀환">Zuo Gui Wan</a></li>
+                    <li><a href="hyunbu.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Hyunbu Yigyung Tang" data-ko="현부이경탕">현부이경탕</a></li>
+                    <li><a href="zhigancaotang.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Zhi Gan Cao Tang" data-ko="자감초탕">Zhi Gan Cao Tang</a></li>
+                    <li><a href="3_tx_liver.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="4 ways to treat Liver" data-ko="간치료의 네가지 방법">Liver</a></li>
+                    <li><a href="xiexintang.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Xie Xin Tang Variations" data-ko="사심탕류의 이해">Xie Xin Tangr</a></li>
+
+                    <li><a href="formula_stats.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Formulae Usage Statistics" data-ko="다용 처방 통계">statistics</a></li>
+
+                    <!-- <li><a href="erchentang_basic.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang" data-ko="이진탕">Er Chen Tang</a></li>                  
+                  <li><a href="guizhi_v.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Gui Zhi Tang variations" data-ko="계지탕 변방 구성">Gui Zhi Tang variations</a></li>
+                    <li><a href="fourgentle.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Jun Zi Tang variations" data-ko="사군자탕 변방">Si Jun Zi Tang variations</a></li>
+                    <li><a href="erchentang.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Er Chen Tang variations" data-ko="이진탕 변방">Er Chen Tang variations</a></li>
+                    <li><a href="lwdh_variations.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Liu Wei Di Huang Wan variations" data-ko="육미지황탕 변방">Liu Wei Di Huang Wan variations</a></li>
+                    <li><a href="pws_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Ping Wei San Variations" data-ko="평위산 변방">Ping Wei San Variations</a></li>
+                    <li><a href="sinisan_var.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Si Ni San Variations" data-ko="사역산 변방">Si Ni San Variations</a></li>
+                     -->
+
+                </ul>
+            </div>
+
+            <!-- Acupuncture -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Acupuncture" data-ko="침구학">Acupuncture</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="acu_process.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Acupuncture Process" data-ko="침구과정">Acupuncture Process</a></li>
+                    <li><a href="acu_organ_injury.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Organ Injury" data-ko="장부손상">Organ Injury</a></li>
+                    <li><a href="truepoint.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="True Point"
+                            data-ko="진혈">True Point</a></li>
+                    <li><a href="hegu.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="True Hegu Point"
+                            data-ko="진짜 합곡혈">Hegu</a></li>
+                    <li><a href="acu_side_effect.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Reported Side Effects" data-ko="침치료 부작용">acupuncture side effect</a></li>
+
+                </ul>
+            </div>
+
+            <!-- History -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="History" data-ko="한의학사">History</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="history.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Brief History of TCM" data-ko="한의학사 요약">Brief History of TCM</a></li>
+                    <li><a href="four_masters.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Four Grand Masters" data-ko="금원사대가">Four Grand Masters</a></li>
+                    <li><a href="spleen_liver.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Muscle, Spleen or Liver?" data-ko="간주근, 비주육">Muscle, Spleen or Liver?</a></li>
+                    <li><a href="m_tcm.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Birth of Morden TCM" data-ko="중의학의 탄생">Mordern TCM</a></li>
+                    <li><a href="history_6_stages.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Six Stages Theory" data-ko="육경변증의 오류">Six stages</a></li>
+                    <li><a href="term_wuxing.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Wuxing Translation" data-ko="오행의 번역">Wuxing</a></li>
+                    <li><a href="history_wrong_chinese.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Wrong Translations" data-ko="고대 한자의 해석 오류">Chinese</a></li>
+                    <li><a href="qi_letter.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Qi in TCM"
+                            data-ko="중의학에서 기">Qi</a></li>
+
+                </ul>
+            </div>
+
+            <!-- Games -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Games" data-ko="게임">Games</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="tetris.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Element Tetris" data-ko="오행 테트리스">Five Element Tetris</a></li>
+                    <li><a href="5_tower.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Five Element Tower Stack" data-ko="오행 탑 쌓기">Five Element Tower</a></li>
+                    <li><a href="herb_shooting.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Herb Shooting" data-ko="약초 슈팅">Herb Shooting</a></li>
+                    <li><a href="herbal_runner_game.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Herb Runner Game" data-ko="약초 달리기">Herb Runner</a></li>
+                </ul>
+            </div>
+
+            <!-- Misc -->
+            <div class="p-6">
+                <h2 class="text-2xl font-serif mb-4 text-gray-700 border-b border-gray-300 pb-2 text-center"
+                    data-en="Misc" data-ko="기타">Misc</h2>
+                <ul class="space-y-2 pl-0">
+                    <li><a href="pulse101.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Pulse 101"
+                            data-ko="맥진 변증 기초">Basic Pulse</a></li>
+                    <li><a href="tongue101.html" class="nav-link" onclick="checkAndNavigate(event)" data-en="Tongue 101"
+                            data-ko="설진 변증 기초">Basic Tongue</a></li>
+                    <li><a href="pulse_tongue.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Basic Pattern's Tongue and Pulse" data-ko="기본 변증 맥과 설">Basic Pattern Tongue and
+                            Pulse</a></li>
+                    <li><a href="pulse_vis.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Combined Pulses" data-ko="복합 맥상의 시각화">Combined Pulses</a></li>
+                    <li><a href="pulse_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Pulse Quiz" data-ko="맥진 퀴즈">Pulse Quiz</a></li>
+                    <li><a href="single_herb_quiz.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Single Herb Quiz" data-ko="기본 본초 퀴즈">Herb Quiz</a></li>
+                    <li><a href="herb_index.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Single Herb Search" data-ko="본초 검색">Herb Quiz</a></li>
+                    <li><a href="acu_stats.html" class="nav-link" onclick="checkAndNavigate(event)"
+                            data-en="Some Statistics" data-ko="침 이용 실태">acupuncture</a></li>
+
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Food Runner Game Section -->
+    <section class="max-w-4xl mx-auto px-4 pb-16 flex flex-col items-center">
+        <iframe id="gameFrame" src="food_runner.html?lang=en" width="820" height="170" title="Food Runner Game">
+        </iframe>
+    </section>
+
+    <!-- Main Footer -->
+    <footer class="text-center py-4 mt-8 text-sm text-gray-500">
+        <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
+        <a href="https://github.com/drchoi2019/study/issues/new" target="_blank"
+            class="text-xs text-gray-400 hover:text-gray-600 transition-colors" data-en="Feedback"
+            data-ko="피드백">Feedback</a>
+    </footer>
 
     <script>
-        const gameScreen = document.getElementById('game-screen');
-        const dog = document.getElementById('dog');
-        const pig = document.getElementById('pig');
-        const scoreEl = document.getElementById('score');
-        const levelEl = document.getElementById('level');
-        const gameOverScreen = document.getElementById('game-over');
-        const finalScoreEl = document.getElementById('final-score');
+        // Language & Page Management
+        let currentLanguage = 'en';
 
-        let score = 0;
-        let gameSpeed = 1.0; // Even slower start speed
-        let spawnRate = 3000; // Even slower spawn rate
-        let isGameOver = false;
-        let animationId;
-        let lastTime = 0;
-        let poops = [];
+        // URL 파라미터에서 언어 정보 추출하는 함수
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
 
-        // Audio Context
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
-
-        const soundManager = {
-            playCatch: () => {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
-
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            },
-            playGameOver: () => {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.5);
-
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.5);
+            // 지원되는 언어만 허용
+            if (langParam === 'ko' || langParam === 'kor' || langParam === 'korean') {
+                return 'ko';
+            } else if (langParam === 'en' || langParam === 'eng' || langParam === 'english') {
+                return 'en';
             }
-        };
 
-        // Positions (0-100 percentage)
-        let dogPos = 50;
-        let pigPos = 50;
-        let dogDirection = 1; // 1: right, -1: left
-
-        // Game Loop
-        function gameLoop(timestamp) {
-            if (isGameOver) return;
-
-            if (!lastTime) lastTime = timestamp;
-            const deltaTime = timestamp - lastTime;
-
-            update(deltaTime);
-
-            lastTime = timestamp;
-            animationId = requestAnimationFrame(gameLoop);
+            // 기본값은 영어
+            return 'en';
         }
 
-        function update(deltaTime) {
-            // Move Dog randomly
-            if (Math.random() < 0.02) {
-                dogDirection *= -1;
-            }
-            dogPos += dogDirection * 0.5;
-            if (dogPos < 10) { dogPos = 10; dogDirection = 1; }
-            if (dogPos > 90) { dogPos = 90; dogDirection = -1; }
-            dog.style.left = dogPos + '%';
+        // URL에 언어 파라미터 업데이트하는 함수
+        function updateURLLanguage(lang) {
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState(null, '', url.toString());
+        }
 
-            // Move Poops
-            const poopsToRemove = [];
-            poops.forEach((poopObj, index) => {
-                poopObj.y += (gameSpeed * deltaTime) / 16; // Normalize to approx 60fps
-                poopObj.el.style.top = poopObj.y + 'px';
-
-                // Collision Detection
-                const poopRect = poopObj.el.getBoundingClientRect();
-                const pigRect = pig.getBoundingClientRect();
-
-                // Check if caught
-                if (
-                    poopRect.bottom >= pigRect.top + 10 &&
-                    poopRect.top <= pigRect.bottom &&
-                    poopRect.right >= pigRect.left + 10 &&
-                    poopRect.left <= pigRect.right - 10
-                ) {
-                    // Caught!
-                    score++;
-                    updateScore();
-                    soundManager.playCatch();
-                    poopObj.el.remove();
-                    poopsToRemove.push(index);
-
-                    // Visual feedback
-                    pig.style.filter = "brightness(1.5)";
-                    setTimeout(() => pig.style.filter = "none", 300);
-                }
-                // Missed (hit ground)
-                else if (poopObj.y > gameScreen.clientHeight - 20) {
-                    gameOver();
-                }
+        // 언어 버튼 상태 업데이트
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll('.lang-button').forEach(btn => {
+                btn.classList.remove('active');
             });
 
-            // Remove caught poops
-            for (let i = poopsToRemove.length - 1; i >= 0; i--) {
-                poops.splice(poopsToRemove[i], 1);
+            const activeButton = document.getElementById(`lang-${lang}`);
+            if (activeButton) {
+                activeButton.classList.add('active');
             }
         }
 
-        function spawnPoop() {
-            if (isGameOver) return;
+        // 페이지 메시지 표시 함수
+        function showPageMessage(message) {
+            const existingModal = document.getElementById('page-message-modal');
+            if (existingModal) return;
 
-            const poopEl = document.createElement('div');
-            poopEl.classList.add('poop');
-            poopEl.textContent = '💩';
-            poopEl.style.left = dogPos + '%'; // Spawn at current dog position
-            poopEl.style.top = '50px';
-            gameScreen.appendChild(poopEl);
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'page-message-modal';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4';
 
-            poops.push({
-                el: poopEl,
-                y: 50
+            const modalContent = document.createElement('div');
+            modalContent.className = 'bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full';
+            modalContent.innerHTML = `<p class="mb-4 text-gray-800">${message}</p>`;
+
+            const closeButton = document.createElement('button');
+            closeButton.className = 'px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors';
+            closeButton.textContent = 'OK';
+
+            modalContent.appendChild(closeButton);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+
+            const closeModal = () => {
+                if (document.body.contains(modalOverlay)) {
+                    document.body.removeChild(modalOverlay);
+                }
+            };
+
+            closeButton.onclick = closeModal;
+            modalOverlay.onclick = (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            };
+        }
+
+        // 네비게이션 확인 및 이동 함수
+        window.checkAndNavigate = async function (event) {
+            event.preventDefault();
+            const linkElement = event.currentTarget;
+            const targetUrl = await determineTargetUrl(linkElement, currentLanguage);
+
+            try {
+                const response = await fetch(targetUrl, { method: 'HEAD' });
+                if (response.ok) {
+                    window.location.href = targetUrl;
+                } else {
+                    showPageMessage(currentLanguage === 'ko' ? '준비 중입니다' : 'Under Construction');
+                }
+            } catch (error) {
+                console.error('Navigation check failed:', error);
+                showPageMessage(currentLanguage === 'ko' ? '페이지를 열 수 없습니다.' : 'Page cannot be opened.');
+            }
+        }
+
+        // 타겟 URL 결정 함수
+        async function determineTargetUrl(linkElement, lang) {
+            const originalHref = linkElement.getAttribute('href').split('?')[0];
+            const baseHref = originalHref.replace('.html', '');
+
+            // 영어 모드일 경우
+            if (lang !== 'ko') {
+                return `${originalHref}?lang=en`;
+            }
+
+            // 한국어 모드일 경우
+            try {
+                // 1. 전통적인 '_k.html' 파일 확인
+                const kVersionUrl = `${baseHref}_k.html`;
+                const kVersionResponse = await fetch(kVersionUrl, { method: 'HEAD' });
+
+                if (kVersionResponse.ok) {
+                    return kVersionUrl;
+                }
+
+                // 2. 파라미터 방식 확인
+                const baseFileResponse = await fetch(originalHref, { method: 'HEAD' });
+                if (baseFileResponse.ok) {
+                    return `${originalHref}?lang=ko`;
+                }
+
+                return originalHref;
+
+            } catch (error) {
+                console.warn(`네트워크 오류로 파일 존재 여부 확인에 실패했습니다: ${originalHref}`, error);
+                return originalHref;
+            }
+        }
+
+        // 언어 설정 함수
+        function setLanguage(lang) {
+            currentLanguage = lang;
+
+            // HTML lang 속성 업데이트
+            document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+
+            // 페이지 제목 업데이트
+            document.title = lang === 'ko' ? '한의학 공부' : 'Interactive TCM';
+
+            // 텍스트 번역
+            const elementsToTranslate = document.querySelectorAll('[data-en]');
+            elementsToTranslate.forEach(el => {
+                const text = el.dataset[lang] || el.dataset.en;
+                el.textContent = text;
             });
 
-            // Increase difficulty
-            let nextSpawn = spawnRate;
-            if (score > 10) { gameSpeed = 2.0; nextSpawn = 2500; }
-            if (score > 20) { gameSpeed = 3.0; nextSpawn = 2000; }
-            if (score > 30) { gameSpeed = 4.0; nextSpawn = 1500; }
-            if (score > 50) { gameSpeed = 5.0; nextSpawn = 1000; }
-
-            levelEl.textContent = `SPEED: ${Math.floor(gameSpeed)}`;
-
-            setTimeout(spawnPoop, nextSpawn);
-        }
-
-        function updateScore() {
-            scoreEl.textContent = `SCORE: ${score}`;
-        }
-
-        function gameOver() {
-            isGameOver = true;
-            soundManager.playGameOver();
-            cancelAnimationFrame(animationId);
-            finalScoreEl.textContent = score;
-            gameOverScreen.style.display = 'block';
-            pig.style.opacity = "0.5";
-        }
-
-        function resetGame() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            isGameOver = false;
-            score = 0;
-            gameSpeed = 1.0;
-            spawnRate = 3000;
-            poops.forEach(p => p.el.remove());
-            poops = [];
-            updateScore();
-            gameOverScreen.style.display = 'none';
-            pig.style.opacity = "1";
-            lastTime = 0;
-            pigPos = 50;
-            pig.style.left = pigPos + '%';
-
-            spawnPoop();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Controls
-        document.addEventListener('keydown', (e) => {
-            if (audioCtx.state === 'suspended') audioCtx.resume(); // Resume audio context on first interaction
-            if (isGameOver) return;
-
-            // Step-by-step movement (20% increments)
-            if (e.key === 'ArrowLeft') {
-                pigPos -= 20;
-            } else if (e.key === 'ArrowRight') {
-                pigPos += 20;
+            // 게임 iframe 언어 업데이트
+            const gameFrame = document.getElementById('gameFrame');
+            if (gameFrame) {
+                gameFrame.src = `food_runner.html?lang=${lang}`;
             }
 
-            if (pigPos < 10) pigPos = 10;
-            if (pigPos > 90) pigPos = 90;
+            // 버튼 상태 업데이트
+            updateLanguageButtons(lang);
 
-            pig.style.left = pigPos + '%';
-        });
-
-        // Mobile Touch / Pointer Controls (Drag to Move)
-        function handleInput(clientX) {
-            if (isGameOver) return;
-
-            const screenWidth = window.innerWidth;
-            const percentage = (clientX / screenWidth) * 100;
-
-            // Snap to grid (0-20% -> 10, 20-40% -> 30, etc.)
-            if (percentage < 20) pigPos = 10;
-            else if (percentage < 40) pigPos = 30;
-            else if (percentage < 60) pigPos = 50;
-            else if (percentage < 80) pigPos = 70;
-            else pigPos = 90;
-
-            pig.style.left = pigPos + '%';
+            // URL 업데이트
+            updateURLLanguage(lang);
         }
 
-        document.addEventListener('pointerdown', (e) => {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            if (e.target.tagName !== 'BUTTON') e.preventDefault();
-            handleInput(e.clientX);
-        });
+        // 언어 전환 함수 (버튼 클릭용)
+        window.switchLanguage = function (lang) {
+            setLanguage(lang);
+        }
 
-        document.addEventListener('pointermove', (e) => {
-            if (e.target.tagName !== 'BUTTON') e.preventDefault();
-            // Only move if pointer is down (buttons property for mouse, always true for touch move usually but good to check)
-            if (e.pressure > 0 || e.type === 'touchmove') {
-                handleInput(e.clientX);
+        // iframe에서 언어 변경 메시지 수신
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'languageChange') {
+                setLanguage(event.data.language);
             }
         });
 
-        // Also add touchmove specifically to be safe as pointermove sometimes behaves differently on some devices
-        document.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            handleInput(e.touches[0].clientX);
-        }, { passive: false });
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function () {
+            // URL에서 언어 파라미터 읽기
+            const urlLanguage = getLanguageFromURL();
+            setLanguage(urlLanguage);
+        });
 
-        // Start Game
-        resetGame();
-
+        // 뒤로가기/앞으로가기 시 언어 상태 동기화
+        window.addEventListener('popstate', function () {
+            const urlLanguage = getLanguageFromURL();
+            if (urlLanguage !== currentLanguage) {
+                setLanguage(urlLanguage);
+            }
+        });
     </script>
+
 </body>
 
 </html>
