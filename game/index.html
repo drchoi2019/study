@@ -16,13 +16,20 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            height: 100dvh;
+            /* Mobile viewport fix */
             font-family: 'Fredoka One', cursive;
             overflow: hidden;
+            touch-action: none;
+            /* Prevent default touch actions like scrolling */
         }
 
         #game-container {
-            width: 400px;
-            height: 600px;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 600px;
+            aspect-ratio: 2/3;
             background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
             /* Sky gradient */
             border: 8px solid #333;
@@ -30,6 +37,8 @@
             position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            box-sizing: border-box;
+            /* Include border in size */
         }
 
         #game-screen {
@@ -367,6 +376,34 @@
             if (e.key === 'ArrowLeft') {
                 pigPos -= 20;
             } else if (e.key === 'ArrowRight') {
+                pigPos += 20;
+            }
+
+            if (pigPos < 10) pigPos = 10;
+            if (pigPos > 90) pigPos = 90;
+
+            pig.style.left = pigPos + '%';
+        });
+
+        // Mobile Touch / Pointer Controls
+        document.addEventListener('pointerdown', (e) => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            // Prevent default behavior only if it's not a button click
+            if (e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+            }
+
+            if (isGameOver) return;
+
+            const touchX = e.clientX;
+            const screenWidth = window.innerWidth;
+
+            if (touchX < screenWidth / 2) {
+                // Left side touch
+                pigPos -= 20;
+            } else {
+                // Right side touch
                 pigPos += 20;
             }
 
