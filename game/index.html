@@ -385,33 +385,42 @@
             pig.style.left = pigPos + '%';
         });
 
-        // Mobile Touch / Pointer Controls
-        document.addEventListener('pointerdown', (e) => {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            // Prevent default behavior only if it's not a button click
-            if (e.target.tagName !== 'BUTTON') {
-                e.preventDefault();
-            }
-
+        // Mobile Touch / Pointer Controls (Drag to Move)
+        function handleInput(clientX) {
             if (isGameOver) return;
 
-            const touchX = e.clientX;
             const screenWidth = window.innerWidth;
+            const percentage = (clientX / screenWidth) * 100;
 
-            if (touchX < screenWidth / 2) {
-                // Left side touch
-                pigPos -= 20;
-            } else {
-                // Right side touch
-                pigPos += 20;
-            }
-
-            if (pigPos < 10) pigPos = 10;
-            if (pigPos > 90) pigPos = 90;
+            // Snap to grid (0-20% -> 10, 20-40% -> 30, etc.)
+            if (percentage < 20) pigPos = 10;
+            else if (percentage < 40) pigPos = 30;
+            else if (percentage < 60) pigPos = 50;
+            else if (percentage < 80) pigPos = 70;
+            else pigPos = 90;
 
             pig.style.left = pigPos + '%';
+        }
+
+        document.addEventListener('pointerdown', (e) => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (e.target.tagName !== 'BUTTON') e.preventDefault();
+            handleInput(e.clientX);
         });
+
+        document.addEventListener('pointermove', (e) => {
+            if (e.target.tagName !== 'BUTTON') e.preventDefault();
+            // Only move if pointer is down (buttons property for mouse, always true for touch move usually but good to check)
+            if (e.pressure > 0 || e.type === 'touchmove') {
+                handleInput(e.clientX);
+            }
+        });
+
+        // Also add touchmove specifically to be safe as pointermove sometimes behaves differently on some devices
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            handleInput(e.touches[0].clientX);
+        }, { passive: false });
 
         // Start Game
         resetGame();
