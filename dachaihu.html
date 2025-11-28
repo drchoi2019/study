@@ -49,16 +49,6 @@
             /* stone-600 */
         }
 
-        .quote-highlight {
-            color: #b91c1c;
-            /* red-700 */
-            font-weight: 700;
-            background-color: #fee2e2;
-            /* red-100 */
-            padding: 0 4px;
-            border-radius: 4px;
-        }
-
         /* Layout Constraint */
         .app-container {
             max-width: 950px;
@@ -98,6 +88,13 @@
         // Default Language
         let currentLang = 'ko';
 
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam === 'en' || langParam === 'eng') return 'en';
+            return 'ko'; // Default
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             document.documentElement.lang = lang;
@@ -105,6 +102,11 @@
             // Dispatch event for React to listen to
             const event = new CustomEvent('languageChange', { detail: lang });
             window.dispatchEvent(event);
+            
+            // Update URL without reloading
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState(null, '', url.toString());
         }
 
         function toggleLanguage(event) {
@@ -114,13 +116,18 @@
         }
 
         function loadLanguage() {
-            // No history.replaceState, no localStorage requirement specified, 
-            // defaulting to simple variable initialization.
-            setLanguage('ko');
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', loadLanguage);
+        
+        // Handle back/forward buttons
+        window.addEventListener('popstate', () => {
+             const lang = getLanguageFromURL();
+             setLanguage(lang);
+        });
     </script>
 
     <!-- React Application -->
@@ -139,20 +146,30 @@
         const Anchor = (props) => <IconBase {...props}><circle cx="12" cy="5" r="3" /><line x1="12" y1="22" x2="12" y2="8" /><path d="M5 12H2a10 10 0 0 0 20 0h-3" /></IconBase>;
         const Plus = (props) => <IconBase {...props}><path d="M5 12h14" /><path d="M12 5v14" /></IconBase>;
 
+        const HerbIcons = {
+            siho: <Wind size={20} />,
+            daehwang: <Flame size={20} />,
+            hwanggeum: <Activity size={20} />,
+            jisil: <MoveVertical size={20} />,
+            jakyak: <Layers size={20} />,
+            banha: <Anchor size={20} />
+        };
+
         // --- Data ---
         const DATA = {
             ko: {
                 title: "대시호탕 (Dachaihutang)",
                 subtitle: "소양(少陽)과 양명(陽明)을 동시에 다스리는 묘방",
                 labels: {
-                    monarch: "군약 (君)",
-                    minister: "신약 (臣)",
-                    assistant: "좌약 (佐)",
-                    role_ext: "소양 해표 (Exterior)",
-                    role_int: "양명 사하 (Interior)",
+                    role_ext_1: "소양 해표",
+                    role_ext_2: "(Exterior)",
+                    role_int_1: "양명 사하",
+                    role_int_2: "(Interior)",
                     synergy_heat: "열 제어 (Heat Control)",
                     synergy_qi: "기 & 적체 (Qi & Accumulation)",
-                    click_hint: "약재를 클릭하여 상세 정보를 확인하세요."
+                    click_hint: "약재를 클릭하여 상세 정보를 확인하세요.",
+                    jakyak_desc_short: "지실, 대황과 함께<br/>복통을 다스립니다",
+                    banha_desc_short: "구토를 멎게 하고<br/>위장을 조화롭게 합니다"
                 },
                 herbs: {
                     siho: {
@@ -215,14 +232,15 @@
                 title: "Dachaihutang (Da Chai Hu Tang)",
                 subtitle: "Wondrous formula for Harmonizing Interior and Exterior",
                 labels: {
-                    monarch: "Monarch (Jun)",
-                    minister: "Minister (Chen)",
-                    assistant: "Assistant (Zuo)",
-                    role_ext: "Releases Shaoyang (Exterior)",
-                    role_int: "Purges Yangming (Interior)",
+                    role_ext_1: "Releases Shaoyang",
+                    role_ext_2: "(Exterior)",
+                    role_int_1: "Purges Yangming",
+                    role_int_2: "(Interior)",
                     synergy_heat: "Heat Control",
                     synergy_qi: "Qi & Accumulation",
-                    click_hint: "Click on an herb to see details"
+                    click_hint: "Click on an herb to see details",
+                    jakyak_desc_short: "Relieves pain with<br/>Dahuang + Zhishi",
+                    banha_desc_short: "Stops vomiting &<br/>harmonizes stomach"
                 },
                 herbs: {
                     siho: {
@@ -272,24 +290,15 @@
                 },
                 synergies: {
                     hwanggeum: [
-                        { label: "Chaihu", desc: "Clears Shaoyang Heat" },
-                        { label: "Dahuang", desc: "Clears Visceral Heat" }
+                        { label: "Chaihu", desc: "Clears Shaoyang Heat (Xiao Chai Hu Tang)" },
+                        { label: "Dahuang", desc: "Clears Visceral Heat (San Huang Xie Xin Tang)" }
                     ],
                     jisil: [
-                        { label: "Chaihu", desc: "Promotes Qi (+Sinisan)" },
+                        { label: "Chaihu", desc: "Promotes Qi (+Shaoyao: Si Ni San)" },
                         { label: "Dahuang", desc: "Breaks Mass" }
                     ]
                 }
             }
-        };
-
-        const HerbIcons = {
-            siho: <Wind size={24} />,
-            daehwang: <Flame size={24} />,
-            hwanggeum: <Activity size={24} />,
-            jisil: <MoveVertical size={24} />,
-            jakyak: <Layers size={24} />,
-            banha: <Anchor size={24} />
         };
 
         // --- Components ---
@@ -299,21 +308,19 @@
                 <div
                     onClick={() => onClick(herbKey)}
                     className={`
-                        cursor-pointer rounded-lg p-3 sm:p-4 shadow-sm border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md
+                        cursor-pointer rounded-lg p-4 shadow-sm border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md
                         ${active ? herbData.color + ' ring-2 ring-offset-2 ring-stone-300' : 'bg-white border-stone-100 text-stone-600 hover:border-stone-300'}
-                        flex flex-col items-center text-center w-full h-full justify-between
+                        flex flex-col items-center text-center w-full
                     `}
                 >
                     <div className={`mb-2 p-2 rounded-full ${active ? 'bg-white bg-opacity-50' : 'bg-stone-100'}`}>
                         {HerbIcons[herbKey]}
                     </div>
-                    <div>
-                        <div className="font-bold text-lg leading-tight">
-                            {herbData.name}
-                            <span className="block text-xs font-serif opacity-70 mt-1">{herbData.hanja}</span>
-                        </div>
-                        <div className="text-xs opacity-75 mt-1">{herbData.role}</div>
+                    <div className="font-bold text-lg mb-1">
+                        {herbData.name}
+                        <span className="text-sm font-serif opacity-70 ml-1">{herbData.hanja}</span>
                     </div>
+                    <div className="text-xs opacity-75">{herbData.role}</div>
                 </div>
             );
         };
@@ -332,32 +339,32 @@
                         <p className="text-stone-300 text-sm sm:text-base">{data.subtitle}</p>
                     </div>
 
-                    <div className="p-4 sm:p-8 relative">
+                    <div className="p-8 relative">
                         {/* Level 1: Monarchs */}
-                        <div className="flex justify-between items-start mb-12 sm:mb-16 gap-4 sm:gap-8 relative z-10">
+                        <div className="flex justify-between items-start mb-16 gap-8 relative z-10">
                             <div className="flex-1 flex flex-col items-center">
                                 <HerbCard herbKey="siho" data={data} onClick={setSelectedHerb} active={selectedHerb === 'siho'} />
-                                <div className="mt-3 px-3 py-1.5 bg-white border-2 border-green-100 text-green-700 text-xs sm:text-sm font-bold rounded-full shadow-sm z-20 text-center">
-                                    {data.labels.role_ext}
+                                <div className="mt-3 px-3 py-1.5 bg-white border-2 border-green-100 text-green-700 text-sm font-bold rounded-full shadow-sm z-20 text-center">
+                                    {data.labels.role_ext_1}<br/>{data.labels.role_ext_2}
                                 </div>
                             </div>
 
                             <div className="flex-1 flex flex-col items-center">
                                 <HerbCard herbKey="daehwang" data={data} onClick={setSelectedHerb} active={selectedHerb === 'daehwang'} />
-                                <div className="mt-3 px-3 py-1.5 bg-white border-2 border-red-100 text-red-700 text-xs sm:text-sm font-bold rounded-full shadow-sm z-20 text-center">
-                                    {data.labels.role_int}
+                                <div className="mt-3 px-3 py-1.5 bg-white border-2 border-red-100 text-red-700 text-sm font-bold rounded-full shadow-sm z-20 text-center">
+                                    {data.labels.role_int_1}<br/>{data.labels.role_int_2}
                                 </div>
                             </div>
                         </div>
 
                         {/* Connection Lines (SVG) */}
                         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-20">
-                            <line x1="25%" y1="180" x2="25%" y2="350" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
-                            <line x1="75%" y1="180" x2="75%" y2="350" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="25%" y1="150" x2="25%" y2="300" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
+                            <line x1="75%" y1="150" x2="75%" y2="300" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
                         </svg>
 
                         {/* Level 2: Ministers & Synergies */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mb-12 sm:mb-16 relative z-10">
+                        <div className="grid grid-cols-2 gap-12 mb-16 relative z-10">
 
                             {/* Hwanggeum Interaction */}
                             <div className="bg-white border-2 border-dashed border-stone-200 rounded-xl p-4 relative group hover:border-yellow-400 transition-colors">
@@ -406,12 +413,16 @@
                         </div>
 
                         {/* Level 3: Assistants */}
-                        <div className="flex justify-center gap-4 sm:gap-8 relative z-10">
-                            <div className="w-1/2 sm:w-1/3">
+                        <div className="flex justify-center gap-8 relative z-10">
+                            <div className="w-1/3">
                                 <HerbCard herbKey="jakyak" data={data} onClick={setSelectedHerb} active={selectedHerb === 'jakyak'} />
+                                <div className="text-center mt-2 text-xs text-stone-500" dangerouslySetInnerHTML={{__html: data.labels.jakyak_desc_short}}>
+                                </div>
                             </div>
-                            <div className="w-1/2 sm:w-1/3">
+                            <div className="w-1/3">
                                 <HerbCard herbKey="banha" data={data} onClick={setSelectedHerb} active={selectedHerb === 'banha'} />
+                                <div className="text-center mt-2 text-xs text-stone-500" dangerouslySetInnerHTML={{__html: data.labels.banha_desc_short}}>
+                                </div>
                             </div>
                         </div>
 
@@ -421,30 +432,25 @@
                     <div className="bg-stone-100 p-6 border-t border-stone-200 min-h-[140px]">
                         {selectedHerb ? (
                             <div className="animate-fade-in">
-                                <h3 className="font-bold text-xl mb-1 flex items-center gap-2 text-stone-800">
+                                <h3 className="font-bold text-lg mb-1 flex items-center gap-2">
                                     {HerbIcons[selectedHerb]}
-                                    <span>
-                                        {data.herbs[selectedHerb].name}
-                                        <span className="hanja ml-2 text-lg">{data.herbs[selectedHerb].hanja}</span>
+                                    {data.herbs[selectedHerb].name}
+                                    <span className="text-sm font-serif opacity-70">{data.herbs[selectedHerb].hanja}</span>
+                                    <span className="text-xs font-normal px-2 py-0.5 rounded-full bg-stone-200 text-stone-600">
+                                        {data.herbs[selectedHerb].role}
                                     </span>
                                 </h3>
-                                <div className="text-xs font-bold text-stone-500 mb-2 uppercase tracking-wide">
-                                    {data.herbs[selectedHerb].role}
-                                </div>
-                                <p className="text-stone-700 mb-3 leading-relaxed">
-                                    {data.herbs[selectedHerb].desc}
-                                </p>
+                                <p className="text-stone-700 mb-2">{data.herbs[selectedHerb].desc}</p>
                                 {data.herbs[selectedHerb].detail && (
-                                    <div className="text-sm text-stone-600 bg-white p-3 rounded border border-stone-200 shadow-sm">
-                                        <span className="font-bold text-yellow-600 mr-2">Tip</span>
-                                        {data.herbs[selectedHerb].detail}
-                                    </div>
+                                    <p className="text-sm text-stone-500 bg-white p-2 rounded border border-stone-200">
+                                        💡 {data.herbs[selectedHerb].detail}
+                                    </p>
                                 )}
                             </div>
                         ) : (
                             <div className="text-center text-stone-400 flex flex-col items-center justify-center h-full py-4">
-                                <span className="text-2xl mb-2 animate-bounce">👆</span>
-                                <p className="font-medium">{data.labels.click_hint}</p>
+                                <span className="mb-1">👆</span>
+                                <p>{data.labels.click_hint}</p>
                             </div>
                         )}
                     </div>
@@ -460,22 +466,16 @@
                     setLang(e.detail);
                 };
                 window.addEventListener('languageChange', handleLanguageChange);
+                
+                // Initial sync with global state
+                setLang(window.currentLang || 'ko');
+
                 return () => window.removeEventListener('languageChange', handleLanguageChange);
             }, []);
 
             return (
                 <div className="w-full">
-                    {/* Mandatory Structure: Content must be put separately into lang-container divs */}
-
-                    {/* Korean Container */}
-                    <div className={`lang-container ${lang === 'ko' ? 'block' : 'hidden'}`} lang="ko">
-                        <InfogramContent lang="ko" data={DATA.ko} />
-                    </div>
-
-                    {/* English Container */}
-                    <div className={`lang-container ${lang === 'en' ? 'block' : 'hidden'}`} lang="en">
-                        <InfogramContent lang="en" data={DATA.en} />
-                    </div>
+                    <InfogramContent lang={lang} data={DATA[lang]} />
                 </div>
             );
         };
