@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCM Formula Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center py-10 px-4">
+
+    <!-- Header & Toggle -->
+    <div class="w-full max-w-2xl flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-semibold tracking-tight text-gray-900">TCM Formula Finder</h1>
+        <button id="langToggle" class="text-sm font-medium bg-white border border-gray-300 px-4 py-2 rounded-full hover:bg-gray-100 transition shadow-sm">
+            한글로 보기
+        </button>
+    </div>
+
+    <!-- Search Section -->
+    <div class="w-full max-w-2xl bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+        <div class="space-y-4">
+            <!-- Formula Name Search -->
+            <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Formula Name</label>
+                <input type="text" id="searchName" placeholder="e.g. Gui Zhi Tang (계지탕)" 
+                    class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition">
+            </div>
+
+            <!-- Ingredient Search (3 slots) -->
+            <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Ingredients</label>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input type="text" id="searchIng1" placeholder="Ingredient 1 (e.g. Ma Huang / 마황)" 
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition">
+                    <input type="text" id="searchIng2" placeholder="Ingredient 2" 
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition">
+                    <input type="text" id="searchIng3" placeholder="Ingredient 3" 
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsContainer" class="w-full max-w-2xl space-y-4 mb-8">
+        <!-- Results will be injected here -->
+    </div>
+
+    <div id="noResults" class="hidden text-center text-gray-400 mt-10 mb-8">
+        No formulas found matching your criteria.
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center text-gray-400 text-sm mt-auto pb-4">
+        &copy; 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+
+    <script>
+        // Data: 162 Formulas (Merged English and Korean Data)
+        const formulas = [
+            { id: 1, en: "Gui Zhi Tang", ko: "계지탕",  ingEn: "Guizhi, Baishao, Shengjiang, Dazao, Zhigancao", ingKo: "계지, 백작약, 생강, 대조, 자감초", effEn: "Exterior Wind-Cold of deficiency type", effKo: "풍한표허증(영위불화)" },
+            { id: 2, en: "Sang Ju Yin", ko: "상국음", ingEn: "Sangye, Juhua, Lianqiao, Bohe, Jiegeng, Xingren, Lugen, Gancao", ingKo: "상엽, 국화, 연교, 박하, 길경, 행인, 노근, 감초", effEn: "Exterior Wind-Heat causing cough; Wind-Heat causing eye disorders", effKo: "풍열해수, 풍열안질" },
+            { id: 3, en: "Yin Qiao San", ko: "은교산", ingEn: "Jinyinhua, Lianqiao, Jiegeng, Niubangzi, Bohe, Dandouchi, Jingjie, Danzhuye, Lugen, Gancao", ingKo: "금은화, 연교, 길경, 우방자, 박하, 담두시, 형개, 담죽엽, 노근, 감초", effEn: "Exterior Wind-Heat with Heat-Toxin; Toxic-Heat causing Boils and Sores", effKo: "풍열독, 온병 초기의 표열증" },
+            { id: 4, en: "Chai Ge Jie Ji Tang", ko: "시갈해기탕", ingEn: "Chaihu, Gegen, Qianghuo, Baizhi, Huangqin, Shigao, Jiegeng, Baishao, Gancao, Shengjiang, Dazao", ingKo: "시호, 갈근, 강활, 백지, 황금, 석고, 길경, 백작약, 감초, 생강, 대조", effEn: "Exterior Wind-Cold (Taiyang) transforming into interior Heat (Yangming)", effKo: "풍한이리화열(표한리열)" },
+            { id: 5, en: "Ren Shen Bai Du San", ko: "인삼패독산", ingEn: "Qianghuo, Duhuo, Chuanxiong, Chaihu, Bohe, Jiegeng, Zhike, Qianhu, Shengjiang, Renshen, Fuling, Gancao", ingKo: "강활, 독활, 천궁, 시호, 박하, 길경, 지각, 전호, 생강, 인삼, 복령, 감초", effEn: "Exterior Wind-Cold-Damp with interior Qi deficiency", effKo: "기허에 겸한 풍한습표증" },
+            { id: 6, en: "Da Cheng Qi Tang", ko: "대승기탕", ingEn: "Dahuang, Mangxiao, Houpo, Zhishi", ingKo: "대황, 망초, 후박, 지실", effEn: "Yangming organ syndrome causing severe constipation", effKo: "양명부실증(심한 변비)" },
+            { id: 7, en: "Xiao Cheng Qi Tang", ko: "소승기탕", ingEn: "Dahuang, Houpo, Zhishi", ingKo: "대황, 후박, 지실", effEn: "Moderate Yangming organ syndrome causing constipation", effKo: "양명부실증(중등도 변비)" },
+            { id: 8, en: "Tiao Wei Cheng Qi Tang", ko: "조위승기탕", ingEn: "Dahuang, Mangxiao, Zhigancao", ingKo: "대황, 망초, 자감초", effEn: "Mild Yangming organ syndrome causing mild constipation", effKo: "양명부실증(경미한 변비)" },
+            { id: 9, en: "Run Chang Wan", ko: "윤장환", ingEn: "Huomaren, Taoren, Danggui, Shengdi, Zhike", ingKo: "화마인, 도인, 당귀, 생지황, 지각", effEn: "Constipation due to Blood deficiency Desiccated Intestines", effKo: "혈허변비, 장조변비" },
+            { id: 10, en: "Ma Zi Ren Wan", ko: "마자인환", ingEn: "Huomaren, Xingren, Baishao, Dahuang, Houpo, Zhishi", ingKo: "화마인, 행인, 백작약, 대황, 후박, 지실", effEn: "Constipation due to Intestinal Dryness & Heat Spleen Bind", effKo: "장조변비, 비약증" },
+            { id: 11, en: "Xiao Chai Hu Tang", ko: "소시호탕", ingEn: "Chaihu, Huangqin, Banxia, Shengjiang, Renshen, Dazao, Zhigancao", ingKo: "시호, 황금, 반하, 생강, 인삼, 대조, 자감초", effEn: "Shaoyang syndrome", effKo: "소양증(한열왕래)" },
+            { id: 12, en: "Si Ni San", ko: "사역산", ingEn: "Chaihu, Zhishi, Baishao, Zhigancao", ingKo: "시호, 지실, 백작약, 자감초", effEn: "LV Qi stagnation overacting on the SP causing cold extremities (Yang Jue)", effKo: "간기울결로 인한 양궐(수족냉증)" },
+            { id: 13, en: "Xiao Yao San", ko: "소요산", ingEn: "Chaihu, Danggui, Baishao, Baizhu, Fuling, Zhigancao, Weijiang, Bohe", ingKo: "시호, 당귀, 백작약, 백출, 복령, 자감초, 외강, 박하", effEn: "LV Qi stagnation with LV Blood & SP Qi deficiency", effKo: "간울혈허, 비기허" },
+            { id: 14, en: "Xia Xie Xin Tang", ko: "반하사심탕", ingEn: "Huanglian, Huangqin, Banxia, Ganjiang, Renshen, Dazao, Zhigancao", ingKo: "황련, 황금, 반하, 건강, 인삼, 대조, 자감초", effEn: "Pi syndrome due to Cold-Heat complex", effKo: "한열착잡 비증(심하비)" },
+            { id: 15, en: "Bai Hu Tang", ko: "백호탕", ingEn: "Shigao, Zhimu, Zhigancao, Jingmi", ingKo: "석고, 지모, 자감초, 갱미", effEn: "Excess Heat in the Yangming channel or Qi level", effKo: "양명기분열성증(대열, 대갈, 대한)" },
+            { id: 16, en: "Huang Lian Jie Du Tang", ko: "황련해독탕", ingEn: "Huanglian, Huangqin, Huangbai, Zhizi", ingKo: "황련, 황금, 황백, 치자", effEn: "Fire-Toxin from excessive Heat in the Triple burners", effKo: "삼초실열, 화독" },
+            { id: 17, en: "Xie Xin Tang", ko: "사심탕", ingEn: "Dahuang, Huanglian, Huangqin", ingKo: "대황, 황련, 황금", effEn: "Excess Heat in the Triple burners", effKo: "삼초실열, 습열" },
+            { id: 18, en: "Qing Wei San", ko: "청위산", ingEn: "Huanglian, Shengma, Mudanpi, Shengdi, Danggui", ingKo: "황련, 승마, 목단피, 생지황, 당귀", effEn: "ST Heat accumulation", effKo: "위화치통, 위열" },
+            { id: 19, en: "Dao Chi San", ko: "도적산", ingEn: "Mutong, Shengdi, Danzhuye, Gancao", ingKo: "목통, 생지황, 담죽엽, 감초", effEn: "HT Fire transferring to the SI", effKo: "심경열성, 심열이 소장으로 전이" },
+            { id: 20, en: "Long Dan Xie Gan Tang", ko: "용담사간탕", ingEn: "Longdancao, Mutong, Cheqianzi, Zexie, Shengdi, Danggui, Gancao, Huangqin, Zhizi, Chaihu", ingKo: "용담초, 목통, 차전자, 택사, 생지황, 당귀, 감초, 황금, 치자, 시호", effEn: "LV Fire blazing up; LV/GB Damp-Heat invading downward", effKo: "간담실화상염, 간경습열하주" },
+            { id: 21, en: "Bai Tou Weng Tang", ko: "백두옹탕", ingEn: "Baitouweng, Qinpi, Huanglian, Huangbai", ingKo: "백두옹, 진피(물푸레나무), 황련, 황백", effEn: "Dysentery due to Toxic-Heat in the ST & Intestine", effKo: "열독이질(습열이질)" },
+            { id: 22, en: "Qing Hao Bie Jia Tang", ko: "청호별갑탕", ingEn: "Qinghao, Biejia, Shengdi, Zhimu, Mudanpi", ingKo: "청호, 별갑, 생지황, 지모, 목단피", effEn: "Yin deficiency with Heat in the Ying level during later stage of febrile disease", effKo: "온병 후기 음허야열" },
+            { id: 23, en: "Dang Gui Liu Huang Tang", ko: "당귀육황탕", ingEn: "Danggui, Shengdihuang, Shudihuang, Huanglian, Huangqin, Huangbai, Huangqi", ingKo: "당귀, 생지황, 숙지황, 황련, 황금, 황백, 황기", effEn: "Yin deficiency with Empty-Heat causing night sweats", effKo: "음허화왕 도한" },
+            { id: 24, en: "Li Zhong Wan", ko: "이중환", ingEn: "Ganjiang, Renshen, Baizhu, Zhigancao", ingKo: "건강, 인삼, 백출, 자감초", effEn: "Deficiency-Cold of the SP/ST", effKo: "비위허한" },
+            { id: 25, en: "Wu Zhu Yu Tang", ko: "오수유탕", ingEn: "Shengjiang, Wuzhuyu, Renshen, Dazao", ingKo: "생강, 오수유, 인삼, 대조", effEn: "Deficiency-Cold of the ST (Yangming), LV (Jueyin), and KD (Shaoyin)", effKo: "위허한, 간한, 신한으로 인한 구토/두통" },
+            { id: 26, en: "Xiao Jian Zhong Tang", ko: "소건중탕", ingEn: "Yitang, Guizhi, Baishao, Shengjiang, Dazao, Zhigancao", ingKo: "이당, 계지, 백작약, 생강, 대조, 자감초", effEn: "SP Yang deficiency with Cold causing abdominal pain", effKo: "허로리급, 비위허한 복통" },
+            { id: 27, en: "Da Jian Zhong Tang", ko: "대건중탕", ingEn: "Huajiao, Ganjiang, Renshen, Yitang", ingKo: "화초, 건강, 인삼, 이당", effEn: "Middle Burner Yang deficiency (root) + Vigorous Yin-cold (manifestation)", effKo: "중초양허, 음한내성(극심한 복통)" },
+            { id: 28, en: "Si Ni Tang", ko: "사역탕", ingEn: "Fuzi, Ganjiang, Zhigancao", ingKo: "부자, 건강, 자감초", effEn: "KD Yang deficiency with Cold-Evil in Shaoyin stage (Yin Jue); Yang collapse", effKo: "소음병 한화증(양허욕탈, 사지궐냉)" },
+            { id: 29, en: "Si Jun Zi Tang", ko: "사군자탕", ingEn: "Renshen, Baizhu, Fuling, Zhigancao", ingKo: "인삼, 백출, 복령, 자감초", effEn: "SP/ST Qi deficiency", effKo: "비위기허" },
+            { id: 30, en: "Shen Ling Bai Zhu San", ko: "삼령백출산", ingEn: "Renshen, Baizhu, Fuling, Zhigancao, Shanyao, Yiyiren, Baibiandou, Lianzi, Sharen, Jiegeng", ingKo: "인삼, 백출, 복령, 자감초, 산약, 의이인, 백편두, 연자육, 사인, 길경", effEn: "SP Qi deficiency & Damp causing diarrhea", effKo: "비위기허협습(설사)" },
+            { id: 31, en: "Bu Zhong Yi Qi Tang", ko: "보중익기탕", ingEn: "Huangqi, Renshen, Baizhu, Zhigancao, Danggui, Chenpi, Shengma, Chaihu", ingKo: "황기, 인삼, 백출, 자감초, 당귀, 진피, 승마, 시호", effEn: "SP/ST Qi deficiency causing intermittent fever; SP Qi sinking", effKo: "비위기허, 기허발열, 중기하함" },
+            { id: 32, en: "Yu Ping Feng San", ko: "옥병풍산", ingEn: "Baizhu, Fangfeng, Huangqi", ingKo: "백출, 방풍, 황기", effEn: "Wei Qi deficiency causing sweating", effKo: "위기허(자한)" },
+            { id: 33, en: "Sheng Mai San", ko: "생맥산", ingEn: "Maimendong, Wuweizi, Renshen", ingKo: "맥문동, 오미자, 인삼", effEn: "Concurrent Qi & Yin deficiency, primarily of the LU", effKo: "기음양허(여름철 원기회복)" },
+            { id: 34, en: "Si Wu Tang", ko: "사물탕", ingEn: "Baishao, Chuanxiong, Shudi, Danggui", ingKo: "백작약, 천궁, 숙지황, 당귀", effEn: "Blood deficiency + Blood stasis", effKo: "혈허, 혈체" },
+            { id: 35, en: "Dang Gui Bu Xue Tang", ko: "당귀보혈탕", ingEn: "Huangqi, Danggui", ingKo: "황기, 당귀", effEn: "Blood & Qi deficiency with floating Yang", effKo: "기혈양허, 혈허발열" },
+            { id: 36, en: "Ba Zhen Tang", ko: "팔진탕", ingEn: "Renshen, Shudi, Baizhu, Fuling, Baishao, Danggui, Shengjiang, Dazao, Chuanxiong, Zhigancao", ingKo: "인삼, 숙지황, 백출, 복령, 백작약, 당귀, 생강, 대조, 천궁, 자감초", effEn: "Qi & Blood deficiency", effKo: "기혈양허" },
+            { id: 37, en: "Shi Quan Da Bu Tang", ko: "십전대보탕", ingEn: "Renshen, Shudi, Baizhu, Fuling, Baishao, Danggui, Huangqi, Rougui, Shengjiang, Dazao, Zhigancao, Chuanxiong", ingKo: "인삼, 숙지황, 백출, 복령, 백작약, 당귀, 황기, 육계, 생강, 대조, 자감초, 천궁", effEn: "Qi & Blood deficiency with mild Deficiency-Cold", effKo: "기혈양허, 허한" },
+            { id: 38, en: "Gui Pi Tang", ko: "귀비탕", ingEn: "Shengjiang, Dazao, Renshen, Huangqi, Baizhu, Zhigancao, Danggui, Longyanrou, Suanzaoren, Yuanzhi, Fuling, Muxiang", ingKo: "생강, 대조, 인삼, 황기, 백출, 자감초, 당귀, 용안육, 산조인, 원지, 복령, 목향", effEn: "SP Qi & HT Blood deficiency causing insomnia; SP Qi Not Controlling Blood", effKo: "심비양허, 비불통혈(불면, 건망)" },
+            { id: 39, en: "Liu Wei Di Huang Wan", ko: "육미지황환", ingEn: "Shudi, Shanzhuyu, Shanyao, Fuling, Mudanpi, Zexie", ingKo: "숙지황, 산수유, 산약, 복령, 목단피, 택사", effEn: "KD & LV Yin deficiency", effKo: "간신음허" },
+            { id: 40, en: "Zuo Gui Wan", ko: "좌귀환", ingEn: "Shudi, Shanzhuyu, Gouqizi, Shanyao, Lujiaojiao, Guibanjiao, Chuanniuxi, Tusizi", ingKo: "숙지황, 산수유, 구기자, 산약, 녹각교, 구판교, 우슬, 토사자", effEn: "KD Yin/Essence deficiency for severe case (more potent)", effKo: "신음부족(진음부족)" },
+            { id: 41, en: "Bai He Gu Jin Tang", ko: "백합고금탕", ingEn: "Baihe, Shengdi, Shudi, Maimendong, Xuanshen, Chuanbeimu, Jiegeng, Danggui, Baishao, Gancao", ingKo: "백합, 생지황, 숙지황, 맥문동, 현삼, 패모, 길경, 당귀, 백작약, 감초", effEn: "Internal Dryness of the LU", effKo: "폐신음허(폐조)" },
+            { id: 42, en: "Jin Gui Shen Qi Wan", ko: "금궤신기환", ingEn: "Shengdi, Shanzhuyu, Shanyao, Fuzi, Guizhi, Fuling, Mudanpi, Zexie", ingKo: "생지황, 산수유, 산약, 부자, 계지, 복령, 목단피, 택사", effEn: "KD Yang deficiency", effKo: "신양부족" },
+            { id: 43, en: "You Gui Wan", ko: "우귀환", ingEn: "Fuzi, Rougui, Lujiaojiao, Shudi, Shanzhuyu, Shanyao, Gouqizi, Tusizi, Duzhong, Danggui", ingKo: "부자, 육계, 녹각교, 숙지황, 산수유, 산약, 구기자, 토사자, 두충, 당귀", effEn: "KD Yang/Essence deficiency for severe case (more potent)", effKo: "신양부족(명문화쇠)" },
+            { id: 44, en: "Si Shen Wan", ko: "사신환", ingEn: "Buguzhi, Roudoukou, Wuzhuyu, Wuweizi, Shengjiang, Dazao", ingKo: "보골지, 육두구, 오수유, 오미자, 생강, 대조", effEn: "SP & KD Yang deficiency causing daybreak diarrhea", effKo: "비신양허(오경설사)" },
+            { id: 45, en: "Jin Suo Gu Jing Wan", ko: "금쇄고정환", ingEn: "Shayuanzi, Lianzi, Lianxu, Qianshi, Longgu, Muli", ingKo: "사원자, 연자육, 연수, 검인, 용골, 모려", effEn: "Spermatorrhea due to KD deficiency", effKo: "신허유정" },
+            { id: 46, en: "Gu Jing Wan", ko: "고경환", ingEn: "Guiban, Baishao, Huangqin, Huangbai, Xiangfu, Chunpi", ingKo: "구판, 백작약, 황금, 황백, 향부자, 춘근피", effEn: "Constrained LV Fire injuring Chong & Ren causing Beng Lou syndrome", effKo: "음허유화 붕루" },
+            { id: 47, en: "Wan Dai Tang", ko: "완대탕", ingEn: "Baizhu, Shanyao, Chenpi, Chaihu, Jingjiesui, Gancao, Renshen, Cangzhu, Cheqianzi, Baishao", ingKo: "백출, 산약, 진피, 시호, 형개수, 감초, 인삼, 창출, 차전자, 백작약", effEn: "Leukorrhea due to Dai/SP deficiency with Damp & Qi stagnation", effKo: "비허습체 대하" },
+            { id: 48, en: "Suan Zao Ren Tang", ko: "산조인탕", ingEn: "Suanzaoren, Chuanxiong, Fuling, Zhimu, Gancao", ingKo: "산조인, 천궁, 복령, 지모, 감초", effEn: "LV Blood & HT Yin deficiency with Empty-Heat", effKo: "허로허번 불면(간혈부족)" },
+            { id: 49, en: "Huang Lian E Jiao Tang", ko: "황련아교탕", ingEn: "Huangqin, Baishao, Jizihuang, Huanglian, Ejiao", ingKo: "황금, 백작약, 계자황, 황련, 아교", effEn: "Fire from Yin deficiency affecting Spirit", effKo: "음허화왕 불면(심신불교)" },
+            { id: 50, en: "Gan Mai Da Zao Tang", ko: "감맥대조탕", ingEn: "Xiaomai, Gancao, Dazao", ingKo: "소맥, 감초, 대조", effEn: "HT Yin deficiency with LV Qi stagnation causing Zang Zao disorder", effKo: "장조증(히스테리, 심신불안)" },
+            { id: 51, en: "Yue Ju Wan", ko: "월국환", ingEn: "Cangzhu, Chuanxiong, Xiangfu, Zhizi, Shenqu", ingKo: "창출, 천궁, 향부자, 치자, 신곡", effEn: "Six Stagnations of Qi, Blood, Phlegm, Damp, Fire and Food", effKo: "육울(기, 혈, 담, 습, 화, 식)" },
+            { id: 52, en: "Ban Xia Hou Po Tang", ko: "반하후박탕", ingEn: "Banxia, Houpo, Fuling, Zisuye, Shengjiang", ingKo: "반하, 후박, 복령, 자소엽, 생강", effEn: "LV Qi & Phlegm stagnation lodging in the throat causing Plum-pit syndrome", effKo: "매핵기(담기울결)" },
+            { id: 53, en: "Su Zi Jiang Qi Tang", ko: "소자강기탕", ingEn: "Zisuzi, Banxia, Houpo, Chenpi, Qianhu, Rougui, Danggui, Zisuye, Shengjiang, Dazao, Zhigancao", ingKo: "자소자, 반하, 후박, 진피, 전호, 육계, 당귀, 자소엽, 생강, 대조, 자감초", effEn: "LU Cold-Phlegm (excess above) with KD Yang deficiency (deficiency below)", effKo: "상실하허(담연옹성, 신양부족)" },
+            { id: 54, en: "Ju Pi Zhu Ru Tang", ko: "귤피죽여탕", ingEn: "Renshen, Shengjiang, Gancao, Dazao, Chenpi, Zhuru", ingKo: "인삼, 생강, 감초, 대조, 진피, 죽여", effEn: "Rebellious ST Qi due to ST deficiency with Heat", effKo: "위허유열(딸꾹질, 구역)" },
+            { id: 55, en: "Tao He Cheng Qi Tang", ko: "도핵승기탕", ingEn: "Mangxiao, Zhigancao, Taoren, Dahuang, Guizhi", ingKo: "망초, 자감초, 도인, 대황, 계지", effEn: "Accumulation of Blood stasis & Heat in the Lower burner", effKo: "하초축혈증" },
+            { id: 56, en: "Xue Fu Zhu Yu Tang", ko: "혈부축어탕", ingEn: "Danggui, Chishao, Shengdi, Chuanniuxi, Chaihu, Zhike, Jiegeng, Gancao, Taoren, Honghua, Chuanxiong", ingKo: "당귀, 적작약, 생지황, 우슬, 시호, 지각, 길경, 감초, 도인, 홍화, 천궁", effEn: "Blood stasis with Qi stagnation in the chest", effKo: "흉중혈어, 기체" },
+            { id: 57, en: "Wen Jing Tang", ko: "온경탕", ingEn: "Gancao, Wuzhuyu, Guizhi, Danggui, Chuanxiong, Baishao, Ejiao, Maidong, Mudanpi, Renshen, Shengjiang, Banxia", ingKo: "감초, 오수유, 계지, 당귀, 천궁, 백작약, 아교, 맥문동, 목단피, 인삼, 생강, 반하", effEn: "Chong & Ren Deficiency-Cold with Blood stasis causing irregular menstruation", effKo: "충임허한, 어혈조체" },
+            { id: 58, en: "Sheng Hua Tang", ko: "생화탕", ingEn: "Danggui, Chuanxiong, Taoren, Paojiang, Zhigancao, Yellow-wine", ingKo: "당귀, 천궁, 도인, 포강, 자감초, 황주", effEn: "Blood & Cold stagnation causing postpartum lochial retention", effKo: "산후오로부전, 혈허한응" },
+            { id: 59, en: "Gui Zhi Fu Ling Wan", ko: "계지복령환", ingEn: "Guizhi, Fuling, Shaoyao, Mudanpi, Taoren, Fengmi", ingKo: "계지, 복령, 작약, 목단피, 도인, 봉밀", effEn: "Blood stasis in the uterus during pregnancy", effKo: "임신 중 어혈(징가)" },
+            { id: 60, en: "Dan Shen Yin", ko: "단삼음", ingEn: "Danshen, Tanxiang, Sharen", ingKo: "단삼, 단향, 사인", effEn: "Blood & Qi stagnation in the Upper/Middle burners causing chest pain", effKo: "기체혈어 심위통" },
+            { id: 61, en: "Huai Hua San", ko: "괴화산", ingEn: "Huaihua, Cebaiye, Jingjiesui, Zhike", ingKo: "괴화, 측백엽, 형개수, 지각", effEn: "Rectal bleeding due to Wind-Heat or DampHeat Toxin", effKo: "장풍변혈(습열)" },
+            { id: 62, en: "Jiao Ai Tang", ko: "교애탕", ingEn: "Ejiao, Aiye, Shengdi, Danggui, Baishao, Chuanxiong, Gancao", ingKo: "아교, 애엽, 생지황, 당귀, 백작약, 천궁, 감초", effEn: "Uterine bleeding due to Chong & Ren Deficiency-Cold with Blood deficiency", effKo: "충임허손 하혈(붕루)" },
+            { id: 63, en: "Xiao Huo Luo Dan", ko: "소활락단", ingEn: "Caowu, Chuanwu, Tiannanxing, Ruxiang, Moyao, Dilong", ingKo: "초오, 천오, 천남성, 유향, 몰약, 지룡", effEn: "Wind-Phlegm obstruction with Blood stasis in the channels & collaterals", effKo: "풍담어혈비통" },
+            { id: 64, en: "Xiao Feng San", ko: "소풍산", ingEn: "Jingjie, Fangfeng, Niubangzi, Chantui, Cangzhu, Kushen, Mutong, Shigao, Zhimu, Shengdi, Danggui, Heizhima, Gancao", ingKo: "형개, 방풍, 우방자, 선퇴, 창출, 고삼, 목통, 석고, 지모, 생지황, 당귀, 흑지마, 감초", effEn: "Wind-Damp-Heat in the skin causing pruritis", effKo: "풍습열 피부병(가려움)" },
+            { id: 65, en: "Zhen Gan Xi Feng Tang", ko: "진간식풍탕", ingEn: "Huainiuxi, Daizheshi, Longgu, Muli, Guiban, Baishao, Xuanshen, Tiandong, Yinchen, Chuanlianzi, Maiya, Gancao", ingKo: "우슬, 대자석, 용골, 모려, 구판, 백작약, 현삼, 천문동, 인진, 천련자, 맥아, 감초", effEn: "LV Yang rising & internal Wind due to LV & KD Yin deficiency", effKo: "간양상항, 간풍내동" },
+            { id: 66, en: "Tian Ma Gou Teng Yin", ko: "천마구등음", ingEn: "Shijueming, Zhizi, Huangqin, Yimucao, Chuanniuxi, Duzhong, Sangjisheng, Yejiaoteng, Fushen, Tianma, Gouteng", ingKo: "석결명, 치자, 황금, 익모초, 우슬, 두충, 상기생, 야교등, 복신, 천마, 구등", effEn: "LV Yang rising; LV Yang rising causing Internal Wind", effKo: "간양상항(고혈압, 두통)" },
+            { id: 67, en: "Xing Su San", ko: "행소산", ingEn: "Qianhu, Jiegeng, Zhike, Banxia, Chenpi, Fuling, Xingren, Zisuye, Shengjiang, Dazao, Gancao", ingKo: "전호, 길경, 지각, 반하, 진피, 복령, 행인, 자소엽, 생강, 대조, 감초", effEn: "Cool-Dryness", effKo: "양조(서늘한 조증)" },
+            { id: 68, en: "Mai Men Dong Tang", ko: "맥문동탕", ingEn: "Maimendong, Renshen, Jingmi, Dazao, Gancao, Banxia", ingKo: "맥문동, 인삼, 갱미, 대조, 감초, 반하", effEn: "LU/ST Qi & Yin deficiency", effKo: "폐위음허(기역)" },
+            { id: 69, en: "Ping Wei San", ko: "평위산", ingEn: "Cangzhu, Houpo, Chenpi, Zhigancao, Shengjiang, Dazao", ingKo: "창출, 후박, 진피, 자감초, 생강, 대조", effEn: "Damp-Cold stagnation in the SP/ST", effKo: "습체비위" },
+            { id: 70, en: "Huo Xiang Zheng Qi San", ko: "곽향정기산", ingEn: "Huoxiang, Houpo, Chenpi, Zisuye, Baizhi, Banxia, Dafupi, Baizhu, Fuling, Jiegeng, Zhigancao, Shengjiang, Dazao", ingKo: "곽향, 후박, 진피, 자소엽, 백지, 반하, 대복피, 백출, 복령, 길경, 자감초, 생강, 대조", effEn: "Damp stagnation in the Middle burner + External Wind-Cold", effKo: "외감풍한 내상습체" },
+            { id: 71, en: "Ba Zheng San", ko: "팔정산", ingEn: "Qumai, Bianxu, Huashi, Cheqianzi, Mutong, Dengxincao, Zhigancao, Zhizi, Dahuang", ingKo: "패랭이꽃(구맥), 마디풀(편축), 활석, 차전자, 목통, 등심초, 자감초, 치자, 대황", effEn: "Damp-Heat clumping in the Lower burner", effKo: "습열하주(임증)" },
+            { id: 72, en: "Wu Ling San", ko: "오령산", ingEn: "Zexie, Fuling, Zhuling, Baizhu, Guizhi", ingKo: "택사, 복령, 저령, 백출, 계지", effEn: "Water-Damp retention marked by edema; Taiyang Fu syndrome", effKo: "수습내정, 방광기화불리" },
+            { id: 73, en: "Zhu Ling Tang", ko: "저령탕", ingEn: "Zhuling, Fuling, Zexie, Huashi, Ejiao", ingKo: "저령, 복령, 택사, 활석, 아교", effEn: "Water & Heat retention in the UB with Yin injury", effKo: "수열호결(음허수열)" },
+            { id: 74, en: "Wu Pi San", ko: "오피산", ingEn: "Chenpi, Dafupi, Sangbaipi, Shengjiangpi, Fulingpi", ingKo: "진피, 대복피, 상백피, 생강피, 복령피", effEn: "SP Qi deficiency with excessive Damp causing skin edema (Pi Shui)", effKo: "비허습체 부종(피수)" },
+            { id: 75, en: "Zhen Wu Tang", ko: "진무탕", ingEn: "Fuzi, Baizhu, Fuling, Shengjiang, Baishao", ingKo: "부자, 백출, 복령, 생강, 백작약", effEn: "KD & SP Yang deficiency causing Water retention", effKo: "비신양허 수기내정" },
+            { id: 76, en: "Juan Bi Tang", ko: "견비탕", ingEn: "Qianghuo, Fangfeng, Danggui, Baishao, Huangqi, Jianghuang, Zhigancao", ingKo: "강활, 방풍, 당귀, 백작약, 황기, 강황, 자감초", effEn: "Acute Bi syndrome due to Wind-ColdDamp-", effKo: "풍한습비(기혈부족)" },
+            { id: 77, en: "Er Chen Tang", ko: "이진탕", ingEn: "Banxia, Juhong, Fuling, Zhigancao, Shengjiang, Wumei", ingKo: "반하, 귤홍, 복령, 자감초, 생강, 오매", effEn: "Damp-Phlegm syndrome in the Middle burner or LU", effKo: "습담증" },
+            { id: 78, en: "Wen Dan Tang", ko: "온담탕", ingEn: "Banxia, Zhuru, Zhishi, Chenpi, Fuling, Zhigancao, Shengjiang, Dazao", ingKo: "반하, 죽여, 지실, 진피, 복령, 자감초, 생강, 대조", effEn: "GB & ST disharmony with Phlegm-Heat", effKo: "담열내요(담열)" },
+            { id: 79, en: "Qing Qi Hua Tan Wan", ko: "청기화담환", ingEn: "Dannanxing, Huangqin, Gualouren, Banxia, Zhishi, Chenpi, Fuling, Xingren", ingKo: "담남성, 황금, 과루인, 반하, 지실, 진피, 복령, 행인", effEn: "LU Phlegm-Heat causing cough", effKo: "폐경담열 해수" },
+            { id: 80, en: "Bei Mu Gua Lou San", ko: "패모과루산", ingEn: "Chuanbeimu, Gualou, Tianhuafen, Fuling, Juhong, Jiegeng", ingKo: "패모, 과루, 천화분, 복령, 귤홍, 길경", effEn: "LU Dry-Phlegm causing cough", effKo: "조담 해수" },
+            { id: 81, en: "Ban Xia Bai Zhu Tian Ma Tang", ko: "반하백출천마탕", ingEn: "Banxia, Tianma, Baizhu, Juhong, Fuling, Gancao, Shengjiang, Dazao", ingKo: "반하, 천마, 백출, 귤홍, 복령, 감초, 생강, 대조", effEn: "Internal Wind-Phlegm rising upward causing dizziness/vertigo", effKo: "풍담상요(현훈)" },
+            { id: 82, en: "Zhi Sou San", ko: "지수산", ingEn: "Ziwan, Baibu, Baiqian, Jiegeng, Chenpi, Jingjie, Gancao", ingKo: "자완, 백부근, 백전, 길경, 진피, 형개, 감초", effEn: "External Wind attacking the LU causing cough", effKo: "풍사범폐 해수" },
+            { id: 83, en: "Bao He Wan", ko: "보화환", ingEn: "Shanzha, Shenqu, Laifuzi, Banxia, Chenpi, Fuling, Lianqiao, Maiya", ingKo: "산사, 신곡, 나복자, 반하, 진피, 복령, 연교, 맥아", effEn: "Food retention in the Middle burner", effKo: "식적" },
+            { id: 84, en: "Ma Huang Tang", ko: "마황탕", ingEn: "Mahuang, Guizhi, Xingren, Zhigancao", ingKo: "마황, 계지, 행인, 자감초", effEn: "Exterior Wind-Cold of excess type", effKo: "풍한표실증" },
+            { id: 85, en: "Xiao Qing Long Tang", ko: "소청룡탕", ingEn: "Mahuang, Guizhi, Xixin, Banxia, Ganjiang, Zhigancao, Baishao, Wuweizi", ingKo: "마황, 계지, 세신, 반하, 건강, 자감초, 백작약, 오미자", effEn: "Exterior Wind-Cold with congested Phlegm-Fluid in the LU", effKo: "외감풍한 내유수음" },
+            { id: 86, en: "Ma Xing Gan Shi Tang", ko: "마행감석탕", ingEn: "Mahuang, Shigao, Xingren, Zhigancao", ingKo: "마황, 석고, 행인, 자감초", effEn: "Heat lodged in the LU", effKo: "폐열해천" },
+            { id: 87, en: "Ge Gen Tang", ko: "갈근탕", ingEn: "Gegen, Mahuang, Guizhi, Shengjiang, Baishao, Zhigancao, Dazao", ingKo: "갈근, 마황, 계지, 생강, 백작약, 자감초, 대조", effEn: "Exterior Wind-Cold of excess type with stiff neck", effKo: "풍한표실증(항배강통)" },
+            { id: 88, en: "Jia Jian Wei Rui Tang", ko: "가감위유탕", ingEn: "Yuzhu, Congbai, Dandouchi, Bohe, Baiwei, Jiegeng, Dazao, Zhigancao", ingKo: "옥죽(위유), 총백, 담두시, 박하, 백미, 길경, 대조, 자감초", effEn: "Exterior Wind-Heat with Yin deficiency", effKo: "음허 외감풍열" },
+            { id: 89, en: "Si Bai San", ko: "사백산", ingEn: "Sangbaipi, Digupei, Zhigancao, Gengmi", ingKo: "상백피, 지골피, 자감초, 갱미", effEn: "Constrained LU Heat causing wheezing", effKo: "폐열해천" },
+            { id: 90, en: "Liang Ge San", ko: "양격산", ingEn: "Lianqiao, Huangqin, Zhizi, Danzhuye, Dahuang, Mangxiao, Bohe, Gancao", ingKo: "연교, 황금, 치자, 담죽엽, 대황, 망초, 박하, 감초", effEn: "Heat and clumping in the diaphragm region", effKo: "격상열(중상초 사열)" },
+            { id: 91, en: "Qing Ying Tang", ko: "청영탕", ingEn: "Shuiniujiao, Shengdihuang, Xuanshen, Jinyinhua, Lianqiao, Huanglian, Danzhuye, Maimendong, Danshen", ingKo: "수우각, 생지황, 현삼, 금은화, 연교, 황련, 담죽엽, 맥문동, 단삼", effEn: "Heat entering the Nutritive level", effKo: "열입영분" },
+            { id: 92, en: "Qing Wen Bai Du Yin", ko: "청온패독음", ingEn: "Shigao, Shuiniujiao, Shengdihuang, Huanglian, Zhizi, Zhimu, Lianqiao, Huangqin, Xuanshen, Mudanpi, Zhuye, Jiegeng, Chishao, Gancao", ingKo: "석고, 수우각, 생지황, 황련, 치자, 지모, 연교, 황금, 현삼, 목단피, 죽엽, 길경, 적작약, 감초", effEn: "Severe Fire in the Qi/Blood levels", effKo: "기혈양번(온역, 열독)" },
+            { id: 93, en: "Pu Ji Xiao Du Yin", ko: "보제소독음", ingEn: "Huangqin, Huanglian, Xuanshen, Lianqiao, Mabo, Banlangen, Chaihu, Niubangzi, Bohe, Shengma, Renshen, Gancao, Jiegeng, Chenpi, Baijiangcan", ingKo: "황금, 황련, 현삼, 연교, 마발, 판람근, 시호, 우방자, 박하, 승마, 인삼, 감초, 길경, 진피, 백강잠", effEn: "Epidemic Toxin with Wind-Heat & Damp-Phlegm", effKo: "두면부 대두온(풍열독)" },
+            { id: 94, en: "Shao Yao Tang", ko: "작약탕", ingEn: "Baishao, Danggui, Huanglian, Huangqin, Dahuang, Rougui, Muxiang, Binglang, Zhigancao", ingKo: "백작약, 당귀, 황련, 황금, 대황, 육계, 목향, 빈랑, 자감초", effEn: "LI Damp-Heat with Qi & Blood stagnation causing dysentery", effKo: "습열이질" },
+            { id: 95, en: "Bai Tou Weng Tang", ko: "백두옹탕", ingEn: "Baitouweng, Huanglian, Huangbai, Qinpi", ingKo: "백두옹, 황련, 황백, 진피(물푸레나무)", effEn: "Dysentery due to Toxic-Heat in the ST & Intestine", effKo: "열독이질" },
+            { id: 96, en: "Zuo Jin Wan", ko: "좌금환", ingEn: "Huanglian, Wuzhuyu", ingKo: "황련, 오수유", effEn: "LV Fire burning ST causing LV & ST disharmony", effKo: "간화범위" },
+            { id: 97, en: "Si Huang San", ko: "사황산", ingEn: "Fangfeng, Huoxiang, Shigao, Zhizi, Gancao", ingKo: "방풍, 곽향, 석고, 치자, 감초", effEn: "Smoldering Fire in the SP/ST", effKo: "비위복화" },
+            { id: 98, en: "Yu Nu Jian", ko: "옥녀전", ingEn: "Fangfeng, Huoxiang, Shigao, Zhizi, Gancao", ingKo: "석고, 지모, 맥문동, 생지황, 우슬", effEn: "ST Heat with Yin deficiency", effKo: "위열음허" },
+            { id: 99, en: "Qing Gu San", ko: "청골산", ingEn: "Yinchaihu, Huhuanglian, Zhimu, Digupei, Qinghao, Qinjiao, Biejia, Gancao", ingKo: "은시호, 호황련, 지모, 지골피, 청호, 진교, 별갑, 감초", effEn: "KD/LV Yin deficiency leading to Steaming Bone disorder", effKo: "골증열(음허내열)" },
+            { id: 100, en: "Jia Wei Xiao Yao San", ko: "가미소요산", ingEn: "Chaihu, Bohe, Shengjiang, Baishao, Danggui, Fuling, Baizhu, Zhigancao, Mudanpi, Zhizi", ingKo: "시호, 박하, 생강, 백작약, 당귀, 복령, 백출, 자감초, 목단피, 치자", effEn: "LV Qi stagnation with LV Blood & SP Qi deficiency + Interior Heat", effKo: "간울혈허 화왕" },
+            { id: 101, en: "Chai Hu Shu Gan San", ko: "시호소간산", ingEn: "Chaihu, Chenpi, Xiangfu, Zhike, Baishao, Chuanxiong, Zhigancao", ingKo: "시호, 진피, 향부자, 지각, 백작약, 천궁, 자감초", effEn: "LV Qi stagnation causing pain", effKo: "간기울결 흉협통" },
+            { id: 102, en: "Ji Chuan Jian", ko: "제천전", ingEn: "Danggui, Roucongrong, Niuxi, Zexie, Zhike, Shengma", ingKo: "당귀, 육종용, 우슬, 택사, 지각, 승마", effEn: "Constipation due to KD Yang deficiency", effKo: "신양허 변비" },
+            { id: 103, en: "San Zi Yang Qin Tang", ko: "삼자양친탕", ingEn: "Baijiezi, Zisuzi, Laifuzi", ingKo: "백개자, 자소자, 나복자", effEn: "LU Phlegm-Cold with Qi stagnation", effKo: "담체기계(노인성 해수)" },
+            { id: 104, en: "Huo Xiang Zheng Qi San", ko: "곽향정기산", ingEn: "Huoxiang, Houpo, Chenpi, Dafupi, Baizhu, Zhigancao, Dazao, Banxia, Jiegeng, Zisuye, Baizhi, Shengjiang, Fuling", ingKo: "곽향, 후박, 진피, 대복피, 백출, 자감초, 대조, 반하, 길경, 자소엽, 백지, 생강, 복령", effEn: "Damp stagnation in the Middle burner + External Wind-Cold", effKo: "외감풍한 내상습체" },
+            { id: 105, en: "Gui Zhi Shao Yao Zhi Mu Tang", ko: "계지작약지모탕", ingEn: "Guizhi, Mahuang, Fangfeng, Shengjiang, Fuzi, Zhimu, Baishao, Baizhu, Gancao", ingKo: "계지, 마황, 방풍, 생강, 부자, 지모, 백작약, 백출, 감초", effEn: "Recurrent painful obstruction with localized Heat", effKo: "풍한습비(역절풍, 국소발열)" },
+            { id: 106, en: "Yin Chen Hao Tang", ko: "인진호탕", ingEn: "Yinchen, Zhizi, Dahuang", ingKo: "인진, 치자, 대황", effEn: "Jaundice due to LV/GB Damp-Heat", effKo: "습열황달" },
+            { id: 107, en: "San Ren Tang", ko: "삼인탕", ingEn: "Yiyiren, Huashi, Tongcao, Xingren, Banxia, Houpo, Baidoukou, Danzhuye", ingKo: "의이인, 활석, 통초, 행인, 반하, 후박, 백두구, 담죽엽", effEn: "Early-stage Damp-Warmth disease affecting Wei/Qi levels (Damp > Heat)", effKo: "습온초기(습중어열)" },
+            { id: 108, en: "Ling Gui Zhu Gan Tang", ko: "영계출감탕", ingEn: "Fuling, Guizhi, Baizhu, Zhigancao", ingKo: "복령, 계지, 백출, 자감초", effEn: "LU Damp-Phlegm or Phlegm-fluid (Tan Yin) syndrome", effKo: "중초수음(담음)" },
+            { id: 109, en: "Shi Pi Yin", ko: "실비음", ingEn: "Fuzi, Ganjiang, Fuling, Houpo, Caoguo, Mugua, Baizhu, Zhigancao, Dazao, Muxiang, Binglang, Shengjiang", ingKo: "부자, 건강, 복령, 후박, 초과, 모과, 백출, 자감초, 대조, 목향, 빈랑, 생강", effEn: "Yin edema due to SP & KD Yang deficiency", effKo: "음수(비신양허 부종)" },
+            { id: 110, en: "Bi Xie Fen Qing Yin", ko: "비해분청음", ingEn: "Bixie, Yizhiren, Wuyao, Shichangpu", ingKo: "비해, 익지인, 오약, 석창포", effEn: "Cloudy urination due to KD Yang Deficiency-Cold", effKo: "신양허부족(백탁)" },
+            { id: 111, en: "Er Miao San", ko: "이묘산", ingEn: "Huangbai, Cangzhu", ingKo: "황백, 창출", effEn: "Damp-Heat lodging in Lower burner", effKo: "습열하주" },
+            { id: 112, en: "Qiang Huo Sheng Shi Tang", ko: "강활승습탕", ingEn: "Qianghuo, Fangfeng, Gaoben, Manjingzi, Duhuo, Chuanxiong, Zhigancao", ingKo: "강활, 방풍, 고본, 만형자, 독활, 천궁, 자감초", effEn: "Acute Bi syndrome due to Wind-Damp in the channel and muscle layer", effKo: "풍습재표(두통, 신통)" },
+            { id: 113, en: "Du Huo Ji Sheng Tang", ko: "독활기생탕", ingEn: "Duhuo, Sangjisheng, Qinjiao, Fangfeng, Xixin, Shengdihuang, Rougui, Duzhong, Niuxi, Chuanxiong, Baishao, Danggui, Renshen, Gancao, Fuling", ingKo: "독활, 상기생, 진교, 방풍, 세신, 생지황, 육계, 두충, 우슬, 천궁, 백작약, 당귀, 인삼, 감초, 복령", effEn: "Chronic Bi syndrome with LV/KD deficiency & Qi/Blood deficiency", effKo: "만성 비증(간신부족, 기혈부족)" },
+            { id: 114, en: "Sang Xing Tang", ko: "상행탕", ingEn: "Sangye, Dandouchi, Xingren, Beimu, Zhizi, Shashen, Lipi", ingKo: "상엽, 담두시, 행인, 패모, 치자, 사삼, 리피(배껍질)", effEn: "Warm-Dryness", effKo: "온조(폐조)" },
+            { id: 115, en: "Qing Zao Jiu Fei Tang", ko: "청조구폐탕", ingEn: "Sangye, Shigao, Maimendong, Heizhima, Pipaye, Xingren, Ejiao, Renshen, Gancao", ingKo: "상엽, 석고, 맥문동, 흑지마, 비파엽, 행인, 아교, 인삼, 감초", effEn: "Dryness attacking the LU", effKo: "조열상폐" },
+            { id: 116, en: "Liang Fu Wan", ko: "양부환", ingEn: "Gaoliangjiang, Xiangfu", ingKo: "고량강, 향부자", effEn: "LV Qi stagnation with ST Cold causing pain", effKo: "간울기체 위한" },
+            { id: 117, en: "Jin Ling Zi San", ko: "금령자산", ingEn: "Chuanlianzi, Yanhu suo", ingKo: "천련자, 현호색", effEn: "Pain due to LV stagnation with Heat", effKo: "간울화열 복통" },
+            { id: 118, en: "Tian Tai Wu Yao San", ko: "천태오약산", ingEn: "Wuyao, Muxiang, Qingpi, Chuanlianzi, Xiaohuixiang, Gaoliangjiang, Binglang, Badou", ingKo: "오약, 목향, 청피, 천련자, 소회향, 고량강, 빈랑, 파두", effEn: "Cold invading the LV channel causing Qi stagnation", effKo: "한응기체 소장산기" },
+            { id: 119, en: "Nuan Gan Jian", ko: "난간전", ingEn: "Gouqizi, Danggui, Rougui, Xiaohuixiang, Wuyao, Chenxiang, Fuling, Shengjiang", ingKo: "구기자, 당귀, 육계, 소회향, 오약, 침향, 복령, 생강", effEn: "Cold from LV & KD deficiency", effKo: "간신음한 산기" },
+            { id: 120, en: "Ding Chuan Tang", ko: "정천탕", ingEn: "Mahuang, Baiguo, Zisuzi, Xingren, Kuandonghua, Sangbaipi, Banxia, Huangqin, Gancao", ingKo: "마황, 백과, 자소자, 행인, 관동화, 상백피, 반하, 황금, 감초", effEn: "Internal LU Phlegm-heat with external Wind-Cold causing rebellious LU Qi", effKo: "풍한외속 담열내온(효천)" },
+            { id: 121, en: "Xuan Fu Dai Zhe Tang", ko: "선복대자탕", ingEn: "Xuanfuhua, Banxia, Daizheshi, Renshen, Zhigancao, Dazao, Shengjiang", ingKo: "선복화, 반하, 대자석, 인삼, 자감초, 대조, 생강", effEn: "Rebellious ST Qi due to ST deficiency with Damp-Phlegm", effKo: "위기허 담탁(애기)" },
+            { id: 122, en: "Ge Xia Zhu Yu Tang", ko: "격하축어탕", ingEn: "Taoren, Honghua, Chuanxiong, Chishao, Wulingzhi, Yanhu suo, Danggui, Mudanpi, Wuyao, Xiangfu, Zhike, Gancao", ingKo: "도인, 홍화, 천궁, 적작약, 오령지, 현호색, 당귀, 목단피, 오약, 향부자, 지각, 감초", effEn: "Blood stasis with Qi stagnation in the Epigastrium", effKo: "격하어혈(복부 어혈)" },
+            { id: 123, en: "Xiao Fu Zhu Yu Tang", ko: "소복축어탕", ingEn: "Danggui, Puhuang, Moyao, Chuanxiong, Chishao, Wulingzhi, Yanhu suo, Rougui, Xiaohuixiang, Ganjiang", ingKo: "당귀, 포황, 몰약, 천궁, 적작약, 오령지, 현호색, 육계, 소회향, 건강", effEn: "Blood stasis with Cold stagnation in the Lower Abdomen", effKo: "소복어혈(하복부 냉증, 통증)" },
+            { id: 124, en: "Shen Tong Zhu Yu Tang", ko: "신통축어탕", ingEn: "Taoren, Honghua, Chuanxiong, Moyao, Niuxi, Wulingzhi, Danggui, Xiangfu, Qinjiao, Qianghuo, Dilong, Gancao", ingKo: "도인, 홍화, 천궁, 몰약, 우슬, 오령지, 당귀, 향부자, 진교, 강활, 지룡, 감초", effEn: "Blood stasis with Qi stagnation in the Channels/Collaterals", effKo: "기혈비조(어혈비통)" },
+            { id: 125, en: "Bu Yang Huan Wu Tang", ko: "보양환오탕", ingEn: "Huangqi, Danggui, Chishao, Taoren, Honghua, Chuanxiong, Dilong", ingKo: "황기, 당귀, 적작약, 도인, 홍화, 천궁, 지룡", effEn: "Hemiplegia due to Qi/Blood stagnation in the channels with Qi deficiency", effKo: "기허혈어(반신불수)" },
+            { id: 126, en: "Fu Yuan Huo Xue Tang", ko: "복원활혈탕", ingEn: "Dahuang, Chaihu, Danggui, Taoren, Honghua, Chuanshanjia, Tianhuafen, Gancao", ingKo: "대황, 시호, 당귀, 도인, 홍화, 천산갑, 천화분, 감초", effEn: "Blood stasis & Qi stagnation in the trunk due to trauma", effKo: "타박어혈(협하통)" },
+            { id: 127, en: "Shi Xiao San", ko: "실소산", ingEn: "Wulingzhi, Puhuang", ingKo: "오령지, 포황", effEn: "Blood stasis in the lower abdomen causing pain", effKo: "어혈복통" },
+            { id: 128, en: "Shi Hui San", ko: "십회산", ingEn: "Daji, Xiaoji, Qiancao, Cebaize, Baimaogen, Zonglu, Heye, Zhizi, Mudanpi, Dahuang", ingKo: "대계, 소계, 천초근, 측백엽, 백모근, 종려피, 하엽, 치자, 목단피, 대황", effEn: "Acute bleeding due to LV ST Fire with Blood Heat", effKo: "혈열망행(각종 출혈)" },
+            { id: 129, en: "Xiao Ji Yin Zi", ko: "소계음자", ingEn: "Xiaoji, Oujie, Puhuang, Shengdihuang, Danzhuye, Zhizi, Huashi, Mutong, Danggui, Zhigancao", ingKo: "소계, 우절, 포황, 생지황, 담죽엽, 치자, 활석, 목통, 당귀, 자감초", effEn: "Heat causing urinary bleeding", effKo: "하초결열(혈뇨)" },
+            { id: 130, en: "Liu Jun Zi Tang", ko: "육군자탕", ingEn: "Renshen, Baizhu, Zhigancao, Fuling, Banxia, Chenpi", ingKo: "인삼, 백출, 자감초, 복령, 반하, 진피", effEn: "SP/ST Qi deficiency + Phlegm", effKo: "비위기허 담습" },
+            { id: 131, en: "Shao Yao Gan Cao Tang", ko: "작약감초탕", ingEn: "Baishao, Gancao", ingKo: "백작약, 감초", effEn: "Blood deficiency with injury to the Fluids", effKo: "음혈부족(근육경련)" },
+            { id: 132, en: "Zhi Gan Cao Tang", ko: "자감초탕", ingEn: "Renshen, Zhigancao, Dazao, Ejiao, Maimendong, Huomaren, Shengdihuang, Guizhi, Shengjiang", ingKo: "인삼, 자감초, 대조, 아교, 맥문동, 화마인, 생지황, 계지, 생강", effEn: "Qi & Blood deficiency causing irregular pulse", effKo: "기혈양허 결대맥" },
+            { id: 133, en: "Tai Shan Pan Shi San", ko: "태산반석산", ingEn: "Renshen, Baizhu, Huangqi, Zhigancao, Shudihuang, Baishao, Danggui, Chuanxiong, Xuduan, Huangqin, Sharen, Nuomi", ingKo: "인삼, 백출, 황기, 자감초, 숙지황, 백작약, 당귀, 천궁, 속단, 황금, 사인, 나미(찹쌀)", effEn: "Qi & Blood deficiency with unsecured Chong & Ren vessels", effKo: "기혈양허(안태)" },
+            { id: 134, en: "Qi Ju Di Huang Wan", ko: "기국지황환", ingEn: "Shudihuang, Shanzhuyu, Shanyao, Fuling, Zexie, Mudanpi, Gouqizi, Juhua", ingKo: "숙지황, 산수유, 산약, 복령, 택사, 목단피, 구기자, 국화", effEn: "Eye disorders due to LV & KD Yin deficiency", effKo: "간신음허 안질" },
+            { id: 135, en: "Zhi Bai Di Huang Wan", ko: "지백지황환", ingEn: "Shudihuang, Shanzhuyu, Shanyao, Fuling, Zexie, Mudanpi, Zhimu, Huangbai", ingKo: "숙지황, 산수유, 산약, 복령, 택사, 목단피, 지모, 황백", effEn: "Empty-Heat due to KD & LV Yin deficiency", effKo: "음허화왕" },
+            { id: 136, en: "Du Qi Wan", ko: "도기환", ingEn: "Shudihuang, Shanzhuyu, Wuweizi, Shanyao, Fuling, Zexie, Mudanpi", ingKo: "숙지황, 산수유, 오미자, 산약, 복령, 택사, 목단피", effEn: "Chronic wheezing disorders or spermatorrhea from KD deficiency", effKo: "폐신음허(천식, 유정)" },
+            { id: 137, en: "Zuo Gui Yin", ko: "좌귀음", ingEn: "Shudihuang, Shanzhuyu, Shanyao, Zhigancao, Fuling, Gouqizi", ingKo: "숙지황, 산수유, 산약, 자감초, 복령, 구기자", effEn: "KD Yin/Essence deficiency for moderate case (less potent)", effKo: "신음부족(경증)" },
+            { id: 138, en: "You Gui Yin", ko: "우귀음", ingEn: "Shudihuang, Shanzhuyu, Shanyao, Zhigancao, Duzhong, Gouqizi, Rougui, Fuzi", ingKo: "숙지황, 산수유, 산약, 자감초, 두충, 구기자, 육계, 부자", effEn: "KD Yang/Essence deficiency for moderate case (less potent)", effKo: "신양부족(경증)" },
+            { id: 139, en: "Er Xian Tang", ko: "이선탕", ingEn: "Xianmao, Yinyanghuo, Bajitian, Danggui, Huangbai, Zhimu", ingKo: "선모, 음양곽, 파극천, 당귀, 황백, 지모", effEn: "KD Yin/Yang deficiency with Empty-Fire.", effKo: "신음양양허" },
+            { id: 140, en: "Da Bu Yin Wan", ko: "대보음환", ingEn: "Shudihuang, Guiban, Huangbai, Zhimu", ingKo: "숙지황, 구판, 황백, 지모", effEn: "Severe KD & LV Yin/Essence deficiency with Empty Heat", effKo: "음허화왕(심한 경우)" },
+            { id: 141, en: "Er Zhi Wan", ko: "이지환", ingEn: "Nuzhenzi, Mohanlian", ingKo: "여정자, 한련초", effEn: "KD & LV Yin deficiency", effKo: "간신음허" },
+            { id: 142, en: "Yi Guan Jian", ko: "일관전", ingEn: "Shengdihuang, Gouqizi, Shashen, Maimendong, Danggui, Chuanlianzi", ingKo: "생지황, 구기자, 사삼, 맥문동, 당귀, 천련자", effEn: "LV & KD Yin deficiency with mild LV Qi stagnation", effKo: "간신음허 간기울결" },
+            { id: 143, en: "Zeng Ye Tang", ko: "증액탕", ingEn: "Xuanshen, Shengdihuang, Maimendong", ingKo: "현삼, 생지황, 맥문동", effEn: "Constipation due to exhaustion of the Fluids", effKo: "음허변비" },
+            { id: 144, en: "Dang Gui Si Ni Tang", ko: "당귀사역탕", ingEn: "Danggui, Baishao, Guizhi, Xixin, Mutong, Zhigancao, Dazao", ingKo: "당귀, 백작약, 계지, 세신, 목통, 자감초, 대조", effEn: "Cold in the channels with underlying Blood deficiency", effKo: "혈허한응(수족궐냉)" },
+            { id: 145, en: "Shen Fu Tang", ko: "삼부탕", ingEn: "Renshen, Fuzi", ingKo: "인삼, 부자", effEn: "Severe deficiency of the Source Qi with Sudden Collapse of the Yang Qi", effKo: "원기대휴 양기폭탈" },
+            { id: 146, en: "Da Chai Hu Tang", ko: "대시호탕", ingEn: "Chaihu, Shengjiang, Banxia, Dahuang, Huangqin, Baishao, Zhishi, Dazao", ingKo: "시호, 생강, 반하, 대황, 황금, 백작약, 지실, 대조", effEn: "Concurrent Shaoyang with Yangming syndromes", effKo: "소양양명 합병" },
+            { id: 147, en: "Fang Feng Tong Sheng San", ko: "방풍통성산", ingEn: "Fangfeng, Mahuang, Jingjie, Bohe, Shengjiang, Dahuang, Mangxiao, Zhizi, Shigao, Lianqiao, Huangqin, Huashi, Jiegeng, Danggui, Baishao, Chuanxiong, Baizhu, Gancao", ingKo: "방풍, 마황, 형개, 박하, 생강, 대황, 망초, 치자, 석고, 연교, 황금, 활석, 길경, 당귀, 백작약, 천궁, 백출, 감초", effEn: "Heat excess in both the exterior and interior", effKo: "풍열실증(표리구실)" },
+            { id: 148, en: "Ge Gen Huang Lian Huang Qin Tang", ko: "갈근황련황금탕", ingEn: "Gegen, Huangqin, Huanglian, Zhigancao", ingKo: "갈근, 황금, 황련, 자감초", effEn: "Incompletely resolved exterior with interior excess Heat", effKo: "표사미해 이열(설사)" },
+            { id: 149, en: "Chuan Xiong Cha Tiao San", ko: "천궁다조산", ingEn: "Chuanxiong, Bohe, Baizhi, Fangfeng, Jingjie, Qianghuo, Xixin, Zhigancao", ingKo: "천궁, 박하, 백지, 방풍, 형개, 강활, 세신, 자감초", effEn: "Headache from exterior Wind", effKo: "풍사두통" },
+            { id: 150, en: "Cang Er Zi San", ko: "창이자산", ingEn: "Cang'erzi, Xinyi, Baizhi, Bohe, Congbai", ingKo: "창이자, 신이, 백지, 박하, 총백", effEn: "Wind causing nasal congestion or discharge", effKo: "비연(코막힘, 콧물)" },
+            { id: 151, en: "Tian Wang Bu Xin Dan", ko: "천왕보심단", ingEn: "Shengdihuang, Xuanshen, Maimendong, Tianmendong, Wuweizi, Danggui, Danshen, Renshen, Suanzaoren, Baiziren, Yuanzhi, Jiegeng, Fuling", ingKo: "생지황, 현삼, 맥문동, 천문동, 오미자, 당귀, 단삼, 인삼, 산조인, 백자인, 원지, 길경, 복령", effEn: "HT & KD Yin deficiency with Empty-Fire", effKo: "심신음허(허화)" },
+            { id: 152, en: "Mu Li San", ko: "모려산", ingEn: "Muli, Huangqi, Mahuanggen, Fuxiaomai", ingKo: "모려, 황기, 마황근, 부소맥", effEn: "Unstable protective Qi with injury to the HT Yin", effKo: "표허자한(도한)" },
+            { id: 153, en: "Zhen Ren Yang Zang Tang", ko: "진인양장탕", ingEn: "Yingsuke, Baishao, Danggui, Renshen, Baizhu, Zhigancao, Rougui, Roudoukou, Hezi, Muxiang", ingKo: "앵속각, 백작약, 당귀, 인삼, 백출, 자감초, 육계, 육두구, 가자, 목향", effEn: "SP & KD Yang deficiency causing unremitting diarrhea", effKo: "비신양허 설사" },
+            { id: 154, en: "Sang Piao Xiao San", ko: "상표초산", ingEn: "Sangpiaoxiao, Longgu, Yuanzhi, Fushen, Shichangpu, Renshen, Danggui, Guiban", ingKo: "상표초, 용골, 원지, 복신, 석창포, 인삼, 당귀, 구판", effEn: "Qi deficiency of the KD & HT", effKo: "심신양허(유뇨, 정충)" },
+            { id: 155, en: "Shou Tai Wan", ko: "수태환", ingEn: "Tusizi, Xuduan, Ejiao, Sangjisheng", ingKo: "토사자, 속단, 아교, 상기생", effEn: "KD deficiency leading to instability of the Chong & Ren channels", effKo: "신허태동불안" },
+            { id: 156, en: "Wu Wei Xiao Du Yin", ko: "오미소독음", ingEn: "Jinyinhua, Pugongying, Zihuadiding, Ye Juhua, Tiankuizi", ingKo: "금은화, 포공영, 자화지정, 야국화, 천규자", effEn: "All types of boils and carbuncles due to accumulation of Toxic-Heat", effKo: "화독(종기)" },
+            { id: 157, en: "Yang He Tang", ko: "양화탕", ingEn: "Shudihuang, Lujiaojiao, Baijiezi, Rougui, Paojiang, Mahuang, Gancao", ingKo: "숙지황, 녹각교, 백개자, 육계, 포강, 마황, 감초", effEn: "Yin-type (deep-rooted) localized swelling due to Blood & Yang deficiency", effKo: "음저(한성 종기)" },
+            { id: 158, en: "Wei Jing Tang", ko: "위경탕", ingEn: "Lugen, Yiyiren, Dongguazi, Taoren", ingKo: "노근, 의이인, 동과자, 도인", effEn: "Lung abscesses from Toxic-Heat accompanied by Phlegm and Blood stasis", effKo: "폐옹(담열어혈)" },
+            { id: 159, en: "Da Huang Mu Dan Tang", ko: "대황목단탕", ingEn: "Dahuang, Mangxiao, Mudanpi, Taoren, Dongguazi", ingKo: "대황, 망초, 목단피, 도인, 동과자", effEn: "Early-stage Intestinal abscess due to interior clumping of Heat and Blood", effKo: "장옹(초기)" },
+            { id: 160, en: "Sheng Ma Ge Gen Tang", ko: "승마갈근탕", ingEn: "Shengma, Gegen, Chishao, Zhigancao", ingKo: "승마, 갈근, 적작약, 자감초", effEn: "Early stage of rashes due to externally contracted Heat", effKo: "마진 초기(투진)" },
+            { id: 161, en: "Tong Xie Yao Fang", ko: "통사요방", ingEn: "Baizhu, Baishao, Chenpi, Fangfeng", ingKo: "백출, 백작약, 진피, 방풍", effEn: "LV Qi stagnation overacting on the SP causing diarrhea with abdominal pain", effKo: "간비불화(복통 설사)" },
+            { id: 162, en: "Liu Yi San", ko: "육일산", ingEn: "Huashi, Gancao", ingKo: "활석, 감초", effEn: "Summer-Heat with interior Damp", effKo: "서습증" }
+        ];
+
+        // State
+        let isKorean = false;
+
+        // Elements
+        const resultsContainer = document.getElementById('resultsContainer');
+        const noResults = document.getElementById('noResults');
+        const langToggle = document.getElementById('langToggle');
+
+        // Inputs
+        const inputs = [
+            document.getElementById('searchName'),
+            document.getElementById('searchIng1'),
+            document.getElementById('searchIng2'),
+            document.getElementById('searchIng3')
+        ];
+
+        // Normalize Helper: remove spaces, lowercase
+        const normalize = (str) => str ? str.toLowerCase().replace(/\s+/g, '') : '';
+
+        // Render Function
+        function render(list) {
+            resultsContainer.innerHTML = '';
+            
+            if (list.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition";
+                
+                const name = isKorean ? item.ko : item.en;
+                const ingredients = isKorean ? item.ingKo : item.ingEn;
+                const effect = isKorean ? item.effKo : item.effEn;
+                
+                // Removed labels per user request
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">${name}</h3>
+                        <span class="text-xs text-gray-400 font-mono">#${item.id}</span>
+                    </div>
+                    <div class="mb-2">
+                        <p class="text-sm text-gray-700 mt-1">${ingredients}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mt-1 italic">${effect}</p>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // Search Logic
+        function performSearch() {
+            const nameQuery = normalize(inputs[0].value);
+            const ing1Query = normalize(inputs[1].value);
+            const ing2Query = normalize(inputs[2].value);
+            const ing3Query = normalize(inputs[3].value);
+
+            // If all empty, show nothing or all? Let's show nothing initially or all. 
+            // Better UX: Show all if empty, or clear? Let's show all if empty.
+            if (!nameQuery && !ing1Query && !ing2Query && !ing3Query) {
+                render([]); 
+                return;
+            }
+
+            const filtered = formulas.filter(f => {
+                // Name Check (Check EN name mostly since input is English, but allow partial matches)
+                // Also check KO name just in case user types Hangeul
+                const nameMatch = !nameQuery || normalize(f.en).includes(nameQuery) || normalize(f.ko).includes(nameQuery);
+
+                // Ingredient Check (AND logic)
+                // Search against BOTH English AND Korean ingredient lists
+                // We combine both strings to check if the query exists in either
+                const targetIngs = normalize(f.ingEn) + "," + normalize(f.ingKo);
+                
+                const ing1Match = !ing1Query || targetIngs.includes(ing1Query);
+                const ing2Match = !ing2Query || targetIngs.includes(ing2Query);
+                const ing3Match = !ing3Query || targetIngs.includes(ing3Query);
+
+                return nameMatch && ing1Match && ing2Match && ing3Match;
+            });
+
+            render(filtered);
+        }
+
+        // Event Listeners
+        inputs.forEach(input => {
+            input.addEventListener('input', performSearch);
+        });
+
+        // Toggle Language
+        langToggle.addEventListener('click', () => {
+            isKorean = !isKorean;
+            langToggle.textContent = isKorean ? "English View" : "한글로 보기";
+            
+            // Re-render current results if search is active
+            if (inputs.some(i => i.value.trim() !== '')) {
+                performSearch();
+            }
+        });
+
+        // Initial state: Empty
+        render([]);
+
+    </script>
+</body>
+</html>
