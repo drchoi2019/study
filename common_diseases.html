@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common Musculoskeletal Disorders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { Globe, RefreshCw, Image as ImageIcon, X } from 'lucide-react';
+
+        // --- Data Structure ---
+        const medicalData = {
+            categories: [
+                {
+                    id: 'shoulder',
+                    title_en: 'Shoulder',
+                    title_ko: '어깨',
+                    diseases: [
+                        {
+                            title_en: 'Frozen Shoulder (Adhesive Capsulitis)',
+                            title_ko: '오십견 (유착성 관절낭염)',
+                            desc_en: 'Inflammation and stiffness of the joint capsule causing pain and limited motion.',
+                            desc_ko: '관절낭의 염증과 유착으로 어깨가 굳고 통증 발생.',
+                            prog_en: 'Natural recovery **1-3 years**, can be shortened with treatment.',
+                            prog_ko: '자연 회복 **1년에서 3년** 소요, 치료 시 기간 단축 가능.'
+                        },
+                        {
+                            title_en: 'Rotator Cuff Tear',
+                            title_ko: '회전근개파열',
+                            desc_en: 'Tear in the tendons around the shoulder due to aging or trauma.',
+                            desc_ko: '어깨 힘줄이 노화나 충격으로 찢어지거나 끊어짐.',
+                            prog_en: 'Partial tear: **3-6 months** conservative care. Full tear: surgery required.',
+                            prog_ko: '부분 파열 **3개월에서 6개월** 보존 치료, 전층 파열 수술 필요.'
+                        },
+                        {
+                            title_en: 'Shoulder Impingement Syndrome',
+                            title_ko: '충돌증후군',
+                            desc_en: 'Tendons rub against the shoulder blade, causing inflammation.',
+                            desc_ko: '어깨뼈와 위팔뼈 사이 힘줄이 부딪혀 염증 발생.',
+                            prog_en: 'Improvement within **3 months** conservative care. Risk of tear if ignored.',
+                            prog_ko: '**3개월 내** 보존 치료 호전, 방치 시 파열 위험.'
+                        },
+                        {
+                            title_en: 'Thoracic Outlet Syndrome',
+                            title_ko: '흉곽출구증후군',
+                            desc_en: 'Nerves/blood vessels compressed, causing numbness/swelling in arm/hand.',
+                            desc_ko: '신경과 혈관이 눌려 팔과 손 전체가 저리고 부음.',
+                            prog_en: '**80% improvement in 3-6 months** with therapy. Posture correction essential.',
+                            prog_ko: '치료 **3개월에서 6개월** 시 80% 호전, 자세 교정 필수.'
+                        }
+                    ]
+                },
+                {
+                    id: 'knee',
+                    title_en: 'Knee',
+                    title_ko: '무릎',
+                    diseases: [
+                        {
+                            title_en: 'Meniscus Tear',
+                            title_ko: '반월상연골파열',
+                            desc_en: 'Tear in the C-shaped cartilage that cushions the knee.',
+                            desc_ko: '무릎 관절 사이 쿠션 역할을 하는 연골 파열.',
+                            prog_en: 'Minor: **2-3 months** conservative. Surgery: **4-6 months** rehab.',
+                            prog_ko: '미세 파열 **2~3개월** 보존, 수술 시 **4~6개월** 재활.'
+                        },
+                        {
+                            title_en: 'ACL Tear (Anterior Cruciate Ligament)',
+                            title_ko: '십자인대파열',
+                            desc_en: 'Tear in the ligament that stabilizes the knee joint.',
+                            desc_ko: '무릎 흔들림을 잡아주는 전방 십자인대 파열.',
+                            prog_en: 'Partial: **3 months** rehab. Complete: **6-9 months** post-op return.',
+                            prog_ko: '부분 **3개월** 재활, 완전 파열 수술 후 **6~9개월**.'
+                        },
+                        {
+                            title_en: 'MCL / LCL Injury',
+                            title_ko: '측부인대파열',
+                            desc_en: 'Damage to ligaments on the inner or outer side of the knee.',
+                            desc_ko: '무릎 안쪽 또는 바깥쪽을 지지하는 인대 손상.',
+                            prog_en: 'Grade 1-2: **4-8 weeks** brace. Grade 3: Surgery possible.',
+                            prog_ko: '1~2도 **4~8주** 보조기, 3도 수술 가능성 있음.'
+                        },
+                        {
+                            title_en: 'IT Band Syndrome',
+                            title_ko: '장경인대증후군',
+                            desc_en: 'Inflammation where the long ligament rubs against the outer thigh bone.',
+                            desc_ko: '허벅지 바깥쪽 긴 인대가 뼈와 마찰해 염증 발생.',
+                            prog_en: 'Improvement in **4-8 weeks** with rest/stretch.',
+                            prog_ko: '휴식 및 스트레칭 **4~8주** 호전.'
+                        },
+                        {
+                            title_en: 'Patellar Tendinitis (Jumper\'s Knee)',
+                            title_ko: '슬개건염 (점퍼스니)',
+                            desc_en: 'Inflammation/micro-trauma of the tendon connecting kneecap to shin.',
+                            desc_ko: '무릎 덮개뼈와 정강이를 잇는 힘줄의 염증 (점프 등 반복 충격).',
+                            prog_en: 'Early: **4-6 weeks**. Chronic/Sports return: **3-6 months**.',
+                            prog_ko: '초기 **4~6주**. 만성/스포츠 복귀 **3~6개월** 재활.'
+                        }
+                    ]
+                },
+                {
+                    id: 'elbow',
+                    title_en: 'Elbow',
+                    title_ko: '팔꿈치',
+                    diseases: [
+                        {
+                            title_en: 'Lateral Epicondylitis (Tennis Elbow)',
+                            title_ko: '외측상과염 (테니스엘보)',
+                            desc_en: 'Inflammation of outer elbow tendons from wrist extension.',
+                            desc_ko: '손목을 젖히는 근육의 팔꿈치 바깥쪽 힘줄 염증.',
+                            prog_en: 'Improvement in **3-6 months**. High recurrence rate.',
+                            prog_ko: '보존적 치료 **3~6개월** 호전, 재발 잦음.'
+                        },
+                        {
+                            title_en: 'Medial Epicondylitis (Golfer\'s Elbow)',
+                            title_ko: '내측상과염 (골프엘보)',
+                            desc_en: 'Inflammation of inner elbow tendons from wrist flexion.',
+                            desc_ko: '손목을 굽히는 근육의 팔꿈치 안쪽 힘줄 염증.',
+                            prog_en: 'Conservative care **3-6+ months**. Slower than Tennis Elbow.',
+                            prog_ko: '보존적 치료 **3~6개월 이상**, 테니스엘보보다 더딤.'
+                        },
+                        {
+                            title_en: 'Olecranon Bursitis',
+                            title_ko: '주두점액낭염',
+                            desc_en: 'Inflammation/fluid in the bursa at the tip of the elbow.',
+                            desc_ko: '팔꿈치 뒤쪽 점액낭에 염증이 생겨 물이 참.',
+                            prog_en: 'Improvement in **2-4 weeks** with compression/meds.',
+                            prog_ko: '압박 및 약물 **2~4주** 호전.'
+                        }
+                    ]
+                },
+                {
+                    id: 'wrist',
+                    title_en: 'Wrist',
+                    title_ko: '손목',
+                    diseases: [
+                        {
+                            title_en: 'Scaphoid Fracture',
+                            title_ko: '주상골골절',
+                            desc_en: 'Fracture of the thumb-side wrist bone; poor blood supply.',
+                            desc_ko: '엄지 쪽 손목 뼈 골절, 혈액순환 나빠 잘 안 붙음.',
+                            prog_en: 'Cast **6-12 weeks**. High risk of non-union.',
+                            prog_ko: '깁스 **6~12주**, 불유합 위험 높아 수술 가능성.'
+                        },
+                        {
+                            title_en: 'De Quervain\'s Tenosynovitis',
+                            title_ko: '드퀘르뱅 (손목건초염)',
+                            desc_en: 'Inflammation of the sheath surrounding thumb tendons.',
+                            desc_ko: '엄지손가락 힘줄을 감싼 막에 염증 발생.',
+                            prog_en: 'Rapid improvement in **2-4 weeks** with rest/injection.',
+                            prog_ko: '휴식 및 주사 **2~4주 내** 빠른 호전.'
+                        },
+                        {
+                            title_en: 'TFCC Injury',
+                            title_ko: 'TFCC (삼각섬유연골복합체)',
+                            desc_en: 'Tear in the cartilage complex on the pinky side.',
+                            desc_ko: '새끼손가락 쪽 손목 쿠션 연골 조직 파열.',
+                            prog_en: 'Minor: **4-6 weeks** cast. Severe: **3+ months** post-op.',
+                            prog_ko: '경미 **4~6주** 고정, 파열 심하면 수술 후 **3개월 이상**.'
+                        },
+                        {
+                            title_en: 'Carpal Tunnel Syndrome',
+                            title_ko: '손목터널증후군',
+                            desc_en: 'Median nerve compression causing hand numbness.',
+                            desc_ko: '손목 터널이 좁아져 신경을 눌러 손저림 발생.',
+                            prog_en: 'Meds effective early. Surgery recovery: **1 month**.',
+                            prog_ko: '초기 약물 호전, 수술 시 **1개월 내** 일상 복귀.'
+                        }
+                    ]
+                },
+                {
+                    id: 'spine',
+                    title_en: 'Spine',
+                    title_ko: '척추',
+                    diseases: [
+                        {
+                            title_en: 'Herniated Disc',
+                            title_ko: '디스크 (추간판탈출증)',
+                            desc_en: 'Disc material protrudes and compresses nerves.',
+                            desc_ko: '디스크 젤리가 튀어나와 신경을 누름.',
+                            prog_en: '**80% natural absorption in 3-6 months**.',
+                            prog_ko: '**3개월에서 6개월 내** 80% 자연 흡수 호전.'
+                        },
+                        {
+                            title_en: 'Spinal Stenosis',
+                            title_ko: '척추관협착증',
+                            desc_en: 'Narrowing of the spinal canal due to aging.',
+                            desc_ko: '신경 통로인 척추관이 노화로 좁아짐.',
+                            prog_en: 'Chronic management. Surgery needed for walking issues.',
+                            prog_ko: '만성 관리 중심, 보행 장애 시 수술 필요.'
+                        },
+                        {
+                            title_en: 'Spondylosis',
+                            title_ko: '척추증',
+                            desc_en: 'Degeneration of spine joints/discs (bone spurs).',
+                            desc_ko: '척추 관절/디스크 노화로 뼈가 자라거나 염증.',
+                            prog_en: 'Long-term management required (Aging process).',
+                            prog_ko: '노화 현상으로 장기적 통증 관리 필요.'
+                        },
+                        {
+                            title_en: 'Piriformis Syndrome',
+                            title_ko: '이상근증후군',
+                            desc_en: 'Buttock muscle compresses sciatic nerve.',
+                            desc_ko: '엉덩이 속 근육이 좌골신경을 눌러 다리 저림.',
+                            prog_en: 'Improvement in **4-8 weeks** with stretch/therapy.',
+                            prog_ko: '스트레칭/물리치료 **4~8주** 호전.'
+                        },
+                        {
+                            title_en: 'SI Joint Dysfunction',
+                            title_ko: '천장관절증후군',
+                            desc_en: 'Misalignment or inflammation of the Sacroiliac joint.',
+                            desc_ko: '골반과 척추를 잇는 관절의 틀어짐 또는 염증.',
+                            prog_en: 'Improvement in **4-6 weeks** with adjustment/injection.',
+                            prog_ko: '주사/도수치료 **4~6주** 호전.'
+                        }
+                    ]
+                },
+                {
+                    id: 'ankle',
+                    title_en: 'Ankle',
+                    title_ko: '발목',
+                    diseases: [
+                        {
+                            title_en: 'Ankle Sprain',
+                            title_ko: '발목염좌',
+                            desc_en: 'Stretching or tearing of ankle ligaments.',
+                            desc_ko: '발목 인대가 늘어나거나 찢어짐.',
+                            prog_en: 'G1: **2w**, G2: **4-6w**, G3: **2+ months**.',
+                            prog_ko: '1도 **2주**, 2도 **4~6주**, 3도 **2개월 이상**.'
+                        },
+                        {
+                            title_en: 'Ankle Fracture',
+                            title_ko: '발목골절',
+                            desc_en: 'Break in the ankle bones (e.g., malleolus).',
+                            desc_ko: '복사뼈 등 발목 주변 뼈 골절.',
+                            prog_en: 'Cast **4-6 weeks**, rehab **3 months** post-union.',
+                            prog_ko: '깁스 **4~6주**, 유합 후 재활 **3개월**.'
+                        },
+                        {
+                            title_en: 'Ankle Impingement Syndrome',
+                            title_ko: '발목충돌증후군',
+                            desc_en: 'Bone/tissue entrapment causing pain.',
+                            desc_ko: '뼈나 조직이 관절 사이에 끼여 통증 발생.',
+                            prog_en: 'Injection helps. Surgery if recurrent.',
+                            prog_ko: '주사 호전 가능, 재발 잦으면 수술 필요.'
+                        },
+                        {
+                            title_en: 'High Ankle Sprain',
+                            title_ko: '경비인대 손상',
+                            desc_en: 'Injury to ligaments connecting tibia and fibula.',
+                            desc_ko: '발목 위쪽 경비인대 손상.',
+                            prog_en: '2x slower than normal sprain (**6 weeks - 3 months**).',
+                            prog_ko: '일반 염좌보다 회복 2배 더딤 (**최소 6주~3개월**).'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // --- Components ---
+
+        const BlindText = ({ text, studyMode }) => {
+            const [revealed, setRevealed] = useState(false);
+
+            // Reset revealed state when studyMode changes to true
+            useEffect(() => {
+                if (studyMode) {
+                    setRevealed(false);
+                }
+            }, [studyMode]);
+
+            if (!studyMode) {
+                return <span className="font-semibold text-blue-900">{text}</span>;
+            }
+
+            return (
+                <span
+                    onClick={() => setRevealed(true)}
+                    className={`
+                transition-all duration-300 cursor-pointer select-none
+                ${revealed
+                            ? 'filter-none text-blue-800 font-semibold bg-blue-50 px-1 rounded'
+                            : 'blur-sm bg-gray-200 text-transparent hover:bg-gray-300 px-2 rounded'}
+              `}
+                    title={revealed ? "" : "Click to reveal"}
+                >
+                    {text}
+                </span>
+            );
+        };
+
+        const ParsedPrognosis = ({ text, studyMode }) => {
+            if (!text.includes('**')) {
+                return <span>{text}</span>;
+            }
+
+            const parts = text.split('**');
+            return (
+                <span>
+                    {parts.map((part, index) => {
+                        if (index % 2 === 1) {
+                            return <BlindText key={index} text={part} studyMode={studyMode} />;
+                        }
+                        return <span key={index}>{part}</span>;
+                    })}
+                </span>
+            );
+        };
+
+        const DiseaseRow = ({ disease, lang, studyMode, onImageClick }) => {
+            const [titleRevealed, setTitleRevealed] = useState(false);
+
+            useEffect(() => {
+                if (studyMode) {
+                    setTitleRevealed(false);
+                } else {
+                    setTitleRevealed(true);
+                }
+            }, [studyMode]);
+
+            const desc = lang === 'en' ? disease.desc_en : disease.desc_ko;
+            const prog = lang === 'en' ? disease.prog_en : disease.prog_ko;
+
+            return (
+                <tr className="border-b border-gray-100 hover:bg-slate-50 transition-colors">
+                    <td className="p-4 align-top w-1/3 border-r border-gray-100">
+                        <div className="flex items-start gap-2">
+                            <div
+                                onClick={() => studyMode && setTitleRevealed(true)}
+                                className={`
+                        font-bold text-lg transition-all duration-500 flex-1
+                        ${!studyMode || titleRevealed
+                                        ? 'text-slate-800'
+                                        : 'blur-md select-none text-transparent bg-slate-200 rounded-md inline-block min-w-[150px] cursor-pointer'}
+                      `}
+                            >
+                                {lang === 'en' ? (
+                                    disease.title_en
+                                ) : (
+                                    <>
+                                        <div>{disease.title_ko}</div>
+                                        <div className={`text-sm font-normal mt-1 ${!studyMode || titleRevealed ? "text-slate-500" : "text-transparent"}`}>
+                                            {disease.title_en}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Image Icon */}
+                            <button
+                                onClick={() => onImageClick(disease.title_en)}
+                                className="text-gray-400 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-blue-50"
+                                title="View Image"
+                            >
+                                <ImageIcon size={20} />
+                            </button>
+                        </div>
+                    </td>
+                    <td className="p-4 align-top w-1/3 border-r border-gray-100">
+                        <div className="text-slate-700 leading-relaxed">
+                            {desc}
+                        </div>
+                    </td>
+                    <td className="p-4 align-top w-1/3 bg-slate-50/50">
+                        <div className="text-slate-700 leading-relaxed">
+                            <ParsedPrognosis text={prog} studyMode={studyMode} />
+                        </div>
+                    </td>
+                </tr>
+            );
+        };
+
+        const CategorySection = ({ category, lang, studyMode, onImageClick }) => {
+            return (
+                <div className="mb-10 overflow-hidden rounded-xl border border-gray-200 shadow-sm bg-white">
+                    <div className="bg-slate-800 text-white px-6 py-3 font-bold text-xl flex items-center gap-2">
+                        <div className="w-2 h-6 bg-blue-400 rounded-full"></div>
+                        {lang === 'en' ? category.title_en : category.title_ko}
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <tbody>
+                                {category.diseases.map((disease, idx) => (
+                                    <DiseaseRow
+                                        key={idx}
+                                        disease={disease}
+                                        lang={lang}
+                                        studyMode={studyMode}
+                                        onImageClick={onImageClick}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        const ImagePopup = ({ isOpen, onClose, imageSrc, title }) => {
+            if (!isOpen) return null;
+
+            return (
+                <div
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+                    onClick={onClose}
+                >
+                    <div
+                        className="relative bg-white rounded-xl shadow-2xl overflow-hidden max-w-5xl w-full max-h-[90vh] flex flex-col"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                            <h3 className="font-bold text-lg text-slate-800">{title}</h3>
+                            <button
+                                onClick={onClose}
+                                className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                            >
+                                <X size={24} className="text-slate-500" />
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-auto p-4 flex items-center justify-center bg-slate-50">
+                            <img
+                                src={imageSrc}
+                                alt={title}
+                                className="max-w-full max-h-[80vh] object-contain rounded shadow-sm"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = 'https://placehold.co/600x400?text=Image+Not+Found';
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [lang, setLang] = useState('en');
+            const [studyMode, setStudyMode] = useState(true);
+            const [popupImage, setPopupImage] = useState(null);
+
+            const toggleLang = () => {
+                setLang(prev => prev === 'en' ? 'ko' : 'en');
+            };
+
+            const refreshPage = () => {
+                window.location.reload();
+            };
+
+            const handleImageClick = (titleEn) => {
+                // Convert title to filename: "Frozen Shoulder (Adhesive Capsulitis)" -> "frozen-shoulder.jpg"
+                // Taking first two words, lowercase, joined by hyphen
+                const filename = titleEn.split(' ').slice(0, 2).join('-').toLowerCase().replace(/[^a-z0-9-]/g, '');
+                setPopupImage({
+                    src: `image/${filename}.jpg`,
+                    title: titleEn
+                });
+            };
+
+            return (
+                <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
+                    {/* Header */}
+                    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+                        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+                            <h1 className="text-xl md:text-2xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
+                                Common Musculoskeletal Disorders
+                                <span className="hidden md:inline text-sm font-normal text-gray-500 ml-2">in Acupuncture Clinic</span>
+                            </h1>
+
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={refreshPage}
+                                    className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                                    title="Reset Blinds"
+                                >
+                                    <RefreshCw size={20} />
+                                </button>
+                                <button
+                                    onClick={toggleLang}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all active:scale-95 border border-slate-300"
+                                >
+                                    <Globe size={18} />
+                                    <span>{lang === 'en' ? 'KR' : 'EN'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="max-w-5xl mx-auto px-4 py-8">
+
+                        <div
+                            onClick={() => setStudyMode(!studyMode)}
+                            className={`
+                        mb-8 p-4 rounded-lg text-sm flex flex-col md:flex-row gap-2 justify-between items-start md:items-center cursor-pointer transition-all select-none
+                        ${studyMode
+                                    ? 'bg-blue-50 border border-blue-100 text-blue-800 shadow-sm'
+                                    : 'bg-gray-100 border border-gray-200 text-gray-600'}
+                    `}
+                        >
+                            <div className="flex items-center gap-2">
+                                <div className={`w-3 h-3 rounded-full ${studyMode ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                                <strong>Study Mode {studyMode ? 'Active' : 'Inactive'}:</strong>
+                                {studyMode
+                                    ? 'Click on blurred text to reveal. Click here to deactivate.'
+                                    : 'All text is revealed. Click here to activate study mode.'}
+                            </div>
+                        </div>
+
+                        {medicalData.categories.map(category => (
+                            <CategorySection
+                                key={category.id}
+                                category={category}
+                                lang={lang}
+                                studyMode={studyMode}
+                                onImageClick={handleImageClick}
+                            />
+                        ))}
+
+                        <div className="text-center text-gray-400 text-sm mt-12 mb-8">
+                            © 2024 Hyungsuk Choi. All Rights Reserved.
+                        </div>
+                    </main>
+
+                    {/* Image Popup */}
+                    <ImagePopup
+                        isOpen={!!popupImage}
+                        onClose={() => setPopupImage(null)}
+                        imageSrc={popupImage?.src}
+                        title={popupImage?.title}
+                    />
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
