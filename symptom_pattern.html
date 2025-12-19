@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom vs Pattern</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Mandatory CSS Rule for Language Toggle Button */
+        .px-3.py-1,
+        .px-3.py-1:link,
+        .px-3.py-1:visited {
+            text-decoration: none !important;
+            color: rgb(68, 64, 60) !important;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        /* Layout Constraint */
+        .app-container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        /* Table Styles */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #d6d3d1;
+            /* stone-300 */
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f5f5f4;
+            /* stone-100 */
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 text-stone-800 flex flex-col min-h-screen">
+
+    <!-- MANDATORY HEADER START -->
+    <header id="page-header"
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)"
+            class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors"
+            style="background-color: #F7F3EF; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+    <!-- MANDATORY HEADER END -->
+
+    <!-- Main Content Area -->
+    <main class="app-container flex-grow px-4 py-8">
+
+        <!-- Korean Content -->
+        <div class="lang-content" data-lang="ko">
+            <h1 class="text-3xl font-bold mb-6 text-stone-800">'증(證)'과 '증(症)'의 역사적 분화</h1>
+
+            <p class="mb-6 leading-relaxed">
+                한의학 임상에서 혼용되기도 하는 '증(證)'과 '증(症)'은 역사적으로 그 등장 시기와 쓰임새에 명확한 차이가 있습니다. 우선 <strong>증(證)</strong>은 한나라 이전부터
+                사용된 매우 오래된 글자입니다. 약 200년경 저술된 《상한론(傷寒論)》과 같은 초기 의학 경전에서는 '아플 증(症)'이라는 글자가 존재하지 않았으며, 오로지 '증거 증(證)' 자만이
+                사용되었습니다. 당시 이 글자는 병의 상태를 증명하는 '증거'나 '징후'라는 포괄적인 의미를 지녔기 때문에, 환자가 호소하는 증상과 의사가 판단한 진단명(예: 태양병증)을 모두
+                '증(證)'이라는 한 글자로 표현했습니다.
+            </p>
+            <p class="mb-8 leading-relaxed">
+                반면, <strong>증(症)</strong>은 의학이 보다 정밀해진 후대(명·청 시대)에 등장한 글자입니다. 1600년대 이후 의학이 발전함에 따라, 환자가 단순히 느끼는
+                '아픔(현상)'과 의사가 본질적으로 파악한 '진단 근거(본질)'를 구분할 필요성이 대두되었습니다. 이에 따라 병질 엄(疒) 부수를 붙인 속자(俗字)인 '증(症)'을 사용하여 겉으로 드러난
+                단순 증상을 표기하기 시작했고, 이것이 현대에 이르러 증상(Symptom)과 증후(Syndrome)를 구별하는 표기의 기원이 되었습니다.
+            </p>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200 mb-8">
+                <h2 class="text-xl font-bold mb-4 text-stone-700">① 증(症, 증세 증)</h2>
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    <li><strong>구성:</strong> 疒 (병질 엄) + 正 (바를 정)</li>
+                    <li><strong>의미:</strong> '병(疒)'이 몸에 구체적으로 '자리 잡은(正)' 현상.</li>
+                    <li>겉으로 드러난 개별적인 증상(Symptom)을 의미합니다. 환자가 호소하는 통증이나 불편함 그 자체입니다.</li>
+                    <li><strong>예:</strong> 두통, 발열, 기침, 복통</li>
+                </ul>
+
+                <h2 class="text-xl font-bold mb-4 text-stone-700">② 증(證, 증거 증)</h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>구성:</strong> 言 (말씀 언) + 登 (오를 등)</li>
+                    <li><strong>의미:</strong> 환자의 말을 듣고(言), 여러 징후를 올려(登) 종합적으로 판단한 증거.</li>
+                    <li>여러 증상(症)들을 종합하여 분석한 결과인 변증(Pattern/Syndrome)을 의미합니다. 질병의 원인, 부위, 성질, 신체의 허실 상태를 요약한 진단명에 가깝습니다.
+                    </li>
+                    <li><strong>예:</strong> 간양상항증(간의 양기가 위로 뜬 상태), 비위허한증(비위가 차갑고 허한 상태)</li>
+                </ul>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">비교 요약</h2>
+            <div class="overflow-x-auto mb-8">
+                <table class="w-full text-sm md:text-base">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4">구분</th>
+                            <th class="w-1/3">증(症, Symptom)</th>
+                            <th>증(證, Pattern/Syndrome)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">관점</td>
+                            <td>현상 (Phenomenon)</td>
+                            <td>본질 (Essence)</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">성격</td>
+                            <td>개별적, 단편적, 표면적</td>
+                            <td>종합적, 체계적, 내부 병리 상태</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">임상</td>
+                            <td>환자가 호소하는 불편감 (주소증)</td>
+                            <td>의사가 진단한 병리적 결론</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">예시</td>
+                            <td>"머리가 아프다", "얼굴이 붉다"</td>
+                            <td>간화상염증(肝火上炎證)</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">대응</td>
+                            <td>대증치료 (증상 완화)</td>
+                            <td>변증논치 (원인 치료)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">상호 관계: 변증(辨證)의 과정</h2>
+            <p class="mb-4 leading-relaxed">
+                중의학의 핵심 진단 과정인 변증(辨證)은 흩어져 있는 증(症)이라는 단서들을 모아, 증(證)이라는 범인을 찾아내는 수사 과정과 같습니다.
+            </p>
+            <ol class="list-decimal pl-5 space-y-2 mb-6">
+                <li><strong>수집 (症):</strong> 환자가 "열이 나고(症), 목이 마르며(症), 맥이 빠르다(症)"고 호소합니다.</li>
+                <li><strong>분석 (辨):</strong> 이 증상들을 중의학 이론(음양오행, 장부론 등)으로 분석합니다.</li>
+                <li><strong>결론 (證):</strong> "이것은 열사(熱邪)가 폐를 침범한 '풍열범폐증(風熱犯肺證)'이다"라고 진단합니다.</li>
+            </ol>
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8">
+                <p class="font-bold text-amber-900">
+                    증(症)은 없애야 할 대상(Target)이지만, 증(證)은 치료의 방향을 결정하는 이정표(Guideline)입니다.
+                </p>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">영문번역</h2>
+            <ul class="list-disc pl-5 space-y-4 mb-8">
+                <li>
+                    <strong>증(症) : Symptom</strong><br>
+                    환자가 호소하는 개별적인 증상.<br>
+                    <span class="text-stone-500 italic">"The patient presents with symptoms such as headache and fever."
+                        (환자는 두통, 발열과 같은 증(症)을 보인다.)</span>
+                </li>
+                <li>
+                    <strong>증(證) : Pattern (또는 Syndrome)</strong><br>
+                    이 개념은 번역 시 두 가지 용어가 혼용되지만, 최근에는 Pattern을 더 선호하는 추세입니다.<br>
+                    <span class="text-stone-500 italic">"Liver Fire Rising Pattern" (간화상염증)</span>
+                </li>
+            </ul>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">'변증논치(辨證論治)' 용어의 현대적 정립</h2>
+            <p class="mb-4 leading-relaxed">
+                한의학의 진단과 치료 원칙을 대표하는 '변증논치(辨證論治)'라는 용어 역시 고대부터 전해져 온 것이라는 일반적인 통념과 달리, 그 명칭이 확립된 것은 현대의 일입니다.
+            </p>
+            <p class="mb-4 leading-relaxed">
+                물론 '증을 구별하여 치료한다'는 개념 자체는 고대부터 존재했으나, '변증논치'라는 네 글자의 사자성어가 공식적인 학술 용어로 굳어진 것은 <strong>1955년</strong>입니다.
+                당시 중국은 중의학을 현대화하고 교육 체계를 재정비하는 과정에서, 병명을 중심으로 진단하고 치료하는 서양 의학의 '변병논치(辨病論治)'와 대비되는 중의학만의 체계가 필요했습니다. 즉,
+                '변증논치'는 고전 문헌인 《황제내경》이나 《상한론》에 수록된 용어가 아니라, 현대 중의학의 방법론적 특징을 한마디로 요약하기 위해 20세기 중반에 공식 채택된 '현대적인 슬로건'에
+                가깝습니다.
+            </p>
+
+            <div class="bg-stone-100 p-6 rounded-lg mt-8">
+                <h3 class="text-lg font-bold mb-2">요약</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><strong>症 (증상):</strong> 아픈 현상 그 자체 (Fact)</li>
+                    <li><strong>證 (증거):</strong> 아픈 이유와 상태에 대한 진단 (Truth)</li>
+                </ul>
+                <p class="mt-4 text-sm text-stone-600">이 구분이 명확해야만 변증논치(辨證論治)가 가능해집니다.</p>
+            </div>
+        </div>
+
+
+        <!-- English Content -->
+        <div class="lang-content hidden" data-lang="en">
+            <h1 class="text-3xl font-bold mb-6 text-stone-800">Historical Differentiation of 證 (<em>zhèng</em>) and 症
+                (<em>zhèng</em>)</h1>
+
+            <p class="mb-6 leading-relaxed">
+                In the clinical practice of Traditional Chinese Medicine (TCM), the terms <strong>證 (zhèng)</strong>
+                and <strong>症 (zhèng)</strong> are sometimes used interchangeably, but historically, there is a clear
+                difference in their emergence and usage.
+            </p>
+            <p class="mb-6 leading-relaxed">
+                First, <strong>證 (zhèng)</strong> is a very old character used before the Han Dynasty. In early
+                medical classics such as <em>Shanghanlun</em> (circa 200 AD), the character 症 (zhèng, meaning
+                symptom/pain) did not exist; only the character 證 (zhèng, meaning evidence) was used. At that time,
+                this character carried a comprehensive meaning of "evidence" or "signs" that proved the condition of the
+                disease. Therefore, both the symptoms complained of by the patient and the diagnosis determined by the
+                physician (e.g., Taiyang Pattern) were expressed with the single character 證 (zhèng).
+            </p>
+            <p class="mb-8 leading-relaxed">
+                On the other hand, <strong>症 (zhèng)</strong> appeared in later periods (Ming and Qing dynasties) as
+                medicine became more precise. As medicine developed after the 1600s, a need arose to distinguish between
+                the "pain (phenomenon)" simply felt by the patient and the "diagnostic basis (essence)" essentially
+                grasped by the physician. Consequently, the popular character (俗字) 症 (zhèng), created by adding the
+                radical 疒 (sickness) to indicate specific symptoms manifesting outwardly, began to be used. This became
+                the origin of the modern distinction between Symptom and Syndrome.
+            </p>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200 mb-8">
+                <h2 class="text-xl font-bold mb-4 text-stone-700">1. 症 (zhèng)</h2>
+                <ul class="list-disc pl-5 space-y-2 mb-6">
+                    <li><strong>Composition:</strong> 疒 (Sickness) + 正 (Upright/Straight)</li>
+                    <li><strong>Meaning:</strong> The phenomenon of 'Sickness' (疒) specifically 'settling' (正) in the
+                        body.</li>
+                    <li>It refers to individual, outwardly manifested Symptoms. It is the pain or discomfort itself
+                        complained of by the patient.</li>
+                    <li><strong>Examples:</strong> Headache, fever, cough, abdominal pain.</li>
+                </ul>
+
+                <h2 class="text-xl font-bold mb-4 text-stone-700">2. 證 (zhèng)</h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>Composition:</strong> 言 (Speech/Words) + 登 (Ascend/Elevate)</li>
+                    <li><strong>Meaning:</strong> Evidence judged comprehensively by listening to the patient's 'words'
+                        (言) and 'elevating' (登) various signs.</li>
+                    <li>It refers to the Pattern/Syndrome (辨證), which is the result of analyzing various symptoms (症)
+                        together. It is close to a diagnostic name that summarizes the cause, location, nature, and the
+                        state of deficiency or excess (虛實) of the body.</li>
+                    <li><strong>Examples:</strong> Liver Yang Rising Pattern, Spleen-Stomach Deficiency Cold Pattern.
+                    </li>
+                </ul>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">Comparison</h2>
+            <div class="overflow-x-auto mb-8">
+                <table class="w-full text-sm md:text-base">
+                    <thead>
+                        <tr>
+                            <th class="w-1/5">Distinction</th>
+                            <th class="w-1/3">症 (zhèng, Symptom)</th>
+                            <th>證 (zhèng, Pattern/Syndrome)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">Perspective</td>
+                            <td>Phenomenon</td>
+                            <td>Essence</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Nature</td>
+                            <td>Individual, Fragmentary, Superficial</td>
+                            <td>Comprehensive, Systematic, Internal Pathological State</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Clinical</td>
+                            <td>Discomfort complained by the patient (Chief Complaint)</td>
+                            <td>Pathological conclusion diagnosed by the physician</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Examples</td>
+                            <td>"My head hurts," "My face is red"</td>
+                            <td>Liver Fire Blazing Upwards Pattern</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Response</td>
+                            <td>Symptomatic Treatment</td>
+                            <td>Treatment based on Pattern Differentiation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">Mutual Relationship: The Process of Pattern
+                Differentiation</h2>
+            <p class="mb-4 leading-relaxed">
+                The core diagnostic process of TCM, Pattern Differentiation (辨證), is like a criminal investigation
+                process that gathers scattered clues called 症 (zhèng) to find the culprit called 證 (zhèng).
+            </p>
+            <ol class="list-decimal pl-5 space-y-2 mb-6">
+                <li><strong>Collection (症):</strong> The patient complains, "I have a fever (症), my throat is dry (症),
+                    and my pulse is rapid (症)."</li>
+                <li><strong>Analysis (辨):</strong> These symptoms are analyzed using TCM theories (Yin-Yang and Five
+                    Elements, Zang-Fu organ theory, etc.).</li>
+                <li><strong>Conclusion (證):</strong> A diagnosis is made: "This is Wind-Heat Invading the Lungs Pattern
+                    where heat evil has invaded the lungs."</li>
+            </ol>
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8">
+                <p class="font-bold text-amber-900">
+                    症 (zhèng) is the Target to be removed, whereas 證 (zhèng) is the Guideline that determines the
+                    direction of treatment.
+                </p>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">English Translation</h2>
+            <ul class="list-disc pl-5 space-y-4 mb-8">
+                <li>
+                    <strong>症 (zhèng) : Symptom</strong><br>
+                    Individual symptoms complained of by the patient.<br>
+                    <span class="text-stone-500 italic">"The patient presents with <strong>symptoms</strong> such as
+                        headache and fever."</span>
+                </li>
+                <li>
+                    <strong>證 (zhèng) : Pattern (or Syndrome)</strong><br>
+                    While both terms are used in translation, "Pattern" is currently preferred.<br>
+                    <span class="text-stone-500 italic">"Liver Fire Rising <strong>Pattern</strong>"</span>
+                </li>
+            </ul>
+
+            <h2 class="text-2xl font-bold mb-4 text-stone-800">Modern Establishment of the term 'Pattern
+                Differentiation'</h2>
+            <p class="mb-4 leading-relaxed">
+                Contrary to the general belief that the term <em>Bian Zheng Lun Zhi</em> (Pattern Differentiation and
+                Treatment), representing the diagnostic and treatment principles of TCM, has been handed down from
+                ancient times, its establishment as a formal name is a modern occurrence.
+            </p>
+            <p class="mb-4 leading-relaxed">
+                Of course, the concept of "distinguishing patterns to treat" existed in ancient times, but it was in
+                <strong>1955</strong> that the four-character idiom was solidified as an official academic term. During
+                the process of modernizing TCM and reorganizing the education system in China, a system unique to TCM
+                was needed to contrast with Western Medicine's "Treatment based on Disease Differentiation", which
+                diagnoses and treats based on disease names.
+            </p>
+            <p class="mb-4 leading-relaxed">
+                In other words, <em>Bian Zheng Lun Zhi</em> is not a term included in classical texts like <em>Huangdi
+                    Neijing</em> or <em>Shanghanlun</em>, but rather a 'modern slogan' officially adopted in the
+                mid-20th century to summarize the methodological characteristics of modern TCM.
+            </p>
+
+            <div class="bg-stone-100 p-6 rounded-lg mt-8">
+                <h3 class="text-lg font-bold mb-2">Summary</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><strong>症 (zhèng):</strong> The painful phenomenon itself (Fact)</li>
+                    <li><strong>證 (zhèng):</strong> The diagnosis regarding the reason and state of the pain (Truth)
+                    </li>
+                </ul>
+                <p class="mt-4 text-sm text-stone-600">Only when this distinction is clear does Pattern Differentiation
+                    become possible.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MANDATORY FOOTER START -->
+    <footer id="page-footer"
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+        © 2024 Hyungsuk Choi. All Rights Reserved.
+    </footer>
+    <!-- MANDATORY FOOTER END -->
+
+    <!-- Language Logic Script -->
+    <script>
+        // Default Language
+        window.currentLang = 'ko';
+
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam === 'en' || langParam === 'eng') return 'en';
+            return 'ko'; // Default
+        }
+
+        function setLanguage(lang) {
+            window.currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // 1. Toggle visibility for static content
+            document.querySelectorAll('.lang-content').forEach(el => {
+                if (el.dataset.lang === lang) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // 2. Update URL without reloading
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState(null, '', url.toString());
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const newLang = window.currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+
+        // Handle back/forward buttons
+        window.addEventListener('popstate', () => {
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
+        });
+    </script>
+</body>
+
+</html>
