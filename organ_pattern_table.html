@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한의학 장부변증 요약표</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #f1f5f9;
+        }
+
+        /* Mandatory CSS Rule for Language Toggle Button from symptom_pattern.html */
+        .lang-toggle-btn,
+        .lang-toggle-btn:link,
+        .lang-toggle-btn:visited {
+            text-decoration: none !important;
+            color: rgb(68, 64, 60) !important;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        /* Layout Constraint */
+        .app-container {
+            max-width: 1152px;
+            /* max-w-6xl */
+            margin: 0 auto;
+        }
+
+        /* Common Table Styles */
+        .organ-section {
+            margin-bottom: 2.5rem;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .organ-header {
+            padding: 1rem 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        td {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Heavy divider when the first column changes */
+        .category-start {
+            border-top: 2px solid #cbd5e1 !important;
+        }
+
+        .cat-cell {
+            background-color: #fcfcfc;
+            font-weight: 600;
+            color: #64748b;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        /* Language Specific Styles */
+        html[lang="ko"] body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        html[lang="en"] body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html[lang="ko"] .cat-cell {
+            width: 120px;
+        }
+
+        html[lang="ko"] .name-cell {
+            width: 180px;
+        }
+
+        html[lang="en"] .cat-cell {
+            width: 140px;
+        }
+
+        html[lang="en"] .name-cell {
+            width: 220px;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen p-4 md:p-8">
+
+    <!-- MANDATORY HEADER START -->
+    <header id="page-header"
+        style="width: 100%; max-width: 1152px; margin: 0 auto 2rem auto; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)"
+            class="lang-toggle-btn px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors"
+            style="background-color: #e2e8f0; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+    <!-- MANDATORY HEADER END -->
+
+    <div class="app-container flex-grow">
+
+        <!-- Korean Content -->
+        <div class="lang-content" data-lang="ko">
+            <header class="mb-10 text-center">
+                <h1 class="text-4xl font-bold text-slate-800 mb-2">장부변증 요약표</h1>
+            </header>
+
+            <!-- 1. 간(肝) 섹션 -->
+            <section class="organ-section border-l-8 border-blue-600">
+                <div class="organ-header bg-blue-600 flex justify-between items-center">
+                    <span>간(肝)</span>
+                    <span class="text-sm font-normal opacity-90">정서 불안, 눈 문제, 옆구리 팽만감 및 통증, 부인과 질환</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">실(實)</td>
+                            <td class="p-4 font-bold text-blue-700 name-cell">간기울결</td>
+                            <td class="p-4 text-sm leading-relaxed">정서 억울, 협륵통, 월경 전 긴장·짜증, 근육통, 가슴 답답함, 상복부 통증, 복부 팽만,
+                                구역질, 매핵기</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">간혈어</td>
+                            <td class="p-4 text-sm leading-relaxed">고정된 위치의 찌르는 통증(야간 악화), 무월경, 어둡고 덩어리진 월경혈, 복부 종괴, 보라색
+                                손톱·입술, 건조한 피부, 출혈반</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">허(虛)</td>
+                            <td class="p-4 font-bold text-blue-700">간혈허</td>
+                            <td class="p-4 text-sm leading-relaxed">현기증, 불면증, 창백한 안색·입술, 시야 흐림, 비문증, 부서지기 쉬운 손톱, 건조한 모발,
+                                사지 저림, 근육 경련 및 쥐남, 이명</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">간양상항</td>
+                            <td class="p-4 text-sm leading-relaxed">측두통, 현기증, 눈의 건조, 이명, 입과 목의 건조, 불면증, 짜증, 흥분, 분노, 고혈압
+                            </td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">열(熱)</td>
+                            <td class="p-4 font-bold text-blue-700">간화상염</td>
+                            <td class="p-4 text-sm leading-relaxed">측두부 두통, 현기증, 이명, 붉은 얼굴과 눈, 눈의 열감 및 충혈, 갈증, 쓴맛, 격렬한
+                                분노, 변비, 진한 소변, 코피, 토혈</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">간담습열</td>
+                            <td class="p-4 text-sm leading-relaxed">협륵통, 황달, 간·담의 염증, 쓴맛, 식욕 부진, 구역질, 복부 팽만, 소변량 감소(진한
+                                색), 발열, 악취 나는 노란 대하, 외음부 가려움</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td class="p-4 cat-cell text-center">한(寒)</td>
+                            <td class="p-4 font-bold text-blue-700">한체간맥</td>
+                            <td class="p-4 text-sm leading-relaxed">음낭과 고환으로 퍼지는 통증, 따뜻하게 하면 통증 완화</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">풍(風)</td>
+                            <td class="p-4 font-bold text-blue-700">열극생풍</td>
+                            <td class="p-4 text-sm leading-relaxed">고열, 경련, 목의 강직, 사지 떨림, 후궁반장, 심한 경우 혼수 및 열성 경련</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">간양화풍</td>
+                            <td class="p-4 text-sm leading-relaxed">현기증, 갑작스러운 의식 상실, 경련, 입과 눈의 편위(구안와사), 반신불수, 언어 장애
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">혈허생풍</td>
+                            <td class="p-4 text-sm leading-relaxed">사지 무감각, 틱, 머리 흔들림, 사지 떨림</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 2. 심(心) 섹션 -->
+            <section class="organ-section border-l-8 border-red-600">
+                <div class="organ-header bg-red-600 flex justify-between items-center">
+                    <span>심(心)</span>
+                    <span class="text-sm font-normal opacity-90">동계(두근거림), 정신 및 인지 증상, 불안</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="5" class="p-4 cat-cell text-center">허(虛)</td>
+                            <td class="p-4 font-bold text-red-700 name-cell">심기허</td>
+                            <td class="p-4 text-sm leading-relaxed">동계, 운동 시 숨가쁨, 발한, 창백함, 피로, 무기력</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">심양허</td>
+                            <td class="p-4 text-sm leading-relaxed">심기허 증상 + 추위에 민감, 부종, 밝고 창백한 안색, 차가운 사지(특히 손)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">심양폭탈</td>
+                            <td class="p-4 text-sm leading-relaxed">심양허 증상 + 입술 청색증, 심한 경우 혼수상태</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">심혈허</td>
+                            <td class="p-4 text-sm leading-relaxed">심계항진, 불면증, 꿈이 많은 수면, 현기증, 기억력 저하, 창백한 안색 입술, 불안, 쉽게
+                                놀람</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">심음허</td>
+                            <td class="p-4 text-sm leading-relaxed">심계항진, 불면증, 쉽게 놀람, 정신적 불안정, 초조, 광대 홍조, 저녁 미열, 야간 발한,
+                                입 마름, 오심열</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">실(實)</td>
+                            <td class="p-4 font-bold text-red-700">심혈어</td>
+                            <td class="p-4 text-sm leading-relaxed">심계항진, 심장 부위의 고정된 찌르는 통증(야간 악화), 가슴 압박감 및 조임, 입술과 손톱의
+                                청색증, 차가운 손</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">심화상염</td>
+                            <td class="p-4 text-sm leading-relaxed">심계항진, 불안정, 초조, 불면증, 충동성, 갈증, 붉은 얼굴, 열감, 쓴맛, 구강 및 혀의
+                                궤양, 어두운 소변 또는 혈뇨</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">담미심규</td>
+                            <td class="p-4 text-sm leading-relaxed">정신 혼미, 의식 불명, 목구멍의 가래 끓는 소리, 사지 무력</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 3. 비/위(脾胃) 섹션 -->
+            <section class="organ-section border-l-8 border-yellow-500">
+                <div class="organ-header bg-yellow-500 flex justify-between items-center">
+                    <span>비/위(脾胃)</span>
+                    <span class="text-sm font-normal opacity-90 text-slate-800">식욕 및 소화 문제, 피로, 황색 안색, 복부팽만</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="4" class="p-4 cat-cell text-center">비허(脾虛)</td>
+                            <td class="p-4 font-bold text-yellow-800 name-cell">비기허</td>
+                            <td class="p-4 text-sm leading-relaxed">창백한 안색, 피로, 무기력, 사지 약화, 식욕 부진, 식후 복부 팽만감, 묽은 변</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">비기하함</td>
+                            <td class="p-4 text-sm leading-relaxed">비기허 증상 + 복부 하수감, 내장 탈기(위, 자궁, 항문 등), 빈뇨 및 급</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">비불통혈</td>
+                            <td class="p-4 text-sm leading-relaxed">비기허 증상 + 창백한 안색 및 숨가쁨, 자반증, 피부 아래 혈반, 과다 월경 또는
+                                부정자궁출혈</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">비양허</td>
+                            <td class="p-4 text-sm leading-relaxed">비기허 증상 + 오한, 사지 냉감, 설사, 부종</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">위실(胃實)</td>
+                            <td class="p-4 font-bold text-yellow-800">식체위완</td>
+                            <td class="p-4 text-sm leading-relaxed">구토로 완화되는 상복부 통증 및 팽만, 구역질, 구토, 달걀 썩는 입 냄새, 신물 역류,
+                                트림, 식욕 부진, 불면</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">위화</td>
+                            <td class="p-4 text-sm leading-relaxed">상복부 작열감 및 통증, 신물 역류, 식후 구역 및 입 냄새, 갈증(찬물 선호), 지속적
+                                허기, 잇몸 염증 및 통증, 변비</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td class="p-4 cat-cell text-center">위허(胃虛)</td>
+                            <td class="p-4 font-bold text-yellow-800">위음허</td>
+                            <td class="p-4 text-sm leading-relaxed">상복부 통증, 식후 포만감, 식욕 부진, 신물 역류, 입과 목의 건조(오후 심화), 오후
+                                미열, 건조한 변, 갈증이 있으나 조금씩 마심</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 4. 폐(肺) 섹션 -->
+            <section class="organ-section border-l-8 border-gray-500">
+                <div class="organ-header bg-gray-500 flex justify-between items-center">
+                    <span>폐(肺)</span>
+                    <span class="text-sm font-normal opacity-90">호흡, 목소리, 기침, 가래 문제, 외감 증상</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">허(虛)</td>
+                            <td class="p-4 font-bold text-gray-700 name-cell">폐기허</td>
+                            <td class="p-4 text-sm leading-relaxed">숨가쁨, 기침, 물 같은 가래, 약한 목소리, 말하기 싫어함, 피로, 냉감, 잦은 감기, 주간
+                                발한, 밝은 백색 안색</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">폐음허</td>
+                            <td class="p-4 text-sm leading-relaxed">마른 기침 또는 혈담, 입과 목의 건조, 쉰 목소리, 간지러운 목, 미열, 광대 홍조, 야간
+                                발한, 오심열, 불면증</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">폐조증</td>
+                            <td class="p-4 text-sm leading-relaxed">마른 기침, 건조한 피부 및 목, 쉰 목소리, 입 마름, 갈증</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">담 / 실</td>
+                            <td class="p-4 font-bold text-gray-700">습담저폐</td>
+                            <td class="p-4 text-sm leading-relaxed">발작적 만성 기침, 쉽게 배출되는 다량의 백색 가래, 가슴 압박감, 숨 가쁨, 백색 안색
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">열담저폐</td>
+                            <td class="p-4 text-sm leading-relaxed">개 짖는 듯한 기침, 다량의 노란색·녹색 악취 가래, 숨가쁨, 천식, 가슴 압박감, 입 마름,
+                                노란 소변, 변비</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">담습옹폐</td>
+                            <td class="p-4 text-sm leading-relaxed">기침, 호흡 곤란, 놀람에 의해 유발되는 기침</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">풍(風)</td>
+                            <td class="p-4 font-bold text-gray-700">풍한범폐</td>
+                            <td class="p-4 text-sm leading-relaxed">기침, 코막힘, 맑은 콧물, 재채기, 오한(발열보다 심함), 후두부 두통, 몸살, 땀 없음
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">풍열범폐</td>
+                            <td class="p-4 text-sm leading-relaxed">기침, 발열(오한보다 심함), 약간의 발한, 갈증, 인후통, 편도 부종, 노란 콧물, 두통
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">풍수범폐</td>
+                            <td class="p-4 text-sm leading-relaxed">눈과 얼굴의 갑작스러운 부종, 밝고 윤기 나는 안색, 소변량 감소, 바람 기피, 발열, 호흡
+                                곤란</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 5. 신(腎) 및 복합변증 섹션 -->
+            <section class="organ-section border-l-8 border-indigo-700">
+                <div class="organ-header bg-indigo-700 flex justify-between items-center">
+                    <span>신(腎) 및 복합변증</span>
+                    <span class="text-sm font-normal opacity-90">요통, 무릎 다리 약화, 성기능 및 비뇨기 장애</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start bg-indigo-50/20">
+                            <td rowspan="2" class="p-4 cat-cell text-center">음/정 허</td>
+                            <td class="p-4 font-bold text-indigo-800 name-cell">신정허</td>
+                            <td class="p-4 text-sm leading-relaxed">발육 부진, 정신 둔화, 뼈 연화, 기억력 저하, 이빨 흔들림, 탈모 및 조기 백발, 성기능
+                                약화, 요통</td>
+                        </tr>
+                        <tr class="bg-indigo-50/20">
+                            <td class="p-4 font-bold text-indigo-800">신음허</td>
+                            <td class="p-4 text-sm leading-relaxed">요통, 하지 무력, 현기증, 이명, 기억력 저하, 난청, 몽정, 야간 발한, 구강건조,
+                                오심열, 갈증, 변비, 진한 소변</td>
+                        </tr>
+                        <tr class="category-start bg-indigo-50/20">
+                            <td rowspan="2" class="p-4 cat-cell text-center">양/기 허</td>
+                            <td class="p-4 font-bold text-indigo-800">신양허</td>
+                            <td class="p-4 text-sm leading-relaxed">요통, 하지 무력, 추위에 민감, 밝은 안색, 무기력, 묽은 변, 관절 냉감, 발기부전,
+                                조루, 맑은 소변 또는 부종</td>
+                        </tr>
+                        <tr class="bg-indigo-50/20">
+                            <td class="p-4 font-bold text-indigo-800">신기허</td>
+                            <td class="p-4 text-sm leading-relaxed">요통, 하지 무력, 맑고 빈번한 배뇨, 약한 소변줄기, 요실금, 야뇨증, 조루, 정액루, 자궁
+                                탈출, 만성 대하</td>
+                        </tr>
+
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center font-bold">복합변증<br>(음허)</td>
+                            <td class="p-4 font-bold text-indigo-800">폐신음허</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">저녁에 악화되는 마른 기침, 운동 시 호흡 곤란,
+                                요통, 사지 약화, 몽정, 입 마름, 야간 발한, 오심열</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-indigo-800">간신음허</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">현기증, 이명, 몽정, 요통, 안구 건조, 시야 흐림,
+                                사지 무감각, 쉽게 화냄, 불면, 야간 발한, 월경 감소</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-indigo-800">심신불교</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">동계, 정신 불안, 불면, 기억 저하, 현기증, 이명,
+                                요통, 몽정, 야간 발한, 진한 소변</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center font-bold">복합변증<br>(기/양허)</td>
+                            <td class="p-4 font-bold text-indigo-800">비신양허</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">오한, 사지 냉감, 새벽 설사, 복부 및 다리 부종,
+                                무기력, 호흡 곤란, 식욕부진, 복명</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-indigo-800">폐신기허</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">운동 시 숨가쁨(흡기 곤란), 빠르고 약한 호흡,
+                                기침, 천식, 얼굴 부종, 마른 체형, 발한, 사지 냉감, 요통</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+
+        <!-- English Content -->
+        <div class="lang-content hidden" data-lang="en">
+            <header class="mb-10 text-center">
+                <h1 class="text-4xl font-bold text-slate-800 mb-2">TCM Organ Pattern Summary</h1>
+            </header>
+
+            <!-- 1. Liver Section -->
+            <section class="organ-section border-l-8 border-blue-600">
+                <div class="organ-header bg-blue-600 flex justify-between items-center">
+                    <span>Liver</span>
+                    <span class="text-sm font-normal opacity-90">Emotional distress, eye issues, hypochondriac
+                        distension/pain, gynecological disorders</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">Excess</td>
+                            <td class="p-4 font-bold text-blue-700 name-cell">Liver Qi Stagnation</td>
+                            <td class="p-4 text-sm leading-relaxed">Depression, hypochondriac pain, PMS/irritability,
+                                muscle pain, chest oppression, epigastric pain, abdominal distension, nausea, plum-pit
+                                qi</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">Liver Blood Stasis</td>
+                            <td class="p-4 text-sm leading-relaxed">Fixed stabbing pain (worse at night), amenorrhea,
+                                dark/clotted menstrual blood, abdominal masses, purple nails/lips, dry skin, purpura
+                            </td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">Deficiency</td>
+                            <td class="p-4 font-bold text-blue-700">Liver Blood Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Dizziness, insomnia, pale complexion/lips, blurred
+                                vision, floaters, brittle nails, dry hair, numbness of limbs, muscle spasms/cramps,
+                                tinnitus</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">Liver Yang Rising</td>
+                            <td class="p-4 text-sm leading-relaxed">Temporal headache, dizziness, dry eyes, tinnitus,
+                                dry mouth/throat, insomnia, irritability, excitement, anger, hypertension</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">Heat</td>
+                            <td class="p-4 font-bold text-blue-700">Liver Fire Blazing</td>
+                            <td class="p-4 text-sm leading-relaxed">Temporal headache, dizziness, tinnitus, red
+                                face/eyes, burning sensation in eyes, thirst, bitter taste, intense anger, constipation,
+                                dark urine, epistaxis, hematemesis</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">Damp-Heat in Liv/GB</td>
+                            <td class="p-4 text-sm leading-relaxed">Hypochondriac pain, jaundice, inflammation of
+                                Liv/GB, bitter taste, poor appetite, nausea, abdominal distension, scanty dark urine,
+                                fever, foul yellow leukorrhea, vulvar itching</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td class="p-4 cat-cell text-center">Cold</td>
+                            <td class="p-4 font-bold text-blue-700">Cold in Liver Meridian</td>
+                            <td class="p-4 text-sm leading-relaxed">Pain radiating to the scrotum and testes, pain
+                                relieved by warmth</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">Wind</td>
+                            <td class="p-4 font-bold text-blue-700">Extreme Heat Stirring Wind</td>
+                            <td class="p-4 text-sm leading-relaxed">High fever, convulsions, neck rigidity, tremors of
+                                limbs, opisthotonos, coma in severe cases, febrile seizures</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">Liver Yang Stirring Wind</td>
+                            <td class="p-4 text-sm leading-relaxed">Dizziness, sudden loss of consciousness,
+                                convulsions, deviation of mouth/eyes, hemiplegia, speech impairment</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-blue-700">Blood Deficiency Wind</td>
+                            <td class="p-4 text-sm leading-relaxed">Numbness of limbs, tics, head shaking, tremors of
+                                limbs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 2. Heart Section -->
+            <section class="organ-section border-l-8 border-red-600">
+                <div class="organ-header bg-red-600 flex justify-between items-center">
+                    <span>Heart</span>
+                    <span class="text-sm font-normal opacity-90">Palpitations, mental/cognitive symptoms, anxiety</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="5" class="p-4 cat-cell text-center">Deficiency</td>
+                            <td class="p-4 font-bold text-red-700 name-cell">Heart Qi Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Palpitations, shortness of breath on exertion,
+                                sweating, pallor, fatigue, lethargy</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">Heart Yang Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Heart Qi Def. symptoms + cold intolerance, edema,
+                                bright pale complexion, cold limbs (especially hands)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">Collapse of Heart Yang</td>
+                            <td class="p-4 text-sm leading-relaxed">Heart Yang Def. symptoms + cyanosis of lips, coma in
+                                severe cases</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">Heart Blood Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Palpitations, insomnia, dream-disturbed sleep,
+                                dizziness, poor memory, pale complexion/lips, anxiety, easily startled</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">Heart Yin Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Palpitations, insomnia, easily startled, mental
+                                restlessness, irritability, malar flush, evening low-grade fever, night sweats, dry
+                                mouth, 5-center heat</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">Excess</td>
+                            <td class="p-4 font-bold text-red-700">Heart Blood Stasis</td>
+                            <td class="p-4 text-sm leading-relaxed">Palpitations, fixed stabbing pain in the precordial
+                                region (worse at night), chest oppression/tightness, cyanosis of lips/nails, cold hands
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">Heart Fire Blazing</td>
+                            <td class="p-4 text-sm leading-relaxed">Palpitations, restlessness, irritability, insomnia,
+                                impulsivity, thirst, red face, heat sensation, bitter taste, mouth/tongue ulcers, dark
+                                or bloody urine</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-red-700">Phlegm Misting Mind</td>
+                            <td class="p-4 text-sm leading-relaxed">Mental confusion, unconsciousness, rattling sound in
+                                the throat, limb weakness</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 3. Spleen/Stomach Section -->
+            <section class="organ-section border-l-8 border-yellow-500">
+                <div class="organ-header bg-yellow-500 flex justify-between items-center">
+                    <span>Spleen & Stomach</span>
+                    <span class="text-sm font-normal opacity-90 text-slate-800">Appetite/digestion issues, fatigue,
+                        sallow complexion, abdominal distension</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="4" class="p-4 cat-cell text-center">Spleen Def.</td>
+                            <td class="p-4 font-bold text-yellow-800 name-cell">Spleen Qi Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Pale complexion, fatigue, lethargy, weakness of
+                                limbs, poor appetite, post-prandial distension, loose stools</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">Spleen Qi Sinking</td>
+                            <td class="p-4 text-sm leading-relaxed">Spleen Qi Def. symptoms + bearing down sensation,
+                                organ prolapse (stomach, uterus, anus), urinary frequency/urgency</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">Spleen Not Controlling Blood</td>
+                            <td class="p-4 text-sm leading-relaxed">Spleen Qi Def. symptoms + pallor, shortness of
+                                breath, purpura, petechiae under skin, menorrhagia, or flooding/spotting</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">Spleen Yang Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Spleen Qi Def. symptoms + chilliness, cold limbs,
+                                diarrhea, edema</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center">Stomach Exc.</td>
+                            <td class="p-4 font-bold text-yellow-800">Food Stagnation</td>
+                            <td class="p-4 text-sm leading-relaxed">Epigastric pain/distension relieved by vomiting,
+                                nausea, vomiting, foul breath (rotten eggs), acid reflux, belching, poor appetite,
+                                insomnia</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-yellow-800">Stomach Fire</td>
+                            <td class="p-4 text-sm leading-relaxed">Epigastric burning pain, acid reflux, post-prandial
+                                nausea, foul breath, thirst (prefers cold), constant hunger, gum inflammation/pain,
+                                constipation</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td class="p-4 cat-cell text-center">Stomach Def.</td>
+                            <td class="p-4 font-bold text-yellow-800">Stomach Yin Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Epigastric pain, post-prandial fullness, poor
+                                appetite, acid reflux, dry mouth/throat (worse in afternoon), evening fever, dry stools,
+                                thirst but only sips water</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 4. Lung Section -->
+            <section class="organ-section border-l-8 border-gray-500">
+                <div class="organ-header bg-gray-500 flex justify-between items-center">
+                    <span>Lung</span>
+                    <span class="text-sm font-normal opacity-90">Respiration, voice, cough, phlegm issues, exterior
+                        syndromes</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">Deficiency</td>
+                            <td class="p-4 font-bold text-gray-700 name-cell">Lung Qi Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Shortness of breath, cough, watery phlegm, weak
+                                voice, reluctance to speak, fatigue, chilliness, frequent colds, daytime sweating,
+                                bright white face</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">Lung Yin Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Dry cough or blood-streaked sputum, dry
+                                mouth/throat, hoarseness, tickly throat, low-grade fever, malar flush, night sweats,
+                                5-center heat, insomnia</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">Lung Dryness</td>
+                            <td class="p-4 text-sm leading-relaxed">Dry cough, dry skin/throat, hoarseness, dry mouth,
+                                thirst</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">Phlegm/Excess</td>
+                            <td class="p-4 font-bold text-gray-700">Damp-Phlegm in Lu</td>
+                            <td class="p-4 text-sm leading-relaxed">Paroxysmal chronic cough, profuse
+                                easy-to-expectorate white phlegm, chest oppression, shortness of breath, white
+                                complexion</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">Phlegm-Heat in Lu</td>
+                            <td class="p-4 text-sm leading-relaxed">Barking cough, profuse yellow/green foul phlegm,
+                                shortness of breath, asthma, chest oppression, dry mouth, yellow urine, constipation
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">Phlegm-Damp Obstr.</td>
+                            <td class="p-4 text-sm leading-relaxed">Cough, dyspnea, cough triggered by startle</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center">Wind</td>
+                            <td class="p-4 font-bold text-gray-700">Wind-Cold Attack</td>
+                            <td class="p-4 text-sm leading-relaxed">Cough, nasal congestion, clear runny nose, sneezing,
+                                chills (worse than fever), occipital headache, body aches, no sweating</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">Wind-Heat Attack</td>
+                            <td class="p-4 text-sm leading-relaxed">Cough, fever (worse than chills), slight sweating,
+                                thirst, sore throat, swollen tonsils, yellow runny nose, headache</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-gray-700">Wind-Water Attack</td>
+                            <td class="p-4 text-sm leading-relaxed">Sudden edema of eyes/face, bright shiny complexion,
+                                scanty urine, aversion to wind, fever, dyspnea</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 5. Kidney & Combined Section -->
+            <section class="organ-section border-l-8 border-indigo-700">
+                <div class="organ-header bg-indigo-700 flex justify-between items-center">
+                    <span>Kidney & Combined</span>
+                    <span class="text-sm font-normal opacity-90">Back pain, weak knees/legs, sexual and urinary
+                        disorders</span>
+                </div>
+                <table class="w-full text-left border-collapse">
+                    <tbody>
+                        <tr class="category-start bg-indigo-50/20">
+                            <td rowspan="2" class="p-4 cat-cell text-center">Yin/Essence Def.</td>
+                            <td class="p-4 font-bold text-indigo-800 name-cell">Kidney Essence Def.</td>
+                            <td class="p-4 text-sm leading-relaxed">Developmental delay, mental dullness, soft bones,
+                                poor memory, loose teeth, hair loss/premature graying, weak sexual function, low back
+                                pain</td>
+                        </tr>
+                        <tr class="bg-indigo-50/20">
+                            <td class="p-4 font-bold text-indigo-800">Kidney Yin Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Back pain, weak legs, dizziness, tinnitus, poor
+                                memory, hearing loss, nocturnal emission, night sweats, dry mouth, 5-center heat, dark
+                                urine</td>
+                        </tr>
+                        <tr class="category-start bg-indigo-50/20">
+                            <td rowspan="2" class="p-4 cat-cell text-center">Yang/Qi Def.</td>
+                            <td class="p-4 font-bold text-indigo-800">Kidney Yang Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Back pain, weak legs, cold intolerance, bright
+                                complexion, lethargy, loose stools, cold joints, impotence, premature ejaculation, clear
+                                urine or edema</td>
+                        </tr>
+                        <tr class="bg-indigo-50/20">
+                            <td class="p-4 font-bold text-indigo-800">Kidney Qi Deficiency</td>
+                            <td class="p-4 text-sm leading-relaxed">Back pain, weak legs, clear frequent urination, weak
+                                stream, incontinence, nycturia, premature ejaculation, spermatorrhea, prolapsed uterus,
+                                chronic leukorrhea</td>
+                        </tr>
+
+                        <tr class="category-start">
+                            <td rowspan="3" class="p-4 cat-cell text-center font-bold italic">Combined<br>(Yin Def.)
+                            </td>
+                            <td class="p-4 font-bold text-indigo-800">Lu/Ki Yin Def.</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">Dry cough worse in evening,
+                                dyspnea on exertion, back pain, weak limbs, nocturnal emission, dry mouth, night sweats,
+                                5-center heat</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-indigo-800">Liv/Ki Yin Def.</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">Dizziness, tinnitus, nocturnal
+                                emission, back pain, dry eyes, blurred vision, numbness of limbs, easily angered,
+                                insomnia, night sweats, scanty menses</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-indigo-800">He/Ki Disharmony</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">Palpitations, restlessness,
+                                insomnia, poor memory, dizziness, tinnitus, back pain, nocturnal emission, night sweats,
+                                dark urine</td>
+                        </tr>
+                        <tr class="category-start">
+                            <td rowspan="2" class="p-4 cat-cell text-center font-bold italic">Combined<br>(Qi/Yang Def.)
+                            </td>
+                            <td class="p-4 font-bold text-indigo-800">Sp/Ki Yang Def.</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">Chilliness, cold limbs, dawn
+                                diarrhea, edema of abdomen/legs, lethargy, dyspnea, poor appetite, borborygmus</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-indigo-800">Lu/Ki Qi Def.</td>
+                            <td class="p-4 text-sm leading-relaxed italic text-slate-700">Shortness of breath on
+                                exertion (difficulty inhaling), rapid shallow breathing, cough, asthma, facial edema,
+                                thin body, sweating, cold limbs, back pain</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+
+        <!-- MANDATORY FOOTER START -->
+        <footer id="page-footer"
+            style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 1rem 2rem; text-align: center; font-size: 0.875rem; color: #999;">
+            © 2024 Hyungsuk Choi. All Rights Reserved.
+        </footer>
+        <!-- MANDATORY FOOTER END -->
+
+    </div>
+
+    <!-- Language Logic Script -->
+    <script>
+        // Default Language
+        window.currentLang = 'ko';
+
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam === 'en' || langParam === 'eng') return 'en';
+            return 'ko'; // Default
+        }
+
+        function setLanguage(lang) {
+            window.currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // 1. Toggle visibility for static content
+            document.querySelectorAll('.lang-content').forEach(el => {
+                if (el.dataset.lang === lang) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // 2. Update URL without reloading
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState(null, '', url.toString());
+
+            // 3. Update Title (Optional)
+            if (lang === 'ko') {
+                document.title = '한의학 장부변증 요약표';
+            } else {
+                document.title = 'TCM Organ Pattern Summary'; // Or 'TCM Organ Pattern Summary Table'
+            }
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const newLang = window.currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+
+        // Handle back/forward buttons
+        window.addEventListener('popstate', () => {
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장부변증 마인드맵</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Inter:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* Mandatory CSS Rule for Language Toggle Button to match other pages */
+        .lang-toggle-btn,
+        .lang-toggle-btn:link,
+        .lang-toggle-btn:visited {
+            text-decoration: none !important;
+            color: rgb(68, 64, 60) !important;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        .tree-node {
+            transition: all 0.3s ease;
+        }
+
+        .children-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s ease;
+            opacity: 0;
+            border-left: 2px dashed #cbd5e1;
+            margin-left: 1.25rem;
+            padding-left: 1rem;
+        }
+
+        .expanded>.children-container {
+            max-height: 5000px;
+            opacity: 1;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expanded>.node-content .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .node-content:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .symptom-box {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #475569;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Language Toggle Styles - Modified for Body Class Logic */
+        .lang-en {
+            display: none;
+        }
+
+        .en-mode .lang-ko {
+            display: none;
+        }
+
+        .en-mode .lang-en {
+            display: inline;
+        }
+
+        .en-mode .lang-en-block {
+            display: block;
+        }
+
+        /* 장부별 테마 색상 */
+        .theme-liver {
+            border-color: #2563eb;
+            color: #1e40af;
+        }
+
+        .theme-heart {
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+
+        .theme-spleen {
+            border-color: #d97706;
+            color: #92400e;
+        }
+
+        .theme-lung {
+            border-color: #4b5563;
+            color: #1f2937;
+        }
+
+        .theme-kidney {
+            border-color: #4338ca;
+            color: #3730a3;
+        }
+
+        /* Layout Constraint */
+        .app-container {
+            max-width: 56rem;
+            /* max-w-4xl */
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-10 relative flex flex-col min-h-screen">
+
+    <!-- MANDATORY HEADER START -->
+    <header id="page-header"
+        style="width: 100%; max-width: 56rem; margin: 0 auto 3rem auto; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+            &larr; Interactive TCM
+        </a>
+        <a href="#" onclick="toggleLanguage(event)"
+            class="lang-toggle-btn px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors"
+            style="background-color: #e2e8f0; padding: 0.25rem 0.75rem;">
+            Kor / Eng
+        </a>
+    </header>
+    <!-- MANDATORY HEADER END -->
+
+    <div class="app-container flex-grow">
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-slate-800 mb-4 tracking-tight">
+                <span class="lang-ko">장부변증 마인드맵</span>
+                <span class="lang-en">Organ Pattern Mind Map</span>
+            </h1>
+        </header>
+
+        <div id="mindmap-root" class="space-y-6">
+            <!-- 간 섹션 -->
+            <div class="tree-node border-l-4 theme-liver bg-white rounded-r-lg shadow-sm">
+                <div class="node-content p-4 flex items-center cursor-pointer select-none" onclick="toggleNode(this)">
+                    <span class="toggle-icon mr-3 text-xl">▶</span>
+                    <span class="font-bold text-xl lang-ko">간</span>
+                    <span class="font-bold text-xl lang-en">Liver</span>
+                </div>
+                <div class="children-container">
+                    <!-- 허실 -->
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">허실</span>
+                            <span class="font-semibold text-slate-700 lang-en">Excess/Deficiency</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-blue-600 font-medium lang-ko">허</span>
+                                    <span class="text-blue-600 font-medium lang-en">Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-ko">
+                                            간혈허</div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-en">
+                                            Liver Blood Deficiency</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">현기증, 불면증, 창백한 안색, 시야 흐림, 비문증, 부서지기 쉬운 손톱, 근육 경련</span>
+                                            <span class="lang-en">Dizziness, insomnia, pale complexion, blurred vision,
+                                                floaters, brittle nails, muscle spasms</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-ko">
+                                            간양상항</div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-en">
+                                            Liver Yang Rising</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">측두통, 현기증, 눈 건조, 이명, 입/목 건조, 불면, 짜증, 흥분, 고혈압</span>
+                                            <span class="lang-en">Temporal headache, dizziness, dry eyes, tinnitus, dry
+                                                mouth/throat, insomnia, irritability, hypertension</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-blue-600 font-medium lang-ko">실</span>
+                                    <span class="text-blue-600 font-medium lang-en">Excess</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-ko">
+                                            간기울결</div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-en">
+                                            Liver Qi Stagnation</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">정서 억울, 협륵통, 월경 전 긴장/짜증, 가슴 답답함, 상복부 통증, 복부 팽만,
+                                                매핵기</span>
+                                            <span class="lang-en">Depression, hypochondriac pain, irritability, chest
+                                                oppression, epigastric pain, abdominal distension, plum-pit qi</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-ko">
+                                            간혈어</div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-en">
+                                            Liver Blood Stasis</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">고정된 위치의 찌르는 통증, 무월경, 어둡고 덩어리진 월경혈, 복부 종괴, 보라색
+                                                손톱/입술</span>
+                                            <span class="lang-en">Fixed stabbing pain, amenorrhea, dark/clotted
+                                                menstrual blood, abdominal masses, purple nails/lips</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 한열 -->
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">한열</span>
+                            <span class="font-semibold text-slate-700 lang-en">Cold/Heat</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-blue-600 font-medium lang-ko">한</span>
+                                    <span class="text-blue-600 font-medium lang-en">Cold</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">한체간맥</div>
+                                        <div class="font-medium text-slate-800 lang-en">Cold in Liver Meridian</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">음낭과 고환으로 퍼지는 통증, 따뜻하게 하면 통증 완화</span>
+                                            <span class="lang-en">Pain radiating to the scrotum and testes, pain
+                                                relieved by warmth</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-blue-600 font-medium lang-ko">열</span>
+                                    <span class="text-blue-600 font-medium lang-en">Heat</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">간화상염</div>
+                                        <div class="font-medium text-slate-800 lang-en">Liver Fire Blazing</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">측두부 두통, 현기증, 이명, 붉은 얼굴과 눈, 격렬한 분노, 변비, 코피</span>
+                                            <span class="lang-en">Temporal headache, red face/eyes, intense anger,
+                                                constipation, dark urine, epistaxis</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">간담습열</div>
+                                        <div class="font-medium text-slate-800 lang-en">Damp-Heat in Liv/GB</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">협륵통, 황달, 쓴맛, 식욕 부진, 구역질, 발열, 악취 나는 노란 대하</span>
+                                            <span class="lang-en">Hypochondriac pain, jaundice, bitter taste, poor
+                                                appetite, nausea, foul yellow leukorrhea</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 풍 -->
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">풍</span>
+                            <span class="font-semibold text-slate-700 lang-en">Wind</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-blue-600 font-medium lang-ko">실</span>
+                                    <span class="text-blue-600 font-medium lang-en">Excess</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">열극생풍</div>
+                                        <div class="font-medium text-slate-800 lang-en">Extreme Heat Stirring Wind</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">고열, 경련, 목의 강직, 사지 떨림, 후궁반장, 혼수</span>
+                                            <span class="lang-en">High fever, convulsions, neck rigidity, tremors of
+                                                limbs, opisthotonos, coma</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-blue-600 font-medium lang-ko">허</span>
+                                    <span class="text-blue-600 font-medium lang-en">Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-ko">
+                                            간양화풍</div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-en">
+                                            Liver Yang Stirring Wind</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">현기증, 갑작스러운 의식 상실, 구안와사, 반신불수, 언어 장애</span>
+                                            <span class="lang-en">Dizziness, sudden loss of consciousness, deviation of
+                                                mouth/eyes, hemiplegia, speech impairment</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-ko">
+                                            혈허생풍</div>
+                                        <div class="font-medium text-slate-800 underline decoration-blue-200 lang-en">
+                                            Blood Deficiency Wind</div>
+                                        <div class="symptom-box">
+                                            <span class="lang-ko">사지 무감각, 틱, 머리 흔들림, 사지 떨림</span>
+                                            <span class="lang-en">Numbness of limbs, tics, head shaking, tremors</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 심 섹션 -->
+            <div class="tree-node border-l-4 theme-heart bg-white rounded-r-lg shadow-sm">
+                <div class="node-content p-4 flex items-center cursor-pointer select-none" onclick="toggleNode(this)">
+                    <span class="toggle-icon mr-3 text-xl">▶</span>
+                    <span class="font-bold text-xl lang-ko">심</span>
+                    <span class="font-bold text-xl lang-en">Heart</span>
+                </div>
+                <div class="children-container">
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">허실</span>
+                            <span class="font-semibold text-slate-700 lang-en">Excess/Deficiency</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-red-600 font-medium lang-ko">허</span>
+                                    <span class="text-red-600 font-medium lang-en">Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심기허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Heart Qi Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">동계, 운동 시 숨가쁨, 발한, 피로,
+                                                무기력</span><span class="lang-en">Palpitations, shortness of breath,
+                                                sweating, fatigue</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심양허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Heart Yang Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">추위에 민감, 부종, 밝고 창백한 안색, 차가운
+                                                사지</span><span class="lang-en">Cold intolerance, edema, bright pale
+                                                complexion, cold limbs</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심양폭탈</div>
+                                        <div class="font-medium text-slate-800 lang-en">Collapse of Heart Yang</div>
+                                        <div class="symptom-box"><span class="lang-ko">입술 청색증, 심한 경우 혼수상태</span><span
+                                                class="lang-en">Cyanosis of lips, coma in severe cases</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심혈허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Heart Blood Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">심계항진, 불면증, 기억력 저하, 창백한 안색,
+                                                불안</span><span class="lang-en">Palpitations, insomnia, poor memory,
+                                                anxiety</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심음허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Heart Yin Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">초조, 광대 홍조, 저녁 미열, 야간 발한, 입 마름,
+                                                오심열</span><span class="lang-en">Restlessness, malar flush, night sweats,
+                                                5-center heat</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-red-600 font-medium lang-ko">실</span>
+                                    <span class="text-red-600 font-medium lang-en">Excess</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심혈어</div>
+                                        <div class="font-medium text-slate-800 lang-en">Heart Blood Stasis</div>
+                                        <div class="symptom-box"><span class="lang-ko">고정된 찌르는 통증, 가슴 압박감, 입술과 손톱의 청색증,
+                                                차가운 손</span><span class="lang-en">Fixed stabbing pain, chest oppression,
+                                                cyanosis of lips/nails</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심화상염</div>
+                                        <div class="font-medium text-slate-800 lang-en">Heart Fire Blazing</div>
+                                        <div class="symptom-box"><span class="lang-ko">초조, 불면증, 쓴맛, 구강 및 혀의 궤양, 어두운
+                                                소변/혈뇨</span><span class="lang-en">Restlessness, insomnia, mouth ulcers,
+                                                dark/bloody urine</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">담미심규</div>
+                                        <div class="font-medium text-slate-800 lang-en">Phlegm Misting Mind</div>
+                                        <div class="symptom-box"><span class="lang-ko">정신 혼미, 의식 불명, 목구멍 가래 끓는 소리, 사지
+                                                무력</span><span class="lang-en">Mental confusion, unconsciousness,
+                                                rattling throat</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비 섹션 -->
+            <div class="tree-node border-l-4 theme-spleen bg-white rounded-r-lg shadow-sm">
+                <div class="node-content p-4 flex items-center cursor-pointer select-none" onclick="toggleNode(this)">
+                    <span class="toggle-icon mr-3 text-xl">▶</span>
+                    <span class="font-bold text-xl lang-ko">비</span>
+                    <span class="font-bold text-xl lang-en">Spleen</span>
+                </div>
+                <div class="children-container">
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">비</span>
+                            <span class="font-semibold text-slate-700 lang-en">Spleen</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-amber-600 font-medium lang-ko">허</span>
+                                    <span class="text-amber-600 font-medium lang-en">Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">비기허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Spleen Qi Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">피로, 무기력, 식욕 부진, 식후 복부 팽만감, 묽은
+                                                변</span><span class="lang-en">Fatigue, lethargy, poor appetite,
+                                                post-prandial distension</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">비기하함</div>
+                                        <div class="font-medium text-slate-800 lang-en">Spleen Qi Sinking</div>
+                                        <div class="symptom-box"><span class="lang-ko">복부 하수감, 내장 탈기(위, 자궁 등), 빈뇨 및
+                                                급</span><span class="lang-en">Bearing down sensation, organ prolapse,
+                                                urinary urgency</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">비불통혈</div>
+                                        <div class="font-medium text-slate-800 lang-en">Spleen Not Controlling Blood
+                                        </div>
+                                        <div class="symptom-box"><span class="lang-ko">자반증, 피부 아래 혈반, 과다 월경 또는
+                                                부정자궁출혈</span><span class="lang-en">Purpura, petechiae, menorrhagia,
+                                                flooding/spotting</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">비양허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Spleen Yang Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">오한, 사지 냉감, 설사, 부종</span><span
+                                                class="lang-en">Chilliness, cold limbs, diarrhea, edema</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">위</span>
+                            <span class="font-semibold text-slate-700 lang-en">Stomach</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-amber-600 font-medium lang-ko">허실</span>
+                                    <span class="text-amber-600 font-medium lang-en">Excess/Deficiency</span>
+                                </div>
+                                <div class="children-container">
+                                    <div class="tree-node">
+                                        <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                            onclick="toggleNode(this)">
+                                            <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                            <span class="font-medium text-slate-600 lang-ko">실</span>
+                                            <span class="font-medium text-slate-600 lang-en">Excess</span>
+                                        </div>
+                                        <div class="children-container space-y-2 pb-2">
+                                            <div>
+                                                <div class="font-medium text-slate-800 lang-ko">식체위완</div>
+                                                <div class="font-medium text-slate-800 lang-en">Food Stagnation</div>
+                                                <div class="symptom-box"><span class="lang-ko">달걀 썩는 입 냄새, 신물 역류, 트림, 식욕
+                                                        부진</span><span class="lang-en">Foul breath (rotten eggs), acid
+                                                        reflux, belching</span></div>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-slate-800 lang-ko">위화</div>
+                                                <div class="font-medium text-slate-800 lang-en">Stomach Fire</div>
+                                                <div class="symptom-box"><span class="lang-ko">상복부 작열감, 갈증(찬물 선호), 지속적
+                                                        허기, 잇몸 염증</span><span class="lang-en">Epigastric burning, thirst
+                                                        (prefers cold), gum inflammation</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tree-node">
+                                        <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                            onclick="toggleNode(this)">
+                                            <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                            <span class="font-medium text-slate-600 lang-ko">허</span>
+                                            <span class="font-medium text-slate-600 lang-en">Deficiency</span>
+                                        </div>
+                                        <div class="children-container space-y-2 pb-2">
+                                            <div>
+                                                <div class="font-medium text-slate-800 lang-ko">위음허</div>
+                                                <div class="font-medium text-slate-800 lang-en">Stomach Yin Deficiency
+                                                </div>
+                                                <div class="symptom-box"><span class="lang-ko">식후 포만감, 입/목 건조(오후 심화), 오후
+                                                        미열, 건조한 변</span><span class="lang-en">Post-prandial fullness,
+                                                        dry mouth/throat, dry stools</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 폐 섹션 -->
+            <div class="tree-node border-l-4 theme-lung bg-white rounded-r-lg shadow-sm">
+                <div class="node-content p-4 flex items-center cursor-pointer select-none" onclick="toggleNode(this)">
+                    <span class="toggle-icon mr-3 text-xl">▶</span>
+                    <span class="font-bold text-xl lang-ko">폐</span>
+                    <span class="font-bold text-xl lang-en">Lung</span>
+                </div>
+                <div class="children-container">
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">허실</span>
+                            <span class="font-semibold text-slate-700 lang-en">Excess/Deficiency</span>
+                        </div>
+                        <div class="children-container">
+                            <!-- 허 -->
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-slate-600 font-medium lang-ko">허</span>
+                                    <span class="text-slate-600 font-medium lang-en">Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">폐기허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Lung Qi Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">숨가쁨, 약한 목소리, 잦은 감기, 주간 발한, 백색
+                                                안색</span><span class="lang-en">Shortness of breath, weak voice, frequent
+                                                colds</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">폐음허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Lung Yin Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">마른 기침/혈담, 쉰 목소리, 광대 홍조, 야간
+                                                발한</span><span class="lang-en">Dry cough, blood-streaked sputum, night
+                                                sweats</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">폐조증</div>
+                                        <div class="font-medium text-slate-800 lang-en">Lung Dryness</div>
+                                        <div class="symptom-box"><span class="lang-ko">건조한 피부 및 목, 입 마름, 갈증</span><span
+                                                class="lang-en">Dry skin/throat, dry mouth, thirst</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 실/담 -->
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-slate-600 font-medium lang-ko">실/담</span>
+                                    <span class="text-slate-600 font-medium lang-en">Excess/Phlegm</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">습담저폐</div>
+                                        <div class="font-medium text-slate-800 lang-en">Damp-Phlegm in Lu</div>
+                                        <div class="symptom-box"><span class="lang-ko">만성 기침, 다량의 백색 가래, 가슴
+                                                압박감</span><span class="lang-en">Chronic cough, profuse white phlegm,
+                                                chest oppression</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">열담저폐</div>
+                                        <div class="font-medium text-slate-800 lang-en">Phlegm-Heat in Lu</div>
+                                        <div class="symptom-box"><span class="lang-ko">개 짖는 듯한 기침, 노란/녹색 악취 가래,
+                                                천식</span><span class="lang-en">Barking cough, foul yellow/green phlegm,
+                                                asthma</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">담습옹폐</div>
+                                        <div class="font-medium text-slate-800 lang-en">Phlegm-Damp Obstr.</div>
+                                        <div class="symptom-box"><span class="lang-ko">호흡 곤란, 놀람에 의해 유발되는 기침</span><span
+                                                class="lang-en">Dyspnea, cough triggered by startle</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 실/풍 -->
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-slate-600 font-medium lang-ko">실/풍</span>
+                                    <span class="text-slate-600 font-medium lang-en">Excess/Wind</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">풍한범폐</div>
+                                        <div class="font-medium text-slate-800 lang-en">Wind-Cold Attack</div>
+                                        <div class="symptom-box"><span class="lang-ko">맑은 콧물, 재채기, 오한, 후두부 두통, 땀
+                                                없음</span><span class="lang-en">Clear runny nose, sneezing, chills, body
+                                                aches</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">풍열범폐</div>
+                                        <div class="font-medium text-slate-800 lang-en">Wind-Heat Attack</div>
+                                        <div class="symptom-box"><span class="lang-ko">발열, 인후통, 편도 부종, 노란 콧물</span><span
+                                                class="lang-en">Fever, sore throat, swollen tonsils, yellow nose</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">풍수범폐</div>
+                                        <div class="font-medium text-slate-800 lang-en">Wind-Water Attack</div>
+                                        <div class="symptom-box"><span class="lang-ko">눈/얼굴 갑작스러운 부종, 밝은 안색, 소변량
+                                                감소</span><span class="lang-en">Sudden edema of face, shiny complexion,
+                                                scanty urine</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 신 섹션 -->
+            <div class="tree-node border-l-4 theme-kidney bg-white rounded-r-lg shadow-sm">
+                <div class="node-content p-4 flex items-center cursor-pointer select-none" onclick="toggleNode(this)">
+                    <span class="toggle-icon mr-3 text-xl">▶</span>
+                    <span class="font-bold text-xl lang-ko">신</span>
+                    <span class="font-bold text-xl lang-en">Kidney</span>
+                </div>
+                <div class="children-container">
+                    <!-- 음양 -->
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">음양</span>
+                            <span class="font-semibold text-slate-700 lang-en">Yin/Yang</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-indigo-600 font-medium lang-ko">음허</span>
+                                    <span class="text-indigo-600 font-medium lang-en">Yin Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">신정허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Kidney Essence Def.</div>
+                                        <div class="symptom-box"><span class="lang-ko">발육 부진, 뼈 연화, 이빨 흔들림, 탈모 및 조기
+                                                백발</span><span class="lang-en">Developmental delay, soft bones, hair
+                                                loss</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">신음허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Kidney Yin Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">하지 무력, 난청, 몽정, 구강건조,
+                                                오심열</span><span class="lang-en">Weak legs, hearing loss, night sweats,
+                                                5-center heat</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-indigo-600 font-medium lang-ko">양허</span>
+                                    <span class="text-indigo-600 font-medium lang-en">Yang Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">신양허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Kidney Yang Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">하지 무력, 관절 냉감, 발기부전, 맑은 소변 또는
+                                                부종</span><span class="lang-en">Weak legs, cold joints, impotence,
+                                                edema</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">신기허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Kidney Qi Deficiency</div>
+                                        <div class="symptom-box"><span class="lang-ko">약한 소변줄기, 요실금, 야뇨증, 정액루, 자궁
+                                                탈출</span><span class="lang-en">Weak stream, incontinence, nycturia,
+                                                prolapse</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 복합 -->
+                    <div class="tree-node">
+                        <div class="node-content py-2 px-3 flex items-center cursor-pointer" onclick="toggleNode(this)">
+                            <span class="toggle-icon mr-2 text-sm text-slate-400">▶</span>
+                            <span class="font-semibold text-slate-700 lang-ko">복합</span>
+                            <span class="font-semibold text-slate-700 lang-en">Combined</span>
+                        </div>
+                        <div class="children-container">
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-indigo-600 font-medium lang-ko">음허</span>
+                                    <span class="text-indigo-600 font-medium lang-en">Yin Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">폐신음허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Lu/Ki Yin Def.</div>
+                                        <div class="symptom-box"><span class="lang-ko">저녁 악화 마른 기침, 운동 시 호흡 곤란, 사지
+                                                약화</span><span class="lang-en">Dry cough, dyspnea on exertion, weak
+                                                limbs</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">간신음허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Liv/Ki Yin Def.</div>
+                                        <div class="symptom-box"><span class="lang-ko">안구 건조, 시야 흐림, 사지 무감각, 쉽게
+                                                화냄</span><span class="lang-en">Dry eyes, blurred vision, numbness,
+                                                easily angered</span></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">심신불교</div>
+                                        <div class="font-medium text-slate-800 lang-en">He/Ki Disharmony</div>
+                                        <div class="symptom-box"><span class="lang-ko">동계, 정신 불안, 불면, 기억 저하</span><span
+                                                class="lang-en">Palpitations, mental restlessness, insomnia</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tree-node">
+                                <div class="node-content py-1 px-3 flex items-center cursor-pointer"
+                                    onclick="toggleNode(this)">
+                                    <span class="toggle-icon mr-2 text-xs text-slate-400">▶</span>
+                                    <span class="text-indigo-600 font-medium lang-ko">양허</span>
+                                    <span class="text-indigo-600 font-medium lang-en">Yang Deficiency</span>
+                                </div>
+                                <div class="children-container space-y-2 pb-2">
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">비신양허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Sp/Ki Yang Def.</div>
+                                        <div class="symptom-box"><span class="lang-ko">새벽 설사, 복부 및 다리 부종, 복명</span><span
+                                                class="lang-en">Dawn diarrhea, abdominal/leg edema, borborygmus</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-800 lang-ko">폐신기허</div>
+                                        <div class="font-medium text-slate-800 lang-en">Lu/Ki Qi Def.</div>
+                                        <div class="symptom-box"><span class="lang-ko">흡기 곤란, 빠르고 약한 호흡, 얼굴 부종, 마른
+                                                체형</span><span class="lang-en">Difficulty inhaling, shallow breathing,
+                                                thin body</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-16 text-center text-slate-400 text-sm pb-10">
+            © 2024 Hyungsuk Choi. All Rights Reserved.
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * 노드를 토글하는 함수
+         * @param {HTMLElement} element - 클릭된 node-content 요소
+         */
+        function toggleNode(element) {
+            const parent = element.parentElement;
+            const isExpanding = !parent.classList.contains('expanded');
+
+            if (isExpanding) {
+                // 확장될 때
+                parent.classList.add('expanded');
+            } else {
+                // 닫힐 때: 현재 노드뿐만 아니라 모든 하위 노드의 expanded 클래스를 제거하여 초기화
+                parent.classList.remove('expanded');
+                const childNodes = parent.querySelectorAll('.tree-node');
+                childNodes.forEach(node => {
+                    node.classList.remove('expanded');
+                });
+            }
+
+            // 이벤트 전파 방지
+            if (window.event) {
+                window.event.stopPropagation();
+            }
+        }
+
+        // ==========================================
+        // Standardized Language Logic (Modified for Mindmap)
+        // ==========================================
+
+        // Default Language
+        window.currentLang = 'ko';
+
+        function getLanguageFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const langParam = urlParams.get('lang');
+            if (langParam === 'en' || langParam === 'eng') return 'en';
+            return 'ko'; // Default
+        }
+
+        function setLanguage(lang) {
+            window.currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // Toggle Body Class for CSS-based switching
+            if (lang === 'en') {
+                document.body.classList.add('en-mode');
+            } else {
+                document.body.classList.remove('en-mode');
+            }
+
+            // Update URL without reloading
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState(null, '', url.toString());
+
+            // Update Title (Optional)
+            if (lang === 'ko') {
+                document.title = '장부변증 마인드맵';
+            } else {
+                document.title = 'Organ Pattern Mind Map';
+            }
+        }
+
+        function toggleLanguage(event) {
+            if (event) event.preventDefault();
+            const newLang = window.currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        function loadLanguage() {
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadLanguage);
+
+        // Handle back/forward buttons
+        window.addEventListener('popstate', () => {
+            const lang = getLanguageFromURL();
+            setLanguage(lang);
+        });
+    </script>
+</body>
+
+</html>
