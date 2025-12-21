@@ -1,61 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-QC84KCE6C1');
-</script>
+        gtag('config', 'G-QC84KCE6C1');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive TCM Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             background-color: #F7F3EF;
             font-family: 'Inter', 'Noto Sans KR', sans-serif;
             transition: background-color 0.3s;
         }
+
         .quiz-option {
             transition: background-color 0.2s, color 0.2s, border-color 0.2s;
         }
+
         .correct {
             background-color: #22c55e !important;
             color: white !important;
             border-color: #16a34a !important;
         }
+
         .incorrect {
             background-color: #ef4444 !important;
             color: white !important;
             border-color: #dc2626 !important;
         }
+
         .explanation {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
-            border-color: transparent; /* Initially transparent border */
+            border-color: transparent;
+            /* Initially transparent border */
         }
+
         .explanation.show {
-            max-height: 500px; /* A large enough height */
-            padding: 1rem; /* Apply padding only when visible */
-            border-color: #e5e7eb; /* Show border when visible */
+            max-height: 500px;
+            /* A large enough height */
+            padding: 1rem;
+            /* Apply padding only when visible */
+            border-color: #e5e7eb;
+            /* Show border when visible */
         }
     </style>
 </head>
+
 <body class="text-gray-800">
 
-    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+    <header id="page-header"
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
-        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+        <a href="#" onclick="toggleLanguage(event)"
+            class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
             Kor / Eng
         </a>
     </header>
@@ -65,8 +81,15 @@
         <div id="stage-selection-container" class="text-center p-8 bg-white rounded-xl shadow-lg">
             <h2 id="stage-title" class="text-3xl font-bold mb-6">단계를 선택하세요</h2>
             <div class="space-y-4">
-                <button id="stage-1-button" class="w-full max-w-xs mx-auto bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors">1단계</button>
-                <button id="stage-2-button" class="w-full max-w-xs mx-auto bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition-colors">2단계</button>
+                <button id="stage-1-button"
+                    class="w-full max-w-xs mx-auto bg-purple-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-600 transition-colors">1단계
+                    (8지선다)</button>
+                <button id="stage-2-button"
+                    class="w-full max-w-xs mx-auto bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors">2단계
+                    (기초)</button>
+                <button id="stage-3-button"
+                    class="w-full max-w-xs mx-auto bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition-colors">3단계
+                    (심화)</button>
             </div>
         </div>
 
@@ -90,7 +113,9 @@
                     </div>
                 </div>
                 <div id="quiz-footer" class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-                    <button id="next-button" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50" style="display: none;"></button>
+                    <button id="next-button"
+                        class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                        style="display: none;"></button>
                 </div>
             </div>
         </div>
@@ -100,7 +125,8 @@
             <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
             <p id="result-score" class="text-5xl font-bold text-green-600 mb-4"></p>
             <p id="result-message" class="text-gray-600 mb-8"></p>
-            <button id="restart-button" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors"></button>
+            <button id="restart-button"
+                class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors"></button>
         </div>
     </main>
 
@@ -108,6 +134,7 @@
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
+    <script src="quiz_data.js"></script>
     <script>
         // --- FALLBACK DATA ---
         const fallbackData = {
@@ -125,27 +152,24 @@
 
         // --- DATA SOURCE ---
         async function loadQuizData(lang) {
-           try {
-                const response = await fetch(`./organpattern_quiz_${lang}.json`); 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                return { data: data, isFallback: false };
-           } catch (error) {
-                console.warn("Could not load quiz data from file. Using fallback data.", error);
+            // Using globalQuizData loaded from quiz_data.js
+            if (typeof globalQuizData !== 'undefined' && globalQuizData[lang]) {
+                return { data: globalQuizData[lang], isFallback: false };
+            } else {
+                console.error("Global quiz data not found or language missing.");
                 return { data: fallbackData[lang], isFallback: true };
-           }
+            }
         }
-        
+
         // --- UI TEXTS ---
         const uiTexts = {
             ko: {
                 stageTitle: "단계를 선택하세요",
-                stage1: "1단계",
-                stage2: "2단계",
-                difficulty: { '하': '하', '중': '중', '상': '상' },
-                difficultyColors: { '하': 'bg-blue-100 text-blue-800', '중': 'bg-yellow-100 text-yellow-800', '상': 'bg-red-100 text-red-800' },
+                stage1: "1단계 (8지선다)",
+                stage2: "2단계 (기초)",
+                stage3: "3단계 (심화)",
+                difficulty: { '하': '하', '중': '중', '상': '상', 'step1': '1단계' },
+                difficultyColors: { '하': 'bg-blue-100 text-blue-800', '중': 'bg-yellow-100 text-yellow-800', '상': 'bg-red-100 text-red-800', 'step1': 'bg-purple-100 text-purple-800' },
                 questionCounter: (current, total) => `문제 ${current} / ${total}`,
                 explanationTitle: "해설",
                 nextButton: "다음 문제",
@@ -155,9 +179,10 @@
             },
             en: {
                 stageTitle: "Select a Stage",
-                stage1: "Stage 1",
-                stage2: "Stage 2",
-                difficulty: { 'Easy': 'Easy', 'Medium': 'Medium', 'Hard': 'Hard' },
+                stageTitle: "Select a Stage",
+                stage1: "Stage 1 (8 Choices)",
+                stage2: "Stage 2 (Basic)",
+                stage3: "Stage 3 (Advanced)",
                 difficultyColors: { 'Easy': 'bg-blue-100 text-blue-800', 'Medium': 'bg-yellow-100 text-yellow-800', 'Hard': 'bg-red-100 text-red-800' },
                 questionCounter: (current, total) => `Question ${current} / ${total}`,
                 explanationTitle: "Explanation",
@@ -179,7 +204,7 @@
         const stageSelectionContainer = document.getElementById('stage-selection-container');
         const quizContainer = document.getElementById('quiz-container');
         const resultContainer = document.getElementById('result-container');
-        
+
         const questionCounterEl = document.getElementById('question-counter');
         const difficultyBadgeEl = document.getElementById('difficulty-badge');
         const questionTextEl = document.getElementById('question-text');
@@ -190,7 +215,7 @@
         const nextButtonEl = document.getElementById('next-button');
         const restartButtonEl = document.getElementById('restart-button');
         const progressBarEl = document.getElementById('progress-bar');
-        
+
         function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
@@ -222,7 +247,7 @@
         function selectRandomQuestions(data, counts) {
             let selected = [];
             const difficulties = currentLang === 'ko' ? ['하', '중', '상'] : ['Easy', 'Medium', 'Hard'];
-            
+
             const [easyKey, mediumKey, hardKey] = difficulties;
 
             const easyData = getPropertyCaseInsensitive(data, easyKey);
@@ -241,35 +266,35 @@
             answerSelected = false;
             explanationBoxEl.classList.remove('show');
             nextButtonEl.style.display = 'none';
-            
+
             const question = quizQuestions[currentQuestionIndex];
             const totalQuestions = quizQuestions.length;
-            
+
             progressBarEl.style.width = `${((currentQuestionIndex) / totalQuestions) * 100}%`;
 
             questionCounterEl.textContent = currentUiTexts.questionCounter(currentQuestionIndex + 1, totalQuestions);
-            
+
             // [수정] 난이도 키를 직접 사용하도록 로직을 단순화했습니다.
             const difficultyKey = question.difficulty;
             difficultyBadgeEl.textContent = currentUiTexts.difficulty[difficultyKey];
             difficultyBadgeEl.className = `px-3 py-1 text-xs font-bold rounded-full ${currentUiTexts.difficultyColors[difficultyKey]}`;
-            
+
             questionTextEl.innerHTML = question.question;
             optionsContainerEl.innerHTML = '';
 
             const optionsArray = Object.entries(question.options);
             shuffleArray(optionsArray);
 
-            const optionLabels = ['A', 'B', 'C', 'D'];
+            const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
             optionsArray.forEach(([originalKey, value], index) => {
                 const button = document.createElement('button');
                 button.className = 'quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-400';
-                
+
                 const newLabel = optionLabels[index];
                 button.innerHTML = `<span class="font-bold mr-2">${newLabel}.</span> ${value}`;
-                
-                button.dataset.answer = originalKey; 
-                
+
+                button.dataset.answer = originalKey;
+
                 button.onclick = (e) => selectAnswer(e.target.closest('button'));
                 optionsContainerEl.appendChild(button);
             });
@@ -281,25 +306,41 @@
 
             const selectedAnswer = selectedButton.dataset.answer;
             const correctAnswer = quizQuestions[currentQuestionIndex].answer;
-            
+
             if (selectedAnswer === correctAnswer) {
                 score++;
                 selectedButton.classList.add('correct');
             } else {
                 selectedButton.classList.add('incorrect');
                 const correctButton = optionsContainerEl.querySelector(`[data-answer="${correctAnswer}"]`);
-                if(correctButton) correctButton.classList.add('correct');
+                if (correctButton) correctButton.classList.add('correct');
             }
-            
+
             optionsContainerEl.querySelectorAll('.quiz-option').forEach(btn => {
                 btn.disabled = true;
                 btn.classList.add('cursor-not-allowed');
                 btn.classList.remove('hover:bg-gray-100', 'hover:border-gray-400');
             });
 
-            explanationTitleEl.textContent = currentUiTexts.explanationTitle;
-            explanationTextEl.innerHTML = quizQuestions[currentQuestionIndex].explanation;
-            explanationBoxEl.classList.add('show');
+
+
+            // If explanation is empty (Step 1 might not have one initially?)
+            // But our data has logic.
+            if (quizQuestions[currentQuestionIndex].explanation) {
+                explanationTitleEl.textContent = currentUiTexts.explanationTitle;
+                explanationTextEl.innerHTML = quizQuestions[currentQuestionIndex].explanation;
+                explanationTitleEl.style.display = 'block';
+                explanationTextEl.style.display = 'block';
+                explanationBoxEl.classList.add('show');
+            } else {
+                // For Step 1, we might not have 'explanation' field in the new data? 
+                // Ah, based on parser implementation, 'description' is used as Question, and 'pattern_ko' as Answer.
+                // We don't have a separate explanation field in the new data.
+                // So we can hide the explanation box or show the answer.
+                explanationTitleEl.textContent = "정답";
+                explanationTextEl.textContent = quizQuestions[currentQuestionIndex].answer;
+                explanationBoxEl.classList.add('show');
+            }
 
             nextButtonEl.textContent = currentUiTexts.nextButton;
             nextButtonEl.style.display = 'block';
@@ -308,10 +349,10 @@
         function showResults() {
             quizContainer.style.display = 'none';
             resultContainer.style.display = 'block';
-            
+
             const totalQuestions = quizQuestions.length;
-            const resultScoreText = currentLang === 'ko' 
-                ? `${totalQuestions}개 중 ${score}개 정답` 
+            const resultScoreText = currentLang === 'ko'
+                ? `${totalQuestions}개 중 ${score}개 정답`
                 : `${score} out of ${totalQuestions} correct`;
 
             document.getElementById('result-title').textContent = currentUiTexts.resultTitle;
@@ -329,25 +370,77 @@
                 showResults();
             }
         }
-        
+
         async function startQuiz(stage) {
             const { data, isFallback } = await loadQuizData(currentLang);
             if (!data) return;
 
             let questionCounts;
             if (isFallback) {
+                // Fallback logic
                 questionCounts = { easy: 1, medium: 0, hard: 1 };
+                quizQuestions = selectRandomQuestions(data, questionCounts);
             } else if (stage === 1) {
+                // New Step 1: 10 Random Questions from 'step1' data with 8 options
+                const step1Data = data.step1 || [];
+                // Pick 10 random questions
+                const selectedQuestions = shuffleArray([...step1Data]).slice(0, 10);
+
+                // Get all possible answers for distractors
+                const allAnswers = step1Data.map(item => item.answer);
+                const uniqueAnswers = [...new Set(allAnswers)];
+
+                // Prepare questions with dynamic options
+                quizQuestions = selectedQuestions.map(q => {
+                    // Create 8 options: 1 correct + 7 random distractors
+                    const distractors = uniqueAnswers
+                        .filter(ans => ans !== q.answer)
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, 7);
+
+                    const optionsList = [q.answer, ...distractors];
+                    shuffleArray(optionsList);
+
+                    // Convert to object { "A": "...", "B": "...", ... }
+                    const labeledOptions = {};
+                    const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+                    optionsList.forEach((opt, idx) => {
+                        labeledOptions[labels[idx]] = opt;
+                    });
+
+                    // Find which key holds the correct answer
+                    const correctKey = Object.keys(labeledOptions).find(key => labeledOptions[key] === q.answer);
+
+                    return {
+                        ...q,
+                        options: labeledOptions,
+                        answer: correctKey, // Updated to be the Key (A, B, etc.)
+                        difficulty: 'step1' // Custom difficulty tag
+                    };
+                });
+
+            } else if (stage === 2) {
+                // Old Step 1 (Easy) -> Now Step 2
                 questionCounts = { easy: 7, medium: 0, hard: 0 };
+                quizQuestions = selectRandomQuestions(data, questionCounts);
             } else {
+                // Old Step 2 (Medium/Hard) -> Now Step 3
                 questionCounts = { easy: 2, medium: 2, hard: 6 };
+                quizQuestions = selectRandomQuestions(data, questionCounts);
             }
-            
-            quizQuestions = selectRandomQuestions(data, questionCounts);
-            
+
+            // If selectRandomQuestions was used (Stage 2/3), quizQuestions is already set.
+            // If Stage 1, we set it manually above.
+
+            // Safety check
+            if (!quizQuestions || quizQuestions.length === 0) {
+                quizContainer.innerHTML = `<div class="p-8 text-center text-gray-600">출제할 문제가 없습니다. 데이터 파일을 확인해주세요.</div>`;
+                return;
+            }
+
             if (quizQuestions.length === 0) {
-                 quizContainer.innerHTML = `<div class="p-8 text-center text-gray-600">출제할 문제가 없습니다. 데이터 파일을 확인해주세요.</div>`;
-                 return;
+                quizContainer.innerHTML = `<div class="p-8 text-center text-gray-600">출제할 문제가 없습니다. 데이터 파일을 확인해주세요.</div>`;
+                return;
             }
 
             currentQuestionIndex = 0;
@@ -356,7 +449,7 @@
             stageSelectionContainer.style.display = 'none';
             resultContainer.style.display = 'none';
             quizContainer.style.display = 'block';
-            
+
             displayQuestion();
         }
 
@@ -374,6 +467,7 @@
             document.getElementById('stage-title').textContent = currentUiTexts.stageTitle;
             document.getElementById('stage-1-button').textContent = currentUiTexts.stage1;
             document.getElementById('stage-2-button').textContent = currentUiTexts.stage2;
+            document.getElementById('stage-3-button').textContent = currentUiTexts.stage3;
 
             quizContainer.style.display = 'none';
             resultContainer.style.display = 'none';
@@ -383,6 +477,7 @@
         // Event Listeners
         document.getElementById('stage-1-button').addEventListener('click', () => startQuiz(1));
         document.getElementById('stage-2-button').addEventListener('click', () => startQuiz(2));
+        document.getElementById('stage-3-button').addEventListener('click', () => startQuiz(3));
         nextButtonEl.addEventListener('click', nextQuestion);
         restartButtonEl.addEventListener('click', showStageSelection);
 
@@ -390,5 +485,5 @@
         document.addEventListener('DOMContentLoaded', showStageSelection);
     </script>
 </body>
-</html>
 
+</html>
