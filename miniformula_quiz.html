@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-QC84KCE6C1');
-</script>
+        gtag('config', 'G-QC84KCE6C1');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulas in Formulas</title>
@@ -21,51 +22,69 @@
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #F7F3EF;
-            color: #374151; /* gray-700 */
+            color: #374151;
+            /* gray-700 */
         }
+
         /* Default herb button style */
         .herb-btn {
             transition: all 0.2s ease-in-out;
-            border: 2px solid #D1D5DB; /* gray-300 */
+            border: 2px solid #D1D5DB;
+            /* gray-300 */
         }
+
         .herb-btn:hover:not([disabled]) {
-            border-color: #6B7280; /* gray-500 */
+            border-color: #6B7280;
+            /* gray-500 */
             transform: translateY(-2px);
         }
+
         .herb-btn[disabled] {
             cursor: not-allowed;
             opacity: 0.6;
             background-color: #F3F4F6;
         }
+
         /* Style for unincluded herb buttons */
         .extra-herb-btn {
             border-style: dashed;
-            border-color: #9CA3AF; /* gray-400 */
-            color: #4B5563; /* gray-600 */
+            border-color: #9CA3AF;
+            /* gray-400 */
+            color: #4B5563;
+            /* gray-600 */
         }
+
         /* Style for selected herb buttons */
         .herb-btn.selected {
-            background-color: #4B5563; /* gray-600 */
+            background-color: #4B5563;
+            /* gray-600 */
             color: white;
-            border-color: #1F2937; /* gray-800 */
+            border-color: #1F2937;
+            /* gray-800 */
         }
+
         /* Style for prescription list buttons */
         .prescription-list-btn {
-             transition: all 0.2s ease-in-out;
+            transition: all 0.2s ease-in-out;
         }
+
         .prescription-list-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
 
-    <header id="page-header" style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" id="header-link" style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+    <header id="page-header"
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-family: serif; font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
-        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+        <a href="#" onclick="toggleLanguage(event)"
+            class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
             Kor / Eng
         </a>
     </header>
@@ -74,36 +93,43 @@
         <div id="menu-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm">
             <h2 id="menu-title" class="text-2xl font-bold mb-6 text-center">Formulas in Formulas</h2>
             <div id="prescription-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                </div>
+            </div>
         </div>
 
         <div id="game-container" class="bg-white/60 p-6 sm:p-8 rounded-xl shadow-lg backdrop-blur-sm hidden">
             <div class="text-center mb-6">
-                 <p id="question-description" class="text-gray-600">Click the herbs to find the <span id="sub-count" class="font-bold"></span> hidden formulas.</p>
+                <p id="question-description" class="text-gray-600">Click the herbs to find the <span id="sub-count"
+                        class="font-bold"></span> hidden formulas.</p>
             </div>
 
             <div class="mb-6 p-4 bg-gray-50 rounded-lg">
                 <h3 id="prescription-name" class="text-xl font-semibold text-center mb-1"></h3>
                 <p id="prescription-description-main" class="text-center text-gray-500 text-sm mb-4"></p>
                 <div id="herbs-container" class="flex flex-wrap gap-3 justify-center">
-                    </div>
+                </div>
                 <div id="extra-herbs-wrapper" class="mt-4 pt-4 border-t border-dashed hidden">
-                    <p id="extra-herbs-label" class="text-center text-sm text-gray-500 mb-3">Herbs needed for other formulas</p>
+                    <p id="extra-herbs-label" class="text-center text-sm text-gray-500 mb-3">Herbs needed for other
+                        formulas</p>
                     <div id="extra-herbs-container" class="flex flex-wrap gap-3 justify-center">
-                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="feedback-container" class="min-h-[3rem] text-center py-2 text-lg font-semibold text-gray-700">
-                </div>
+            </div>
 
             <div id="summary-container" class="mt-4 space-y-3">
-                </div>
+            </div>
 
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
-                <button id="show-all-btn" class="bg-white text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Show All</button>
-                <button id="reset-btn" class="bg-white text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Reset</button>
-                <button id="back-btn" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors shadow-md">Back to List</button>
+                <button id="show-all-btn"
+                    class="bg-white text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Show
+                    All</button>
+                <button id="reset-btn"
+                    class="bg-white text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors shadow-md border">Reset</button>
+                <button id="back-btn"
+                    class="bg-gray-800 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors shadow-md">Back
+                    to List</button>
             </div>
         </div>
     </main>
@@ -130,32 +156,32 @@
                 foundNotIncluded: "Not Included Herbs:",
                 // Quiz Data
                 quiz: [
-                    { mainPrescription: "Liu Jun Zi Tang", description: "Tonifies Spleen Qi and transforms phlegm.", herbs: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao", "Ban Xia", "Chen Pi"], subPrescriptions: [ { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Wen Dan Tang", description: "Clears Gallbladder heat and resolves phlegm.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Zhi Shi", "Zhu Ru"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Ban Xia Bai Zhu Tian Ma Tang", description: "Dries dampness, resolves phlegm, and extinguishes wind.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Bai Zhu", "Tian Ma"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Qing Qi Hua Tan Wan", description: "Clears heat and resolves phlegm from the Lungs.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Gua Lou Ren", "Dan Nan Xing", "Huang Qin", "Zhi Shi", "Xing Ren"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Dao Tan Tang", description: "Transforms stubborn phlegm obstructing the channels.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Dan Nan Xing", "Zhi Shi"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Xing Su San", description: "Disseminates Lung qi and resolves phlegm for externally-contracted cool-dryness.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Xing Ren", "Jie Geng", "Zi Su Ye", "Qian Hu", "Zhi Shi"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Bao He Wan", description: "Reduces food stagnation and harmonizes the stomach.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Shan Zha", "Lian Qiao", "Mai Ya", "Shen Qu", "Lai Fu Zi"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Qu Feng Chu Shi Tang", description: "Expels wind-dampness and relieves pain.", herbs: ["Gan Cao", "Qiang Huo", "Zhi Qiao", "Jie Geng", "Dang Gui", "Ban Xia", "Fang Feng", "Fu Ling", "Bai Zhi", "Bai Zhu", "Wu Yao", "Ren Shen", "Chi Shao", "Chen Pi", "Cang Zhu", "Chuan Xiong", "Huang Qin", "Huang Lian"], subPrescriptions: [ { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Tao He Cheng Qi Tang", description: "Drains heat and breaks up blood stasis in the lower jiao.", herbs: ["Da Huang", "Mang Xiao", "Gan Cao", "Tao Ren", "Gui Zhi"], subPrescriptions: [ { name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." } ] },
-                    { mainPrescription: "Xiao Ji Yin Zi", description: "Cools the Blood, stops bleeding, promotes urination, and unblocks painful urinary dribbling.", herbs: ["Xiao Ji", "Ou Jie", "Pu Huang", "Sheng Di Huang", "Dan Zhu Ye", "Zhi Zi", "Hua Shi", "Mu Tong", "Dang Gui", "Zhi Gan Cao"], subPrescriptions: [ { name: "Dao Chi San", ingredients: ["Sheng Di Huang", "Mu Tong", "Dan Zhu Ye", "Zhi Gan Cao"], notIncluded: [], description: "Clears Heart-heat, nourishes Yin, and promotes urination." } ] },
-                    { mainPrescription: "Pei Pa Koa", description: "For cough, phlegm, dry phlegm, and colds.", herbs: ["Chuan Bei Mu", "Pi Pa Ye", "Sha Shen", "Fu Ling", "Chen Pi", "Jie Geng", "Ban Xia", "Wu Wei Zi", "Gua Lou Ren", "Kuan Dong Hua", "Yuan Zhi", "Xing Ren", "Gan Jiang", "Gan Cao", "Bo He"], subPrescriptions: [ { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Hwalmyung Soo", description: "A popular digestive aid.", herbs: ["Er Cha", "Rou Gui", "Ding Xiang", "Xuan Hu Suo", "Rou Dou Kou", "Gan Jiang", "Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], subPrescriptions: [ { name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." } ] },
-                    { mainPrescription: "Wu Ji San", description: "Most used formula in Korea for Bi syndrome.", herbs: ["Cang Zhu", "Ma Huang", "Chen Pi", "Hou Po", "Jie Geng", "Zhi Shi", "Dang Gui", "Gan Jiang", "Shao Yao", "Fu Ling", "Bai Zhi", "Chuan Xiong", "Ban Xia", "Gui Zhi", "Gan Cao", "Sheng Jiang", "Da Zao"], subPrescriptions: [ { name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }, { name: "Gui Zhi Tang", ingredients: ["Gui Zhi", "Shao Yao", "Gan Cao", "Sheng Jiang", "Da Zao"], notIncluded: [], description: "Warms and releases the exterior, harmonizes Ying and Wei." } ] },
-                    { mainPrescription: "Du Huo Ji Sheng Tang", description: "Commonly used formula for Bi syndrome.", herbs: ["Gan Cao", "Dang Gui", "Du Huo", "Du Zhong", "Fang Feng", "Fu Ling", "Shao Yao", "Sang Ji Sheng", "Xi Xin", "Shu Di Huang", "Niu Xi", "Rou Gui", "Ren Shen", "Qin Jiao", "Chuan Xiong"], subPrescriptions: [ { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: ["Bai Zhu"], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }, { name: "Si Wu Tang", ingredients: ["Dang Gui", "Chuan Xiong", "Shao Yao", "Shu Di Huang"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." } ] },
-                    { mainPrescription: "Shi Quan Da Bu Tang", description: "A representative formula that tonifies both Qi and Blood.", herbs: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong", "Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao", "Huang Qi", "Rou Gui"], subPrescriptions: [ { name: "Si Wu Tang", ingredients: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." }, { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." } ] },
-                    { mainPrescription: "Wen Qing Yin", description: "Used for bleeding disorders or skin conditions caused by heat in the blood.", herbs: ["Di Huang", "Dang Gui", "Shao Yao", "Chuan Xiong", "Huang Lian", "Huang Qin", "Huang Bai", "Zhi Zi"], subPrescriptions: [ { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: [], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." }, { name: "Si Wu Tang", ingredients: ["Shao Yao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." } ] },
-                    { mainPrescription: "Qing Wen Bai Du Yin", description: "Used when heat-toxin from an epidemic disease is severe in both the Qi and Blood levels.", herbs: ["Huang Lian", "Huang Qin", "Lian Qiao", "Zhi Zi", "Di Huang", "Xi Jiao", "Mu Dan Pi", "Chi Shao", "Zhi Mu", "Shi Gao", "Xuan Shen", "Dan Zhu Ye", "Gan Cao", "Jie Geng"], subPrescriptions: [ { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: ["Huang Bai"], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." }, { name: "Xi Jiao Di Huang Tang", ingredients: ["Di Huang", "Mu Dan Pi", "Xi Jiao", "Chi Shao"], notIncluded: [], description: "Treats various bleeding and rashes caused by heat entering the nutritive and blood levels." }, { name: "Bai Hu Tang", ingredients: ["Zhi Mu", "Shi Gao", "Geng Mi", "Gan Cao"], notIncluded: ["Geng Mi"], description: "Clears Qi-level heat, drains Stomach fire, generates fluids, and alleviates thirst." } ] },
-                    { mainPrescription: "Liang Ge San", description: "Treats stomatitis, constipation, and headaches from accumulated heat in the upper and middle jiaos.", herbs: ["Da Huang", "Mang Xiao", "Gan Cao", "Huang Qin", "Lian Qiao", "Zhi Zi", "Bo He"], subPrescriptions: [ { name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." }, { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: ["Huang Lian", "Huang Bai"], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." }, { name: "San Huang Xie Xin Tang", ingredients: ["Da Huang", "Huang Qin", "Huang Lian"], notIncluded: ["Huang Lian"], description: "Directly drains fire-heat from the Heart and Stomach." } ] },
-                    { mainPrescription: "Qing Ying Tang", description: "Treats symptoms of severe fever at night and mental confusion when heat enters the nutritive level.", herbs: ["Huang Lian", "Jin Yin Hua", "Lian Qiao", "Dan Shen", "Di Huang", "Xuan Shen", "Mai Men Dong", "Xi Jiao", "Dan Zhu Ye"], subPrescriptions: [ { name: "Zeng Ye Tang", ingredients: ["Di Huang", "Xuan Shen", "Mai Men Dong"], notIncluded: [], description: "A formula that replenishes fluids to treat constipation or dry cough." } ] },
-                    { mainPrescription: "Jia Wei Xiao Yao San", description: "Cools fire from liver qi stagnation and tonifies blood to alleviate stress-related symptoms.", herbs: ["Chai Hu", "Shao Yao", "Dang Gui", "Fu Ling", "Bai Zhu", "Gan Cao", "Mu Dan Pi", "Zhi Zi"], subPrescriptions: [ { name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: ["Zhi Shi"], description: "A key formula for soothing the liver and resolving qi stagnation." }, { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: ["Ren Shen"], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." } ] },
-                    { mainPrescription: "Chai Hu Shu Gan San", description: "Derived from Si Ni San, it is more effective for symptoms of liver qi stagnation like flank pain.", herbs: ["Chai Hu", "Shao Yao", "Chuan Xiong", "Gan Cao", "Xiang Fu", "Chen Pi", "Zhi Shi"], subPrescriptions: [ { name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: [], description: "A key formula for soothing the liver and resolving qi stagnation." } ] },
-                    { mainPrescription: "Xue Fu Zhu Yu Tang", description: "Treats pain and circulatory disorders due to blood stasis in the chest area.", herbs: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao", "Dang Gui", "Chuan Xiong", "Di Huang", "Chi Shao", "Tao Ren", "Hong Hua", "Niu Xi", "Jie Geng"], subPrescriptions: [ { name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: [], description: "A key formula for soothing the liver and resolving qi stagnation." }, { name: "Tao Hong Si Wu Tang", ingredients: ["Dang Gui", "Chuan Xiong", "Di Huang", "Chi Shao", "Tao Ren", "Hong Hua"], notIncluded: [], description: "Adds blood stasis-removing herbs to Si Wu Tang for stronger circulation." } ] },
-                    { mainPrescription: "Huo Xiang Zheng Qi San", description: "Used for various summer cold symptoms, indigestion, vomiting, and diarrhea.", herbs: ["Huo Xiang", "Zi Su Ye", "Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Cang Zhu", "Bai Zhi", "Hou Po", "Da Fu Pi", "Jie Geng"], subPrescriptions: [ { name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." } ] },
-                    { mainPrescription: "Shao Yao Tang", description: "For febrile dysentery with bleeding and diarrhea.", herbs: ["Da Huang", "Huang Qin", "Huang Lian", "Gui Zhi", "Shao Yao", "Dang Gui", "Mu Xiang", "Bing Lang", "Gan Cao"], subPrescriptions: [ { name: "Gui Zhi Jia Shao Yao Tang", ingredients: ["Gui Zhi", "Shao Yao", "Gan Cao", "Da Zao", "Sheng Jiang"], notIncluded: ["Da Zao", "Sheng Jiang"], description: "Augments Gui Zhi Tang to address abdominal pain." }, { name: "San Huang Xie Xin Tang", ingredients: ["Da Huang", "Huang Qin", "Huang Lian"], notIncluded: [], description: "Directly drains fire-heat from the Heart and Stomach." } ] },
-                    { mainPrescription: "Fang Feng Tong Sheng San", description: "Cools both exterior and interior heat, widely used for skin diseases, obesity, and constipation.", herbs: ["Fang Feng", "Jing Jie", "Bai Zhu", "Zhi Zi", "Ma Huang", "Bo He", "Da Huang", "Mang Xiao", "Lian Qiao", "Dang Gui", "Chuan Xiong", "Bai Shao", "Shi Gao", "Jie Geng", "Huang Qin", "Hua Shi", "Gan Cao"], subPrescriptions: [ { name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." }, { name: "Si Wu Tang", ingredients: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: ["Di Huang"], description: "A fundamental formula to tonify Blood and promote circulation." } ] },
-                    { mainPrescription: "Zi Yin Jiang Huo Tang", description: "Treats cough, phlegm, and hemoptysis due to yin deficiency with effulgent fire.", herbs: ["Dang Gui", "Bai Shao", "Shu Di Huang", "Sheng Di Huang", "Mai Men Dong", "Zhi Mu", "Huang Bai", "Bai Zhu", "Chen Pi", "Gan Cao"], subPrescriptions: [ { name: "Si Wu Tang", ingredients: ["Dang Gui", "Bai Shao", "Shu Di Huang", "Sheng Di Huang", "Chuan Xiong"], notIncluded: ["Chuan Xiong"], description: "A fundamental formula to tonify Blood and promote circulation." } ] }
+                    { mainPrescription: "Liu Jun Zi Tang", description: "Tonifies Spleen Qi and transforms phlegm.", herbs: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao", "Ban Xia", "Chen Pi"], subPrescriptions: [{ name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Wen Dan Tang", description: "Clears Gallbladder heat and resolves phlegm.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Zhi Shi", "Zhu Ru"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Ban Xia Bai Zhu Tian Ma Tang", description: "Dries dampness, resolves phlegm, and extinguishes wind.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Bai Zhu", "Tian Ma"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Qing Qi Hua Tan Wan", description: "Clears heat and resolves phlegm from the Lungs.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Gua Lou Ren", "Dan Nan Xing", "Huang Qin", "Zhi Shi", "Xing Ren"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Dao Tan Tang", description: "Transforms stubborn phlegm obstructing the channels.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Dan Nan Xing", "Zhi Shi"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Xing Su San", description: "Disseminates Lung qi and resolves phlegm for externally-contracted cool-dryness.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Xing Ren", "Jie Geng", "Zi Su Ye", "Qian Hu", "Zhi Shi"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Bao He Wan", description: "Reduces food stagnation and harmonizes the stomach.", herbs: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Shan Zha", "Lian Qiao", "Mai Ya", "Shen Qu", "Lai Fu Zi"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Qu Feng Chu Shi Tang", description: "Expels wind-dampness and relieves pain.", herbs: ["Gan Cao", "Qiang Huo", "Zhi Qiao", "Jie Geng", "Dang Gui", "Ban Xia", "Fang Feng", "Fu Ling", "Bai Zhi", "Bai Zhu", "Wu Yao", "Ren Shen", "Chi Shao", "Chen Pi", "Cang Zhu", "Chuan Xiong", "Huang Qin", "Huang Lian"], subPrescriptions: [{ name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Tao He Cheng Qi Tang", description: "Drains heat and breaks up blood stasis in the lower jiao.", herbs: ["Da Huang", "Mang Xiao", "Gan Cao", "Tao Ren", "Gui Zhi"], subPrescriptions: [{ name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." }] },
+                    { mainPrescription: "Xiao Ji Yin Zi", description: "Cools the Blood, stops bleeding, promotes urination, and unblocks painful urinary dribbling.", herbs: ["Xiao Ji", "Ou Jie", "Pu Huang", "Sheng Di Huang", "Dan Zhu Ye", "Zhi Zi", "Hua Shi", "Mu Tong", "Dang Gui", "Zhi Gan Cao"], subPrescriptions: [{ name: "Dao Chi San", ingredients: ["Sheng Di Huang", "Mu Tong", "Dan Zhu Ye", "Zhi Gan Cao"], notIncluded: [], description: "Clears Heart-heat, nourishes Yin, and promotes urination." }] },
+                    { mainPrescription: "Pei Pa Koa", description: "For cough, phlegm, dry phlegm, and colds.", herbs: ["Chuan Bei Mu", "Pi Pa Ye", "Sha Shen", "Fu Ling", "Chen Pi", "Jie Geng", "Ban Xia", "Wu Wei Zi", "Gua Lou Ren", "Kuan Dong Hua", "Yuan Zhi", "Xing Ren", "Gan Jiang", "Gan Cao", "Bo He"], subPrescriptions: [{ name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Hwalmyung Soo", description: "A popular digestive aid.", herbs: ["Er Cha", "Rou Gui", "Ding Xiang", "Xuan Hu Suo", "Rou Dou Kou", "Gan Jiang", "Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], subPrescriptions: [{ name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." }] },
+                    { mainPrescription: "Wu Ji San", description: "Most used formula in Korea for Bi syndrome.", herbs: ["Cang Zhu", "Ma Huang", "Chen Pi", "Hou Po", "Jie Geng", "Zhi Shi", "Dang Gui", "Gan Jiang", "Shao Yao", "Fu Ling", "Bai Zhi", "Chuan Xiong", "Ban Xia", "Gui Zhi", "Gan Cao", "Sheng Jiang", "Da Zao"], subPrescriptions: [{ name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }, { name: "Gui Zhi Tang", ingredients: ["Gui Zhi", "Shao Yao", "Gan Cao", "Sheng Jiang", "Da Zao"], notIncluded: [], description: "Warms and releases the exterior, harmonizes Ying and Wei." }] },
+                    { mainPrescription: "Du Huo Ji Sheng Tang", description: "Commonly used formula for Bi syndrome.", herbs: ["Gan Cao", "Dang Gui", "Du Huo", "Du Zhong", "Fang Feng", "Fu Ling", "Shao Yao", "Sang Ji Sheng", "Xi Xin", "Shu Di Huang", "Niu Xi", "Rou Gui", "Ren Shen", "Qin Jiao", "Chuan Xiong"], subPrescriptions: [{ name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: ["Bai Zhu"], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }, { name: "Si Wu Tang", ingredients: ["Dang Gui", "Chuan Xiong", "Shao Yao", "Shu Di Huang"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." }] },
+                    { mainPrescription: "Shi Quan Da Bu Tang", description: "A representative formula that tonifies both Qi and Blood.", herbs: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong", "Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao", "Huang Qi", "Rou Gui"], subPrescriptions: [{ name: "Si Wu Tang", ingredients: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." }, { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }] },
+                    { mainPrescription: "Wen Qing Yin", description: "Used for bleeding disorders or skin conditions caused by heat in the blood.", herbs: ["Di Huang", "Dang Gui", "Shao Yao", "Chuan Xiong", "Huang Lian", "Huang Qin", "Huang Bai", "Zhi Zi"], subPrescriptions: [{ name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: [], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." }, { name: "Si Wu Tang", ingredients: ["Shao Yao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: [], description: "A fundamental formula to tonify Blood and promote circulation." }] },
+                    { mainPrescription: "Qing Wen Bai Du Yin", description: "Used when heat-toxin from an epidemic disease is severe in both the Qi and Blood levels.", herbs: ["Huang Lian", "Huang Qin", "Lian Qiao", "Zhi Zi", "Di Huang", "Xi Jiao", "Mu Dan Pi", "Chi Shao", "Zhi Mu", "Shi Gao", "Xuan Shen", "Dan Zhu Ye", "Gan Cao", "Jie Geng"], subPrescriptions: [{ name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: ["Huang Bai"], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." }, { name: "Xi Jiao Di Huang Tang", ingredients: ["Di Huang", "Mu Dan Pi", "Xi Jiao", "Chi Shao"], notIncluded: [], description: "Treats various bleeding and rashes caused by heat entering the nutritive and blood levels." }, { name: "Bai Hu Tang", ingredients: ["Zhi Mu", "Shi Gao", "Geng Mi", "Gan Cao"], notIncluded: ["Geng Mi"], description: "Clears Qi-level heat, drains Stomach fire, generates fluids, and alleviates thirst." }] },
+                    { mainPrescription: "Liang Ge San", description: "Treats stomatitis, constipation, and headaches from accumulated heat in the upper and middle jiaos.", herbs: ["Da Huang", "Mang Xiao", "Gan Cao", "Huang Qin", "Lian Qiao", "Zhi Zi", "Bo He"], subPrescriptions: [{ name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." }, { name: "Huang Lian Jie Du Tang", ingredients: ["Huang Qin", "Zhi Zi", "Huang Lian", "Huang Bai"], notIncluded: ["Huang Lian", "Huang Bai"], description: "A powerful heat-clearing and detoxifying agent for fire in the three jiaos." }, { name: "San Huang Xie Xin Tang", ingredients: ["Da Huang", "Huang Qin", "Huang Lian"], notIncluded: ["Huang Lian"], description: "Directly drains fire-heat from the Heart and Stomach." }] },
+                    { mainPrescription: "Qing Ying Tang", description: "Treats symptoms of severe fever at night and mental confusion when heat enters the nutritive level.", herbs: ["Huang Lian", "Jin Yin Hua", "Lian Qiao", "Dan Shen", "Di Huang", "Xuan Shen", "Mai Men Dong", "Xi Jiao", "Dan Zhu Ye"], subPrescriptions: [{ name: "Zeng Ye Tang", ingredients: ["Di Huang", "Xuan Shen", "Mai Men Dong"], notIncluded: [], description: "A formula that replenishes fluids to treat constipation or dry cough." }] },
+                    { mainPrescription: "Jia Wei Xiao Yao San", description: "Cools fire from liver qi stagnation and tonifies blood to alleviate stress-related symptoms.", herbs: ["Chai Hu", "Shao Yao", "Dang Gui", "Fu Ling", "Bai Zhu", "Gan Cao", "Mu Dan Pi", "Zhi Zi"], subPrescriptions: [{ name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: ["Zhi Shi"], description: "A key formula for soothing the liver and resolving qi stagnation." }, { name: "Si Jun Zi Tang", ingredients: ["Ren Shen", "Bai Zhu", "Fu Ling", "Gan Cao"], notIncluded: ["Ren Shen"], description: "A fundamental formula to tonify Qi and strengthen spleen/stomach function." }] },
+                    { mainPrescription: "Chai Hu Shu Gan San", description: "Derived from Si Ni San, it is more effective for symptoms of liver qi stagnation like flank pain.", herbs: ["Chai Hu", "Shao Yao", "Chuan Xiong", "Gan Cao", "Xiang Fu", "Chen Pi", "Zhi Shi"], subPrescriptions: [{ name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: [], description: "A key formula for soothing the liver and resolving qi stagnation." }] },
+                    { mainPrescription: "Xue Fu Zhu Yu Tang", description: "Treats pain and circulatory disorders due to blood stasis in the chest area.", herbs: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao", "Dang Gui", "Chuan Xiong", "Di Huang", "Chi Shao", "Tao Ren", "Hong Hua", "Niu Xi", "Jie Geng"], subPrescriptions: [{ name: "Si Ni San", ingredients: ["Chai Hu", "Shao Yao", "Zhi Shi", "Gan Cao"], notIncluded: [], description: "A key formula for soothing the liver and resolving qi stagnation." }, { name: "Tao Hong Si Wu Tang", ingredients: ["Dang Gui", "Chuan Xiong", "Di Huang", "Chi Shao", "Tao Ren", "Hong Hua"], notIncluded: [], description: "Adds blood stasis-removing herbs to Si Wu Tang for stronger circulation." }] },
+                    { mainPrescription: "Huo Xiang Zheng Qi San", description: "Used for various summer cold symptoms, indigestion, vomiting, and diarrhea.", herbs: ["Huo Xiang", "Zi Su Ye", "Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao", "Cang Zhu", "Bai Zhi", "Hou Po", "Da Fu Pi", "Jie Geng"], subPrescriptions: [{ name: "Ping Wei San", ingredients: ["Cang Zhu", "Chen Pi", "Hou Po", "Gan Cao"], notIncluded: [], description: "A basic formula for indigestion and bloating caused by dampness." }, { name: "Er Chen Tang", ingredients: ["Ban Xia", "Chen Pi", "Fu Ling", "Gan Cao"], notIncluded: [], description: "A basic formula for removing phlegm and dampness." }] },
+                    { mainPrescription: "Shao Yao Tang", description: "For febrile dysentery with bleeding and diarrhea.", herbs: ["Da Huang", "Huang Qin", "Huang Lian", "Gui Zhi", "Shao Yao", "Dang Gui", "Mu Xiang", "Bing Lang", "Gan Cao"], subPrescriptions: [{ name: "Gui Zhi Jia Shao Yao Tang", ingredients: ["Gui Zhi", "Shao Yao", "Gan Cao", "Da Zao", "Sheng Jiang"], notIncluded: ["Da Zao", "Sheng Jiang"], description: "Augments Gui Zhi Tang to address abdominal pain." }, { name: "San Huang Xie Xin Tang", ingredients: ["Da Huang", "Huang Qin", "Huang Lian"], notIncluded: [], description: "Directly drains fire-heat from the Heart and Stomach." }] },
+                    { mainPrescription: "Fang Feng Tong Sheng San", description: "Cools both exterior and interior heat, widely used for skin diseases, obesity, and constipation.", herbs: ["Fang Feng", "Jing Jie", "Bai Zhu", "Zhi Zi", "Ma Huang", "Bo He", "Da Huang", "Mang Xiao", "Lian Qiao", "Dang Gui", "Chuan Xiong", "Bai Shao", "Shi Gao", "Jie Geng", "Huang Qin", "Hua Shi", "Gan Cao"], subPrescriptions: [{ name: "Tiao Wei Cheng Qi Tang", ingredients: ["Da Huang", "Mang Xiao", "Gan Cao"], notIncluded: [], description: "Gently purges heat and dryness in the gastrointestinal tract to treat constipation." }, { name: "Si Wu Tang", ingredients: ["Bai Shao", "Dang Gui", "Di Huang", "Chuan Xiong"], notIncluded: ["Di Huang"], description: "A fundamental formula to tonify Blood and promote circulation." }, { name: "Liang Ge San", ingredients: ["Lian Qiao", "Huang Qin", "Zhi Zi", "Da Huang", "Mang Xiao", "Bo He", "Gan Cao"], notIncluded: [], description: "Treats stomatitis, constipation, and headaches from accumulated heat in the upper and middle jiaos." }] },
+                    { mainPrescription: "Zi Yin Jiang Huo Tang", description: "Treats cough, phlegm, and hemoptysis due to yin deficiency with effulgent fire.", herbs: ["Dang Gui", "Bai Shao", "Shu Di Huang", "Sheng Di Huang", "Mai Men Dong", "Zhi Mu", "Huang Bai", "Bai Zhu", "Chen Pi", "Gan Cao"], subPrescriptions: [{ name: "Si Wu Tang", ingredients: ["Dang Gui", "Bai Shao", "Shu Di Huang", "Sheng Di Huang", "Chuan Xiong"], notIncluded: ["Chuan Xiong"], description: "A fundamental formula to tonify Blood and promote circulation." }] }
                 ]
             },
             ko: {
@@ -173,32 +199,32 @@
                 foundNotIncluded: "미포함 약재:",
                 // Quiz Data
                 quiz: [
-                    { mainPrescription: "육군자탕", description: "비위기허(脾胃氣虛)와 담습(痰濕)을 함께 치료하는 처방입니다.", herbs: ["인삼", "백출", "복령", "감초", "반하", "진피"], subPrescriptions: [ { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "온담탕", description: "담열(痰熱)로 인한 심리적 불안, 불면 등을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "지실", "죽여"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "반하백출천마탕", description: "풍담(風痰)으로 인한 어지럼증, 두통 등을 치료하는 대표적인 처방입니다.", herbs: ["반하", "진피", "복령", "감초", "백출", "천마"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "청기화담환", description: "폐에 쌓인 담열(痰熱)로 인한 기침, 가래 등을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "과루인", "담남성", "황금", "지실", "행인"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "도담탕", description: "완고한 담(痰)이 경락을 막아 생긴 증상을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "담남성", "지실"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "행소산", description: "외감성으로 온 조증(凉燥)으로 폐기가 막힌 것을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "행인", "길경", "자소엽", "전호", "지실"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "보화환", description: "음식 정체로 인한 소화불량을 해소하고 위를 편안하게 합니다.", herbs: ["반하", "진피", "복령", "감초", "산사", "연교", "맥아", "신곡", "내복자"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "거풍출습탕", description: "풍습(風濕)을 몰아내고 통증을 완화합니다.", herbs: ["감초", "강활", "지각", "길경", "당귀", "반하", "방풍", "복령", "백지", "백출", "오약", "인삼", "적작", "진피", "창출", "천궁", "황금", "황련"], subPrescriptions: [ { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "도핵승기탕", description: "하초(下焦)의 열을 내리고 어혈(瘀血)을 풀어줍니다.", herbs: ["대황", "망초", "감초", "도인", "계지"], subPrescriptions: [ { name: "조위승기탕", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." } ] },
-                    { mainPrescription: "소계음자", description: "혈(血)을 식혀 출혈을 멈추고, 소변을 통해 열을 배출하여 임증(淋證)을 치료합니다.", herbs: ["소계", "우절", "포황", "생지황", "단죽엽", "치자", "활석", "목통", "당귀", "지감초"], subPrescriptions: [ { name: "도적산", ingredients: ["생지황", "목통", "단죽엽", "지감초"], notIncluded: [], description: "심장의 열을 내리고 음(陰)을 보하며 소변을 원활하게 합니다." } ] },
-                    { mainPrescription: "패파고", description: "기침, 담, 건조한 담, 감기 증상에 사용됩니다.", herbs: ["천패모", "비파엽", "사삼", "복령", "진피", "길경", "반하", "오미자", "과루인", "관동화", "원지", "행인", "건강", "감초", "박하"], subPrescriptions: [ { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "활명수", description: "유명한 소화제입니다.", herbs: ["아선약", "육계", "정향", "현호색", "육두구", "건강", "창출", "진피", "후박", "감초"], subPrescriptions: [ { name: "평위산", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." } ] },
-                    { mainPrescription: "오적산", description: "한국에서 비증(痺證)에 가장 많이 사용되는 처방입니다.", herbs: ["창출", "마황", "진피", "후박", "길경", "지실", "당귀", "건강", "작약", "복령", "백지", "천궁", "반하", "계지", "감초", "생강", "대조"], subPrescriptions: [ { name: "평위산", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }, { name: "계지탕", ingredients: ["계지", "작약", "감초", "생강", "대조"], notIncluded: [], description: "몸을 따뜻하게 하여 외사를 몰아내고 영위(營衛)를 조화롭게 합니다." } ] },
-                    { mainPrescription: "독활기생탕", description: "비증(痺證)에 흔히 사용되는 처방입니다.", herbs: ["감초", "당귀", "독활", "두충", "방풍", "복령", "작약", "상기생", "세신", "숙지황", "우슬", "육계", "인삼", "진교", "천궁"], subPrescriptions: [ { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: ["백출"], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }, { name: "사물탕", ingredients: ["당귀", "천궁", "작약", "숙지황"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." } ] },
-                    { mainPrescription: "십전대보탕", description: "기(氣)와 혈(血)을 모두 보하는 대표적인 처방입니다.", herbs: ["백작", "당귀", "지황", "천궁", "인삼", "백출", "복령", "감초", "황기", "육계"], subPrescriptions: [ { name: "사물탕", ingredients: ["백작", "당귀", "지황", "천궁"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }, { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." } ] },
-                    { mainPrescription: "온청음", description: "혈열(血熱)로 인한 출혈성 질환이나 피부 질환에 사용됩니다.", herbs: ["지황", "당귀", "작약", "천궁", "황연", "황금", "황백", "치자"], subPrescriptions: [ { name: "황련해독탕", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: [], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." }, { name: "사물탕", ingredients: ["작약", "당귀", "지황", "천궁"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." } ] },
-                    { mainPrescription: "청온패독음", description: "온역(瘟疫)으로 기분(氣分)과 혈분(血分)의 열독이 극심할 때 사용합니다.", herbs: ["황연", "황금", "연교", "치자", "지황", "서각", "목단피", "적작약", "지모", "석고", "현삼", "죽엽", "감초", "길경"], subPrescriptions: [ { name: "황련해독탕", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: ["황백"], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." }, { name: "서각지황탕", ingredients: ["지황", "목단피", "서각", "적작약"], notIncluded: [], description: "열이 영혈(營血)에 들어가 생긴 각종 출혈과 반진을 치료합니다." }, { name: "백호탕", ingredients: ["지모", "석고", "갱미", "감초"], notIncluded: ["갱미"], description: "기분(氣分)의 열을 내리고 위(胃)의 화(火)를 끄며, 진액을 생성하고 갈증을 멈춥니다." } ] },
-                    { mainPrescription: "양격산", description: "상·중초에 쌓인 열로 인한 구내염, 변비, 두통 등을 치료합니다.", herbs: ["대황", "망초", "감초", "황금", "연교", "치자", "박하"], subPrescriptions: [ { name: "조위승기탕", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." }, { name: "황련해독탕", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: ["황연", "황백"], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." }, { name: "삼황사심탕", ingredients: ["대황", "황금", "황연"], notIncluded: ["황연"], description: "심위(心胃)의 화열(火熱)을 직접적으로 내리는 처방입니다." } ] },
-                    { mainPrescription: "청영탕", description: "열이 영분(營分)에 들어가 밤에 열이 심해지고 정신이 혼미한 증상을 치료합니다.", herbs: ["황연", "금은화", "연교", "단삼", "지황", "현삼", "맥문동", "서각", "죽엽"], subPrescriptions: [ { name: "증액탕", ingredients: ["지황", "현삼", "맥문동"], notIncluded: [], description: "진액(津液)을 보충하여 변비나 마른기침 등을 치료하는 처방입니다." } ] },
-                    { mainPrescription: "가미소요산", description: "간기울결(肝氣鬱結)로 인한 화(火)를 식히고 혈(血)을 보하여 스트레스성 증상을 완화합니다.", herbs: ["시호", "작약", "당귀", "복령", "백출", "감초", "목단피", "치자"], subPrescriptions: [ { name: "사역산", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: ["지실"], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." }, { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: ["인삼"], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." } ] },
-                    { mainPrescription: "시호소간산", description: "사역산에서 파생되어, 옆구리 통증 등 간기울결(肝氣鬱結) 증상에 더 효과적입니다.", herbs: ["시호", "작약", "천궁", "감초", "향부자", "진피", "지실"], subPrescriptions: [ { name: "사역산", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: [], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." } ] },
-                    { mainPrescription: "혈부축어탕", description: "가슴 부위의 어혈(瘀血)로 인한 통증 및 순환 장애를 치료합니다.", herbs: ["시호", "작약", "지실", "감초", "당귀", "천궁", "지황", "적작", "도인", "홍화", "우슬", "길경"], subPrescriptions: [ { name: "사역산", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: [], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." }, { name: "도홍사물탕", ingredients: ["당귀", "천궁", "지황", "적작", "도인", "홍화"], notIncluded: [], description: "사물탕에 어혈을 제거하는 약재를 더해 혈액순환을 더욱 강력하게 촉진합니다." } ] },
-                    { mainPrescription: "곽향정기산", description: "여름철 감기, 소화불량, 구토, 설사 등 다양한 증상에 사용됩니다.", herbs: ["곽향", "소엽", "반하", "진피", "복령", "감초", "창출", "백지", "후박", "대복피", "길경"], subPrescriptions: [ { name: "평위산", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." } ] },
-                    { mainPrescription: "작약탕", description: "열성 이질, 출혈성 설사에 사용됩니다.", herbs: ["대황", "황금", "황련", "계지", "작약", "당귀", "목향", "빈랑", "감초"], subPrescriptions: [ { name: "계지가작약탕", ingredients: ["계지", "작약", "감초", "대조", "생강"], notIncluded: ["대조", "생강"], description: "계지탕에 작약을 증량하여 복통을 치료합니다." }, { name: "삼황사심탕", ingredients: ["대황", "황금", "황련"], notIncluded: [], description: "심위(心胃)의 화열(火熱)을 직접적으로 내리는 처방입니다." } ] },
-                    { mainPrescription: "방풍통성산", description: "표리(表裏)의 열을 모두 식혀 피부질환, 비만, 변비 등에 널리 응용됩니다.", herbs: ["방풍", "형개", "백출", "치자", "마황", "박하", "대황", "망초", "연교", "당귀", "천궁", "백작", "석고", "길경", "황금", "활석", "감초"], subPrescriptions: [ { name: "조위승기탕", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." }, { name: "사물탕", ingredients: ["백작", "당귀", "지황", "천궁"], notIncluded: ["지황"], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." } ] },
-                    { mainPrescription: "자음강화탕", description: "음허화동(陰虛火動)으로 인한 해수, 가래, 객혈 등을 치료하는 처방입니다.", herbs: ["당귀", "백작약", "숙지황", "생지황", "맥문동", "지모", "황백", "백출", "진피", "감초"], subPrescriptions: [ { name: "사물탕", ingredients: ["당귀", "백작약", "숙지황", "생지황", "천궁"], notIncluded: ["천궁"], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." } ] }
+                    { mainPrescription: "육군자탕", description: "비위기허(脾胃氣虛)와 담습(痰濕)을 함께 치료하는 처방입니다.", herbs: ["인삼", "백출", "복령", "감초", "반하", "진피"], subPrescriptions: [{ name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "온담탕", description: "담열(痰熱)로 인한 심리적 불안, 불면 등을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "지실", "죽여"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "반하백출천마탕", description: "풍담(風痰)으로 인한 어지럼증, 두통 등을 치료하는 대표적인 처방입니다.", herbs: ["반하", "진피", "복령", "감초", "백출", "천마"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "청기화담환", description: "폐에 쌓인 담열(痰熱)로 인한 기침, 가래 등을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "과루인", "담남성", "황금", "지실", "행인"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "도담탕", description: "완고한 담(痰)이 경락을 막아 생긴 증상을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "담남성", "지실"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "행소산", description: "외감성으로 온 조증(凉燥)으로 폐기가 막힌 것을 치료합니다.", herbs: ["반하", "진피", "복령", "감초", "행인", "길경", "자소엽", "전호", "지실"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "보화환", description: "음식 정체로 인한 소화불량을 해소하고 위를 편안하게 합니다.", herbs: ["반하", "진피", "복령", "감초", "산사", "연교", "맥아", "신곡", "내복자"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "거풍출습탕", description: "풍습(風濕)을 몰아내고 통증을 완화합니다.", herbs: ["감초", "강활", "지각", "길경", "당귀", "반하", "방풍", "복령", "백지", "백출", "오약", "인삼", "적작", "진피", "창출", "천궁", "황금", "황련"], subPrescriptions: [{ name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "도핵승기탕", description: "하초(下焦)의 열을 내리고 어혈(瘀血)을 풀어줍니다.", herbs: ["대황", "망초", "감초", "도인", "계지"], subPrescriptions: [{ name: "조위승기탕", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." }] },
+                    { mainPrescription: "소계음자", description: "혈(血)을 식혀 출혈을 멈추고, 소변을 통해 열을 배출하여 임증(淋證)을 치료합니다.", herbs: ["소계", "우절", "포황", "생지황", "단죽엽", "치자", "활석", "목통", "당귀", "지감초"], subPrescriptions: [{ name: "도적산", ingredients: ["생지황", "목통", "단죽엽", "지감초"], notIncluded: [], description: "심장의 열을 내리고 음(陰)을 보하며 소변을 원활하게 합니다." }] },
+                    { mainPrescription: "패파고", description: "기침, 담, 건조한 담, 감기 증상에 사용됩니다.", herbs: ["천패모", "비파엽", "사삼", "복령", "진피", "길경", "반하", "오미자", "과루인", "관동화", "원지", "행인", "건강", "감초", "박하"], subPrescriptions: [{ name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "활명수", description: "유명한 소화제입니다.", herbs: ["아선약", "육계", "정향", "현호색", "육두구", "건강", "창출", "진피", "후박", "감초"], subPrescriptions: [{ name: "평위산", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." }] },
+                    { mainPrescription: "오적산", description: "한국에서 비증(痺證)에 가장 많이 사용되는 처방입니다.", herbs: ["창출", "마황", "진피", "후박", "길경", "지실", "당귀", "건강", "작약", "복령", "백지", "천궁", "반하", "계지", "감초", "생강", "대조"], subPrescriptions: [{ name: "평위산", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }, { name: "계지탕", ingredients: ["계지", "작약", "감초", "생강", "대조"], notIncluded: [], description: "몸을 따뜻하게 하여 외사를 몰아내고 영위(營衛)를 조화롭게 합니다." }] },
+                    { mainPrescription: "독활기생탕", description: "비증(痺證)에 흔히 사용되는 처방입니다.", herbs: ["감초", "당귀", "독활", "두충", "방풍", "복령", "작약", "상기생", "세신", "숙지황", "우슬", "육계", "인삼", "진교", "천궁"], subPrescriptions: [{ name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: ["백출"], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }, { name: "사물탕", ingredients: ["당귀", "천궁", "작약", "숙지황"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }] },
+                    { mainPrescription: "십전대보탕", description: "기(氣)와 혈(血)을 모두 보하는 대표적인 처방입니다.", herbs: ["백작", "당귀", "지황", "천궁", "인삼", "백출", "복령", "감초", "황기", "육계"], subPrescriptions: [{ name: "사물탕", ingredients: ["백작", "당귀", "지황", "천궁"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }, { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: [], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }] },
+                    { mainPrescription: "온청음", description: "혈열(血熱)로 인한 출혈성 질환이나 피부 질환에 사용됩니다.", herbs: ["지황", "당귀", "작약", "천궁", "황연", "황금", "황백", "치자"], subPrescriptions: [{ name: "황련해독탕", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: [], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." }, { name: "사물탕", ingredients: ["작약", "당귀", "지황", "천궁"], notIncluded: [], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }] },
+                    { mainPrescription: "청온패독음", description: "온역(瘟疫)으로 기분(氣分)과 혈분(血分)의 열독이 극심할 때 사용합니다.", herbs: ["황연", "황금", "연교", "치자", "지황", "서각", "목단피", "적작약", "지모", "석고", "현삼", "죽엽", "감초", "길경"], subPrescriptions: [{ name: "황련해독탕", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: ["황백"], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." }, { name: "서각지황탕", ingredients: ["지황", "목단피", "서각", "적작약"], notIncluded: [], description: "열이 영혈(營血)에 들어가 생긴 각종 출혈과 반진을 치료합니다." }, { name: "백호탕", ingredients: ["지모", "석고", "갱미", "감초"], notIncluded: ["갱미"], description: "기분(氣分)의 열을 내리고 위(胃)의 화(火)를 끄며, 진액을 생성하고 갈증을 멈춥니다." }] },
+                    { mainPrescription: "양격산", description: "상·중초에 쌓인 열로 인한 구내염, 변비, 두통 등을 치료합니다.", herbs: ["대황", "망초", "감초", "황금", "연교", "치자", "박하"], subPrescriptions: [{ name: "조위승기탕", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." }, { name: "황련해독탕", ingredients: ["황금", "치자", "황연", "황백"], notIncluded: ["황연", "황백"], description: "삼초의 실화(實火)를 끄는 강력한 청열해독제입니다." }, { name: "삼황사심탕", ingredients: ["대황", "황금", "황연"], notIncluded: ["황연"], description: "심위(心胃)의 화열(火熱)을 직접적으로 내리는 처방입니다." }] },
+                    { mainPrescription: "청영탕", description: "열이 영분(營分)에 들어가 밤에 열이 심해지고 정신이 혼미한 증상을 치료합니다.", herbs: ["황연", "금은화", "연교", "단삼", "지황", "현삼", "맥문동", "서각", "죽엽"], subPrescriptions: [{ name: "증액탕", ingredients: ["지황", "현삼", "맥문동"], notIncluded: [], description: "진액(津液)을 보충하여 변비나 마른기침 등을 치료하는 처방입니다." }] },
+                    { mainPrescription: "가미소요산", description: "간기울결(肝氣鬱結)로 인한 화(火)를 식히고 혈(血)을 보하여 스트레스성 증상을 완화합니다.", herbs: ["시호", "작약", "당귀", "복령", "백출", "감초", "목단피", "치자"], subPrescriptions: [{ name: "사역산", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: ["지실"], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." }, { name: "사군자탕", ingredients: ["인삼", "백출", "복령", "감초"], notIncluded: ["인삼"], description: "기(氣)를 보하고 비위 기능을 강화하는 기본 처방입니다." }] },
+                    { mainPrescription: "시호소간산", description: "사역산에서 파생되어, 옆구리 통증 등 간기울결(肝氣鬱結) 증상에 더 효과적입니다.", herbs: ["시호", "작약", "천궁", "감초", "향부자", "진피", "지실"], subPrescriptions: [{ name: "사역산", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: [], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." }] },
+                    { mainPrescription: "혈부축어탕", description: "가슴 부위의 어혈(瘀血)로 인한 통증 및 순환 장애를 치료합니다.", herbs: ["시호", "작약", "지실", "감초", "당귀", "천궁", "지황", "적작", "도인", "홍화", "우슬", "길경"], subPrescriptions: [{ name: "사역산", ingredients: ["시호", "작약", "지실", "감초"], notIncluded: [], description: "간과 비의 기운이 막힌 것을 풀어주는 소간해울의 대표 처방입니다." }, { name: "도홍사물탕", ingredients: ["당귀", "천궁", "지황", "적작", "도인", "홍화"], notIncluded: [], description: "사물탕에 어혈을 제거하는 약재를 더해 혈액순환을 더욱 강력하게 촉진합니다." }] },
+                    { mainPrescription: "곽향정기산", description: "여름철 감기, 소화불량, 구토, 설사 등 다양한 증상에 사용됩니다.", herbs: ["곽향", "소엽", "반하", "진피", "복령", "감초", "창출", "백지", "후박", "대복피", "길경"], subPrescriptions: [{ name: "평위산", ingredients: ["창출", "진피", "후박", "감초"], notIncluded: [], description: "습(濕)으로 인한 소화불량, 복부 팽만감을 치료하는 기본 처방입니다." }, { name: "이진탕", ingredients: ["반하", "진피", "복령", "감초"], notIncluded: [], description: "담(痰)과 습(濕)을 제거하는 조습화담의 기본 처방입니다." }] },
+                    { mainPrescription: "작약탕", description: "열성 이질, 출혈성 설사에 사용됩니다.", herbs: ["대황", "황금", "황련", "계지", "작약", "당귀", "목향", "빈랑", "감초"], subPrescriptions: [{ name: "계지가작약탕", ingredients: ["계지", "작약", "감초", "대조", "생강"], notIncluded: ["대조", "생강"], description: "계지탕에 작약을 증량하여 복통을 치료합니다." }, { name: "삼황사심탕", ingredients: ["대황", "황금", "황련"], notIncluded: [], description: "심위(心胃)의 화열(火熱)을 직접적으로 내리는 처방입니다." }] },
+                    { mainPrescription: "방풍통성산", description: "표리(表裏)의 열을 모두 식혀 피부질환, 비만, 변비 등에 널리 응용됩니다.", herbs: ["방풍", "형개", "백출", "치자", "마황", "박하", "대황", "망초", "연교", "당귀", "천궁", "백작", "석고", "길경", "황금", "활석", "감초"], subPrescriptions: [{ name: "조위승기탕", ingredients: ["대황", "망초", "감초"], notIncluded: [], description: "위장관의 열과 조실(燥實)을 완만하게 내려 변비를 치료합니다." }, { name: "사물탕", ingredients: ["백작", "당귀", "지황", "천궁"], notIncluded: ["지황"], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }, { name: "양격산", ingredients: ["연교", "황금", "치자", "대황", "망초", "박하", "감초"], notIncluded: [], description: "상·중초에 쌓인 열로 인한 구내염, 변비, 두통 등을 치료합니다." }] },
+                    { mainPrescription: "자음강화탕", description: "음허화동(陰虛火動)으로 인한 해수, 가래, 객혈 등을 치료하는 처방입니다.", herbs: ["당귀", "백작약", "숙지황", "생지황", "맥문동", "지모", "황백", "백출", "진피", "감초"], subPrescriptions: [{ name: "사물탕", ingredients: ["당귀", "백작약", "숙지황", "생지황", "천궁"], notIncluded: ["천궁"], description: "혈(血)을 보하고 혈액순환을 돕는 기본 처방입니다." }] }
                 ]
             }
         };
@@ -278,7 +304,7 @@
                         displayFoundPrescription(sub);
                     }
                 });
-                
+
                 // Update UI based on restored state
                 if (foundPrescriptions.length === newQuestion.subPrescriptions.length) {
                     showAllBtn.style.display = 'none';
@@ -299,11 +325,11 @@
             const sortedArr2 = [...arr2].sort();
             return sortedArr1.every((value, index) => value === sortedArr2[index]);
         }
-        
+
         function displayFoundPrescription(sub) {
             const foundDiv = document.createElement('div');
             foundDiv.className = 'bg-green-50 p-4 rounded-lg border border-green-200';
-            
+
             let ingredientsHTML = sub.ingredients.join(', ');
             let notIncludedHTML = '';
             if (sub.notIncluded.length > 0) {
@@ -337,7 +363,7 @@
                     btn.classList.add('selected');
                 }
                 if (allFoundHerbs.has(herbName)) {
-                    const isNeededForOther = question.subPrescriptions.some(p => 
+                    const isNeededForOther = question.subPrescriptions.some(p =>
                         !foundPrescriptions.includes(p.name) && p.ingredients.includes(herbName)
                     );
                     if (!isNeededForOther) {
@@ -405,7 +431,7 @@
                 btn.addEventListener('click', handleHerbClick);
                 herbsContainerEl.appendChild(btn);
             });
-            
+
             const extraHerbs = new Set();
             question.subPrescriptions.forEach(sub => {
                 sub.notIncluded.forEach(herb => extraHerbs.add(herb));
@@ -437,9 +463,9 @@
                 const btn = document.createElement('button');
                 btn.textContent = quiz.mainPrescription;
                 btn.className = 'prescription-list-btn w-full text-left p-4 bg-white rounded-lg shadow-sm hover:bg-gray-100 border';
-                
+
                 const originalIndex = quizData.findIndex(item => item.mainPrescription === quiz.mainPrescription);
-                
+
                 btn.addEventListener('click', () => {
                     menuContainer.classList.add('hidden');
                     gameContainer.classList.remove('hidden');
@@ -489,4 +515,5 @@
         initializeApp();
     </script>
 </body>
+
 </html>
