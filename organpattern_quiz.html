@@ -134,7 +134,7 @@
         <p>&copy; 2024 Hyungsuk Choi. All Rights Reserved.</p>
     </footer>
 
-    <script src="quiz_data.js"></script>
+    <script src="quiz_data.js" charset="UTF-8"></script>
     <script>
         // --- FALLBACK DATA ---
         const fallbackData = {
@@ -179,11 +179,11 @@
             },
             en: {
                 stageTitle: "Select a Stage",
-                stageTitle: "Select a Stage",
                 stage1: "Stage 1 (8 Choices)",
                 stage2: "Stage 2 (Basic)",
                 stage3: "Stage 3 (Advanced)",
-                difficultyColors: { 'Easy': 'bg-blue-100 text-blue-800', 'Medium': 'bg-yellow-100 text-yellow-800', 'Hard': 'bg-red-100 text-red-800' },
+                difficulty: { 'Easy': 'Easy', 'Medium': 'Medium', 'Hard': 'Hard', 'step1': 'Stage 1' },
+                difficultyColors: { 'Easy': 'bg-blue-100 text-blue-800', 'Medium': 'bg-yellow-100 text-yellow-800', 'Hard': 'bg-red-100 text-red-800', 'step1': 'bg-purple-100 text-purple-800' },
                 questionCounter: (current, total) => `Question ${current} / ${total}`,
                 explanationTitle: "Explanation",
                 nextButton: "Next Question",
