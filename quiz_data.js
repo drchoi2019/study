@@ -1328,7 +1328,7 @@ const globalQuizData = {
       "id": 1031,
       "difficulty": "step1",
       "question": "운동 시 숨가쁨, 빠르고 약한 호흡, 기침, 천식. 흡기 곤란. 얼굴 부종, 마른 체형, 정신적 무기력. 사지 냉감, 발한 후 사지 냉감. 발한. 천식 발작 시 맑은 소변, 요통",
-      "answer": "폐신기허, Kidney Unable to Grasp Qi 신불납기",
+      "answer": "폐신기허, 신불납기",
       "options": {}
     },
     {
@@ -2456,224 +2456,224 @@ const globalQuizData = {
     {
       "id": 1001,
       "difficulty": "step1",
-      "question": "정서문제. 협륵통, 월경문제, 월경 전 긴장감과 짜증, 근육통, 가슴 답답함. 상복부 통증, 복부 팽만감. 메스꺼움, 구토, 딸꾹질, 식욕 부진, 목에 뭔가 걸린 듯한 느낌.",
+      "question": "Emotional issues, hypochondriac pain, menstrual problems, PMS/irritability, muscle pain, chest tightness. Epigastric pain, abdominal distension. Nausea, vomiting, hiccups, poor appetite, feeling of something stuck in throat.",
       "answer": "Liver Qi Stagnation",
       "options": {}
     },
     {
       "id": 1002,
       "difficulty": "step1",
-      "question": "통증(고정된, 찌르는 듯한, 밤에 악화되는), 무월경, 불규칙한 월경, 어둡고 응고된 월경혈. 복부의 \"덩어리\". 보라색 손톱, 보라색 입술. 건조한 피부 (심한 경우), 출혈반(보라색 반점)",
+      "question": "Pain (fixed, stabbing, worse at night), amenorrhea, irregular periods, dark clotted blood. Abdominal masses. Purple nails/lips. Dry skin (severe), petechiae.",
       "answer": "Liver Blood Stasis",
       "options": {}
     },
     {
       "id": 1003,
       "difficulty": "step1",
-      "question": "현기증, 불면증, 창백하고 흐린 안색, 창백한 입술. 시야 흐림, \"비문증\", 위축되거나 부서지기 쉬운 손톱, 건조한 머리카락/피부. 사지 저림, 근육 약화와 경련, 쥐남 (간혈허 = 혈허) 이명",
+      "question": "Dizziness, insomnia, pale lusterless complexion, pale lips. Blurred vision, floaters, brittle nails, dry hair/skin. Numbness, weakness, cramps. Tinnitus.",
       "answer": "Liver Blood Deficiency",
       "options": {}
     },
     {
       "id": 1004,
       "difficulty": "step1",
-      "question": "측두통. 현기증, 눈의 건조, , 이명, 입과 목의 건조. 불면증, 짜증, 흥분된 느낌, 분노, 고혈압, 피부건조",
+      "question": "Temporal headache. Dizziness, dry eyes, tinnitus, dry mouth/throat. Insomnia, irritability, excitement, anger, hypertension, dry skin.",
       "answer": "Liver Yang Rising",
       "options": {}
     },
     {
       "id": 1005,
       "difficulty": "step1",
-      "question": "측두부 두통, 현기증, 이명. 붉은 얼굴과 눈, 눈의 열감과 충혈, 갈증, 쓴맛. 짜증, 화를 내기 쉬움, 꿈에 의해 방해받는 수면. 건조한 변의 변비, 짙은 노란색 소변. 코피, 토혈, 객혈(혈열망행)",
+      "question": "Temporal headache, dizziness, tinnitus. Red face/eyes, burning eyes, thirst, bitter taste. Irritability, anger, disturbed sleep. Constipation, dark urine. Epistaxis, hematemesis, hemoptysis.",
       "answer": "Liver Fire Flare-up",
       "options": {}
     },
     {
       "id": 1006,
       "difficulty": "step1",
-      "question": "협륵통, 황달, 간, 담의 염증,  쓴맛, 식욕 부진. 메스꺼움, 구토, 복부 팽만, 소변량 감소-어두운 색. 발열, 노란색의 악취 나는 대하와 외음부 가려움",
+      "question": "Hypochondriac pain, jaundice, liver/gallbladder inflammation, bitter taste, poor appetite. Nausea, vomiting, distension, scanty dark urine. Fever, yellow foul vaginal discharge, genital itching.",
       "answer": "Damp-Heat in Liver and Gallbladder",
       "options": {}
     },
     {
       "id": 1007,
       "difficulty": "step1",
-      "question": "음낭과 고환으로 퍼지는 통증. 따뜻하게 하면 통증 완화",
+      "question": "Pain radiating to scrotum/testes. Relieved by warmth.",
       "answer": "Stagnation of Cold in the Liver Meridian",
       "options": {}
     },
     {
       "id": 1008,
       "difficulty": "step1",
-      "question": "심(동계)+기허(운동 시 숨가쁨. 땀흘림, 창백함, 피로, 무기력)",
+      "question": "Palpitations + Qi Deficiency (shortness of breath on exertion, sweating, pallor, fatigue).",
       "answer": "Heart Qi Deficiency",
       "options": {}
     },
     {
       "id": 1009,
       "difficulty": "step1",
-      "question": "심(동계)+기허(운동 시 숨가쁨. 땀흘림, 창백함, 피로, 무기력) + 양허( 추위와 부종, 밝은 창백한 얼굴, 차가운 사지 (특히 손))",
+      "question": "Palpitations + Qi Deficiency + Yang Deficiency (cold, edema, bright pale face, cold hands).",
       "answer": "Heart Yang Deficiency",
       "options": {}
     },
     {
       "id": 1010,
       "difficulty": "step1",
-      "question": "심(동계)+기허(운동 시 숨가쁨. 땀흘림, 창백함, 피로, 무기력) + 양허( 추위와 부종, 밝은 창백한 얼굴, 차가운 사지 (특히 손)) +  입술 청색증. 심한 경우 혼수상태",
+      "question": "Palpitations + Qi/Yang Deficiency + Cyanosis of lips. Coma in severe cases.",
       "answer": "Heart Yang Collapse",
       "options": {}
     },
     {
       "id": 1011,
       "difficulty": "step1",
-      "question": "심계항진, 불면증, 꿈에 의해 방해받는 수면. 현기증, 기억력 저하. 흐리고 창백한 안색, 창백한 입술. 불안, 쉽게 놀라는 경향 cf. 간혈허",
+      "question": "Palpitations, insomnia, dream-disturbed sleep. Dizziness, poor memory. Pale complexion/lips. Anxiety, easily startled.",
       "answer": "Heart Blood Deficiency",
       "options": {}
     },
     {
       "id": 1012,
       "difficulty": "step1",
-      "question": "심계항진, 불면증, 꿈에 의해 방해받는 수면. 쉽게 놀라는 경향, 불안, 정신적 불안정, \"불편함\", \"안절부절\". 광대뼈 부위 홍조, 특히 저녁에 미열, 야간 발한, 입 마름, 오심열",
+      "question": "Palpitations, insomnia, dream-disturbed sleep. Anxiety, restlessness, fidgeting. Malar flush, evening low-grade fever, night sweats, dry mouth, 5-palm heat.",
       "answer": "Heart Yin Deficiency",
       "options": {}
     },
     {
       "id": 1013,
       "difficulty": "step1",
-      "question": "심계항진. 심장 부위 통증(고정된, 찌르는 듯한, 밤에 악화되는), 가슴 압박감 또는 조임. 입술과 손톱의 청색증, 차가운 손",
+      "question": "Palpitations. Stabbing fixed heart pain (worse at night), chest oppression. Cyanosis of lips/nails, cold hands.",
       "answer": "Heart Blood Stagnation",
       "options": {}
     },
     {
       "id": 1014,
       "difficulty": "step1",
-      "question": "심계항진, 불안정, 초조, 불면증, 충동성. 갈증, 붉은 얼굴, 열감, 쓴맛. 구강과 혀의 궤양. 어두운 소변 또는 혈뇨",
+      "question": "Palpitations, agitation, insomnia, impulsiveness. Thirst, red face, heat, bitter taste. Mouth/tongue ulcers. Dark or bloody urine.",
       "answer": "Heart Fire Blazing",
       "options": {}
     },
     {
       "id": 1015,
       "difficulty": "step1",
-      "question": "창백한 안색, 피로, 무기력, 사지 약화. 식욕 부진, 식후 복부 팽만감, 묽은 변",
+      "question": "Pale complexion, fatigue, limb weakness. Poor appetite, post-prandial distension, loose stools.",
       "answer": "Spleen Qi Deficiency",
       "options": {}
     },
     {
       "id": 1016,
       "difficulty": "step1",
-      "question": "창백한 안색, 피로, 무기력, 사지 약화. 식욕 부진, 식후 복부 팽만감, 묽은 변 + 복부의 하수감. 위, 자궁, 항문 또는 질의 탈출, 빈뇨와 급뇨",
+      "question": "Spleen Qi Deficiency + Bearing down sensation. Prolapse (stomach/uterus/anus), frequency/urgency of urination.",
       "answer": "Spleen Qi Sinking",
       "options": {}
     },
     {
       "id": 1017,
       "difficulty": "step1",
-      "question": "창백한 안색, 피로, 무기력, 사지 약화. 식욕 부진, 식후 복부 팽만감, 묽은 변 + 창백한 안색과 숨가쁨. 자반증, 피부 아래 혈반, 과다월경 또는 부정자궁출혈",
+      "question": "Spleen Qi Deficiency + Pale complexion, shortness of breath. Purpura, subcutaneous bleeding, menorrhagia/metrorrhagia.",
       "answer": "Spleen Unable to Control Blood",
       "options": {}
     },
     {
       "id": 1018,
       "difficulty": "step1",
-      "question": "창백한 안색, 피로, 무기력, 사지 약화. 식욕 부진, 식후 복부 팽만감, 묽은 변, 오한, 사지 냉감, 사지 약화, 설사, 부종",
+      "question": "Spleen Qi Deficiency + Chills, cold limbs, edema, diarrhea.",
       "answer": "Spleen Yang Deficiency",
       "options": {}
     },
     {
       "id": 1019,
       "difficulty": "step1",
-      "question": "구토로 완화되는 상복부 통증과 팽만감. 구역질, 구토, 달걀 썩는 입 냄새, 신물 역류, 트림. 식욕 부진. 불면증",
+      "question": "Epigastric pain/distension relieved by vomiting. Nausea, vomiting, foul breath, acid reflux, belching. Poor appetite, insomnia.",
       "answer": "Food Retention in the Stomach",
       "options": {}
     },
     {
       "id": 1020,
       "difficulty": "step1",
-      "question": "상복부의 작열감과 통증. 신물 역류. 식후 즉시 구역질, 구토 및 입 냄새. 갈증과 차가운 액체를 마시고 싶어 함. 지속적인 배고픔. 잇몸 염증과 통증. 변비",
+      "question": "Burning epigastric pain. Acid reflux. Nausea/vomiting after eating. Thirst for cold drinks. Constant hunger. Gum pain/swelling. Constipation.",
       "answer": "Stomach Fire",
       "options": {}
     },
     {
       "id": 1021,
       "difficulty": "step1",
-      "question": "상복부 통증. 식후 포만감. 식욕 부진. 신물 역류, 특히 오후에 입과 목의 건조. 오후의 발열 또는 열감. 변비(건조한 변). 갈증이 있으나 마시고 싶지 않거나 조금씩 마심",
+      "question": "Epigastric pain, fullness. Poor appetite. Acid reflux, dry mouth/throat (afternoon). Afternoon heat. Dry stools. Thirst with no desire to drink much.",
       "answer": "Stomach Yin Deficiency",
       "options": {}
     },
     {
       "id": 1022,
       "difficulty": "step1",
-      "question": "스트레스, 불면, 짜증. 복부 팽만과 통증, 복부 가스. 피로. 변비와 설사의 교대, 때로는 건조하고 작은 알갱이 같은 변, 때로는 묽은 변",
+      "question": "Stress, insomnia, irritability. Abdominal distension/pain, gas. Fatigue. Alternating constipation/diarrhea (pebble vs loose stools).",
       "answer": "Liver and Spleen Disharmony",
       "options": {}
     },
     {
       "id": 1023,
       "difficulty": "step1",
-      "question": "숨가쁨, 기침. 물같은 가래. 약한 목소리, 말하기 싫어함, 피로. 냉감, 감기에 걸리기 쉬움. 주간 발한. 밝은 백색 안색",
+      "question": "Shortness of breath, cough, watery sputum. Weak voice, fatigue. Aversion to cold, prone to colds. Daytime sweating. Bright white complexion.",
       "answer": "Lung Qi Deficiency",
       "options": {}
     },
     {
       "id": 1024,
       "difficulty": "step1",
-      "question": "마른 기침 또는 약간의 끈적한 가래를 동반한 기침, 혈담. 입과 목의 건조, 쉰 목소리, 간지러운 목. 미열, 오후나 저녁의 열감, 광대뼈 홍조, 야간 발한, 오심열, 불면증",
+      "question": "Dry cough (or scanty sticky spectrum), bloody sputum. Dry/itchy throat, hoarse voice. Low grade fever, malar flush, night sweats, 5-center heat, insomnia.",
       "answer": "Lung Yin Deficiency",
       "options": {}
     },
     {
       "id": 1025,
       "difficulty": "step1",
-      "question": "기침. 코막힘 또는 맑고 물 같은 콧물을 동반한 콧물, 재채기. 발열 < 오한, 간지러운 목. 후두부 두통, 몸살. 갈증 없음, 발한 없음",
+      "question": "Cough. Congestion/runny nose (clear/watery), sneezing. Fever < Chills. Itchy throat. Occipital headache, body aches. No thirst/sweating.",
       "answer": "Wind-Cold Invading Lung",
       "options": {}
     },
     {
       "id": 1026,
       "difficulty": "step1",
-      "question": "기침. 발열 > 오한, 약간의 발한. 갈증, 인후통, 편도선 부종. 두통, 몸살. 노란 콧물을 동반한 코막힘 또는 콧물",
+      "question": "Cough. Fever > Chills, slight sweating. Thirst, sore throat, swollen tonsils. Headache, body aches. Yellow nasal discharge.",
       "answer": "Wind-Heat Invading Lung",
       "options": {}
     },
     {
       "id": 1027,
       "difficulty": "step1",
-      "question": "어린이: 뼈 발달 부진, 천문 늦은 폐쇄, 정신 둔화 또는 지체. 성인: 뼈 연화, 무릎과 다리 약화, 기억력 저하, 이빨 흔들림, 탈모 또는 조기 백발, 성기능 약화, 요통",
+      "question": "Children: Delayed bone development, late fontanelle closure, developmental delay. Adults: Brittle bones, weak knees/legs, poor memory, loose teeth, hair loss/graying, sexual weakness, back pain.",
       "answer": "Kidney Essence Deficiency",
       "options": {}
     },
     {
       "id": 1028,
       "difficulty": "step1",
-      "question": "요통, 성기능저하, 하지 무력, 현기증, 이명, 어지러움, 기억력 저하, 난청. 뼈의 통증. 몽정. 야간 발한, 야간 구강 건조, 오심열, 갈증. 변비, 소변량 감소-어두운 색",
+      "question": "Back pain, sexual dysfunction, leg weakness, dizziness, tinnitus, poor memory, deafness. Bone pain. Nocturnal emissions. Night sweats, dry mouth at night, 5-center heat, thirst. Constipation, scanty dark urine.",
       "answer": "Kidney Yin Deficiency",
       "options": {}
     },
     {
       "id": 1029,
       "difficulty": "step1",
-      "question": "요통, 성기능저하, 하지 무력,  추위에 민감, 밝은 백색 안색, 무기력, 묽은 변. 관절의 냉감. 발기부전, 조루, 불임, 다량의 맑은 소변, 소량의 맑은 소변,, 다리 부종",
+      "question": "Back pain, sexual dysfunction, leg weakness, cold sensitivity, bright pale face, listlessness, loose stools. Cold joints. Impotence, infertility, copious/scanty clear urine, edema.",
       "answer": "Kidney Yang Deficiency",
       "options": {}
     },
     {
       "id": 1030,
       "difficulty": "step1",
-      "question": "요통, 성기능저하, 하지 무력. 맑고 빈번한 배뇨. 약한 소변줄기, 배뇨 후 방울방울 떨어짐. 요실금, 야뇨증, 야간 배뇨, 조루, 정액루, 꿈 없는 몽정. 여성의 경우 자궁 탈출, 만성 질 분비물",
+      "question": "Back pain, sexual dysfunction, leg weakness. Frequent clear urination, weak stream, dribbling. Incontinence, nocturia, spermatorrhea. Uterine prolapse, chronic vaginal discharge.",
       "answer": "Kidney Qi Deficiency",
       "options": {}
     },
     {
       "id": 1031,
       "difficulty": "step1",
-      "question": "운동 시 숨가쁨, 빠르고 약한 호흡, 기침, 천식. 흡기 곤란. 얼굴 부종, 마른 체형, 정신적 무기력. 사지 냉감, 발한 후 사지 냉감. 발한. 천식 발작 시 맑은 소변, 요통",
+      "question": "Shortness of breath on exertion, weak rapid breathing, cough, asthma. Difficulty inhaling. Facial edema, thin body, listlessness. Cold limbs (esp after sweating). Clear urine during asthma, back pain.",
       "answer": "Lung and Kidney Qi Deficiency",
       "options": {}
     },
     {
       "id": 1032,
       "difficulty": "step1",
-      "question": "저녁에 악화되는 마른 기침, 운동 시 호흡곤란. 요통, 사지 약화, 몽정. 입 마름, 마른 체형, 오후의 발열 또는 열감, 야간 발한, 오심열",
+      "question": "Dry cough (worse in evening), shortness of breath on exertion. Back pain, limb weakness, nocturnal emissions. Dry mouth, thin body, afternoon fever/heat, night sweats, 5-center heat.",
       "answer": "Lung and Kidney Yin Deficiency",
       "options": {}
     }
