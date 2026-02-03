@@ -6,25 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Common Musculoskeletal Disorders</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+
+    <style>
+        /* Animation utilities */
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-    }
-    </script>
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { Globe, RefreshCw, Image as ImageIcon, X } from 'lucide-react';
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+
+        // --- Icons (Inline SVGs to avoid dependency issues) ---
+        const Globe = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+        );
+
+        const RefreshCw = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                <path d="M21 3v5h-5"></path>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                <path d="M3 21v-5h5"></path>
+            </svg>
+        );
+
+        const ImageIcon = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+        );
+
+        const X = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        );
 
         // --- Data Structure ---
         const medicalData = {
@@ -39,8 +84,8 @@
                             title_ko: '오십견 (유착성 관절낭염)',
                             desc_en: 'Inflammation and stiffness of the joint capsule causing pain and limited motion.',
                             desc_ko: '관절낭의 염증과 유착으로 어깨가 굳고 통증 발생.',
-                            prog_en: 'Natural recovery **1-3 years**, can be shortened with treatment.',
-                            prog_ko: '자연 회복 **1년에서 3년** 소요, 치료 시 기간 단축 가능.',
+                            prog_en: 'Natural recovery **6 months - 2 years**, can be shortened with treatment.',
+                            prog_ko: '자연 회복 **6개월에서 2년** 소요, 치료 시 기간 단축 가능.',
                             image: 'frozen-shoulder.jpg'
                         },
                         {
@@ -166,8 +211,8 @@
                             title_ko: '주상골골절',
                             desc_en: 'Fracture of the thumb-side wrist bone; poor blood supply.',
                             desc_ko: '엄지 쪽 손목 뼈 골절, 혈액순환 나빠 잘 안 붙음.',
-                            prog_en: 'Cast **6-12 weeks**. High risk of non-union.',
-                            prog_ko: '깁스 **6~12주**, 불유합 위험 높아 수술 가능성.'
+                            prog_en: 'High risk of non-union.',
+                            prog_ko: '불유합 위험 높아 수술 가능성.'
                         },
                         {
                             title_en: 'De Quervain\'s Tenosynovitis',
@@ -233,7 +278,7 @@
                             prog_ko: '다양하고 비특이적'
                         },
                         {
-                            title_en: 'sacroiliac joint',
+                            title_en: 'Sacroiliac Joint',
                             title_ko: '천장관절증후군',
                             desc_en: 'Misalignment or inflammation of the Sacroiliac joint.',
                             desc_ko: '골반과 척추를 잇는 관절의 틀어짐 또는 염증.',
@@ -303,7 +348,7 @@
                     title_ko: '기타',
                     diseases: [
                         {
-                            title_en: 'osteoarthritis, degenerative joint disease',
+                            title_en: 'Osteoarthritis, Degenerative Joint Disease',
                             title_ko: '골관절염',
                             desc_en: 'Degeneration of joint cartilage and underlying bone causing pain and stiffness.',
                             desc_ko: '관절 연골과 뼈의 퇴행성 변화로 통증과 뻣뻣함 발생.',
@@ -611,5 +656,6 @@
         root.render(<App />);
     </script>
 </body>
+
 
 </html>
