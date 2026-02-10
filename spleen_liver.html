@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QC84KCE6C1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-QC84KCE6C1');
-</script>
+        gtag('config', 'G-QC84KCE6C1');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Does Spleen or Liver Govern Muscle?</title>
@@ -16,8 +17,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif:wght@600&family=Noto+Serif+KR:wght@600&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif:wght@600&family=Noto+Serif+KR:wght@600&display=swap"
+        rel="stylesheet">
+
     <style>
         body {
             background-color: #F7F3EF;
@@ -27,14 +30,17 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
         main {
             flex-grow: 1;
         }
+
         .hanja {
             font-family: 'Noto Sans KR', sans-serif;
             font-weight: 700;
             color: #81b29a;
         }
+
         .card {
             background-color: white;
             border-radius: 1rem;
@@ -42,10 +48,12 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+
         .btn {
             display: inline-block;
             padding: 0.75rem 1.5rem;
@@ -55,13 +63,16 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
+
         .btn-primary {
             background-color: #81b29a;
             color: white;
         }
+
         .btn-primary:hover {
             background-color: #6a9a81;
         }
+
         .quiz-status {
             display: none;
             margin-top: 1rem;
@@ -70,6 +81,7 @@
             border-left-width: 5px;
             font-size: 1.125rem;
         }
+
         .quiz-explanation {
             display: none;
             margin-top: 0.75rem;
@@ -77,47 +89,75 @@
             border-radius: 0.5rem;
             background-color: white;
             border: 1px solid #e5e7eb;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
+
         .status-correct {
             background-color: #f0fff4;
             border-color: #38a169;
             color: #2f855a;
         }
+
         .status-incorrect {
             background-color: #fff5f5;
             border-color: #e53e3e;
             color: #c53030;
         }
+
         .equation-card {
-             cursor: pointer;
-             border: 2px dashed #cbd5e0;
+            cursor: pointer;
+            border: 2px dashed #cbd5e0;
         }
+
         .equation-card .plus {
             transition: transform 0.3s ease;
         }
+
         .equation-card:hover .plus {
             transform: scale(1.2) rotate(90deg);
         }
+
         .dict-card {
             background: #fafafa;
             border-left: 5px solid #81b29a;
         }
-        .text-main { color: #3d405b; }
-        .text-subtle { color: #6b7280; }
-        .border-error { border-color: #ef4444; }
-        .text-error { color: #b91c1c; }
-        .border-correct { border-color: #22c55e; }
-        .text-correct { color: #15803d; }
+
+        .text-main {
+            color: #3d405b;
+        }
+
+        .text-subtle {
+            color: #6b7280;
+        }
+
+        .border-error {
+            border-color: #ef4444;
+        }
+
+        .text-error {
+            color: #b91c1c;
+        }
+
+        .border-correct {
+            border-color: #22c55e;
+        }
+
+        .text-correct {
+            color: #15803d;
+        }
     </style>
 </head>
+
 <body class="p-8">
 
-    <header style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" id="header-link" style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
+    <header
+        style="width: 100%; max-width: 48rem; margin: 1rem auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="index.html" id="header-link"
+            style="font-size: 1.125rem; font-weight: 600; color: rgb(55, 65, 81); text-decoration: none;">
             &larr; Interactive TCM
         </a>
-        <a id="lang-toggle-btn" href="#" class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
+        <a id="lang-toggle-btn" href="#"
+            class="px-3 py-1 bg-stone-200 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-300 transition-colors">
             Kor / Eng
         </a>
     </header>
@@ -126,7 +166,8 @@
         <div class="container mx-auto p-4 md:p-8 max-w-5xl">
 
             <header class="text-center mb-12 pt-8">
-                <h1 data-lang="en" class="text-4xl md:text-5xl font-bold text-main mb-2">Does Spleen or Liver Govern Muscle?</h1>
+                <h1 data-lang="en" class="text-4xl md:text-5xl font-bold text-main mb-2">Does Spleen or Liver Govern
+                    Muscle?</h1>
                 <h1 data-lang="ko" class="text-4xl md:text-5xl font-bold text-main mb-2">Muscle은 간,비 어느쪽이 주관?</h1>
                 <p data-lang="en" class="text-xl text-subtle">Clarifying a Key Translation Error in TCM</p>
                 <p data-lang="ko" class="text-xl text-subtle">한의학의 핵심 번역 오류 바로잡기</p>
@@ -135,13 +176,16 @@
             <section class="mb-16 text-center">
                 <blockquote class="text-3xl md:text-4xl font-semibold text-main mb-6 italic">
                     "脾主肉, 肝主筋"
-                    <footer data-lang="en" class="text-lg mt-2 text-subtle not-italic">— Huangdi Neijing (The Yellow Emperor's Inner Canon)</footer>
+                    <footer data-lang="en" class="text-lg mt-2 text-subtle not-italic">— Huangdi Neijing (The Yellow
+                        Emperor's Inner Canon)</footer>
                     <footer data-lang="ko" class="text-lg mt-2 text-subtle not-italic">— 황제내경 (黃帝內經)</footer>
                 </blockquote>
-                <h2 data-lang="en" class="text-2xl md:text-3xl font-bold mb-4 text-main">How Should We Interpret This Foundation?</h2>
+                <h2 data-lang="en" class="text-2xl md:text-3xl font-bold mb-4 text-main">How Should We Interpret This
+                    Foundation?</h2>
                 <h2 data-lang="ko" class="text-2xl md:text-3xl font-bold mb-4 text-main">이 기초 이론을 어떻게 해석해야 할까?</h2>
                 <p data-lang="en" class="text-lg max-w-3xl mx-auto text-subtle">
-                    This classical statement is fundamental to TCM. But its modern interpretation has created a critical split in understanding.
+                    This classical statement is fundamental to TCM. But its modern interpretation has created a critical
+                    split in understanding.
                 </p>
                 <p data-lang="ko" class="text-lg max-w-3xl mx-auto text-subtle">
                     이 고전 구절은 한의학의 근간입니다. 하지만 현대에 들어 잘못된 해석으로 인해 두 가지 상반된 견해가 충돌하고 있습니다.
@@ -150,75 +194,114 @@
                     <div class="p-6 bg-white rounded-lg border-t-4 border-error shadow-md">
                         <h3 data-lang="en" class="font-bold text-xl mb-2 text-error">Common Error</h3>
                         <h3 data-lang="ko" class="font-bold text-xl mb-2 text-error">일반적인 오류</h3>
-                        <p data-lang="en" class="text-lg text-main">Spleen governs <span class="font-semibold">Muscle</span></p>
-                        <p data-lang="ko" class="text-lg text-main">비장(脾)은 <span class="font-semibold">근육(Muscle)</span>을 주관한다</p>
-                        <p data-lang="en" class="text-lg text-main">Liver governs <span class="font-semibold">Sinew/Tendon</span></p>
-                        <p data-lang="ko" class="text-lg text-main">간(肝)은 <span class="font-semibold">건(Sinew/Tendon)</span>을 주관한다</p>
+                        <p data-lang="en" class="text-lg text-main">Spleen governs <span
+                                class="font-semibold">Muscle</span></p>
+                        <p data-lang="ko" class="text-lg text-main">비장(脾)은 <span
+                                class="font-semibold">근육(Muscle)</span>을 주관한다</p>
+                        <p data-lang="en" class="text-lg text-main">Liver governs <span
+                                class="font-semibold">Sinew/Tendon</span></p>
+                        <p data-lang="ko" class="text-lg text-main">간(肝)은 <span
+                                class="font-semibold">건(Sinew/Tendon)</span>을 주관한다</p>
                     </div>
                     <div class="p-6 bg-white rounded-lg border-t-4 border-correct shadow-md">
                         <h3 data-lang="en" class="font-bold text-xl mb-2 text-correct">Classical Truth</h3>
                         <h3 data-lang="ko" class="font-bold text-xl mb-2 text-correct">고전적 진실</h3>
-                        <p data-lang="en" class="text-lg text-main">Spleen governs <span class="font-semibold">Flesh (肉)</span></p>
-                        <p data-lang="ko" class="text-lg text-main">비장(脾)은 <span class="font-semibold">살(Flesh, 肉)</span>을 주관한다</p>
-                        <p data-lang="en" class="text-lg text-main">Liver governs <span class="font-semibold">Muscle (筋)</span></p>
-                        <p data-lang="ko" class="text-lg text-main">간(肝)은 <span class="font-semibold">근육(Muscle, 筋)</span>을 주관한다</p>
+                        <p data-lang="en" class="text-lg text-main">Spleen governs <span class="font-semibold">Flesh
+                                (肉)</span></p>
+                        <p data-lang="ko" class="text-lg text-main">비장(脾)은 <span class="font-semibold">살(Flesh,
+                                肉)</span>을 주관한다</p>
+                        <p data-lang="en" class="text-lg text-main">Liver governs <span class="font-semibold">Muscle
+                                (筋)</span></p>
+                        <p data-lang="ko" class="text-lg text-main">간(肝)은 <span class="font-semibold">근육(Muscle,
+                                筋)</span>을 주관한다</p>
                     </div>
                 </div>
-                <p data-lang="en" class="mt-8 text-lg max-w-3xl mx-auto text-subtle"><b>Neijing says "Spleen governs 肉, and Liver Governs 筋.</b> The key to resolving this confusion lies in the original Chinese characters themselves.</p>
-                <p data-lang="ko" class="mt-8 text-lg max-w-3xl mx-auto text-subtle">이 혼동을 해결하기 위한 열쇠는 바로 원문 한자 그 자체에 있습니다.</p>
+                <p data-lang="en" class="mt-8 text-lg max-w-3xl mx-auto text-subtle"><b>Neijing says "Spleen governs 肉,
+                        and Liver Governs 筋.</b> The key to resolving this confusion lies in the original Chinese
+                    characters themselves.</p>
+                <p data-lang="ko" class="mt-8 text-lg max-w-3xl mx-auto text-subtle">이 혼동을 해결하기 위한 열쇠는 바로 원문 한자 그 자체에
+                    있습니다.</p>
             </section>
 
             <section class="mb-16 text-center">
                 <h2 data-lang="en" class="text-3xl font-bold mb-4 text-main">The Answer is in the Characters</h2>
                 <h2 data-lang="ko" class="text-3xl font-bold mb-4 text-main">해답은 한자에 있다</h2>
-                <p data-lang="en" class="text-lg max-w-3xl mx-auto text-subtle mb-8">When we move away from a Western anatomical view and look at the functional meaning of the characters, the confusion becomes clear.</p>
-                <p data-lang="ko" class="text-lg max-w-3xl mx-auto text-subtle mb-8">서양 해부학적 관점에서 벗어나, 원문 한자의 기능적 의미를 살펴보면 혼란은 명확해집니다.</p>
+                <p data-lang="en" class="text-lg max-w-3xl mx-auto text-subtle mb-8">When we move away from a Western
+                    anatomical view and look at the functional meaning of the characters, the confusion becomes clear.
+                </p>
+                <p data-lang="ko" class="text-lg max-w-3xl mx-auto text-subtle mb-8">서양 해부학적 관점에서 벗어나, 원문 한자의 기능적 의미를
+                    살펴보면 혼란은 명확해집니다.</p>
                 <div class="flex justify-center items-center gap-8 md:gap-16">
-                    <div><p class="text-8xl md:text-9xl hanja">肉</p><p class="text-2xl font-semibold mt-2">ròu<br>Spleen</p></div>
-                    <div><p class="text-8xl md:text-9xl hanja">筋</p><p class="text-2xl font-semibold mt-2">jīn<br>Liver</p></div>
+                    <div>
+                        <p class="text-8xl md:text-9xl hanja">肉</p>
+                        <p class="text-2xl font-semibold mt-2">ròu<br>Spleen</p>
+                    </div>
+                    <div>
+                        <p class="text-8xl md:text-9xl hanja">筋</p>
+                        <p class="text-2xl font-semibold mt-2">jīn<br>Liver</p>
+                    </div>
                 </div>
             </section>
-            
+
             <section class="mb-16">
                 <div class="grid md:grid-cols-1 gap-8">
                     <div class="card dict-card">
                         <div class="space-y-6">
                             <div>
-                                <p class="text-4xl hanja">肉 <span class="text-2xl text-gray-500 font-normal">(ròu)</span></p>
+                                <p class="text-4xl hanja">肉 <span
+                                        class="text-2xl text-gray-500 font-normal">(ròu)</span></p>
                                 <ul data-lang="en" class="list-disc list-inside mt-2 text-lg text-main space-y-1">
-                                    <li><strong>Collins:</strong> 1. (human) <span class="font-semibold text-correct">flesh</span> 2. (animal) <span class="font-semibold text-correct">meat</span></li>
-                                    <li><strong>Google Translate:</strong> <span class="font-semibold text-correct">meat</span></li>
-                                    <li><span class="font-semibold text-error">Key Point:</span> No dictionary translates it as 'muscle'.</li>
+                                    <li><strong>Collins:</strong> 1. (human) <span
+                                            class="font-semibold text-correct">flesh</span> 2. (animal) <span
+                                            class="font-semibold text-correct">meat</span></li>
+                                    <li><strong>Google Translate:</strong> <span
+                                            class="font-semibold text-correct">meat</span></li>
+                                    <li><span class="font-semibold text-error">Key Point:</span> No dictionary
+                                        translates it as 'muscle'.</li>
                                 </ul>
                                 <ul data-lang="ko" class="list-disc list-inside mt-2 text-lg text-main space-y-1">
-                                    <li><strong>콜린스 사전:</strong> 1. (사람) <span class="font-semibold text-correct">flesh(살)</span> 2. (동물) <span class="font-semibold text-correct">meat(고기)</span></li>
-                                    <li><strong>구글 번역:</strong> <span class="font-semibold text-correct">meat(고기)</span></li>
-                                    <li><span class="font-semibold text-error">핵심:</span> 어떤 사전도 'muscle'로 번역하지 않습니다.</li>
+                                    <li><strong>콜린스 사전:</strong> 1. (사람) <span
+                                            class="font-semibold text-correct">flesh(살)</span> 2. (동물) <span
+                                            class="font-semibold text-correct">meat(고기)</span></li>
+                                    <li><strong>구글 번역:</strong> <span class="font-semibold text-correct">meat(고기)</span>
+                                    </li>
+                                    <li><span class="font-semibold text-error">핵심:</span> 어떤 사전도 'muscle'로 번역하지 않습니다.
+                                    </li>
                                 </ul>
                             </div>
                             <hr class="my-4">
                             <div>
-                                <p class="text-4xl hanja">筋 <span class="text-2xl text-gray-500 font-normal">(jīn)</span></p>
-                                 <ul data-lang="en" class="list-disc list-inside mt-2 text-lg text-main space-y-1">
-                                    <li><strong>Collins:</strong> 1. (tendon) tendon 2. (muscle) <span class="font-semibold text-correct">muscle</span></li>
-                                    <li><strong>Google Translate:</strong> <span class="font-semibold text-correct">muscle</span></li>
-                                     <li><strong>Related term (筋骨):</strong> Wiktionary & LIFE Science Dictionary define this as "muscles and bones" or "musculoskeletal system".</li>
+                                <p class="text-4xl hanja">筋 <span
+                                        class="text-2xl text-gray-500 font-normal">(jīn)</span></p>
+                                <ul data-lang="en" class="list-disc list-inside mt-2 text-lg text-main space-y-1">
+                                    <li><strong>Collins:</strong> 1. (tendon) tendon 2. (muscle) <span
+                                            class="font-semibold text-correct">muscle</span></li>
+                                    <li><strong>Google Translate:</strong> <span
+                                            class="font-semibold text-correct">muscle</span></li>
+                                    <li><strong>Related term (筋骨):</strong> Wiktionary & LIFE Science Dictionary define
+                                        this as "muscles and bones" or "musculoskeletal system".</li>
                                 </ul>
                                 <ul data-lang="ko" class="list-disc list-inside mt-2 text-lg text-main space-y-1">
-                                    <li><strong>콜린스 사전:</strong> 1. (tendon) 건 2. (muscle) <span class="font-semibold text-correct">근육</span></li>
-                                    <li><strong>구글 번역:</strong> <span class="font-semibold text-correct">muscle(근육)</span></li>
-                                     <li><strong>관련 용어 (筋骨):</strong> 위키낱말사전 & LIFE 과학사전은 "근육과 뼈" 또는 "근골격계"로 정의합니다.</li>
+                                    <li><strong>콜린스 사전:</strong> 1. (tendon) 건 2. (muscle) <span
+                                            class="font-semibold text-correct">근육</span></li>
+                                    <li><strong>구글 번역:</strong> <span
+                                            class="font-semibold text-correct">muscle(근육)</span></li>
+                                    <li><strong>관련 용어 (筋骨):</strong> 위키낱말사전 & LIFE 과학사전은 "근육과 뼈" 또는 "근골격계"로 정의합니다.</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p data-lang="en" class="text-center mt-6 text-subtle">Dictionaries consistently point to <span class="hanja">筋</span> as muscle and <span class="hanja">肉</span> as flesh/meat.</p>
-                <p data-lang="ko" class="text-center mt-6 text-subtle">사전들은 일관되게 <span class="hanja">筋</span>을 muscle로, <span class="hanja">肉</span>을 flesh/meat로 지목합니다.</p>
+                <p data-lang="en" class="text-center mt-6 text-subtle">Dictionaries consistently point to <span
+                        class="hanja">筋</span> as muscle and <span class="hanja">肉</span> as flesh/meat.</p>
+                <p data-lang="ko" class="text-center mt-6 text-subtle">사전들은 일관되게 <span class="hanja">筋</span>을 muscle로,
+                    <span class="hanja">肉</span>을 flesh/meat로 지목합니다.
+                </p>
             </section>
 
             <section class="mb-16">
-                <h2 data-lang="en" class="text-3xl font-bold text-center mb-8 text-main">A Difference in Function, Not Form</h2>
+                <h2 data-lang="en" class="text-3xl font-bold text-center mb-8 text-main">A Difference in Function, Not
+                    Form</h2>
                 <h2 data-lang="ko" class="text-3xl font-bold text-center mb-8 text-main">형태가 아닌 기능의 차이</h2>
                 <div id="equation" class="card equation-card text-center" onclick="toggleExplanation()">
                     <div class="flex justify-center items-center flex-wrap gap-4 md:gap-8">
@@ -240,33 +323,53 @@
                             <p data-lang="ko" class="text-xl font-semibold">움직이는 근육</p>
                         </div>
                     </div>
-                     <p data-lang="en" class="mt-6 text-subtle text-sm">(Click this card to reveal the explanation)</p>
-                     <p data-lang="ko" class="mt-6 text-subtle text-sm">(카드를 클릭하여 설명을 확인하세요)</p>
+                    <p data-lang="en" class="mt-6 text-subtle text-sm">(Click this card to reveal the explanation)</p>
+                    <p data-lang="ko" class="mt-6 text-subtle text-sm">(카드를 클릭하여 설명을 확인하세요)</p>
                 </div>
                 <div id="explanation" class="hidden mt-6 p-6 bg-green-50/30 border border-green-200/50 rounded-lg">
-                    <p data-lang="en" class="text-lg text-correct">In TCM, <span class="hanja text-2xl">肉</span> (ròu) and <span class="hanja text-2xl">筋</span> (jīn) are not materially different. They describe the *same tissue* in different functional states.
-                    <br><br>
-                    <span class="hanja">肉</span> (ròu) refers to the tissue in its passive, structural, and nourishing state—like flesh or an inactive muscle. It provides form and substance. This is the domain of the <span class="font-bold">Spleen</span>.
-                    <br><br>
-                    When that same tissue is engaged in movement, contraction, and exertion, it is called <span class="hanja">筋</span> (jīn). This refers to its active, dynamic function. This is the domain of the <span class="font-bold">Liver</span>.</p>
-                    <p data-lang="ko" class="text-lg text-correct">한의학에서 <span class="hanja text-2xl">肉</span>(육)과 <span class="hanja text-2xl">筋</span>(근)은 물질적으로 다른 조직이 아닙니다. 다른 기능적 상태에 있는 *같은 조직*을 설명합니다.
-                    <br><br>
-                    <span class="hanja">肉</span>(육)은 수동적이고 구조적이며 영양을 공급하는 상태의 조직(살, 비활성 근육)을 의미합니다. 형태와 실체를 제공하며, 이는 <span class="font-bold">비장(脾)</span>의 영역입니다.
-                    <br><br>
-                    그 동일한 조직이 움직임, 수축, 힘쓰기에 관여할 때 <span class="hanja">筋</span>(근)이라고 불립니다. 이는 능동적이고 역동적인 기능을 의미하며, 이는 <span class="font-bold">간(肝)</span>의 영역입니다.</p>
+                    <p data-lang="en" class="text-lg text-correct">In TCM, <span class="hanja text-2xl">肉</span> (ròu)
+                        and <span class="hanja text-2xl">筋</span> (jīn) are not materially different. They describe the
+                        *same tissue* in different functional states.
+                        <br><br>
+                        <span class="hanja">肉</span> (ròu) refers to the tissue in its passive, structural, and
+                        nourishing state—like flesh or an inactive muscle. It provides form and substance. This is the
+                        domain of the <span class="font-bold">Spleen</span>.
+                        <br><br>
+                        When that same tissue is engaged in movement, contraction, and exertion, it is called <span
+                            class="hanja">筋</span> (jīn). This refers to its active, dynamic function. This is the
+                        domain of the <span class="font-bold">Liver</span>.
+                    </p>
+                    <p data-lang="ko" class="text-lg text-correct">한의학에서 <span class="hanja text-2xl">肉</span>(육)과 <span
+                            class="hanja text-2xl">筋</span>(근)은 물질적으로 다른 조직이 아닙니다. 다른 기능적 상태에 있는 *같은 조직*을 설명합니다.
+                        <br><br>
+                        <span class="hanja">肉</span>(육)은 수동적이고 구조적이며 영양을 공급하는 상태의 조직(살, 비활성 근육)을 의미합니다. 형태와 실체를 제공하며, 이는
+                        <span class="font-bold">비장(脾)</span>의 영역입니다.
+                        <br><br>
+                        그 동일한 조직이 움직임, 수축, 힘쓰기에 관여할 때 <span class="hanja">筋</span>(근)이라고 불립니다. 이는 능동적이고 역동적인 기능을 의미하며,
+                        이는 <span class="font-bold">간(肝)</span>의 영역입니다.
+                    </p>
                 </div>
             </section>
 
             <section class="mb-16">
-                <h2 data-lang="en" class="text-3xl font-bold text-center mb-8 text-main">Practical Implications in Diagnosis</h2>
+                <h2 data-lang="en" class="text-3xl font-bold text-center mb-8 text-main">Practical Implications in
+                    Diagnosis</h2>
                 <h2 data-lang="ko" class="text-3xl font-bold text-center mb-8 text-main">진단에서의 실용적 차이</h2>
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="card">
-                        <h3 data-lang="en" class="text-2xl font-semibold mb-4 text-center">Spleen Governs <span class="hanja">肉</span> (Flesh)</h3>
-                        <h3 data-lang="ko" class="text-2xl font-semibold mb-4 text-center">비장이 <span class="hanja">肉</span>(살)을 주관할 때</h3>
+                        <h3 data-lang="en" class="text-2xl font-semibold mb-4 text-center">Spleen Governs <span
+                                class="hanja">肉</span> (Flesh)</h3>
+                        <h3 data-lang="ko" class="text-2xl font-semibold mb-4 text-center">비장이 <span
+                                class="hanja">肉</span>(살)을 주관할 때</h3>
                         <div class="flex items-center mb-3">
-                            <svg class="w-8 h-8 mr-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h1a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.881 4.002l.023.023a1 1 0 010 1.414l-2.122 2.121a1 1 0 01-1.414 0l-.023-.023a1 1 0 010-1.414l2.122-2.121a1 1 0 011.414 0zM16.12 4.002l.023.023a1 1 0 000 1.414l-2.122 2.121a1 1 0 00-1.414 0l-.023-.023a1 1 0 000-1.414l2.122-2.121a1 1 0 001.414 0zM12 21a9 9 0 100-18 9 9 0 000 18z"></path></svg>
-                            <p data-lang="en" class="text-lg font-semibold">Focus: Structure, Metabolism, Nourishment</p>
+                            <svg class="w-8 h-8 mr-3 text-yellow-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h1a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.881 4.002l.023.023a1 1 0 010 1.414l-2.122 2.121a1 1 0 01-1.414 0l-.023-.023a1 1 0 010-1.414l2.122-2.121a1 1 0 011.414 0zM16.12 4.002l.023.023a1 1 0 000 1.414l-2.122 2.121a1 1 0 00-1.414 0l-.023-.023a1 1 0 000-1.414l2.122-2.121a1 1 0 001.414 0zM12 21a9 9 0 100-18 9 9 0 000 18z">
+                                </path>
+                            </svg>
+                            <p data-lang="en" class="text-lg font-semibold">Focus: Structure, Metabolism, Nourishment
+                            </p>
                             <p data-lang="ko" class="text-lg font-semibold">초점: 구조, 대사, 영양</p>
                         </div>
                         <ul data-lang="en" class="list-disc list-inside space-y-2 text-main">
@@ -283,10 +386,16 @@
                         </ul>
                     </div>
                     <div class="card">
-                        <h3 data-lang="en" class="text-2xl font-semibold mb-4 text-center">Liver Governs <span class="hanja">筋</span> (Muscle)</h3>
-                        <h3 data-lang="ko" class="text-2xl font-semibold mb-4 text-center">간이 <span class="hanja">筋</span>(근육)을 주관할 때</h3>
-                         <div class="flex items-center mb-3">
-                            <svg class="w-8 h-8 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <h3 data-lang="en" class="text-2xl font-semibold mb-4 text-center">Liver Governs <span
+                                class="hanja">筋</span> (Muscle)</h3>
+                        <h3 data-lang="ko" class="text-2xl font-semibold mb-4 text-center">간이 <span
+                                class="hanja">筋</span>(근육)을 주관할 때</h3>
+                        <div class="flex items-center mb-3">
+                            <svg class="w-8 h-8 mr-3 text-green-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
                             <p data-lang="en" class="text-lg font-semibold">Focus: Movement, Flexibility, Tension</p>
                             <p data-lang="ko" class="text-lg font-semibold">초점: 움직임, 유연성, 긴장</p>
                         </div>
@@ -306,60 +415,171 @@
                 </div>
             </section>
 
-  <section class="card">
-      <div class="flex justify-center">
-        <img src="spleen_liver.jpg" alt="Spleen and Liver relationship diagram" class="max-w-2xl w-full h-auto rounded-lg shadow-md">
-      </div>
-    </section>
+            <section class="card">
+                <div class="flex justify-center">
+                    <img src="spleen_liver.jpg" alt="Spleen and Liver relationship diagram"
+                        class="max-w-2xl w-full h-auto rounded-lg shadow-md">
+                </div>
+            </section>
             <br>
             <section class="card">
                 <h2 data-lang="en" class="text-3xl font-bold text-center mb-2 text-main">Test Your Understanding</h2>
                 <h2 data-lang="ko" class="text-3xl font-bold text-center mb-2 text-main">이해력 테스트</h2>
-                <p data-lang="en" class="text-center text-subtle mb-8">Check the core distinction: passive substance vs. active function.</p>
+                <p data-lang="en" class="text-center text-subtle mb-8">Check the core distinction: passive substance vs.
+                    active function.</p>
                 <p data-lang="ko" class="text-center text-subtle mb-8">수동적 물질 vs 능동적 기능의 핵심 차이를 확인해 보세요.</p>
 
                 <div class="mb-8">
-                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 1: You've ordered sirloin at a steakhouse. Is the sirloin on your plate governed by the Spleen or the Liver?</p>
-                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 1: 스테이크하우스에서 등심을 주문했습니다. 접시에 놓인 등심은 비장(脾)의 주관일까요, 간(肝)의 주관일까요?</p>
+                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 1: You've ordered sirloin at a
+                        steakhouse. Is the sirloin on your plate governed by the Spleen or the Liver?</p>
+                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 1: 스테이크하우스에서 등심을 주문했습니다. 접시에 놓인
+                        등심은 비장(脾)의 주관일까요, 간(肝)의 주관일까요?</p>
                     <div class="flex gap-4">
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(1, 'spleen')"><span data-lang="en">Flesh (Spleen)</span><span data-lang="ko">살 (비장)</span></button>
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(1, 'liver')"><span data-lang="en">Muscle (Liver)</span><span data-lang="ko">근육 (간)</span></button>
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(1, 'spleen')"><span
+                                data-lang="en">Flesh (Spleen)</span><span data-lang="ko">살 (비장)</span></button>
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(1, 'liver')"><span
+                                data-lang="en">Muscle (Liver)</span><span data-lang="ko">근육 (간)</span></button>
                     </div>
                     <div id="status-1" class="quiz-status"></div>
                     <div id="explanation-1" class="quiz-explanation"></div>
                 </div>
 
                 <div class="mb-8">
-                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 2: You repeatedly injure your calf muscle or Achilles tendon at the gym. Is this recurring injury related to the Spleen or the Liver?</p>
-                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 2: 헬스장에서 반복적으로 종아리 근육이나 아킬레스건에 부상을 입습니다. 이 반복적인 부상은 비장(脾)과 관련이 있을까요, 간(肝)과 관련이 있을까요?</p>
-                     <div class="flex gap-4">
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(2, 'spleen')"><span data-lang="en">Flesh (Spleen)</span><span data-lang="ko">살 (비장)</span></button>
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(2, 'liver')"><span data-lang="en">Muscle (Liver)</span><span data-lang="ko">근육 (간)</span></button>
+                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 2: You repeatedly injure your
+                        calf muscle or Achilles tendon at the gym. Is this recurring injury related to the Spleen or the
+                        Liver?</p>
+                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 2: 헬스장에서 반복적으로 종아리 근육이나 아킬레스건에 부상을
+                        입습니다. 이 반복적인 부상은 비장(脾)과 관련이 있을까요, 간(肝)과 관련이 있을까요?</p>
+                    <div class="flex gap-4">
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(2, 'spleen')"><span
+                                data-lang="en">Flesh (Spleen)</span><span data-lang="ko">살 (비장)</span></button>
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(2, 'liver')"><span
+                                data-lang="en">Muscle (Liver)</span><span data-lang="ko">근육 (간)</span></button>
                     </div>
                     <div id="status-2" class="quiz-status"></div>
                     <div id="explanation-2" class="quiz-explanation"></div>
                 </div>
-                
+
                 <div class="mb-8">
-                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 3: You sprained your back while exercising and now can't walk. Should you needle the Liver channel or the Spleen channel?</p>
-                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 3: 운동하다 허리를 삐끗해서 현재 걷지를 못합니다. 간 경락에 침을 놓아야 할까요, 비장 경락에 침을 놓아야 할까요?</p>
-                     <div class="flex gap-4">
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(3, 'spleen')"><span data-lang="en">Spleen Channel</span><span data-lang="ko">비장 경락</span></button>
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(3, 'liver')"><span data-lang="en">Liver Channel</span><span data-lang="ko">간 경락</span></button>
+                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 3: You sprained your back while
+                        exercising and now can't walk. Should you needle the Liver channel or the Spleen channel?</p>
+                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 3: 운동하다 허리를 삐끗해서 현재 걷지를 못합니다. 간
+                        경락에 침을 놓아야 할까요, 비장 경락에 침을 놓아야 할까요?</p>
+                    <div class="flex gap-4">
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(3, 'spleen')"><span
+                                data-lang="en">Spleen Channel</span><span data-lang="ko">비장 경락</span></button>
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(3, 'liver')"><span
+                                data-lang="en">Liver Channel</span><span data-lang="ko">간 경락</span></button>
                     </div>
                     <div id="status-3" class="quiz-status"></div>
                     <div id="explanation-3" class="quiz-explanation"></div>
                 </div>
 
                 <div>
-                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 4: You've been gaining weight for no obvious reason. In Korean, people often say they are “gaining 살,” where 살 means “flesh” (肉, ròu). Is this related to the Spleen or the Liver?</p>
-                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 4: 최근 들어 이유 없이 살이 찌고 있습니다. '살이 찐다'에서 '살'은 肉(육)을 의미합니다. 이는 비장(脾)의 문제일까요, 간(肝)의 문제일까요?</p>
-                     <div class="flex gap-4">
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(4, 'spleen')"><span data-lang="en">Spleen Issue</span><span data-lang="ko">비장의 문제</span></button>
-                        <button class="btn btn-primary flex-1" onclick="checkAnswer(4, 'liver')"><span data-lang="en">Liver Issue</span><span data-lang="ko">간의 문제</span></button>
+                    <p data-lang="en" class="text-lg font-semibold mb-3 text-main">Quiz 4: You've been gaining weight
+                        for no obvious reason. In Korean, people often say they are “gaining 살,” where 살 means “flesh”
+                        (肉, ròu). Is this related to the Spleen or the Liver?</p>
+                    <p data-lang="ko" class="text-lg font-semibold mb-3 text-main">퀴즈 4: 최근 들어 이유 없이 살이 찌고 있습니다. '살이
+                        찐다'에서 '살'은 肉(육)을 의미합니다. 이는 비장(脾)의 문제일까요, 간(肝)의 문제일까요?</p>
+                    <div class="flex gap-4">
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(4, 'spleen')"><span
+                                data-lang="en">Spleen Issue</span><span data-lang="ko">비장의 문제</span></button>
+                        <button class="btn btn-primary flex-1" onclick="checkAnswer(4, 'liver')"><span
+                                data-lang="en">Liver Issue</span><span data-lang="ko">간의 문제</span></button>
                     </div>
                     <div id="status-4" class="quiz-status"></div>
                     <div id="explanation-4" class="quiz-explanation"></div>
+                </div>
+            </section>
+            <br>
+            <section class="mb-16 card border-l-4 border-red-500 bg-white shadow-xl">
+                <!-- Header -->
+                <h2 data-lang="en" class="text-3xl font-bold mb-8 text-red-800 flex items-center gap-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                    Critical Analysis: Refuting Maciocia's View
+                </h2>
+                <h2 data-lang="ko" class="text-3xl font-bold mb-8 text-red-800 flex items-center gap-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                    비평: 마시오시아 이론의 결정적 오류
+                </h2>
+
+                <!-- The Misconception (Maciocia's Quote) -->
+                <div class="mb-8 p-6 bg-red-50/50 rounded-lg border border-red-100">
+                    <h3 data-lang="en" class="font-bold text-lg mb-4 text-gray-600 uppercase tracking-wide text-sm">
+                        Reference: The Misinterpretation</h3>
+                    <h3 data-lang="ko" class="font-bold text-lg mb-4 text-gray-600 uppercase tracking-wide text-sm">참고:
+                        지오바니 마시오시아의 견해 (비평 대상)</h3>
+                    <div class="italic text-gray-600 space-y-4 font-serif border-l-4 border-gray-300 pl-4">
+                        <p data-lang="en">
+                            "Finally, mention should be made of the fact that most Western books on acupuncture list the
+                            ‘muscles’ as being controlled by the Liver and ‘ﬂesh’ by the Spleen: I translate jin (the
+                            tissue controlled by the Liver) as ‘sinews’ (which includes tendons, ligaments of the limbs
+                            and cartilages) and rou or ji rou (the tissue controlled by the Spleen) as ‘muscles’. First
+                            of all, it should be noted that ji rou indicating ‘muscles’ refers only to the skeletal
+                            muscles in the limbs (and therefore not the cardiac muscle or the smooth muscles). Secondly,
+                            obviously there is an overlap in the physiology and pathology of sinews and muscles and
+                            therefore between Liver and Spleen. Essentially, a weakness of the limb muscles is related
+                            to the Spleen, while cramps, contractions, difﬁculty in ﬂexion/extension reﬂect a pathology
+                            of the Liver."
+                        </p>
+                        <p data-lang="ko">
+                            "마지막으로, 대부분의 서양 침구 서적들이 '근육(muscles)'은 간이 조절하고 '살(flesh)'은 비장이 조절한다고 기재하고 있다는 점을 언급해야겠습니다.
+                            저는 진(筋, 간이 조절하는 조직)을 '건(sinews, 팔다리의 힘줄, 인대 및 연골 포함)'으로, 육(肉) 또는 기육(肌肉, 비장이 조절하는 조직)을
+                            '근육(muscles)'으로 번역합니다. 우선, '근육'을 나타내는 기육(肌肉)은 사지의 골격근만을 지칭한다는 점에 유의해야 합니다(따라서 심장근이나 평활근은
+                            아닙니다). 둘째로, 건(sinews)과 근육(muscles)의 생리와 병리, 그리고 간과 비장 사이에는 분명히 겹치는 부분이 있습니다. 본질적으로, 사지 근육의
+                            위약(weakness)은 비장과 관련이 있는 반면, 경련, 수축, 굴신(굽히고 펴기)의 어려움은 간의 병리를 반영합니다."
+                        </p>
+                        <footer class="text-right text-sm font-semibold mt-2">- Giovanni Maciocia</footer>
+                    </div>
+                </div>
+
+                <!-- The Critique -->
+                <div class="space-y-8 text-gray-800 px-2 md:px-4">
+                    <div>
+                        <h3 data-lang="en" class="font-bold text-xl mb-3 text-red-700">1. Misguided Originality</h3>
+                        <h3 data-lang="ko" class="font-bold text-xl mb-3 text-red-700">1. 잘못된 독창성 (Why "Most Western
+                            Books" differ)</h3>
+                        <p data-lang="en" class="text-lg leading-relaxed">
+                            Maciocia notes that "most Western books" disagree with him. This is because those books were
+                            guided by <strong>native Chinese or Korean experts</strong> who understood the characters
+                            <span class="hanja">肉</span> and <span class="hanja">筋</span> in their true cultural
+                            context. They correctly identified the fleshy substance as Spleen-governed. Maciocia's
+                            deviation is not an advanced insight, but a departure from the source integrity.
+                        </p>
+                        <p data-lang="ko" class="text-lg leading-relaxed">
+                            마시오시아는 "대부분의 서양 서적"이 자신과 다르다는 점을 스스로 언급합니다. 그 이유는 해당 서적들이 한자 문화권의 <strong>원어민 전문가들의
+                                지도</strong>를 받았기 때문입니다. 그들은 <span class="hanja">肉</span>과 <span class="hanja">筋</span>의
+                            본질을 정확히 이해하고 있었습니다. 마시오시아의 독창적인 해석은 학문적 진보가 아니라, 원문의 본질에서 벗어난 오류입니다.
+                        </p>
+                    </div>
+
+                    <hr class="border-red-100">
+
+                    <div>
+                        <h3 data-lang="en" class="font-bold text-xl mb-3 text-red-700">2. A Theory Built on Sand</h3>
+                        <h3 data-lang="ko" class="font-bold text-xl mb-3 text-red-700">2. 모래 위에 쌓은 이론 (Maciocia's
+                            Delusion)</h3>
+                        <p data-lang="en" class="text-lg leading-relaxed">
+                            Separating 'sinews' and 'muscles' in this manner is a <strong>personal
+                                re-interpretation</strong> that ignores linguistic reality. By redefining terms to fit
+                            his own logical framework rather than accepting the standard definition of the Hanja, he
+                            created unnecessary confusion. This suggests a superficial understanding of the language,
+                            constructing a theory based on imagination rather than etymological fact.
+                        </p>
+                        <p data-lang="ko" class="text-lg leading-relaxed">
+                            '건'과 '근육'을 억지로 분리한 것은 언어적 현실을 무시한 <strong>저자 개인의 자의적 재해석</strong>에 불과합니다. 한자의 표준적인 의미를 수용하는
+                            대신 자신의 논리적 틀에 끼워 맞추기 위해 용어를 재정의함으로써 불필요한 혼란을 초래했습니다. 이는 한자에 대한 이해가 부족함을 드러내는 것이며, 문헌학적 사실이
+                            아닌 개인적 상상(혹은 망상) 위에 이론을 구축했다는 비판을 피할 수 없습니다.
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -372,11 +592,11 @@
 
     <script>
         // --- Language Switching Logic ---
-        (function() {
+        (function () {
             const params = new URLSearchParams(window.location.search);
             const lang = params.get('lang');
             const currentLang = (lang === 'ko') ? 'ko' : 'en';
-            
+
             document.documentElement.lang = currentLang;
 
             const headerLink = document.getElementById('header-link');
@@ -395,7 +615,7 @@
             const newParams = new URLSearchParams(window.location.search);
             newParams.set('lang', newLang);
             toggleButton.href = '?' + newParams.toString();
-            
+
             // --- Content Visibility based on Language ---
             const allLangElements = document.querySelectorAll('[data-lang]');
             allLangElements.forEach(el => {
@@ -473,7 +693,7 @@
             const currentLang = document.documentElement.lang;
             const statusDiv = document.getElementById(`status-${questionNum}`);
             const explanationDiv = document.getElementById(`explanation-${questionNum}`);
-            
+
             const answerData = answers[questionNum];
             const langData = answerData[currentLang];
 
@@ -484,13 +704,14 @@
                 statusDiv.innerHTML = langData.status_incorrect;
                 statusDiv.className = 'quiz-status status-incorrect';
             }
-            
+
             explanationDiv.innerHTML = langData.explanation;
-            
+
             statusDiv.style.display = 'block';
             explanationDiv.style.display = 'block';
         }
     </script>
 
 </body>
+
 </html>
