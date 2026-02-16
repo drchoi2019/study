@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Root Word Puzzle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Mono:wght@500&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        body {
+            overscroll-behavior-y: none;
+        }
+
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        .btn-letter {
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+
+        .btn-letter:active {
+            transform: scale(0.92);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Layout utility for swapping prefix/suffix order */
+        .word-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            min-height: 3.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 h-[100dvh] w-full flex items-center justify-center p-0 sm:p-4 overflow-hidden">
+
+    <div
+        class="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-md sm:rounded-3xl shadow-2xl overflow-hidden relative flex flex-col">
+
+        <!-- Header -->
+        <div class="bg-slate-900 text-white p-4 shrink-0 flex justify-between items-center z-20 relative shadow-md">
+            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="showMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="w-5 h-5">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                <h1 class="text-lg font-extrabold tracking-tight">ROOT WORD QUIZ</h1>
+            </div>
+            <div id="progress-container"
+                class="text-xs font-bold bg-slate-800 px-3 py-1 rounded-full hidden border border-slate-700">
+                <span id="current-count">1</span> / <span id="total-count">10</span>
+            </div>
+        </div>
+
+        <!-- VIEW 1: MENU -->
+        <div id="menu-view" class="flex-1 flex flex-col p-6 items-center justify-center overflow-y-auto">
+            <h2 class="text-2xl font-black text-slate-800 mb-2 tracking-tight">SELECT ROOT</h2>
+            <p class="text-slate-500 mb-8 text-center text-sm font-medium">Choose a root to practice.</p>
+
+            <div class="grid grid-cols-2 gap-3 w-full max-w-sm">
+                <button onclick="startGame('AUDI')"
+                    class="p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-2xl font-bold border-2 border-blue-100 hover:border-blue-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">AUDI-</span>
+                    <span class="text-[10px] uppercase font-bold text-blue-400">To Hear</span>
+                </button>
+                <button onclick="startGame('VIS')"
+                    class="p-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-2xl font-bold border-2 border-indigo-100 hover:border-indigo-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">VIS-</span>
+                    <span class="text-[10px] uppercase font-bold text-indigo-400">To See</span>
+                </button>
+                <button onclick="startGame('SPECT')"
+                    class="p-4 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-2xl font-bold border-2 border-purple-100 hover:border-purple-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">SPECT-</span>
+                    <span class="text-[10px] uppercase font-bold text-purple-400">To Look</span>
+                </button>
+                <button onclick="startGame('TRACT')"
+                    class="p-4 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-2xl font-bold border-2 border-teal-100 hover:border-teal-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">TRACT-</span>
+                    <span class="text-[10px] uppercase font-bold text-teal-400">To Pull</span>
+                </button>
+                <button onclick="startGame('DUCT')"
+                    class="p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-2xl font-bold border-2 border-emerald-100 hover:border-emerald-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">DUCT-</span>
+                    <span class="text-[10px] uppercase font-bold text-emerald-400">To Lead</span>
+                </button>
+                <button onclick="startGame('JECT')"
+                    class="p-4 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-2xl font-bold border-2 border-rose-100 hover:border-rose-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">JECT-</span>
+                    <span class="text-[10px] uppercase font-bold text-rose-400">To Throw</span>
+                </button>
+                <button onclick="startGame('GRESS')"
+                    class="p-4 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 rounded-2xl font-bold border-2 border-cyan-100 hover:border-cyan-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">GRESS-</span>
+                    <span class="text-[10px] uppercase font-bold text-cyan-400">To Go</span>
+                </button>
+                <button onclick="startGame('FERRE')"
+                    class="p-4 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-2xl font-bold border-2 border-amber-100 hover:border-amber-300 transition-all flex flex-col items-center gap-1 group">
+                    <span class="text-xl group-hover:scale-110 transition-transform">FERRE-</span>
+                    <span class="text-[10px] uppercase font-bold text-amber-400">To Carry</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: GAME -->
+        <div id="game-view" class="hidden flex-1 flex flex-col p-4 sm:p-6 items-center overflow-hidden">
+
+            <div id="root-hint"
+                class="text-slate-400 font-bold mb-4 text-xs uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full">
+                ROOT: AUDI- (TO HEAR)
+            </div>
+
+            <div class="w-full flex justify-end mb-2">
+                <button id="btn-hint" onclick="useHint()"
+                    class="flex items-center gap-2 bg-yellow-50 text-yellow-600 px-3 py-1.5 rounded-full text-xs font-bold border border-yellow-200 shadow-sm active:scale-95 transition-transform disabled:opacity-50 disabled:grayscale">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4">
+                        <path
+                            d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1 1.5-2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                        <path d="M9 18h6" />
+                        <path d="M10 22h4" />
+                    </svg>
+                    <span>HINT</span>
+                    <span id="hint-count"
+                        class="bg-yellow-400 text-white w-5 h-5 flex items-center justify-center rounded-full text-[10px]">3</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Word Display Area -->
+            <div id="word-container" class="word-container mb-8 text-4xl sm:text-5xl font-black text-slate-800">
+                <span id="fixed-part" class="text-slate-900"></span>
+                <span id="input-part" class="flex gap-1"></span>
+            </div>
+
+            <div
+                class="bg-slate-50 w-full p-6 rounded-2xl border-2 border-slate-100 text-center mb-4 flex-1 flex flex-col justify-center items-center shadow-inner">
+                <p id="definition-text" class="text-slate-700 font-bold text-xl leading-tight">
+                    Definition here
+                </p>
+            </div>
+
+            <div class="w-full mt-auto shrink-0 pb-12 sm:pb-0">
+                <div id="letters-container" class="grid grid-cols-5 gap-2 mb-4"></div>
+                <div class="flex gap-3 h-14">
+                    <button onclick="deleteLastChar()"
+                        class="flex-1 bg-white border-2 border-slate-200 hover:bg-red-50 hover:border-red-200 text-slate-400 hover:text-red-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5">
+                            <path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z" />
+                            <line x1="18" y1="9" x2="12" y2="15" />
+                            <line x1="12" y1="9" x2="18" y2="15" />
+                        </svg>
+                    </button>
+                    <button onclick="skipQuestion()"
+                        class="px-6 rounded-xl bg-slate-200 text-slate-500 font-bold hover:bg-slate-300 transition-colors text-sm tracking-wide">
+                        PASS
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: RESULTS (Fixed Layout) -->
+        <div id="result-view" class="hidden flex-1 flex flex-col p-6 items-center w-full h-full overflow-hidden">
+            <h2 class="shrink-0 text-3xl font-black text-slate-800 mb-2">RESULTS</h2>
+            <div id="score-display" class="shrink-0 text-6xl font-black text-blue-600 mb-8 tracking-tighter">
+                8/10
+            </div>
+            <!-- Added min-h-0 to allow proper scrolling within flex container -->
+            <div
+                class="w-full flex-1 min-h-0 overflow-y-auto mb-6 rounded-2xl border border-slate-100 bg-slate-50 p-2 shadow-inner">
+                <ul id="result-list" class="divide-y divide-slate-100"></ul>
+            </div>
+            <button onclick="showMenu()"
+                class="shrink-0 w-full bg-slate-900 text-white py-4 rounded-2xl font-bold shadow-xl hover:bg-slate-800 transition-all active:scale-95">
+                BACK TO MENU
+            </button>
+        </div>
+
+        <div id="message-area"
+            class="h-16 w-full absolute bottom-0 left-0 flex items-center justify-center text-lg font-bold text-white translate-y-full transition-transform duration-300 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+            CORRECT!
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const database = [
+            // AUDI
+            { group: "AUDI", fixed: "audi", tar: "ence", mode: "suffix", def: "people who listen/watch a performance" },
+            { group: "AUDI", fixed: "audi", tar: "torium", mode: "suffix", def: "a place to hear" },
+            { group: "AUDI", fixed: "audi", tar: "ble", mode: "suffix", def: "able to be heard" },
+            { group: "AUDI", fixed: "audi", tar: "ology", mode: "suffix", def: "study of hearing disorders" },
+            { group: "AUDI", fixed: "audi", tar: "ometer", mode: "suffix", def: "device for measuring hearing" },
+            { group: "AUDI", fixed: "audi", tar: "tor", mode: "suffix", def: "one who listens or reviews accounts" },
+
+            // VIS
+            { group: "VIS", fixed: "vis", tar: "ion", mode: "suffix", def: "the faculty or state of being able to see" },
+            { group: "VIS", fixed: "vis", tar: "ible", mode: "suffix", def: "capable of being seen" },
+            { group: "VIS", fixed: "vis", tar: "ual", mode: "suffix", def: "pertaining to sight" },
+            { group: "VIS", fixed: "vis", tar: "ualize", mode: "suffix", def: "to form a mental image" },
+            { group: "VIS", fixed: "vis", tar: "it", mode: "suffix", def: "to go to see a person or place" },
+            { group: "VIS", fixed: "vis", tar: "or", mode: "suffix", def: "a shield for the eyes" },
+
+            // SPECT
+            { group: "SPECT", fixed: "spect", tar: "ator", mode: "suffix", def: "person who watches an event" },
+            { group: "SPECT", fixed: "spect", tar: "rum", mode: "suffix", def: "band of colors; wide range" },
+            { group: "SPECT", fixed: "spect", tar: "in", mode: "prefix", def: "to look into carefully (investigate)" },
+            { group: "SPECT", fixed: "spect", tar: "pro", mode: "prefix", def: "possibility of future event" },
+            { group: "SPECT", fixed: "spect", tar: "su", mode: "prefix", def: "to look at with mistrust" },
+            { group: "SPECT", fixed: "spect", tar: "re", mode: "prefix", def: "to look up to; honor" },
+
+            // TRACT
+            { group: "TRACT", fixed: "tract", tar: "at", mode: "prefix", def: "to draw attention or interest" },
+            { group: "TRACT", fixed: "tract", tar: "dis", mode: "prefix", def: "to draw away attention" },
+            { group: "TRACT", fixed: "tract", tar: "con", mode: "prefix", def: "to draw together; shorten muscle" },
+            { group: "TRACT", fixed: "tract", tar: "ex", mode: "prefix", def: "to pull out (tooth or fluid)" },
+            { group: "TRACT", fixed: "tract", tar: "abs", mode: "prefix", def: "to draw away from; theoretical" },
+            { group: "TRACT", fixed: "trac", tar: "tion", mode: "suffix", def: "pulling force on a limb" },
+
+            // DUCT
+            { group: "DUCT", fixed: "duct", tar: "ab", mode: "prefix", def: "to move a limb away from the body" },
+            { group: "DUCT", fixed: "duct", tar: "con", mode: "prefix", def: "to lead together; guide" },
+            { group: "DUCT", fixed: "duct", tar: "pro", mode: "prefix", def: "to lead forward; result" },
+            { group: "DUCT", fixed: "duct", tar: "de", mode: "prefix", def: "to lead down; subtract" },
+            { group: "DUCT", fixed: "duct", tar: "via", mode: "prefix", def: "bridge for carrying a road" },
+
+            // JECT
+            { group: "JECT", fixed: "ject", tar: "in", mode: "prefix", def: "to force fluid into body" },
+            { group: "JECT", fixed: "ject", tar: "re", mode: "prefix", def: "immune system attacking transplant" },
+            { group: "JECT", fixed: "ject", tar: "pro", mode: "prefix", def: "to throw forward; predict" },
+            { group: "JECT", fixed: "ject", tar: "e", mode: "prefix", def: "to throw out" },
+            { group: "JECT", fixed: "ject", tar: "sub", mode: "prefix", def: "to throw under; dependent" },
+
+            // GRESS
+            { group: "GRESS", fixed: "gress", tar: "pro", mode: "prefix", def: "forward or onward movement toward a destination" },
+            { group: "GRESS", fixed: "gress", tar: "re", mode: "prefix", def: "return to a former or less developed state" },
+            { group: "GRESS", fixed: "grade", tar: "retro", mode: "prefix", def: "directed or moving backward" },
+            { group: "GRESS", fixed: "grade", tar: "ante", mode: "prefix", def: "directed or moving in a forward direction" },
+            { group: "GRESS", fixed: "gress", tar: "trans", mode: "prefix", def: "to go beyond the bounds of a moral principle" },
+            { group: "GRESS", fixed: "gress", tar: "di", mode: "prefix", def: "leave the main subject temporarily in speech" },
+            { group: "GRESS", fixed: "gress", tar: "e", mode: "prefix", def: "the action of going out of or leaving a place" },
+            { group: "GRESS", fixed: "gress", tar: "in", mode: "prefix", def: "the action or fact of going in or entering" },
+            { group: "GRESS", fixed: "gress", tar: "con", mode: "prefix", def: "a formal meeting or series of meetings" },
+            { group: "GRESS", fixed: "gress", tar: "ag", mode: "prefix", def: "to behave in a hostile or violent way" },
+
+            // FERRE
+            { group: "FERRE", fixed: "ference", tar: "con", mode: "prefix", def: "Event where people bring ideas together" },
+            { group: "FERRE", fixed: "ference", tar: "dif", mode: "prefix", def: "The quality of being unlike" },
+            { group: "FERRE", fixed: "ference", tar: "in", mode: "prefix", def: "Conclusion reached by bringing evidence into reasoning" },
+            { group: "FERRE", fixed: "ference", tar: "re", mode: "prefix", def: "Act of bringing back a source to consult" },
+            { group: "FERRE", fixed: "ference", tar: "pre", mode: "prefix", def: "Act of carrying one option forward" },
+            { group: "FERRE", fixed: "ference", tar: "de", mode: "prefix", def: "Humble submission and respect" },
+            { group: "FERRE", fixed: "ference", tar: "inter", mode: "prefix", def: "Act of carrying something between two points" },
+            { group: "FERRE", fixed: "ference", tar: "trans", mode: "prefix", def: "Act of carrying something from one place to another" },
+            { group: "FERRE", fixed: "ference", tar: "circum", mode: "prefix", def: "The distance carried around a circle" },
+            { group: "FERRE", fixed: "ference", tar: "af", mode: "prefix", def: "Nerve signals carried toward the CNS" },
+            { group: "FERRE", fixed: "ference", tar: "ef", mode: "prefix", def: "Nerve signals carried out from the CNS" }
+        ];
+
+        // --- STATE ---
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let userInput = "";
+        let isAnimating = false;
+        let gameResults = [];
+        let hintsRemaining = 3;
+
+        // --- DOM ELEMENTS ---
+        const viewMenu = document.getElementById('menu-view');
+        const viewGame = document.getElementById('game-view');
+        const viewResult = document.getElementById('result-view');
+        const elRootHint = document.getElementById('root-hint');
+        const elContainer = document.getElementById('letters-container');
+        const elMsg = document.getElementById('message-area');
+        const elCurrentCount = document.getElementById('current-count');
+        const elTotalCount = document.getElementById('total-count');
+        const elProgress = document.getElementById('progress-container');
+        const elResultList = document.getElementById('result-list');
+        const elScoreDisplay = document.getElementById('score-display');
+        const elHintCount = document.getElementById('hint-count');
+        const btnHint = document.getElementById('btn-hint');
+        const elDef = document.getElementById('definition-text');
+        const elWordContainer = document.getElementById('word-container');
+        const elFixedPart = document.getElementById('fixed-part');
+        const elInputPart = document.getElementById('input-part');
+
+        // --- SOUND ENGINE ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        function playSound(freq, type, duration, startTime = 0, volume = 0.1) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
+            gain.gain.setValueAtTime(0, audioCtx.currentTime + startTime);
+            gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + startTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + startTime);
+            osc.stop(audioCtx.currentTime + startTime + duration);
+        }
+        function playChord(notes, type = 'sine', duration = 0.5) {
+            notes.forEach((freq, index) => playSound(freq, type, duration, index * 0.05));
+        }
+
+        function sfxCorrect() { playChord([523.25, 659.25, 783.99, 1046.50], 'triangle', 0.6); }
+        function sfxWrong() {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
+        function sfxClick() { playSound(800, 'sine', 0.05, 0, 0.05); }
+        function sfxHint() { playChord([1200, 1600], 'sine', 0.3); }
+        function sfxWin() {
+            const seq = [{ f: 523, t: 0 }, { f: 523, t: 0.15 }, { f: 523, t: 0.3 }, { f: 659, t: 0.5 }, { f: 783, t: 0.9 }, { f: 1046, t: 0.9 }];
+            seq.forEach(n => playSound(n.f, 'square', 0.4, n.t, 0.1));
+        }
+
+        // --- LOGIC ---
+
+        function showMenu() {
+            viewMenu.classList.remove('hidden');
+            viewGame.classList.add('hidden');
+            viewResult.classList.add('hidden');
+            elProgress.classList.add('hidden');
+            elMsg.style.transform = "translateY(100%)";
+        }
+
+        function startGame(rootGroup) {
+            initAudio();
+            currentQuestions = database.filter(q => q.group === rootGroup);
+            currentQuestions.sort(() => Math.random() - 0.5);
+
+            if (currentQuestions.length === 0) {
+                alert("No data available.");
+                return;
+            }
+
+            currentIndex = 0;
+            gameResults = [];
+            hintsRemaining = 3; // Reset HINTS here ONLY
+
+            viewMenu.classList.add('hidden');
+            viewGame.classList.remove('hidden');
+            elProgress.classList.remove('hidden');
+            elTotalCount.innerText = currentQuestions.length;
+            loadQuestion(0);
+        }
+
+        function loadQuestion(index) {
+            currentIndex = index;
+            const q = currentQuestions[index];
+            userInput = "";
+            isAnimating = false;
+            // hintsRemaining = 3; // Removed Reset
+            updateHintUI();
+
+            elCurrentCount.innerText = index + 1;
+            elRootHint.innerText = `ROOT: ${q.group}`;
+            elDef.innerText = q.def;
+            elMsg.style.transform = "translateY(100%)";
+
+            // Layout Logic: Prefix vs Suffix
+            elFixedPart.innerText = q.fixed;
+            elInputPart.className = "flex gap-1";
+
+            elWordContainer.innerHTML = '';
+            if (q.mode === 'prefix') {
+                elWordContainer.appendChild(elInputPart);
+                elWordContainer.appendChild(elFixedPart);
+            } else {
+                elWordContainer.appendChild(elFixedPart);
+                elWordContainer.appendChild(elInputPart);
+            }
+            updateAnswerDisplay();
+
+            // Prepare Unique Letters
+            let uniqueChars = new Set(q.tar.split(''));
+            let letters = Array.from(uniqueChars);
+
+            const commonLetters = "aeiounrstlmcdp";
+            while (letters.length < 10) {
+                const randomChar = commonLetters[Math.floor(Math.random() * commonLetters.length)];
+                if (!uniqueChars.has(randomChar)) {
+                    uniqueChars.add(randomChar);
+                    letters.push(randomChar);
+                }
+            }
+            letters.sort(() => Math.random() - 0.5);
+
+            elContainer.innerHTML = '';
+            letters.forEach(char => {
+                const btn = document.createElement('button');
+                btn.className = "btn-letter bg-white border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 text-slate-700 text-xl font-bold rounded-xl h-14 flex items-center justify-center uppercase select-none shadow-sm";
+                btn.innerText = char;
+                btn.onclick = () => handleInput(char);
+                elContainer.appendChild(btn);
+            });
+        }
+
+        function updateAnswerDisplay() {
+            const q = currentQuestions[currentIndex];
+            let displayHtml = '';
+
+            // Render user input letters in boxes
+            for (let i = 0; i < userInput.length; i++) {
+                displayHtml += `<div class="w-8 h-12 sm:w-10 sm:h-14 border-2 border-slate-800 bg-white rounded-lg flex items-center justify-center text-xl sm:text-2xl font-bold uppercase text-slate-800 shadow-sm">${userInput[i]}</div>`;
+            }
+
+            // Render remaining empty boxes
+            const remainingLen = q.tar.length - userInput.length;
+            for (let i = 0; i < remainingLen; i++) {
+                displayHtml += `<div class="w-8 h-12 sm:w-10 sm:h-14 border-2 border-slate-300 bg-slate-50 rounded-lg flex items-center justify-center shadow-inner"></div>`;
+            }
+
+            elInputPart.innerHTML = displayHtml;
+        }
+
+        function updateHintUI() {
+            elHintCount.innerText = hintsRemaining;
+            if (hintsRemaining > 0) {
+                btnHint.disabled = false;
+                btnHint.classList.remove('opacity-50');
+            } else {
+                btnHint.disabled = true;
+                btnHint.classList.add('opacity-50');
+            }
+        }
+
+        function useHint() {
+            if (isAnimating || hintsRemaining <= 0) return;
+            const q = currentQuestions[currentIndex];
+            sfxHint();
+            hintsRemaining--;
+            updateHintUI();
+
+            if (!q.tar.startsWith(userInput)) userInput = "";
+            userInput += q.tar[userInput.length];
+            updateAnswerDisplay();
+
+            if (userInput.length === q.tar.length) checkAnswer();
+        }
+
+        function handleInput(char) {
+            if (isAnimating) return;
+            sfxClick();
+            const q = currentQuestions[currentIndex];
+            if (userInput.length < q.tar.length) {
+                userInput += char;
+                updateAnswerDisplay();
+                if (userInput.length === q.tar.length) checkAnswer();
+            }
+        }
+
+        function deleteLastChar() {
+            if (isAnimating) return;
+            sfxClick();
+            if (userInput.length > 0) {
+                userInput = userInput.slice(0, -1);
+                updateAnswerDisplay();
+            }
+        }
+
+        function checkAnswer() {
+            const q = currentQuestions[currentIndex];
+            if (userInput === q.tar) {
+                isAnimating = true;
+                sfxCorrect();
+                gameResults.push({ correct: true, word: q.mode === 'prefix' ? (q.tar + q.fixed) : (q.fixed + q.tar), def: q.def });
+                showToast("CORRECT!", "bg-green-500");
+
+                elInputPart.querySelectorAll('div').forEach(div => {
+                    div.classList.remove('border-slate-800', 'bg-white');
+                    div.classList.add('border-green-500', 'bg-green-50', 'text-green-600');
+                });
+
+                setTimeout(() => nextQuestion(), 1200);
+            } else {
+                sfxWrong();
+                showToast("TRY AGAIN", "bg-red-500");
+                elInputPart.classList.add('shake');
+
+                elInputPart.querySelectorAll('div').forEach(div => {
+                    div.classList.add('border-red-400', 'bg-red-50', 'text-red-500');
+                });
+
+                setTimeout(() => {
+                    elInputPart.classList.remove('shake');
+                    // Reset style for next attempt
+                    elInputPart.querySelectorAll('div').forEach(div => {
+                        // Only reset if it has content (though in this logic, all have content if checkAnswer is called)
+                        div.classList.remove('border-red-400', 'bg-red-50', 'text-red-500');
+                        div.classList.add('border-slate-800', 'bg-white', 'text-slate-800');
+                    });
+                }, 500);
+                setTimeout(() => elMsg.style.transform = "translateY(100%)", 1000);
+            }
+        }
+
+        function showToast(text, colorClass) {
+            elMsg.innerText = text;
+            elMsg.className = `h-16 w-full absolute bottom-0 left-0 flex items-center justify-center text-xl font-black text-white translate-y-0 transition-transform duration-300 z-50 shadow-lg ${colorClass}`;
+        }
+
+        function skipQuestion() {
+            if (isAnimating) return;
+            const q = currentQuestions[currentIndex];
+            gameResults.push({ correct: false, word: q.mode === 'prefix' ? (q.tar + q.fixed) : (q.fixed + q.tar), def: q.def });
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIndex < currentQuestions.length - 1) {
+                loadQuestion(currentIndex + 1);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            viewGame.classList.add('hidden');
+            viewResult.classList.remove('hidden');
+            elProgress.classList.add('hidden');
+            elMsg.style.transform = "translateY(100%)";
+
+            const correctCount = gameResults.filter(r => r.correct).length;
+            const total = gameResults.length;
+            elScoreDisplay.innerText = `${correctCount}/${total}`;
+
+            elResultList.innerHTML = '';
+            gameResults.forEach(r => {
+                const li = document.createElement('li');
+                li.className = "p-4 flex justify-between items-center";
+                const iconHtml = r.correct
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 w-6 h-6"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400 w-6 h-6"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+                li.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="font-bold text-lg ${r.correct ? 'text-slate-800' : 'text-slate-400 line-through decoration-red-400'}">${r.word}</span>
+                        <span class="text-xs text-slate-500 font-medium">${r.def}</span>
+                    </div>
+                    <div>${iconHtml}</div>
+                `;
+                elResultList.appendChild(li);
+            });
+
+            if (correctCount === total && total > 0) {
+                sfxWin();
+                fireConfetti();
+            }
+        }
+
+        function fireConfetti() {
+            var duration = 3000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            var interval = setInterval(function () {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!viewGame.classList.contains('hidden')) {
+                if (e.key === 'Backspace') {
+                    deleteLastChar();
+                } else if (/^[a-zA-Z]$/.test(e.key)) {
+                    handleInput(e.key.toLowerCase());
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

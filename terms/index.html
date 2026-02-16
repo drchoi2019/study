@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,81 +8,163 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #f8fafc;
+            /* slate-50 */
         }
+
         .card {
             background-color: #ffffff;
-            border-radius: 0.75rem; /* 12px */
-            border: 1px solid #e2e8f0; /* slate-200 */
+            border-radius: 0.75rem;
+            /* 12px */
+            border: 1px solid #e2e8f0;
+            /* slate-200 */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
+
         .card:hover {
             transform: translateY(-6px);
             box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.07);
         }
+
         .card-title-container {
             display: flex;
             align-items: center;
-            gap: 0.75rem; /* 12px */
-            padding: 1.5rem; /* 24px */
-            border-bottom: 1px solid #e2e8f0; /* slate-200 */
+            gap: 0.75rem;
+            /* 12px */
+            padding: 1.5rem;
+            /* 24px */
+            border-bottom: 1px solid #e2e8f0;
+            /* slate-200 */
         }
+
         .card-title {
-            font-size: 1.125rem; /* text-lg */
+            font-size: 1.125rem;
+            /* text-lg */
             font-weight: 700;
         }
+
         .card-content {
-            padding: 1.5rem; /* 24px */
+            padding: 1.5rem;
+            /* 24px */
             flex-grow: 1;
         }
+
         .card-link {
             display: block;
             padding: 0.6rem 1rem;
             text-decoration: none;
-            border-radius: 0.5rem; /* 8px */
+            border-radius: 0.5rem;
+            /* 8px */
             transition: background-color 0.2s ease, color 0.2s ease;
-            color: #475569; /* slate-600 */
+            color: #475569;
+            /* slate-600 */
             font-weight: 500;
         }
+
         .card-link:not(:last-child) {
-            margin-bottom: 0.5rem; /* 8px */
+            margin-bottom: 0.5rem;
+            /* 8px */
         }
-        
+
         /* Color Variandts */
-        .card-sky .card-title-container { background-color: #f0f9ff; }
-        .card-sky .card-title { color: #0c4a6e; }
-        .card-sky .card-link:hover { background-color: #e0f2fe; color: #0369a1; }
+        .card-sky .card-title-container {
+            background-color: #f0f9ff;
+        }
 
-        .card-emerald .card-title-container { background-color: #ecfdf5; }
-        .card-emerald .card-title { color: #065f46; }
-        .card-emerald .card-link:hover { background-color: #d1fae5; color: #047857; }
+        .card-sky .card-title {
+            color: #0c4a6e;
+        }
 
-        .card-indigo .card-title-container { background-color: #eef2ff; }
-        .card-indigo .card-title { color: #3730a3; }
-        .card-indigo .card-link:hover { background-color: #e0e7ff; color: #4338ca; }
-        
-        .card-amber .card-title-container { background-color: #fffbeb; }
-        .card-amber .card-title { color: #92400e; }
-        .card-amber .card-link:hover { background-color: #fef3c7; color: #b45309; }
+        .card-sky .card-link:hover {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
 
-        .card-rose .card-title-container { background-color: #fff1f2; }
-        .card-rose .card-title { color: #9f1239; }
-        .card-rose .card-link:hover { background-color: #ffe4e6; color: #be123c; }
+        .card-emerald .card-title-container {
+            background-color: #ecfdf5;
+        }
 
-        .card-fuchsia .card-title-container { background-color: #fdf4ff; }
-        .card-fuchsia .card-title { color: #86198f; }
-        .card-fuchsia .card-link:hover { background-color: #fae8ff; color: #a21caf; }
+        .card-emerald .card-title {
+            color: #065f46;
+        }
 
-        .card-teal .card-title-container { background-color: #f0fdfa; }
-        .card-teal .card-title { color: #134e4a; }
-        .card-teal .card-link:hover { background-color: #ccfbf1; color: #0f766e; }
+        .card-emerald .card-link:hover {
+            background-color: #d1fae5;
+            color: #047857;
+        }
+
+        .card-indigo .card-title-container {
+            background-color: #eef2ff;
+        }
+
+        .card-indigo .card-title {
+            color: #3730a3;
+        }
+
+        .card-indigo .card-link:hover {
+            background-color: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .card-amber .card-title-container {
+            background-color: #fffbeb;
+        }
+
+        .card-amber .card-title {
+            color: #92400e;
+        }
+
+        .card-amber .card-link:hover {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .card-rose .card-title-container {
+            background-color: #fff1f2;
+        }
+
+        .card-rose .card-title {
+            color: #9f1239;
+        }
+
+        .card-rose .card-link:hover {
+            background-color: #ffe4e6;
+            color: #be123c;
+        }
+
+        .card-fuchsia .card-title-container {
+            background-color: #fdf4ff;
+        }
+
+        .card-fuchsia .card-title {
+            color: #86198f;
+        }
+
+        .card-fuchsia .card-link:hover {
+            background-color: #fae8ff;
+            color: #a21caf;
+        }
+
+        .card-teal .card-title-container {
+            background-color: #f0fdfa;
+        }
+
+        .card-teal .card-title {
+            color: #134e4a;
+        }
+
+        .card-teal .card-link:hover {
+            background-color: #ccfbf1;
+            color: #0f766e;
+        }
 
         /* Styles for the iframe view */
         #iframe-view {
@@ -92,52 +175,63 @@
             height: 100%;
             z-index: 100;
         }
+
         #thin-header {
             height: 50px;
         }
+
         #content-frame {
             height: calc(100% - 50px);
             border: none;
         }
     </style>
 </head>
+
 <body class="text-slate-700">
 
     <div id="main-view">
         <header>
-            <svg width="100%" viewBox="0 0 1200 222" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+            <svg width="100%" viewBox="0 0 1200 222" preserveAspectRatio="xMidYMid slice"
+                xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
                 <defs>
                     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" style="stop-color:#0f172a;" />
                         <stop offset="100%" style="stop-color:#1e293b;" />
                     </linearGradient>
                     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                        <feGaussianBlur stdDeviation="8" result="coloredBlur" />
                         <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#bg-gradient)" />
 
-                <path d="M 50 50 Q 150 126, 250 50 T 450 50" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-                <path d="M 80 170 Q 180 95, 280 170 T 480 170" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-                
-                <path d="M 1150 170 Q 1050 95, 950 170 T 750 170" stroke="#4338ca" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
-                <path d="M 1120 50 Q 1020 126, 920 50 T 720 50" stroke="#38bdf8" stroke-width="2.5" fill="none" opacity="0.4" filter="url(#glow)"/>
+                <path d="M 50 50 Q 150 126, 250 50 T 450 50" stroke="#4338ca" stroke-width="2.5" fill="none"
+                    opacity="0.4" filter="url(#glow)" />
+                <path d="M 80 170 Q 180 95, 280 170 T 480 170" stroke="#38bdf8" stroke-width="2.5" fill="none"
+                    opacity="0.4" filter="url(#glow)" />
 
-                <path d="M 350 110 L 480 110 L 500 91 L 530 129 L 550 104 L 570 117 L 600 110 L 850 110" stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.6"/>
+                <path d="M 1150 170 Q 1050 95, 950 170 T 750 170" stroke="#4338ca" stroke-width="2.5" fill="none"
+                    opacity="0.4" filter="url(#glow)" />
+                <path d="M 1120 50 Q 1020 126, 920 50 T 720 50" stroke="#38bdf8" stroke-width="2.5" fill="none"
+                    opacity="0.4" filter="url(#glow)" />
 
-                <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="60" font-weight="800" fill="#ffffff">
+                <path d="M 350 110 L 480 110 L 500 91 L 530 129 L 550 104 L 570 117 L 600 110 L 850 110"
+                    stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.6" />
+
+                <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle"
+                    font-family="'Plus Jakarta Sans', sans-serif" font-size="60" font-weight="800" fill="#ffffff">
                     Medical Terminology
                 </text>
-                <text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="40" font-weight="500" fill="#cbd5e1">
+                <text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle"
+                    font-family="'Plus Jakarta Sans', sans-serif" font-size="40" font-weight="500" fill="#cbd5e1">
                     The Ultimate Hack
                 </text>
             </svg>
             <div class="text-center -mt-4 sm:-mt-5 md:-mt-6 pb-6 bg-slate-800 pt-2">
-                 <p class="text-xs sm:text-sm md:text-base text-slate-400">by Hyungsuk Choi</p>
+                <p class="text-xs sm:text-sm md:text-base text-slate-400">by Hyungsuk Choi</p>
             </div>
         </header>
 
@@ -146,7 +240,11 @@
 
                 <div class="card card-sky">
                     <div class="card-title-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-5.197-5.975M15 21v-1a6 6 0 015.197-5.975M15 21v-1a6 6 0 00-9-5.197" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-5.197-5.975M15 21v-1a6 6 0 015.197-5.975M15 21v-1a6 6 0 00-9-5.197" />
+                        </svg>
                         <h2 class="card-title">Basics: The Foundation</h2>
                     </div>
                     <div class="card-content">
@@ -163,7 +261,11 @@
 
                 <div class="card card-emerald">
                     <div class="card-title-container">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                         <h2 class="card-title">Organs & Systems</h2>
                     </div>
                     <div class="card-content">
@@ -182,7 +284,11 @@
 
                 <div class="card card-indigo">
                     <div class="card-title-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                        </svg>
                         <h2 class="card-title">Prefixes</h2>
                     </div>
                     <div class="card-content">
@@ -199,18 +305,22 @@
                             <a href="peri.html" class="card-link">peri- (around)</a>
                             <a href="circum.html" class="card-link">circum- (around)</a>
                             <a href="defecation.html" class="card-link">de- (remove)</a>
-                             <a href="morph.html" class="card-link">morph- (shape)</a>
-                             <a href="vol.html" class="card-link">vol- (will)</a>
- 
+                            <a href="morph.html" class="card-link">morph- (shape)</a>
+                            <a href="vol.html" class="card-link">vol- (will)</a>
+
 
 
                         </nav>
                     </div>
                 </div>
-                
+
                 <div class="card card-fuchsia">
                     <div class="card-title-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                        </svg>
                         <h2 class="card-title">Suffixes: Condition</h2>
                     </div>
                     <div class="card-content">
@@ -230,7 +340,11 @@
 
                 <div class="card card-amber">
                     <div class="card-title-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
                         <h2 class="card-title">Suffixes: Miscellaneous</h2>
                     </div>
                     <div class="card-content">
@@ -241,8 +355,8 @@
                             <a href="oid.html" class="card-link">-oid (resemble)</a>
                             <a href="lysis.html" class="card-link">-lysis (destruction)</a>
                             <a href="rect.html" class="card-link">-rect (straighten)</a>
-                             <a href="tomy.html" class="card-link">-tomy (cut)</a>
-                            <a href="ectomy.html" class="card-link">-ectomy (cut away)</a> 
+                            <a href="tomy.html" class="card-link">-tomy (cut)</a>
+                            <a href="ectomy.html" class="card-link">-ectomy (cut away)</a>
                             <a href="cision.html" class="card-link">-cision (cutting)</a>
 
                         </nav>
@@ -251,7 +365,10 @@
 
                 <div class="card card-rose">
                     <div class="card-title-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                         <h2 class="card-title">Actions & Processes</h2>
                     </div>
                     <div class="card-content">
@@ -266,35 +383,59 @@
                             <a href="sight.html" class="card-link">sight (to see)</a>
                             <a href="spect.html" class="card-link">spect (to look, to see)</a>
                             <a href="vid_vis.html" class="card-link">vid, vis (to see)</a>
-                             <a href="mission.html" class="card-link">mission (to send)</a>
-                             <a href="somni.html" class="card-link">somni (to sleep)</a>
+                            <a href="mission.html" class="card-link">mission (to send)</a>
+                            <a href="somni.html" class="card-link">somni (to sleep)</a>
 
                         </nav>
                     </div>
                 </div>
-                
-                <div class="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="card bg-gradient-to-r from-sky-400 to-emerald-400 text-white flex flex-col items-center justify-center p-10 text-center">
+
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="card bg-gradient-to-r from-sky-400 to-emerald-400 text-white flex flex-col items-center justify-center p-10 text-center">
                         <h2 class="text-2xl font-bold mb-4 text-white">Test Your Knowledge!</h2>
-                        <p class="max-w-xl mb-6 text-sky-100">Consolidate your knowledge with a multiple-choice quiz.</p>
-                        <a href="quiz.html" class="card-link inline-block bg-white text-emerald-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start Quiz</a>
+                        <p class="max-w-xl mb-6 text-sky-100">Consolidate your knowledge with a multiple-choice quiz.
+                        </p>
+                        <a href="quiz.html"
+                            class="card-link inline-block bg-white text-emerald-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start
+                            Quiz</a>
                     </div>
-                    
-                    <div class="card bg-gradient-to-r from-indigo-400 to-fuchsia-400 text-white flex flex-col items-center justify-center p-10 text-center">
+
+                    <div
+                        class="card bg-gradient-to-r from-indigo-400 to-fuchsia-400 text-white flex flex-col items-center justify-center p-10 text-center">
                         <h2 class="text-2xl font-bold mb-4 text-white">Translation Challenge!</h2>
                         <p class="max-w-xl mb-6 text-indigo-100">Translate medical terms between Korean and English.</p>
-                        <a href="translate_quiz.html?lang=en" class="card-link inline-block bg-white text-fuchsia-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start Challenge</a>
+                        <a href="translate_quiz.html?lang=en"
+                            class="card-link inline-block bg-white text-fuchsia-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start
+                            Challenge</a>
+                    </div>
+
+                    <div
+                        class="card bg-gradient-to-r from-amber-400 to-orange-500 text-white flex flex-col items-center justify-center p-10 text-center">
+                        <h2 class="text-2xl font-bold mb-4 text-white">Root Word Puzzle</h2>
+                        <p class="max-w-xl mb-6 text-amber-100">Practice roots like AUDI, VIS, SPECT with an interactive
+                            puzzle.</p>
+                        <a href="ety_quiz.html"
+                            class="card-link inline-block bg-white text-orange-600 font-bold py-3 px-8 rounded-full hover:bg-slate-50 transition-colors">Start
+                            Puzzle</a>
                     </div>
                 </div>
 
             </div>
-            
-            <div class="mt-20 p-8 bg-white rounded-lg border border-slate-200 flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-8">
-                <img src="https://image.yes24.com/goods/122284179/XL" alt="Book Cover for Medical Terminology: A Practical Guide" class="rounded-md shadow-lg w-32 md:w-36 h-auto flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/150x210/FFFFFF/000000?text=Book+Cover';">
+
+            <div
+                class="mt-20 p-8 bg-white rounded-lg border border-slate-200 flex flex-col md:flex-row items-center justify-center text-center md:text-left gap-8">
+                <img src="https://image.yes24.com/goods/122284179/XL"
+                    alt="Book Cover for Medical Terminology: A Practical Guide"
+                    class="rounded-md shadow-lg w-32 md:w-36 h-auto flex-shrink-0"
+                    onerror="this.onerror=null;this.src='https://placehold.co/150x210/FFFFFF/000000?text=Book+Cover';">
                 <div class="flex-grow">
                     <h3 class="text-xl font-bold text-slate-900">Meet the Author's Guide to Medical Terminology</h3>
-                    <p class="text-slate-600 mt-2 mb-4">Dive deeper with this practical guide. It offers the ultimate strategy to easily understand and retain complex medical terms for lifelong use in clinical practice. Explore the book to master the language of medicine.</p>
-                    <a href="https://www.yes24.com/product/goods/122284179" target="_blank" rel="noopener noreferrer" class="inline-block bg-slate-900 text-white font-bold py-3 px-6 rounded-lg hover:bg-slate-700 transition-colors">
+                    <p class="text-slate-600 mt-2 mb-4">Dive deeper with this practical guide. It offers the ultimate
+                        strategy to easily understand and retain complex medical terms for lifelong use in clinical
+                        practice. Explore the book to master the language of medicine.</p>
+                    <a href="https://www.yes24.com/product/goods/122284179" target="_blank" rel="noopener noreferrer"
+                        class="inline-block bg-slate-900 text-white font-bold py-3 px-6 rounded-lg hover:bg-slate-700 transition-colors">
                         Find it on YES24
                     </a>
                 </div>
@@ -307,7 +448,8 @@
     </div>
 
     <div id="iframe-view" class="hidden">
-        <div id="thin-header" class="fixed top-0 left-0 w-full bg-slate-800 text-white flex items-center justify-center shadow-md cursor-pointer z-50">
+        <div id="thin-header"
+            class="fixed top-0 left-0 w-full bg-slate-800 text-white flex items-center justify-center shadow-md cursor-pointer z-50">
             <p class="font-semibold text-sm sm:text-base whitespace-nowrap px-2">Click to return to home</p>
         </div>
         <iframe id="content-frame" class="w-full mt-[50px]"></iframe>
@@ -326,7 +468,7 @@
                 link.addEventListener('click', (event) => {
                     // Prevent default link behavior
                     event.preventDefault();
-                    
+
                     const url = link.getAttribute('href');
 
                     // Handle external links (like yes24) differently
@@ -334,7 +476,7 @@
                         window.open(url, '_blank');
                         return;
                     }
-                    
+
                     // Set iframe source
                     contentFrame.src = url;
 
@@ -357,4 +499,5 @@
     </script>
 
 </body>
+
 </html>
