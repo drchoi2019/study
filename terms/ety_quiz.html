@@ -98,51 +98,30 @@
         </div>
 
         <!-- VIEW 1: MENU -->
-        <div id="menu-view" class="flex-1 flex flex-col p-6 items-center justify-center overflow-y-auto">
+        <div id="menu-view" class="flex-1 flex flex-col p-6 items-center overflow-hidden">
             <h2 class="text-2xl font-black text-slate-800 mb-2 tracking-tight">SELECT ROOT</h2>
-            <p class="text-slate-500 mb-8 text-center text-sm font-medium">Choose a root to practice.</p>
+            <p class="text-slate-500 mb-6 text-center text-sm font-medium">Choose a category and root to practice.</p>
 
-            <div class="grid grid-cols-2 gap-3 w-full max-w-sm">
-                <button onclick="startGame('AUDI')"
-                    class="p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-2xl font-bold border-2 border-blue-100 hover:border-blue-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">AUDI-</span>
-                    <span class="text-[10px] uppercase font-bold text-blue-400">To Hear</span>
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6 w-full max-w-sm">
+                <button id="tab-medical" onclick="switchTab('medical')"
+                    class="flex-1 py-2 rounded-xl font-bold text-sm transition-colors bg-blue-600 text-white shadow-md">
+                    MEDICAL
                 </button>
-                <button onclick="startGame('VIS')"
-                    class="p-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-2xl font-bold border-2 border-indigo-100 hover:border-indigo-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">VIS-</span>
-                    <span class="text-[10px] uppercase font-bold text-indigo-400">To See</span>
+                <button id="tab-general" onclick="switchTab('general')"
+                    class="flex-1 py-2 rounded-xl font-bold text-sm transition-colors bg-slate-200 text-slate-500 hover:bg-slate-300">
+                    GENERAL
                 </button>
-                <button onclick="startGame('SPECT')"
-                    class="p-4 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-2xl font-bold border-2 border-purple-100 hover:border-purple-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">SPECT-</span>
-                    <span class="text-[10px] uppercase font-bold text-purple-400">To Look</span>
-                </button>
-                <button onclick="startGame('TRACT')"
-                    class="p-4 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-2xl font-bold border-2 border-teal-100 hover:border-teal-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">TRACT-</span>
-                    <span class="text-[10px] uppercase font-bold text-teal-400">To Pull</span>
-                </button>
-                <button onclick="startGame('DUCT')"
-                    class="p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-2xl font-bold border-2 border-emerald-100 hover:border-emerald-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">DUCT-</span>
-                    <span class="text-[10px] uppercase font-bold text-emerald-400">To Lead</span>
-                </button>
-                <button onclick="startGame('JECT')"
-                    class="p-4 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-2xl font-bold border-2 border-rose-100 hover:border-rose-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">JECT-</span>
-                    <span class="text-[10px] uppercase font-bold text-rose-400">To Throw</span>
-                </button>
-                <button onclick="startGame('GRESS')"
-                    class="p-4 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 rounded-2xl font-bold border-2 border-cyan-100 hover:border-cyan-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">GRESS-</span>
-                    <span class="text-[10px] uppercase font-bold text-cyan-400">To Go</span>
-                </button>
-                <button onclick="startGame('FERRE')"
-                    class="p-4 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-2xl font-bold border-2 border-amber-100 hover:border-amber-300 transition-all flex flex-col items-center gap-1 group">
-                    <span class="text-xl group-hover:scale-110 transition-transform">FERRE-</span>
-                    <span class="text-[10px] uppercase font-bold text-amber-400">To Carry</span>
-                </button>
+            </div>
+
+            <!-- Scrollable Grid Container -->
+            <div class="flex-1 w-full overflow-y-auto">
+                <div id="grid-medical" class="grid grid-cols-2 gap-3 w-full max-w-sm mx-auto pb-6">
+                    <!-- Medical buttons injected here -->
+                </div>
+                <div id="grid-general" class="hidden grid grid-cols-2 gap-3 w-full max-w-sm mx-auto pb-6">
+                    <!-- General buttons injected here -->
+                </div>
             </div>
         </div>
 
@@ -230,77 +209,455 @@
 
     <script>
         // --- DATA ---
+        // Root Metadata: Meaning, Color Theme, Category
+        const rootData = {
+            // MEDICAL
+            "PNEUMON": { mean: "Lung", cat: "medical", color: "blue" },
+            "REN": { mean: "Kidney", cat: "medical", color: "red" },
+            "ALGIA": { mean: "Pain", cat: "medical", color: "rose" },
+            "DYS": { mean: "Bad/Difficult", cat: "medical", color: "orange" },
+            "ECTOMY": { mean: "Excision", cat: "medical", color: "emerald" },
+            "OID": { mean: "Shape/Likeness", cat: "medical", color: "indigo" },
+            "ENTERO": { mean: "Intestine", cat: "medical", color: "amber" },
+            "EPI": { mean: "Upon/Over", cat: "medical", color: "purple" },
+            "GASTRO": { mean: "Stomach", cat: "medical", color: "pink" },
+            "EMIA": { mean: "Blood Condition", cat: "medical", color: "red" },
+            "HEPA": { mean: "Liver", cat: "medical", color: "orange" },
+            "HYDRO": { mean: "Water", cat: "medical", color: "cyan" },
+            "ITIS": { mean: "Inflammation", cat: "medical", color: "rose" },
+            "CARDIA": { mean: "Heart", cat: "medical", color: "red" },
+            "LYSIS": { mean: "Destruction", cat: "medical", color: "slate" },
+            "OMA": { mean: "Tumor", cat: "medical", color: "stone" },
+            "URIA": { mean: "Urine", cat: "medical", color: "yellow" },
+            "PARA": { mean: "Beside/Beyond", cat: "medical", color: "teal" },
+            "PERI": { mean: "Around", cat: "medical", color: "lime" },
+            "PLASIA": { mean: "Formation", cat: "medical", color: "green" },
+            "RRHEA": { mean: "Flow", cat: "medical", color: "blue" },
+            "SCOPE": { mean: "View", cat: "medical", color: "sky" },
+            "TOMY": { mean: "Incision", cat: "medical", color: "gray" },
+            "TROPHY": { mean: "Nourishment", cat: "medical", color: "emerald" },
+            "GRAPH": { mean: "Write/Record", cat: "medical", color: "violet" },
+
+            // GENERAL
+            "AUDI": { mean: "To Hear", cat: "general", color: "blue" },
+            "VIS": { mean: "To See", cat: "general", color: "indigo" },
+            "SPECT": { mean: "To Look", cat: "general", color: "purple" },
+            "TRACT": { mean: "To Pull", cat: "general", color: "teal" },
+            "DUCT": { mean: "To Lead", cat: "general", color: "emerald" },
+            "JECT": { mean: "To Throw", cat: "general", color: "rose" },
+            "GRESS": { mean: "To Go", cat: "general", color: "cyan" },
+            "FERRE": { mean: "To Carry", cat: "general", color: "amber" },
+            "SIGHT": { mean: "To See", cat: "general", color: "sky" },
+            "CISIONE": { mean: "To Cut", cat: "general", color: "red" },
+            "CIRCUM": { mean: "Around", cat: "general", color: "orange" },
+            "LOQUI": { mean: "To Speak", cat: "general", color: "lime" },
+            "MALE": { mean: "Bad", cat: "general", color: "stone" },
+            "META": { mean: "Beyond/Change", cat: "general", color: "fuchsia" },
+            "MISSION": { mean: "To Send", cat: "general", color: "blue" },
+            "MORPH": { mean: "Form", cat: "general", color: "pink" },
+            "RECT": { mean: "Straight/Lead", cat: "general", color: "green" },
+            "SCRIBE": { mean: "To Write", cat: "general", color: "slate" },
+            "SOMNI": { mean: "Sleep", cat: "general", color: "indigo" },
+            "SPIRE": { mean: "To Breathe", cat: "general", color: "sky" },
+            "TEST": { mean: "Witness", cat: "general", color: "amber" },
+            "TRANS": { mean: "Across", cat: "general", color: "violet" },
+            "VOL": { mean: "Wish/Will", cat: "general", color: "rose" },
+            "VOC": { mean: "To Call", cat: "general", color: "orange" }
+        };
+
         const database = [
-            // AUDI
-            { group: "AUDI", fixed: "audi", tar: "ence", mode: "suffix", def: "people who listen/watch a performance" },
-            { group: "AUDI", fixed: "audi", tar: "torium", mode: "suffix", def: "a place to hear" },
-            { group: "AUDI", fixed: "audi", tar: "ble", mode: "suffix", def: "able to be heard" },
-            { group: "AUDI", fixed: "audi", tar: "ology", mode: "suffix", def: "study of hearing disorders" },
-            { group: "AUDI", fixed: "audi", tar: "ometer", mode: "suffix", def: "device for measuring hearing" },
-            { group: "AUDI", fixed: "audi", tar: "tor", mode: "suffix", def: "one who listens or reviews accounts" },
+            // --- MEDICAL SESSION ---
 
-            // VIS
-            { group: "VIS", fixed: "vis", tar: "ion", mode: "suffix", def: "the faculty or state of being able to see" },
-            { group: "VIS", fixed: "vis", tar: "ible", mode: "suffix", def: "capable of being seen" },
-            { group: "VIS", fixed: "vis", tar: "ual", mode: "suffix", def: "pertaining to sight" },
-            { group: "VIS", fixed: "vis", tar: "ualize", mode: "suffix", def: "to form a mental image" },
-            { group: "VIS", fixed: "vis", tar: "it", mode: "suffix", def: "to go to see a person or place" },
-            { group: "VIS", fixed: "vis", tar: "or", mode: "suffix", def: "a shield for the eyes" },
+            // PNEUMON / PULMO (Lung)
+            { group: "PNEUMON", fixed: "pneumon", tar: "ia", mode: "suffix", def: "Lung inflammation (폐렴)" },
+            { group: "PNEUMON", fixed: "pneuma", tar: "thorax", mode: "suffix", def: "Air in chest (기흉)" },
+            { group: "PNEUMON", fixed: "pneumon", tar: "ectomy", mode: "suffix", def: "Lung removal (폐절제술)" },
+            { group: "PNEUMON", fixed: "pulmon", tar: "ary", mode: "suffix", def: "Pertaining to lungs (폐의)" },
+            { group: "PNEUMON", fixed: "pulmono", tar: "logist", mode: "suffix", def: "Lung specialist (호흡기내과 의사)" },
+            { group: "PNEUMON", fixed: "pulmon", tar: "ary", mode: "suffix", def: "Relating to lungs (폐의)" },
 
-            // SPECT
-            { group: "SPECT", fixed: "spect", tar: "ator", mode: "suffix", def: "person who watches an event" },
-            { group: "SPECT", fixed: "spect", tar: "rum", mode: "suffix", def: "band of colors; wide range" },
-            { group: "SPECT", fixed: "spect", tar: "in", mode: "prefix", def: "to look into carefully (investigate)" },
-            { group: "SPECT", fixed: "spect", tar: "pro", mode: "prefix", def: "possibility of future event" },
-            { group: "SPECT", fixed: "spect", tar: "su", mode: "prefix", def: "to look at with mistrust" },
-            { group: "SPECT", fixed: "spect", tar: "re", mode: "prefix", def: "to look up to; honor" },
+            // REN / NEPHROS (Kidney)
+            { group: "REN", fixed: "ren", tar: "al", mode: "suffix", def: "Of the kidney (신장의)" },
+            { group: "REN", fixed: "renal", tar: "ad", mode: "prefix", def: "Near kidney (부신의)" },
+            { group: "REN", fixed: "ren", tar: "in", mode: "suffix", def: "Kidney enzyme (레닌)" },
+            { group: "REN", fixed: "nephr", tar: "itis", mode: "suffix", def: "Kidney inflammation (신장염)" },
+            { group: "REN", fixed: "nephr", tar: "ology", mode: "suffix", def: "Study of kidneys (신장학)" },
+            { group: "REN", fixed: "nephr", tar: "on", mode: "suffix", def: "Kidney unit (네프론)" },
+            { group: "REN", fixed: "nephr", tar: "ectomy", mode: "suffix", def: "Kidney removal (신장절제술)" },
+            { group: "REN", fixed: "nephrosis", tar: "hydro", mode: "prefix", def: "Water in kidney (수신증)" },
 
-            // TRACT
-            { group: "TRACT", fixed: "tract", tar: "at", mode: "prefix", def: "to draw attention or interest" },
-            { group: "TRACT", fixed: "tract", tar: "dis", mode: "prefix", def: "to draw away attention" },
-            { group: "TRACT", fixed: "tract", tar: "con", mode: "prefix", def: "to draw together; shorten muscle" },
-            { group: "TRACT", fixed: "tract", tar: "ex", mode: "prefix", def: "to pull out (tooth or fluid)" },
-            { group: "TRACT", fixed: "tract", tar: "abs", mode: "prefix", def: "to draw away from; theoretical" },
-            { group: "TRACT", fixed: "trac", tar: "tion", mode: "suffix", def: "pulling force on a limb" },
+            // ALGIA (Pain)
+            { group: "ALGIA", fixed: "algia", tar: "neur", mode: "prefix", def: "Nerve pain (신경통)" },
+            { group: "ALGIA", fixed: "algia", tar: "my", mode: "prefix", def: "Muscle pain (근육통)" },
+            { group: "ALGIA", fixed: "algia", tar: "arthr", mode: "prefix", def: "Joint pain (관절통)" },
+            { group: "ALGIA", fixed: "myalgia", tar: "fibro", mode: "prefix", def: "Fibrous muscle pain (섬유근육통)" },
+            { group: "ALGIA", fixed: "algia", tar: "ot", mode: "prefix", def: "Ear pain (이통)" },
+            { group: "ALGIA", fixed: "algia", tar: "an", mode: "prefix", def: "No pain (무통)" },
 
-            // DUCT
-            { group: "DUCT", fixed: "duct", tar: "ab", mode: "prefix", def: "to move a limb away from the body" },
-            { group: "DUCT", fixed: "duct", tar: "con", mode: "prefix", def: "to lead together; guide" },
-            { group: "DUCT", fixed: "duct", tar: "pro", mode: "prefix", def: "to lead forward; result" },
-            { group: "DUCT", fixed: "duct", tar: "de", mode: "prefix", def: "to lead down; subtract" },
-            { group: "DUCT", fixed: "duct", tar: "via", mode: "prefix", def: "bridge for carrying a road" },
+            // DYS (Bad/Difficult)
+            { group: "DYS", fixed: "dys", tar: "pepsia", mode: "suffix", def: "Bad digestion (소화불량)" },
+            { group: "DYS", fixed: "dys", tar: "phagia", mode: "suffix", def: "Difficulty swallowing (연하곤란)" },
+            { group: "DYS", fixed: "dys", tar: "uria", mode: "suffix", def: "Painful urination (배뇨통)" },
+            { group: "DYS", fixed: "dys", tar: "menorrhea", mode: "suffix", def: "Painful menstruation (월경통)" },
+            { group: "DYS", fixed: "dys", tar: "trophy", mode: "suffix", def: "Bad nourishment (이영양증)" },
+            { group: "DYS", fixed: "dys", tar: "plasia", mode: "suffix", def: "Bad formation (이형성증)" },
 
-            // JECT
-            { group: "JECT", fixed: "ject", tar: "in", mode: "prefix", def: "to force fluid into body" },
-            { group: "JECT", fixed: "ject", tar: "re", mode: "prefix", def: "immune system attacking transplant" },
-            { group: "JECT", fixed: "ject", tar: "pro", mode: "prefix", def: "to throw forward; predict" },
-            { group: "JECT", fixed: "ject", tar: "e", mode: "prefix", def: "to throw out" },
-            { group: "JECT", fixed: "ject", tar: "sub", mode: "prefix", def: "to throw under; dependent" },
+            // ECTOMY (Excision)
+            { group: "ECTOMY", fixed: "ectomy", tar: "append", mode: "prefix", def: "Appendix removal (충수절제술)" },
+            { group: "ECTOMY", fixed: "ectomy", tar: "tonsill", mode: "prefix", def: "Tonsil removal (편도절제술)" },
+            { group: "ECTOMY", fixed: "ectomy", tar: "mast", mode: "prefix", def: "Breast removal (유방절제술)" },
+            { group: "ECTOMY", fixed: "ectomy", tar: "gastr", mode: "prefix", def: "Stomach removal (위절제술)" },
+            { group: "ECTOMY", fixed: "ectomy", tar: "hyster", mode: "prefix", def: "Uterus removal (자궁절제술)" },
+            { group: "ECTOMY", fixed: "ectomy", tar: "thyroid", mode: "prefix", def: "Thyroid removal (갑상선절제술)" },
+            { group: "ECTOMY", fixed: "ectomy", tar: "vas", mode: "prefix", def: "Vessel removal (정관수술)" },
 
-            // GRESS
-            { group: "GRESS", fixed: "gress", tar: "pro", mode: "prefix", def: "forward or onward movement toward a destination" },
-            { group: "GRESS", fixed: "gress", tar: "re", mode: "prefix", def: "return to a former or less developed state" },
-            { group: "GRESS", fixed: "grade", tar: "retro", mode: "prefix", def: "directed or moving backward" },
-            { group: "GRESS", fixed: "grade", tar: "ante", mode: "prefix", def: "directed or moving in a forward direction" },
-            { group: "GRESS", fixed: "gress", tar: "trans", mode: "prefix", def: "to go beyond the bounds of a moral principle" },
-            { group: "GRESS", fixed: "gress", tar: "di", mode: "prefix", def: "leave the main subject temporarily in speech" },
-            { group: "GRESS", fixed: "gress", tar: "e", mode: "prefix", def: "the action of going out of or leaving a place" },
-            { group: "GRESS", fixed: "gress", tar: "in", mode: "prefix", def: "the action or fact of going in or entering" },
-            { group: "GRESS", fixed: "gress", tar: "con", mode: "prefix", def: "a formal meeting or series of meetings" },
-            { group: "GRESS", fixed: "gress", tar: "ag", mode: "prefix", def: "to behave in a hostile or violent way" },
+            // OID (Form/Shape)
+            { group: "OID", fixed: "oid", tar: "delt", mode: "prefix", def: "Triangle shaped (삼각근)" },
+            { group: "OID", fixed: "oid", tar: "mast", mode: "prefix", def: "Breast shaped (유양돌기)" },
+            { group: "OID", fixed: "oid", tar: "aden", mode: "prefix", def: "Gland like (아데노이드)" },
+            { group: "OID", fixed: "oid", tar: "arachn", mode: "prefix", def: "Spider like (지주막)" },
+            { group: "OID", fixed: "oid", tar: "sigm", mode: "prefix", def: "S-shaped (S상결장)" },
+            { group: "OID", fixed: "oid", tar: "cortic", mode: "prefix", def: "Bark like (코르티코이드)" },
+            { group: "OID", fixed: "oid", tar: "rheumat", mode: "prefix", def: "Flow like (류마티스)" },
+            { group: "OID", fixed: "oid", tar: "opi", mode: "prefix", def: "Opium like (오피오이드)" },
+            { group: "OID", fixed: "oid", tar: "xiph", mode: "prefix", def: "Sword like (검상돌기)" },
+            { group: "OID", fixed: "oid", tar: "thyr", mode: "prefix", def: "Shield like (갑상선)" },
 
-            // FERRE
-            { group: "FERRE", fixed: "ference", tar: "con", mode: "prefix", def: "Event where people bring ideas together" },
-            { group: "FERRE", fixed: "ference", tar: "dif", mode: "prefix", def: "The quality of being unlike" },
-            { group: "FERRE", fixed: "ference", tar: "in", mode: "prefix", def: "Conclusion reached by bringing evidence into reasoning" },
-            { group: "FERRE", fixed: "ference", tar: "re", mode: "prefix", def: "Act of bringing back a source to consult" },
-            { group: "FERRE", fixed: "ference", tar: "pre", mode: "prefix", def: "Act of carrying one option forward" },
-            { group: "FERRE", fixed: "ference", tar: "de", mode: "prefix", def: "Humble submission and respect" },
-            { group: "FERRE", fixed: "ference", tar: "inter", mode: "prefix", def: "Act of carrying something between two points" },
-            { group: "FERRE", fixed: "ference", tar: "trans", mode: "prefix", def: "Act of carrying something from one place to another" },
-            { group: "FERRE", fixed: "ference", tar: "circum", mode: "prefix", def: "The distance carried around a circle" },
-            { group: "FERRE", fixed: "ference", tar: "af", mode: "prefix", def: "Nerve signals carried toward the CNS" },
-            { group: "FERRE", fixed: "ference", tar: "ef", mode: "prefix", def: "Nerve signals carried out from the CNS" }
+            // ENTERO (Intestine)
+            { group: "ENTERO", fixed: "enter", tar: "itis", mode: "suffix", def: "Intestine inflammation (장염)" },
+            { group: "ENTERO", fixed: "entero", tar: "gastro", mode: "prefix", def: "Stomach and intestine (위장병학)" },
+            { group: "ENTERO", fixed: "enter", tar: "ocyte", mode: "suffix", def: "Intestine cell (장세포)" },
+            { group: "ENTERO", fixed: "enter", tar: "ovirus", mode: "suffix", def: "Intestine virus (엔테로바이러스)" },
+            { group: "ENTERO", fixed: "entery", tar: "dys", mode: "prefix", def: "Bad intestine condition (이질)" },
+            { group: "ENTERO", fixed: "entery", tar: "mes", mode: "prefix", def: "Middle intestine (장간막)" },
+
+            // EPI (Upon/Over)
+            { group: "EPI", fixed: "epi", tar: "dermis", mode: "suffix", def: "Upon skin (표피)" },
+            { group: "EPI", fixed: "epi", tar: "glottis", mode: "suffix", def: "Upon tongue (후두개)" },
+            { group: "EPI", fixed: "epi", tar: "nephrine", mode: "suffix", def: "Upon kidney substance (에피네프린)" },
+            { group: "EPI", fixed: "epi", tar: "lepsy", mode: "suffix", def: "Seizure upon (간질)" },
+            { group: "EPI", fixed: "epi", tar: "dural", mode: "suffix", def: "Upon dura mater (경막외)" },
+            { group: "EPI", fixed: "epi", tar: "demic", mode: "suffix", def: "Upon people (유행병)" },
+
+            // GASTRO (Stomach)
+            { group: "GASTRO", fixed: "gastr", tar: "itis", mode: "suffix", def: "Stomach inflammation (위염)" },
+            { group: "GASTRO", fixed: "gastro", tar: "scope", mode: "suffix", def: "Stomach viewer (위내시경)" },
+            { group: "GASTRO", fixed: "gastro", tar: "nomy", mode: "suffix", def: "Stomach law/rule (미식학)" },
+            { group: "GASTRO", fixed: "gastr", tar: "opod", mode: "suffix", def: "Stomach foot (복족류)" },
+
+            // EMIA (Blood)
+            { group: "EMIA", fixed: "emia", tar: "an", mode: "prefix", def: "No blood (binhyeol - 빈혈)" },
+            { group: "EMIA", fixed: "emia", tar: "hyperglyc", mode: "prefix", def: "High blood sugar (고혈당)" },
+            { group: "EMIA", fixed: "emia", tar: "hypoglyc", mode: "prefix", def: "Low blood sugar (저혈당)" },
+            { group: "EMIA", fixed: "emia", tar: "leuk", mode: "prefix", def: "White blood (백혈병)" },
+            { group: "EMIA", fixed: "emia", tar: "septic", mode: "prefix", def: "Infected blood (패혈증)" },
+            { group: "EMIA", fixed: "emia", tar: "ur", mode: "prefix", def: "Urine in blood (요독증)" },
+            { group: "EMIA", fixed: "emia", tar: "isch", mode: "prefix", def: "Holding back blood (허혈)" },
+
+            // HEPA (Liver)
+            { group: "HEPA", fixed: "hepat", tar: "itis", mode: "suffix", def: "Liver inflammation (간염)" },
+            { group: "HEPA", fixed: "hepat", tar: "ocyte", mode: "suffix", def: "Liver cell (간세포)" },
+            { group: "HEPA", fixed: "hepat", tar: "ology", mode: "suffix", def: "Study of liver (간학)" },
+            { group: "HEPA", fixed: "hepat", tar: "omegaly", mode: "suffix", def: "Large liver (간비대)" },
+            { group: "HEPA", fixed: "hepat", tar: "otoxin", mode: "suffix", def: "Liver poison (간독소)" },
+
+            // HYDRO (Water)
+            { group: "HYDRO", fixed: "hydro", tar: "cephalus", mode: "suffix", def: "Water in head (수두증)" },
+            { group: "HYDRO", fixed: "hydro", tar: "nephrosis", mode: "suffix", def: "Water in kidney (수신증)" },
+            { group: "HYDRO", fixed: "hydro", tar: "cortisone", mode: "suffix", def: "Water hormone (하이드로코르티손)" },
+            { group: "HYDRO", fixed: "hydro", tar: "phobia", mode: "suffix", def: "Fear of water (공수병)" },
+            { group: "HYDRO", fixed: "hydro", tar: "therapy", mode: "suffix", def: "Water treatment (수치료)" },
+            { group: "HYDRO", fixed: "hydro", tar: "lysis", mode: "suffix", def: "Water breakdown (가수분해)" },
+
+            // ITIS (Inflammation)
+            { group: "ITIS", fixed: "itis", tar: "arthr", mode: "prefix", def: "Joint inflammation (관절염)" },
+            { group: "ITIS", fixed: "itis", tar: "bronch", mode: "prefix", def: "Bronchus inflammation (기관지염)" },
+            { group: "ITIS", fixed: "itis", tar: "dermat", mode: "prefix", def: "Skin inflammation (피부염)" },
+            { group: "ITIS", fixed: "itis", tar: "gastr", mode: "prefix", def: "Stomach inflammation (위염)" },
+            { group: "ITIS", fixed: "itis", tar: "hepat", mode: "prefix", def: "Liver inflammation (간염)" },
+            { group: "ITIS", fixed: "itis", tar: "nephr", mode: "prefix", def: "Kidney inflammation (신장염)" },
+            { group: "ITIS", fixed: "itis", tar: "ot", mode: "prefix", def: "Ear inflammation (중이염)" },
+            { group: "ITIS", fixed: "itis", tar: "pharyng", mode: "prefix", def: "Throat inflammation (인두염)" },
+            { group: "ITIS", fixed: "itis", tar: "sinus", mode: "prefix", def: "Sinus inflammation (축농증)" },
+            { group: "ITIS", fixed: "itis", tar: "tonsill", mode: "prefix", def: "Tonsil inflammation (편도선염)" },
+
+            // CARDIA (Heart)
+            { group: "CARDIA", fixed: "cardial", tar: "myo", mode: "prefix", def: "Heart muscle (심근의)" },
+            { group: "CARDIA", fixed: "cardiology", tar: "k", mode: "prefix", def: "Study of heart (replace k with c) (심장학)" }, // Trickier one? Let's use standard
+            { group: "CARDIA", fixed: "cardiology", tar: "", mode: "suffix", def: "Study of heart (심장학)" }, // Logic update needed? No, just fixed 'cardi' tar 'ology'
+            { group: "CARDIA", fixed: "cardi", tar: "ology", mode: "suffix", def: "Study of heart (심장학)" },
+            { group: "CARDIA", fixed: "cardi", tar: "ac", mode: "suffix", def: "Pertaining to heart (심장의)" },
+            { group: "CARDIA", fixed: "cardium", tar: "myo", mode: "prefix", def: "Muscle of heart (심근)" },
+            { group: "CARDIA", fixed: "cardium", tar: "peri", mode: "prefix", def: "Around heart (심낭)" },
+            { group: "CARDIA", fixed: "cardia", tar: "tachy", mode: "prefix", def: "Fast heart (빈맥)" },
+            { group: "CARDIA", fixed: "cardia", tar: "brady", mode: "prefix", def: "Slow heart (서맥)" },
+
+            // LYSIS (Destruction)
+            { group: "LYSIS", fixed: "lysis", tar: "hemo", mode: "prefix", def: "Blood destruction (용혈)" },
+            { group: "LYSIS", fixed: "lysis", tar: "dia", mode: "prefix", def: "Through separation (투석)" },
+            { group: "LYSIS", fixed: "lysis", tar: "auto", mode: "prefix", def: "Self destruction (자가융해)" },
+            { group: "LYSIS", fixed: "lysis", tar: "thrombo", mode: "prefix", def: "Clot destruction (혈전용해)" },
+            { group: "LYSIS", fixed: "lysis", tar: "cyto", mode: "prefix", def: "Cell destruction (세포용해)" },
+            { group: "LYSIS", fixed: "lysis", tar: "lipo", mode: "prefix", def: "Fat destruction (지방분해)" },
+            { group: "LYSIS", fixed: "lysis", tar: "glyco", mode: "prefix", def: "Sugar breakdown (당분해)" },
+
+            // OMA (Tumor)
+            { group: "OMA", fixed: "noma", tar: "carci", mode: "prefix", def: "Cancerous tumor (암종)" }, // carci-noma
+            { group: "OMA", fixed: "oma", tar: "sarc", mode: "prefix", def: "Flesh tumor (육종)" },
+            { group: "OMA", fixed: "oma", tar: "aden", mode: "prefix", def: "Gland tumor (선종)" },
+            { group: "OMA", fixed: "oma", tar: "lip", mode: "prefix", def: "Fat tumor (지방종)" },
+            { group: "OMA", fixed: "oma", tar: "my", mode: "prefix", def: "Muscle tumor (근종)" },
+            { group: "OMA", fixed: "oma", tar: "melan", mode: "prefix", def: "Black tumor (흑색종)" },
+            { group: "OMA", fixed: "oma", tar: "lymph", mode: "prefix", def: "Lymph tumor (림프종)" },
+            { group: "OMA", fixed: "oma", tar: "papill", mode: "prefix", def: "Nipple-like tumor (유두종)" },
+
+            // URIA (Urine)
+            { group: "URIA", fixed: "uria", tar: "olig", mode: "prefix", def: "Scanty urine (핍뇨)" },
+            { group: "URIA", fixed: "uria", tar: "poly", mode: "prefix", def: "Much urine (다뇨)" },
+            { group: "URIA", fixed: "uria", tar: "an", mode: "prefix", def: "No urine (무뇨)" },
+            { group: "URIA", fixed: "uria", tar: "noct", mode: "prefix", def: "Night urine (야뇨)" },
+            { group: "URIA", fixed: "uria", tar: "dys", mode: "prefix", def: "Painful urine (배뇨통)" },
+            { group: "URIA", fixed: "uria", tar: "hemat", mode: "prefix", def: "Blood in urine (혈뇨)" },
+            { group: "URIA", fixed: "uria", tar: "protein", mode: "prefix", def: "Protein in urine (단백뇨)" },
+            { group: "URIA", fixed: "uria", tar: "glycos", mode: "prefix", def: "Sugar in urine (당뇨)" },
+            { group: "URIA", fixed: "uria", tar: "py", mode: "prefix", def: "Pus in urine (농뇨)" },
+
+            // PARA (Beside)
+            { group: "PARA", fixed: "para", tar: "site", mode: "suffix", def: "Eat beside (기생충)" },
+            { group: "PARA", fixed: "para", tar: "noia", mode: "suffix", def: "Mind beside (망상)" }, // para-noia
+            { group: "PARA", fixed: "para", tar: "plegic", mode: "suffix", def: "Stroke beside (하반신마비)" },
+            { group: "PARA", fixed: "para", tar: "mnesia", mode: "suffix", def: "Memory beside (기억착오)" },
+            { group: "PARA", fixed: "para", tar: "somnia", mode: "suffix", def: "Sleep beside (수면장애)" },
+            { group: "PARA", fixed: "para", tar: "thyroid", mode: "suffix", def: "Beside thyroid (부갑상선)" },
+
+            // PERI (Around)
+            { group: "PERI", fixed: "peri", tar: "cardium", mode: "suffix", def: "Around heart (심낭)" },
+            { group: "PERI", fixed: "peri", tar: "osteum", mode: "suffix", def: "Around bone (골막)" },
+            { group: "PERI", fixed: "peri", tar: "natal", mode: "suffix", def: "Around birth (주산기)" },
+            { group: "PERI", fixed: "peri", tar: "orbital", mode: "suffix", def: "Around eye (안와위)" },
+            { group: "PERI", fixed: "peri", tar: "toneum", mode: "suffix", def: "Around stretch (복막)" },
+
+            // PLASIA (Formation)
+            { group: "PLASIA", fixed: "plasia", tar: "hyper", mode: "prefix", def: "Over formation (과형성)" },
+            { group: "PLASIA", fixed: "plasia", tar: "hypo", mode: "prefix", def: "Under formation (저형성)" },
+            { group: "PLASIA", fixed: "plasia", tar: "dys", mode: "prefix", def: "Bad formation (이형성)" },
+            { group: "PLASIA", fixed: "plasia", tar: "a", mode: "prefix", def: "No formation (무형성)" },
+            { group: "PLASIA", fixed: "plasia", tar: "neo", mode: "prefix", def: "New formation (종양)" },
+
+            // RRHEA (Flow)
+            { group: "RRHEA", fixed: "rrhea", tar: "dia", mode: "prefix", def: "Flow through (설사)" },
+            { group: "RRHEA", fixed: "rrhea", tar: "rhino", mode: "prefix", def: "Nose flow (콧물)" },
+            { group: "RRHEA", fixed: "rrhea", tar: "galacto", mode: "prefix", def: "Milk flow (유즙누출)" },
+            { group: "RRHEA", fixed: "rrhea", tar: "leuko", mode: "prefix", def: "White flow (백대하)" },
+            { group: "RRHEA", fixed: "rrhea", tar: "oto", mode: "prefix", def: "Ear flow (이루)" },
+
+            // SCOPE (View)
+            { group: "SCOPE", fixed: "scope", tar: "endo", mode: "prefix", def: "Inside viewer (내시경)" },
+            { group: "SCOPE", fixed: "scope", tar: "arthro", mode: "prefix", def: "Joint viewer (관절경)" },
+            { group: "SCOPE", fixed: "scope", tar: "fluoro", mode: "prefix", def: "Flow viewer (투시경)" },
+            { group: "SCOPE", fixed: "scope", tar: "stetho", mode: "prefix", def: "Chest viewer (청진기)" },
+            { group: "SCOPE", fixed: "scope", tar: "gastro", mode: "prefix", def: "Stomach viewer (위내시경)" },
+            { group: "SCOPE", fixed: "scope", tar: "colo", mode: "prefix", def: "Colon viewer (대장내시경)" }, // colonoscope -> colono-scope
+
+            // TOMY (Incision)
+            { group: "TOMY", fixed: "tomy", tar: "ana", mode: "prefix", def: "Cut up (해부학)" },
+            { group: "TOMY", fixed: "tomy", tar: "phlebo", mode: "prefix", def: "Vein cut (정맥절개)" },
+            { group: "TOMY", fixed: "tomy", tar: "tracheo", mode: "prefix", def: "Windpipe cut (기관절개)" },
+            { group: "TOMY", fixed: "tomy", tar: "lobo", mode: "prefix", def: "Lobe cut (엽절제)" },
+            { group: "TOMY", fixed: "tomy", tar: "cranio", mode: "prefix", def: "Skull cut (개두술)" },
+            { group: "TOMY", fixed: "tomy", tar: "laparo", mode: "prefix", def: "Abdomen cut (복부절개)" },
+
+            // TROPHY (Nourishment)
+            { group: "TROPHY", fixed: "trophy", tar: "a", mode: "prefix", def: "No nourishment (위축)" },
+            { group: "TROPHY", fixed: "trophy", tar: "hyper", mode: "prefix", def: "Over nourishment (비대)" },
+            { group: "TROPHY", fixed: "trophy", tar: "dys", mode: "prefix", def: "Bad nourishment (이영양증)" },
+
+            // GRAPH (Write/Record)
+            { group: "GRAPH", fixed: "graphy", tar: "tomo", mode: "prefix", def: "Slice recording (단층촬영)" },
+            { group: "GRAPH", fixed: "graphy", tar: "angio", mode: "prefix", def: "Vessel recording (혈관조영)" },
+            { group: "GRAPH", fixed: "graphy", tar: "mammo", mode: "prefix", def: "Breast recording (유방촬영)" },
+            { group: "GRAPH", fixed: "graphy", tar: "radio", mode: "prefix", def: "Ray recording (방사선촬영)" },
+            { group: "GRAPH", fixed: "graphy", tar: "thermo", mode: "prefix", def: "Heat recording (적외선체열촬영)" },
+
+            // --- GENERAL SESSION ---
+
+            // SIGHT (See)
+            { group: "SIGHT", fixed: "sight", tar: "fore", mode: "prefix", def: "Seeing beforehand (선견지명)" },
+            { group: "SIGHT", fixed: "sight", tar: "hind", mode: "prefix", def: "Seeing behind (뒤늦은 깨달음)" },
+            { group: "SIGHT", fixed: "sight", tar: "in", mode: "prefix", def: "Seeing into (통찰력)" },
+            { group: "SIGHT", fixed: "sight", tar: "over", mode: "prefix", def: "Seeing over (간과/감독)" },
+            { group: "SIGHT", fixed: "sight", tar: "blind", mode: "prefix", def: "Blind seeing (맹시)" },
+
+            // CISIONE (Cut)
+            { group: "CISIONE", fixed: "cision", tar: "in", mode: "prefix", def: "Cut into (절개)" },
+            { group: "CISIONE", fixed: "cision", tar: "ex", mode: "prefix", def: "Cut out (적출)" },
+            { group: "CISIONE", fixed: "cision", tar: "pre", mode: "prefix", def: "Cut before (정밀)" },
+            { group: "CISIONE", fixed: "cision", tar: "de", mode: "prefix", def: "Cut away (결정)" },
+            { group: "CISIONE", fixed: "cision", tar: "circum", mode: "prefix", def: "Cut around (포경수술)" },
+
+            // CIRCUM (Around)
+            { group: "CIRCUM", fixed: "circum", tar: "ference", mode: "suffix", def: "Carry around (원둘레)" },
+            { group: "CIRCUM", fixed: "circum", tar: "stance", mode: "suffix", def: "Stand around (상황)" },
+            { group: "CIRCUM", fixed: "circum", tar: "navigate", mode: "suffix", def: "Sail around (세계일주)" },
+            { group: "CIRCUM", fixed: "circum", tar: "vent", mode: "suffix", def: "Come around (우회하다)" },
+            { group: "CIRCUM", fixed: "circum", tar: "scribe", mode: "suffix", def: "Write around (제한하다)" },
+            { group: "CIRCUM", fixed: "circum", tar: "spect", mode: "suffix", def: "Look around (신중한)" },
+
+            // FERRE (Carry) - Existing + New
+            { group: "FERRE", fixed: "ference", tar: "con", mode: "prefix", def: "Bring together (회의)" }, // Conference
+            { group: "FERRE", fixed: "ference", tar: "dif", mode: "prefix", def: "Carry apart (차이)" }, // Difference
+            { group: "FERRE", fixed: "ference", tar: "in", mode: "prefix", def: "Bring in (추론)" }, // Inference
+            { group: "FERRE", fixed: "ference", tar: "re", mode: "prefix", def: "Bring back (참조)" }, // Reference
+            { group: "FERRE", fixed: "ference", tar: "pre", mode: "prefix", def: "Carry before (선호)" }, // Preference
+            { group: "FERRE", fixed: "ference", tar: "de", mode: "prefix", def: "Bring down (존중)" }, // Deference - wait defer? yes.
+            { group: "FERRE", fixed: "ference", tar: "inter", mode: "prefix", def: "Carry between (방해)" }, // Interference
+            { group: "FERRE", fixed: "ference", tar: "trans", mode: "prefix", def: "Carry across (전이)" }, // Transference
+
+            // GRESS (Go)
+            { group: "GRESS", fixed: "gress", tar: "pro", mode: "prefix", def: "Go forward (진보)" },
+            { group: "GRESS", fixed: "gress", tar: "re", mode: "prefix", def: "Go back (퇴보)" },
+            { group: "GRESS", fixed: "grade", tar: "retro", mode: "prefix", def: "Go backward (역행)" },
+            { group: "GRESS", fixed: "gress", tar: "trans", mode: "prefix", def: "Go across (위반하다)" },
+            { group: "GRESS", fixed: "gress", tar: "di", mode: "prefix", def: "Go apart (벗어나다)" },
+            { group: "GRESS", fixed: "gress", tar: "e", mode: "prefix", def: "Go out (출구)" },
+            { group: "GRESS", fixed: "gress", tar: "in", mode: "prefix", def: "Go in (입구/진입)" },
+            { group: "GRESS", fixed: "gress", tar: "con", mode: "prefix", def: "Go together (의회)" },
+            { group: "GRESS", fixed: "gress", tar: "ag", mode: "prefix", def: "Go toward (공격)" },
+
+            // LOQUI (Speak)
+            { group: "LOQUI", fixed: "loqu", tar: "acious", mode: "suffix", def: "Full of speak (수다스러운)" },
+            { group: "LOQUI", fixed: "loqu", tar: "e", mode: "prefix", def: "Speak out (웅변의)" }, // Eloquent
+            { group: "LOQUI", fixed: "loqu", tar: "col", mode: "prefix", def: "Speak together (구어체의)" }, // Colloquial
+            { group: "LOQUI", fixed: "loquy", tar: "soli", mode: "prefix", def: "Speak alone (독백)" }, // Soliloquy
+            { group: "LOQUI", fixed: "loqu", tar: "ventri", mode: "prefix", def: "Belly speak (복화술)" }, // Ventriloquist
+            { group: "LOQUI", fixed: "locu", tar: "circum", mode: "prefix", def: "Speak around (에둘러 말하기)" }, // Circumlocution
+            { group: "LOQUI", fixed: "locu", tar: "e", mode: "prefix", def: "Speak out (연설 태도)" }, // Elocution
+
+            // MALE (Bad)
+            { group: "MALE", fixed: "mal", tar: "for", mode: "suffix", def: "Bad shape (기형)" }, // Malformation -> mal-formation. 
+            // Better: fixed mal, tar formation.
+            { group: "MALE", fixed: "mal", tar: "formation", mode: "suffix", def: "Bad formation (기형)" },
+            { group: "MALE", fixed: "mal", tar: "function", mode: "suffix", def: "Bad function (오작동)" },
+            { group: "MALE", fixed: "mal", tar: "nutrition", mode: "suffix", def: "Bad nutrition (영양실조)" },
+            { group: "MALE", fixed: "mal", tar: "aria", mode: "suffix", def: "Bad air (말라리아)" }, // Malaria
+            { group: "MALE", fixed: "mal", tar: "odor", mode: "suffix", def: "Bad smell (악취)" },
+
+            // META (Beyond/Change)
+            { group: "META", fixed: "meta", tar: "carpal", mode: "suffix", def: "Beyond wrist (중수골)" },
+            { group: "META", fixed: "meta", tar: "tarsal", mode: "suffix", def: "Beyond ankle (중족골)" },
+            { group: "META", fixed: "meta", tar: "morphosis", mode: "suffix", def: "Change form (변태)" },
+            { group: "META", fixed: "meta", tar: "stasis", mode: "suffix", def: "Change standing (전이)" },
+            { group: "META", fixed: "meta", tar: "bolism", mode: "suffix", def: "Change throw (대사)" },
+            { group: "META", fixed: "meta", tar: "physics", mode: "suffix", def: "Beyond nature (형이상학)" },
+
+            // MISSION (Send)
+            { group: "MISSION", fixed: "mission", tar: "re", mode: "prefix", def: "Send back (관해/차도)" },
+            { group: "MISSION", fixed: "mission", tar: "sub", mode: "prefix", def: "Send under (제출/복종)" },
+            { group: "MISSION", fixed: "mission", tar: "trans", mode: "prefix", def: "Send across (전송)" },
+            { group: "MISSION", fixed: "mission", tar: "e", mode: "prefix", def: "Send out (배출)" },
+            { group: "MISSION", fixed: "mission", tar: "ad", mode: "prefix", def: "Send to (입장)" },
+            { group: "MISSION", fixed: "mission", tar: "inter", mode: "prefix", def: "Send between (휴식 시간)" },
+            { group: "MISSION", fixed: "mission", tar: "per", mode: "prefix", def: "Send through (허가)" },
+
+            // MORPH (Form)
+            { group: "MORPH", fixed: "morph", tar: "ine", mode: "suffix", def: "Form drug (모르핀)" }, // Morpheus
+            { group: "MORPH", fixed: "morph", tar: "ology", mode: "suffix", def: "Study of form (형태학)" },
+            { group: "MORPH", fixed: "morph", tar: "poly", mode: "prefix", def: "Many forms (다형성)" },
+            { group: "MORPH", fixed: "morph", tar: "a", mode: "prefix", def: "No form (무정형)" },
+
+            // RECT (Straight/Lead)
+            { group: "RECT", fixed: "rect", tar: "e", mode: "prefix", def: "Lead out (세우다/발기)" }, // Erect
+            { group: "RECT", fixed: "rect", tar: "cor", mode: "prefix", def: "Lead with (수정하다)" }, // Correct
+            { group: "RECT", fixed: "rect", tar: "di", mode: "prefix", def: "Lead apart (지시하다)" }, // Direct
+            { group: "RECT", fixed: "rect", tar: "ify", mode: "suffix", def: "Make straight (바로잡다)" }, // Rectify
+            { group: "RECT", fixed: "rect", tar: "angle", mode: "suffix", def: "Straight angle (직사각형)" },
+
+            // SCRIBE (Write)
+            { group: "SCRIBE", fixed: "scribe", tar: "pre", mode: "prefix", def: "Write before (처방하다)" },
+            { group: "SCRIBE", fixed: "scribe", tar: "pro", mode: "prefix", def: "Write forward (금지하다)" },
+            { group: "SCRIBE", fixed: "script", tar: "post", mode: "prefix", def: "Write after (추신)" },
+            { group: "SCRIBE", fixed: "scribe", tar: "in", mode: "prefix", def: "Write into (새기다)" },
+            { group: "SCRIBE", fixed: "scribe", tar: "sub", mode: "prefix", def: "Write under (구독하다)" },
+            { group: "SCRIBE", fixed: "scribe", tar: "de", mode: "prefix", def: "Write down (묘사하다)" },
+            { group: "SCRIBE", fixed: "scribe", tar: "tran", mode: "prefix", def: "Write across (필사하다)" },
+
+            // SOMNI (Sleep)
+            { group: "SOMNI", fixed: "somn", tar: "ia", mode: "suffix", def: "State of no sleep (불면증)" }, // In-somn-ia. 
+            { group: "SOMNI", fixed: "somnia", tar: "in", mode: "prefix", def: "No sleep (불면증)" },
+            { group: "SOMNI", fixed: "somni", tar: "loquy", mode: "suffix", def: "Sleep talking (잠꼬대)" },
+            { group: "SOMNI", fixed: "somn", tar: "ambulism", mode: "suffix", def: "Sleep walking (몽유병)" },
+            { group: "SOMNI", fixed: "somni", tar: "ferous", mode: "suffix", def: "Sleep bearing (졸리게 하는)" },
+
+            // SPECT (Look)
+            { group: "SPECT", fixed: "spect", tar: "ator", mode: "suffix", def: "Looker (관중)" },
+            { group: "SPECT", fixed: "spect", tar: "in", mode: "prefix", def: "Look into (조사하다)" },
+            { group: "SPECT", fixed: "spect", tar: "re", mode: "prefix", def: "Look back/again (존경하다)" },
+            { group: "SPECT", fixed: "spect", tar: "per", mode: "prefix", def: "Look through (관점)" }, // Perspective
+            { group: "SPECT", fixed: "spect", tar: "retro", mode: "prefix", def: "Look backward (회고)" },
+            { group: "SPECT", fixed: "spect", tar: "pro", mode: "prefix", def: "Look forward (전망)" },
+
+            // SPIRE (Breathe)
+            { group: "SPIRE", fixed: "spire", tar: "ex", mode: "prefix", def: "Breathe out (만료되다/죽다)" },
+            { group: "SPIRE", fixed: "spire", tar: "in", mode: "prefix", def: "Breathe in (영감을 주다)" },
+            { group: "SPIRE", fixed: "spire", tar: "re", mode: "prefix", def: "Breathe again (호흡하다)" },
+            { group: "SPIRE", fixed: "spire", tar: "per", mode: "prefix", def: "Breathe through (땀을 흘리다)" },
+            { group: "SPIRE", fixed: "spire", tar: "a", mode: "prefix", def: "Breathe toward (열망하다)" }, // Aspire
+            { group: "SPIRE", fixed: "spire", tar: "con", mode: "prefix", def: "Breathe together (공모하다)" },
+
+            // TEST (Witness)
+            { group: "TEST", fixed: "test", tar: "ify", mode: "suffix", def: "Make witness (증언하다)" },
+            { group: "TEST", fixed: "test", tar: "imony", mode: "suffix", def: "State of witness (증언)" },
+            { group: "TEST", fixed: "test", tar: "ament", mode: "suffix", def: "Result of witness (성서/유언)" },
+            { group: "TEST", fixed: "test", tar: "at", mode: "prefix", def: "Witness to (증명하다)" }, // Attest
+            { group: "TEST", fixed: "test", tar: "con", mode: "prefix", def: "Witness together (경연/다투다)" }, // Contest
+            { group: "TEST", fixed: "test", tar: "de", mode: "prefix", def: "Witness down (혐오하다)" }, // Detest
+            { group: "TEST", fixed: "test", tar: "pro", mode: "prefix", def: "Witness forward (항의하다)" },
+
+            // TRANS (Across)
+            { group: "TRANS", fixed: "trans", tar: "fer", mode: "suffix", def: "Carry across (이전하다)" },
+            { group: "TRANS", fixed: "trans", tar: "plant", mode: "suffix", def: "Plant across (이식하다)" },
+            { group: "TRANS", fixed: "trans", tar: "fusion", mode: "suffix", def: "Pour across (수혈)" },
+            { group: "TRANS", fixed: "trans", tar: "form", mode: "suffix", def: "Shape across (변형시키다)" },
+            { group: "TRANS", fixed: "trans", tar: "port", mode: "suffix", def: "Carry across (수송하다)" },
+            { group: "TRANS", fixed: "trans", tar: "parent", mode: "suffix", def: "Appear across (투명한)" },
+
+            // VOL (Wish/Will)
+            { group: "VOL", fixed: "vol", tar: "ition", mode: "suffix", def: "Act of willing (의지)" },
+            { group: "VOL", fixed: "vol", tar: "unteer", mode: "suffix", def: "One who wills (자원봉사자)" },
+            { group: "VOL", fixed: "vol", tar: "untary", mode: "suffix", def: "Relating to will (자발적인)" },
+            { group: "VOL", fixed: "vol", tar: "bene", mode: "prefix", def: "Well wishing (자비로운)" },
+            { group: "VOL", fixed: "vol", tar: "male", mode: "prefix", def: "Bad wishing (악의적인)" },
+
+            // VOC (Call)
+            { group: "VOC", fixed: "voc", tar: "al", mode: "suffix", def: "Relating to voice (목소리의)" },
+            { group: "VOC", fixed: "voc", tar: "ation", mode: "suffix", def: "Calling (직업/천직)" },
+            { group: "VOC", fixed: "voke", tar: "e", mode: "prefix", def: "Call out (불러일으키다)" }, // Evoke
+            { group: "VOC", fixed: "voke", tar: "pro", mode: "prefix", def: "Call forward (자극하다)" }, // Provoke
+            { group: "VOC", fixed: "voke", tar: "re", mode: "prefix", def: "Call back (취소하다)" }, // Revoke
+            { group: "VOC", fixed: "voc", tar: "ad", mode: "prefix", def: "Call to (옹호하다)" }, // Advocate
+            { group: "VOC", fixed: "voke", tar: "in", mode: "prefix", def: "Call in (호소하다)" }, // Invoke
+
+            // JECT & TRACT & DUCT & AUDI & VIS (Already in General)
+            { group: "JECT", fixed: "ject", tar: "in", mode: "prefix", def: "Throw in (주사하다)" },
+            { group: "JECT", fixed: "ject", tar: "re", mode: "prefix", def: "Throw back (거절하다)" },
+            { group: "JECT", fixed: "ject", tar: "pro", mode: "prefix", def: "Throw forward (계획하다/투사하다)" },
+            { group: "JECT", fixed: "ject", tar: "e", mode: "prefix", def: "Throw out (내쫓다)" },
+
+            { group: "TRACT", fixed: "tract", tar: "at", mode: "prefix", def: "Draw to (매혹하다)" },
+            { group: "TRACT", fixed: "tract", tar: "con", mode: "prefix", def: "Draw together (계약하다/수축하다)" },
+            { group: "TRACT", fixed: "tract", tar: "ex", mode: "prefix", def: "Draw out (추출하다)" },
+            { group: "TRACT", fixed: "trac", tar: "tion", mode: "suffix", def: "Drawing act (견인)" },
+
+            { group: "DUCT", fixed: "duct", tar: "con", mode: "prefix", def: "Lead together (전도하다)" },
+            { group: "DUCT", fixed: "duct", tar: "pro", mode: "prefix", def: "Lead forward (생산품)" },
+            { group: "DUCT", fixed: "duct", tar: "intro", mode: "prefix", def: "Lead within (소개하다)" },
+
+            { group: "AUDI", fixed: "audi", tar: "ence", mode: "suffix", def: "Listening group (청중)" },
+            { group: "AUDI", fixed: "audi", tar: "ble", mode: "suffix", def: "Able to hear (잘 들리는)" },
+
+            { group: "VIS", fixed: "vis", tar: "ion", mode: "suffix", def: "Act of seeing (시력/비전)" },
+            { group: "VIS", fixed: "vis", tar: "ible", mode: "suffix", def: "Able to see (보이는)" },
+            { group: "VIS", fixed: "vis", tar: "it", mode: "suffix", def: "Go to see (방문하다)" },
         ];
 
         // --- STATE ---
@@ -310,6 +667,7 @@
         let isAnimating = false;
         let gameResults = [];
         let hintsRemaining = 3;
+        let activeTab = 'medical';
 
         // --- DOM ELEMENTS ---
         const viewMenu = document.getElementById('menu-view');
@@ -329,6 +687,10 @@
         const elWordContainer = document.getElementById('word-container');
         const elFixedPart = document.getElementById('fixed-part');
         const elInputPart = document.getElementById('input-part');
+        const elGridMedical = document.getElementById('grid-medical');
+        const elGridGeneral = document.getElementById('grid-general');
+        const elTabMedical = document.getElementById('tab-medical');
+        const elTabGeneral = document.getElementById('tab-general');
 
         // --- SOUND ENGINE ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -379,12 +741,51 @@
 
         // --- LOGIC ---
 
+        function initMenu() {
+            elGridMedical.innerHTML = '';
+            elGridGeneral.innerHTML = '';
+
+            for (const [key, data] of Object.entries(rootData)) {
+                const btn = document.createElement('button');
+                btn.className = `p-4 bg-${data.color}-50 hover:bg-${data.color}-100 text-${data.color}-700 rounded-2xl font-bold border-2 border-${data.color}-100 hover:border-${data.color}-300 transition-all flex flex-col items-center gap-1 group`;
+                btn.onclick = () => startGame(key);
+                btn.innerHTML = `
+                    <span class="text-xl group-hover:scale-110 transition-transform">${key}${key.endsWith('-') ? '' : '-'}</span>
+                    <span class="text-[10px] uppercase font-bold text-${data.color}-400 text-center leading-tight">${data.mean}</span>
+                `;
+
+                if (data.cat === 'medical') {
+                    elGridMedical.appendChild(btn);
+                } else {
+                    elGridGeneral.appendChild(btn);
+                }
+            }
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            if (tab === 'medical') {
+                elTabMedical.className = "flex-1 py-2 rounded-xl font-bold text-sm transition-colors bg-blue-600 text-white shadow-md";
+                elTabGeneral.className = "flex-1 py-2 rounded-xl font-bold text-sm transition-colors bg-slate-200 text-slate-500 hover:bg-slate-300";
+                elGridMedical.classList.remove('hidden');
+                elGridGeneral.classList.add('hidden');
+            } else {
+                elTabGeneral.className = "flex-1 py-2 rounded-xl font-bold text-sm transition-colors bg-blue-600 text-white shadow-md";
+                elTabMedical.className = "flex-1 py-2 rounded-xl font-bold text-sm transition-colors bg-slate-200 text-slate-500 hover:bg-slate-300";
+                elGridGeneral.classList.remove('hidden');
+                elGridMedical.classList.add('hidden');
+            }
+        }
+
         function showMenu() {
             viewMenu.classList.remove('hidden');
             viewGame.classList.add('hidden');
             viewResult.classList.add('hidden');
             elProgress.classList.add('hidden');
             elMsg.style.transform = "translateY(100%)";
+
+            // Re-init menu if needed or just switch tab
+            // initMenu(); // Call once at startup
         }
 
         function startGame(rootGroup) {
@@ -393,13 +794,13 @@
             currentQuestions.sort(() => Math.random() - 0.5);
 
             if (currentQuestions.length === 0) {
-                alert("No data available.");
+                alert("No data available for " + rootGroup);
                 return;
             }
 
             currentIndex = 0;
             gameResults = [];
-            hintsRemaining = 3; // Reset HINTS here ONLY
+            hintsRemaining = 3;
 
             viewMenu.classList.add('hidden');
             viewGame.classList.remove('hidden');
@@ -407,6 +808,10 @@
             elTotalCount.innerText = currentQuestions.length;
             loadQuestion(0);
         }
+
+        // Load menu on start
+        initMenu();
+
 
         function loadQuestion(index) {
             currentIndex = index;
@@ -417,7 +822,12 @@
             updateHintUI();
 
             elCurrentCount.innerText = index + 1;
-            elRootHint.innerText = `ROOT: ${q.group}`;
+
+            // Get root meaning from rootData
+            const rootInfo = rootData[q.group];
+            const rootMean = rootInfo ? rootInfo.mean.toUpperCase() : "UNKNOWN";
+            elRootHint.innerText = `ROOT: ${q.group} - ${rootMean}`;
+
             elDef.innerText = q.def;
             elMsg.style.transform = "translateY(100%)";
 
@@ -504,12 +914,25 @@
 
         function handleInput(char) {
             if (isAnimating) return;
-            sfxClick();
+
             const q = currentQuestions[currentIndex];
             if (userInput.length < q.tar.length) {
-                userInput += char;
-                updateAnswerDisplay();
-                if (userInput.length === q.tar.length) checkAnswer();
+                const expectedChar = q.tar[userInput.length].toLowerCase();
+
+                if (char.toLowerCase() === expectedChar) {
+                    sfxClick();
+                    userInput += char;
+                    updateAnswerDisplay();
+                    if (userInput.length === q.tar.length) checkAnswer();
+                } else {
+                    // Error sound (beep/buzz) and visual feedback
+                    playSound(150, 'sawtooth', 0.15, 0, 0.2);
+                    elInputPart.classList.remove('shake'); // Reset valid shake if re-triggered quick
+                    // Trigger reflow
+                    void elInputPart.offsetWidth;
+                    elInputPart.classList.add('shake');
+                    setTimeout(() => elInputPart.classList.remove('shake'), 400); // Cleanup
+                }
             }
         }
 
