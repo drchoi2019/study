@@ -81,19 +81,25 @@
         class="bg-white w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-md sm:rounded-3xl shadow-2xl overflow-hidden relative flex flex-col">
 
         <!-- Header -->
-        <div class="bg-slate-900 text-white p-4 shrink-0 flex justify-between items-center z-20 relative shadow-md">
+        <div
+            class="bg-slate-900 text-white py-2.5 px-4 shrink-0 flex justify-between items-center z-20 relative shadow-md">
             <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
                 onclick="showMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="w-5 h-5">
+                    class="w-4 h-4">
                     <path d="m15 18-6-6 6-6" />
                 </svg>
-                <h1 class="text-lg font-extrabold tracking-tight">ROOT WORD QUIZ</h1>
+                <h1 class="text-base font-extrabold tracking-tight">ROOT WORD QUIZ</h1>
             </div>
-            <div id="progress-container"
-                class="text-xs font-bold bg-slate-800 px-3 py-1 rounded-full hidden border border-slate-700">
-                <span id="current-count">1</span> / <span id="total-count">10</span>
+            <div class="flex items-center gap-3">
+                <div id="lives-container" class="flex gap-0.5 mt-0.5">
+                    <!-- Lives injected here -->
+                </div>
+                <div id="progress-container"
+                    class="text-[10px] font-bold bg-slate-800 px-2 py-1 rounded-full hidden border border-slate-700">
+                    <span id="current-count">1</span> / <span id="total-count">10</span>
+                </div>
             </div>
         </div>
 
@@ -129,55 +135,43 @@
         <div id="game-view" class="hidden flex-1 flex flex-col p-4 sm:p-6 items-center overflow-hidden">
 
             <div id="root-hint"
-                class="text-slate-400 font-bold mb-4 text-xs uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full">
+                class="text-slate-400 font-bold mb-2 text-xs uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full text-center">
                 ROOT: AUDI- (TO HEAR)
             </div>
 
-            <div class="w-full flex justify-end mb-2">
-                <button id="btn-hint" onclick="useHint()"
-                    class="flex items-center gap-2 bg-yellow-50 text-yellow-600 px-3 py-1.5 rounded-full text-xs font-bold border border-yellow-200 shadow-sm active:scale-95 transition-transform disabled:opacity-50 disabled:grayscale">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="w-4 h-4">
-                        <path
-                            d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1 1.5-2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
-                        <path d="M9 18h6" />
-                        <path d="M10 22h4" />
-                    </svg>
-                    <span>HINT</span>
-                    <span id="hint-count"
-                        class="bg-yellow-400 text-white w-5 h-5 flex items-center justify-center rounded-full text-[10px]">3</span>
-                </button>
-            </div>
-
             <!-- Dynamic Word Display Area -->
-            <div id="word-container" class="word-container mb-8 text-4xl sm:text-5xl font-black text-slate-800">
+            <div id="word-container" class="word-container mb-4 text-3xl sm:text-5xl font-black text-slate-800">
                 <span id="fixed-part" class="text-slate-900"></span>
                 <span id="input-part" class="flex gap-1"></span>
             </div>
 
             <div
-                class="bg-slate-50 w-full p-6 rounded-2xl border-2 border-slate-100 text-center mb-4 flex-1 flex flex-col justify-center items-center shadow-inner">
-                <p id="definition-text" class="text-slate-700 font-bold text-xl leading-tight">
+                class="bg-slate-50 w-full p-4 sm:p-6 rounded-2xl border-2 border-slate-100 text-center mb-3 flex-1 flex flex-col justify-center items-center shadow-inner min-h-[4rem]">
+                <p id="definition-text"
+                    class="text-slate-700 font-bold text-lg sm:text-xl leading-tight overflow-y-auto">
                     Definition here
                 </p>
             </div>
 
-            <div class="w-full mt-auto shrink-0 pb-12 sm:pb-0">
-                <div id="letters-container" class="grid grid-cols-5 gap-2 mb-4"></div>
+            <div class="w-full mt-auto shrink-0 pb-4 sm:pb-0">
+                <div id="letters-container" class="grid grid-cols-5 gap-2 mb-3"></div>
                 <div class="flex gap-3 h-14">
-                    <button onclick="deleteLastChar()"
-                        class="flex-1 bg-white border-2 border-slate-200 hover:bg-red-50 hover:border-red-200 text-slate-400 hover:text-red-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    <button id="btn-hint" onclick="useHint()"
+                        class="flex-1 bg-yellow-50 border-2 border-yellow-200 hover:bg-yellow-100 text-yellow-600 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:grayscale">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="w-5 h-5">
-                            <path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z" />
-                            <line x1="18" y1="9" x2="12" y2="15" />
-                            <line x1="12" y1="9" x2="18" y2="15" />
+                            <path
+                                d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1 1.5-2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                            <path d="M9 18h6" />
+                            <path d="M10 22h4" />
                         </svg>
+                        <span class="text-sm">HINT</span>
+                        <span id="hint-count"
+                            class="bg-yellow-400 text-white w-5 h-5 flex items-center justify-center rounded-full text-[10px]">3</span>
                     </button>
                     <button onclick="skipQuestion()"
-                        class="px-6 rounded-xl bg-slate-200 text-slate-500 font-bold hover:bg-slate-300 transition-colors text-sm tracking-wide">
+                        class="px-6 rounded-xl bg-slate-200 text-slate-500 font-bold hover:bg-slate-300 transition-colors text-sm tracking-wide active:scale-95">
                         PASS
                     </button>
                 </div>
@@ -262,7 +256,9 @@
             "TEST": { mean: "Witness", cat: "general", color: "amber" },
             "TRANS": { mean: "Across", cat: "general", color: "violet" },
             "VOL": { mean: "Wish/Will", cat: "general", color: "rose" },
-            "VOC": { mean: "To Call", cat: "general", color: "orange" }
+            "VOC": { mean: "To Call", cat: "general", color: "orange" },
+            "CLAMARE": { mean: "To Shout", cat: "general", color: "pink" },
+            "CEPT": { mean: "To Take", cat: "general", color: "emerald" }
         };
 
         const database = [
@@ -270,11 +266,10 @@
 
             // PNEUMON / PULMO (Lung)
             { group: "PNEUMON", fixed: "pneumon", tar: "ia", mode: "suffix", def: "Lung inflammation (폐렴)" },
-            { group: "PNEUMON", fixed: "pneuma", tar: "thorax", mode: "suffix", def: "Air in chest (기흉)" },
+            { group: "PNEUMON", fixed: "pneumo", tar: "thorax", mode: "suffix", def: "Air in chest (기흉)" },
             { group: "PNEUMON", fixed: "pneumon", tar: "ectomy", mode: "suffix", def: "Lung removal (폐절제술)" },
             { group: "PNEUMON", fixed: "pulmon", tar: "ary", mode: "suffix", def: "Pertaining to lungs (폐의)" },
             { group: "PNEUMON", fixed: "pulmono", tar: "logist", mode: "suffix", def: "Lung specialist (호흡기내과 의사)" },
-            { group: "PNEUMON", fixed: "pulmon", tar: "ary", mode: "suffix", def: "Relating to lungs (폐의)" },
 
             // REN / NEPHROS (Kidney)
             { group: "REN", fixed: "ren", tar: "al", mode: "suffix", def: "Of the kidney (신장의)" },
@@ -325,7 +320,7 @@
 
             // ENTERO (Intestine)
             { group: "ENTERO", fixed: "enter", tar: "itis", mode: "suffix", def: "Intestine inflammation (장염)" },
-            { group: "ENTERO", fixed: "entero", tar: "gastro", mode: "prefix", def: "Stomach and intestine (위장병학)" },
+            { group: "ENTERO", fixed: "enterology", tar: "gastro", mode: "prefix", def: "Stomach and intestine (위장병학)" },
             { group: "ENTERO", fixed: "enter", tar: "ocyte", mode: "suffix", def: "Intestine cell (장세포)" },
             { group: "ENTERO", fixed: "enter", tar: "ovirus", mode: "suffix", def: "Intestine virus (엔테로바이러스)" },
             { group: "ENTERO", fixed: "entery", tar: "dys", mode: "prefix", def: "Bad intestine condition (이질)" },
@@ -383,8 +378,6 @@
 
             // CARDIA (Heart)
             { group: "CARDIA", fixed: "cardial", tar: "myo", mode: "prefix", def: "Heart muscle (심근의)" },
-            { group: "CARDIA", fixed: "cardiology", tar: "k", mode: "prefix", def: "Study of heart (replace k with c) (심장학)" }, // Trickier one? Let's use standard
-            { group: "CARDIA", fixed: "cardiology", tar: "", mode: "suffix", def: "Study of heart (심장학)" }, // Logic update needed? No, just fixed 'cardi' tar 'ology'
             { group: "CARDIA", fixed: "cardi", tar: "ology", mode: "suffix", def: "Study of heart (심장학)" },
             { group: "CARDIA", fixed: "cardi", tar: "ac", mode: "suffix", def: "Pertaining to heart (심장의)" },
             { group: "CARDIA", fixed: "cardium", tar: "myo", mode: "prefix", def: "Muscle of heart (심근)" },
@@ -526,16 +519,14 @@
 
             // LOQUI (Speak)
             { group: "LOQUI", fixed: "loqu", tar: "acious", mode: "suffix", def: "Full of speak (수다스러운)" },
-            { group: "LOQUI", fixed: "loqu", tar: "e", mode: "prefix", def: "Speak out (웅변의)" }, // Eloquent
-            { group: "LOQUI", fixed: "loqu", tar: "col", mode: "prefix", def: "Speak together (구어체의)" }, // Colloquial
+            { group: "LOQUI", fixed: "loquent", tar: "e", mode: "prefix", def: "Speak out (웅변의)" }, // Eloquent
+            { group: "LOQUI", fixed: "loquial", tar: "col", mode: "prefix", def: "Speak together (구어체의)" }, // Colloquial
             { group: "LOQUI", fixed: "loquy", tar: "soli", mode: "prefix", def: "Speak alone (독백)" }, // Soliloquy
-            { group: "LOQUI", fixed: "loqu", tar: "ventri", mode: "prefix", def: "Belly speak (복화술)" }, // Ventriloquist
-            { group: "LOQUI", fixed: "locu", tar: "circum", mode: "prefix", def: "Speak around (에둘러 말하기)" }, // Circumlocution
-            { group: "LOQUI", fixed: "locu", tar: "e", mode: "prefix", def: "Speak out (연설 태도)" }, // Elocution
+            { group: "LOQUI", fixed: "loquist", tar: "ventri", mode: "prefix", def: "Belly speak (복화술)" }, // Ventriloquist
+            { group: "LOQUI", fixed: "locution", tar: "circum", mode: "prefix", def: "Speak around (에둘러 말하기)" }, // Circumlocution
+            { group: "LOQUI", fixed: "locution", tar: "e", mode: "prefix", def: "Speak out (연설 태도)" }, // Elocution
 
             // MALE (Bad)
-            { group: "MALE", fixed: "mal", tar: "for", mode: "suffix", def: "Bad shape (기형)" }, // Malformation -> mal-formation. 
-            // Better: fixed mal, tar formation.
             { group: "MALE", fixed: "mal", tar: "formation", mode: "suffix", def: "Bad formation (기형)" },
             { group: "MALE", fixed: "mal", tar: "function", mode: "suffix", def: "Bad function (오작동)" },
             { group: "MALE", fixed: "mal", tar: "nutrition", mode: "suffix", def: "Bad nutrition (영양실조)" },
@@ -582,7 +573,8 @@
             { group: "SCRIBE", fixed: "scribe", tar: "tran", mode: "prefix", def: "Write across (필사하다)" },
 
             // SOMNI (Sleep)
-            { group: "SOMNI", fixed: "somn", tar: "ia", mode: "suffix", def: "State of no sleep (불면증)" }, // In-somn-ia. 
+            { group: "SOMNI", fixed: "somnia", tar: "para", mode: "prefix", def: "Sleep beside/abnormal (사건수면)" },
+            { group: "SOMNI", fixed: "somnia", tar: "dys", mode: "prefix", def: "Bad sleep (수면장애)" },
             { group: "SOMNI", fixed: "somnia", tar: "in", mode: "prefix", def: "No sleep (불면증)" },
             { group: "SOMNI", fixed: "somni", tar: "loquy", mode: "suffix", def: "Sleep talking (잠꼬대)" },
             { group: "SOMNI", fixed: "somn", tar: "ambulism", mode: "suffix", def: "Sleep walking (몽유병)" },
@@ -592,12 +584,12 @@
             { group: "SPECT", fixed: "spect", tar: "ator", mode: "suffix", def: "Looker (관중)" },
             { group: "SPECT", fixed: "spect", tar: "in", mode: "prefix", def: "Look into (조사하다)" },
             { group: "SPECT", fixed: "spect", tar: "re", mode: "prefix", def: "Look back/again (존경하다)" },
-            { group: "SPECT", fixed: "spect", tar: "per", mode: "prefix", def: "Look through (관점)" }, // Perspective
+            { group: "SPECT", fixed: "spective", tar: "per", mode: "prefix", def: "Look through (관점)" }, // Perspective
             { group: "SPECT", fixed: "spect", tar: "retro", mode: "prefix", def: "Look backward (회고)" },
             { group: "SPECT", fixed: "spect", tar: "pro", mode: "prefix", def: "Look forward (전망)" },
 
             // SPIRE (Breathe)
-            { group: "SPIRE", fixed: "spire", tar: "ex", mode: "prefix", def: "Breathe out (만료되다/죽다)" },
+            { group: "SPIRE", fixed: "piration", tar: "ex", mode: "prefix", def: "Breathe out (만료되다/죽다)" },
             { group: "SPIRE", fixed: "spire", tar: "in", mode: "prefix", def: "Breathe in (영감을 주다)" },
             { group: "SPIRE", fixed: "spire", tar: "re", mode: "prefix", def: "Breathe again (호흡하다)" },
             { group: "SPIRE", fixed: "spire", tar: "per", mode: "prefix", def: "Breathe through (땀을 흘리다)" },
@@ -625,8 +617,8 @@
             { group: "VOL", fixed: "vol", tar: "ition", mode: "suffix", def: "Act of willing (의지)" },
             { group: "VOL", fixed: "vol", tar: "unteer", mode: "suffix", def: "One who wills (자원봉사자)" },
             { group: "VOL", fixed: "vol", tar: "untary", mode: "suffix", def: "Relating to will (자발적인)" },
-            { group: "VOL", fixed: "vol", tar: "bene", mode: "prefix", def: "Well wishing (자비로운)" },
-            { group: "VOL", fixed: "vol", tar: "male", mode: "prefix", def: "Bad wishing (악의적인)" },
+            { group: "VOL", fixed: "volent", tar: "bene", mode: "prefix", def: "Well wishing (자비로운)" },
+            { group: "VOL", fixed: "volent", tar: "male", mode: "prefix", def: "Bad wishing (악의적인)" },
 
             // VOC (Call)
             { group: "VOC", fixed: "voc", tar: "al", mode: "suffix", def: "Relating to voice (목소리의)" },
@@ -634,8 +626,22 @@
             { group: "VOC", fixed: "voke", tar: "e", mode: "prefix", def: "Call out (불러일으키다)" }, // Evoke
             { group: "VOC", fixed: "voke", tar: "pro", mode: "prefix", def: "Call forward (자극하다)" }, // Provoke
             { group: "VOC", fixed: "voke", tar: "re", mode: "prefix", def: "Call back (취소하다)" }, // Revoke
-            { group: "VOC", fixed: "voc", tar: "ad", mode: "prefix", def: "Call to (옹호하다)" }, // Advocate
+            { group: "VOC", fixed: "vocate", tar: "ad", mode: "prefix", def: "Call to (옹호하다)" }, // Advocate
             { group: "VOC", fixed: "voke", tar: "in", mode: "prefix", def: "Call in (호소하다)" }, // Invoke
+
+            // CLAMARE (Shout)
+            { group: "CLAMARE", fixed: "clamation", tar: "pro", mode: "prefix", def: "Shout forward (선언/포고)" },
+            { group: "CLAMARE", fixed: "clamation", tar: "ac", mode: "prefix", def: "Shout toward (환호/갈채)" },
+            { group: "CLAMARE", fixed: "clamation", tar: "de", mode: "prefix", def: "Shout down (웅변/열변)" },
+            { group: "CLAMARE", fixed: "clamation", tar: "ex", mode: "prefix", def: "Shout out (외침/감탄)" },
+            { group: "CLAMARE", fixed: "clamation", tar: "re", mode: "prefix", def: "Shout back/again (되찾음/간척)" },
+
+            // CEPT (Take)
+            { group: "CEPT", fixed: "cept", tar: "ac", mode: "prefix", def: "Take toward (수락하다)" },
+            { group: "CEPT", fixed: "cept", tar: "inter", mode: "prefix", def: "Take between (가로채다)" },
+            { group: "CEPT", fixed: "cept", tar: "con", mode: "prefix", def: "Take together (개념)" },
+            { group: "CEPT", fixed: "cept", tar: "ex", mode: "prefix", def: "Take out (제외하다)" },
+            { group: "CEPT", fixed: "cept", tar: "per", mode: "prefix", def: "Take through (인지/지각)" },
 
             // JECT & TRACT & DUCT & AUDI & VIS (Already in General)
             { group: "JECT", fixed: "ject", tar: "in", mode: "prefix", def: "Throw in (주사하다)" },
@@ -650,7 +656,7 @@
 
             { group: "DUCT", fixed: "duct", tar: "con", mode: "prefix", def: "Lead together (전도하다)" },
             { group: "DUCT", fixed: "duct", tar: "pro", mode: "prefix", def: "Lead forward (생산품)" },
-            { group: "DUCT", fixed: "duct", tar: "intro", mode: "prefix", def: "Lead within (소개하다)" },
+            { group: "DUCT", fixed: "duction", tar: "intro", mode: "prefix", def: "Lead within (소개하다)" },
 
             { group: "AUDI", fixed: "audi", tar: "ence", mode: "suffix", def: "Listening group (청중)" },
             { group: "AUDI", fixed: "audi", tar: "ble", mode: "suffix", def: "Able to hear (잘 들리는)" },
@@ -668,6 +674,8 @@
         let gameResults = [];
         let hintsRemaining = 3;
         let activeTab = 'medical';
+        let mistakes = 0;
+        const MAX_MISTAKES = 3;
 
         // --- DOM ELEMENTS ---
         const viewMenu = document.getElementById('menu-view');
@@ -691,6 +699,7 @@
         const elGridGeneral = document.getElementById('grid-general');
         const elTabMedical = document.getElementById('tab-medical');
         const elTabGeneral = document.getElementById('tab-general');
+        const elLivesContainer = document.getElementById('lives-container');
 
         // --- SOUND ENGINE ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -801,17 +810,32 @@
             currentIndex = 0;
             gameResults = [];
             hintsRemaining = 3;
+            mistakes = 0;
+            updateLivesUI();
 
             viewMenu.classList.add('hidden');
             viewGame.classList.remove('hidden');
             elProgress.classList.remove('hidden');
             elTotalCount.innerText = currentQuestions.length;
+            elLivesContainer.classList.remove('hidden');
             loadQuestion(0);
         }
 
         // Load menu on start
         initMenu();
 
+
+        function updateLivesUI() {
+            let html = '';
+            for (let i = 0; i < MAX_MISTAKES; i++) {
+                if (i < MAX_MISTAKES - mistakes) {
+                    html += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-red-500 transition-all duration-300"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`; // Filled Heart
+                } else {
+                    html += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-slate-600 transition-all duration-300"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`; // Empty Heart
+                }
+            }
+            elLivesContainer.innerHTML = html;
+        }
 
         function loadQuestion(index) {
             currentIndex = index;
@@ -828,6 +852,11 @@
             const rootMean = rootInfo ? rootInfo.mean.toUpperCase() : "UNKNOWN";
             elRootHint.innerText = `ROOT: ${q.group} - ${rootMean}`;
 
+            if (q.def.includes('\n')) {
+                elDef.className = "text-slate-700 font-medium text-sm sm:text-base leading-snug text-left w-full";
+            } else {
+                elDef.className = "text-slate-700 font-bold text-xl leading-tight text-center";
+            }
             elDef.innerText = q.def;
             elMsg.style.transform = "translateY(100%)";
 
@@ -925,8 +954,32 @@
                     updateAnswerDisplay();
                     if (userInput.length === q.tar.length) checkAnswer();
                 } else {
-                    // Error sound (beep/buzz) and visual feedback
-                    playSound(150, 'sawtooth', 0.15, 0, 0.2);
+                    // Logic for wrong letter clicked
+                    mistakes++;
+                    updateLivesUI();
+                    sfxWrong();
+
+                    if (mistakes >= MAX_MISTAKES) {
+                        isAnimating = true; // Block input
+                        showToast("GAME OVER", "bg-red-600");
+                        elInputPart.classList.add('shake');
+                        elInputPart.querySelectorAll('div').forEach(div => {
+                            div.classList.add('border-red-400', 'bg-red-50', 'text-red-500');
+                        });
+                        gameResults.push({ correct: false, word: q.mode === 'prefix' ? (q.tar + q.fixed) : (q.fixed + q.tar), def: q.def });
+
+                        setTimeout(() => {
+                            // Forfeit remaining questions
+                            while (gameResults.length < currentQuestions.length) {
+                                let remQ = currentQuestions[gameResults.length];
+                                gameResults.push({ correct: false, word: remQ.mode === 'prefix' ? (remQ.tar + remQ.fixed) : (remQ.fixed + remQ.tar), def: remQ.def });
+                            }
+                            showResults(true); // pass true for gameOver flag
+                        }, 1500);
+                        return;
+                    }
+
+                    // Not game over, just a wrong letter
                     elInputPart.classList.remove('shake'); // Reset valid shake if re-triggered quick
                     // Trigger reflow
                     void elInputPart.offsetWidth;
@@ -936,14 +989,7 @@
             }
         }
 
-        function deleteLastChar() {
-            if (isAnimating) return;
-            sfxClick();
-            if (userInput.length > 0) {
-                userInput = userInput.slice(0, -1);
-                updateAnswerDisplay();
-            }
-        }
+        // Backspace feature was removed
 
         function checkAnswer() {
             const q = currentQuestions[currentIndex];
@@ -960,6 +1006,9 @@
 
                 setTimeout(() => nextQuestion(), 1200);
             } else {
+                // We should theoretically never reach here because handleInput 
+                // prevents wrong letters from adding to userInput. 
+                // But just in case, we'll keep a simple warning.
                 sfxWrong();
                 showToast("TRY AGAIN", "bg-red-500");
                 elInputPart.classList.add('shake');
@@ -972,7 +1021,6 @@
                     elInputPart.classList.remove('shake');
                     // Reset style for next attempt
                     elInputPart.querySelectorAll('div').forEach(div => {
-                        // Only reset if it has content (though in this logic, all have content if checkAnswer is called)
                         div.classList.remove('border-red-400', 'bg-red-50', 'text-red-500');
                         div.classList.add('border-slate-800', 'bg-white', 'text-slate-800');
                     });
@@ -1001,11 +1049,22 @@
             }
         }
 
-        function showResults() {
+        function showResults(isGameOver = false) {
             viewGame.classList.add('hidden');
             viewResult.classList.remove('hidden');
             elProgress.classList.add('hidden');
+            elLivesContainer.classList.add('hidden');
             elMsg.style.transform = "translateY(100%)";
+
+            // If game over, change title to game over
+            const resultTitle = viewResult.querySelector('h2');
+            if (isGameOver) {
+                resultTitle.innerText = "GAME OVER";
+                resultTitle.classList.replace('text-slate-800', 'text-red-600');
+            } else {
+                resultTitle.innerText = "RESULTS";
+                resultTitle.classList.replace('text-red-600', 'text-slate-800');
+            }
 
             const correctCount = gameResults.filter(r => r.correct).length;
             const total = gameResults.length;
@@ -1048,9 +1107,7 @@
 
         document.addEventListener('keydown', (e) => {
             if (!viewGame.classList.contains('hidden')) {
-                if (e.key === 'Backspace') {
-                    deleteLastChar();
-                } else if (/^[a-zA-Z]$/.test(e.key)) {
+                if (/^[a-zA-Z]$/.test(e.key)) {
                     handleInput(e.key.toLowerCase());
                 }
             }
