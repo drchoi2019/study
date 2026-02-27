@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,29 +13,50 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
         .correct {
-            background-color: #22c55e !important; /* green-500 */
+            background-color: #22c55e !important;
+            /* green-500 */
             color: white !important;
-            border-color: #16a34a !important; /* green-600 */
+            border-color: #16a34a !important;
+            /* green-600 */
         }
+
         .incorrect {
-            background-color: #ef4444 !important; /* red-500 */
+            background-color: #ef4444 !important;
+            /* red-500 */
             color: white !important;
-            border-color: #dc2626 !important; /* red-600 */
+            border-color: #dc2626 !important;
+            /* red-600 */
         }
+
         .disabled-options button {
             pointer-events: none;
         }
     </style>
 </head>
+
 <body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-4xl">
         <div id="quiz-container" class="bg-white w-full rounded-xl shadow-lg p-6 md:p-8">
             <!-- Header -->
-            <div class="mb-6">
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Medical Terminology Quiz</h1>
-                <p class="text-slate-500 mt-1">Test your knowledge of prefixes and suffixes.</p>
+            <div class="mb-6 relative">
+                <!-- Home Button -->
+                <a href="index.html"
+                    class="absolute -top-2 md:-top-3 -left-2 md:-left-4 p-2 text-slate-400 hover:text-slate-600 transition-colors bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center active:scale-95"
+                    title="Back to Home">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </a>
+
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-800 text-center sm:text-left sm:ml-12">Medical
+                    Terminology Quiz</h1>
+                <p class="text-slate-500 mt-1 text-center sm:text-left sm:ml-12">Test your knowledge of prefixes and
+                    suffixes.</p>
             </div>
 
             <!-- Quiz Content Area -->
@@ -43,7 +65,7 @@
                     <div id="question-counter" class="text-sm font-semibold text-slate-600"></div>
                     <div id="score-counter" class="text-sm font-semibold text-slate-600"></div>
                 </div>
-                
+
                 <div id="question-area" class="mb-6">
                     <p class="text-lg text-slate-600">What is the meaning of the term:</p>
                     <h2 id="question-term" class="text-3xl md:text-4xl font-bold text-indigo-600 my-2"></h2>
@@ -53,21 +75,23 @@
                     <!-- Options will be injected here by JavaScript -->
                 </div>
             </div>
-            
+
             <!-- Results Screen -->
             <div id="results-screen" class="hidden text-center">
                 <h2 class="text-2xl font-bold text-slate-800">Quiz Complete!</h2>
                 <p class="text-slate-600 mt-2">Your final score is:</p>
                 <p id="final-score" class="text-6xl font-bold text-indigo-600 my-4"></p>
                 <p id="score-message" class="text-lg text-slate-700 mb-6"></p>
-                <button id="restart-btn" class="w-full max-w-xs mx-auto bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                <button id="restart-btn"
+                    class="w-full max-w-xs mx-auto bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
                     Try Again
                 </button>
             </div>
 
             <!-- Controls -->
             <div class="mt-8 text-right">
-                <button id="next-btn" class="bg-slate-200 text-slate-700 font-bold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors hidden">
+                <button id="next-btn"
+                    class="bg-slate-200 text-slate-700 font-bold py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors hidden">
                     Next
                 </button>
             </div>
@@ -164,7 +188,7 @@
             currentQuestionIndex = 0;
             score = 0;
             quizQuestions = [];
-            
+
             // Show quiz content and hide results
             quizContentEl.classList.remove('hidden');
             resultsScreenEl.classList.add('hidden');
@@ -181,7 +205,7 @@
                 shuffleArray(otherTerms);
                 // Get 5 incorrect options to make a total of 6 options
                 const incorrectOptions = otherTerms.slice(0, 5).map(t => t.definition);
-                
+
                 const options = [correctTerm.definition, ...incorrectOptions];
                 shuffleArray(options);
 
@@ -191,7 +215,7 @@
                     options: options
                 };
             });
-            
+
             displayQuestion();
             updateScoreDisplay();
         }
@@ -206,7 +230,7 @@
             }
 
             const question = quizQuestions[currentQuestionIndex];
-            
+
             questionCounterEl.textContent = `Question ${currentQuestionIndex + 1} / ${QUIZ_LENGTH}`;
             questionTermEl.textContent = question.term;
             optionsContainerEl.innerHTML = '';
@@ -221,7 +245,7 @@
                 optionsContainerEl.appendChild(button);
             });
         }
-        
+
         /**
          * Handles the user selecting an answer.
          * @param {HTMLButtonElement} selectedButton - The button element that was clicked.
@@ -244,7 +268,7 @@
                     }
                 });
             }
-            
+
             updateScoreDisplay();
             nextBtn.classList.remove('hidden');
         }
@@ -255,7 +279,7 @@
         function updateScoreDisplay() {
             scoreCounterEl.textContent = `Score: ${score}`;
         }
-        
+
         /**
          * Shows the final results screen.
          */
@@ -292,4 +316,5 @@
 
     </script>
 </body>
+
 </html>

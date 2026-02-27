@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,27 +13,44 @@
             transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
             opacity: 0;
         }
+
         .explanation.show {
-            max-height: 500px; /* Adjust as needed */
+            max-height: 500px;
+            /* Adjust as needed */
             opacity: 1;
         }
+
         body {
             background-color: white;
             font-family: 'Inter', sans-serif;
         }
+
         .clickable-sentence {
             cursor: pointer;
-            user-select: none; /* Prevents text selection on click */
+            user-select: none;
+            /* Prevents text selection on click */
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body class="text-stone-800">
 
-    <header id="page-header" class="w-full max-w-2xl mx-auto my-4 px-4 flex justify-end items-center">
-        <a href="#" onclick="toggleLanguage(event)" class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-200 transition-colors" style="background-color: #F0F4F8;">
+    <header id="page-header" class="w-full max-w-2xl mx-auto my-4 px-4 flex justify-between items-center relative">
+        <a href="index.html"
+            class="p-2 text-stone-400 hover:text-stone-600 transition-colors bg-white rounded-full shadow-sm border border-stone-100 flex items-center justify-center active:scale-95"
+            title="Back to Home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </a>
+        <a href="#" onclick="toggleLanguage(event)"
+            class="px-3 py-1 text-stone-700 rounded-md text-sm font-bold hover:bg-stone-200 transition-colors"
+            style="background-color: #F0F4F8;">
             Kor / Eng
         </a>
     </header>
@@ -76,7 +94,7 @@
             { word: 'indication', example: 'There’s no <strong class="text-blue-500 font-semibold">indication</strong> for surgery at this time.', ko_trans: '현시점에서는 수술에 대한 <strong>의학적 근거(적응증)</strong>가 없습니다.', ko_exp: "'indication'은 '표시, 신호'를 의미하지만, 의학에서는 특정 치료나 검사가 필요한 '의학적 근거(적응증)'를 뜻합니다.", en_exp: "An 'indication' is a sign, and medically, it is a valid reason to use a certain test or treatment." },
             { word: 'impression', example: 'The clinical <strong class="text-blue-500 font-semibold">impression</strong> is viral infection.', ko_trans: '<strong>1차 진단 소견</strong>은 바이러스 감염입니다.', ko_exp: "'impression'은 '인상, 느낌'을 의미하지만, 의무기록에서는 의사의 '1차적인 진단 소견'을 의미합니다.", en_exp: "An 'impression' is a feeling, but on a medical chart, it refers to the initial diagnosis or assessment." },
         ];
-        
+
         const content = {
             ko: {
                 instruction: "강조된 단어에 주의해서 예문을 해석해보세요. 문장을 클릭하면 설명이 나타납니다.",
@@ -98,7 +116,7 @@
             medicalTerms.forEach((term, index) => {
                 const card = document.createElement('div');
                 card.className = 'bg-gray-50 p-5 rounded-lg border border-gray-200';
-                
+
                 const exampleText = term.example; // Always show English example
                 let explanationContent = '';
 
@@ -154,5 +172,5 @@
 
     </script>
 </body>
-</html>
 
+</html>
