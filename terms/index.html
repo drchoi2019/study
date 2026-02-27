@@ -165,25 +165,6 @@
             background-color: #ccfbf1;
             color: #0f766e;
         }
-
-        /* Styles for the iframe view */
-        #iframe-view {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 100;
-        }
-
-        #thin-header {
-            height: 50px;
-        }
-
-        #content-frame {
-            height: calc(100% - 50px);
-            border: none;
-        }
     </style>
 </head>
 
@@ -446,57 +427,6 @@
             <p class="text-slate-500">&copy; 2024 Hyungsuk Choi. All rights reserved.</p>
         </footer>
     </div>
-
-    <div id="iframe-view" class="hidden">
-        <div id="thin-header"
-            class="fixed top-0 left-0 w-full bg-slate-800 text-white flex items-center justify-center shadow-md cursor-pointer z-50">
-            <p class="font-semibold text-sm sm:text-base whitespace-nowrap px-2">Click to return to home</p>
-        </div>
-        <iframe id="content-frame" class="w-full mt-[50px]"></iframe>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mainView = document.getElementById('main-view');
-            const iframeView = document.getElementById('iframe-view');
-            const thinHeader = document.getElementById('thin-header');
-            const contentFrame = document.getElementById('content-frame');
-            const links = document.querySelectorAll('a[href$=".html"]');
-
-            // Handle link clicks
-            links.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    // Prevent default link behavior
-                    event.preventDefault();
-
-                    const url = link.getAttribute('href');
-
-                    // Handle external links (like yes24) differently
-                    if (link.getAttribute('target') === '_blank') {
-                        window.open(url, '_blank');
-                        return;
-                    }
-
-                    // Set iframe source
-                    contentFrame.src = url;
-
-                    // Switch views
-                    mainView.classList.add('hidden');
-                    iframeView.classList.remove('hidden');
-                });
-            });
-
-            // Handle click on the thin header to go back
-            thinHeader.addEventListener('click', () => {
-                // Switch views back
-                iframeView.classList.add('hidden');
-                mainView.classList.remove('hidden');
-
-                // Clear the iframe to stop any loading/playing media
-                contentFrame.src = 'about:blank';
-            });
-        });
-    </script>
 
 </body>
 
