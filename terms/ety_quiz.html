@@ -120,10 +120,12 @@
             <h2 class="text-2xl font-black text-slate-800 mb-2 tracking-tight mt-6">SELECT ROOT</h2>
             <p class="text-slate-500 mb-2 text-center text-sm font-medium">Choose a category and root to practice.</p>
             <p class="text-slate-400 mb-6 text-center text-xs">
-                Difficulty:
-                <span class="text-yellow-600 font-bold">Yellow (1-3 words)</span>,
-                <span class="text-blue-600 font-bold">Blue (4-6 words)</span>,
-                <span class="text-red-500 font-bold">Red (7+ words)</span>
+                Difficulty (easy to hard):
+                <span class="text-yellow-600 font-bold">Yellow</span> -
+                <span class="text-green-600 font-bold">Green</span> -
+                <span class="text-blue-600 font-bold">Blue</span> -
+                <span class="text-purple-500 font-bold">Purple</span> -
+                <span class="text-red-500 font-bold">Red</span>
             </p>
 
             <!-- Tabs -->
@@ -671,17 +673,25 @@
             { group: "TRACT", fixed: "tract", tar: "con", mode: "prefix", def: "Draw together (계약하다/수축하다)" },
             { group: "TRACT", fixed: "tract", tar: "ex", mode: "prefix", def: "Draw out (추출하다)" },
             { group: "TRACT", fixed: "trac", tar: "tion", mode: "suffix", def: "Drawing act (견인)" },
+            { group: "TRACT", fixed: "tract", tar: "or", mode: "suffix", def: "Thing that pulls (트랙터)" },
+            { group: "TRACT", fixed: "tract", tar: "sub", mode: "prefix", def: "Draw under/away (빼다)" },
 
             { group: "DUCT", fixed: "duct", tar: "con", mode: "prefix", def: "Lead together (전도하다)" },
             { group: "DUCT", fixed: "duct", tar: "pro", mode: "prefix", def: "Lead forward (생산품)" },
             { group: "DUCT", fixed: "duction", tar: "intro", mode: "prefix", def: "Lead within (소개하다)" },
+            { group: "DUCT", fixed: "duct", tar: "ab", mode: "prefix", def: "Lead away (유괴하다)" },
+            { group: "DUCT", fixed: "duct", tar: "de", mode: "prefix", def: "Lead down (공제하다)" },
 
             { group: "AUDI", fixed: "audi", tar: "ence", mode: "suffix", def: "Listening group (청중)" },
             { group: "AUDI", fixed: "audi", tar: "ble", mode: "suffix", def: "Able to hear (잘 들리는)" },
+            { group: "AUDI", fixed: "audi", tar: "torium", mode: "suffix", def: "Place for hearing (강당)" },
+            { group: "AUDI", fixed: "audi", tar: "tion", mode: "suffix", def: "Hearing test (오디션)" },
 
             { group: "VIS", fixed: "vis", tar: "ion", mode: "suffix", def: "Act of seeing (시력/비전)" },
             { group: "VIS", fixed: "vis", tar: "ible", mode: "suffix", def: "Able to see (보이는)" },
             { group: "VIS", fixed: "vis", tar: "it", mode: "suffix", def: "Go to see (방문하다)" },
+            { group: "VIS", fixed: "vis", tar: "or", mode: "suffix", def: "Thing that protects sight (햇빛 가리개)" },
+            { group: "VIS", fixed: "vis", tar: "ta", mode: "suffix", def: "View (경치/전망)" },
         ];
 
         // --- STATE ---
@@ -784,8 +794,12 @@
                 let btnColor = "slate"; // default fallback
                 if (count <= 3) {
                     btnColor = "yellow";
-                } else if (count >= 4 && count <= 6) {
+                } else if (count === 4) {
+                    btnColor = "green";
+                } else if (count === 5) {
                     btnColor = "blue";
+                } else if (count === 6) {
+                    btnColor = "purple";
                 } else {
                     btnColor = "red";
                 }
