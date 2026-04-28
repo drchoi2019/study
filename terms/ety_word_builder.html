@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etymology Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fcfdfe;
+            --primary-color: #a7c8e2;   /* Pastel Blue */
+            --secondary-color: #ffb7b2; /* Pastel Red/Pink */
+            --accent-color: #e2f0cb;    /* Pastel Green */
+            --highlight-color: #ffd3b6; /* Pastel Orange */
+            --purple-pastel: #d5aaee;   /* Pastel Purple */
+            --text-color: #4a4a4a;
+            --light-text: #7a7a7a;
+            --border-radius: 16px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.5rem;
+            color: #3b3b3b;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            font-weight: 300;
+            color: var(--light-text);
+            font-size: 1.1rem;
+        }
+
+        .main-container {
+            display: flex;
+            width: 95%;
+            max-width: 1200px;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .column {
+            flex: 1;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .column-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #555;
+            text-align: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 8px;
+        }
+
+        .block {
+            padding: 6px 8px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            user-select: none;
+            background-color: #f7f9fc;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 35px;
+        }
+
+        .block:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .block.root-block {
+            background-color: #f4f6fb;
+        }
+
+        .block.root-block:hover {
+            background-color: #eef2fa;
+            color: #3b3b3b;
+            border-color: var(--primary-color);
+        }
+
+        .block.root-block.selected {
+            background-color: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(167, 200, 226, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .block.prefix-block {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Before any root is selected, prefixes look normal but can't be clicked */
+        .grid-container.no-root-selected .prefix-block {
+            opacity: 1;
+            background-color: #fafafa;
+        }
+
+        /* Valid prefixes when a root is selected */
+        .block.prefix-block.valid-prefix {
+            opacity: 1;
+            pointer-events: auto;
+            background-color: var(--accent-color);
+            color: #44582f;
+            border-color: #c9e5a1;
+            font-weight: 600;
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        .block.prefix-block.valid-prefix:hover {
+            background-color: #cde4ad;
+            color: #334223;
+            transform: scale(1.05);
+        }
+
+        .root-hint {
+            font-size: 0.65rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 85%;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-word {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+        
+        .modal-breakdown {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            margin-bottom: 25px;
+            font-weight: 400;
+            background: #fcfcfc;
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #efefef;
+        }
+
+        .modal-meaning {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .modal-example {
+            font-size: 1.05rem;
+            color: #5b7da8;
+            font-style: italic;
+            background: #f0f6fc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 0;
+            font-family: inherit;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #888;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.03); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .stylish-footer {
+            margin-top: auto;
+            padding: 30px 10px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #bdc3c7;
+            font-weight: 500;
+            text-align: center;
+            width: 100%;
+            user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <p class="subtitle">Select a root, then click a highlighted prefix to learn words!</p>
+    </header>
+
+    <div class="main-container">
+        <!-- Prefixes Column -->
+        <div class="column">
+            <div class="column-header">Prefixes</div>
+            <div class="grid-container no-root-selected" id="prefixes-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Roots Column -->
+        <div class="column">
+            <div class="column-header">Roots</div>
+            <div class="grid-container" id="roots-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="word-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <h2 class="modal-word" id="modal-word"></h2>
+            <div class="modal-breakdown" id="modal-breakdown">prefix + root</div>
+            <p class="modal-meaning" id="modal-meaning"></p>
+            <p class="modal-example" id="modal-example"></p>
+        </div>
+    </div>
+
+    <footer class="stylish-footer">
+        &copy; Hyungsuk Choi. All rights reserved.
+    </footer>
+
+    <script>
+        const prefixData = [
+            { id: "a", label: "a" },
+            { id: "e_ex", label: "e, ex" },
+            { id: "en_in", label: "en, in" },
+            { id: "supra", label: "supra" },
+            { id: "infra", label: "infra" },
+            { id: "contra", label: "contra" },
+            { id: "re", label: "re" },
+            { id: "pro_pre", label: "pro, pre" },
+            { id: "sub", label: "sub" },
+            { id: "con_co", label: "con, co" },
+            { id: "un", label: "un" },
+            { id: "dis", label: "dis" },
+            { id: "non", label: "non" },
+            { id: "mis", label: "mis" },
+            { id: "anti", label: "anti" },
+            { id: "inter", label: "inter" },
+            { id: "trans", label: "trans" },
+            { id: "hypo", label: "hypo" },
+            { id: "auto", label: "auto" },
+            { id: "tele", label: "tele" },
+            { id: "micro", label: "micro" },
+            { id: "macro", label: "macro" },
+            { id: "mega", label: "mega" },
+            { id: "mini", label: "mini" },
+            { id: "post", label: "post" },
+            { id: "fore", label: "fore" },
+            { id: "in_im_il_ir", label: "in, im, il, ir" },
+            { id: "de", label: "de" },
+            { id: "ab", label: "ab" },
+            { id: "ad", label: "ad" },
+            { id: "per", label: "per" },
+            { id: "circum", label: "circum" },
+            { id: "ob_op", label: "ob, op" }, 
+            { id: "se", label: "se" }
+        ];
+
+        const rootData = [
+            { id: "tract", label: "tract", meaning: "draw" },
+            { id: "ject", label: "ject", meaning: "throw" },
+            { id: "port", label: "port", meaning: "carry" },
+            { id: "mit_miss", label: "mit, miss", meaning: "send" },
+            { id: "duce_duct", label: "duce, duct", meaning: "lead" },
+            { id: "vert_vers", label: "vert, vers", meaning: "turn" },
+            { id: "spect", label: "spect", meaning: "look" },
+            { id: "scribe_script", label: "scribe, script", meaning: "write" },
+            { id: "pose_pos", label: "pose, pos", meaning: "place" },
+            { id: "fer", label: "fer", meaning: "carry" },
+            { id: "press", label: "press", meaning: "press" },
+            { id: "pel_puls", label: "pel, puls", meaning: "push" },
+            { id: "struct", label: "struct", meaning: "build" },
+            { id: "gress", label: "gress", meaning: "go" },
+            { id: "ven_vent", label: "ven, vent", meaning: "come" },
+            { id: "clude_clud", label: "clude, clud", meaning: "close" },
+            { id: "voke_voc", label: "voke, voc", meaning: "call" },
+            { id: "form", label: "form", meaning: "shape" },
+            { id: "dict", label: "dict", meaning: "say" },
+            { id: "pend", label: "pend", meaning: "hang" },
+            { id: "cede_ceed", label: "cede, ceed", meaning: "go" },
+            { id: "ceive_cept", label: "ceive, cept", meaning: "take" },
+            { id: "rupt", label: "rupt", meaning: "break" },
+            { id: "vise_vid", label: "vise, vid", meaning: "see" },
+            { id: "nounce", label: "nounce", meaning: "announce" }
+        ];
+
+        const dictionary = {
+            "tract": {
+                "sub": { word: "subtract", desc: "To take away from a whole.", ex: "If you subtract 2 from 5, you get 3." },
+                "con_co": { word: "contract", desc: "To draw together; a formal agreement.", ex: "They signed a contract." },
+                "re": { word: "retract", desc: "To draw back or take back.", ex: "He had to retract his statement." },
+                "e_ex": { word: "extract", desc: "To pull out by force.", ex: "We extract oil from the ground." },
+                "ad": { word: "attract", desc: "To pull toward.", ex: "Magnets attract iron." },
+                "dis": { word: "distract", desc: "To draw attention away.", ex: "Don't distract me while I'm studying." },
+                "pro_pre": { word: "protract", desc: "To draw out or lengthen.", ex: "We shouldn't protract this meeting." }
+            },
+            "ject": {
+                "sub": { word: "subject", desc: "To bring under control; a topic.", ex: "Math is my favorite subject." },
+                "ob_op": { word: "object", desc: "To throw against; to oppose.", ex: "I object to this plan." },
+                "re": { word: "reject", desc: "To refuse to accept.", ex: "The company rejected his application." },
+                "pro_pre": { word: "project", desc: "To throw forward.", ex: "We are starting a new science project." },
+                "in_im_il_ir": { word: "inject", desc: "To throw or force into.", ex: "The doctor will inject the medicine." },
+                "e_ex": { word: "eject", desc: "To throw out.", ex: "Eject the CD from the player." },
+                "inter": { word: "interject", desc: "To throw between; interrupt.", ex: "She interjected a funny comment." }
+            },
+            "port": {
+                "in_im_il_ir": { word: "import", desc: "To bring in from a foreign country.", ex: "We import coffee from Brazil." },
+                "e_ex": { word: "export", desc: "To send goods out.", ex: "They export cars to other countries." },
+                "trans": { word: "transport", desc: "To carry across a distance.", ex: "Buses transport people to work." },
+                "sub": { word: "support", desc: "To bear or carry from below.", ex: "I will always support you." },
+                "re": { word: "report", desc: "To carry back an account of something.", ex: "He wrote a good book report." },
+                "de": { word: "deport", desc: "To carry or send away (expel).", ex: "The country will deport illegal immigrants." }
+            },
+            "mit_miss": {
+                "sub": { word: "submit", desc: "To send oneself under the control of another.", ex: "Please submit your homework." },
+                "trans": { word: "transmit", desc: "To send across.", ex: "The radio transmits a signal." },
+                "per": { word: "permit", desc: "To let through; allow.", ex: "Do you have a permit to park here?" },
+                "ad": { word: "admit", desc: "To send or allow into.", ex: "I admit I was wrong." },
+                "e_ex": { word: "emit", desc: "To send out.", ex: "The sun emits light." },
+                "dis": { word: "dismiss", desc: "To send away.", ex: "The teacher dismissed the class early." },
+                "re": { word: "remit", desc: "To send back (usually money).", ex: "Please remit payment by mail." }
+            },
+            "duce_duct": {
+                "en_in": { word: "induce", desc: "To lead to action.", ex: "Stress can induce a headache." },
+                "de": { word: "deduce", desc: "To read away from; infer.", ex: "I deduced the answer from his clues." },
+                "pro_pre": { word: "produce", desc: "To bring forth.", ex: "Cows produce milk." },
+                "re": { word: "reduce", desc: "To lead back; diminish.", ex: "We must reduce plastic waste." },
+                "con_co": { word: "conduct", desc: "To lead together; direct.", ex: "Copper can conduct electricity." },
+                "ab": { word: "abduct", desc: "To lead away by force.", ex: "Aliens tried to abduct them." },
+                "inter": { word: "introduce", desc: "To lead inward; present.", ex: "Let me introduce my friend." }
+            },
+            "vert_vers": {
+                "con_co": { word: "convert", desc: "To turn thoroughly into something else.", ex: "We can convert solar energy into electricity." },
+                "re": { word: "revert", desc: "To turn back.", ex: "The rules will revert to the old version." },
+                "en_in": { word: "invert", desc: "To turn upside down.", ex: "If you invert the glass, the water falls out." },
+                "sub": { word: "subvert", desc: "To turn from below; overthrow.", ex: "They tried to subvert the king." },
+                "dis": { word: "divert", desc: "To turn aside.", ex: "The police diverted the traffic." },
+                "trans": { word: "transverse", desc: "Turned across.", ex: "A transverse beam holds the roof." }
+            },
+            "spect": {
+                "en_in": { word: "inspect", desc: "To look into carefully.", ex: "The chef will inspect the kitchen." },
+                "re": { word: "respect", desc: "To look back at; regard highly.", ex: "You should respect your elders." },
+                "pro_pre": { word: "prospect", desc: "Looking forward; anticipation.", ex: "He liked the prospect of a new job." },
+                "sub": { word: "suspect", desc: "To look at from below; mistrust.", ex: "I suspect he is lying." },
+                "circum": { word: "circumspect", desc: "Looking around; cautious.", ex: "Be circumspect when talking to strangers." }
+            },
+            "scribe_script": {
+                "sub": { word: "subscribe", desc: "To write underneath; support.", ex: "I subscribe to a science magazine." },
+                "de": { word: "describe", desc: "To write down or tell.", ex: "Can you describe the man?" },
+                "pro_pre": { word: "prescribe", desc: "To write before; lay down rules.", ex: "The doctor prescribed a new medicine." },
+                "trans": { word: "transcribe", desc: "To write across; copy.", ex: "She transcribed the speech into text." },
+                "en_in": { word: "inscribe", desc: "To write in or on.", ex: "They inscribed his name on the ring." },
+                "post": { word: "postscript", desc: "Written after.", ex: "He added a postscript to his letter." }
+            },
+            "pose_pos": {
+                "con_co": { word: "compose", desc: "To put together.", ex: "Mozart composed beautiful music." },
+                "pro_pre": { word: "propose", desc: "To put forward.", ex: "He proposed a new idea." },
+                "in_im_il_ir": { word: "impose", desc: "To place upon.", ex: "Don't impose your rules on me." },
+                "e_ex": { word: "expose", desc: "To place out; reveal.", ex: "The melted snow exposed the grass." },
+                "de": { word: "depose", desc: "To put down from power.", ex: "The rebels deposed the king." },
+                "sub": { word: "suppose", desc: "To place under; assume.", ex: "I suppose you are right." },
+                "ob_op": { word: "oppose", desc: "To place against.", ex: "I strongly oppose this plan." }
+            },
+            "fer": {
+                "trans": { word: "transfer", desc: "To carry across.", ex: "He will transfer to a new school." },
+                "re": { word: "refer", desc: "To carry back; direct to.", ex: "Please refer to page 5." },
+                "pro_pre": { word: "prefer", desc: "To bring forward; choose first.", ex: "I prefer tea over coffee." },
+                "in_im_il_ir": { word: "infer", desc: "To bring in (reasoning).", ex: "I inferred from his smile that he was happy." },
+                "de": { word: "defer", desc: "To put off or bring down.", ex: "We will defer the decision until next week." },
+                "con_co": { word: "confer", desc: "To bring together; consult.", ex: "I need to confer with my team." },
+                "ob_op": { word: "offer", desc: "To bring toward.", ex: "Can I offer you a drink?" }
+            },
+            "press": {
+                "con_co": { word: "compress", desc: "To press together.", ex: "We can compress the files to save space." },
+                "de": { word: "depress", desc: "To press down.", ex: "The dark weather depresses me." },
+                "e_ex": { word: "express", desc: "To press out.", ex: "He expressed his feelings in a letter." },
+                "in_im_il_ir": { word: "impress", desc: "To press into; affect deeply.", ex: "Her singing impressed the judges." },
+                "sub": { word: "suppress", desc: "To press under.", ex: "She tried to suppress a laugh." },
+                "re": { word: "repress", desc: "To press back.", ex: "He repressed his angry feelings." }
+            },
+            "pel_puls": {
+                "con_co": { word: "compel", desc: "To push together; force.", ex: "The law compels us to pay taxes." },
+                "re": { word: "repel", desc: "To push back.", ex: "This spray repels mosquitoes." },
+                "e_ex": { word: "expel", desc: "To push out.", ex: "The school expelled the bad student." },
+                "pro_pre": { word: "propel", desc: "To push forward.", ex: "The wind propels the boat." },
+                "dis": { word: "dispel", desc: "To drive away.", ex: "He spoke to dispel their fears." },
+                "in_im_il_ir": { word: "impulse", desc: "A sudden push inward.", ex: "I bought the shoes on an impulse." }
+            },
+            "struct": {
+                "con_co": { word: "construct", desc: "To build together.", ex: "They will construct a new bridge." },
+                "de": { word: "destruct", desc: "To pull down buildings.", ex: "The robot is set to self-destruct." },
+                "in_im_il_ir": { word: "instruct", desc: "To build into; teach.", ex: "The teacher instructed us to be quiet." },
+                "ob_op": { word: "obstruct", desc: "To build against; block.", ex: "The fallen tree obstructed the road." },
+                "re": { word: "reconstruct", desc: "To build again.", ex: "They will reconstruct the old building." },
+                "infra": { word: "infrastructure", desc: "Underlying building/foundation.", ex: "The city needs better infrastructure." }
+            },
+            "gress": {
+                "pro_pre": { word: "progress", desc: "To step forward.", ex: "We are making good progress." },
+                "re": { word: "regress", desc: "To step back.", ex: "His skills began to regress." },
+                "con_co": { word: "congress", desc: "A stepping together; meeting.", ex: "The congress passed a new law." },
+                "trans": { word: "transgress", desc: "To step across lines; violate.", ex: "He promised not to transgress the rules." },
+                "dis": { word: "digress", desc: "To step aside from a topic.", ex: "I don't want to digress from the main topic." },
+                "in_im_il_ir": { word: "ingress", desc: "The act of stepping in.", ex: "The door provides ingress to the building." }
+            },
+            "ven_vent": {
+                "con_co": { word: "convene", desc: "To come together.", ex: "The committee will convene tomorrow." },
+                "pro_pre": { word: "prevent", desc: "To come before; stop.", ex: "Washing hands helps prevent illness." },
+                "inter": { word: "intervene", desc: "To come between.", ex: "The teacher had to intervene in the fight." },
+                "ad": { word: "advent", desc: "A coming to; arrival.", ex: "The advent of the internet changed life." },
+                "circum": { word: "circumvent", desc: "To come around; bypass.", ex: "They found a way to circumvent the rules." },
+                "contra": { word: "contravene", desc: "To come against; oppose.", ex: "Doing that would contravene the law." }
+            },
+            "clude_clud": {
+                "in_im_il_ir": { word: "include", desc: "To shut in.", ex: "The price includes breakfast." },
+                "e_ex": { word: "exclude", desc: "To shut out.", ex: "Do not exclude anyone from the game." },
+                "con_co": { word: "conclude", desc: "To shut together; finish.", ex: "Let's conclude the meeting." },
+                "pro_pre": { word: "preclude", desc: "To shut out beforehand.", ex: "Bad weather will preclude our picnic." },
+                "se": { word: "seclude", desc: "To shut apart.", ex: "He secluded himself in his room to study." }
+            },
+            "voke_voc": {
+                "in_im_il_ir": { word: "invoke", desc: "To call upon.", ex: "He invoked the law to protect himself." },
+                "re": { word: "revoke", desc: "To call back; cancel.", ex: "The police revoked his driving license." },
+                "pro_pre": { word: "provoke", desc: "To call forth; incite.", ex: "Don't provoke the sleeping dog." },
+                "e_ex": { word: "evoke", desc: "To call out (memories).", ex: "That song evokes happy memories." },
+                "con_co": { word: "convoke", desc: "To call together.", ex: "The king convoked a grand meeting." },
+                "ad": { word: "advocate", desc: "To call towards/for; support.", ex: "She advocates for animal rights." }
+            },
+            "form": {
+                "con_co": { word: "conform", desc: "To shape together; comply.", ex: "You must conform to the school rules." },
+                "re": { word: "reform", desc: "To shape again.", ex: "They want to reform the education system." },
+                "trans": { word: "transform", desc: "To change shape completely.", ex: "The caterpillar transforms into a butterfly." },
+                "de": { word: "deform", desc: "To misshape.", ex: "Heat can deform the plastic bottle." },
+                "in_im_il_ir": { word: "inform", desc: "To shape the mind; tell.", ex: "Please inform us when you arrive." },
+                "per": { word: "perform", desc: "To shape thoroughly; carry out.", ex: "The band will perform live tonight." },
+                "un": { word: "uniform", desc: "Having one shape.", ex: "All the nurses wear a white uniform." }
+            },
+            "dict": {
+                "pro_pre": { word: "predict", desc: "To say beforehand.", ex: "The weather forecaster predicts rain." },
+                "contra": { word: "contradict", desc: "To say against.", ex: "Don't contradict what your mother said." },
+                "de": { word: "dictate", desc: "To say aloud for writing.", ex: "The boss dictated a letter to his secretary." },
+                "en_in": { word: "indict", desc: "To formally say a charge against.", ex: "The jury will indict the thief." },
+                "e_ex": { word: "verdict", desc: "To say the truth.", ex: "The jury reached a guilty verdict." }
+            },
+            "pend": {
+                "de": { word: "depend", desc: "To hang down from; rely on.", ex: "Children depend on their parents." },
+                "sub": { word: "suspend", desc: "To hang under; temporarily stop.", ex: "The game was suspended due to rain." },
+                "ad": { word: "append", desc: "To hang onto; attach.", ex: "I will append a note to the end of the letter." },
+                "in_im_il_ir": { word: "impend", desc: "To hang over; be imminent.", ex: "A storm is impending." },
+                "e_ex": { word: "expend", desc: "To weigh out; spend.", ex: "Don't expend too much energy on this." }
+            },
+            "cede_ceed": {
+                "re": { word: "recede", desc: "To go backward.", ex: "The flood waters started to recede." },
+                "sub": { word: "succeed", desc: "To go under or after; follow up.", ex: "She worked hard to succeed." },
+                "e_ex": { word: "exceed", desc: "To go beyond.", ex: "Do not exceed the speed limit." },
+                "inter": { word: "intercede", desc: "To go between.", ex: "He had to intercede to stop the fight." },
+                "anti": { word: "antecede", desc: "To go before.", ex: "The invention anteceded the computer." }
+            },
+            "ceive_cept": {
+                "re": { word: "receive", desc: "To take back.", ex: "I received a gift." },
+                "de": { word: "deceive", desc: "To take away; mislead.", ex: "The magician deceived the audience." },
+                "per": { word: "perceive", desc: "To take thoroughly; grasp.", ex: "I can perceive a change in his mood." },
+                "con_co": { word: "conceive", desc: "To take into the mind.", ex: "It's hard to conceive of such a big number." },
+                "inter": { word: "intercept", desc: "To take between points.", ex: "He intercepted the ball in the game." },
+                "ad": { word: "accept", desc: "To take to oneself.", ex: "Please accept my apology." },
+                "e_ex": { word: "except", desc: "To take out; exclude.", ex: "Everyone went except me." }
+            },
+            "rupt": {
+                "dis": { word: "disrupt", desc: "To break apart.", ex: "Don't disrupt the class." },
+                "inter": { word: "interrupt", desc: "To break between.", ex: "Please don't interrupt me." },
+                "e_ex": { word: "erupt", desc: "To break out.", ex: "The volcano is going to erupt." },
+                "con_co": { word: "corrupt", desc: "To break with completely; ruin.", ex: "The corrupt mayor was arrested." },
+                "ab": { word: "abrupt", desc: "Broken off; sudden.", ex: "The car came to an abrupt stop." }
+            },
+            "vise_vid": {
+                "re": { word: "revise", desc: "To look at again.", ex: "Please revise your essay." },
+                "supra": { word: "supervise", desc: "To overlook.", ex: "The teacher will supervise the test." },
+                "tele": { word: "televise", desc: "To let see from far.", ex: "They will televise the match live." },
+                "ad": { word: "advise", desc: "To look upon; give counsel.", ex: "I advise you to stay home." },
+                "pro_pre": { word: "provide", desc: "To look forward; prepare.", ex: "The hotel will provide towels." },
+                "dis": { word: "divide", desc: "To separate (see parts).", ex: "Divide the cake into four pieces." }
+            },
+            "nounce": {
+                "ad": { word: "announce", desc: "To bring news to.", ex: "They will announce the winner soon." },
+                "pro_pre": { word: "pronounce", desc: "To speak forth.", ex: "How do you pronounce this word?" },
+                "de": { word: "denounce", desc: "To speak down; condemn.", ex: "They denounced the bad decision." },
+                "re": { word: "renounce", desc: "To call back; give up.", ex: "He decided to renounce his throne." },
+                "mis": { word: "mispronounce", desc: "To speak forth incorrectly.", ex: "I often mispronounce his name." }
+            }
+        };
+
+        // Edge Cases that overlap
+        dictionary["cede_ceed"]["pro_pre"] = { word: "precede / proceed", desc: "To go before / To go forward.", ex: "Dinner precedes the movie. / You may proceed." };
+        dictionary["spect"]["re"] = { word: "respect / retrospect", desc: "To look back at / A looking back.", ex: "Respect your elders. / In retrospect, it was a bad idea." };
+
+        let currentRoot = null;
+
+        const prefixesGrid = document.getElementById("prefixes-grid");
+        const rootsGrid = document.getElementById("roots-grid");
+
+        const modal = document.getElementById("word-modal");
+        const modalWord = document.getElementById("modal-word");
+        const modalMeaning = document.getElementById("modal-meaning");
+        const modalExample = document.getElementById("modal-example");
+        const modalBreakdown = document.getElementById("modal-breakdown");
+        const closeModal = document.getElementById("close-modal");
+
+        // Render Prefixes
+        prefixData.forEach(prefix => {
+            const div = document.createElement("div");
+            div.className = "block prefix-block";
+            div.id = `prefix-${prefix.id}`;
+            div.textContent = prefix.label;
+
+            div.addEventListener("click", () => {
+                if (currentRoot && div.classList.contains("valid-prefix")) {
+                    const data = dictionary[currentRoot][prefix.id];
+                    showModal(data.word, prefix.label, rootData.find(r => r.id === currentRoot).label, data.desc, data.ex);
+                }
+            });
+
+            prefixesGrid.appendChild(div);
+        });
+
+        // Render Roots
+        rootData.forEach(root => {
+            const div = document.createElement("div");
+            div.className = "block root-block";
+            div.id = `root-${root.id}`;
+            
+            const textSpan = document.createElement("span");
+            textSpan.textContent = root.label;
+            
+            const hintSpan = document.createElement("span");
+            hintSpan.className = "root-hint";
+            hintSpan.textContent = `(${root.meaning})`;
+
+            div.appendChild(textSpan);
+            div.appendChild(hintSpan);
+
+            div.addEventListener("click", () => {
+                selectRoot(root.id, div);
+            });
+
+            rootsGrid.appendChild(div);
+        });
+
+        function selectRoot(rootId, element) {
+            currentRoot = rootId;
+
+            // Remove selected class from all roots
+            document.querySelectorAll(".root-block").forEach(el => el.classList.remove("selected"));
+            
+            // Add selected class to the clicked root
+            element.classList.add("selected");
+
+            // Update prefixes grid state
+            prefixesGrid.classList.remove("no-root-selected");
+
+            // Clear valid prefixes
+            document.querySelectorAll(".prefix-block").forEach(el => {
+                el.classList.remove("valid-prefix");
+                el.style.animation = 'none';
+                el.offsetHeight; /* trigger reflow */
+                el.style.animation = null; 
+            });
+
+            // Highlight valid prefixes
+            const validPrefixes = dictionary[rootId] || {};
+            Object.keys(validPrefixes).forEach(prefixId => {
+                const pBlock = document.getElementById(`prefix-${prefixId}`);
+                if (pBlock) {
+                    pBlock.classList.add("valid-prefix");
+                }
+            });
+        }
+
+        function showModal(word, prefixLabel, rootLabel, desc, ex) {
+            modalWord.textContent = word;
+            modalBreakdown.textContent = `${prefixLabel} + ${rootLabel}`;
+            modalMeaning.textContent = desc;
+            modalExample.textContent = `"${ex}"`;
+            modal.classList.add("active");
+        }
+
+        closeModal.addEventListener("click", () => {
+            modal.classList.remove("active");
+        });
+
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.remove("active");
+            }
+        });
+
+    </script>
+</body>
+</html>
