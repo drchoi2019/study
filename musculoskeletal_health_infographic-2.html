@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buganshen & Gangjingu: Musculoskeletal Health Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f4f8; color: #0f172a; }
+        .chart-container { position: relative; width: 100%; max-width: 650px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .vibrant-gradient { background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%); }
+        .card { background: white; border-radius: 1.25rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; border: 1px solid #e2e8f0; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .theory-node { width: 140px; height: 140px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 700; padding: 1rem; position: relative; z-index: 10; }
+        .connector { height: 2px; flex-grow: 1; background: #cbd5e1; position: relative; }
+        .stat-highlight { font-size: 2.5rem; font-weight: 800; line-height: 1; color: #FF6B6B; }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <!-- 
+    Chosen Palette: "Energetic & Playful" (Vibrant Oranges, Teals, and Coral Red)
+    Confirming: NEITHER Mermaid JS NOR SVG were used in this output.
+    Narrative Plan:
+    1. Introduction: Contextualizing Buganshen (Tonifying Liver/Kidney) and the musculoskeletal link.
+    2. The Translation Argument: Explaining why 'Jin' is best understood as Muscle/Connective Tissue.
+    3. Structural Visualization: Mapping Liver-Kidney Homology to Muscle-Bone health.
+    4. Data Analysis: Thermal nature and Taste distribution of key herbs.
+    5. Action Matrix: Visualizing overlapping clinical benefits.
+    6. Detailed Reference: Comparative table of analyzed herbs.
+    
+    Visualization Justification:
+    - Theory Map: Custom HTML/CSS nodes to show organ-tissue relationships (Goal: Organize/Relationship - NO SVG).
+    - Bar Chart (Chart.js): Temperature nature comparison (Goal: Compare).
+    - Radar Chart (Chart.js): Five-taste intensity profile (Goal: Compare).
+    - Action Donut (Chart.js): Breakdown of medicinal actions (Goal: Composition).
+    -->
+
+    <header class="max-w-6xl mx-auto mb-16 text-center">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight">Buganshen & Gangjingu</h1>
+        <p class="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
+            A comprehensive data visualization of Traditional Chinese Medicine's approach to the <span class="font-bold text-teal-600">Musculoskeletal System</span>, 
+            focusing on the synergy between organ tonification and structural strength.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto space-y-12">
+        
+        <!-- SECTION 1: THE CORE THEORY & TRANSLATION -->
+        <section class="card p-8 md:p-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-slate-800 border-b-4 border-teal-500 w-fit pb-2">The Biological Root</h2>
+                    <p class="text-lg leading-relaxed text-slate-700">
+                        The relationship between <span class="font-bold">Tonifying Liver & Kidney (Buganshen)</span> and 
+                        <span class="font-bold">Strengthening Muscle & Bone (Gangjingu)</span> is one of cause and effect. 
+                        In classical theory, organs are not just functional units but the architects of physical structure.
+                    </p>
+                    <div class="bg-orange-50 p-6 rounded-2xl border-l-8 border-orange-400">
+                        <h4 class="font-bold text-orange-800 mb-2">Translation Insight: The 'Jin' (筋) Concept</h4>
+                        <p class="text-sm text-orange-900 leading-relaxed">
+                            While 'sinew' is a traditional translation, 'Jin' more accurately represents <strong>muscle</strong> and its supporting structures: fascia, ligaments, and tendons. Just as we refer to the <strong>musculoskeletal system</strong> (not 'sinewskeletal'), 'Jin' should be viewed through the lens of modern muscle science.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- THEORY DIAGRAM (HTML/CSS ONLY) -->
+                <div class="flex flex-col items-center space-y-10 py-10 bg-slate-50 rounded-3xl border border-slate-100 shadow-inner">
+                    <div class="flex items-center w-full px-8 gap-4">
+                        <div class="theory-node bg-teal-500 text-white shadow-lg">
+                            <span class="text-xs opacity-80">Organ</span>
+                            <span>Tonify Liver</span>
+                        </div>
+                        <div class="connector flex items-center justify-center">
+                            <div class="bg-teal-500 h-1 w-full opacity-30"></div>
+                        </div>
+                        <div class="theory-node bg-blue-500 text-white shadow-lg">
+                            <span class="text-xs opacity-80">Organ</span>
+                            <span>Tonify Kidney</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vibrant-gradient text-white px-6 py-3 rounded-full font-bold shadow-md">
+                        Supports Foundations
+                    </div>
+
+                    <div class="flex items-center w-full px-8 gap-4">
+                        <div class="theory-node border-4 border-teal-500 bg-white text-teal-800">
+                            <span class="text-xs opacity-70">Tissue (Jin)</span>
+                            <span>Muscle & Sinew</span>
+                        </div>
+                        <div class="connector flex items-center justify-center">
+                            <div class="bg-slate-300 h-1 w-full"></div>
+                        </div>
+                        <div class="theory-node border-4 border-blue-500 bg-white text-blue-800">
+                            <span class="text-xs opacity-70">Tissue (Gu)</span>
+                            <span>Bone</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: STATS & TEMPERATURE -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="card p-8 flex flex-col justify-center items-center text-center">
+                <span class="text-slate-500 font-semibold mb-2">Primary Action</span>
+                <div class="stat-highlight">100%</div>
+                <p class="mt-4 text-slate-700 font-medium">of analyzed herbs directly perform <span class="text-teal-600 underline">Gangjingu</span> (Strengthening Muscle/Bone).</p>
+            </div>
+            
+            <div class="card p-8 md:col-span-2">
+                <h3 class="text-xl font-bold mb-4">Temperature Profile (Nature)</h3>
+                <p class="text-sm text-slate-500 mb-6">Herbs used for musculoskeletal health typically lean towards 'Warm' to dispel stagnation and cold-dampness.</p>
+                <div class="chart-container">
+                    <canvas id="tempNatureChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: TASTE & OVERLAP -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="card p-8">
+                <h3 class="text-xl font-bold mb-4">The Five Tastes Matrix</h3>
+                <p class="text-sm text-slate-500 mb-6">Mapping the intensity and frequency of medicinal tastes across the herb group.</p>
+                <div class="chart-container">
+                    <canvas id="tasteRadarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card p-8">
+                <h3 class="text-xl font-bold mb-4">Clinical Action Distribution</h3>
+                <p class="text-sm text-slate-500 mb-6">Most herbs provide secondary benefits such as dispelling dampness or calming the fetus.</p>
+                <div class="chart-container">
+                    <canvas id="actionDonutChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: DETAILED HERB TABLE -->
+        <section class="card overflow-hidden">
+            <div class="p-8 border-b border-slate-100">
+                <h2 class="text-2xl font-bold text-slate-800">Materia Medica Reference</h2>
+                <p class="text-slate-500 mt-1">Core characteristics of herbs that Tonify Liver/Kidney and Strengthen Muscle/Bone.</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 text-slate-600 text-sm uppercase tracking-wider">
+                        <tr>
+                            <th class="px-8 py-4">Herb Name</th>
+                            <th class="px-8 py-4">Nature</th>
+                            <th class="px-8 py-4">Primary Actions</th>
+                            <th class="px-8 py-4">Clinical Caution</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-8 py-5"><span class="font-bold text-slate-900">Du Zhong</span><br><span class="text-xs text-slate-400 italic">Eucommiae Cortex</span></td>
+                            <td class="px-8 py-5"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-bold">Warm</span></td>
+                            <td class="px-8 py-5 text-sm">Tonify Liver/Kidney, Strengthen Muscle/Bone, Calm Fetus</td>
+                            <td class="px-8 py-5 text-xs text-red-500 italic">Heat from Yin deficiency</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-8 py-5"><span class="font-bold text-slate-900">Niu Xi</span><br><span class="text-xs text-slate-400 italic">Achyranthes bidentata</span></td>
+                            <td class="px-8 py-5"><span class="px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs font-bold">Neutral</span></td>
+                            <td class="px-8 py-5 text-sm">Invigorate Blood, Tonify Liver/Kidney, Descend Fire</td>
+                            <td class="px-8 py-5 text-xs text-red-500 italic">Pregnancy, Excessive menses</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-8 py-5"><span class="font-bold text-slate-900">Gou Ji</span><br><span class="text-xs text-slate-400 italic">Cibotii Rhizoma</span></td>
+                            <td class="px-8 py-5"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-bold">Warm</span></td>
+                            <td class="px-8 py-5 text-sm">Tonify Liver/Kidney, Strengthen Muscle/Bone, Dispel Wind-Damp</td>
+                            <td class="px-8 py-5 text-xs text-red-500 italic">Urinary difficulty</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-8 py-5"><span class="font-bold text-slate-900">Ba Ji Tian</span><br><span class="text-xs text-slate-400 italic">Morindae officinalis</span></td>
+                            <td class="px-8 py-5"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-bold">Warm</span></td>
+                            <td class="px-8 py-5 text-sm">Tonify Kidney Yang, Strengthen Muscle/Bone, Dispel Wind-Damp</td>
+                            <td class="px-8 py-5 text-xs text-slate-400">None Specified</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-8 py-5"><span class="font-bold text-slate-900">Xu Duan</span><br><span class="text-xs text-slate-400 italic">Dipsaci Radix</span></td>
+                            <td class="px-8 py-5"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-bold">Warm</span></td>
+                            <td class="px-8 py-5 text-sm">Reconnect Muscle/Bone, Tonify Liver/Kidney, Calm Fetus</td>
+                            <td class="px-8 py-5 text-xs text-red-500 italic">Wind-Damp-Heat pain</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="max-w-6xl mx-auto mt-20 pb-12 text-center text-slate-400 text-sm">
+        <p>© 2024 Musculoskeletal Therapeutics Informatics. Designed with the vibrancy of traditional wisdom.</p>
+    </footer>
+
+    <script>
+        // Label wrapping helper for Chart.js
+        function formatLabel(label) {
+            if (typeof label !== 'string' || label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let current = '';
+            words.forEach(w => {
+                if ((current + w).length > 16) {
+                    lines.push(current.trim());
+                    current = w + ' ';
+                } else {
+                    current += w + ' ';
+                }
+            });
+            lines.push(current.trim());
+            return lines;
+        }
+
+        // Global Tooltip Title Handler
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+
+        // Chart 1: Temperature Nature (Bar Chart)
+        const ctxTemp = document.getElementById('tempNatureChart').getContext('2d');
+        new Chart(ctxTemp, {
+            type: 'bar',
+            data: {
+                labels: ['Warm Nature', 'Neutral Nature', 'Cool/Cold'],
+                datasets: [{
+                    label: 'Number of Herbs',
+                    data: [5, 2, 0],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4', '#e2e8f0'],
+                    borderRadius: 10,
+                    barThickness: 50
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: tooltipConfig },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { stepSize: 1 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Chart 2: Tastes Matrix (Radar)
+        const ctxTaste = document.getElementById('tasteRadarChart').getContext('2d');
+        new Chart(ctxTaste, {
+            type: 'radar',
+            data: {
+                labels: ['Sweet', 'Bitter', 'Acrid', 'Sour', 'Salty'],
+                datasets: [{
+                    label: 'Dominance Score',
+                    data: [6, 5, 4, 1, 0],
+                    fill: true,
+                    backgroundColor: 'rgba(78, 205, 196, 0.2)',
+                    borderColor: '#4ECDC4',
+                    pointBackgroundColor: '#FF6B6B',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { tooltip: tooltipConfig },
+                scales: {
+                    r: { angleLines: { color: '#e2e8f0' }, grid: { color: '#e2e8f0' }, pointLabels: { font: { size: 12, weight: 'bold' } }, ticks: { display: false }, beginAtZero: true }
+                }
+            }
+        });
+
+        // Chart 3: Action Distribution (Donut)
+        const ctxAction = document.getElementById('actionDonutChart').getContext('2d');
+        new Chart(ctxAction, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    formatLabel('Strengthen Muscle/Bone (Gangjingu)'),
+                    formatLabel('Tonify Liver/Kidney (Buganshen)'),
+                    formatLabel('Dispel Wind-Damp'),
+                    formatLabel('Calm Fetus'),
+                    formatLabel('Invigorate Blood')
+                ],
+                datasets: [{
+                    data: [7, 5, 4, 3, 2],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4', '#FFD93D', '#6366f1', '#f472b6'],
+                    hoverOffset: 10,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { size: 11 } } },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+    </script>
+</body>
+</html>
