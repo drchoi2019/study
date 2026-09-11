@@ -32,7 +32,7 @@ const globalQuizData = {
     {
       "id": 3,
       "difficulty": "하",
-      "question": "25세 여성 환자가 심한 생리통으로 내원했습니다. 통증의 위치가 고정되어 있고 찌르는 듯한 느낌이며, 밤에 더 심해집니다. 월경혈은 어둡고 덩어리가 많으며, 손톱이 푸르스름합니다. 맥은 현(弦)하고  삽(澁)입니다. 이 경우 가장 적절한 변증은?",
+      "question": "25세 여성 환자가 심한 생리통으로 내원했습니다. 통증의 위치가 고정되어 있고 찌르는 듯한 느낌이며, 밤에 더 심해집니다. 월경혈은 어둡고 덩어리가 많으며, 손톱이 푸르스름합니다. 맥은 현(弦)하고 삽(澁)입니다. 이 경우 가장 적절한 변증은?",
       "options": {
         "A": "간기울결",
         "B": "간혈어",
@@ -331,7 +331,7 @@ const globalQuizData = {
     {
       "id": 26,
       "difficulty": "하",
-      "question": "6세 아이이 내원하였습니다. 부모는 아이가 또래보다 키가 작고 뼈 발달이 늦다고 호소합니다. 천문이 늦게 닫히고, 말과 학습 능력 발달도 늦습니다. 치아가 약하고 빠지는 경우가 있으며 머리카락이 드믑니다. 무릎과 다리에 힘이 부족하며 자주 넘어집니다",
+      "question": "6세 아이가 내원하였습니다. 부모는 아이가 또래보다 키가 작고 뼈 발달이 늦다고 호소합니다. 천문이 늦게 닫히고, 말과 학습 능력 발달도 늦습니다. 치아가 약하고 빠지는 경우가 있으며 머리카락이 드믑니다. 무릎과 다리에 힘이 부족하며 자주 넘어집니다",
       "options": {
         "A": "신정허",
         "B": "신음허",
@@ -409,7 +409,7 @@ const globalQuizData = {
     {
       "id": 57,
       "difficulty": "하",
-      "question": "환자의 얼굴이 어두운 노란 빛(sallow and yellowish)을 띈다. 의심할 수 있는 패턴은?",
+      "question": "환자의 얼굴이 어두운 노란 빛(sallow and yellowish)을 띤다. 의심할 수 있는 패턴은?",
       "options": {
         "A": "비허",
         "B": "신허",
@@ -543,7 +543,7 @@ const globalQuizData = {
     {
       "id": 41,
       "difficulty": "상",
-      "question": "42세 여성 환자가 어지럼증과 수족 저림을 주소로 내원하였다. 환자는 늘 어지럽고(현훈), 손발에 감각이 둔하며 마비되는 느낌이 든다고 한다. 밤에는 잠들기 어렵고(불면), 시야가 흐릿하며(눈이 흐릿함) 눈앞에 꽃 같은 것이 어른거릴 때(안화)도 있다. 몇 달 전부터 월경량이 눈에 띄게 줄었다. 주변에서 얼굴에 핏기가 없고 어둡고 창백하다(안색이 어둡게 창백)는 말을 자주 듣고, 입술도 창백하다. 전신에 기운이 없고(근육무력), 밤에 다리에 쥐가 나는(경련) 경우가 잦다. 손톱을 보니 윤기가 없고 쉽게 부서진다. 혀는 전체적으로 창백하며 특히 양쪽 가장자리가 더 창백하고 건조하다. 맥은 가늘고(세) 깔끄러운 느낌(삽)이다. 다음 경락 조합 중 어떤 것을 사용해야 하는가?",
+      "question": "42세 여성 환자가 어지럼증과 수족 저림을 주소로 내원하였다. 환자는 늘 어지럽고(현훈), 손발에 감각이 둔하며 마비되는 느낌이 든다고 한다. 밤에는 잠들기 어렵고(불면), 시야가 흐릿하며(눈이 흐릿함) 눈앞에 꽃 같은 것이 어른거릴 때(안화)도 있다. 몇 달 전부터 월경량이 눈에 띄게 줄었다. 주변에서 얼굴에 핏기가 없고 윤기 없이 창백하다는 말을 자주 듣고, 입술도 창백하다. 전신에 기운이 없고(근육무력), 밤에 다리에 쥐가 나는(경련) 경우가 잦다. 손톱을 보니 윤기가 없고 쉽게 부서진다. 혀는 전체적으로 창백하며 특히 양쪽 가장자리가 더 창백하고 건조하다. 맥은 가늘고(세) 깔끄러운 느낌(삽)이다. 가장 적절한 변증은?",
       "options": {
         "A": "신음허",
         "B": "간비불화",
@@ -603,7 +603,7 @@ const globalQuizData = {
         "D": "풍열범폐"
       },
       "answer": "B",
-      "explanation": "환자의 증상은 풍한(風寒)이 체표에 침범한 풍한범폐, 풍한감모(風寒感冒), 즉 상한병(傷寒病) 태양병(太陽病)에 해당한다. 치료는 풍한을 발산시키는 것을 목표로 한다. 열결, 합곡, 풍문, 풍지, 풍부, 폐수는 모두 풍사(風邪)를 제거하고 폐 기능을 조절하는 핵심 혈자리이다."
+      "explanation": "환자의 증상은 풍한(風寒)이 체표에 침범한 풍한범폐, 풍한감모(風寒感冒), 즉 상한병(傷寒病) 태양병(太陽病)에 해당한다. 오한이 발열보다 심하고 무한, 맥부긴, 경항강직 등은 모두 한사(寒邪)가 주리(腠理)를 막아 위기(衛氣)의 선발 기능이 억눌린 소견이다. 치료는 신온해표(辛溫解表)로 풍한을 발산시키는 것을 목표로 한다."
     },
     {
       "id": 46,
@@ -655,7 +655,7 @@ const globalQuizData = {
         "D": "비불통혈"
       },
       "answer": "D",
-      "explanation": "환자는 비기허(脾氣虛)로 인한 기함 증상과 심혈허(心血虛) 증상(현훈)을 동시에 보이고 있다. 비(脾)는 혈액이 맥 밖으로 새어 나가지 않도록 통섭하는 기능(통혈, 統血)을 하는데, 비기가 허해지면 이 기능이 약해져 붕루, 누하부지와 같은 출혈이 발생한다. 귀비탕이 추천된다."
+      "explanation": "환자는 비기허(脾氣虛)로 인해 혈액이 맥 밖으로 새어 나가지 않도록 통섭하는 기능(통혈, 統血)이 약해져 붕루, 누하부지와 같은 출혈이 나타나는 비불통혈(脾不統血)에 해당한다. 안색 창백, 피로, 경미한 현훈, 식욕부진, 변당 등은 비기허의 동반 증상이다. 귀비탕이 추천된다."
     },
     {
       "id": 50,
@@ -753,7 +753,7 @@ const globalQuizData = {
       "difficulty": "상",
       "question": "50대 남성 환자가 심한 기침으로 내원하였다. 기침 소리가 개 짖는 소리 같으며(개 짖는 듯한 기침), 양이 많고 끈적하며 노란 가래가 나온다. 숨이 차고(천증), 호흡이 짧으며, 가슴이 답답하다. 갈증이 심하고, 밤에 잠을 잘 못 이루며 초조하다. 어지럼증을 동반하며, 혀는 붉고 부어 있으며 끈적한 황태가 끼어 있다. 맥은 미끄러지듯 빠르다(활, 삭). 다음 중 어떤 폐(肺) 장부 변증에 속하겠는가?",
       "options": {
-        "A": "담(phlegm)열이 폐를 막음",
+        "A": "담열이 폐를 막음",
         "B": "습담이 폐를 막음",
         "C": "풍습이 폐를 침입함",
         "D": "담음이 폐를 막음"
@@ -818,7 +818,7 @@ const globalQuizData = {
       "difficulty": "상",
       "question": "50대 여성 환자가 마른기침을 주소로 내원하였다. 기침을 할 때 가래가 거의 없거나, 있더라도 소량의 뱉어내기 힘든 끈적한 가래가 나온다고 한다. 숨이 차고(천증), 목에 가래가 걸린 듯한 느낌이 있으며, 목과 인후가 건조하다. 가슴이 답답하고 호흡이 짧으며, 온몸이 무겁게 느껴진다. 안색은 마른 반죽처럼 누렇고 윤기가 없다. 혀는 부어 있으며, 건조하고 끈적한 태가 끼어 있고, 맥은 활하면서 가늘다(활, 세). 다음 중 어떤 폐(肺) 장부 변증에 속하겠는가?",
       "options": {
-        "A": "폐의 조담(Dry-Phlegm)",
+        "A": "폐의 조담",
         "B": "폐 건조",
         "C": "풍열이 폐를 침입",
         "D": "폐음허"
@@ -876,12 +876,12 @@ const globalQuizData = {
         "D": "간화범폐(목모금)"
       },
       "answer": "D",
-      "explanation": "환자는 얼굴이 붉고, 갈증, 구고, 변비, 설홍, 현맥 등 간화(肝火)의 증상을 명확하게 보이고 있다. 동시에 기침, 천식, 숨가쁨, 황담 등 폐(肺) 계통의 증상이 함께 나타난다. 이는 간의 불(火)이 오행 상극 관계에 따라 폐(金)를 공격(형, 刑)하여 폐의 선발숙강 기능이 실조된 '간화형폐(肝火刑肺)' 또는 '목화형금(木火刑金)'의 상태로, 간화가 폐를 상모(insulting)한 것이다."
+      "explanation": "환자는 얼굴이 붉고, 갈증, 구고, 변비, 설홍, 현맥 등 간화(肝火)의 증상을 명확하게 보이고 있다. 동시에 기침, 천식, 숨가쁨, 황담 등 폐(肺) 계통의 증상이 함께 나타난다. 이는 간의 불(火)이 오행 상극 관계에 따라 폐(金)를 공격(범, 犯)하여 폐의 선발숙강 기능이 실조된 '간화범폐(肝火犯肺)', 즉 '목모금(木侮金)'의 상태이다."
     },
     {
       "id": 68,
       "difficulty": "상",
-      "question": "45세 남성 환자가 식욕부진과 구역감을 주소로 내원했다. 환자는 입은 마르지만 물을 마시고 싶지는 않다고 하며, 상복부가 항상 더부룩하고 가득 찬 느낌이 든다. 평소 예민하고 초조하며, 가슴과 옆구리가 답답하고(흉협고만) 입이 쓰다(구고). 최근에는 황달 기운도 보인다. 몸과 머리가 무겁게 느껴지며, 혀에는 두껍고 끈적한 노란 태가 있다. 맥은 활(滑)하면서 현(弦)하다. 이것은 비(脾)장 장부 변증에서 어디에 속하는가?",
+      "question": "45세 남성 환자가 식욕부진과 구역감을 주소로 내원했다. 환자는 입은 마르지만 물을 마시고 싶지는 않다고 하며, 상복부가 항상 더부룩하고 가득 찬 느낌이 든다. 평소 예민하고 초조하며, 가슴과 옆구리가 답답하고(흉협고만) 입이 쓰다(구고). 황달은 없다. 몸과 머리가 무겁게 느껴지며, 혀에는 두껍고 끈적한 백태가 있다. 맥은 활(滑)하면서 현(弦)하다. 이것은 비(脾)장 장부 변증에서 어디에 속하는가?",
       "options": {
         "A": "비습과 간기울결",
         "B": "비와 간의 혈허",
@@ -889,7 +889,7 @@ const globalQuizData = {
         "D": "비양허"
       },
       "answer": "A",
-      "explanation": "환자는 식욕부진, 상복부 팽만, 무거운 느낌, 황니태, 활맥 등 비(脾)에 습(濕)이 정체된 증상과, 예민함, 흉협고만, 구고, 현맥 등 간기(肝氣)가 울결된 증상을 모두 가지고 있다. 간의 소설 기능이 막히면 비의 운화 기능에 영향을 주어(목극토, 木克土) 습이 생기기 쉬우므로, 이는 간기울결(肝氣鬱結)과 비허습곤(脾虛濕困)이 결합된 병증으로 볼 수 있다."
+      "explanation": "환자는 식욕부진, 상복부 팽만, 무거운 느낌, 백니태, 활맥 등 비(脾)에 습(濕)이 정체된 증상과, 예민함, 흉협고만, 구고, 현맥 등 간기(肝氣)가 울결된 증상을 모두 가지고 있다. 황달이 없고 설태가 노랗지 않으므로 습열(濕熱)로 보기는 어렵다. 간의 소설 기능이 막히면 비의 운화 기능에 영향을 주어(목극토, 木克土) 습이 생기기 쉬우므로, 이는 간기울결(肝氣鬱結)과 비허습곤(脾虛濕困)이 결합된 병증으로 볼 수 있다."
     },
     {
       "id": 69,
@@ -1063,7 +1063,7 @@ const globalQuizData = {
     {
       "id": 82,
       "difficulty": "상",
-      "question": "45세 남성이 발기부전을 호소한다. 이 증상은 아내와 성관계 중 기절하며 의식을 잃었을 때 시작되었다. 그는 우울증, 심계항진, 다몽으로 인한 불면증이 있으며, 안색이 어둡고 잦은 배뇨를 호소한다. 혀는 창백하였고, 맥은 현(wiry), 세(thin), 침(deep)하다. 진단은 무엇인가?",
+      "question": "45세 남성이 발기부전을 호소한다. 이 증상은 아내와 성관계 중 기절하며 의식을 잃었을 때 시작되었다. 그는 우울증, 심계항진, 다몽으로 인한 불면증이 있으며, 안색이 어둡고 잦은 배뇨를 호소한다. 혀는 창백하였고, 맥은 현, 세, 침하다. 진단은 무엇인가?",
       "options": {
         "A": "신기허, 심기허, 간기울결",
         "B": "명문화 감소, 혈허",
@@ -1089,7 +1089,7 @@ const globalQuizData = {
     {
       "id": 84,
       "difficulty": "상",
-      "question": "45세 여성이 지난 4년간 겪어온 두통으로 내원하였다. 통증은 주로 전두부에서 나타나지만 종종 정수리에서도 나타나며, 낮에 더욱 악화된다. 두통이 있을 때 머리가 무겁게 느껴지지만 어지럼증은 없다. 다른 증상으로는 비염, 요통, 빈뇨, 낮은 에너지가 있다. 현재는 변비 증상이 있지만 예전에는 변이 무르기도 했다. 환자는 추위를 많이 타고, 혀는 붓고 창백하며 광택 나는 노란 태가 있다. 맥은 우측에서 침, 허, 활 맥이 나타났다. 다음 중 적합한 변증은 무엇인가?",
+      "question": "45세 여성이 지난 4년간 겪어온 두통으로 내원하였다. 통증은 주로 전두부에서 나타나지만 종종 정수리에서도 나타나며, 낮에 더욱 악화된다. 두통이 있을 때 머리가 무겁게 느껴지지만 어지럼증은 없다. 다른 증상으로는 비염, 요통, 빈뇨, 낮은 에너지가 있다. 현재는 변비 증상이 있지만 예전에는 변이 무르기도 했다. 환자는 추위를 많이 타고, 혀는 붓고 창백하며 광택 나는 흰 태가 있다. 맥은 우측에서 침, 허, 활 맥이 나타났다. 다음 중 적합한 변증은 무엇인가?",
       "options": {
         "A": "비허습담, 신음허",
         "B": "비기허, 한습",
@@ -1869,7 +1869,7 @@ const globalQuizData = {
     {
       "id": 41,
       "difficulty": "Hard",
-      "question": "A 42-year-old female patient presents with chief complaints of dizziness and numbness in her limbs. She reports constant dizziness, a dull and numb sensation in her hands and feet. She has difficulty falling asleep at night (insomnia), her vision is blurry, and she sometimes sees flower-like shapes before her eyes (floaters). Her menstrual flow has noticeably decreased in recent months. People often tell her that her face lacks color and is dusky and pale, and her lips are also pale. She feels a general lack of strength (muscle weakness) and frequently experiences leg cramps at night. Her nails are lusterless and brittle. Her tongue is pale overall, especially paler and drier on the sides. Her pulse is thready and choppy. This corresponds to which pattern?",
+      "question": "A 42-year-old female patient presents with chief complaints of dizziness and numbness in her limbs. She reports constant dizziness, a dull and numb sensation in her hands and feet. She has difficulty falling asleep at night (insomnia), her vision is blurry, and she sometimes sees flower-like shapes before her eyes (floaters). Her menstrual flow has noticeably decreased in recent months. People often tell her that her face lacks color and looks pale without luster, and her lips are also pale. She feels a general lack of strength (muscle weakness) and frequently experiences leg cramps at night. Her nails are lusterless and brittle. Her tongue is pale overall, especially paler and drier on the sides. Her pulse is thready and choppy. This corresponds to which pattern?",
       "options": {
         "A": "Kidney Yin Deficiency",
         "B": "Liver-Spleen Disharmony",
@@ -1929,7 +1929,7 @@ const globalQuizData = {
         "D": "Wind-Heat Invading the Lungs"
       },
       "answer": "B",
-      "explanation": "The patient's symptoms correspond to a Taiyang stage pattern of Shang Han Bing (Cold Damage Disease), specifically Wind-Cold invading the exterior, or Wind-Cold Invading the Lungs. The treatment goal is to release the exterior and disperse Wind-Cold. Acupoints such as Lieque (LU-7), Hegu (LI-4), Fengmen (BL-12), Fengchi (GB-20), Fengfu (GV-16), and Feishu (BL-13) are key points for expelling pathogenic wind and regulating Lung function."
+      "explanation": "The patient's symptoms correspond to a Taiyang stage pattern of Shang Han Bing (Cold Damage Disease), specifically Wind-Cold invading the exterior, or Wind-Cold Invading the Lungs. Chills more severe than fever, absence of sweating, a floating-tight pulse, and stiffness of the neck and shoulders all indicate that Cold has obstructed the pores, suppressing the Lung's function of dispersing Defensive Qi. The treatment goal is to release the exterior with pungent-warm herbs and disperse Wind-Cold."
     },
     {
       "id": 46,
@@ -1965,7 +1965,7 @@ const globalQuizData = {
         "A": "Tian Wang Bu Xin Dan - Heart Yin Deficiency",
         "B": "Liu Wei Di Huang Wan - Kidney Yin Deficiency, Liver and Kidney Yin Deficiency",
         "C": "Gan Mai Da Zao Tang - Qi and Blood Deficiency",
-        "D": "Suan Zao Ren Tang - Liver Yin Deficiency"
+        "D": "Suan Zao Ren Tang - Liver Blood Deficiency"
       },
       "answer": "B",
       "explanation": "The symptoms of dizziness, tinnitus, sore lower back, night sweats, dry mouth, red tongue with little coating, and a thready-rapid pulse are all classic findings of Kidney Yin Deficiency. Liu Wei Di Huang Wan is the representative formula for tonifying Kidney Yin and is used to treat the various symptoms arising from this deficiency. Tian Wang Bu Xin Dan is for Heart and Kidney Yin Deficiency, Gan Mai Da Zao Tang for Zang Zao (Restless Organ Syndrome), and Suan Zao Ren Tang primarily for insomnia due to Liver Blood Deficiency."
@@ -1981,7 +1981,7 @@ const globalQuizData = {
         "D": "Spleen Not Controlling Blood"
       },
       "answer": "D",
-      "explanation": "The patient exhibits symptoms of both Spleen Qi Deficiency (leading to Qi sinking) and Heart Blood Deficiency (dizziness). The Spleen has the function of 'governing' the blood, keeping it within the vessels. When Spleen Qi is deficient, this function weakens, leading to bleeding disorders such as menorrhagia and metrorrhagia. Gui Pi Tang is the recommended formula."
+      "explanation": "The patient's Spleen Qi Deficiency has weakened the Spleen's function of 'governing' the Blood, keeping it within the vessels. This failure of the Spleen to control the Blood (Spleen Not Controlling Blood) results in bleeding disorders such as menorrhagia and metrorrhagia. The pale complexion, fatigue, slight dizziness, poor appetite, and loose stools are accompanying signs of the underlying Spleen Qi Deficiency. Gui Pi Tang is the recommended formula."
     },
     {
       "id": 50,
@@ -2220,7 +2220,7 @@ const globalQuizData = {
     {
       "id": 68,
       "difficulty": "Hard",
-      "question": "A 45-year-old male patient presents with poor appetite and nausea. He reports having a dry mouth but no desire to drink water, and his epigastrium always feels bloated and full. He is irritable and anxious, has a feeling of oppression in his chest and hypochondrium, and a bitter taste in his mouth. He has recently shown signs of jaundice. His body and head feel heavy, and his tongue has a thick, sticky, yellow coating. His pulse is slippery and wiry. This belongs to which Spleen Zang-fu pattern?",
+      "question": "A 45-year-old male patient presents with poor appetite and nausea. He reports having a dry mouth but no desire to drink water, and his epigastrium always feels bloated and full. He is irritable and anxious, has a feeling of oppression in his chest and hypochondrium, and a bitter taste in his mouth. There is no jaundice. His body and head feel heavy, and his tongue has a thick, sticky, white coating. His pulse is slippery and wiry. This belongs to which Spleen Zang-fu pattern?",
       "options": {
         "A": "Spleen Dampness and Liver Qi Stagnation",
         "B": "Blood Deficiency of the Spleen and Liver",
@@ -2228,7 +2228,7 @@ const globalQuizData = {
         "D": "Spleen Yang Deficiency"
       },
       "answer": "A",
-      "explanation": "The patient exhibits symptoms of Dampness retention in the Spleen (poor appetite, epigastric fullness, feeling of heaviness, yellow greasy coating, slippery pulse) as well as symptoms of Liver Qi Stagnation (irritability, chest and hypochondriac oppression, bitter taste, wiry pulse). When the Liver's dredging and regulating function is blocked, it can affect the Spleen's transformation and transportation function (Wood overacting on Earth), making it easy for Dampness to form. Therefore, this can be seen as a combined pathology of Liver Qi Stagnation and Spleen Deficiency with Damp retention."
+      "explanation": "The patient exhibits symptoms of Dampness retention in the Spleen (poor appetite, epigastric fullness, feeling of heaviness, white greasy coating, slippery pulse) as well as symptoms of Liver Qi Stagnation (irritability, chest and hypochondriac oppression, bitter taste, wiry pulse). Since there is no jaundice and the coating is white rather than yellow, this is not a Damp-Heat pattern. When the Liver's dredging and regulating function is blocked, it can affect the Spleen's transformation and transportation function (Wood overacting on Earth), making it easy for Dampness to form. Therefore, this can be seen as a combined pathology of Liver Qi Stagnation and Spleen Deficiency with Damp retention."
     },
     {
       "id": 69,
@@ -2617,7 +2617,7 @@ const globalQuizData = {
     {
       "id": 1024,
       "difficulty": "step1",
-      "question": "Dry cough (or scanty sticky spectrum), bloody sputum. Dry/itchy throat, hoarse voice. Low grade fever, malar flush, night sweats, 5-center heat, insomnia.",
+      "question": "Dry cough (or scanty sticky sputum), bloody sputum. Dry/itchy throat, hoarse voice. Low grade fever, malar flush, night sweats, 5-center heat, insomnia.",
       "answer": "Lung Yin Deficiency",
       "options": {}
     },
